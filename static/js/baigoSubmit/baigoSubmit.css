@@ -1,0 +1,4 @@
+.baigoSubmit_y { height: 40px; background: url(status_y.png) no-repeat; padding-left: 40px; color: #093; }
+.baigoSubmit_x { height: 40px; background: url(status_x.png) no-repeat; padding-left: 40px; color: #f00; }
+.baigoSubmit_loading { height: 40px; background: url(loading.gif) no-repeat; padding-left: 60px; color: #999; }
+

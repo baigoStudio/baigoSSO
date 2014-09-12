@@ -1,0 +1,3 @@
+.global { max-width: 600px!important; margin: 40px auto; }
+label.control-label > span { color: #c30; margin-left: 10px; }
+.text_md { height: 200px!important; }
