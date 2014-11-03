@@ -244,6 +244,21 @@ class CLASS_MYSQL {
 		return $this->db_rs;
 	}
 
+
+	function create_view($view, $data, $table, $join) {
+		$sql      = " CREATE OR REPLACE VIEW `" . $view."` AS SELECT ";
+		$values   = array();
+		foreach ($data as $key => $value) {
+			$values[] = "`" . $value . "`.`" . $key . "` AS `" . $key . "`";
+		}
+		$sql         .= implode(",", $values);
+		$sql         .= " FROM `" . $table . "` " . $join;
+		//print_r($sql);
+		$this->db_rs  = $this->query($sql);
+		return $this->db_rs;
+	}
+
+
 	function alert_table($table, $data = false, $rename = false) {
 		$sql      = "ALTER TABLE `" . $table."` ";
 		if ($rename) {
@@ -269,7 +284,7 @@ class CLASS_MYSQL {
 		$this->db_rs  = $this->query($sql);
 		return $this->db_rs;
 	}
-	
+
 	function insert($table, $data) {
 		$sql      = "INSERT INTO `" . $table."` SET ";
 		$values   = array();

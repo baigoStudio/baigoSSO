@@ -17,6 +17,18 @@ include_once(BG_PATH_CONTROL_ADMIN . "ajax/app.class.php"); //载入商家控制
 $ajax_app = new AJAX_APP(); //初始化商家
 
 switch ($act_post) {
+	case "auth":
+		$ajax_app->ajax_auth();
+	break;
+
+	case "deauth":
+		$ajax_app->ajax_deauth();
+	break;
+
+	case "reset":
+		$ajax_app->ajax_reset();
+	break;
+
 	case "submit":
 		$ajax_app->ajax_submit();
 	break;

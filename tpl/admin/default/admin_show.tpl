@@ -72,8 +72,8 @@
 		<div class="col-md-3">
 			<div class="well">
 				<div class="form-group">
-					<label class="control-label">{$lang.label.id}</label>
-					<p class="form-control-static">{$tplData.adminRow.admin_id}</p>
+					<label class="control-label static_label">{$lang.label.id}</label>
+					<p class="form-control-static static_input">{$tplData.adminRow.admin_id}</p>
 				</div>
 
 				{if $tplData.adminRow.admin_status == "enable"}
@@ -83,7 +83,7 @@
 				{/if}
 
 				<div class="form-group">
-					<label class="control-label">{$lang.label.status}</label>
+					<label class="control-label static_label">{$lang.label.status}</label>
 					<p class="form-control-static">
 						<span class="label label-{$_css_status}">{$status.admin[$tplData.adminLogged.admin_status]}</span>
 					</p>

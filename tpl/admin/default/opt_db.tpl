@@ -30,33 +30,45 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="form-group">
-					<label for="db_host" class="control-label">{$lang.label.dbHost}<span id="msg_db_host">*</span></label>
-					<input type="text" name="db_host" id="db_host" class="validate form-control" value="{if $smarty.const.BG_DB_HOST}{$smarty.const.BG_DB_HOST}{else}localhost{/if}">
+					<div id="group_db_host">
+						<label for="db_host" class="control-label">{$lang.label.dbHost}<span id="msg_db_host">*</span></label>
+						<input type="text" name="db_host" id="db_host" class="validate form-control" value="{if $smarty.const.BG_DB_HOST}{$smarty.const.BG_DB_HOST}{else}localhost{/if}">
+					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="db_name" class="control-label">{$lang.label.dbName}<span id="msg_db_name">*</span></label>
-					<input type="text" name="db_name" id="db_name" class="validate form-control" value="{if $smarty.const.BG_DB_NAME}{$smarty.const.BG_DB_NAME}{else}sso{/if}">
+					<div id="group_db_name">
+						<label for="db_name" class="control-label">{$lang.label.dbName}<span id="msg_db_name">*</span></label>
+						<input type="text" name="db_name" id="db_name" class="validate form-control" value="{if $smarty.const.BG_DB_NAME}{$smarty.const.BG_DB_NAME}{else}sso{/if}">
+					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="db_user" class="control-label">{$lang.label.dbUser}<span id="msg_db_user">*</span></label>
-					<input type="text" name="db_user" id="db_user" class="validate form-control" value="{if $smarty.const.BG_DB_USER}{$smarty.const.BG_DB_USER}{else}sso{/if}">
+					<div id="group_db_user">
+						<label for="db_user" class="control-label">{$lang.label.dbUser}<span id="msg_db_user">*</span></label>
+						<input type="text" name="db_user" id="db_user" class="validate form-control" value="{if $smarty.const.BG_DB_USER}{$smarty.const.BG_DB_USER}{else}sso{/if}">
+					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="db_pass" class="control-label">{$lang.label.dbPass}<span id="msg_db_pass">*</span></label>
-					<input type="text" name="db_pass" id="db_pass" class="validate form-control" value="{if $smarty.const.BG_DB_PASS}{$smarty.const.BG_DB_PASS}{/if}">
+					<div id="group_db_pass">
+						<label for="db_pass" class="control-label">{$lang.label.dbPass}<span id="msg_db_pass">*</span></label>
+						<input type="text" name="db_pass" id="db_pass" class="validate form-control" value="{if $smarty.const.BG_DB_PASS}{$smarty.const.BG_DB_PASS}{/if}">
+					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="db_charset" class="control-label">{$lang.label.dbCharset}<span id="msg_db_charset">*</span></label>
-					<input type="text" name="db_charset" id="db_charset" class="validate form-control" value="{if $smarty.const.BG_DB_CHARSET}{$smarty.const.BG_DB_CHARSET}{else}utf8{/if}">
+					<div id="group_db_charset">
+						<label for="db_charset" class="control-label">{$lang.label.dbCharset}<span id="msg_db_charset">*</span></label>
+						<input type="text" name="db_charset" id="db_charset" class="validate form-control" value="{if $smarty.const.BG_DB_CHARSET}{$smarty.const.BG_DB_CHARSET}{else}utf8{/if}">
+					</div>
 				</div>
 
 				<div class="form-group">
-					<label for="db_table" class="control-label">{$lang.label.dbTable}<span id="msg_db_table">*</span></label>
-					<input type="text" name="db_table" id="db_table" class="validate form-control" value="{if $smarty.const.BG_DB_TABLE}{$smarty.const.BG_DB_TABLE}{else}sso_{/if}">
+					<div id="group_db_table">
+						<label for="db_table" class="control-label">{$lang.label.dbTable}<span id="msg_db_table">*</span></label>
+						<input type="text" name="db_table" id="db_table" class="validate form-control" value="{if $smarty.const.BG_DB_TABLE}{$smarty.const.BG_DB_TABLE}{else}sso_{/if}">
+					</div>
 				</div>
 
 				<div class="form-group">
@@ -72,32 +84,32 @@
 	var opts_validator_form = {
 		db_host: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_db_host" },
 			msg: { id: "msg_db_host", too_short: "{$alert.x030204}" }
 		},
 		db_name: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_db_name" },
 			msg: { id: "msg_db_name", too_short: "{$alert.x030205}" }
 		},
 		db_user: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_db_user" },
 			msg: { id: "msg_db_user", too_short: "{$alert.x030206}" }
 		},
 		db_pass: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_db_pass" },
 			msg: { id: "msg_db_pass", too_short: "{$alert.x030207}" }
 		},
 		db_charset: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_db_charset" },
 			msg: { id: "msg_db_charset", too_short: "{$alert.x030208}" }
 		},
 		db_table: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_db_table" },
 			msg: { id: "msg_db_table", too_short: "{$alert.x030209}" }
 		},
 		db_debug: {

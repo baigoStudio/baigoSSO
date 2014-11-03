@@ -115,7 +115,7 @@ class AJAX_USER {
 			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
 		}
 
-		$_arr_userRow = $this->mdl_user->mdl_del();
+		$_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds);
 
 		if ($_arr_userRow["str_alert"] == "y010104") {
 			foreach ($_arr_userIds["user_ids"] as $_value) {

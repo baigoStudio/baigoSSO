@@ -1,14 +1,5 @@
-.head_sub { margin-bottom: 10px; }
-
-.body_menu { width: 200px; position: absolute; }
-
-	.sub_normal { background: #eee!important; }
-	.sub_normal:hover { background: #ddd!important; }
-
-.body_main { margin-left: 220px; min-height: 700px; }
-
-	.form_ext { width: 240px; position: absolute; }
-	.form_main { margin-left: 260px; }
+.sub_normal { background: #eee!important; }
+.sub_normal:hover { background: #ddd!important; }
 
 .page_foot { height: 40px; }
 .foot_logo > a { display: block; width: 150px; height: 0px; padding-top: 40px; overflow: hidden; background: url(../image/admin_foot.png); }
@@ -19,14 +10,6 @@
 .td_md { width: 150px; white-space: nowrap; }
 .td_bg { width: 200px; white-space: nowrap; }
 .td_lg { width: 250px; white-space: nowrap; }
-
-.input_xl { width: 500px!important; }
-.input_lg { width: 400px!important; }
-.input_bg { width: 350px!important; }
-.input_md { width: 300px!important; }
-.input_sm { width: 200px!important; }
-.input_xs { width: 150px!important; }
-.input_mn { width: 100px!important; }
 
 .text_bg { height: 400px!important; }
 .text_md { height: 200px!important; }

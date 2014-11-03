@@ -13,6 +13,8 @@ include_once(BG_PATH_FUNC . "http.func.php"); //载入模板类
 include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入模板类
 include_once(BG_PATH_CLASS . "ajax.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
+include_once(BG_PATH_MODEL . "appBelong.class.php");
+include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 
 /*-------------用户控制器-------------*/
@@ -29,10 +31,94 @@ class AJAX_APP {
 		$this->obj_ajax       = new CLASS_AJAX(); //获取界面类型
 		$this->log            = $this->obj_ajax->log; //初始化 AJAX 基对象
 		$this->mdl_app        = new MODEL_APP(); //设置用户模型
+		$this->mdl_appBelong  = new MODEL_APP_BELONG();
+		$this->mdl_user       = new MODEL_USER(); //设置管理员模型
 		$this->mdl_log        = new MODEL_LOG(); //设置管理员模型
 		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
 			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
 		}
+	}
+
+
+	function ajax_reset() {
+		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+			$this->obj_ajax->halt_alert("x050303");
+		}
+
+		$_num_appId   = fn_getSafe($_POST["app_id"], "int", 0);
+
+		if ($_num_appId == 0) {
+			return array(
+				"str_alert" => "x050203",
+			);
+		}
+
+		$_arr_appRow = $this->mdl_app->mdl_read($_num_appId);
+		if ($_arr_appRow["str_alert"] != "y050102") {
+			return $_arr_appRow;
+			exit;
+		}
+
+		$_arr_appRow  = $this->mdl_app->mdl_reset($_num_appId);
+
+		$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
+	}
+
+
+	function ajax_deauth() {
+		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+			$this->obj_ajax->halt_alert("x050303");
+		}
+
+		$_arr_userIds = $this->mdl_user->input_ids();
+
+		//print_r($_arr_userIds);
+
+		if ($_arr_userIds["str_alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
+		}
+
+		$_num_appId = fn_getSafe($_POST["app_id"], "int", 0);
+
+		if ($_num_appId == 0) {
+			$this->obj_ajax->halt_alert("x050203");
+		}
+
+		$this->mdl_appBelong->mdl_del($_num_appId, 0, false, $_arr_userIds["user_ids"]);
+
+		//$_arr_appRow     = $this->mdl_app->mdl_order();
+
+		$this->obj_ajax->halt_alert("y070402");
+	}
+
+
+	function ajax_auth() {
+		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+			$this->obj_ajax->halt_alert("x050303");
+		}
+
+		$_arr_userIds = $this->mdl_user->input_ids();
+
+		if ($_arr_userIds["str_alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
+		}
+
+		$_num_appId = fn_getSafe($_POST["app_id"], "int", 0);
+
+		if ($_num_appId == 0) {
+			$this->obj_ajax->halt_alert("x050203");
+		}
+
+		foreach ($_arr_userIds["user_ids"] as $_value) {
+			$_arr_userRow = $this->mdl_user->mdl_read($_value);
+			if ($_arr_userRow["str_alert"] == "y010102") {
+				$this->mdl_appBelong->mdl_submit($_value, $_num_appId);
+			}
+		}
+
+		//$_arr_appRow     = $this->mdl_app->mdl_order();
+
+		$this->obj_ajax->halt_alert("y070401");
 	}
 
 

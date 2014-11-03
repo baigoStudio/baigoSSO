@@ -196,6 +196,7 @@
 			msg: { id: "msg_app_sync", too_few: "{$alert.x050218}" }
 		}
 	};
+
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=app",
 		btn_text: "{$lang.btn.ok}",

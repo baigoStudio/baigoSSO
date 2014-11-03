@@ -73,6 +73,7 @@ class AJAX_INSTALL {
 		$this->table_admin();
 		$this->table_user();
 		$this->table_app();
+		$this->table_app_belong();
 		$this->table_log();
 		$this->table_opt();
 
@@ -88,6 +89,7 @@ class AJAX_INSTALL {
 		$this->table_admin();
 		$this->table_user();
 		$this->table_app();
+		$this->table_app_belong();
 		$this->table_log();
 		$this->table_opt();
 
@@ -240,7 +242,7 @@ class AJAX_INSTALL {
 
 	private function table_admin() {
 		include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
-		$_mdl_admin  = new MODEL_ADMIN();
+		$_mdl_admin       = new MODEL_ADMIN();
 		$_arr_adminRow    = $_mdl_admin->mdl_create();
 
 		if ($_arr_adminRow["str_alert"] != "y020105") {
@@ -251,8 +253,8 @@ class AJAX_INSTALL {
 
 	private function table_user() {
 		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
-		$_mdl_user  = new MODEL_USER();
-		$_arr_userRow    = $_mdl_user->mdl_create();
+		$_mdl_user    = new MODEL_USER();
+		$_arr_userRow = $_mdl_user->mdl_create();
 
 		if ($_arr_userRow["str_alert"] != "y010105") {
 			$this->obj_ajax->halt_alert($_arr_userRow["str_alert"]);
@@ -262,8 +264,8 @@ class AJAX_INSTALL {
 
 	private function table_app() {
 		include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
-		$_mdl_app  = new MODEL_APP();
-		$_arr_appRow    = $_mdl_app->mdl_create();
+		$_mdl_app     = new MODEL_APP();
+		$_arr_appRow  = $_mdl_app->mdl_create();
 
 		if ($_arr_appRow["str_alert"] != "y050105") {
 			$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
@@ -271,10 +273,27 @@ class AJAX_INSTALL {
 	}
 
 
+	private function table_app_belong() {
+		include_once(BG_PATH_MODEL . "appBelong.class.php"); //载入管理帐号模型
+		$_mdl_appBelong       = new MODEL_APP_BELONG();
+		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create();
+
+		if ($_arr_appBelongRow["str_alert"] != "y070105") {
+			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
+		}
+
+		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_view();
+
+		if ($_arr_appBelongRow["str_alert"] != "y070108") {
+			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
+		}
+	}
+
+
 	private function table_log() {
 		include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
-		$_mdl_log  = new MODEL_LOG();
-		$_arr_logRow    = $_mdl_log->mdl_create();
+		$_mdl_log     = new MODEL_LOG();
+		$_arr_logRow  = $_mdl_log->mdl_create();
 
 		if ($_arr_logRow["str_alert"] != "y060105") {
 			$this->obj_ajax->halt_alert($_arr_logRow["str_alert"]);
@@ -284,8 +303,8 @@ class AJAX_INSTALL {
 
 	private function table_opt() {
 		include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
-		$_mdl_opt  = new MODEL_OPT();
-		$_arr_optRow    = $_mdl_opt->mdl_create();
+		$_mdl_opt     = new MODEL_OPT();
+		$_arr_optRow  = $_mdl_opt->mdl_create();
 
 		if ($_arr_optRow["str_alert"] != "y040105") {
 			$this->obj_ajax->halt_alert($_arr_optRow["str_alert"]);

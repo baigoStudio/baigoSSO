@@ -86,6 +86,8 @@
 										&nbsp;|&nbsp;
 										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=form&app_id={$value.app_id}">{$lang.href.edit}</a>
 										&nbsp;|&nbsp;
+										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=belong&app_id={$value.app_id}">{$lang.href.appBelong}</a>
+										&nbsp;|&nbsp;
 										<a href="javascript:void(0);" class="go_notice" id="{$value.app_id}">{$lang.href.noticeTest}</a>
 									</div>
 								</td>

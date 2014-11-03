@@ -42,23 +42,6 @@
 {include "include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
-	var opts_validator_form = {
-		{foreach $opt["reg"] as $key=>$value}
-			{if $value.type == "str" || $value.type == "textarea"}
-				{$str_msg_min = "too_short"}
-				{$str_msg_max = "too_long"}
-			{else}
-				{$str_msg_min = "too_few"}
-				{$str_msg_max = "too_many"}
-			{/if}
-			"opt_{$key}": {
-				length: { min: {$value.min}, max: 900 },
-				validate: { type: "{$value.type}", format: "{$value.format}" },
-				msg: { id: "msg_{$key}", {$str_msg_min}: "{$alert.x040201}{$value.label}", {$str_msg_max}: "{$value.label}{$alert.x040202}", format_err: "{$value.label}{$alert.x040203}" }
-			}{if !$value@last},{/if}
-		{/foreach}
-	};
-
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=opt",
 		btn_text: "{$lang.btn.ok}",

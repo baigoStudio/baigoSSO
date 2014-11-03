@@ -28,6 +28,7 @@ return array(
 		"order"           => "优先级",
 		"profile"         => "管理员个人信息",
 		"pass"            => "修改密码",
+		"appBelong"       => "授权用户",
 
 		"upgrade"         => "baigo SSO 升级程序",
 		"upgradeTable"    => "升级数据库",
@@ -55,6 +56,7 @@ return array(
 		"draft"           => "草稿",
 		"recycle"         => "回收站",
 		"help"            => "帮助",
+		"appBelong"      => "授权用户",
 
 		"passModi"        => "修改密码",
 		"show"            => "查看",
@@ -105,6 +107,8 @@ return array(
 		"upgrade"         => "正在进行升级安装",
 		"to"              => "至",
 		"complete"        => "升级安装无法创建管理员，点完成完成安装",
+		"belongUser"      => "已授权用户",
+		"selectUser"      => "待授权用户",
 
 		"appName"         => "应用名称",
 		"appId"           => "APP ID",
@@ -146,6 +150,7 @@ return array(
 		"email"           => "E-mail 地址",
 		"timeAdd"         => "创建",
 		"timeLogin"       => "最后登录",
+		"resetKey"        => "如果 APP KEY 泄露，可以通过重置更换，原 APP KEY 将作废。",
 	),
 
 	/*------选择项------*/
@@ -179,13 +184,18 @@ return array(
 		"close"       => "关闭",
 		"jump"        => "跳转至",
 		"over"        => "完成",
+		"auth"        => "授权",
+		"deauth"      => "取消授权",
 		"installNext" => "下一步",
+		"resetKey"    => "重置 APP KEY",
 	),
 
 	/*------确认框------*/
 	"confirm" => array(
-		"del"     => "确认永久删除吗？此操作不可恢复！",
-		"empty"   => "确认清空回收站吗？此操作不可恢复！",
+		"del"         => "确认永久删除吗？此操作不可恢复！",
+		"empty"       => "确认清空回收站吗？此操作不可恢复！",
+		"deauth"      => "取消授权将使此应用失去对这些用户的编辑权限，确认取消吗？",
+		"resetKey"    => "确认重置吗？此操作不可恢复！",
 	),
 
 	/*------图片说明------*/

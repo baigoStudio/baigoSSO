@@ -13,6 +13,7 @@ include_once(BG_PATH_FUNC . "http.func.php"); //载入开放平台类
 include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入开放平台类
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
+include_once(BG_PATH_MODEL . "appBelong.class.php");
 include_once(BG_PATH_MODEL . "user.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 
@@ -27,11 +28,12 @@ class API_USER {
 	private $appGet;
 
 	function __construct() { //构造函数
-		$this->obj_api    = new CLASS_API();
-		$this->log        = $this->obj_api->log; //初始化 AJAX 基对象
-		$this->mdl_user   = new MODEL_USER(); //设置管理组模型
-		$this->mdl_app    = new MODEL_APP(); //设置管理组模型
-		$this->mdl_log    = new MODEL_LOG(); //设置管理员模型
+		$this->obj_api        = new CLASS_API();
+		$this->log            = $this->obj_api->log; //初始化 AJAX 基对象
+		$this->mdl_user       = new MODEL_USER(); //设置管理组模型
+		$this->mdl_app        = new MODEL_APP(); //设置管理组模型
+		$this->mdl_appBelong  = new MODEL_APP_BELONG();
+		$this->mdl_log        = new MODEL_LOG(); //设置管理员模型
 	}
 
 
@@ -104,7 +106,7 @@ class API_USER {
 			);
 			$_arr_logType = array("user", "reg");
 			$_arr_logTarget[] = array(
-				"app_id" => $this->appGet["app_id"]
+				"app_id" => $this->appGet["app_id"],
 			);
 			$this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
 			$this->obj_api->halt_re($_arr_return);
@@ -120,6 +122,7 @@ class API_USER {
 		$_str_userPass    = fn_baigoEncrypt($_arr_userReg["user_pass"], $_str_userRand, true);
 		$_arr_userRow     = $this->mdl_user->mdl_submit($_str_userPass, $_str_userRand);
 		$_str_code        = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
+		$this->mdl_appBelong->mdl_submit($_arr_userRow["user_id"], $this->appGet["app_id"]);
 
 		$_arr_return = array(
 			"code"   => $_str_code,
@@ -152,7 +155,7 @@ class API_USER {
 			);
 			$_arr_logType = array("user", "login");
 			$_arr_logTarget[] = array(
-				"app_id" => $this->appGet["app_id"]
+				"app_id" => $this->appGet["app_id"],
 			);
 			$this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
 			$this->obj_api->halt_re($_arr_return);
@@ -215,7 +218,7 @@ class API_USER {
 				"str_alert" => "x050307",
 			);
 			$_arr_logTarget[] = array(
-				"app_id" => $this->appGet["app_id"]
+				"app_id" => $this->appGet["app_id"],
 			);
 			$_arr_logType = array("user", "get");
 			$this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
@@ -262,7 +265,7 @@ class API_USER {
 				"str_alert" => "x050308",
 			);
 			$_arr_logTarget[] = array(
-				"app_id" => $this->appGet["app_id"]
+				"app_id" => $this->appGet["app_id"],
 			);
 			$_arr_logType = array("user", "edit");
 			$this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
@@ -278,6 +281,14 @@ class API_USER {
 		$_arr_userRow = $this->mdl_user->mdl_read($_arr_userEdit["user_str"], $_arr_userEdit["user_by"]);
 		if ($_arr_userRow["str_alert"] != "y010102") {
 			$this->obj_api->halt_re($_arr_userRow);
+		}
+
+		$_arr_appBelongRow = $this->mdl_appBelong->mdl_read($_arr_userRow["user_id"], $this->appGet["app_id"]);
+		if ($_arr_appBelongRow != "y070102") {
+			$_arr_return = array(
+				"str_alert" => "x050308",
+			);
+			$this->obj_api->halt_re($_arr_return);
 		}
 
 		if ($_arr_userEdit["user_check_pass"] == true) {
@@ -342,7 +353,7 @@ class API_USER {
 				"str_alert" => "x050309",
 			);
 			$_arr_logTarget[] = array(
-				"app_id" => $this->appGet["app_id"]
+				"app_id" => $this->appGet["app_id"],
 			);
 			$_arr_logType = array("user", "del");
 			$this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
@@ -357,7 +368,9 @@ class API_USER {
 			}
 		}
 
-		$_arr_userDel = $this->mdl_user->mdl_del();
+		$_arr_appBelongIds = $this->mdl_appBelong->mdl_list(1000, 0, 0, $this->appGet["app_id"], $_arr_userIds);
+
+		$_arr_userDel = $this->mdl_user->mdl_del($_arr_appBelongIds);
 
 		if ($_arr_userDel["str_alert"] == "y010104") {
 			foreach ($_arr_userIds["user_ids"] as $_value) {

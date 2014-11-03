@@ -34,6 +34,14 @@ switch ($act_get) {
 		}
 	break;
 
+	case "belong":
+		$arr_appRow = $ctl_app->ctl_belong();
+		if ($arr_appRow["str_alert"] != "y050302") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_appRow["str_alert"]);
+			exit;
+		}
+	break;
+
 	default:
 		$arr_appRow = $ctl_app->ctl_list();
 		if ($arr_appRow["str_alert"] != "y050302") {

@@ -86,6 +86,28 @@ class MODEL_APP {
 	}
 
 
+	function mdl_reset($num_appId) {
+		$_arr_appData = array(
+			"app_key" => fn_rand(64),
+		);
+
+		$_num_mysql = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "app_id=" . $num_appId); //更新数据
+
+		if ($_num_mysql > 0) {
+			$_str_alert = "y050103"; //更新成功
+		} else {
+			return array(
+				"str_alert" => "x050103", //更新失败
+			);
+			exit;
+		}
+
+		return array(
+			"app_id"     => $num_appId,
+			"str_alert"  => $_str_alert, //成功
+		);
+	}
+
 	/**
 	 * mdl_submit function.
 	 *

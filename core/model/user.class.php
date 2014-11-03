@@ -292,6 +292,35 @@ class MODEL_USER {
 	}
 
 
+	function mdl_view($str_key = "", $num_appId = 0) {
+		$_arr_userSelect = array(
+			"user_id",
+			"user_name",
+			"user_mail",
+			"user_nick",
+			"user_note",
+			"user_status",
+			"user_time",
+			"user_time_login",
+			"user_ip",
+		);
+
+		$_str_sqlWhere = "user_id > 0";
+
+		if ($str_key) {
+			$_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
+		}
+
+		if ($num_appId > 0) {
+			$_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
+		}
+
+		$_arr_userRows = $this->obj_db->select_array(BG_DB_TABLE . "user_view", $_arr_userSelect, $_str_sqlWhere . " ORDER BY user_id DESC", $num_userNo, $num_userExcept); //查询数据
+
+		return $_arr_userRows;
+	}
+
+
 	/**
 	 * mdl_list function.
 	 *
@@ -302,7 +331,7 @@ class MODEL_USER {
 	 * @param string $str_status (default: "")
 	 * @return void
 	 */
-	function mdl_list($num_userNo, $num_userExcept = 0, $str_key = "", $str_status = "") {
+	function mdl_list($num_userNo, $num_userExcept = 0, $str_key = "", $str_status = "", $arr_notIn = false) {
 		$_arr_userSelect = array(
 			"user_id",
 			"user_name",
@@ -325,6 +354,11 @@ class MODEL_USER {
 			$_str_sqlWhere .= " AND user_status='" . $str_status . "'";
 		}
 
+		if ($arr_notIn) {
+			$_str_notIn = implode(",", $arr_notIn);
+			$_str_sqlWhere .= " AND user_id NOT IN (" . $_str_notIn . ")";
+		}
+
 		$_arr_userRows = $this->obj_db->select_array(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere . " ORDER BY user_id DESC", $num_userNo, $num_userExcept); //查询数据
 
 		return $_arr_userRows;
@@ -336,14 +370,14 @@ class MODEL_USER {
 
 	返回提示信息
 	*/
-	function mdl_del() {
-		$_str_userId = implode(",", $this->userIds["user_ids"]);
-
-		$_num_mysql = $this->obj_db->delete(BG_DB_TABLE . "user", "user_id IN (" . $_str_userId . ")"); //删除数据
+	function mdl_del($_arr_userIds) {
+		$_str_userId  = implode(",", $_arr_userIds);
+		$_num_mysql   = $this->obj_db->delete(BG_DB_TABLE . "user", "user_id IN (" . $_str_userId . ")"); //删除数据
 
 		//如车影响行数小于0则返回错误
 		if ($_num_mysql > 0) {
 			$_str_alert = "y010104"; //成功
+			$this->obj_db->delete(BG_DB_TABLE . "appBelong", "belong_user_id IN (" . $_str_userId . ")"); //删除数据
 		} else {
 			$_str_alert = "x010104"; //失败
 		}
@@ -357,7 +391,7 @@ class MODEL_USER {
 	/*============统计管理员============
 	返回数量
 	*/
-	function mdl_count($str_key = "", $str_status = "") {
+	function mdl_count($str_key = "", $str_status = "", $arr_notIn = false) {
 		$_str_sqlWhere = "user_id > 0";
 
 		if ($str_key) {
@@ -366,6 +400,11 @@ class MODEL_USER {
 
 		if ($str_status) {
 			$_str_sqlWhere .= " AND user_status='" . $str_status . "'";
+		}
+
+		if ($arr_notIn) {
+			$_str_notIn = implode(",", $arr_notIn);
+			$_str_sqlWhere .= " AND user_id NOT IN (" . $_str_notIn . ")";
 		}
 
 		$_num_userCount = $this->obj_db->count(BG_DB_TABLE . "user", $_str_sqlWhere); //查询数据

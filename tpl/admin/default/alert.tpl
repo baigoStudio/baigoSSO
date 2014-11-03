@@ -7,7 +7,7 @@
 
 	<li>{$lang.page.alert}</li>
 
-	{include "include/admin_menu.tpl" cfg=$cfg}
+	{include "include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
 		<a href="javascript:history.go(-1);">
