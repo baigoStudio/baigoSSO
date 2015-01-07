@@ -32,12 +32,12 @@ class API_CODE {
 
 
 	/**
-	 * api_chkapp function.
+	 * app_check function.
 	 *
 	 * @access private
 	 * @return void
 	 */
-	private function api_chkapp($str_method = "get") {
+	private function app_check($str_method = "get") {
 		$this->appGet = $this->obj_api->app_get($str_method);
 		if ($this->appGet["str_alert"] != "ok") {
 			$this->log_do($this->appGet, "get");
@@ -84,7 +84,7 @@ class API_CODE {
 	 * @return void
 	 */
 	function api_signature() {
-		$this->api_chkapp("get");
+		$this->app_check("get");
 
 		if ($this->appAllow["code"]["signature"] != 1) {
 			$_arr_return = array(
@@ -115,7 +115,7 @@ class API_CODE {
 	 * @return void
 	 */
 	function api_verify() {
-		$this->api_chkapp("get");
+		$this->app_check("get");
 
 		if ($this->appAllow["code"]["verify"] != 1) {
 			$_arr_return = array(
@@ -150,7 +150,7 @@ class API_CODE {
 	 * @return void
 	 */
 	function api_encode() {
-		$this->api_chkapp("get");
+		$this->app_check("get");
 		if ($this->appAllow["code"]["encode"] != 1) {
 			$_arr_return = array(
 				"str_alert" => "x050314",
@@ -179,7 +179,7 @@ class API_CODE {
 	 * @return void
 	 */
 	function api_decode() {
-		$this->api_chkapp("get");
+		$this->app_check("get");
 		if ($this->appAllow["code"]["decode"] != 1) {
 			$_arr_return = array(
 				"str_alert" => "x050315",

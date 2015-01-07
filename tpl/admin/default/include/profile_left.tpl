@@ -18,18 +18,16 @@
 				</p>
 			</div>
 
-			<div class="form-group">
-				{if $tplData.adminLogged.admin_allow.info == "1"}
-					<div>
-						<span class="label label-danger">{$lang.label.profileInfo}</span>
-					</div>
-				{/if}
+			{if $tplData.adminLogged.admin_allow.info == "1"}
+				<div class="form-group">
+					<span class="label label-danger">{$lang.label.profileInfo}</span>
+				</div>
+			{/if}
 
-				{if $tplData.adminLogged.admin_allow.pass == "1"}
-					<div>
-						<span class="label label-danger">{$lang.label.profilePass}</span>
-					</div>
-				{/if}
-			</div>
+			{if $tplData.adminLogged.admin_allow.pass == "1"}
+				<div class="form-group">
+					<span class="label label-danger">{$lang.label.profilePass}</span>
+				</div>
+			{/if}
 		</div>
 	</div>

@@ -22,8 +22,7 @@
 	</div>
 
 	<form name="app_form" id="app_form">
-
-		<input type="hidden" name="token_session" value="{$common.token_session}">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" id="act_post" value="reset">
 		<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 
@@ -53,7 +52,7 @@
 
 						<div class="form-group">
 							<button type="button" class="go_reset btn btn-primary">{$lang.btn.resetKey}</button>
-							<p class="help-block">{$lang.label.resetKey}</p>
+							<p class="help-block">{$lang.label.appKeyNote}</p>
 						</div>
 
 						<div class="form-group">
@@ -63,7 +62,7 @@
 
 						<div class="form-group">
 							<label class="control-label static_label">{$lang.label.allow}</label>
-							<dl>
+							<dl class="list_baigo">
 								{foreach $allow as $key_m=>$value_m}
 									<dt>{$value_m.title}</dt>
 									<dd>
@@ -152,9 +151,11 @@
 				</div>
 			</div>
 		</div>
+
 	</form>
 
 {include "include/admin_foot.tpl" cfg=$cfg}
+
 	<script type="text/javascript">
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=app",
@@ -173,4 +174,5 @@
 		});
 	})
 	</script>
+
 {include "include/html_foot.tpl" cfg=$cfg}

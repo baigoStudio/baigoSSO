@@ -8,7 +8,7 @@
 					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="./">
-					<img alt="baigo CMS" src="./image/logo_baigo_sso.png">
+					<img alt="baigo SSO" src="./image/logo_baigo_sso.png">
 				</a>
 			</div>
 			<nav class="collapse navbar-collapse bs-navbar-collapse">
@@ -18,7 +18,7 @@
 					<li<?php if ($_str_mod == "upgrade") { ?> class="active"<?php } ?>><a href="./?lang=zh_CN&mod=upgrade">升级</a></li>
 					<li<?php if ($_str_mod == "help") { ?> class="active"<?php } ?>><a href="./?lang=zh_CN&mod=help">使用帮助</a></li>
 					<li<?php if ($_str_mod == "api") { ?> class="active"<?php } ?>><a href="./?lang=zh_CN&mod=api">API 接口</a></li>
-					<li><a href="http://www.baigo.net/Products/baigoSSO/?lang=zh_CN&mod=download" target="_blank">下载</a></li>
+					<li><a href="http://www.baigo.net/Products/baigoSSO/download.php" target="_blank">下载</a></li>
 				</ul>
 			</nav>
 		</div>

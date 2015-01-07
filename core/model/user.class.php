@@ -121,8 +121,10 @@ class MODEL_USER {
 			$_arr_userData["user_nick"] = $this->apiEdit["user_nick"]; //如果密码为空，则不修改
 		}
 
-		$_num_userId  = $num_userId;
-		$_num_mysql   = $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "user_id=" . $_num_userId); //更新数据
+		if ($_arr_userData) {
+			$_num_userId  = $num_userId;
+			$_num_mysql   = $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "user_id=" . $_num_userId); //更新数据
+		}
 
 		if ($_num_mysql > 0) {
 			$_str_alert = "y010103"; //更新成功

@@ -38,25 +38,25 @@
 
 	<div class="row">
 		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<form name="belong_search" id="belong_search" class="form-inline" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get">
-						<div class="pull-left">{$lang.label.belongUser}</div>
-						<div class="pull-right">
-							<input type="hidden" name="mod" value="app">
-							<input type="hidden" name="act_get" value="belong">
-							<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
-							<input type="text" name="key_belong" class="form-control input-sm" value="{$tplData.search.key_belong}" placeholder="{$lang.label.key}">
-							<button class="btn btn-default btn-sm" type="submit">{$lang.btn.filter}</button>
-						</div>
-						<div class="clearfix"></div>
-					</form>
-				</div>
-				<form name="belong_list" id="belong_list" class="form-inline">
-
-					<input type="hidden" name="token_session" value="{$common.token_session}">
+			<div class="well">
+				<form name="belong_search" id="belong_search" class="form-inline" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get">
+					<input type="hidden" name="mod" value="app">
+					<input type="hidden" name="act_get" value="belong">
 					<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
+					<div class="pull-left">{$lang.label.belongUser}</div>
+					<div class="pull-right">
+						<input type="text" name="key_belong" class="form-control input-sm" value="{$tplData.search.key_belong}" placeholder="{$lang.label.key}">
+						<button class="btn btn-default btn-sm" type="submit">{$lang.btn.filter}</button>
+					</div>
+					<div class="clearfix"></div>
+				</form>
+			</div>
 
+			<form name="belong_list" id="belong_list" class="form-inline">
+				<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+				<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
+
+				<div class="panel panel-default">
 					<div class="table-responsive">
 						<table class="table table-striped table-hover">
 							<thead>
@@ -107,31 +107,31 @@
 							</tfoot>
 						</table>
 					</div>
-				</form>
-			</div>
+				</div>
+
+			</form>
 		</div>
 
 		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<form name="user_search" id="user_search" class="form-inline" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get">
-						<div class="pull-left">{$lang.label.selectUser}</div>
-						<div class="pull-right">
-							<input type="hidden" name="mod" value="app">
-							<input type="hidden" name="act_get" value="belong">
-							<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
-							<input type="text" name="key" class="form-control input-sm" value="{$tplData.search.key}" placeholder="{$lang.label.key}">
-							<button class="btn btn-default btn-sm" type="submit">{$lang.btn.filter}</button>
-						</div>
-						<div class="clearfix"></div>
-					</form>
-				</div>
-
-				<form name="user_list" id="user_list" class="form-inline">
-
-					<input type="hidden" name="token_session" value="{$common.token_session}">
+			<div class="well">
+				<form name="user_search" id="user_search" class="form-inline" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get">
+					<input type="hidden" name="mod" value="app">
+					<input type="hidden" name="act_get" value="belong">
 					<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
+					<div class="pull-left">{$lang.label.selectUser}</div>
+					<div class="pull-right">
+						<input type="text" name="key" class="form-control input-sm" value="{$tplData.search.key}" placeholder="{$lang.label.key}">
+						<button class="btn btn-default btn-sm" type="submit">{$lang.btn.filter}</button>
+					</div>
+					<div class="clearfix"></div>
+				</form>
+			</div>
 
+			<form name="user_list" id="user_list" class="form-inline">
+				<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+				<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
+
+				<div class="panel panel-default">
 					<div class="table-responsive">
 						<table class="table table-striped table-hover">
 							<thead>
@@ -182,14 +182,14 @@
 							</tfoot>
 						</table>
 					</div>
-				</form>
+				</div>
+
+			</form>
+
+			<div class="text-right">
+				{include "include/page.tpl" cfg=$cfg}
 			</div>
 		</div>
-
-	</div>
-
-	<div class="text-right">
-		{include "include/page.tpl" cfg=$cfg}
 	</div>
 
 {include "include/admin_foot.tpl" cfg=$cfg}

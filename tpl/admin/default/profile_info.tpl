@@ -1,6 +1,8 @@
 {* profile_form.tpl 管理员编辑界面 *}
 {$cfg = [
 	title          => $lang.page.profile,
+	menu_active    => "profile",
+	sub_active     => "info",
 	baigoValidator => "true",
 	baigoSubmit    => "true",
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=info"
@@ -14,7 +16,7 @@
 
 	<form name="profile_form" id="profile_form" autocomplete="off">
 
-		<input type="hidden" name="token_session" value="{$common.token_session}">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="info">
 
 		<div class="row">
@@ -40,7 +42,7 @@
 
 						<div class="form-group">
 							<label class="control-label">{$lang.label.allow}</label>
-							<dl>
+							<dl class="list_baigo">
 								{foreach $adminMod as $key_m=>$value_m}
 									<dt>{$value_m.main.title}</dt>
 									<dd>

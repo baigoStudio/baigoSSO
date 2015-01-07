@@ -9,6 +9,8 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
+include_once(BG_PATH_SMARTY . "smarty.class.php"); //载入 Smarty 类
+
 /*-------------模板类-------------*/
 class CLASS_TPL {
 

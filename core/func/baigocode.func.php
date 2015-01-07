@@ -14,11 +14,11 @@ if(!defined("IN_BAIGO")) {
 //加密
 function fn_baigoEncode($txt, $key) {
 	srand((double)microtime() * 1000000);
-	$encrypt_key = md5(rand(0, 32000));
-	$ctr = 0;
-	$tmp = '';
+	$encrypt_key   = md5(rand(0, 32000));
+	$ctr           = 0;
+	$tmp           = '';
 	for($i = 0; $i < strlen($txt); $i++) {
-		$ctr = $ctr == strlen($encrypt_key) ? 0 : $ctr;
+		$ctr  = $ctr == strlen($encrypt_key) ? 0 : $ctr;
 		$tmp .= $encrypt_key[$ctr] . ($txt[$i] ^ $encrypt_key[$ctr++]);
 	}
 	return base64_encode(fn_baigoKey($tmp, $key));
@@ -26,21 +26,21 @@ function fn_baigoEncode($txt, $key) {
 
 //解密
 function fn_baigoDecode($txt, $key) {
-	$txt = fn_baigoKey(base64_decode($txt), $key);
-	$tmp = '';
+	$txt   = fn_baigoKey(base64_decode($txt), $key);
+	$tmp   = '';
 	for($i = 0; $i < strlen($txt); $i++) {
-		$md5 = $txt[$i];
+		$md5  = $txt[$i];
 		$tmp .= $txt[++$i] ^ $md5;
 	}
 	return $tmp;
 }
 
 function fn_baigoKey($txt, $encrypt_key) {
-	$encrypt_key = md5($encrypt_key);
-	$ctr = 0;
-	$tmp = '';
+	$encrypt_key   = md5($encrypt_key);
+	$ctr           = 0;
+	$tmp           = '';
 	for($i = 0; $i < strlen($txt); $i++) {
-		$ctr = $ctr == strlen($encrypt_key) ? 0 : $ctr;
+		$ctr  = $ctr == strlen($encrypt_key) ? 0 : $ctr;
 		$tmp .= $txt[$i] ^ $encrypt_key[$ctr++];
 	}
 	return $tmp;
@@ -48,11 +48,11 @@ function fn_baigoKey($txt, $encrypt_key) {
 
 //生成签名
 function fn_baigoSignMk($tm_timestamp, $str_rand) {
-	$_num_timestamp = intval($tm_timestamp);
-	$_arr_temp = array($_num_timestamp, $str_rand);
+	$_num_timestamp    = intval($tm_timestamp);
+	$_arr_temp         = array($_num_timestamp, $str_rand);
 	sort($_arr_temp);
-	$_str_temp = implode($_arr_temp);
-	$_str_temp = sha1($_str_temp);
+	$_str_temp         = implode($_arr_temp);
+	$_str_temp         = sha1($_str_temp);
 
 	return $_str_temp;
 }

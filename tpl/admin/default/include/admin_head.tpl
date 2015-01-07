@@ -21,14 +21,14 @@
 					<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php">{$smarty.const.BG_SITE_NAME}</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li>
+					<li {if $cfg.menu_active == "profile" && $cfg.sub_active == "info"}class="active"{/if}>
 						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=info">
 							<span class="glyphicon glyphicon-user"></span>
 							{$tplData.adminLogged.admin_name}
-							{if $tplData.adminLogged.admin_note}[ {$tplData.adminLogged.admin_note} ]{/if}
+							{if $tplData.adminLogged.admin_nick}[ {$tplData.adminLogged.admin_nick} ]{/if}
 						</a>
 					</li>
-					<li>
+					<li {if $cfg.menu_active == "profile" && $cfg.sub_active == "pass"}class="active"{/if}>
 						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=pass">
 							<span class="glyphicon glyphicon-lock"></span>
 							{$lang.href.passModi}

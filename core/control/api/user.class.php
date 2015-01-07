@@ -38,14 +38,14 @@ class API_USER {
 
 
 	/**
-	 * api_chkapp function.
+	 * app_check function.
 	 *
 	 * @access private
 	 * @param mixed $num_appId
 	 * @param string $str_method (default: "get")
 	 * @return void
 	 */
-	private function api_chkapp($str_method = "get") {
+	private function app_check($str_method = "get") {
 		$this->appGet = $this->obj_api->app_get($str_method);
 		$_arr_logTarget[] = array(
 			"app_id" => $this->appGet["app_id"]
@@ -98,7 +98,7 @@ class API_USER {
 	 * @return void
 	 */
 	function api_reg() {
-		$this->api_chkapp("post");
+		$this->app_check("post");
 
 		if ($this->appAllow["user"]["reg"] != 1) {
 			$_arr_return = array(
@@ -147,7 +147,7 @@ class API_USER {
 	 * @return void
 	 */
 	function api_login() {
-		$this->api_chkapp("post");
+		$this->app_check("post");
 
 		if ($this->appAllow["user"]["login"] != 1) {
 			$_arr_return = array(
@@ -211,7 +211,7 @@ class API_USER {
 	 * @return void
 	 */
 	function api_get() {
-		$this->api_chkapp("get");
+		$this->app_check("get");
 
 		if ($this->appAllow["user"]["get"] != 1) {
 			$_arr_return = array(
@@ -258,7 +258,7 @@ class API_USER {
 	 * @return void
 	 */
 	function api_edit() {
-		$this->api_chkapp("post");
+		$this->app_check("post");
 
 		if ($this->appAllow["user"]["edit"] != 1) {
 			$_arr_return = array(
@@ -283,12 +283,14 @@ class API_USER {
 			$this->obj_api->halt_re($_arr_userRow);
 		}
 
-		$_arr_appBelongRow = $this->mdl_appBelong->mdl_read($_arr_userRow["user_id"], $this->appGet["app_id"]);
-		if ($_arr_appBelongRow != "y070102") {
-			$_arr_return = array(
-				"str_alert" => "x050308",
-			);
-			$this->obj_api->halt_re($_arr_return);
+		if ($this->appAllow["user"]["global"] != 1) {
+			$_arr_appBelongRow = $this->mdl_appBelong->mdl_read($_arr_userRow["user_id"], $this->appGet["app_id"]);
+			if ($_arr_appBelongRow["str_alert"] != "y070102") {
+				$_arr_return = array(
+					"str_alert" => "x050308",
+				);
+				$this->obj_api->halt_re($_arr_return);
+			}
 		}
 
 		if ($_arr_userEdit["user_check_pass"] == true) {
@@ -346,7 +348,7 @@ class API_USER {
 	 * @return void
 	 */
 	function api_del() {
-		$this->api_chkapp("post");
+		$this->app_check("post");
 
 		if ($this->appAllow["user"]["del"] != 1) {
 			$_arr_return = array(
@@ -368,9 +370,13 @@ class API_USER {
 			}
 		}
 
-		$_arr_appBelongIds = $this->mdl_appBelong->mdl_list(1000, 0, 0, $this->appGet["app_id"], $_arr_userIds);
+		if ($this->appAllow["user"]["global"] != 1) {
+			$_arr_users = $this->mdl_appBelong->mdl_list(1000, 0, 0, $this->appGet["app_id"], $_arr_userIds);
+		} else {
+			$_arr_users = $_arr_userIds;
+		}
 
-		$_arr_userDel = $this->mdl_user->mdl_del($_arr_appBelongIds);
+		$_arr_userDel = $this->mdl_user->mdl_del($_arr_users);
 
 		if ($_arr_userDel["str_alert"] == "y010104") {
 			foreach ($_arr_userIds["user_ids"] as $_value) {
@@ -398,7 +404,7 @@ class API_USER {
 	 * @return void
 	 */
 	function api_chkname() {
-		$this->api_chkapp("get");
+		$this->app_check("get");
 
 		if ($this->appAllow["user"]["chkname"] != 1) {
 			$_arr_return = array(
@@ -433,7 +439,7 @@ class API_USER {
 	 */
 	function api_chkmail() {
 		if (BG_REG_ONEMAIL == "false" && BG_REG_NEEDMAIL == "on") {
-			$this->api_chkapp("get");
+			$this->app_check("get");
 
 			if ($this->appAllow["user"]["chkmail"] != 1) {
 				$_arr_return = array(

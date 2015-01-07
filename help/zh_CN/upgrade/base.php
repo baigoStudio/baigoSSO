@@ -1,7 +1,7 @@
 	<h3>基本设置</h3>
 
 	<p>
-		<img src="./zh_CN/install/image/base.jpg" class="img-responsive">
+		<img src="./zh_CN/upgrade/image/base.jpg" class="img-responsive">
 	</p>
 
 	<div class="panel panel-default">
@@ -17,7 +17,7 @@
 			<p>请根据实际情况填写，如：<mark>http://www.domain.com</mark>，默认为当前网站 URL，末尾请勿加 <mark>/</mark>。</p>
 
 			<h4 class="text-info">每页显示数</h4>
-			<p>管理后台以及前台页面，在对文章、TAG等进行分页管理的时候，每一页所显示的数量，默认为 30。</p>
+			<p>管理后台以及前台页面，在对文章、TAG 等进行分页管理的时候，每一页所显示的数量，默认为 30。</p>
 
 			<h4 class="text-info">时区</h4>
 			<p>请根据当地实际情况填写，默认为 Etc/GMT+8，即北京时间。</p>

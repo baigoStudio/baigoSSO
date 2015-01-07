@@ -24,7 +24,7 @@
 
 	<form name="opt_form" id="opt_form">
 
-		<input type="hidden" name="token_session" value="{$common.token_session}">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="reg">
 
 		<div class="panel panel-default">

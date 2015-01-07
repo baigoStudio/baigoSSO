@@ -42,8 +42,7 @@
 	</div>
 
 	<form name="admin_form" id="admin_form" autocomplete="off">
-
-		<input type="hidden" name="token_session" value="{$common.token_session}">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="submit">
 		<input type="hidden" name="admin_id" value="{$tplData.adminRow.admin_id}">
 
@@ -86,15 +85,17 @@
 							</div>
 						</div>
 
-						<label class="control-label">{$lang.label.allow}<span id="msg_admin_allow">*</span></label>
 						<div class="form-group">
-							<div class="checkbox_baigo">
-								<label for="chk_all">
-									<input type="checkbox" id="chk_all" class="first">
-									{$lang.label.all}
-								</label>
-							</div>
-							<dl>
+							<label class="control-label">{$lang.label.allow}<span id="msg_admin_allow">*</span></label>
+							<dl class="list_baigo">
+								<dd>
+									<div class="checkbox_baigo">
+										<label for="chk_all">
+											<input type="checkbox" id="chk_all" class="first">
+											{$lang.label.all}
+										</label>
+									</div>
+								</dd>
 								{foreach $adminMod as $key_m=>$value_m}
 									<dt>{$value_m.main.title}</dt>
 									<dd>
@@ -164,6 +165,7 @@
 				</div>
 			</div>
 		</div>
+
 	</form>
 
 {include "include/admin_foot.tpl" cfg=$cfg}

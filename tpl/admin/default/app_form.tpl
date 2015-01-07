@@ -42,8 +42,7 @@
 	</div>
 
 	<form name="app_form" id="app_form">
-
-		<input type="hidden" name="token_session" value="{$common.token_session}">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="submit">
 		<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 
@@ -65,16 +64,17 @@
 							</div>
 						</div>
 
-						<label class="control-label">{$lang.label.allow}<span id="msg_app_allow">*</span></label>
 						<div class="form-group">
-							<div class="checkbox_baigo">
-								<label for="chk_all">
-									<input type="checkbox" id="chk_all" class="first">
-									{$lang.label.all}
-								</label>
-							</div>
-
-							<dl>
+							<label class="control-label">{$lang.label.allow}<span id="msg_app_allow">*</span></label>
+							<dl class="list_baigo">
+								<dd>
+									<div class="checkbox_baigo">
+										<label for="chk_all">
+											<input type="checkbox" id="chk_all" class="first">
+											{$lang.label.all}
+										</label>
+									</div>
+								</dd>
 								{foreach $allow as $key_m=>$value_m}
 									<dt>{$value_m.title}</dt>
 									<dd>
@@ -154,6 +154,7 @@
 				</div>
 			</div>
 		</div>
+
 	</form>
 
 {include "include/admin_foot.tpl" cfg=$cfg}

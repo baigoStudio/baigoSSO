@@ -7,8 +7,9 @@
 {include "include/install_head.tpl" cfg=$cfg}
 
 	<form name="install_form_dbtable" id="install_form_dbtable">
-		<input type="hidden" name="token_session" value="{$common.token_session}">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="pathParent" value="{$tplData.path}">
+		<input type="hidden" name="target" value="{$tplData.target}">
 		<input type="hidden" name="act_post" value="auto">
 
 		<div class="alert alert-warning">
@@ -31,7 +32,7 @@
 	<script type="text/javascript">
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_INSTALL}ajax.php?mod=install",
-		btn_text: "{$lang.btn.installNext}",
+		btn_text: "{$lang.btn.stepNext}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$tplData.url}ctl.php?mod=install&act_get=ssoAdmin"
 	};

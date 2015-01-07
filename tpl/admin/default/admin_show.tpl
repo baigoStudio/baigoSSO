@@ -37,7 +37,7 @@
 
 					<div class="form-group">
 						<label class="control-label static_label">{$lang.label.allow}</label>
-						<dl>
+						<dl class="list_baigo">
 							{foreach $adminMod as $key_m=>$value_m}
 								<dt>{$value_m.main.title}</dt>
 								<dd>

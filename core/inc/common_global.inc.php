@@ -23,7 +23,6 @@ header("Content-Type: text/html; charset=utf-8");
 
 include_once(BG_PATH_FUNC . "common.func.php"); //载入通用函数
 include_once(BG_PATH_FUNC . "validate.func.php"); //载入表单验证函数
-include_once(BG_PATH_SMARTY . "smarty.class.php"); //载入 Smarty 类
 
 $act_post           = fn_getSafe($_POST["act_post"], "txt", ""); //表单动作
 $act_get            = fn_getSafe($_GET["act_get"], "txt", ""); //查询串动作

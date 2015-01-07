@@ -8,20 +8,20 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">code</td>
-						<td>string</td>
+						<td class="nowrap">string</td>
 						<td>加密字符串，需要解密。详情请看 <a href="?lang=zh_CN&mod=api&act=code">密文接口</a>。</td>
 					</tr>
 					<tr>
@@ -56,9 +56,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -66,25 +66,25 @@
 					<tr>
 						<td class="nowrap">act_get</td>
 						<td class="nowrap">string</td>
-						<td>true</td>
+						<td class="nowrap">true</td>
 						<td>接口调用动作，值只能为 decode。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">app_id</td>
 						<td class="nowrap">int</td>
-						<td>true</td>
+						<td class="nowrap">true</td>
 						<td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href="?lang=zh_CN&mod=help&act=app#show">查看应用</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">app_key</td>
 						<td class="nowrap">string</td>
-						<td>true</td>
+						<td class="nowrap">true</td>
 						<td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href="?lang=zh_CN&mod=help&act=app#show">查看应用</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">code</td>
 						<td class="nowrap">string</td>
-						<td>true</td>
+						<td class="nowrap">true</td>
 						<td>从其他接口得到的加密字符串。</td>
 					</tr>
 					<tr>
@@ -104,19 +104,19 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
-						<td colspan="3">返回的其他内容请参照具体的接口。</td>
+						<td colspan="3">返回的其他内容均为 <mark>Base64 加密</mark>，需要对此进行 <mark>Base64 解密</mark>，请参照具体的接口。</td>
 					</tr>
 				</tbody>
 			</table>

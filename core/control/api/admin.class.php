@@ -43,7 +43,7 @@ class API_ADMIN {
 	}
 
 
-	private function api_chkapp($str_method = "get") {
+	private function app_check($str_method = "get") {
 		$this->appGet = $this->obj_api->app_get($str_method);
 		$_arr_logTarget[] = array(
 			"app_id" => $this->appGet["app_id"]
@@ -88,7 +88,7 @@ class API_ADMIN {
 	 * @return void
 	 */
 	function api_add() {
-		$this->api_chkapp("post");
+		$this->app_check("post");
 
 
 		$_arr_adminAdd = $this->mdl_admin->api_add();

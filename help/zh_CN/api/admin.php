@@ -23,9 +23,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -75,19 +75,22 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
+						<td>false</td>
 						<td>string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">admin_id</td>
+						<td>true</td>
 						<td>int</td>
 						<td>管理员 ID</td>
 					</tr>

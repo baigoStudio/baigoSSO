@@ -402,8 +402,8 @@ class CLASS_MYSQL {
 
 	function __destruct() {
 		if ($this->db_link) {
-			$this->close();
-			unset($this->db_link);
+			//$this->close();
+			//unset($this->db_link);
 		}
 	}
 }

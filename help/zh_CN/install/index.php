@@ -9,8 +9,8 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>文件 / 文件夹</th>
-						<th>用途</th>
+						<th class="nowrap">文件 / 文件夹</th>
+						<th class="nowrap">用途</th>
 						<th>说明</th>
 					</tr>
 				</thead>

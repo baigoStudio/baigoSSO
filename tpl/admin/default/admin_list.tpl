@@ -48,11 +48,10 @@
 		<div class="clearfix"></div>
 	</div>
 
-	<div class="panel panel-default">
-		<form name="admin_list" id="admin_list" class="form-inline">
+	<form name="admin_list" id="admin_list" class="form-inline">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 
-			<input type="hidden" name="token_session" value="{$common.token_session}">
-
+		<div class="panel panel-default">
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 					<thead>
@@ -65,6 +64,7 @@
 							</th>
 							<th class="td_mn">{$lang.label.id}</th>
 							<th>{$lang.label.admin}</th>
+							<th class="td_sm">{$lang.label.note}</th>
 							<th class="td_sm">{$lang.label.status}</th>
 						</tr>
 					</thead>
@@ -80,7 +80,7 @@
 								<td class="td_mn">{$value.admin_id}</td>
 								<td>
 									<div>
-										{$value.admin_name} {if $value.admin_note}[ {$value.admin_note} ]{/if}
+										{$value.admin_name} {if $value.admin_nick}[ {$value.admin_nick} ]{/if}
 									</div>
 									<div>
 										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=show&admin_id={$value.admin_id}">{$lang.href.show}</a>
@@ -88,6 +88,7 @@
 										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=form&admin_id={$value.admin_id}">{$lang.href.edit}</a>
 									</div>
 								</td>
+								<td class="td_sm">{$value.admin_note}</td>
 								<td class="td_sm">
 									<span class="label label-{$_css_status}">{$status.admin[$value.admin_status]}</span>
 								</td>
@@ -112,9 +113,9 @@
 					</tfoot>
 				</table>
 			</div>
-		</form>
+		</div>
 
-	</div>
+	</form>
 
 	<div class="text-right">
 		{include "include/page.tpl" cfg=$cfg}

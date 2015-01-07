@@ -25,20 +25,20 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">code</td>
-						<td>string</td>
+						<td class="nowrap">string</td>
 						<td>加密字符串，需要解密。详情请看 <a href="?lang=zh_CN&mod=api&act=code">密文接口</a>。</td>
 					</tr>
 					<tr>

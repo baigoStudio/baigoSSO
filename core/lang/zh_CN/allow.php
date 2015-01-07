@@ -17,9 +17,10 @@ return array(
 		"allow" => array(
 			"reg"        => "注册",
 			"login"      => "登录",
-			"get"        => "获取信息",
+			"get"        => "读取",
 			"edit"       => "编辑",
 			"del"        => "删除",
+			"global"     => "操作所有用户",
 			"chkname"    => "验证用户名",
 			"chkmail"    => "验证 E-mail",
 		),

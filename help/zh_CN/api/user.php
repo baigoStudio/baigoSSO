@@ -18,9 +18,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -82,20 +82,23 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_id</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>用户 ID</td>
 					</tr>
 				</tbody>
@@ -125,9 +128,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -177,50 +180,59 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_id</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>用户 ID</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_name</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>用户名</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_mail</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>Email</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_nick</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>昵称</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_time</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>注册时间，unix 时间戳。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_time_login</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>最后登录时间，unix 时间戳。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_ip</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>最后登录 IP 地址</td>
 					</tr>
 				</tbody>
@@ -250,9 +262,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -302,50 +314,59 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_id</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>用户 ID</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_name</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>用户名</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_mail</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>Email</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_nick</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>昵称</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_time</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>注册时间，unix 时间戳。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_time_login</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>最后登录时间，unix 时间戳。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_ip</td>
-						<td>string</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">string</td>
 						<td>最后登录 IP 地址</td>
 					</tr>
 				</tbody>
@@ -375,9 +396,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -451,20 +472,23 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 					<tr>
 						<td class="nowrap">user_id</td>
-						<td>int</td>
+						<td class="nowrap">true</td>
+						<td class="nowrap">int</td>
 						<td>用户 ID</td>
 					</tr>
 				</tbody>
@@ -494,9 +518,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -540,15 +564,17 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 				</tbody>
@@ -578,9 +604,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -624,15 +650,17 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 				</tbody>
@@ -662,9 +690,9 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
-						<th>是否必须</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">类型</th>
+						<th class="nowrap">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
@@ -708,15 +736,17 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>名称</th>
-						<th>类型</th>
+						<th class="nowrap">名称</th>
+						<th class="nowrap">Base64</th>
+						<th class="nowrap">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="nowrap">str_alert</td>
-						<td>string</td>
+						<td class="nowrap">false</td>
+						<td class="nowrap">string</td>
 						<td>结果代码，详情请看 <a href="?lang=zh_CN&mod=api&act=alert">结果代码</a>。</td>
 					</tr>
 				</tbody>

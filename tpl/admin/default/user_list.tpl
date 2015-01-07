@@ -43,6 +43,7 @@
 		<div class="pull-right">
 			<form name="user_search" id="user_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
 				<input type="hidden" name="mod" value="user">
+				<input type="hidden" name="act_get" value="list">
 				<select name="status" class="form-control input-sm">
 					<option value="">{$lang.option.allStatus}</option>
 					{foreach $status.user as $key=>$value}
@@ -60,7 +61,7 @@
 		<div class="col-md-3">
 			<div class="well">
 				<form name="user_form" id="user_form">
-					<input type="hidden" name="token_session" value="{$common.token_session}">
+					<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 					<input type="hidden" name="act_post" value="submit">
 					<input type="hidden" name="user_id" value="{$tplData.userRow.user_id}">
 
@@ -124,10 +125,10 @@
 		</div>
 
 		<div class="col-md-9">
-			<div class="panel panel-default">
-				<form name="user_list" id="user_list" class="form-inline">
+			<form name="user_list" id="user_list" class="form-inline">
+				<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 
-					<input type="hidden" name="token_session" value="{$common.token_session}">
+				<div class="panel panel-default">
 					<div class="table-responsive">
 						<table class="table table-striped table-hover">
 							<thead>
@@ -190,8 +191,9 @@
 							</tfoot>
 						</table>
 					</div>
-				</form>
-			</div>
+				</div>
+
+			</form>
 		</div>
 	</div>
 

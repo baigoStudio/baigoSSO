@@ -747,7 +747,7 @@ class MODEL_ADMIN {
 			),
 		);
 
-		$this->adminSubmit["admin_allow"] = json_encode($_arr_adminAllow);;
+		$this->adminSubmit["admin_allow"] = json_encode($_arr_adminAllow);
 		$this->adminSubmit["str_alert"]   = "ok";
 
 		return $this->adminSubmit;

@@ -35,6 +35,7 @@
 		<div class="pull-right">
 			<form name="app_search" id="app_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
 				<input type="hidden" name="mod" value="app">
+				<input type="hidden" name="act_get" value="list">
 				<select name="status" class="form-control input-sm">
 					<option value="">{$lang.option.allStatus}</option>
 					{foreach $status.app as $key=>$value}
@@ -48,11 +49,10 @@
 		<div class="clearfix"></div>
 	</div>
 
-	<div class="panel panel-default">
+	<form name="app_list" id="app_list" class="form-inline">
+		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 
-		<form name="app_list" id="app_list" class="form-inline">
-
-			<input type="hidden" name="token_session" value="{$common.token_session}">
+		<div class="panel panel-default">
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
 					<thead>
@@ -118,8 +118,9 @@
 					</tfoot>
 				</table>
 			</div>
-		</form>
-	</div>
+		</div>
+
+	</form>
 
 	<div class="text-right">
 		{include "include/page.tpl" cfg=$cfg}

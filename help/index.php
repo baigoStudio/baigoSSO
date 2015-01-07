@@ -1,4 +1,5 @@
 <?php
+include_once("../config/config.inc.php"); //载入配置
 $_arr_title = array(
 	"en"       => "Help",
 	"zh_CN"    => "帮助",
@@ -17,6 +18,8 @@ if (!$_str_mod) {
 if (!$_str_act) {
 	$_str_act = "index";
 }
+
+$_arr_alert = include_once(BG_PATH_LANG . $_str_lang . "/alert.php"); //载入提示代码
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo($_str_lang); ?>">
@@ -41,8 +44,8 @@ if (!$_str_act) {
 		<div class="row">
 			<div class="col-md-9">
 			<?php
-			include_once("./" . $_str_lang . "/" . $_str_mod . "/title.html");
-			include_once("./" . $_str_lang . "/" . $_str_mod . "/" . $_str_act . ".html");
+			include_once("./" . $_str_lang . "/" . $_str_mod . "/title.php");
+			include_once("./" . $_str_lang . "/" . $_str_mod . "/" . $_str_act . ".php");
 			?>
 			</div>
 			<?php

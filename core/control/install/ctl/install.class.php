@@ -37,31 +37,6 @@ class CONTROL_INSTALL {
 	}
 
 
-	function ctl_auto() {
-		if (!$this->check_db()) {
-			return array(
-				"str_alert" => "x030404",
-			);
-			exit;
-		}
-
-		$_str_url     = fn_getSafe($_GET["url"], "txt", "");
-		$_str_path    = fn_getSafe($_GET["path"], "txt", "");
-		$_str_target  = fn_getSafe($_GET["target"], "txt", "");
-
-		$_arr_tplData = array(
-			"url"    => base64_decode($_str_url),
-			"path"   => $_str_path,
-			"target" => $_str_target,
-		);
-
-		$this->obj_tpl->tplDisplay("install_auto.tpl", $_arr_tplData);
-
-		return array(
-			"str_alert" => "y030404",
-		);
-	}
-
 	/**
 	 * install_2 function.
 	 *
@@ -84,21 +59,6 @@ class CONTROL_INSTALL {
 	}
 
 
-	function ctl_over() {
-		if (!$this->check_db()) {
-			return array(
-				"str_alert" => "x030404",
-			);
-			exit;
-		}
-
-		$this->obj_tpl->tplDisplay("install_over.tpl", $_arr_tplData);
-
-		return array(
-			"str_alert" => "y030404",
-		);
-	}
-
 	/**
 	 * install_3 function.
 	 *
@@ -112,6 +72,14 @@ class CONTROL_INSTALL {
 			);
 			exit;
 		}
+
+		if (!$this->check_opt()) {
+			return array(
+				"str_alert" => "x030409",
+			);
+			exit;
+		}
+
 
 		foreach ($this->obj_tpl->opt["base"] as $_key=>$_value) {
 			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
@@ -141,6 +109,13 @@ class CONTROL_INSTALL {
 			exit;
 		}
 
+		if (!$this->check_opt()) {
+			return array(
+				"str_alert" => "x030409",
+			);
+			exit;
+		}
+
 		foreach ($this->obj_tpl->opt["reg"] as $_key=>$_value) {
 			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
 		}
@@ -148,6 +123,32 @@ class CONTROL_INSTALL {
 		$_arr_tplData["optRows"] = $_arr_optRows;
 
 		$this->obj_tpl->tplDisplay("install_reg.tpl", $_arr_tplData);
+
+		return array(
+			"str_alert" => "y030404",
+		);
+	}
+
+
+	function ctl_auto() {
+		if (!$this->check_db()) {
+			return array(
+				"str_alert" => "x030404",
+			);
+			exit;
+		}
+
+		$_str_url     = fn_getSafe($_GET["url"], "txt", "");
+		$_str_path    = fn_getSafe($_GET["path"], "txt", "");
+		$_str_target  = fn_getSafe($_GET["target"], "txt", "");
+
+		$_arr_tplData = array(
+			"url"    => base64_decode($_str_url),
+			"path"   => $_str_path,
+			"target" => $_str_target,
+		);
+
+		$this->obj_tpl->tplDisplay("install_auto.tpl", $_arr_tplData);
 
 		return array(
 			"str_alert" => "y030404",
@@ -169,7 +170,37 @@ class CONTROL_INSTALL {
 			exit;
 		}
 
+		if (!$this->check_opt()) {
+			return array(
+				"str_alert" => "x030409",
+			);
+			exit;
+		}
+
 		$this->obj_tpl->tplDisplay("install_admin.tpl", $_arr_tplData);
+
+		return array(
+			"str_alert" => "y030404",
+		);
+	}
+
+
+	function ctl_over() {
+		if (!$this->check_db()) {
+			return array(
+				"str_alert" => "x030404",
+			);
+			exit;
+		}
+
+		if (!$this->check_opt()) {
+			return array(
+				"str_alert" => "x030409",
+			);
+			exit;
+		}
+
+		$this->obj_tpl->tplDisplay("install_over.tpl", $_arr_tplData);
 
 		return array(
 			"str_alert" => "y030404",
@@ -183,6 +214,26 @@ class CONTROL_INSTALL {
 		} else {
 			$GLOBALS["obj_db"]   = new CLASS_MYSQL(); //设置数据库对象
 			$this->mdl_opt       = new MODEL_OPT(); //设置管理员模型
+			return true;
+		}
+	}
+
+
+	private function check_opt() {
+		$_arr_tableSelect = array(
+			"table_name",
+		);
+
+		$_str_sqlWhere    = "table_schema='" . BG_DB_NAME . "'";
+		$_arr_tableRows   = $GLOBALS["obj_db"]->select_array("information_schema`.`tables", $_arr_tableSelect, $_str_sqlWhere, 100, 0);
+
+		foreach ($_arr_tableRows as $_key=>$_value) {
+			$_arr_chks[] = $_value["table_name"];
+		}
+
+		if (!in_array(BG_DB_TABLE . "opt", $_arr_chks)) {
+			return false;
+		} else {
 			return true;
 		}
 	}

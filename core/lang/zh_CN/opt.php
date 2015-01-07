@@ -11,10 +11,10 @@ if(!defined("IN_BAIGO")) {
 
 for ($_i = 14; $_i >= -12; $_i--) {
 	if ($_i >= 0) {
-		$_i_key = "Etc/GMT+" . $_i;
+		$_i_key   = "Etc/GMT+" . $_i;
 		$_i_value = "Etc/GMT+" . $_i;
 	} else {
-		$_i_key = $_i;
+		$_i_key   = "Etc/GMT" . $_i;
 		$_i_value = "Etc/GMT" . $_i;
 	}
 	$_timezone[$_i_key] = $_i_value;
