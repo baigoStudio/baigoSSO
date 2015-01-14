@@ -14,7 +14,7 @@ include_once(BG_PATH_CONTROL_ADMIN . "ajax/token.class.php"); //载入登录控�
 
 $ajax_token = new AJAX_TOKEN();
 
-switch ($act_get) {
+switch ($GLOBALS["act_get"]) {
 	case "make":
 		$ajax_token->ajax_make();
 	break;

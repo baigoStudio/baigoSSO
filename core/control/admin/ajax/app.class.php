@@ -45,7 +45,7 @@ class AJAX_APP {
 			$this->obj_ajax->halt_alert("x050303");
 		}
 
-		$_num_appId   = fn_getSafe($_POST["app_id"], "int", 0);
+		$_num_appId   = fn_getSafe(fn_post("app_id"), "int", 0);
 
 		if ($_num_appId == 0) {
 			return array(
@@ -78,7 +78,7 @@ class AJAX_APP {
 			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
 		}
 
-		$_num_appId = fn_getSafe($_POST["app_id"], "int", 0);
+		$_num_appId = fn_getSafe(fn_post("app_id"), "int", 0);
 
 		if ($_num_appId == 0) {
 			$this->obj_ajax->halt_alert("x050203");
@@ -103,7 +103,7 @@ class AJAX_APP {
 			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
 		}
 
-		$_num_appId = fn_getSafe($_POST["app_id"], "int", 0);
+		$_num_appId = fn_getSafe(fn_post("app_id"), "int", 0);
 
 		if ($_num_appId == 0) {
 			$this->obj_ajax->halt_alert("x050203");
@@ -129,7 +129,7 @@ class AJAX_APP {
 	 * @return void
 	 */
 	function ajax_notice() {
-		$_num_appId = fn_getSafe($_POST["app_id_notice"], "int", 0);
+		$_num_appId = fn_getSafe(fn_post("app_id_notice"), "int", 0);
 		if ($_num_appId == 0) {
 			$this->obj_ajax->halt_alert("x050203");
 		}
@@ -158,6 +158,8 @@ class AJAX_APP {
 		);
 
 		$_arr_notice = fn_http($_arr_appRow["app_notice"], $_arr_data, "post");
+		//print_r($_arr_notice);
+		//exit;
 
 		if ($_arr_notice["ret"] == $_str_echo) {
 			$_str_alert = "y050401";
@@ -168,8 +170,10 @@ class AJAX_APP {
 				"app_id" => $_num_appId,
 			);
 			$_str_targets    = json_encode($_arr_targets);
-			$_str_notice     = json_encode($_arr_notice);
+			$_str_notice     = htmlentities($_arr_notice["ret"], ENT_QUOTES, "UTF-8");
+			//exit($_str_notice);
 			$this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"]["noticeTest"], $_str_notice, "admin", $this->adminLogged["admin_id"]);
+			//exit("test");
 		}
 
 		$this->obj_ajax->halt_alert($_str_alert);
@@ -230,7 +234,7 @@ class AJAX_APP {
 			$this->obj_ajax->halt_alert("x050303");
 		}
 
-		$_str_status = fn_getSafe($_POST["act_post"], "txt", "");
+		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_appIds = $this->mdl_app->input_ids();
 		if ($_arr_appIds["str_alert"] != "ok") {

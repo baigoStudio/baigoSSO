@@ -29,7 +29,9 @@ class CONTROL_INSTALL {
 	 * @return void
 	 */
 	function ctl_dbconfig() {
-		$this->obj_tpl->tplDisplay("install_dbconfig.tpl", $this->tplData);
+		$_arr_tplData = array();
+
+		$this->obj_tpl->tplDisplay("install_dbconfig.tpl", $_arr_tplData);
 
 		return array(
 			"str_alert" => "y030403",
@@ -50,6 +52,8 @@ class CONTROL_INSTALL {
 			);
 			exit;
 		}
+
+		$_arr_tplData = array();
 
 		$this->obj_tpl->tplDisplay("install_dbtable.tpl", $_arr_tplData);
 
@@ -138,9 +142,9 @@ class CONTROL_INSTALL {
 			exit;
 		}
 
-		$_str_url     = fn_getSafe($_GET["url"], "txt", "");
-		$_str_path    = fn_getSafe($_GET["path"], "txt", "");
-		$_str_target  = fn_getSafe($_GET["target"], "txt", "");
+		$_str_url     = fn_getSafe(fn_get("url"), "txt", "");
+		$_str_path    = fn_getSafe(fn_get("path"), "txt", "");
+		$_str_target  = fn_getSafe(fn_get("target"), "txt", "");
 
 		$_arr_tplData = array(
 			"url"    => base64_decode($_str_url),
@@ -177,6 +181,8 @@ class CONTROL_INSTALL {
 			exit;
 		}
 
+		$_arr_tplData = array();
+
 		$this->obj_tpl->tplDisplay("install_admin.tpl", $_arr_tplData);
 
 		return array(
@@ -199,6 +205,8 @@ class CONTROL_INSTALL {
 			);
 			exit;
 		}
+
+		$_arr_tplData = array();
 
 		$this->obj_tpl->tplDisplay("install_over.tpl", $_arr_tplData);
 

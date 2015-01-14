@@ -155,9 +155,10 @@ class MODEL_APP_BELONG {
 		}
 
 		$_arr_belongRows  = $this->obj_db->select_array(BG_DB_TABLE . "app_belong",  $_arr_belongSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
-		$_arr_belongRow   = $_arr_belongRows[0];
 
-		if (!$_arr_belongRow) {
+		if (isset($_arr_belongRows[0])) {
+			$_arr_belongRow   = $_arr_belongRows[0];
+		} else {
 			return array(
 				"str_alert" => "x070102", //不存在记录
 			);

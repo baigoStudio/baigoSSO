@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -13,11 +11,11 @@ if(!defined("IN_BAIGO")) {
 
 include_once(BG_PATH_INC . "common_admin.inc.php"); //验证是否已登录
 include_once(BG_PATH_INC . "is_admin.inc.php"); //验证是否已登录
-
 include_once(BG_PATH_CONTROL_ADMIN . "ctl/log.class.php"); //载入商家控制器
+
 $ctl_log = new CONTROL_LOG(); //初始化商家
 
-switch ($act_get) {
+switch ($GLOBALS["act_get"]) {
 	case "show":
 		$arr_logRow = $ctl_log->ctl_show();
 		if ($arr_logRow["str_alert"] != "y060102") {

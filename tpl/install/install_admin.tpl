@@ -34,7 +34,7 @@
 
 		<div class="form-group">
 			<label class="control-label">{$lang.label.nick}<span id="msg_admin_nick"></span></label>
-			<input type="text" name="admin_nick" id="admin_nick" value="{$tplData.adminRow.admin_nick}" class="validate form-control input-lg">
+			<input type="text" name="admin_nick" id="admin_nick" class="validate form-control input-lg">
 		</div>
 
 		<div class="form-group">

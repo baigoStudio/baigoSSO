@@ -1,13 +1,17 @@
 <?php
 include_once("../config/config.inc.php"); //载入配置
+include_once(BG_PATH_FUNC . "common.func.php"); //载入通用函数
+
+error_reporting(E_ALL & ~E_NOTICE);
+
 $_arr_title = array(
 	"en"       => "Help",
 	"zh_CN"    => "帮助",
 );
 
-$_str_lang  = $_GET["lang"];
-$_str_mod   = $_GET["mod"];
-$_str_act   = $_GET["act"];
+$_str_lang  = fn_get("lang");
+$_str_mod   = fn_get("mod");
+$_str_act   = fn_get("act");
 
 if (!$_str_lang) {
 	$_str_lang = "zh_CN";

@@ -136,7 +136,7 @@ class CLASS_MYSQL {
 	}
 
 	function halt($message) {
-		if($this->db_debug) {
+		if(isset($this->db_debug)) {
 			echo "<div>" . $message . "</div>";
 			echo "<div>Error: " . $this->error() . "</div>";
 			echo "<div>Error number: " . $this->errno() . "</div>";

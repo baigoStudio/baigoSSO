@@ -42,7 +42,7 @@ class CONTROL_LOG {
 	返回提示
 	*/
 	function ctl_show() {
-		$_num_logId = fn_getSafe($_GET["log_id"], "int", 0);
+		$_num_logId = fn_getSafe(fn_get("log_id"), "int", 0);
 
 		if ($_num_logId == 0) {
 			return array(
@@ -69,19 +69,31 @@ class CONTROL_LOG {
 				case "admin":
 					$_arr_adminRow = $this->mdl_admin->mdl_read($_value["admin_id"]);
 					$_arr_logRow["log_targets"][$_key]["target_id"]   = $_value["admin_id"];
-					$_arr_logRow["log_targets"][$_key]["target_name"] = $_arr_adminRow["admin_name"];
+					if (isset($_arr_adminRow["admin_name"])) {
+						$_arr_logRow["log_targets"][$_key]["target_name"] = $_arr_adminRow["admin_name"];
+					} else {
+						$_arr_logRow["log_targets"][$_key]["target_name"] = "";
+					}
 				break;
 
 				case "user":
 					$_arr_userRow = $this->mdl_user->mdl_read($_value["user_id"]);
 					$_arr_logRow["log_targets"][$_key]["target_id"]   = $_value["user_id"];
-					$_arr_logRow["log_targets"][$_key]["target_name"] = $_arr_userRow["user_name"];
+					if (isset($_arr_userRow["user_name"])) {
+						$_arr_logRow["log_targets"][$_key]["target_name"] = $_arr_userRow["user_name"];
+					} else {
+						$_arr_logRow["log_targets"][$_key]["target_name"] = "";
+					}
 				break;
 
 				case "app":
 					$_arr_appRow = $this->mdl_app->mdl_read($_value["app_id"]);
 					$_arr_logRow["log_targets"][$_key]["target_id"]   = $_value["app_id"];
-					$_arr_logRow["log_targets"][$_key]["target_name"] = $_arr_appRow["app_name"];
+					if (isset($_arr_appRow["app_name"])) {
+						$_arr_logRow["log_targets"][$_key]["target_name"] = $_arr_appRow["app_name"];
+					} else {
+						$_arr_logRow["log_targets"][$_key]["target_name"] = "";
+					}
 				break;
 
 				case "log":
@@ -90,8 +102,8 @@ class CONTROL_LOG {
 				break;
 
 				case "opt":
-					$_arr_logRow["log_targets"][$_key]["target_id"] = $_value["opt_key"];
-					$_arr_logRow["log_targets"][$_key]["target_name"] = $_value["opt_key"];
+					$_arr_logRow["log_targets"][$_key]["target_id"]    = $_value["opt_key"];
+					$_arr_logRow["log_targets"][$_key]["target_name"]  = $_value["opt_key"];
 				break;
 			}
 		}
@@ -134,11 +146,11 @@ class CONTROL_LOG {
 			exit;
 		}
 
-		$_str_key         = fn_getSafe($_GET["key"], "txt", "");
-		$_str_type        = fn_getSafe($_GET["type"], "txt", "");
-		$_str_status      = fn_getSafe($_GET["status"], "txt", "");
-		$_str_level       = fn_getSafe($_GET["level"], "txt", "");
-		$_num_operatorId  = fn_getSafe($_GET["operator_id"], "int", 0);
+		$_str_key         = fn_getSafe(fn_get("key"), "txt", "");
+		$_str_type        = fn_getSafe(fn_get("type"), "txt", "");
+		$_str_status      = fn_getSafe(fn_get("status"), "txt", "");
+		$_str_level       = fn_getSafe(fn_get("level"), "txt", "");
+		$_num_operatorId  = fn_getSafe(fn_get("operator_id"), "int", 0);
 
 		$_arr_search = array(
 			"key"            => $_str_key,

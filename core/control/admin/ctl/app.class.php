@@ -50,7 +50,7 @@ class CONTROL_APP {
 			exit;
 		}
 
-		$_num_appId = fn_getSafe($_GET["app_id"], "int", 0);
+		$_num_appId = fn_getSafe(fn_get("app_id"), "int", 0);
 
 		if ($_num_appId == 0) {
 			return array(
@@ -77,7 +77,7 @@ class CONTROL_APP {
 	返回提示
 	*/
 	function ctl_form() {
-		$_num_appId = fn_getSafe($_GET["app_id"], "int", 0);
+		$_num_appId = fn_getSafe(fn_get("app_id"), "int", 0);
 
 		if ($_num_appId > 0) {
 			if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
@@ -99,6 +99,12 @@ class CONTROL_APP {
 				exit;
 			}
 			$_arr_appRow = array(
+				"app_id"        => 0,
+				"app_name"      => "",
+				"app_notice"    => "",
+				"app_ip_allow"  => "",
+				"app_ip_bad"    => "",
+				"app_note"      => "",
 				"app_status"    => "enable",
 				"app_sync"      => "off",
 			);
@@ -122,10 +128,10 @@ class CONTROL_APP {
 			exit;
 		}
 
-		$_num_appId       = fn_getSafe($_GET["app_id"], "int", 0);
-		$_act_get         = fn_getSafe($_GET["act_get"], "txt", "");
-		$_str_key         = fn_getSafe($_GET["key"], "txt", "");
-		$_str_keyBelong   = fn_getSafe($_GET["key_belong"], "txt", "");
+		$_act_get         = fn_getSafe($GLOBALS["act_get"], "txt", "");
+		$_num_appId       = fn_getSafe(fn_get("app_id"), "int", 0);
+		$_str_key         = fn_getSafe(fn_get("key"), "txt", "");
+		$_str_keyBelong   = fn_getSafe(fn_get("key_belong"), "txt", "");
 
 		if ($_num_appId == 0) {
 			return array(
@@ -147,6 +153,8 @@ class CONTROL_APP {
 		);
 
 		$_arr_userBelongs  = $this->mdl_user->mdl_view("", $_num_appId);
+
+		$_arr_notIds = array();
 
 		foreach ($_arr_userBelongs as $_key=>$_value) {
 			$_arr_notIds[] = $_value["user_id"];
@@ -187,8 +195,8 @@ class CONTROL_APP {
 			exit;
 		}
 
-		$_str_key     = fn_getSafe($_GET["key"], "txt", "");
-		$_str_status  = fn_getSafe($_GET["status"], "txt", "");
+		$_str_key     = fn_getSafe(fn_get("key"), "txt", "");
+		$_str_status  = fn_getSafe(fn_get("status"), "txt", "");
 
 		$_arr_search = array(
 			"key"    => $_str_key,

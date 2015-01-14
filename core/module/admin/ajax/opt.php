@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -16,7 +14,7 @@ include_once(BG_PATH_CONTROL_ADMIN . "ajax/opt.class.php"); //载入栏目控制
 
 $ajax_opt = new AJAX_OPT(); //初始化设置对象
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "reg":
 		$ajax_opt->ajax_reg();
 	break;

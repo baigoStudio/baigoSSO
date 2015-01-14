@@ -15,7 +15,7 @@ include_once(BG_PATH_INC . "common_api.inc.php"); //验证是否已登录
 include_once(BG_PATH_CONTROL_API . "code.class.php"); //载入商家控制器
 $api_code = new API_CODE(); //初始化商家
 
-switch ($act_get) {
+switch ($GLOBALS["act_get"]) {
 	case "signature":
 		$api_code->api_signature();
 	break;

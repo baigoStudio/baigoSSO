@@ -161,17 +161,26 @@ class MODEL_LOG {
 		$_str_sqlWhere = "log_id=" . $num_logId;
 
 		$_arr_logRows = $this->obj_db->select_array(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
-		$_arr_logRow = $_arr_logRows[0];
 
-		if (!$_arr_logRow) { //用户名不存在则返回错误
+		if (isset($_arr_logRows[0])) { //用户名不存在则返回错误
+			$_arr_logRow = $_arr_logRows[0];
+		} else {
 			return array(
 				"str_alert" => "x060102", //不存在记录
 			);
 			exit;
 		}
 
-		$_arr_logRow["log_result"]    = json_decode($_arr_logRow["log_result"], true);
-		$_arr_logRow["log_targets"]   = json_decode($_arr_logRow["log_targets"], true);
+		/*if (isset($_arr_logRow["log_result"])) {
+			$_arr_logRow["log_result"]    = json_decode($_arr_logRow["log_result"], true);
+		}*/
+
+		if (isset($_arr_logRow["log_targets"])) {
+			$_arr_logRow["log_targets"]   = json_decode($_arr_logRow["log_targets"], true);
+		} else {
+			$_arr_logRow["log_targets"]   = array();
+		}
+
 		$_arr_logRow["str_alert"]     = "y060102";
 
 		return $_arr_logRow;
@@ -196,6 +205,7 @@ class MODEL_LOG {
 			"log_title",
 			"log_type",
 			"log_status",
+			"log_result",
 			"log_operator_id",
 		);
 
@@ -290,7 +300,7 @@ class MODEL_LOG {
 			exit;
 		}
 
-		$_arr_logIds = $_POST["log_id"];
+		$_arr_logIds = fn_post("log_id");
 
 		if ($_arr_logIds) {
 			foreach ($_arr_logIds as $_key=>$_value) {

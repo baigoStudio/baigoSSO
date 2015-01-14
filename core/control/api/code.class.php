@@ -95,8 +95,8 @@ class API_CODE {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_tm_time     = $_GET["timestamp"];
-		$_str_rand    = $_GET["random"];
+		$_tm_time     = fn_get("timestamp");
+		$_str_rand    = fn_get("random");
 		$_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand);
 
 		$_arr_return = array(
@@ -125,9 +125,9 @@ class API_CODE {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_tm_time     = $_GET["timestamp"];
-		$_str_rand    = $_GET["random"];
-		$_str_sign    = $_GET["signature"];
+		$_tm_time     = fn_get("timestamp");
+		$_str_rand    = fn_get("random");
+		$_str_sign    = fn_get("signature");
 
 		if (fn_baigoSignChk($_tm_time, $_str_rand, $_str_sign)) {
 			$_str_alert = "y050403";
@@ -188,8 +188,8 @@ class API_CODE {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_str_code    = $_GET["code"];
-		$_str_key     = $_GET["key"];
+		$_str_code    = fn_get("code");
+		$_str_key     = fn_get("key");
 		$_str_result  = fn_baigoDecode($_str_code, $_str_key);
 
 		exit($_str_result);

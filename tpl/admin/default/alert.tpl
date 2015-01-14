@@ -2,7 +2,13 @@
 	title  => $lang.page.alert
 ]}
 
-{if $tplData.view != "iframe"}
+{if $tplData.view == "iframe"}
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		{$lang.page.alert}
+	</div>
+	<div class="modal-body">
+{else}
 	{include "include/admin_head.tpl" cfg=$cfg}
 
 	<li>{$lang.page.alert}</li>
@@ -15,12 +21,6 @@
 			{$lang.href.back}
 		</a>
 	</div>
-{else}
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		{$lang.page.alert}
-	</div>
-	<div class="modal-body">
 {/if}
 
 	<div class="alert alert-{if $tplData.status == "y"}success{else}danger{/if}">
@@ -28,7 +28,11 @@
 			<span class="glyphicon glyphicon-{if $tplData.status == "y"}ok-circle{else}remove-circle{/if}"></span>
 			{$alert[$tplData.alert]}
 		</h3>
-		<p>{$lang.text[$tplData.alert]}</p>
+		<p>
+			{if isset($lang.text[$tplData.alert])}
+				{$lang.text[$tplData.alert]}
+			{/if}
+		</p>
 		<p>
 			{$lang.label.alert}
 			:
@@ -36,11 +40,11 @@
 		</p>
 	</div>
 
-{if $smarty.get.view != "iframe"}
-	{include "include/admin_foot.tpl" cfg=$cfg}
-	{include "include/html_foot.tpl" cfg=$cfg}
-{else}
+{if $tplData.view == "iframe"}
 	</div>
 	<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">{$lang.btn.close}</button></div>
+{else}
+	{include "include/admin_foot.tpl" cfg=$cfg}
+	{include "include/html_foot.tpl" cfg=$cfg}
 {/if}
 

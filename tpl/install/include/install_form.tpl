@@ -28,7 +28,7 @@
 									</label>
 								</div>
 							</dt>
-							<dd>{$_value.note}</dd>
+							<dd>{if isset($_value.note)}{$_value.note}{/if}</dd>
 						{/foreach}
 					</dl>
 				{else if $value.type == "textarea"}
@@ -37,7 +37,7 @@
 					<input type="text" value="{$_this_value}" name="opt[{$key}]" id="opt_{$key}" class="validate form-control input-lg">
 				{/if}
 
-				<p class="help-block">{$value.note}</p>
+				<p class="help-block">{if isset($value.note)}{$value.note}{/if}</p>
 			</div>
 		</div>
 	{/foreach}
@@ -54,7 +54,7 @@
 			{/if}
 			"opt_{$key}": {
 				length: { min: {$value.min}, max: 900 },
-				validate: { type: "{$value.type}", format: "{$value.format}", group: "group_{$key}" },
+				validate: { type: "{$value.type}", {if isset($value.format)}format: "{$value.format}", {/if}group: "group_{$key}" },
 				msg: { id: "msg_{$key}", {$str_msg_min}: "{$alert.x040201}{$value.label}", {$str_msg_max}: "{$value.label}{$alert.x040202}", format_err: "{$value.label}{$alert.x040203}" }
 			}{if !$value@last},{/if}
 		{/foreach}

@@ -3,6 +3,7 @@
 	{$str_mailNeed = "*"}
 	{$num_mailMin = 1}
 {else}
+	{$str_mailNeed = ""}
 	{$num_mailMin = 0}
 {/if}
 

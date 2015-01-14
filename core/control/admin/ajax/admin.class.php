@@ -46,11 +46,14 @@ class AJAX_ADMIN {
 			$this->obj_ajax->halt_alert($_arr_adminSubmit["str_alert"]);
 		}
 
+		$_str_adminPassDo = "";
+		$_str_adminRand   = "";
+
 		if ($_arr_adminSubmit["admin_id"] > 0) {
 			if ($this->adminLogged["admin_allow"]["admin"]["edit"] != 1) {
 				$this->obj_ajax->halt_alert("x020303");
 			}
-			$_str_adminPass = $_POST["admin_pass"];
+			$_str_adminPass = fn_post("admin_pass");
 			if ($_str_adminPass) {
 				$_str_adminRand     = fn_rand(6);
 				$_str_adminPassDo   = fn_baigoEncrypt($_str_adminPass, $_str_adminRand);
@@ -59,7 +62,7 @@ class AJAX_ADMIN {
 			if ($this->adminLogged["admin_allow"]["admin"]["add"] != 1) {
 				$this->obj_ajax->halt_alert("x020302");
 			}
-			$_arr_adminPass = validateStr($_POST["admin_pass"], 1, 0);
+			$_arr_adminPass = validateStr(fn_post("admin_pass"), 1, 0);
 			switch ($_arr_adminPass["status"]) {
 				case "too_short":
 					$this->obj_ajax->halt_alert("x020205");
@@ -104,7 +107,7 @@ class AJAX_ADMIN {
 			$this->obj_ajax->halt_alert("x020303");
 		}
 
-		$_str_status = fn_getSafe($_POST["act_post"], "txt", "");
+		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_adminIds = $this->mdl_admin->input_ids();
 		if ($_arr_adminIds["str_alert"] != "ok") {
@@ -168,8 +171,8 @@ class AJAX_ADMIN {
 	 * @return void
 	 */
 	function ajax_chkname() {
-		$_str_adminName   = fn_getSafe($_GET["admin_name"], "txt", "");
-		$_num_adminId     = fn_getSafe($_GET["admin_id"], "int", 0);
+		$_str_adminName   = fn_getSafe(fn_get("admin_name"), "txt", "");
+		$_num_adminId     = fn_getSafe(fn_get("admin_id"), "int", 0);
 
 		$_arr_adminRow = $this->mdl_admin->mdl_read($_str_adminName, "admin_name", $_num_adminId);
 

@@ -41,9 +41,9 @@ class CONTROL_USER {
 	 * @return void
 	 */
 	function ctl_list() {
-		$_num_userId  = fn_getSafe($_GET["user_id"], "int", 0);
-		$_str_key     = fn_getSafe($_GET["key"], "txt", "");
-		$_str_status  = fn_getSafe($_GET["status"], "txt", "");
+		$_num_userId  = fn_getSafe(fn_get("user_id"), "int", 0);
+		$_str_key     = fn_getSafe(fn_get("key"), "txt", "");
+		$_str_status  = fn_getSafe(fn_get("status"), "txt", "");
 
 		$_arr_search = array(
 			"key"    => $_str_key,
@@ -70,7 +70,11 @@ class CONTROL_USER {
 				exit;
 			}
 			$_arr_userRow = array(
-				"user_status" => "enable",
+				"user_id"       => 0,
+				"user_mail"     => "",
+				"user_nick"     => "",
+				"user_note"     => "",
+				"user_status"   => "enable",
 			);
 		}
 

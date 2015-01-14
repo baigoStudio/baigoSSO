@@ -7,9 +7,9 @@ include_once("../config/config.inc.php"); //载入配置
 
 $arr_mod = array("user", "code", "admin");
 
-$mod = $_GET["mod"];
-
-if (!$mod) {
+if (isset($_GET["mod"])) {
+	$mod = $_GET["mod"];
+} else {
 	$mod = $arr_mod[0];
 }
 

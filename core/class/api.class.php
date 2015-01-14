@@ -24,7 +24,7 @@ class CLASS_API {
 	}
 
 
-	/**
+	/** 验证 app
 	 * app_chk function.
 	 *
 	 * @access public
@@ -77,7 +77,7 @@ class CLASS_API {
 	}
 
 
-	/**
+	/** 读取 app 信息
 	 * app_get function.
 	 *
 	 * @access public
@@ -86,11 +86,11 @@ class CLASS_API {
 	 */
 	function app_get($str_method = "get", $chk_token = false) {
 		if ($str_method == "post") {
-			$num_appId       = $_POST["app_id"];
-			$str_appKey      = $_POST["app_key"];
+			$num_appId       = fn_post("app_id");
+			$str_appKey      = fn_post("app_key");
 		} else {
-			$num_appId       = $_GET["app_id"];
-			$str_appKey      = $_GET["app_key"];
+			$num_appId       = fn_get("app_id");
+			$str_appKey      = fn_get("app_key");
 		}
 
 		$_arr_appId = validateStr($num_appId, 1, 0, "str", "int");
@@ -150,7 +150,7 @@ class CLASS_API {
 	}
 
 
-	/**
+	/** 通知
 	 * api_notice function.
 	 *
 	 * @access public
@@ -181,7 +181,7 @@ class CLASS_API {
 	}
 
 
-	/**
+	/** 编码
 	 * api_encode function.
 	 *
 	 * @access public
@@ -198,7 +198,7 @@ class CLASS_API {
 		return $_str_code;
 	}
 
-	/**
+	/** 返回结果
 	 * halt_re function.
 	 *
 	 * @access public

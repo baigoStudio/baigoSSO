@@ -11,12 +11,12 @@
 	<link href="{$smarty.const.BG_URL_STATIC_ADMIN}default/css/admin_common.css" type="text/css" rel="stylesheet">
 	<link href="{$smarty.const.BG_URL_JS}bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 
-	{if $cfg.baigoValidator}
+	{if isset($cfg.baigoValidator)}
 		<!--表单验证 js-->
 		<link href="{$smarty.const.BG_URL_JS}baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
 	{/if}
 
-	{if $cfg.baigoSubmit}
+	{if isset($cfg.baigoSubmit)}
 		<!--表单 ajax 提交 js-->
 		<link href="{$smarty.const.BG_URL_JS}baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
 	{/if}

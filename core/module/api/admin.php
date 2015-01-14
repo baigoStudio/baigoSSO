@@ -16,7 +16,7 @@ include_once(BG_PATH_CONTROL_API . "admin.class.php"); //载入商家控制器
 
 $api_admin = new API_ADMIN(); //初始化商家
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "add":
 		$api_admin->api_add();
 	break;

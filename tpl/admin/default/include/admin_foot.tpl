@@ -8,7 +8,7 @@
 								{$value_m.main.title}
 								<span class="caret"></span>
 							</a>
-							{if $cfg.menu_active == $key_m}
+							{if isset($cfg.menu_active) && $cfg.menu_active == $key_m}
 								{foreach $value_m.sub as $key_s=>$value_s}
 									<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod={$value_s.mod}&act_get={$value_s.act_get}" class="list-group-item {if $cfg.sub_active == $key_s}list-group-item-success{else}sub_normal{/if}">{$value_s.title}</a>
 								{/foreach}

@@ -40,7 +40,7 @@ class AJAX_LOG {
 			$this->obj_ajax->halt_alert("x060303");
 		}
 
-		$_str_status = fn_getSafe($_POST["act_post"], "txt", "");
+		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_logIds = $this->mdl_log->input_ids();
 		if ($_arr_logIds["str_alert"] != "ok") {

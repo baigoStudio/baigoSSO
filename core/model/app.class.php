@@ -243,16 +243,22 @@ class MODEL_APP {
 		}
 
 		$_arr_appRows = $this->obj_db->select_array(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
-		$_arr_appRow = $_arr_appRows[0];
 
-		if (!$_arr_appRow) { //用户名不存在则返回错误
+		if (isset($_arr_appRows[0])) { //用户名不存在则返回错误
+			$_arr_appRow = $_arr_appRows[0];
+		} else {
 			return array(
 				"str_alert" => "x050102", //不存在记录
 			);
 			exit;
 		}
 
-		$_arr_appRow["app_allow"] = json_decode($_arr_appRow["app_allow"], true);
+		if (isset($_arr_appRow["app_allow"])) {
+			$_arr_appRow["app_allow"] = json_decode($_arr_appRow["app_allow"], true);
+		} else {
+			$_arr_appRow["app_allow"] = array();
+
+		}
 		$_arr_appRow["str_alert"] = "y050102";
 
 		return $_arr_appRow;
@@ -272,6 +278,7 @@ class MODEL_APP {
 	function mdl_list($num_appNo, $num_appExcept = 0, $str_key = "", $str_status = "", $str_sync = "", $str_notice = false) {
 		$_arr_appSelect = array(
 			"app_id",
+			"app_key",
 			"app_name",
 			"app_notice",
 			"app_note",
@@ -362,7 +369,7 @@ class MODEL_APP {
 			exit;
 		}
 
-		$this->appSubmit["app_id"] = fn_getSafe($_POST["app_id"], "int", 0);
+		$this->appSubmit["app_id"] = fn_getSafe(fn_post("app_id"), "int", 0);
 
 		if ($this->appSubmit["app_id"] > 0) {
 			//检查用户是否存在
@@ -373,7 +380,7 @@ class MODEL_APP {
 			}
 		}
 
-		$_arr_appName = validateStr($_POST["app_name"], 1, 30);
+		$_arr_appName = validateStr(fn_post("app_name"), 1, 30);
 		switch ($_arr_appName["status"]) {
 			case "too_short":
 				return array(
@@ -395,7 +402,7 @@ class MODEL_APP {
 
 		}
 
-		$_arr_appNotice = validateStr($_POST["app_notice"], 1, 3000);
+		$_arr_appNotice = validateStr(fn_post("app_notice"), 1, 3000);
 		switch ($_arr_appNotice["status"]) {
 			case "too_short":
 				return array(
@@ -423,7 +430,7 @@ class MODEL_APP {
 			break;
 		}
 
-		$_arr_appNote = validateStr($_POST["app_note"], 0, 30);
+		$_arr_appNote = validateStr(fn_post("app_note"), 0, 30);
 		switch ($_arr_appNote["status"]) {
 			case "too_long":
 				return array(
@@ -438,7 +445,7 @@ class MODEL_APP {
 
 		}
 
-		$_arr_appStatus = validateStr($_POST["app_status"], 1, 0);
+		$_arr_appStatus = validateStr(fn_post("app_status"), 1, 0);
 		switch ($_arr_appStatus["status"]) {
 			case "too_short":
 				return array(
@@ -452,7 +459,7 @@ class MODEL_APP {
 			break;
 		}
 
-		$_arr_appIpAllow = validateStr($_POST["app_ip_allow"], 0, 3000);
+		$_arr_appIpAllow = validateStr(fn_post("app_ip_allow"), 0, 3000);
 		switch ($_arr_appIpAllow["status"]) {
 			case "too_long":
 				return array(
@@ -466,7 +473,7 @@ class MODEL_APP {
 			break;
 		}
 
-		$_arr_appIpBad = validateStr($_POST["app_ip_bad"], 0, 3000);
+		$_arr_appIpBad = validateStr(fn_post("app_ip_bad"), 0, 3000);
 		switch ($_arr_appIpBad["status"]) {
 			case "too_long":
 				return array(
@@ -480,7 +487,7 @@ class MODEL_APP {
 			break;
 		}
 
-		$_arr_appSync = validateStr($_POST["app_sync"], 1, 0);
+		$_arr_appSync = validateStr(fn_post("app_sync"), 1, 0);
 		switch ($_arr_appSync["status"]) {
 			case "too_short":
 				return array(
@@ -494,7 +501,7 @@ class MODEL_APP {
 			break;
 		}
 
-		$this->appSubmit["app_allow"] = json_encode($_POST["app_allow"]);
+		$this->appSubmit["app_allow"] = json_encode(fn_post("app_allow"));
 		$this->appSubmit["str_alert"] = "ok";
 
 		return $this->appSubmit;
@@ -515,7 +522,7 @@ class MODEL_APP {
 			exit;
 		}
 
-		$_arr_appIds = $_POST["app_id"];
+		$_arr_appIds = fn_post("app_id");
 
 		if ($_arr_appIds) {
 			foreach ($_arr_appIds as $_key=>$_value) {

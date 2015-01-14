@@ -93,7 +93,7 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_id"    => $_num_userId,
+			"user_id"    => $num_userId,
 			"str_alert"  => $_str_alert, //成功
 		);
 	}
@@ -110,13 +110,17 @@ class MODEL_USER {
 	 * @return void
 	 */
 	function mdl_edit($num_userId) {
-		if ($this->apiEdit["user_mail"]) {
+		$_arr_userData = array();
+
+		if (isset($this->apiEdit["user_mail"])) {
 			$_arr_userData["user_mail"] = $this->apiEdit["user_mail"]; //如果密码为空，则不修改
 		}
-		if ($this->apiEdit["user_pass_do"]) {
+
+		if (isset($this->apiEdit["user_pass_do"])) {
 			$_arr_userData["user_pass"] = $this->apiEdit["user_pass_do"]; //如果密码为空，则不修改
 			$_arr_userData["user_rand"] = $this->apiEdit["user_rand"]; //如果密码为空，则不修改
 		}
+
 		if ($this->apiEdit["user_nick"]) {
 			$_arr_userData["user_nick"] = $this->apiEdit["user_nick"]; //如果密码为空，则不修改
 		}
@@ -160,11 +164,20 @@ class MODEL_USER {
 			"user_name"     => $this->userSubmit["user_name"],
 			"user_mail"     => $this->userSubmit["user_mail"],
 			"user_nick"     => $this->userSubmit["user_nick"],
-			"user_note"     => $this->userSubmit["user_note"],
 			"user_status"   => $this->userSubmit["user_status"],
 		);
 
-		if ($this->userSubmit["user_id"] == 0) {
+		if (isset($this->userSubmit["user_id"])) {
+			$_num_userId = $this->userSubmit["user_id"];
+		} else {
+			$_num_userId = 0;
+		}
+
+		if (isset($this->userSubmit["user_note"])) {
+			$_arr_userData["user_note"] = $this->userSubmit["user_note"];
+		}
+
+		if ($_num_userId == 0) {
 			$_arr_insert = array(
 				"user_pass"         => $str_userPass,
 				"user_rand"         => $str_userRand,
@@ -277,16 +290,16 @@ class MODEL_USER {
 		}
 
 		$_arr_userRows    = $this->obj_db->select_array(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
-		$_arr_userRow     = $_arr_userRows[0];
 
-		if (!$_arr_userRow) { //用户名不存在则返回错误
+		if (isset($_arr_userRows[0])) { //用户名不存在则返回错误
+			$_arr_userRow = $_arr_userRows[0];
+		} else {
 			return array(
 				"str_alert" => "x010102", //不存在记录
 			);
 			exit;
 		}
 
-		$_arr_userRow["user_allow"]   = json_decode($_arr_userRow["user_allow"], true); //json解码
 		$_arr_userRow["str_alert"]    = "y010102";
 
 		return $_arr_userRow;
@@ -317,7 +330,7 @@ class MODEL_USER {
 			$_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
 		}
 
-		$_arr_userRows = $this->obj_db->select_array(BG_DB_TABLE . "user_view", $_arr_userSelect, $_str_sqlWhere . " ORDER BY user_id DESC", $num_userNo, $num_userExcept); //查询数据
+		$_arr_userRows = $this->obj_db->select_array(BG_DB_TABLE . "user_view", $_arr_userSelect, $_str_sqlWhere . " ORDER BY user_id DESC"); //查询数据
 
 		return $_arr_userRows;
 	}
@@ -379,7 +392,7 @@ class MODEL_USER {
 		//如车影响行数小于0则返回错误
 		if ($_num_mysql > 0) {
 			$_str_alert = "y010104"; //成功
-			$this->obj_db->delete(BG_DB_TABLE . "appBelong", "belong_user_id IN (" . $_str_userId . ")"); //删除数据
+			$this->obj_db->delete(BG_DB_TABLE . "app_belong", "belong_user_id IN (" . $_str_userId . ")"); //删除数据
 		} else {
 			$_str_alert = "x010104"; //失败
 		}
@@ -424,25 +437,25 @@ class MODEL_USER {
 	 */
 	function input_get_by($str_method = "get") {
 		if ($str_method == "post") {
-			$_str_getBy = fn_getSafe($_POST["user_by"], "txt", "");
+			$_str_getBy = fn_getSafe(fn_post("user_by"), "txt", "");
 			if ($_str_getBy == "user_id") {
 				$_arr_userGet["user_by"]     = "user_id";
-				$_arr_userChk                = $this->input_id_chk($_POST["user_id"]);
+				$_arr_userChk                = $this->input_id_chk(fn_post("user_id"));
 				$_arr_userGet["user_str"]    = $_arr_userChk["user_id"];
 			} else {
 				$_arr_userGet["user_by"]     = "user_name";
-				$_arr_userChk                = $this->input_name_chk($_POST["user_name"]);
+				$_arr_userChk                = $this->input_name_chk(fn_post("user_name"));
 				$_arr_userGet["user_str"]    = $_arr_userChk["user_name"];
 			}
 		} else {
-			$_str_getBy = fn_getSafe($_GET["user_by"], "txt", "");
+			$_str_getBy = fn_getSafe(fn_get("user_by"), "txt", "");
 			if ($_str_getBy == "user_id") {
 				$_arr_userGet["user_by"]     = "user_id";
-				$_arr_userChk                = $this->input_id_chk($_GET["user_id"]);
+				$_arr_userChk                = $this->input_id_chk(fn_get("user_id"));
 				$_arr_userGet["user_str"]    = $_arr_userChk["user_id"];
 			} else {
 				$_arr_userGet["user_by"]     = "user_name";
-				$_arr_userChk                = $this->input_name_chk($_GET["user_name"]);
+				$_arr_userChk                = $this->input_name_chk(fn_get("user_name"));
 				$_arr_userGet["user_str"]    = $_arr_userChk["user_name"];
 			}
 		}
@@ -687,9 +700,9 @@ class MODEL_USER {
 	 * @return void
 	 */
 	function input_user_name() {
-		$_num_notId = fn_getSafe($_GET["not_id"], "int", 0);
+		$_num_notId = fn_getSafe(fn_get("not_id"), "int", 0);
 
-		$_arr_userName = $this->input_name_chk($_GET["user_name"]);
+		$_arr_userName = $this->input_name_chk(fn_get("user_name"));
 		if ($_arr_userName["str_alert"] != "ok") {
 			return $_arr_userName;
 			exit;
@@ -718,9 +731,9 @@ class MODEL_USER {
 	 * @return void
 	 */
 	function input_user_mail() {
-		$_num_notId   = fn_getSafe($_GET["not_id"], "int", 0);
+		$_num_notId   = fn_getSafe(fn_get("not_id"), "int", 0);
 
-		$_arr_userMail = $this->input_mail_chk($_GET["user_mail"]);
+		$_arr_userMail = $this->input_mail_chk(fn_get("user_mail"));
 		if ($_arr_userMail["str_alert"] != "ok") {
 			return $_arr_userMail;
 			exit;
@@ -757,7 +770,7 @@ class MODEL_USER {
 	 * @return void
 	 */
 	function api_reg() {
-		$_arr_userName = $this->input_name_chk($_POST["user_name"]);
+		$_arr_userName = $this->input_name_chk(fn_post("user_name"));
 		if ($_arr_userName["str_alert"] != "ok") {
 			return $_arr_userName;
 			exit;
@@ -781,7 +794,7 @@ class MODEL_USER {
 			exit;
 		}
 
-		$_arr_userMail = $this->input_mail_chk($_POST["user_mail"]);
+		$_arr_userMail = $this->input_mail_chk(fn_post("user_mail"));
 		if ($_arr_userMail["str_alert"] != "ok") {
 			return $_arr_userMail;
 			exit;
@@ -814,14 +827,14 @@ class MODEL_USER {
 			}
 		}
 
-		$_arr_userPass = $this->input_pass_chk($_POST["user_pass"]);
+		$_arr_userPass = $this->input_pass_chk(fn_post("user_pass"));
 		if ($_arr_userPass["str_alert"] != "ok") {
 			return $_arr_userPass;
 			exit;
 		}
 		$this->userSubmit["user_pass"] = $_arr_userPass["user_pass"];
 
-		$_arr_userNick = $this->input_nick_chk($_POST["user_nick"]);
+		$_arr_userNick = $this->input_nick_chk(fn_post("user_nick"));
 		if ($_arr_userNick["str_alert"] != "ok") {
 			return $_arr_userNick;
 			exit;
@@ -849,7 +862,7 @@ class MODEL_USER {
 		}
 
 		$this->apiLogin   = $_arr_userGet;
-		$_arr_userPass    = $this->input_pass_chk($_POST["user_pass"]);
+		$_arr_userPass    = $this->input_pass_chk(fn_post("user_pass"));
 		if ($_arr_userPass["str_alert"] != "ok") {
 			return $_arr_userPass;
 			exit;
@@ -880,8 +893,8 @@ class MODEL_USER {
 
 		$this->apiEdit = $_arr_userGet;
 
-		if ($_POST["user_mail"]) {
-			$_arr_userMail = $this->input_mail_chk($_POST["user_mail"]);
+		if (fn_post("user_mail")) {
+			$_arr_userMail = $this->input_mail_chk(fn_post("user_mail"));
 			if ($_arr_userMail["str_alert"] != "ok") {
 				return $_arr_userMail;
 				exit;
@@ -905,10 +918,10 @@ class MODEL_USER {
 			}
 		}
 
-		$this->apiEdit["user_check_pass"] = fn_getSafe($_POST["user_check_pass"], "txt", "");
+		$this->apiEdit["user_check_pass"] = fn_getSafe(fn_post("user_check_pass"), "txt", "");
 
 		if ($this->apiEdit["user_check_pass"] == true) {
-			$_arr_userPass = $this->input_pass_chk($_POST["user_pass"]);
+			$_arr_userPass = $this->input_pass_chk(fn_post("user_pass"));
 			if ($_arr_userPass["str_alert"] != "ok") {
 				return $_arr_userPass;
 				exit;
@@ -916,13 +929,13 @@ class MODEL_USER {
 			$this->apiEdit["user_pass"] = $_arr_userPass["user_pass"];
 		}
 
-		if ($_POST["user_pass_new"]) {
-			$this->apiEdit["user_pass_new"]  = $_POST["user_pass_new"];
+		if (fn_post("user_pass_new")) {
+			$this->apiEdit["user_pass_new"]  = fn_post("user_pass_new");
 			$this->apiEdit["user_rand"]      = fn_rand(6);
 			$this->apiEdit["user_pass_do"]   = fn_baigoEncrypt($this->apiEdit["user_pass_new"], $this->apiEdit["user_rand"], true);
 		}
 
-		$_arr_userNick = $this->input_nick_chk($_POST["user_nick"]);
+		$_arr_userNick = $this->input_nick_chk(fn_post("user_nick"));
 		if ($_arr_userNick["str_alert"] != "ok") {
 			return $_arr_userNick;
 			exit;
@@ -948,7 +961,7 @@ class MODEL_USER {
 			exit;
 		}
 
-		$this->userSubmit["user_id"] = fn_getSafe($_POST["user_id"], "int", 0);
+		$this->userSubmit["user_id"] = fn_getSafe(fn_post("user_id"), "int", 0);
 
 		if ($this->userSubmit["user_id"] > 0) {
 			//检查用户是否存在
@@ -958,7 +971,7 @@ class MODEL_USER {
 			}
 		}
 
-		$_arr_userName = $this->input_name_chk($_POST["user_name"]);
+		$_arr_userName = $this->input_name_chk(fn_post("user_name"));
 		if ($_arr_userName["str_alert"] != "ok") {
 			return $_arr_userName;
 			exit;
@@ -975,28 +988,28 @@ class MODEL_USER {
 		}
 
 
-		$_arr_userMail = $this->input_mail_chk($_POST["user_mail"]);
+		$_arr_userMail = $this->input_mail_chk(fn_post("user_mail"));
 		if ($_arr_userMail["str_alert"] != "ok") {
 			return $_arr_userMail;
 			exit;
 		}
 		$this->userSubmit["user_mail"] = $_arr_userMail["user_mail"];
 
-		$_arr_userNick = $this->input_nick_chk($_POST["user_nick"]);
+		$_arr_userNick = $this->input_nick_chk(fn_post("user_nick"));
 		if ($_arr_userNick["str_alert"] != "ok") {
 			return $_arr_userNick;
 			exit;
 		}
 		$this->userSubmit["user_nick"] = $_arr_userNick["user_nick"];
 
-		$_arr_userNote = $this->input_note_chk($_POST["user_note"]);
+		$_arr_userNote = $this->input_note_chk(fn_post("user_note"));
 		if ($_arr_userNote["str_alert"] != "ok") {
 			return $_arr_userNote;
 			exit;
 		}
 		$this->userSubmit["user_note"] = $_arr_userNote["user_note"];
 
-		$_arr_userStatus = validateStr($_POST["user_status"], 1, 0);
+		$_arr_userStatus = validateStr(fn_post("user_status"), 1, 0);
 		switch ($_arr_userStatus["status"]) {
 			case "too_short":
 				return array(
@@ -1029,7 +1042,7 @@ class MODEL_USER {
 			exit;
 		}
 
-		$_arr_userIds = $_POST["user_id"];
+		$_arr_userIds = fn_post("user_id");
 
 		if ($_arr_userIds) {
 			foreach ($_arr_userIds as $_key=>$_value) {

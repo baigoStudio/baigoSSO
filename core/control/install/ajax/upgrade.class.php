@@ -101,7 +101,7 @@ class AJAX_UPGRADE {
 	private function opt_post($str_type) {
 		$_mdl_opt = new MODEL_OPT(); //设置管理组模型
 
-		$_arr_opt = $_POST["opt"];
+		$_arr_opt = fn_post("opt");
 
 		$_str_content = "<?php" . PHP_EOL;
 		foreach ($_arr_opt as $_key=>$_value) {
@@ -135,7 +135,7 @@ class AJAX_UPGRADE {
 			$_arr_alert["admin_nick"] = array("ADD", "varchar(30) NOT NULL COMMENT '昵称'");
 		}
 
-		if ($_arr_alert) {
+		if (isset($_arr_alert)) {
 			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "admin", $_arr_alert);
 			if (!$_reselt) {
 				$this->obj_ajax->halt_alert("x020106");

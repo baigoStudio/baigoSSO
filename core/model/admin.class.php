@@ -18,6 +18,12 @@ class MODEL_ADMIN {
 	}
 
 
+	/** 创建表
+	 * mdl_create function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create() {
 		$_arr_adminCreate = array(
 			"admin_id"           => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
@@ -47,6 +53,12 @@ class MODEL_ADMIN {
 	}
 
 
+	/** 检查字段
+	 * mdl_column function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_column() {
 		$_arr_colSelect = array(
 			"column_name"
@@ -64,7 +76,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 登录时更新用户信息
 	 * mdl_login function.
 	 *
 	 * @access public
@@ -99,7 +111,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 修改个人信息
 	 * mdl_profile function.
 	 *
 	 * @access public
@@ -132,6 +144,13 @@ class MODEL_ADMIN {
 	}
 
 
+	/** 修改密码
+	 * mdl_pass function.
+	 *
+	 * @access public
+	 * @param mixed $num_adminId
+	 * @return void
+	 */
 	function mdl_pass($num_adminId) {
 		$_arr_adminData = array(
 			"admin_pass" => $this->adminPass["admin_pass_do"],
@@ -155,7 +174,7 @@ class MODEL_ADMIN {
 		);
 	}
 
-	/**
+	/** 管理员创建、编辑提交
 	 * mdl_submit function.
 	 *
 	 * @access public
@@ -224,7 +243,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 编辑状态
 	 * mdl_status function.
 	 *
 	 * @access public
@@ -253,7 +272,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 读取
 	 * mdl_read function.
 	 *
 	 * @access public
@@ -291,16 +310,30 @@ class MODEL_ADMIN {
 		}
 
 		$_arr_adminRows = $this->obj_db->select_array(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
-		$_arr_adminRow = $_arr_adminRows[0];
 
-		if (!$_arr_adminRow) { //用户名不存在则返回错误
+		if (isset($_arr_adminRows[0])) { //用户名不存在则返回错误
+			$_arr_adminRow = $_arr_adminRows[0];
+		} else {
 			return array(
 				"str_alert" => "x020102", //不存在记录
 			);
 			exit;
 		}
 
-		$_arr_adminRow["admin_allow"] = json_decode($_arr_adminRow["admin_allow"], true); //json解码
+		if (isset($_arr_adminRow["admin_allow"])) {
+			$_arr_adminRow["admin_allow"] = json_decode($_arr_adminRow["admin_allow"], true); //json解码
+		} else {
+			$_arr_adminRow["admin_allow"] = array();
+		}
+
+		if (!isset($_arr_adminRow["admin_allow"]["info"])) {
+			$_arr_adminRow["admin_allow"]["info"] = 0;
+		}
+
+		if (!isset($_arr_adminRow["admin_allow"]["pass"])) {
+			$_arr_adminRow["admin_allow"]["pass"] = 0;
+		}
+
 		$_arr_adminRow["str_alert"]   = "y020102";
 
 		return $_arr_adminRow;
@@ -308,7 +341,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 列出
 	 * mdl_list function.
 	 *
 	 * @access public
@@ -346,7 +379,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 删除
 	 * mdl_del function.
 	 *
 	 * @access public
@@ -370,7 +403,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 计数
 	 * mdl_count function.
 	 *
 	 * @access public
@@ -395,6 +428,12 @@ class MODEL_ADMIN {
 	}
 
 
+	/** 修改个人信息表单验证
+	 * input_profile function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function input_profile() {
 		if (!fn_token("chk")) { //令牌
 			return array(
@@ -403,7 +442,7 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$_arr_adminNick = validateStr($_POST["admin_nick"], 0, 30);
+		$_arr_adminNick = validateStr(fn_post("admin_nick"), 0, 30);
 		switch ($_arr_adminNick["status"]) {
 			case "too_long":
 				return array(
@@ -424,6 +463,12 @@ class MODEL_ADMIN {
 	}
 
 
+	/** 修改密码表单验证
+	 * input_pass function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function input_pass() {
 		if (!fn_token("chk")) { //令牌
 			return array(
@@ -432,7 +477,7 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$_arr_adminPassOld = validateStr($_POST["admin_pass"], 1, 0);
+		$_arr_adminPassOld = validateStr(fn_post("admin_pass"), 1, 0);
 		switch ($_arr_adminPassOld["status"]) {
 			case "too_short":
 				return array(
@@ -446,7 +491,7 @@ class MODEL_ADMIN {
 			break;
 		}
 
-		$_arr_adminPassNew = validateStr($_POST["admin_pass_new"], 1, 0);
+		$_arr_adminPassNew = validateStr(fn_post("admin_pass_new"), 1, 0);
 		switch ($_arr_adminPassNew["status"]) {
 			case "too_short":
 				return array(
@@ -460,7 +505,7 @@ class MODEL_ADMIN {
 			break;
 		}
 
-		$_arr_adminPassConfirm = validateStr($_POST["admin_pass_confirm"], 1, 0);
+		$_arr_adminPassConfirm = validateStr(fn_post("admin_pass_confirm"), 1, 0);
 		switch ($_arr_adminPassConfirm["status"]) {
 			case "too_short":
 				return array(
@@ -489,7 +534,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 登录验证
 	 * input_login function.
 	 *
 	 * @access public
@@ -512,13 +557,13 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$this->adminLogin["forward"] = fn_getSafe($_POST["forward"], "txt", "");
+		$this->adminLogin["forward"] = fn_getSafe(fn_post("forward"), "txt", "");
 
 		if (!$this->adminLogin["forward"]) {
 			$this->adminLogin["forward"] = base64_encode(BG_URL_ADMIN . "ctl.php");
 		}
 
-		$_arr_adminName = validateStr($_POST["admin_name"], 1, 30, "str", "strDigit");
+		$_arr_adminName = validateStr(fn_post("admin_name"), 1, 30, "str", "strDigit");
 		switch ($_arr_adminName["status"]) {
 			case "too_short":
 				return array(
@@ -550,7 +595,7 @@ class MODEL_ADMIN {
 
 		}
 
-		$_arr_adminPass = validateStr($_POST["admin_pass"], 1, 0);
+		$_arr_adminPass = validateStr(fn_post("admin_pass"), 1, 0);
 		switch ($_arr_adminPass["status"]) {
 			case "too_short":
 				return array(
@@ -572,7 +617,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 创建、编辑表单验证
 	 * input_submit function.
 	 *
 	 * @access public
@@ -586,7 +631,7 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$this->adminSubmit["admin_id"] = fn_getSafe($_POST["admin_id"], "int", 0);
+		$this->adminSubmit["admin_id"] = fn_getSafe(fn_post("admin_id"), "int", 0);
 
 		if ($this->adminSubmit["admin_id"] > 0) {
 			//检验用户是否存在
@@ -596,7 +641,7 @@ class MODEL_ADMIN {
 			}
 		}
 
-		$_arr_adminName = validateStr($_POST["admin_name"], 1, 30);
+		$_arr_adminName = validateStr(fn_post("admin_name"), 1, 30);
 		switch ($_arr_adminName["status"]) {
 			case "too_short":
 				return array(
@@ -627,7 +672,7 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$_arr_adminNote = validateStr($_POST["admin_note"], 0, 30);
+		$_arr_adminNote = validateStr(fn_post("admin_note"), 0, 30);
 		switch ($_arr_adminNote["status"]) {
 			case "too_long":
 				return array(
@@ -641,7 +686,7 @@ class MODEL_ADMIN {
 			break;
 		}
 
-		$_arr_adminStatus = validateStr($_POST["admin_status"], 1, 0);
+		$_arr_adminStatus = validateStr(fn_post("admin_status"), 1, 0);
 		switch ($_arr_adminStatus["status"]) {
 			case "too_short":
 				return array(
@@ -656,7 +701,7 @@ class MODEL_ADMIN {
 
 		}
 
-		$_arr_adminNick = validateStr($_POST["admin_nick"], 0, 30);
+		$_arr_adminNick = validateStr(fn_post("admin_nick"), 0, 30);
 		switch ($_arr_adminNick["status"]) {
 			case "too_long":
 				return array(
@@ -670,13 +715,19 @@ class MODEL_ADMIN {
 			break;
 		}
 
-		$this->adminSubmit["admin_allow"] = json_encode($_POST["admin_allow"]);
+		$this->adminSubmit["admin_allow"] = json_encode(fn_post("admin_allow"));
 		$this->adminSubmit["str_alert"]   = "ok";
 
 		return $this->adminSubmit;
 	}
 
 
+	/** api 创建验证
+	 * api_add function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function api_add() {
 		if (!fn_token("chk")) { //令牌
 			return array(
@@ -685,7 +736,7 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$_arr_adminName = validateStr($_POST["admin_name"], 1, 30);
+		$_arr_adminName = validateStr(fn_post("admin_name"), 1, 30);
 		switch ($_arr_adminName["status"]) {
 			case "too_short":
 				return array(
@@ -714,7 +765,7 @@ class MODEL_ADMIN {
 		}
 
 		$this->adminSubmit["admin_status"]    = "enable";
-		$this->adminSubmit["admin_pass"]      = $_POST["admin_pass"];
+		$this->adminSubmit["admin_pass"]      = fn_post("admin_pass");
 
 		$_arr_adminAllow = array(
 			"user" => array(
@@ -754,7 +805,7 @@ class MODEL_ADMIN {
 	}
 
 
-	/**
+	/** 选择管理员
 	 * input_ids function.
 	 *
 	 * @access public
@@ -768,7 +819,7 @@ class MODEL_ADMIN {
 			exit;
 		}
 
-		$_arr_adminIds = $_POST["admin_id"];
+		$_arr_adminIds = fn_post("admin_id");
 
 		if ($_arr_adminIds) {
 			foreach ($_arr_adminIds as $_key=>$_value) {

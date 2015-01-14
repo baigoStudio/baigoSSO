@@ -25,20 +25,17 @@ class CONTROL_ALERT {
 		$this->config         = $this->obj_base->config;
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
 		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]); //初始化视图对象
-		$this->tplData = array(
-			"adminLogged" => $this->adminLogged
-		);
 	}
 
 	function ctl_display() {
-		$_str_alert   = fn_getSafe($_GET["alert"], "txt", "");
-		$_str_view    = fn_getSafe($_GET["view"], "txt", "");
+		$_str_alert   = fn_getSafe(fn_get("alert"), "txt", "");
+		//$_str_view    = fn_getSafe(fn_get("view"), "txt", "");
 
 		$arr_data = array(
 			"adminLogged"    => $this->adminLogged,
 			"alert"          => $_str_alert,
 			"status"         => substr($_str_alert, 0, 1),
-			"view"           => $_str_view,
+			"view"           => $GLOBALS["view"],
 		);
 
 		$this->obj_tpl->tplDisplay("alert.tpl", $arr_data);

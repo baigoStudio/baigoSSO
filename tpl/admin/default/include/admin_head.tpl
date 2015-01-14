@@ -21,14 +21,18 @@
 					<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php">{$smarty.const.BG_SITE_NAME}</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li {if $cfg.menu_active == "profile" && $cfg.sub_active == "info"}class="active"{/if}>
+					<li {if isset($cfg.menu_active) && $cfg.menu_active == "profile" && isset($cfg.sub_active) && $cfg.sub_active == "info"}class="active"{/if}>
 						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=info">
 							<span class="glyphicon glyphicon-user"></span>
-							{$tplData.adminLogged.admin_name}
-							{if $tplData.adminLogged.admin_nick}[ {$tplData.adminLogged.admin_nick} ]{/if}
+							{if isset($tplData.adminLogged.admin_name)}
+								{$tplData.adminLogged.admin_name}
+							{/if}
+							{if isset($tplData.adminLogged.admin_nick)}
+								[ {$tplData.adminLogged.admin_nick} ]
+							{/if}
 						</a>
 					</li>
-					<li {if $cfg.menu_active == "profile" && $cfg.sub_active == "pass"}class="active"{/if}>
+					<li {if isset($cfg.menu_active) && $cfg.menu_active == "profile" && isset($cfg.sub_active) && $cfg.sub_active == "pass"}class="active"{/if}>
 						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=pass">
 							<span class="glyphicon glyphicon-lock"></span>
 							{$lang.href.passModi}

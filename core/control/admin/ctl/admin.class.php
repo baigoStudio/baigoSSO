@@ -33,7 +33,7 @@ class CONTROL_ADMIN {
 	}
 
 	function ctl_show() {
-		$_num_adminId = fn_getSafe($_GET["admin_id"], "int", 0);
+		$_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0);
 
 		if ($this->adminLogged["admin_allow"]["admin"]["browse"] != 1) {
 			return array(
@@ -64,7 +64,7 @@ class CONTROL_ADMIN {
 	 * @return void
 	 */
 	function ctl_form() {
-		$_num_adminId = fn_getSafe($_GET["admin_id"], "int", 0);
+		$_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0);
 
 		if ($_num_adminId > 0) {
 			if ($this->adminLogged["admin_allow"]["admin"]["edit"] != 1) {
@@ -86,7 +86,10 @@ class CONTROL_ADMIN {
 				exit;
 			}
 			$_arr_adminRow = array(
-				"admin_status" => "enable",
+				"admin_id"      => 0,
+				"admin_nick"    => "",
+				"admin_note"    => "",
+				"admin_status"  => "enable",
 			);
 		}
 
@@ -114,8 +117,8 @@ class CONTROL_ADMIN {
 			exit;
 		}
 
-		$_str_key     = fn_getSafe($_GET["key"], "txt", "");
-		$_str_status  = fn_getSafe($_GET["status"], "txt", "");
+		$_str_key     = fn_getSafe(fn_get("key"), "txt", "");
+		$_str_status  = fn_getSafe(fn_get("status"), "txt", "");
 
 		$_arr_search = array(
 			"key"        => $_str_key,

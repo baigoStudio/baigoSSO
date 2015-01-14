@@ -1,21 +1,21 @@
 {* html_foot.tpl HTML 底部通用 *}
 
-	{if $cfg.baigoValidator}
+	{if isset($cfg.baigoValidator)}
 		<!--表单验证 js-->
 		<script src="{$smarty.const.BG_URL_JS}baigoValidator/baigoValidator.js" type="text/javascript"></script>
 	{/if}
 
-	{if $cfg.baigoSubmit}
+	{if isset($cfg.baigoSubmit)}
 		<!--表单 ajax 提交 js-->
 		<script src="{$smarty.const.BG_URL_JS}baigoSubmit/baigoSubmit.js" type="text/javascript"></script>
 	{/if}
 
-	{if $cfg.reloadImg}
+	{if isset($cfg.reloadImg)}
 		<!--重新载入图片 js-->
 		<script src="{$smarty.const.BG_URL_JS}reloadImg.js" type="text/javascript"></script>
 	{/if}
 
-	{if $cfg.baigoCheckall}
+	{if isset($cfg.baigoCheckall)}
 		<!--全选 js-->
 		<script src="{$smarty.const.BG_URL_JS}baigoCheckall.js" type="text/javascript"></script>
 	{/if}

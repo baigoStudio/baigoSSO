@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -17,7 +15,7 @@ include_once(BG_PATH_CONTROL_ADMIN . "ctl/profile.class.php"); //载入栏目控
 
 $ctl_profile = new CONTROL_PROFILE(); //初始化设置对象
 
-switch ($act_get) {
+switch ($GLOBALS["act_get"]) {
 	case "pass":
 		$arr_profileRow = $ctl_profile->ctl_pass();
 		if ($arr_profileRow["str_alert"] != "y020109") {

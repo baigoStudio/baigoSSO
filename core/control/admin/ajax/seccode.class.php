@@ -26,8 +26,8 @@ class AJAX_SECCODE {
 		str_alert 提示信息
 	*/
 	function ajax_chk() {
-		$_str_seccode = strtolower($_GET["seccode"]);
-		if ($_str_seccode != $_SESSION["seccode_" . BG_SITE_SSIN]) {
+		$_str_seccode = strtolower(fn_get("seccode"));
+		if ($_str_seccode != fn_session("seccode_" . BG_SITE_SSIN)) {
 			$this->obj_ajax->halt_re("x030101");
 		}
 

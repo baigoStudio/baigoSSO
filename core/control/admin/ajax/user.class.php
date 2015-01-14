@@ -39,7 +39,10 @@ class AJAX_USER {
 		str_alert 提示信息
 	*/
 	function ajax_submit() {
-		$_arr_userSubmit = $this->mdl_user->input_submit();
+		$_arr_userSubmit  = $this->mdl_user->input_submit();
+
+		$_str_userPassDo  = "";
+		$_str_userRand    = "";
 
 		if ($_arr_userSubmit["str_alert"] != "ok") {
 			$this->obj_ajax->halt_alert($_arr_userSubmit["str_alert"]);
@@ -49,7 +52,7 @@ class AJAX_USER {
 			if ($this->adminLogged["admin_allow"]["user"]["edit"] != 1) {
 				$this->obj_ajax->halt_alert("x010303");
 			}
-			$_str_userPass = $_POST["user_pass"];
+			$_str_userPass = fn_post("user_pass");
 			if ($_str_userPass) {
 				$_str_userRand      = fn_rand(6);
 				$_str_userPassDo    = fn_baigoEncrypt($_str_userPass, $_str_userRand);
@@ -58,7 +61,7 @@ class AJAX_USER {
 			if ($this->adminLogged["admin_allow"]["user"]["add"] != 1) {
 				$this->obj_ajax->halt_alert("x010302");
 			}
-			$_arr_userPass = validateStr($_POST["user_pass"], 1, 0);
+			$_arr_userPass = validateStr(fn_post("user_pass"), 1, 0);
 			switch ($_arr_userPass["status"]) {
 				case "too_short":
 					$this->obj_ajax->halt_alert("x010212");
@@ -88,7 +91,7 @@ class AJAX_USER {
 			$this->obj_ajax->halt_alert("x010303");
 		}
 
-		$_str_status = fn_getSafe($_POST["act_post"], "txt", "");
+		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_userIds = $this->mdl_user->input_ids();
 		if ($_arr_userIds["str_alert"] != "ok") {
@@ -115,7 +118,7 @@ class AJAX_USER {
 			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
 		}
 
-		$_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds);
+		$_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds["user_ids"]);
 
 		if ($_arr_userRow["str_alert"] == "y010104") {
 			foreach ($_arr_userIds["user_ids"] as $_value) {

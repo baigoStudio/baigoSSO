@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -16,7 +14,7 @@ include_once(BG_PATH_CONTROL_ADMIN . "ajax/app.class.php"); //载入商家控制
 
 $ajax_app = new AJAX_APP(); //初始化商家
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "auth":
 		$ajax_app->ajax_auth();
 	break;

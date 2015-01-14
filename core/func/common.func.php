@@ -21,6 +21,7 @@ if(!defined("IN_BAIGO")) {
  */
 function fn_rand($num_rand = 32) {
 	$_str_char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	$_str_rnd = "";
 	while (strlen($_str_rnd) < $num_rand) {
 		$_str_rnd .= substr($_str_char, (rand(0, strlen($_str_char))), 1);
 	}
@@ -35,10 +36,10 @@ function fn_rand($num_rand = 32) {
  * @return void
  */
 function fn_getIp($str_ipTrue = true) {
-	if ($_SERVER) {
+	if (isset($_SERVER)) {
 		if ($str_ipTrue) {
-			if ($_SERVER["HTTP_X_FORWARDED_FOR"]) {
-				$_arr_ips = explode(",", $_SERVER["HTTP_X_FORWARDED_FOR"]);
+			if (fn_server("HTTP_X_FORWARDED_FOR")) {
+				$_arr_ips = explode(",", fn_server("HTTP_X_FORWARDED_FOR"));
 				foreach ($_arr_ips as $_value) {
 					$_value = trim($_value);
 					if ($_value != "unknown") {
@@ -46,17 +47,19 @@ function fn_getIp($str_ipTrue = true) {
 						break;
 					}
 				}
-			} elseif ($_SERVER["HTTP_CLIENT_IP"]) {
-				$_str_ip = $_SERVER["HTTP_CLIENT_IP"];
+			} elseif (fn_server("HTTP_CLIENT_IP")) {
+				$_str_ip = fn_server("HTTP_CLIENT_IP");
+			} elseif (fn_server("REMOTE_ADDR")) {
+				$_str_ip = fn_server("REMOTE_ADDR");
 			} else {
-				if ($_SERVER["REMOTE_ADDR"]) {
-					$_str_ip = $_SERVER["REMOTE_ADDR"];
-				} else {
-					$_str_ip = "0.0.0.0";
-				}
+				$_str_ip = "0.0.0.0";
 			}
 		} else {
-			$_str_ip = $_SERVER["REMOTE_ADDR"];
+			if (fn_server("REMOTE_ADDR")) {
+				$_str_ip = fn_server("REMOTE_ADDR");
+			} else {
+				$_str_ip = "0.0.0.0";
+			}
 		}
 	} else {
 		if ($str_ipTrue) {
@@ -82,8 +85,8 @@ function fn_getIp($str_ipTrue = true) {
  * @return void
  */
 function fn_seccode() {
-	$_str_seccode = strtolower($_POST["seccode"]);
-	if ($_str_seccode != $_SESSION["seccode_" . BG_SITE_SSIN]) {
+	$_str_seccode = strtolower(fn_post("seccode"));
+	if ($_str_seccode != fn_session("seccode_" . BG_SITE_SSIN)) {
 		return false;
 	} else {
 		return true;
@@ -99,32 +102,32 @@ function fn_seccode() {
  * @param string $token_method (default: "post")
  * @return void
  */
-function fn_token($token_action = "mk", $token_method = "post") {
+function fn_token($token_action = "mk", $session_method = "post", $cookie_method = "cookie") {
 	switch ($token_action) {
 		case "chk":
 			switch ($session_method) {
 				case "get":
-					$_str_tokenSession = fn_getSafe($_GET["token_session"], "txt", "");
+					$_str_tokenSession = fn_getSafe(fn_get("token_session"), "txt", "");
 				break;
 				default:
-					$_str_tokenSession = fn_getSafe($_POST["token_session"], "txt", "");
+					$_str_tokenSession = fn_getSafe(fn_post("token_session"), "txt", "");
 				break;
 			}
 
 			switch ($cookie_method) {
 				case "get":
-					$_str_tokenCookie = fn_getSafe($_GET["token_cookie"], "txt", "");
+					$_str_tokenCookie = fn_getSafe(fn_get("token_cookie"), "txt", "");
 				break;
 				case "post":
-					$_str_tokenCookie = fn_getSafe($_POST["token_cookie"], "txt", "");
+					$_str_tokenCookie = fn_getSafe(fn_post("token_cookie"), "txt", "");
 				break;
 				default:
-					$_str_tokenCookie = $_COOKIE["token_cookie_" . BG_SITE_SSIN];
+					$_str_tokenCookie = fn_cookie("token_cookie_" . BG_SITE_SSIN);
 				break;
 			}
 
 			if (BG_SWITCH_TOKEN == true) {
-				 if ($_str_tokenSession != $_SESSION["token_session_" . BG_SITE_SSIN] || $_str_tokenCookie != $_SESSION["token_cookie_" . BG_SITE_SSIN]) {
+				 if ($_str_tokenSession != fn_session("token_session_" . BG_SITE_SSIN) || $_str_tokenCookie != fn_session("token_cookie_" . BG_SITE_SSIN)) {
 					$_str_return = false;
 				 } else {
 					$_str_return = true;
@@ -136,22 +139,22 @@ function fn_token($token_action = "mk", $token_method = "post") {
 
 		default:
 			if (BG_SWITCH_TOKEN == true) {
-				$_num_tokenSessionDiff = $_SESSION["token_sessionTime_" . BG_SITE_SSIN] + 300; //session有效期
-				if (!$_SESSION["token_session_" . BG_SITE_SSIN] || !$_SESSION["token_sessionTime_" . BG_SITE_SSIN] || $_num_tokenSessionDiff < time()) {
+				$_num_tokenSessionDiff = fn_session("token_sessionTime_" . BG_SITE_SSIN) + 300; //session有效期
+				if (!fn_session("token_session_" . BG_SITE_SSIN) || !fn_session("token_sessionTime_" . BG_SITE_SSIN) || $_num_tokenSessionDiff < time()) {
 					$_str_tokenSession = fn_rand();
 					$_SESSION["token_session_" . BG_SITE_SSIN]     = $_str_tokenSession;
 					$_SESSION["token_sessionTime_" . BG_SITE_SSIN] = time();
 				} else {
-					$_str_tokenSession = $_SESSION["token_session_" . BG_SITE_SSIN];
+					$_str_tokenSession = fn_session("token_session_" . BG_SITE_SSIN);
 				}
 
-				$_num_tokenCookieDiff = $_SESSION["token_cookieTime_" . BG_SITE_SSIN] + 300; //cookie有效期
-				if (!$_SESSION["token_cookie_" . BG_SITE_SSIN] || !$_SESSION["token_cookieTime_" . BG_SITE_SSIN] || $_num_tokenCookieDiff < time()) {
+				$_num_tokenCookieDiff = fn_session("token_cookieTime_" . BG_SITE_SSIN) + 300; //cookie有效期
+				if (!fn_session("token_cookie_" . BG_SITE_SSIN) || !fn_session("token_cookieTime_" . BG_SITE_SSIN) || $_num_tokenCookieDiff < time()) {
 					$_str_tokenCookie = fn_rand();
 					$_SESSION["token_cookie_" . BG_SITE_SSIN]      = $_str_tokenCookie;
 					$_SESSION["token_cookieTime_" . BG_SITE_SSIN]  = time();
 				} else {
-					$_str_tokenCookie = $_SESSION["token_cookie_" . BG_SITE_SSIN];
+					$_str_tokenCookie = fn_session("token_cookie_" . BG_SITE_SSIN);
 				}
 
 				$_str_return = $_str_tokenSession;
@@ -295,7 +298,7 @@ function fn_substr_utf8($str_string, $begin, $length) {
  */
 function fn_page($num_total, $num_per = BG_SITE_PERPAGE) {
 
-	$_num_pageThis = fn_getSafe($_GET["page"], "int", 1);
+	$_num_pageThis = fn_getSafe(fn_get("page"), "int", 1);
 
 	if ($_num_pageThis < 1) {
 		$_num_pageThis = 1;
@@ -371,7 +374,7 @@ function fn_jsonEncode($arr_json = "", $method = "") {
  * @return void
  */
 function fn_jsonDecode($str_json = "", $method = "") {
-	if ($str_json) {
+	if (isset($str_json)) {
 		$arr_json = json_decode($str_json, true); //json解码
 		$arr_json = fn_eachArray($arr_json, $method);
 	} else {
@@ -469,5 +472,58 @@ function fn_regChk($str_chk, $str_reg, $str_wild = false) {
 	print_r($aaaa);*/
 
 	return preg_match($_str_reg, $str_chk);
+}
+
+function fn_get($key) {
+	if (isset($_GET[$key])) {
+		return $_GET[$key];
+	} else {
+		return null;
+	}
+}
+
+
+function fn_post($key) {
+	if (isset($_POST[$key])) {
+		return $_POST[$key];
+	} else {
+		return null;
+	}
+}
+
+
+function fn_cookie($key) {
+	if (isset($_COOKIE[$key])) {
+		return $_COOKIE[$key];
+	} else {
+		return null;
+	}
+}
+
+
+function fn_session($key) {
+	if (isset($_SESSION[$key])) {
+		return $_SESSION[$key];
+	} else {
+		return null;
+	}
+}
+
+
+function fn_request($key) {
+	if (isset($_REQUEST[$key])) {
+		return $_REQUEST[$key];
+	} else {
+		return null;
+	}
+}
+
+
+function fn_server($key) {
+	if (isset($_SERVER[$key])) {
+		return $_SERVER[$key];
+	} else {
+		return null;
+	}
 }
 ?>

@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -16,7 +14,7 @@ include_once(BG_PATH_CONTROL_ADMIN . "ajax/admin.class.php"); //载入栏目控�
 
 $ajax_admin = new AJAX_ADMIN(); //初始化设置对象
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "submit":
 		$ajax_admin->ajax_submit();
 	break;
@@ -31,7 +29,7 @@ switch ($act_post) {
 	break;
 
 	default:
-		switch ($act_get) {
+		switch ($GLOBALS["act_get"]) {
 			case "chkname":
 				$ajax_admin->ajax_chkname();
 			break;

@@ -29,6 +29,7 @@
 
 		<div class="panel panel-default">
 			<div class="panel-body">
+
 				{include "include/opt_form.tpl" cfg=$cfg}
 
 				<div class="form-group">

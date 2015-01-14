@@ -20,7 +20,7 @@ $GLOBALS["obj_db"]      = new CLASS_MYSQL(); //设置数据库对象
 $GLOBALS["obj_base"]    = new CLASS_BASE(); //初始化基类
 $ctl_logon              = new CONTROL_LOGON();
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "login":
 		$arr_logonRow = $ctl_logon->ctl_login();
 		if ($arr_logonRow["str_alert"] != "y020201") {
@@ -32,7 +32,7 @@ switch ($act_post) {
 	break;
 
 	default:
-		switch ($act_get) {
+		switch ($GLOBALS["act_get"]) {
 			case "logout":
 				$arr_logonRow = $ctl_logon->ctl_logout();
 				header("Location: " . base64_decode($arr_logonRow["forward"]));

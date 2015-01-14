@@ -16,7 +16,7 @@ include_once(BG_PATH_CONTROL_API . "user.class.php"); //载入商家控制器
 
 $api_user = new API_USER(); //初始化商家
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "reg":
 		$api_user->api_reg();
 	break;
@@ -34,7 +34,7 @@ switch ($act_post) {
 	break;
 
 	default:
-		switch ($act_get) {
+		switch ($GLOBALS["act_get"]) {
 			case "get":
 				$api_user->api_get();
 			break;

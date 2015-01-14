@@ -61,7 +61,6 @@
 							</th>
 							<th class="td_mn">{$lang.label.id}</th>
 							<th>{$lang.label.title}</th>
-							<th>{$lang.label.content}</th>
 							<th class="td_bg">{$lang.label.operator}</th>
 							<th class="td_sm">{$lang.label.status} / {$lang.label.type}</th>
 						</tr>
@@ -83,9 +82,6 @@
 									<div>
 										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&act_get=show&log_id={$value.log_id}&view=iframe" data-toggle="modal" data-target="#log_modal">{$lang.href.show}</a>
 									</div>
-								</td>
-								<td>
-									{$value.log_content}
 								</td>
 								<td class="td_bg">
 									<div>
@@ -109,7 +105,7 @@
 					<tfoot>
 						<tr>
 							<td colspan="2"><span id="msg_log_id"></span></td>
-							<td colspan="5">
+							<td colspan="3">
 								<select name="act_post" id="act_post" class="validate form-control input-sm">
 									<option value="">{$lang.option.batch}</option>
 									{foreach $status.log as $key=>$value}

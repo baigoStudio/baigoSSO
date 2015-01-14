@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -19,7 +17,7 @@ include_once(BG_PATH_CONTROL_INSTALL . "ajax/install.class.php"); //载入栏目
 $GLOBALS["obj_base"]    = new CLASS_BASE(); //初始化基类
 $ajax_install           = new AJAX_INSTALL(); //初始化商家
 
-switch ($act_post) {
+switch ($GLOBALS["act_post"]) {
 	case "admin":
 		$ajax_install->ajax_admin();
 	break;

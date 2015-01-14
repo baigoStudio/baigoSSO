@@ -38,12 +38,12 @@ class AJAX_INSTALL {
 			$this->obj_ajax->halt_alert("x030102");
 		}
 
-		$_str_dbHost      = fn_getSafe($_POST["db_host"], "txt", "localhost");
-		$_str_dbName      = fn_getSafe($_POST["db_name"], "txt", "sso");
-		$_str_dbUser      = fn_getSafe($_POST["db_user"], "txt", "sso");
-		$_str_dbPass      = fn_getSafe($_POST["db_pass"], "txt", "");
-		$_str_dbCharset   = fn_getSafe($_POST["db_charset"], "txt", "utf8");
-		$_str_dbTable     = fn_getSafe($_POST["db_table"], "txt", "sso_");
+		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
+		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "sso");
+		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "sso");
+		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
+		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
+		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
 
 		$_str_content = "<?php" . PHP_EOL;
 			$_str_content .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
@@ -124,7 +124,7 @@ class AJAX_INSTALL {
 			$this->obj_ajax->halt_alert($_arr_adminSubmit["str_alert"]);
 		}
 
-		$_arr_adminPass = validateStr($_POST["admin_pass"], 1, 0);
+		$_arr_adminPass = validateStr(fn_post("admin_pass"), 1, 0);
 		switch ($_arr_adminPass["status"]) {
 			case "too_short":
 				$this->obj_ajax->halt_alert("x020205");
@@ -135,7 +135,7 @@ class AJAX_INSTALL {
 			break;
 		}
 
-		$_arr_adminPassConfirm = validateStr($_POST["admin_pass_confirm"], 1, 0);
+		$_arr_adminPassConfirm = validateStr(fn_post("admin_pass_confirm"), 1, 0);
 		switch ($_arr_adminPassConfirm["status"]) {
 			case "too_short":
 				$this->obj_ajax->halt_alert("x020211");
@@ -162,8 +162,8 @@ class AJAX_INSTALL {
 	function ajax_auto() {
 		$this->check_db();
 
-		$_str_pathParent  = fn_getSafe($_POST["pathParent"], "txt", "");
-		$this->target     = fn_getSafe($_POST["target"], "txt", "");
+		$_str_pathParent  = fn_getSafe(fn_post("pathParent"), "txt", "");
+		$this->target     = fn_getSafe(fn_post("target"), "txt", "");
 		$this->pathParent = base64_decode($_str_pathParent);
 
 		if (!file_exists($this->pathParent)) {
@@ -209,7 +209,7 @@ class AJAX_INSTALL {
 	private function opt_post($str_type) {
 		$_mdl_opt = new MODEL_OPT(); //设置管理组模型
 
-		$_arr_opt = $_POST["opt"];
+		$_arr_opt = fn_post("opt");
 
 		$_str_content = "<?php" . PHP_EOL;
 		foreach ($_arr_opt as $_key=>$_value) {

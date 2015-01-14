@@ -1,9 +1,7 @@
 <?php
 /*-----------------------------------------------------------------
-
 ！！！！警告！！！！
 以下为系统文件，请勿修改
-
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
@@ -17,7 +15,7 @@ include_once(BG_PATH_CONTROL_ADMIN . "ctl/admin.class.php"); //载入栏目控�
 
 $ctl_admin = new CONTROL_ADMIN(); //初始化设置对象
 
-switch ($act_get) {
+switch ($GLOBALS["act_get"]) {
 	case "show":
 		$arr_adminRow = $ctl_admin->ctl_show();
 		if ($arr_adminRow["str_alert"] != "y020102") {

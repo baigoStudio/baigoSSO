@@ -15,7 +15,7 @@ include_once(BG_PATH_SMARTY . "smarty.class.php"); //载入 Smarty 类
 class CLASS_TPL {
 
 	public $common; //通用
-	public $obj_base;
+	public $obj_base; //基类
 	public $obj_smarty; //Smarty
 	public $config; //配置
 	public $lang; //语言 通用
@@ -26,7 +26,7 @@ class CLASS_TPL {
 	public $opt; //语言 后台
 
 	function __construct($str_pathTpl) { //构造函数
-		$this->obj_base                   = $GLOBALS["obj_base"]; //获取界面类型
+		$this->obj_base                   = $GLOBALS["obj_base"];
 		$this->config                     = $this->obj_base->config;
 
 		$this->obj_smarty                 = new Smarty(); //初始化 Smarty 对象
@@ -44,17 +44,20 @@ class CLASS_TPL {
 		$this->adminMod   = include_once(BG_PATH_LANG . $this->config["lang"] . "/adminMod.php"); //载入管理权限配置
 	}
 
-	/*============显示模板============
-	@str_view 模板文件
-	@arr_tplData 需要显示的数据
-	@str_token 是否生成令牌
-	@str_fileHtml 静态页面文件名
 
-	无返回
-	*/
+	/** 显示界面
+	 * tplDisplay function.
+	 *
+	 * @access public
+	 * @param mixed $str_view
+	 * @param string $arr_tplData (default: "")
+	 * @return void
+	 */
 	function tplDisplay($str_view, $arr_tplData = "") {
 		$this->common["token_session"]    = fn_token();
-		$this->common["thisUrl"]          = base64_encode($_SERVER["REQUEST_URI"]);
+		if (fn_server("REQUEST_URI")) {
+			$this->common["thisUrl"]      = base64_encode(fn_server("REQUEST_URI"));
+		}
 		$this->common["ssid"]             = session_id();
 		$this->common["view"]             = $GLOBALS["view"];
 

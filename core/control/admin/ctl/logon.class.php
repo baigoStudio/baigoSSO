@@ -81,7 +81,7 @@ class CONTROL_LOGON {
 	无返回
 	*/
 	function ctl_logout() {
-		$_str_forward  = fn_getSafe($_GET["forward"], "txt", "");
+		$_str_forward  = fn_getSafe(fn_get("forward"), "txt", "");
 		if (!$_str_forward) {
 			$_str_forward = base64_encode(BG_URL_ADMIN . "ctl.php");
 		}
@@ -98,8 +98,8 @@ class CONTROL_LOGON {
 	*/
 	function ctl_logon() {
 		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]);
-		$_str_forward     = fn_getSafe($_GET["forward"], "txt", "");
-		$_str_alert       = fn_getSafe($_GET["alert"], "txt", "");
+		$_str_forward     = fn_getSafe(fn_get("forward"), "txt", "");
+		$_str_alert       = fn_getSafe(fn_get("alert"), "txt", "");
 
 		$_arr_tplData = array(
 			"forward"    => $_str_forward,
