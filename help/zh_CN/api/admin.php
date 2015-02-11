@@ -1,20 +1,20 @@
 	<h3>创建管理员</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于创建管理员。</p>
 
 	<div class="alert alert-warning">
 		<span class="glyphicon glyphicon-warning-sign"></span>
-		注意：本接口仅在自动部署 SSO 是有用，安装成功后将自动失效。
+		注意：本接口仅在自动部署 SSO 时有用，安装成功后将自动失效。
 	</div>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=admin</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>POST</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">

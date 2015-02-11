@@ -9,29 +9,29 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_admin.inc.php"); //验证是否已登录
-include_once(BG_PATH_CONTROL_ADMIN . "ajax/admin.class.php"); //载入栏目控制器
+include_once(BG_PATH_INC . "common_admin.inc.php"); //管理员通用
+include_once(BG_PATH_CONTROL_ADMIN . "ajax/admin.class.php"); //载入管理员 ajax 控制器
 
-$ajax_admin = new AJAX_ADMIN(); //初始化设置对象
+$ajax_admin = new AJAX_ADMIN(); //初始化管理员对象
 
 switch ($GLOBALS["act_post"]) {
 	case "submit":
-		$ajax_admin->ajax_submit();
+		$ajax_admin->ajax_submit(); //创建、编辑
 	break;
 
 	case "del":
-		$ajax_admin->ajax_del();
+		$ajax_admin->ajax_del(); //删除
 	break;
 
 	case "enable":
 	case "disable":
-		$ajax_admin->ajax_status();
+		$ajax_admin->ajax_status(); //状态
 	break;
 
 	default:
 		switch ($GLOBALS["act_get"]) {
 			case "chkname":
-				$ajax_admin->ajax_chkname();
+				$ajax_admin->ajax_chkname(); //验证用户名
 			break;
 		}
 	break;

@@ -30,7 +30,7 @@ $_arr_alert = include_once(BG_PATH_LANG . $_str_lang . "/alert.php"); //载入�
 <head>
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<title>baigoSSO <?php echo($_arr_title[$_str_lang]); ?></title>
 	<script src="../static/js/jquery.min.js" type="text/javascript"></script>
 	<link href="../static/js/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
@@ -46,15 +46,17 @@ $_arr_alert = include_once(BG_PATH_LANG . $_str_lang . "/alert.php"); //载入�
 
 	<div class="container">
 		<div class="row">
-			<div class="col-md-9">
-			<?php
-			include_once("./" . $_str_lang . "/" . $_str_mod . "/title.php");
-			include_once("./" . $_str_lang . "/" . $_str_mod . "/" . $_str_act . ".php");
-			?>
+			<div class="col-md-10">
+				<?php
+				include_once("./" . $_str_lang . "/" . $_str_mod . "/title.php");
+				include_once("./" . $_str_lang . "/" . $_str_mod . "/" . $_str_act . ".php");
+				?>
 			</div>
-			<?php
-			include_once("./" . $_str_lang . "/" . $_str_mod . "/menu.php");
-			?>
+			<div class="col-md-2">
+				<?php
+				include_once("./" . $_str_lang . "/" . $_str_mod . "/menu.php");
+				?>
+			</div>
 		</div>
 	</div>
 

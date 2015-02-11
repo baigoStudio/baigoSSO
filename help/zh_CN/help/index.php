@@ -14,7 +14,7 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/user_list.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/user_list.jpg" class="img-responsive thumbnail">
 	</p>
 
 	<div class="panel panel-default">

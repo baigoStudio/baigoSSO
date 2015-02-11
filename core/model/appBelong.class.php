@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-/*-------------用户类-------------*/
+/*-------------应用归属-------------*/
 class MODEL_APP_BELONG {
 
 	private $obj_db;
@@ -18,6 +18,13 @@ class MODEL_APP_BELONG {
 		$this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
 	}
 
+
+	/** 创建视图
+	 * mdl_create_view function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create_view() {
 		$_arr_userCreat = array(
 			"user_id"            => BG_DB_TABLE . "user",
@@ -32,9 +39,9 @@ class MODEL_APP_BELONG {
 			"belong_app_id"      => BG_DB_TABLE . "app_belong",
 		);
 
-		$_str_sqlJoin = "LEFT JOIN `" . BG_DB_TABLE . "user` ON (`" . BG_DB_TABLE . "app_belong`.`belong_user_id`=`" . BG_DB_TABLE . "user`.`user_id`)";
+		$_str_sqlJoin = "LEFT JOIN `" . BG_DB_TABLE . "app_belong` ON (`" . BG_DB_TABLE . "user`.`user_id`=`" . BG_DB_TABLE . "app_belong`.`belong_user_id`)";
 
-		$_num_mysql = $this->obj_db->create_view(BG_DB_TABLE . "user_view", $_arr_userCreat, BG_DB_TABLE . "app_belong", $_str_sqlJoin);
+		$_num_mysql = $this->obj_db->create_view(BG_DB_TABLE . "user_view", $_arr_userCreat, BG_DB_TABLE . "user", $_str_sqlJoin);
 
 		if ($_num_mysql > 0) {
 			$_str_alert = "y070108"; //更新成功
@@ -48,6 +55,12 @@ class MODEL_APP_BELONG {
 	}
 
 
+	/** 创建表
+	 * mdl_create function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create() {
 		$_arr_belongCreat = array(
 			"belong_id"          => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
@@ -69,6 +82,12 @@ class MODEL_APP_BELONG {
 	}
 
 
+	/** 检查字段
+	 * mdl_column function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_column() {
 		$_arr_colSelect = array(
 			"column_name"
@@ -86,13 +105,12 @@ class MODEL_APP_BELONG {
 	}
 
 
-	/**
+	/** 提交
 	 * mdl_submit function.
 	 *
 	 * @access public
-	 * @param mixed $num_belongId
+	 * @param mixed $num_userId
 	 * @param mixed $num_appId
-	 * @param mixed $num_belongId
 	 * @return void
 	 */
 	function mdl_submit($num_userId, $num_appId) {
@@ -128,14 +146,12 @@ class MODEL_APP_BELONG {
 	}
 
 
-	/**
+	/** 读取
 	 * mdl_read function.
 	 *
 	 * @access public
-	 * @param mixed $str_belong
-	 * @param string $str_readBy (default: "belong_id")
-	 * @param int $num_notThisId (default: 0)
-	 * @param int $num_parentId (default: 0)
+	 * @param int $num_userId (default: 0)
+	 * @param int $num_appId (default: 0)
 	 * @return void
 	 */
 	function mdl_read($num_userId = 0, $num_appId = 0) {
@@ -171,6 +187,17 @@ class MODEL_APP_BELONG {
 	}
 
 
+	/** 列出
+	 * mdl_list function.
+	 *
+	 * @access public
+	 * @param mixed $num_belongNo
+	 * @param int $num_belongExcept (default: 0)
+	 * @param int $num_appId (default: 0)
+	 * @param int $num_userId (default: 0)
+	 * @param bool $arr_userIds (default: false)
+	 * @return void
+	 */
 	function mdl_list($num_belongNo, $num_belongExcept = 0, $num_appId = 0, $num_userId = 0, $arr_userIds = false) {
 		$_arr_belongSelect = array(
 			"belong_app_id",
@@ -198,12 +225,13 @@ class MODEL_APP_BELONG {
 	}
 
 
-	/**
+	/** 计数
 	 * mdl_count function.
 	 *
 	 * @access public
 	 * @param int $num_appId (default: 0)
 	 * @param int $num_userId (default: 0)
+	 * @param bool $arr_userIds (default: false)
 	 * @return void
 	 */
 	function mdl_count($num_appId = 0, $num_userId = 0, $arr_userIds = false) {
@@ -232,12 +260,16 @@ class MODEL_APP_BELONG {
 	}
 
 
-	/**
+	/** 删除
 	 * mdl_del function.
 	 *
 	 * @access public
 	 * @param int $num_appId (default: 0)
 	 * @param int $num_userId (default: 0)
+	 * @param bool $arr_appIds (default: false)
+	 * @param bool $arr_userIds (default: false)
+	 * @param bool $arr_notAppIds (default: false)
+	 * @param bool $arr_notUserIds (default: false)
 	 * @return void
 	 */
 	function mdl_del($num_appId = 0, $num_userId = 0, $arr_appIds = false, $arr_userIds = false, $arr_notAppIds = false, $arr_notUserIds = false) {

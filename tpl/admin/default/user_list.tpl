@@ -111,10 +111,12 @@
 					<label class="control-label">{$lang.label.status}<span id="msg_user_status">*</span></label>
 					<div class="form-group">
 						{foreach $status.user as $key=>$value}
-							<label for="user_status_{$key}" class="radio-inline">
-								<input type="radio" name="user_status" id="user_status_{$key}" value="{$key}" class="validate" {if $tplData.userRow.user_status == $key}checked{/if} group="user_status">
-								{$value}
-							</label>
+							<div class="radio_baigo">
+								<label for="user_status_{$key}">
+									<input type="radio" name="user_status" id="user_status_{$key}" value="{$key}" class="validate" {if $tplData.userRow.user_status == $key}checked{/if} group="user_status">
+									{$value}
+								</label>
+							</div>
 						{/foreach}
 					</div>
 

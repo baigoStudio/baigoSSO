@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-/*-------------管理员模型-------------*/
+/*-------------用户模型-------------*/
 class MODEL_USER {
 	private $obj_db;
 
@@ -18,6 +18,12 @@ class MODEL_USER {
 	}
 
 
+	/** 创建表
+	 * mdl_create function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create() {
 		$_arr_userCreate = array(
 			"user_id"            => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
@@ -47,6 +53,12 @@ class MODEL_USER {
 	}
 
 
+	/** 检查字段
+	 * mdl_column function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_column() {
 		$_arr_colSelect = array(
 			"column_name"
@@ -64,13 +76,11 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 登录
 	 * mdl_login function.
 	 *
 	 * @access public
 	 * @param mixed $num_userId
-	 * @param mixed $str_userPass
-	 * @param mixed $str_userRand
 	 * @return void
 	 */
 	function mdl_login($num_userId) {
@@ -99,14 +109,11 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 编辑
 	 * mdl_edit function.
 	 *
 	 * @access public
 	 * @param mixed $num_userId
-	 * @param string $str_userPass (default: "")
-	 * @param string $str_userRand (default: "")
-	 * @param string $str_userNick (default: "")
 	 * @return void
 	 */
 	function mdl_edit($num_userId) {
@@ -146,17 +153,12 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 提交
 	 * mdl_submit function.
 	 *
 	 * @access public
-	 * @param mixed $num_userId
-	 * @param mixed $str_userName
-	 * @param mixed $str_userPass
-	 * @param mixed $str_userRand (default: fn_rand(6))
-	 * @param string $str_userNick (default: "")
-	 * @param string $str_userStatus (default: "enable")
-	 * @param string $str_userAllow (default: "")
+	 * @param string $str_userPass (default: "")
+	 * @param string $str_userRand (default: "")
 	 * @return void
 	 */
 	function mdl_submit($str_userPass = "", $str_userRand = "") {
@@ -223,7 +225,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 更新状态
 	 * mdl_status function.
 	 *
 	 * @access public
@@ -252,7 +254,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 读取
 	 * mdl_read function.
 	 *
 	 * @access public
@@ -307,6 +309,14 @@ class MODEL_USER {
 	}
 
 
+	/** 从视图里出
+	 * mdl_view function.
+	 *
+	 * @access public
+	 * @param string $str_key (default: "")
+	 * @param int $num_appId (default: 0)
+	 * @return void
+	 */
 	function mdl_view($str_key = "", $num_appId = 0) {
 		$_arr_userSelect = array(
 			"user_id",
@@ -336,7 +346,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 列出
 	 * mdl_list function.
 	 *
 	 * @access public
@@ -344,6 +354,7 @@ class MODEL_USER {
 	 * @param int $num_userExcept (default: 0)
 	 * @param string $str_key (default: "")
 	 * @param string $str_status (default: "")
+	 * @param bool $arr_notIn (default: false)
 	 * @return void
 	 */
 	function mdl_list($num_userNo, $num_userExcept = 0, $str_key = "", $str_status = "", $arr_notIn = false) {
@@ -380,11 +391,13 @@ class MODEL_USER {
 	}
 
 
-	/*============删除管理员============
-	@arr_userId 管理员 ID 数组
-
-	返回提示信息
-	*/
+	/** 删除
+	 * mdl_del function.
+	 *
+	 * @access public
+	 * @param mixed $_arr_userIds
+	 * @return void
+	 */
 	function mdl_del($_arr_userIds) {
 		$_str_userId  = implode(",", $_arr_userIds);
 		$_num_mysql   = $this->obj_db->delete(BG_DB_TABLE . "user", "user_id IN (" . $_str_userId . ")"); //删除数据
@@ -403,9 +416,15 @@ class MODEL_USER {
 	}
 
 
-	/*============统计管理员============
-	返回数量
-	*/
+	/** 计数
+	 * mdl_count function.
+	 *
+	 * @access public
+	 * @param string $str_key (default: "")
+	 * @param string $str_status (default: "")
+	 * @param bool $arr_notIn (default: false)
+	 * @return void
+	 */
 	function mdl_count($str_key = "", $str_status = "", $arr_notIn = false) {
 		$_str_sqlWhere = "user_id > 0";
 
@@ -428,11 +447,11 @@ class MODEL_USER {
 	}
 
 
-
 	/**
 	 * input_get_by function.
 	 *
 	 * @access public
+	 * @param string $str_method (default: "get")
 	 * @return void
 	 */
 	function input_get_by($str_method = "get") {
@@ -474,7 +493,7 @@ class MODEL_USER {
 	/**
 	 * input_id_chk function.
 	 *
-	 * @access public
+	 * @access private
 	 * @param mixed $num_id
 	 * @return void
 	 */
@@ -763,7 +782,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** api 注册
 	 * api_reg function.
 	 *
 	 * @access public
@@ -847,7 +866,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** api 登录
 	 * api_login function.
 	 *
 	 * @access public
@@ -877,7 +896,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** api 编辑
 	 * api_edit function.
 	 *
 	 * @access public
@@ -947,7 +966,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 表单验证
 	 * input_submit function.
 	 *
 	 * @access public
@@ -1028,7 +1047,7 @@ class MODEL_USER {
 	}
 
 
-	/**
+	/** 选择
 	 * input_ids function.
 	 *
 	 * @access public
@@ -1060,6 +1079,5 @@ class MODEL_USER {
 
 		return $this->userIds;
 	}
-
 }
 ?>

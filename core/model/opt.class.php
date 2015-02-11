@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-/*-------------管理员模型-------------*/
+/*-------------设置项模型-------------*/
 class MODEL_OPT {
 	private $obj_db;
 
@@ -18,6 +18,12 @@ class MODEL_OPT {
 	}
 
 
+	/** 创建表
+	 * mdl_create function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create() {
 		$_arr_optCreate = array(
 			"opt_key"    => "varchar(100) NOT NULL COMMENT '设置键名'",
@@ -38,6 +44,12 @@ class MODEL_OPT {
 	}
 
 
+	/** 检查字段
+	 * mdl_column function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_column() {
 		$_arr_colSelect = array(
 			"column_name"
@@ -55,7 +67,7 @@ class MODEL_OPT {
 	}
 
 
-	/**
+	/** 提交
 	 * mdl_submit function.
 	 *
 	 * @access public
@@ -103,7 +115,7 @@ class MODEL_OPT {
 	}
 
 
-	/**
+	/** 读取
 	 * mdl_read function.
 	 *
 	 * @access public
@@ -136,7 +148,7 @@ class MODEL_OPT {
 	}
 
 
-	/**
+	/** 删除
 	 * mdl_del function.
 	 *
 	 * @access public

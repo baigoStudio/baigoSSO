@@ -12,13 +12,13 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_global.inc.php"); //载入通用
+include_once(BG_PATH_CONTROL_ADMIN . "ctl/seccode.class.php"); //载入验证码类
 
-include_once(BG_PATH_CONTROL_ADMIN . "ctl/seccode.class.php"); //载入消息类
-$ctl_seccode = new CONTROL_SECCODE(); //初始化消息对象
+$ctl_seccode = new CONTROL_SECCODE(); //初始化验证对象
 
 switch ($GLOBALS["act_get"]) {
 	case "make":
-		$ctl_seccode->ctl_make(); //显示消息
+		$ctl_seccode->ctl_make(); //生成验证码
 	break;
 }
 ?>

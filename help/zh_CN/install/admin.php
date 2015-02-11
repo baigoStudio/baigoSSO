@@ -11,16 +11,16 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">填写说明</div>
 		<div class="panel-body">
-			<h4 class="text-info">用户名</h4>
+			<h4 class="text-success">用户名</h4>
 			<p>请根据实际情况填写。</p>
 
-			<h4 class="text-info">密码</h4>
+			<h4 class="text-success">密码</h4>
 			<p>请根据实际情况填写。</p>
 
-			<h4 class="text-info">确认密码</h4>
+			<h4 class="text-success">确认密码</h4>
 			<p>请根据实际情况填写。</p>
 
-			<h4 class="text-info">昵称</h4>
+			<h4 class="text-success">昵称</h4>
 			<p>请根据实际情况填写。</p>
 		</div>
 	</div>

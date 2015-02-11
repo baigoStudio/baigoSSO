@@ -1,15 +1,15 @@
 	<h3>用户注册</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于新用户的注册。用户名、密码、Email、昵称为一个用户在 baigo SSO 的基本数据，提交后 baigo SSO 会按照 <a href="?zh_CN&mod=help&act=opt#reg">注册设置</a> 检测用户名和 Email 的格式是否正确合法。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>POST</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">
@@ -110,16 +110,16 @@
 
 	<h3>用户登录</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于用户的登录验证。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>POST</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">
@@ -244,16 +244,16 @@
 
 	<h3>读取用户数据</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于读取已注册用户的信息。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>GET</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">
@@ -378,16 +378,16 @@
 
 	<h3>编辑用户资料</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于编辑已注册用户的信息。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>POST</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">
@@ -500,16 +500,16 @@
 
 	<h3>删除用户</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于删除已注册用户。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>POST</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">
@@ -586,16 +586,16 @@
 
 	<h3>检查用户名</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于检查用户名是否可以注册。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>GET</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">
@@ -672,16 +672,16 @@
 
 	<h3>检查 E-mail</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于检查 E-mail 是否可以注册。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=user</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>GET</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">

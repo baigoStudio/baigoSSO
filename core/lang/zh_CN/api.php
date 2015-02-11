@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-/*-------------------------通用-------------------------*/
+/*-------------------------api 语言-------------------------*/
 return array(
 	"site" => array(
 		"name" => "baigo SSO",

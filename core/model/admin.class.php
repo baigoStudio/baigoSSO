@@ -116,9 +116,6 @@ class MODEL_ADMIN {
 	 *
 	 * @access public
 	 * @param mixed $num_adminId
-	 * @param string $str_adminPass (default: "")
-	 * @param string $str_adminRand (default: "")
-	 * @param string $str_adminNote (default: "")
 	 * @return void
 	 */
 	function mdl_profile($num_adminId) {
@@ -174,17 +171,13 @@ class MODEL_ADMIN {
 		);
 	}
 
+
 	/** 管理员创建、编辑提交
 	 * mdl_submit function.
 	 *
 	 * @access public
-	 * @param mixed $num_adminId
-	 * @param mixed $str_adminName
-	 * @param mixed $str_adminPass
-	 * @param mixed $str_adminRand (default: fn_rand(6))
-	 * @param string $str_adminNote (default: "")
-	 * @param string $str_adminStatus (default: "enable")
-	 * @param string $str_adminAllow (default: "")
+	 * @param string $str_adminPass (default: "")
+	 * @param string $str_adminRand (default: "")
 	 * @return void
 	 */
 	function mdl_submit($str_adminPass = "", $str_adminRand = "") {

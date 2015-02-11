@@ -38,16 +38,16 @@
 
 	<h3>解密</h3>
 
-	<p class="text-info">接口说明</p>
+	<p class="text-success">接口说明</p>
 	<p>本接口用于将其他接口返回的加密字符串进行解密。解密后返回真正的结果。</p>
 
-	<p class="text-info">URL</p>
+	<p class="text-success">URL</p>
 	<p><span class="text-primary">http://www.domain.com/api/api.php?mod=code</span></p>
 
-	<p class="text-info">HTTP 请求方式</p>
+	<p class="text-success">HTTP 请求方式</p>
 	<p>GET</p>
 
-	<p class="text-info">返回格式</p>
+	<p class="text-success">返回格式</p>
 	<p>JSON</p>
 
 	<div class="panel panel-default">

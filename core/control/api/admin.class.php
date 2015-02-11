@@ -90,7 +90,6 @@ class API_ADMIN {
 	function api_add() {
 		$this->app_check("post");
 
-
 		$_arr_adminAdd = $this->mdl_admin->api_add();
 
 		if ($_arr_adminAdd["str_alert"] != "ok") {

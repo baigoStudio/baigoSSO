@@ -5,14 +5,14 @@
 			<table class="table">
 				<thead>
 					<tr>
-						<th>代码</th>
+						<th class="nowrap">代码</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ($_arr_alert as $_key=>$_value) { ?>
 						<tr>
-							<td><?php echo $_key; ?></td>
+							<td class="nowrap"><?php echo $_key; ?></td>
 							<td><?php echo $_value; ?></td>
 						</tr>
 					<?php } ?>

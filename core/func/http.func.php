@@ -11,10 +11,19 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
+
+/** http 函数
+ * fn_http function.
+ *
+ * @access public
+ * @param mixed $str_url
+ * @param mixed $arr_data
+ * @param string $str_method (default: "get")
+ * @return void
+ */
 function fn_http($str_url, $arr_data, $str_method = "get") {
 
 	$_obj_http = curl_init();
-
 	$_str_data = http_build_query($arr_data);
 
 	$_arr_headers = array(

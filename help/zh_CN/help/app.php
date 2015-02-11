@@ -4,7 +4,7 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/app_list.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/app_list.jpg" class="img-responsive thumbnail">
 	</p>
 
 	<hr>
@@ -16,28 +16,28 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/app_form.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/app_form.jpg" class="img-responsive thumbnail">
 	</p>
 
 	<div class="panel panel-default">
 		<div class="panel-heading">填写说明</div>
 		<div class="panel-body">
-			<h4 class="text-info">应用名称</h4>
+			<h4 class="text-success">应用名称</h4>
 			<p>应用的名称。</p>
 
-			<h4 class="text-info">通知接口 URL</h4>
+			<h4 class="text-success">通知接口 URL</h4>
 			<p>baigo SSO 在一些特殊情况下，通过此接口，告诉各个应用进行某种操作，比如删除用户、更新用户信息等，详情请看 API 接口。</p>
 
-			<h4 class="text-info">权限</h4>
+			<h4 class="text-success">权限</h4>
 			<p>选择该应用具备的各种权限。</p>
 
-			<h4 class="text-info">允许通信的 IP</h4>
+			<h4 class="text-success">允许通信的 IP</h4>
 			<p>允许与 baigo SSO 进行通信的 IP 地址，每行一个 IP 地址，可使用通配符 <mark>*</mark>，如：<mark>192.168.1.*</mark>，此时，只有 <mark>192.168.1</mark> 网段的 IP 地址 <mark>允许</mark> 通信。</p>
 
-			<h4 class="text-info">禁止通信的 IP</h4>
+			<h4 class="text-success">禁止通信的 IP</h4>
 			<p>禁止与 baigo SSO 进行通信的 IP 地址，每行一个 IP 地址，可使用通配符 <mark>*</mark>，如：<mark>192.168.1.*</mark>，此时，<mark>192.168.1</mark> 网段的 IP 地址 <mark>禁止</mark> 通信。</p>
 
-			<h4 class="text-info">同步通知</h4>
+			<h4 class="text-success">同步通知</h4>
 			<p>如为开启状态，部分对本系统的操作，将通过通知接口 URL 通知各个应用，以供这些应用进行相应操作，详情请看 API 接口。</p>
 		</div>
 	</div>
@@ -51,7 +51,7 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/app_show.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/app_show.jpg" class="img-responsive thumbnail">
 	</p>
 
 	<hr>
@@ -63,6 +63,6 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/app_belong.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/app_belong.jpg" class="img-responsive thumbnail">
 	</p>
 

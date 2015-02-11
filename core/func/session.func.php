@@ -50,6 +50,12 @@ function fn_ssin_begin() {
 }
 
 
+/** 结束登录 session
+ * fn_ssin_end function.
+ *
+ * @access public
+ * @return void
+ */
 function fn_ssin_end() {
 	unset($_SESSION["admin_id_" . BG_SITE_SSIN]);
 	unset($_SESSION["admin_ssintime_" . BG_SITE_SSIN]);

@@ -8,6 +8,7 @@
 if (!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
+
 /*------验证长度------
 @str 需验证字符串
 @length(min, max) 数组，(最小长度, 最大长度) 0 为不限制

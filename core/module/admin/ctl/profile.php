@@ -9,14 +9,14 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_admin.inc.php"); //验证是否已登录
+include_once(BG_PATH_INC . "common_admin.inc.php"); //管理员通用
 include_once(BG_PATH_INC . "is_admin.inc.php"); //验证是否已登录
-include_once(BG_PATH_CONTROL_ADMIN . "ctl/profile.class.php"); //载入栏目控制器
+include_once(BG_PATH_CONTROL_ADMIN . "ctl/profile.class.php"); //载入个人信息控制器
 
-$ctl_profile = new CONTROL_PROFILE(); //初始化设置对象
+$ctl_profile = new CONTROL_PROFILE(); //初始化个人信息
 
 switch ($GLOBALS["act_get"]) {
-	case "pass":
+	case "pass": //修改密码
 		$arr_profileRow = $ctl_profile->ctl_pass();
 		if ($arr_profileRow["str_alert"] != "y020109") {
 			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_profileRow["str_alert"]);
@@ -24,7 +24,7 @@ switch ($GLOBALS["act_get"]) {
 		}
 	break;
 
-	default:
+	default: //修改个人信息
 		$arr_profileRow = $ctl_profile->ctl_info();
 		if ($arr_profileRow["str_alert"] != "y020108") {
 			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_profileRow["str_alert"]);

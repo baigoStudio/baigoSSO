@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_admin.inc.php"); //载入全局通用
+include_once(BG_PATH_INC . "common_admin.inc.php"); //管理员通用
 include_once(BG_PATH_CONTROL_ADMIN . "ctl/alert.class.php"); //载入消息类
 
 $ctl_alert = new CONTROL_ALERT(); //初始化消息对象

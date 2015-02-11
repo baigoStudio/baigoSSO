@@ -4,7 +4,7 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/log_list.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/log_list.jpg" class="img-responsive thumbnail">
 	</p>
 
 	<hr>
@@ -16,5 +16,5 @@
 	</p>
 
 	<p>
-		<img src="./zh_CN/help/image/log_show.jpg" class="img-responsive img-rounded img_border">
+		<img src="./zh_CN/help/image/log_show.jpg" class="img-responsive thumbnail">
 	</p>

@@ -12,7 +12,7 @@ if(!defined("IN_BAIGO")) {
 }
 
 
-/**
+/** 随机数
  * fn_rand function.
  *
  * @access public
@@ -29,7 +29,7 @@ function fn_rand($num_rand = 32) {
 }
 
 
-/**
+/** 获取 IP
  * fn_getIp function.
  *
  * @access public
@@ -78,7 +78,7 @@ function fn_getIp($str_ipTrue = true) {
 }
 
 
-/**
+/** 验证码校对
  * fn_seccode function.
  *
  * @access public
@@ -94,7 +94,7 @@ function fn_seccode() {
 }
 
 
-/**
+/** 令牌生成、校对
  * fn_token function.
  *
  * @access public
@@ -175,7 +175,7 @@ function fn_clearCookie() {
 }
 
 
-/**
+/** 过滤数据
  * fn_getSafe function.
  *
  * @access public
@@ -214,7 +214,7 @@ function fn_getSafe($str_string, $str_type = "txt", $str_default = "") {
 }
 
 
-/**
+/** 获取 UTF8 字符长度
  * fn_strlen_utf8 function.
  *
  * @access public
@@ -244,7 +244,7 @@ function fn_strlen_utf8($str) {
 }
 
 
-/**
+/** 截取 UTF8 字符
  * fn_substr_utf8 function.
  *
  * @access public
@@ -288,7 +288,8 @@ function fn_substr_utf8($str_string, $begin, $length) {
 	return $lstrResult;
 }
 
-/**
+
+/** 分页参数
  * fn_page function.
  *
  * @access public
@@ -345,7 +346,7 @@ function fn_page($num_total, $num_per = BG_SITE_PERPAGE) {
 }
 
 
-/**
+/** JSON 编码（内容可编码成 base64）
  * fn_jsonEncode function.
  *
  * @access public
@@ -365,7 +366,7 @@ function fn_jsonEncode($arr_json = "", $method = "") {
 }
 
 
-/**
+/** JSON 解码 (内容可解码自 base64)
  * fn_jsonDecode function.
  *
  * @access public
@@ -384,15 +385,8 @@ function fn_jsonDecode($str_json = "", $method = "") {
 }
 
 
-/**
- * fn_eachArray function.
- *
- * @access public
- * @param mixed $arr
- * @param string $method (default: "encode")
- * @return void
- */
-/**
+
+/** 遍历数组，并进行 base64 解码编码
  * fn_eachArray function.
  *
  * @access public
@@ -424,7 +418,7 @@ function fn_eachArray($arr, $method = "encode") {
 }
 
 
-/**
+/** 密码加密
  * fn_baigoEncrypt function.
  *
  * @access public
@@ -443,7 +437,7 @@ function fn_baigoEncrypt($str, $rand, $is_md5 = false) {
 }
 
 
-/**
+/** 正则匹配
  * fn_regChk function.
  *
  * @access public
@@ -474,6 +468,14 @@ function fn_regChk($str_chk, $str_reg, $str_wild = false) {
 	return preg_match($_str_reg, $str_chk);
 }
 
+
+/** 封装 $_GET
+ * fn_get function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
 function fn_get($key) {
 	if (isset($_GET[$key])) {
 		return $_GET[$key];
@@ -483,6 +485,13 @@ function fn_get($key) {
 }
 
 
+/** 封装 $_POST
+ * fn_post function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
 function fn_post($key) {
 	if (isset($_POST[$key])) {
 		return $_POST[$key];
@@ -492,6 +501,13 @@ function fn_post($key) {
 }
 
 
+/** 封装 $_COOKIE
+ * fn_cookie function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
 function fn_cookie($key) {
 	if (isset($_COOKIE[$key])) {
 		return $_COOKIE[$key];
@@ -501,6 +517,13 @@ function fn_cookie($key) {
 }
 
 
+/** 封装 $_SESSION
+ * fn_session function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
 function fn_session($key) {
 	if (isset($_SESSION[$key])) {
 		return $_SESSION[$key];
@@ -510,6 +533,13 @@ function fn_session($key) {
 }
 
 
+/** 封装 $_REQUEST
+ * fn_request function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
 function fn_request($key) {
 	if (isset($_REQUEST[$key])) {
 		return $_REQUEST[$key];
@@ -519,6 +549,13 @@ function fn_request($key) {
 }
 
 
+/** 封装 $_SERVER
+ * fn_server function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
 function fn_server($key) {
 	if (isset($_SERVER[$key])) {
 		return $_SERVER[$key];

@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-/*-------------管理员模型-------------*/
+/*-------------应用模型-------------*/
 class MODEL_APP {
 	private $obj_db;
 
@@ -18,6 +18,12 @@ class MODEL_APP {
 	}
 
 
+	/** 创建表
+	 * mdl_create function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create() {
 		$_arr_appCreate = array(
 			"app_id"             => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
@@ -50,6 +56,12 @@ class MODEL_APP {
 	}
 
 
+	/** 检查字段
+	 * mdl_column function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_column() {
 		$_arr_colSelect = array(
 			"column_name"
@@ -67,7 +79,7 @@ class MODEL_APP {
 	}
 
 
-	/**
+	/** 生成 token
 	 * mdl_token function.
 	 *
 	 * @access public
@@ -86,6 +98,13 @@ class MODEL_APP {
 	}
 
 
+	/** 重置 app key
+	 * mdl_reset function.
+	 *
+	 * @access public
+	 * @param mixed $num_appId
+	 * @return void
+	 */
 	function mdl_reset($num_appId) {
 		$_arr_appData = array(
 			"app_key" => fn_rand(64),
@@ -108,16 +127,11 @@ class MODEL_APP {
 		);
 	}
 
-	/**
+
+	/** 提交
 	 * mdl_submit function.
 	 *
 	 * @access public
-	 * @param mixed $num_appId
-	 * @param mixed $str_appName
-	 * @param mixed $str_appNotice
-	 * @param string $str_appNote (default: "")
-	 * @param string $str_appStatus (default: "enable")
-	 * @param string $str_appIpAllow (default: "")
 	 * @return void
 	 */
 	function mdl_submit() {
@@ -173,7 +187,7 @@ class MODEL_APP {
 	}
 
 
-	/**
+	/** 更改状态
 	 * mdl_status function.
 	 *
 	 * @access public
@@ -202,7 +216,7 @@ class MODEL_APP {
 	}
 
 
-	/**
+	/** 读取
 	 * mdl_read function.
 	 *
 	 * @access public
@@ -265,7 +279,7 @@ class MODEL_APP {
 	}
 
 
-	/**
+	/** 列出
 	 * mdl_list function.
 	 *
 	 * @access public
@@ -273,6 +287,8 @@ class MODEL_APP {
 	 * @param int $num_appExcept (default: 0)
 	 * @param string $str_key (default: "")
 	 * @param string $str_status (default: "")
+	 * @param string $str_sync (default: "")
+	 * @param bool $str_notice (default: false)
 	 * @return void
 	 */
 	function mdl_list($num_appNo, $num_appExcept = 0, $str_key = "", $str_status = "", $str_sync = "", $str_notice = false) {
@@ -310,11 +326,12 @@ class MODEL_APP {
 	}
 
 
-	/*============删除管理员============
-	@arr_appId 管理员 ID 数组
-
-	返回提示信息
-	*/
+	/** 删除
+	 * mdl_del function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_del() {
 		$_str_appId = implode(",", $this->appIds["app_ids"]);
 
@@ -333,9 +350,16 @@ class MODEL_APP {
 	}
 
 
-	/*============统计管理员============
-	返回数量
-	*/
+	/** 计数
+	 * mdl_count function.
+	 *
+	 * @access public
+	 * @param string $str_key (default: "")
+	 * @param string $str_status (default: "")
+	 * @param string $str_sync (default: "")
+	 * @param bool $str_notice (default: false)
+	 * @return void
+	 */
 	function mdl_count($str_key = "", $str_status = "", $str_sync = "", $str_notice = false) {
 		$_str_sqlWhere = "app_id > 0";
 
@@ -361,6 +385,12 @@ class MODEL_APP {
 	}
 
 
+	/** 表单验证
+	 * input_submit function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function input_submit() {
 		if (!fn_token("chk")) { //令牌
 			return array(
@@ -508,7 +538,7 @@ class MODEL_APP {
 	}
 
 
-	/**
+	/** 选择 app
 	 * input_ids function.
 	 *
 	 * @access public

@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-/*-------------管理员模型-------------*/
+/*-------------日志模型-------------*/
 class MODEL_LOG {
 	private $obj_db;
 
@@ -18,6 +18,12 @@ class MODEL_LOG {
 	}
 
 
+	/** 创建表
+	 * mdl_create function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_create() {
 		$_arr_logCreate = array(
 			"log_id"             => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
@@ -46,6 +52,12 @@ class MODEL_LOG {
 	}
 
 
+	/** 检查字段
+	 * mdl_column function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_column() {
 		$_arr_colSelect = array(
 			"column_name"
@@ -63,16 +75,18 @@ class MODEL_LOG {
 	}
 
 
-	/**
+	/** 提交
 	 * mdl_submit function.
 	 *
 	 * @access public
-	 * @param mixed $num_logId
-	 * @param mixed $str_targetNote
+	 * @param mixed $str_targets
+	 * @param mixed $str_targetType
 	 * @param mixed $str_logTitle
-	 * @param string $str_logResult (default: "")
-	 * @param string $str_logStatus (default: "enable")
-	 * @param string $str_logType (default: "")
+	 * @param mixed $str_logResult
+	 * @param mixed $str_logType
+	 * @param int $num_operatorId (default: 0)
+	 * @param string $str_logStatus (default: "wait")
+	 * @param string $str_logLevel (default: "normal")
 	 * @return void
 	 */
 	function mdl_submit($str_targets, $str_targetType, $str_logTitle, $str_logResult, $str_logType, $num_operatorId = 0, $str_logStatus = "wait", $str_logLevel = "normal") {
@@ -106,7 +120,7 @@ class MODEL_LOG {
 	}
 
 
-	/**
+	/** 更新状态
 	 * mdl_status function.
 	 *
 	 * @access public
@@ -135,13 +149,11 @@ class MODEL_LOG {
 	}
 
 
-	/**
+	/** 读取
 	 * mdl_read function.
 	 *
 	 * @access public
-	 * @param mixed $str_log
-	 * @param string $str_by (default: "log_id")
-	 * @param int $num_notId (default: 0)
+	 * @param mixed $num_logId
 	 * @return void
 	 */
 	function mdl_read($num_logId) {
@@ -187,14 +199,17 @@ class MODEL_LOG {
 	}
 
 
-	/**
+	/** 列出
 	 * mdl_list function.
 	 *
 	 * @access public
 	 * @param mixed $num_no
 	 * @param int $num_except (default: 0)
 	 * @param string $str_key (default: "")
+	 * @param string $str_type (default: "")
 	 * @param string $str_status (default: "")
+	 * @param string $str_level (default: "")
+	 * @param int $num_operatorId (default: 0)
 	 * @return void
 	 */
 	function mdl_list($num_no, $num_except = 0, $str_key = "", $str_type = "", $str_status = "", $str_level = "", $num_operatorId = 0) {
@@ -237,11 +252,12 @@ class MODEL_LOG {
 	}
 
 
-	/*============删除管理员============
-	@arr_logId 管理员 ID 数组
-
-	返回提示信息
-	*/
+	/** 删除
+	 * mdl_del function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function mdl_del() {
 		$_str_logId = implode(",", $this->logIds["log_ids"]);
 
@@ -292,6 +308,12 @@ class MODEL_LOG {
 	}
 
 
+	/** 选择
+	 * input_ids function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(

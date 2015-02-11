@@ -11,6 +11,17 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
+
+/** 邮件发送 fsock
+ * fn_mailsend function.
+ *
+ * @access public
+ * @param mixed $arr_mailTo
+ * @param mixed $str_mailSubject
+ * @param mixed $str_mailContent
+ * @param bool $is_send (default: true)
+ * @return void
+ */
 function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send = true) {
 
 	//将目标邮件地址串成字符串

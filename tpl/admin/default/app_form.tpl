@@ -135,20 +135,24 @@
 					<label class="control-label">{$lang.label.status}<span id="msg_app_status">*</span></label>
 					<div class="form-group">
 						{foreach $status.app as $key=>$value}
-							<label for="app_status_{$key}" class="radio-inline">
-								<input type="radio" name="app_status" id="app_status_{$key}" value="{$key}" class="validate" {if $tplData.appRow.app_status == $key}checked{/if} group="app_status">
-								{$value}
-							</label>
+							<div class="radio_baigo">
+								<label for="app_status_{$key}">
+									<input type="radio" name="app_status" id="app_status_{$key}" value="{$key}" class="validate" {if $tplData.appRow.app_status == $key}checked{/if} group="app_status">
+									{$value}
+								</label>
+							</div>
 						{/foreach}
 					</div>
 
 					<label class="control-label">{$lang.label.sync}<span id="msg_app_sync">*</span></label>
 					<div class="form-group">
 						{foreach $status.appSync as $key=>$value}
-							<label for="app_sync_{$key}" class="radio-inline">
-								<input type="radio" name="app_sync" id="app_sync_{$key}" value="{$key}" class="validate" {if $tplData.appRow.app_sync == $key}checked{/if} group="app_sync">
-								{$value}
-							</label>
+							<div class="radio_baigo">
+								<label for="app_sync_{$key}">
+									<input type="radio" name="app_sync" id="app_sync_{$key}" value="{$key}" class="validate" {if $tplData.appRow.app_sync == $key}checked{/if} group="app_sync">
+									{$value}
+								</label>
+							</div>
 						{/foreach}
 					</div>
 				</div>
