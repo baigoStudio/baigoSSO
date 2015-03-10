@@ -23,4 +23,3 @@ switch ($GLOBALS["act_post"]) {
 		$ajax_profile->ajax_info(); //修改个人信息
 	break;
 }
-?>

@@ -33,7 +33,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="{$smarty.const.BG_URL_HELP}?lang=zh_CN&mod=help&act=user" target="_blank">
+					<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=user" target="_blank">
 						<span class="glyphicon glyphicon-question-sign"></span>
 						{$lang.href.help}
 					</a>
@@ -45,14 +45,22 @@
 			<form name="user_search" id="user_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
 				<input type="hidden" name="mod" value="user">
 				<input type="hidden" name="act_get" value="list">
-				<select name="status" class="form-control input-sm">
-					<option value="">{$lang.option.allStatus}</option>
-					{foreach $status.user as $key=>$value}
-						<option {if $tplData.search.status == $key}selected{/if} value="{$key}">{$value}</option>
-					{/foreach}
-				</select>
-				<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
-				<button type="submit" class="btn btn-default btn-sm">{$lang.btn.filter}</button>
+				<div class="form-group">
+					<select name="status" class="form-control input-sm">
+						<option value="">{$lang.option.allStatus}</option>
+						{foreach $status.user as $key=>$value}
+							<option {if $tplData.search.status == $key}selected{/if} value="{$key}">{$value}</option>
+						{/foreach}
+					</select>
+				</div>
+				<div class="form-group">
+					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</div>
 			</form>
 		</div>
 		<div class="clearfix"></div>
@@ -144,8 +152,7 @@
 									</th>
 									<th class="td_mn">{$lang.label.id}</th>
 									<th>{$lang.label.user}</th>
-									<th class="td_md">{$lang.label.note}</th>
-									<th class="td_sm">{$lang.label.status}</th>
+									<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -161,17 +168,23 @@
 										<td class="td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_id_{$value.user_id}" group="user_id" class="validate chk_all"></td>
 										<td class="td_mn">{$value.user_id}</td>
 										<td>
-											<div>
-												{$value.user_name}
-												{if $value.user_nick}[ {$value.user_nick} ]{/if}
-											</div>
-											<div>
-												<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=user&act_get=list&user_id={$value.user_id}">{$lang.href.edit}</a>
-											</div>
+											<ul class="list-unstyled">
+												<li>
+													{$value.user_name}
+													{if $value.user_nick}[ {$value.user_nick} ]{/if}
+												</li>
+												<li>
+													<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=user&act_get=list&user_id={$value.user_id}">{$lang.href.edit}</a>
+												</li>
+											</ul>
 										</td>
-										<td class="td_md">{$value.user_note}</td>
 										<td class="td_sm">
-											<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
+											<ul class="list-unstyled">
+												<li>
+													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
+												</li>
+												<li>{$value.user_note}</li>
+											</ul>
 										</td>
 									</tr>
 								{/foreach}
@@ -179,16 +192,22 @@
 							<tfoot>
 								<tr>
 									<td colspan="2"><span id="msg_user_id"></span></td>
-									<td colspan="3">
-										<select name="act_post" id="act_post" class="form-control input-sm">
-											<option value="">{$lang.option.batch}</option>
-											{foreach $status.user as $key=>$value}
-												<option value="{$key}">{$value}</option>
-											{/foreach}
-											<option value="del">{$lang.option.del}</option>
-										</select>
-										<button type="button" id="go_list" class="btn btn-primary btn-sm">{$lang.btn.submit}</button>
-										<span id="msg_act_post"></span>
+									<td colspan="2">
+										<div class="form-group">
+											<select name="act_post" id="act_post" class="form-control input-sm">
+												<option value="">{$lang.option.batch}</option>
+												{foreach $status.user as $key=>$value}
+													<option value="{$key}">{$value}</option>
+												{/foreach}
+												<option value="del">{$lang.option.del}</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<button type="button" id="go_list" class="btn btn-primary btn-sm">{$lang.btn.submit}</button>
+										</div>
+										<div class="form-group">
+											<span id="msg_act_post"></span>
+										</div>
 									</td>
 								</tr>
 							</tfoot>

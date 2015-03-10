@@ -36,61 +36,6 @@ class API_USER {
 		$this->mdl_log        = new MODEL_LOG(); //设置管理员模型
 	}
 
-
-	/**
-	 * app_check function.
-	 *
-	 * @access private
-	 * @param mixed $num_appId
-	 * @param string $str_method (default: "get")
-	 * @return void
-	 */
-	private function app_check($str_method = "get") {
-		$this->appGet = $this->obj_api->app_get($str_method);
-		$_arr_logTarget[] = array(
-			"app_id" => $this->appGet["app_id"]
-		);
-
-		if ($this->appGet["str_alert"] != "ok") {
-			$_arr_logType = array("app", "get");
-			$this->log_do($_arr_logTarget, "app", $this->appGet, $_arr_logType);
-			$this->obj_api->halt_re($this->appGet);
-		}
-
-		$_arr_appRow = $this->mdl_app->mdl_read($this->appGet["app_id"]);
-		if ($_arr_appRow["str_alert"] != "y050102") {
-			$_arr_logType = array("app", "read");
-			$this->log_do($_arr_logTarget, "app", $_arr_appRow, $_arr_logType);
-			$this->obj_api->halt_re($_arr_appRow);
-		}
-		$this->appAllow = $_arr_appRow["app_allow"];
-
-		$_arr_appChk = $this->obj_api->app_chk($this->appGet, $_arr_appRow);
-		if ($_arr_appChk["str_alert"] != "ok") {
-			$_arr_logType = array("app", "check");
-			$this->log_do($_arr_logTarget, "app", $_arr_appChk, $_arr_logType);
-			$this->obj_api->halt_re($_arr_appChk);
-		}
-
-		$this->appRows = $this->mdl_app->mdl_list(100, 0, "", "enable", "on", true);
-	}
-
-
-	/**
-	 * log_do function.
-	 *
-	 * @access private
-	 * @param mixed $arr_logResult
-	 * @param mixed $str_logType
-	 * @return void
-	 */
-	private function log_do($arr_logTarget, $str_targetType, $arr_logResult, $arr_logType) {
-		$_str_targets = json_encode($arr_logTarget);
-		$_str_result  = json_encode($arr_logResult);
-		$this->mdl_log->mdl_submit($_str_targets, $str_targetType, $this->log[$arr_logType[0]][$arr_logType[1]], $_str_result, "app", $this->appGet["app_id"]);
-	}
-
-
 	/**
 	 * api_reg function.
 	 *
@@ -468,5 +413,57 @@ class API_USER {
 		);
 		$this->obj_api->halt_re($_arr_return);
 	}
-}
-?>
+
+
+	/**
+	 * app_check function.
+	 *
+	 * @access private
+	 * @param mixed $num_appId
+	 * @param string $str_method (default: "get")
+	 * @return void
+	 */
+	private function app_check($str_method = "get") {
+		$this->appGet = $this->obj_api->app_get($str_method);
+		$_arr_logTarget[] = array(
+			"app_id" => $this->appGet["app_id"]
+		);
+
+		if ($this->appGet["str_alert"] != "ok") {
+			$_arr_logType = array("app", "get");
+			$this->log_do($_arr_logTarget, "app", $this->appGet, $_arr_logType);
+			$this->obj_api->halt_re($this->appGet);
+		}
+
+		$_arr_appRow = $this->mdl_app->mdl_read($this->appGet["app_id"]);
+		if ($_arr_appRow["str_alert"] != "y050102") {
+			$_arr_logType = array("app", "read");
+			$this->log_do($_arr_logTarget, "app", $_arr_appRow, $_arr_logType);
+			$this->obj_api->halt_re($_arr_appRow);
+		}
+		$this->appAllow = $_arr_appRow["app_allow"];
+
+		$_arr_appChk = $this->obj_api->app_chk($this->appGet, $_arr_appRow);
+		if ($_arr_appChk["str_alert"] != "ok") {
+			$_arr_logType = array("app", "check");
+			$this->log_do($_arr_logTarget, "app", $_arr_appChk, $_arr_logType);
+			$this->obj_api->halt_re($_arr_appChk);
+		}
+
+		$this->appRows = $this->mdl_app->mdl_list(100, 0, "", "enable", "on", true);
+	}
+
+
+	/**
+	 * log_do function.
+	 *
+	 * @access private
+	 * @param mixed $arr_logResult
+	 * @param mixed $str_logType
+	 * @return void
+	 */
+	private function log_do($arr_logTarget, $str_targetType, $arr_logResult, $arr_logType) {
+		$_str_targets = json_encode($arr_logTarget);
+		$_str_result  = json_encode($arr_logResult);
+		$this->mdl_log->mdl_submit($_str_targets, $str_targetType, $this->log[$arr_logType[0]][$arr_logType[1]], $_str_result, "app", $this->appGet["app_id"]);
+	}}

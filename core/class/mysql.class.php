@@ -22,29 +22,42 @@ class CLASS_MYSQL {
 	public $db_link;
 	public $db_select;
 
-	/*function __construct($db_host = "localhost", $db_user = "root", $db_pass, $db_name, $db_charset = "utf8", $db_debug = false) {
-		$this->db_host = $db_host ? $db_host : "localhost";
-		$this->db_user = $db_user ? $db_user : "root";
-		$this->db_pass = $db_pass ? $db_pass : "";
-		$this->db_name = $db_name ? $db_name : "";
-		$this->db_charset = $db_charset ? $db_charset : "utf8";
-		$this->db_debug = $db_debug ? $db_debug : false;
-		$this->connect();
-		$this->select_db();
-		unset($this->db_host);
-		unset($this->db_user);
-		unset($this->db_pass);
-		unset($this->db_charset);
-		unset($this->db_debug);
-	}*/
+	function __construct($cfg_host) {
+		if (isset($cfg_host["host"])) {
+			$this->db_host       = $cfg_host["host"];
+		} else {
+			$this->db_host       = "localhost";
+		}
 
-	function __construct() {
-		$this->db_host    = defined("BG_DB_HOST") ? BG_DB_HOST : "localhost";
-		$this->db_user    = defined("BG_DB_USER") ? BG_DB_USER : "root";
-		$this->db_pass    = defined("BG_DB_PASS") ? BG_DB_PASS : "";
-		$this->db_name    = defined("BG_DB_NAME") ? BG_DB_NAME : "";
-		$this->db_charset = defined("BG_DB_CHARSET") ? BG_DB_CHARSET : "utf8";
-		$this->db_debug   = defined("BG_DB_DEBUG") ? BG_DB_DEBUG : false;
+		if (isset($cfg_host["user"])) {
+			$this->db_user       = $cfg_host["user"];
+		} else {
+			$this->db_user       = "root";
+		}
+
+		if (isset($cfg_host["pass"])) {
+			$this->db_pass       = $cfg_host["pass"];
+		} else {
+			$this->db_pass       = "";
+		}
+
+		if (isset($cfg_host["name"])) {
+			$this->db_name       = $cfg_host["name"];
+		} else {
+			$this->db_name       = "";
+		}
+
+		if (isset($cfg_host["charset"])) {
+			$this->db_charset    = $cfg_host["charset"];
+		} else {
+			$this->db_charset    = "utf8";
+		}
+
+		if (isset($cfg_host["debug"])) {
+			$this->db_debug      = $cfg_host["debug"];
+		} else {
+			$this->db_debug      = false;
+		}
 
 		$this->connect();
 		$this->select_db();
@@ -148,25 +161,6 @@ class CLASS_MYSQL {
 		mysql_close($this->db_link);
 	}
 
-	function num_fields($rs="") {
-		$rs = $rs ? $rs : $this->db_link;
-		return mysql_num_fields($rs);
-	}
-
-	function list_dbs() {
-		return mysql_list_dbs();
-	}
-
-	function list_tables($db_name = "") {
-		$db_name = $db_name ? $db_name : $this->db_name;
-		return mysql_list_tables($db_name);
-	}
-
-	function list_fields($table_name, $db_name = "") {
-		$db_name = $db_name ? $db_name : $this->db_name;
-		return mysql_list_fields($db_name, $table_name);
-	}
-
 	function client_encoding() {
 		return mysql_client_encoding();
 	}
@@ -233,7 +227,7 @@ class CLASS_MYSQL {
 	}
 
 	function create_table($table, $data, $primary, $comment = "", $engine = "MyISAM", $charset = "utf8") {
-		$sql      = "CREATE TABLE IF NOT EXISTS `" . $table."` (";
+		$sql      = "CREATE TABLE IF NOT EXISTS `" . $table . "` (";
 		$values   = array();
 		foreach ($data as $key => $value) {
 			$values[] = "`" . $key . "` " . $value;
@@ -244,9 +238,25 @@ class CLASS_MYSQL {
 		return $this->db_rs;
 	}
 
+	function create_index($index, $table, $data, $type = "BTREE", $is_exists = false) {
+		if ($is_exists) {
+			$sql = "DROP INDEX `" . $index . "` ON `" . $table . "`";
+			$this->query($sql);
+		}
+
+		$sql      = "CREATE INDEX `" . $index . "` ON `" . $table . "` (";
+		$values   = array();
+		foreach ($data as $value) {
+			$values[] = "`" . $value . "` ";
+		}
+		$sql         .= implode(",", $values);
+		$sql         .= ") USING " . $type . "";
+		$this->db_rs  = $this->query($sql);
+		return $this->db_rs;
+	}
 
 	function create_view($view, $data, $table, $join) {
-		$sql      = " CREATE OR REPLACE VIEW `" . $view."` AS SELECT ";
+		$sql      = "CREATE OR REPLACE VIEW `" . $view . "` AS SELECT ";
 		$values   = array();
 		foreach ($data as $key => $value) {
 			$values[] = "`" . $value . "`.`" . $key . "` AS `" . $key . "`";
@@ -258,14 +268,37 @@ class CLASS_MYSQL {
 		return $this->db_rs;
 	}
 
+	function copy_table($table, $table_src, $data, $primary, $comment = "", $engine = "MyISAM", $charset = "utf8") {
+		$sql  = "CREATE TABLE IF NOT EXISTS `" . $table . "` (";
+
+		$values   = array();
+		foreach ($data as $key => $value) {
+			$values[] = "`" . $key . "` " . $value;
+		}
+		$sql     .= implode(",", $values);
+
+		$sql     .= ", PRIMARY KEY (`" . $primary . "`)) ENGINE=" . $engine . " DEFAULT CHARSET=" . $charset . " COMMENT='" . $comment . "' ";
+		$sql     .= " SELECT ";
+
+		$values   = array();
+		foreach ($data as $key => $value) {
+			$values[] = "`" . $key . "`";
+		}
+		$sql .= implode(",", $values);
+
+		$sql .= " FROM `" . $table_src . "` WHERE 1=1";
+
+		$this->db_rs  = $this->query($sql);
+		return $this->db_rs;
+	}
 
 	function alert_table($table, $data = false, $rename = false) {
-		$sql      = "ALTER TABLE `" . $table."` ";
+		$sql      = "ALTER TABLE `" . $table . "` ";
 		if ($rename) {
 			$sql .= " RENAME TO `" . $rename . "`";
 		}
 		if ($data) {
-			$values   = array();
+			$values  = array();
 			foreach ($data as $key => $value) {
 				switch ($value[0]) {
 					case "ADD":
@@ -274,6 +307,12 @@ class CLASS_MYSQL {
 					case "DROP":
 						$values[] = $value[0] . " COLUMN `" . $key . "`";
 					break;
+					case "DROP PRIMARY KEY":
+						$values[] = $value[0];
+					break;
+					case "ADD PRIMARY KEY":
+						$values[] = $value[0] . " (`" . $value[1] . "`)";
+					break;
 					case "CHANGE":
 						$values[] = $value[0] . " COLUMN `" . $key . "` `" . $value[2] . "` " . $value[1];
 					break;
@@ -281,12 +320,12 @@ class CLASS_MYSQL {
 			}
 			$sql         .= implode(",", $values);
 		}
-		$this->db_rs  = $this->query($sql);
+		$this->db_rs = $this->query($sql);
 		return $this->db_rs;
 	}
 
 	function insert($table, $data) {
-		$sql      = "INSERT INTO `" . $table."` SET ";
+		$sql      = "INSERT INTO `" . $table . "` SET ";
 		$values   = array();
 		foreach ($data as $key => $value) {
 			$values[] = "`" . $key . "`='" . $value . "'";
@@ -328,6 +367,7 @@ class CLASS_MYSQL {
 		if ($condition) {
 			$sql .= " WHERE " . $condition;
 		}
+		//print_r($sql);
 		$this->db_rs  = $this->query($sql);
 		$obj_temp     = $this->fetch_row($this->db_rs);
 		return $obj_temp[0];
@@ -386,6 +426,7 @@ class CLASS_MYSQL {
 			$sql .= " LIMIT " . $start . ", " . $length;
 		}
 
+		//print_r($sql);
 		/*if ($field) {
 		print_r($sql . "\n");
 		}*/
@@ -400,6 +441,58 @@ class CLASS_MYSQL {
 		return $obj;
 	}
 
+	function show_columns($table) {
+		$sql = "SHOW COLUMNS FROM `" . $table . "`";
+		$this->db_rs  = $this->query($sql);
+		$obj          = array();
+
+		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
+			$obj[] = $obj_temp;
+			unset($obj_temp);
+		}
+		return $obj;
+	}
+
+
+	function show_index($table) {
+		$sql = "SHOW INDEX FROM `" . $table . "`";
+		$this->db_rs  = $this->query($sql);
+		$obj          = array();
+
+		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
+			$obj[] = $obj_temp;
+			unset($obj_temp);
+		}
+		return $obj;
+	}
+
+
+	function show_tables() {
+		$sql = "SHOW TABLES FROM `" . $this->db_name . "`";
+		$this->db_rs  = $this->query($sql);
+		$obj          = array();
+
+		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
+			$obj[] = $obj_temp;
+			unset($obj_temp);
+		}
+		return $obj;
+	}
+
+
+	function show_databases() {
+		$sql = "SHOW DATABASES";
+		$this->db_rs  = $this->query($sql);
+		$obj          = array();
+
+		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
+			$obj[] = $obj_temp;
+			unset($obj_temp);
+		}
+		return $obj;
+	}
+
+
 	function __destruct() {
 		if ($this->db_link) {
 			//$this->close();
@@ -407,4 +500,3 @@ class CLASS_MYSQL {
 		}
 	}
 }
-?>

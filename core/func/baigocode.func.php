@@ -67,4 +67,3 @@ function fn_baigoSignChk($tm_timestamp, $str_rand, $str_sign) {
 		return false;
 	}
 }
-?>

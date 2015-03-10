@@ -83,4 +83,3 @@ class AJAX_LOG {
 		$this->obj_ajax->halt_alert($_arr_logRow["str_alert"]);
 	}
 }
-?>

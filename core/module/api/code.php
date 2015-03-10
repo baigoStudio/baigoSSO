@@ -32,4 +32,3 @@ switch ($GLOBALS["act_get"]) {
 		$api_code->api_decode();
 	break;
 }
-?>

@@ -161,4 +161,3 @@ function validateStr($str, $min, $max, $type = "str", $format = "text") {
 		"status" => $_status
 	);
 }
-?>

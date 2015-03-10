@@ -109,4 +109,3 @@ class CONTROL_LOGON {
 		$this->obj_tpl->tplDisplay("logon.tpl", $_arr_tplData);
 	}
 }
-?>

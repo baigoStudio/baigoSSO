@@ -25,7 +25,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="{$smarty.const.BG_URL_HELP}?lang=zh_CN&mod=help&act=app" target="_blank">
+				<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=app" target="_blank">
 					<span class="glyphicon glyphicon-question-sign"></span>
 					{$lang.href.help}
 				</a>
@@ -39,20 +39,23 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="well">
+				<label class="control-label">{$lang.label.belongUser}</label>
 				<form name="belong_search" id="belong_search" class="form-inline" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get">
 					<input type="hidden" name="mod" value="app">
 					<input type="hidden" name="act_get" value="belong">
 					<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
-					<div class="pull-left">{$lang.label.belongUser}</div>
-					<div class="pull-right">
+					<div class="form-group">
 						<input type="text" name="key_belong" class="form-control input-sm" value="{$tplData.search.key_belong}" placeholder="{$lang.label.key}">
-						<button class="btn btn-default btn-sm" type="submit">{$lang.btn.filter}</button>
 					</div>
-					<div class="clearfix"></div>
+					<div class="form-group">
+						<button class="btn btn-default btn-sm" type="submit">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</div>
 				</form>
 			</div>
 
-			<form name="belong_list" id="belong_list" class="form-inline">
+			<form name="belong_list" id="belong_list">
 				<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 				<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 
@@ -69,8 +72,7 @@
 									</th>
 									<th class="td_mn">{$lang.label.id}</th>
 									<th>{$lang.label.user}</th>
-									<th class="td_md">{$lang.label.note}</th>
-									<th class="td_sm">{$lang.label.status}</th>
+									<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -89,9 +91,13 @@
 											{$value.user_name}
 											{if $value.user_nick}[ {$value.user_nick} ]{/if}
 										</td>
-										<td class="td_md">{$value.user_note}</td>
-										<td class="td_sm">
-											<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
+										<td class="td_md">
+											<ul class="list-unstyled">
+												<li>
+													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
+												</li>
+												<li>{$value.user_note}</li>
+											</ul>
 										</td>
 									</tr>
 								{/foreach}
@@ -99,7 +105,7 @@
 							<tfoot>
 								<tr>
 									<td colspan="2"><span id="msg_user_belong"></span></td>
-									<td colspan="3">
+									<td colspan="2">
 										<input type="hidden" name="act_post" id="act_post" value="deauth">
 										<button type="button" id="go_belong" class="btn btn-primary btn-sm">{$lang.btn.deauth}</button>
 									</td>
@@ -114,20 +120,23 @@
 
 		<div class="col-md-6">
 			<div class="well">
+				<label class="control-label">{$lang.label.selectUser}</label>
 				<form name="user_search" id="user_search" class="form-inline" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get">
 					<input type="hidden" name="mod" value="app">
 					<input type="hidden" name="act_get" value="belong">
 					<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
-					<div class="pull-left">{$lang.label.selectUser}</div>
-					<div class="pull-right">
+					<div class="form-group">
 						<input type="text" name="key" class="form-control input-sm" value="{$tplData.search.key}" placeholder="{$lang.label.key}">
-						<button class="btn btn-default btn-sm" type="submit">{$lang.btn.filter}</button>
 					</div>
-					<div class="clearfix"></div>
+					<div class="form-group">
+						<button class="btn btn-default btn-sm" type="submit">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</div>
 				</form>
 			</div>
 
-			<form name="user_list" id="user_list" class="form-inline">
+			<form name="user_list" id="user_list">
 				<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 				<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 
@@ -144,8 +153,7 @@
 									</th>
 									<th class="td_mn">{$lang.label.id}</th>
 									<th>{$lang.label.user}</th>
-									<th class="td_md">{$lang.label.note}</th>
-									<th class="td_sm">{$lang.label.status}</th>
+									<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -164,9 +172,13 @@
 											{$value.user_name}
 											{if $value.user_nick}[ {$value.user_nick} ]{/if}
 										</td>
-										<td class="td_md">{$value.user_note}</td>
-										<td class="td_sm">
-											<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
+										<td class="td_md">
+											<ul class="list-unstyled">
+												<li>
+													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
+												</li>
+												<li>{$value.user_note}</li>
+											</ul>
 										</td>
 									</tr>
 								{/foreach}
@@ -174,7 +186,7 @@
 							<tfoot>
 								<tr>
 									<td colspan="2"><span id="msg_user_id"></span></td>
-									<td colspan="3">
+									<td colspan="2">
 										<input type="hidden" name="act_post" value="auth">
 										<button type="button" id="go_list" class="btn btn-primary btn-sm">{$lang.btn.auth}</button>
 									</td>

@@ -1,0 +1,10 @@
+.nowrap { white-space: nowrap; }
+.img_border { border: #ddd 1px solid; }
+.text_break { word-break: break-all; }
+.indicator_black { color: #999; }
+.indicator_black li { border:1px solid #999; }
+.indicator_black li.active { background: #999; }
+
+.nav_sso li a { color: #3c763d; }
+.nav_sso li.active a { background: #3c763d!important; }
+.nav_sso li.active a:hover { background: #3c763d!important; }

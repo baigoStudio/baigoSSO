@@ -41,4 +41,3 @@ class CONTROL_ALERT {
 		$this->obj_tpl->tplDisplay("alert.tpl", $arr_data);
 	}
 }
-?>

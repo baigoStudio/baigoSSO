@@ -78,7 +78,7 @@ return array(
 		"seccode"         => "验证码",
 		"key"             => "关键词",
 		"type"            => "类型",
-		"alert"           => "提示代码",
+		"alert"           => "返回代码",
 		"hits"            => "点击数",
 		"count"           => "统计",
 		"noname"          => "未命名",
@@ -140,7 +140,7 @@ return array(
 		"passNew"         => "新密码", //密码
 		"passConfirm"     => "确认密码", //密码
 
-		"upgradeTable"    => "即将升级数据表",
+		"upgradeTable"    => "即将升级数据库",
 		"upgradeOver"     => "还差最后一步，完成升级",
 
 		"installOver"     => "还差最后一步，完成安装",
@@ -203,4 +203,3 @@ return array(
 		"seccode"         => "看不清",
 	),
 );
-?>

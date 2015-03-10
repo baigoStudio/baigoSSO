@@ -21,4 +21,3 @@ switch ($GLOBALS["act_get"]) {
 		$ctl_seccode->ctl_make(); //生成验证码
 	break;
 }
-?>

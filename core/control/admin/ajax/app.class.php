@@ -290,4 +290,3 @@ class AJAX_APP {
 		$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
 	}
 }
-?>

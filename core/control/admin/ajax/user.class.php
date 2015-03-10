@@ -188,4 +188,3 @@ class AJAX_USER {
 		exit(json_encode($arr_re));
 	}
 }
-?>

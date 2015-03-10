@@ -24,21 +24,21 @@ class MODEL_APP {
 	 * @access public
 	 * @return void
 	 */
-	function mdl_create() {
+	function mdl_create_table() {
 		$_arr_appCreate = array(
-			"app_id"             => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+			"app_id"             => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
 			"app_name"           => "varchar(30) NOT NULL COMMENT '应用名'",
-			"app_key"            => "varchar(64) NOT NULL COMMENT '校验码'",
+			"app_key"            => "char(64) NOT NULL COMMENT '校验码'",
 			"app_notice"         => "varchar(3000) NOT NULL COMMENT '通知接口URL'",
-			"app_token"          => "varchar(64) NOT NULL COMMENT '访问口令'",
-			"app_token_expire"   => "int(11) NOT NULL COMMENT '口令存活期'",
-			"app_token_time"     => "int(11) NOT NULL COMMENT '上次授权时间'",
-			"app_status"         => "varchar(20) NOT NULL COMMENT '状态'",
+			"app_token"          => "char(64) NOT NULL COMMENT '访问口令'",
+			"app_token_expire"   => "int NOT NULL COMMENT '口令存活期'",
+			"app_token_time"     => "int NOT NULL COMMENT '上次授权时间'",
+			"app_status"         => "enum('enable','disable') NOT NULL COMMENT '状态'",
 			"app_note"           => "varchar(30) NOT NULL COMMENT '备注'",
-			"app_time"           => "int(11) NOT NULL COMMENT '创建时间'",
+			"app_time"           => "int NOT NULL COMMENT '创建时间'",
 			"app_ip_allow"       => "varchar(1000) NOT NULL COMMENT '允许调用IP地址'",
 			"app_ip_bad"         => "varchar(1000) NOT NULL COMMENT '禁止IP'",
-			"app_sync"           => "varchar(30) NOT NULL COMMENT '是否同步'",
+			"app_sync"           => "enum('on','off') NOT NULL COMMENT '是否同步'",
 			"app_allow"          => "varchar(3000) NOT NULL COMMENT '权限'",
 		);
 
@@ -63,16 +63,10 @@ class MODEL_APP {
 	 * @return void
 	 */
 	function mdl_column() {
-		$_arr_colSelect = array(
-			"column_name"
-		);
-
-		$_str_sqlWhere = "table_schema='" . BG_DB_NAME . "' AND table_name='" . BG_DB_TABLE . "app'";
-
-		$_arr_colRows = $this->obj_db->select_array("information_schema`.`columns", $_arr_colSelect, $_str_sqlWhere, 100, 0);
+		$_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "app");
 
 		foreach ($_arr_colRows as $_key=>$_value) {
-			$_arr_col[] = $_value["column_name"];
+			$_arr_col[] = $_value["Field"];
 		}
 
 		return $_arr_col;
@@ -302,7 +296,7 @@ class MODEL_APP {
 			"app_time",
 		);
 
-		$_str_sqlWhere = "app_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (app_name LIKE '%" . $str_key . "%' OR app_note LIKE '%" . $str_key . "%')";
@@ -361,7 +355,7 @@ class MODEL_APP {
 	 * @return void
 	 */
 	function mdl_count($str_key = "", $str_status = "", $str_sync = "", $str_notice = false) {
-		$_str_sqlWhere = "app_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (app_name LIKE '%" . $str_key . "%' OR app_note LIKE '%" . $str_key . "%')";
@@ -571,4 +565,3 @@ class MODEL_APP {
 		return $this->appIds;
 	}
 }
-?>

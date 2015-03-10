@@ -29,8 +29,8 @@ return array(
 
 	"logTarget" => array(
 		"admin"   => "管理员",
-		"user"    => "用户",
 		"app"     => "应用",
+		"user"    => "用户",
 		"log"     => "日志",
 		"opt"     => "设置",
 	),
@@ -40,4 +40,3 @@ return array(
 		"sm"    => "install",
 	),
 );
-?>

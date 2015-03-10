@@ -113,7 +113,7 @@
 				<div class="well">
 					<div class="form-group">
 						<label class="control-label static_label">{$lang.label.id}</label>
-						<p class="form-control-static static_input">{$tplData.appRow.app_id}</p>
+						<p class="form-control-static">{$tplData.appRow.app_id}</p>
 					</div>
 
 					{if $tplData.appRow.app_status == "enable"}

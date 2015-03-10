@@ -49,4 +49,3 @@ return array(
 		"edit"        => "编辑设置",
 	),
 );
-?>

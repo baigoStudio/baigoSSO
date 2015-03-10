@@ -24,18 +24,18 @@ class MODEL_USER {
 	 * @access public
 	 * @return void
 	 */
-	function mdl_create() {
+	function mdl_create_table() {
 		$_arr_userCreate = array(
-			"user_id"            => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+			"user_id"            => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
 			"user_name"          => "varchar(30) NOT NULL COMMENT '用户名'",
 			"user_mail"          => "varchar(300) NOT NULL COMMENT 'E-mail'",
-			"user_pass"          => "varchar(32) NOT NULL COMMENT '密码'",
-			"user_rand"          => "varchar(6) NOT NULL COMMENT '随机串'",
+			"user_pass"          => "char(32) NOT NULL COMMENT '密码'",
+			"user_rand"          => "char(6) NOT NULL COMMENT '随机串'",
 			"user_nick"          => "varchar(30) NOT NULL COMMENT '昵称'",
-			"user_status"        => "varchar(20) NOT NULL COMMENT '状态'",
+			"user_status"        => "enum('wait','enable','disable') NOT NULL COMMENT '状态'",
 			"user_note"          => "varchar(30) NOT NULL COMMENT '备注'",
-			"user_time"          => "int(11) NOT NULL COMMENT '创建时间'",
-			"user_time_login"    => "int(11) NOT NULL COMMENT '登录时间'",
+			"user_time"          => "int NOT NULL COMMENT '创建时间'",
+			"user_time_login"    => "int NOT NULL COMMENT '登录时间'",
 			"user_ip"            => "varchar(15) NOT NULL COMMENT '最后IP地址'",
 		);
 
@@ -53,6 +53,42 @@ class MODEL_USER {
 	}
 
 
+	/** 创建视图
+	 * mdl_create_view function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function mdl_create_view() {
+		$_arr_userCreat = array(
+			"user_id"            => BG_DB_TABLE . "user",
+			"user_name"          => BG_DB_TABLE . "user",
+			"user_mail"          => BG_DB_TABLE . "user",
+			"user_nick"          => BG_DB_TABLE . "user",
+			"user_note"          => BG_DB_TABLE . "user",
+			"user_status"        => BG_DB_TABLE . "user",
+			"user_time"          => BG_DB_TABLE . "user",
+			"user_time_login"    => BG_DB_TABLE . "user",
+			"user_ip"            => BG_DB_TABLE . "user",
+			"belong_app_id"      => BG_DB_TABLE . "app_belong",
+		);
+
+		$_str_sqlJoin = "LEFT JOIN `" . BG_DB_TABLE . "app_belong` ON (`" . BG_DB_TABLE . "user`.`user_id`=`" . BG_DB_TABLE . "app_belong`.`belong_user_id`)";
+
+		$_num_mysql = $this->obj_db->create_view(BG_DB_TABLE . "user_view", $_arr_userCreat, BG_DB_TABLE . "user", $_str_sqlJoin);
+
+		if ($_num_mysql > 0) {
+			$_str_alert = "y010108"; //更新成功
+		} else {
+			$_str_alert = "x010108"; //更新成功
+		}
+
+		return array(
+			"str_alert" => $_str_alert, //更新成功
+		);
+	}
+
+
 	/** 检查字段
 	 * mdl_column function.
 	 *
@@ -60,16 +96,10 @@ class MODEL_USER {
 	 * @return void
 	 */
 	function mdl_column() {
-		$_arr_colSelect = array(
-			"column_name"
-		);
-
-		$_str_sqlWhere = "table_schema='" . BG_DB_NAME . "' AND table_name='" . BG_DB_TABLE . "user'";
-
-		$_arr_colRows = $this->obj_db->select_array("information_schema`.`columns", $_arr_colSelect, $_str_sqlWhere, 100, 0);
+		$_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "user");
 
 		foreach ($_arr_colRows as $_key=>$_value) {
-			$_arr_col[] = $_value["column_name"];
+			$_arr_col[] = $_value["Field"];
 		}
 
 		return $_arr_col;
@@ -330,7 +360,7 @@ class MODEL_USER {
 			"user_ip",
 		);
 
-		$_str_sqlWhere = "user_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
@@ -370,7 +400,7 @@ class MODEL_USER {
 			"user_ip",
 		);
 
-		$_str_sqlWhere = "user_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
@@ -426,7 +456,7 @@ class MODEL_USER {
 	 * @return void
 	 */
 	function mdl_count($str_key = "", $str_status = "", $arr_notIn = false) {
-		$_str_sqlWhere = "user_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
@@ -1080,4 +1110,3 @@ class MODEL_USER {
 		return $this->userIds;
 	}
 }
-?>

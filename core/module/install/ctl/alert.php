@@ -21,4 +21,3 @@ switch ($GLOBALS["act_get"]) {
 		$arr_alertRow = $ctl_alert->ctl_display();
 	break;
 }
-?>

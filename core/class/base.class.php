@@ -38,12 +38,12 @@ class CLASS_BASE {
 						$_str_agentUser = fn_server("HTTP_ACCEPT_LANGUAGE");
 
 						if (stristr($_str_agentUser, "zh")) {
-							$_str_return = "zh_CN"; //客户端是中文
+							$_str_return = BG_DEFAULT_LANG; //客户端是中文
 						} else {
 							$_str_return = "en"; //客户端是英文
 						}
 					} else {
-						$_str_return = "zh_CN"; //客户端是中文
+						$_str_return = BG_DEFAULT_LANG; //客户端是中文
 					}
 				//}
 			}
@@ -79,15 +79,15 @@ class CLASS_BASE {
 
 						if (preg_match($_str_agentMobile, $_str_agentUser)) {
 							if (preg_match($_str_agentPad, $_str_agentUser)) { //客户端是平板
-								$_str_return = "default";
+								$_str_return = BG_DEFAULT_UI;
 							} else {
 								$_str_return = "mobile"; //客户端是移动设备
 							}
 						} else {
-							$_str_return = "default"; //客户端是 pc
+							$_str_return = BG_DEFAULT_UI; //客户端是 pc
 						}
 					} else {
-						$_str_return = "default"; //客户端是 pc
+						$_str_return = BG_DEFAULT_UI; //客户端是 pc
 					}
 				//}
 			}
@@ -116,4 +116,3 @@ class CLASS_BASE {
 		date_default_timezone_set($_str_timezone);
 	}
 }
-?>

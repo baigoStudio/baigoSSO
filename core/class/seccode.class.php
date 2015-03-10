@@ -98,4 +98,3 @@ class CLASS_SECCODE {
 		$_SESSION["seccode_" . BG_SITE_SSIN] = strtolower($this->code);
 	}
 }
-?>

@@ -3,7 +3,8 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-include_once("../config/config.inc.php"); //载入配置
+$base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));
+include_once($base . "config/config.inc.php"); //载入配置
 
 $arr_mod = array("install", "upgrade");
 
@@ -18,4 +19,3 @@ if (!in_array($mod, $arr_mod)) {
 }
 
 include_once(BG_PATH_MODULE_INSTALL . "ajax/" . $mod . ".php");
-?>

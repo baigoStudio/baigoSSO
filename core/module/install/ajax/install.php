@@ -46,4 +46,3 @@ switch ($GLOBALS["act_post"]) {
 		$ajax_install->ajax_dbconfig();
 	break;
 }
-?>

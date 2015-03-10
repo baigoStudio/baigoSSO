@@ -19,4 +19,3 @@ switch ($GLOBALS["act_get"]) {
 		$ajax_token->ajax_make(); //滚动令牌
 	break;
 }
-?>

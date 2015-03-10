@@ -163,7 +163,7 @@ class CONTROL_LOG {
 		$_num_logCount    = $this->mdl_log->mdl_count($_str_key, $_str_type, $_str_status, $_str_level, $_num_operatorId);
 		$_arr_page        = fn_page($_num_logCount); //取得分页数据
 		$_str_query       = http_build_query($_arr_search);
-		$_arr_logRows     = $this->mdl_log->mdl_list(BG_SITE_PERPAGE, $_arr_page["except"], $_str_key, $_str_type, $_str_status, $_str_level, $_num_operatorId);
+		$_arr_logRows     = $this->mdl_log->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_type, $_str_status, $_str_level, $_num_operatorId);
 
 		foreach ($_arr_logRows as $_key=>$_value) {
 			switch ($_value["log_type"]) {
@@ -193,4 +193,3 @@ class CONTROL_LOG {
 		);
 	}
 }
-?>

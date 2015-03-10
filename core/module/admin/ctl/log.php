@@ -32,4 +32,3 @@ switch ($GLOBALS["act_get"]) {
 		}
 	break;
 }
-?>

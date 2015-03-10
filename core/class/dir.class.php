@@ -11,35 +11,35 @@ if(!defined("IN_BAIGO")) {
 
 /*-------------文件操作类类-------------*/
 class CLASS_DIR {
-	
+
 	/*============删除目录============
 	@str_path 路径
-	
+
 	无返回
 	*/
 	function del_dir($str_path) {
-	
+
 		//删除目录及目录里所有的文件夹和文件
 		if (is_dir($str_path)) {
 			$_arr_dir = $this->list_dir($str_path); //逐级列出
-			
+
 			foreach ($_arr_dir as $_value) {
 				if ($_value["type"] == "file") {
 					unlink($str_path . "/" . $_value["name"]);  //删除
 				} else {
 					$this->del_dir($str_path . "/" . $_value["name"]); //递归
 				}
-			} 
-			
+			}
+
 			rmdir($str_path);
 		}
-		
+
 	}
-	
+
 	/*============生成目录============
 	@str_path 路径
-	
-	返回提示代码
+
+	返回返回代码
 	*/
 	function mk_dir($str_path) {
 
@@ -58,23 +58,23 @@ class CLASS_DIR {
 				$_str_alert = "x030201";
 			}
 		}
-		
+
 		return array(
 			"str_alert" => $_str_alert,
 		);
 	}
-	
+
 	/*============逐级列出目录============
 	@str_path 路径
-	
+
 	返回多维数组
 		type 类型 文件，目录
 		name 目录名
 	*/
 	function list_dir($str_path) {
-	
+
 		$_arr_dir = scandir($str_path);
-		
+
 		if ($_arr_dir) {
 			foreach ($_arr_dir as $_key=>$_value) {
 				if ($_value != "." && $_value != "..") {
@@ -83,13 +83,12 @@ class CLASS_DIR {
 					} else {
 						$_arr_return[$_key]["type"] = "file";
 					}
-	
+
 					$_arr_return[$_key]["name"] = $_value;
 				}
 			}
 		}
-		
+
 		return $_arr_return;
 	}
 }
-?>

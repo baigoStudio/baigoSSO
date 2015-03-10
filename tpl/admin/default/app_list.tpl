@@ -25,7 +25,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="{$smarty.const.BG_URL_HELP}?lang=zh_CN&mod=help&act=app" target="_blank">
+					<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=app" target="_blank">
 						<span class="glyphicon glyphicon-question-sign"></span>
 						{$lang.href.help}
 					</a>
@@ -36,14 +36,22 @@
 			<form name="app_search" id="app_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
 				<input type="hidden" name="mod" value="app">
 				<input type="hidden" name="act_get" value="list">
-				<select name="status" class="form-control input-sm">
-					<option value="">{$lang.option.allStatus}</option>
-					{foreach $status.app as $key=>$value}
-						<option {if $tplData.search.status == $key}selected{/if} value="{$key}">{$value}</option>
-					{/foreach}
-				</select>
-				<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
-				<button type="submit" class="btn btn-default btn-sm">{$lang.btn.filter}</button>
+				<div class="form-group">
+					<select name="status" class="form-control input-sm">
+						<option value="">{$lang.option.allStatus}</option>
+						{foreach $status.app as $key=>$value}
+							<option {if $tplData.search.status == $key}selected{/if} value="{$key}">{$value}</option>
+						{/foreach}
+					</select>
+				</div>
+				<div class="form-group">
+					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</div>
 			</form>
 		</div>
 		<div class="clearfix"></div>
@@ -65,8 +73,7 @@
 							</th>
 							<th class="td_mn">{$lang.label.id}</th>
 							<th>{$lang.label.appName}</th>
-							<th class="td_md">{$lang.label.note}</th>
-							<th class="td_sm">{$lang.label.status}</th>
+							<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -80,22 +87,33 @@
 								<td class="td_mn"><input type="checkbox" name="app_id[]" value="{$value.app_id}" id="app_id_{$value.app_id}" group="app_id" class="validate chk_all"></td>
 								<td class="td_mn">{$value.app_id}</td>
 								<td>
-									<div>{$value.app_name}</div>
-									<div>
-										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=show&app_id={$value.app_id}">{$lang.href.show}</a>
-										&nbsp;|&nbsp;
-										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=form&app_id={$value.app_id}">{$lang.href.edit}</a>
-										&nbsp;|&nbsp;
-										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=belong&app_id={$value.app_id}">{$lang.href.appBelong}</a>
-										&nbsp;|&nbsp;
-										<a href="javascript:void(0);" class="go_notice" id="{$value.app_id}">{$lang.href.noticeTest}</a>
-									</div>
+									<ul class="list-unstyled">
+										<li>{$value.app_name}</li>
+										<li>
+											<ul class="list_menu">
+												<li>
+													<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=show&app_id={$value.app_id}">{$lang.href.show}</a>
+												</li>
+												<li>
+													<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=form&app_id={$value.app_id}">{$lang.href.edit}</a>
+												</li>
+												<li>
+													<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=belong&app_id={$value.app_id}">{$lang.href.appBelong}</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);" class="go_notice" id="{$value.app_id}">{$lang.href.noticeTest}</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
 								</td>
 								<td class="td_md">
-									{$value.app_note}
-								</td>
-								<td class="td_sm">
-									<span class="label label-{$_css_status}">{$status.app[$value.app_status]}</span>
+									<ul class="list-unstyled">
+										<li>
+											<span class="label label-{$_css_status}">{$status.app[$value.app_status]}</span>
+										</li>
+										<li>{$value.app_note}</li>
+									</ul>
 								</td>
 							</tr>
 						{/foreach}
@@ -103,16 +121,22 @@
 					<tfoot>
 						<tr>
 							<td colspan="2"><span id="msg_app_id"></span></td>
-							<td colspan="3">
-								<select name="act_post" id="act_post" class="validate form-control input-sm">
-									<option value="">{$lang.option.batch}</option>
-									{foreach $status.app as $key=>$value}
-										<option value="{$key}">{$value}</option>
-									{/foreach}
-									<option value="del">{$lang.option.del}</option>
-								</select>
-								<button type="button" id="go_list" class="btn btn-sm btn-primary">{$lang.btn.submit}</button>
-								<span id="msg_act_post"></span>
+							<td colspan="2">
+								<div class="form-group">
+									<select name="act_post" id="act_post" class="validate form-control input-sm">
+										<option value="">{$lang.option.batch}</option>
+										{foreach $status.app as $key=>$value}
+											<option value="{$key}">{$value}</option>
+										{/foreach}
+										<option value="del">{$lang.option.del}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<button type="button" id="go_list" class="btn btn-sm btn-primary">{$lang.btn.submit}</button>
+								</div>
+								<div class="form-group">
+									<span id="msg_act_post"></span>
+								</div>
 							</td>
 						</tr>
 					</tfoot>

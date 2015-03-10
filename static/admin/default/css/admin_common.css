@@ -19,6 +19,23 @@
 
 .list_padding { margin: 0 25px; }
 
+.list_menu {
+  padding-left: 0;
+  margin: 3px 0 0 -3px;
+  list-style: none;
+}
+
+.list_menu > li {
+  display: inline-block;
+  padding: 0 3px;
+}
+
+.list_menu > li + li:before {
+  padding-right: 4px;
+  color: #999;
+  content: "|";
+}
+
 label.control-label > span { color: #c30; margin-left: 10px; }
 
 .radio_baigo,

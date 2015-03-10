@@ -13,7 +13,7 @@
 					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="{$smarty.const.PRD_SSO_URL}" target="_blank">
-					<img alt="baigoSSO" src="{$smarty.const.BG_URL_STATIC_ADMIN}default/image/admin_logo.png">
+					<img alt="baigoSSO" src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
 				</a>
 			</div>
 			<nav class="collapse navbar-collapse bs-navbar-collapse">

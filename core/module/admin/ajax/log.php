@@ -24,4 +24,3 @@ switch ($GLOBALS["act_post"]) {
 		$ajax_log->ajax_del();  //删除
 	break;
 }
-?>

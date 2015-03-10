@@ -24,18 +24,18 @@ class MODEL_ADMIN {
 	 * @access public
 	 * @return void
 	 */
-	function mdl_create() {
+	function mdl_create_table() {
 		$_arr_adminCreate = array(
-			"admin_id"           => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+			"admin_id"           => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
 			"admin_name"         => "varchar(30) NOT NULL COMMENT '用户名'",
-			"admin_pass"         => "varchar(32) NOT NULL COMMENT '密码'",
-			"admin_rand"         => "varchar(6) NOT NULL COMMENT '随机串'",
+			"admin_pass"         => "char(32) NOT NULL COMMENT '密码'",
+			"admin_rand"         => "char(6) NOT NULL COMMENT '随机串'",
 			"admin_note"         => "varchar(30) NOT NULL COMMENT '备注'",
 			"admin_nick"         => "varchar(30) NOT NULL COMMENT '昵称'",
-			"admin_status"       => "varchar(20) NOT NULL COMMENT '状态'",
+			"admin_status"       => "enum('enable','disable') NOT NULL COMMENT '状态'",
 			"admin_allow"        => "varchar(3000) NOT NULL COMMENT '权限'",
-			"admin_time"         => "int(11) NOT NULL COMMENT '创建时间'",
-			"admin_time_login"   => "int(11) NOT NULL COMMENT '登录时间'",
+			"admin_time"         => "int NOT NULL COMMENT '创建时间'",
+			"admin_time_login"   => "int NOT NULL COMMENT '登录时间'",
 			"admin_ip"           => "varchar(15) NOT NULL COMMENT '最后IP地址'",
 		);
 
@@ -60,16 +60,10 @@ class MODEL_ADMIN {
 	 * @return void
 	 */
 	function mdl_column() {
-		$_arr_colSelect = array(
-			"column_name"
-		);
-
-		$_str_sqlWhere = "table_schema='" . BG_DB_NAME . "' AND table_name='" . BG_DB_TABLE . "admin'";
-
-		$_arr_colRows = $this->obj_db->select_array("information_schema`.`columns", $_arr_colSelect, $_str_sqlWhere, 100, 0);
+		$_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "admin");
 
 		foreach ($_arr_colRows as $_key=>$_value) {
-			$_arr_col[] = $_value["column_name"];
+			$_arr_col[] = $_value["Field"];
 		}
 
 		return $_arr_col;
@@ -356,7 +350,7 @@ class MODEL_ADMIN {
 			"admin_ip",
 		);
 
-		$_str_sqlWhere = "admin_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (admin_name LIKE '%" . $str_key . "%' OR admin_note LIKE '%" . $str_key . "%')";
@@ -405,7 +399,7 @@ class MODEL_ADMIN {
 	 * @return void
 	 */
 	function mdl_count($str_key = "", $str_status = "") {
-		$_str_sqlWhere = "admin_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (admin_name LIKE '%" . $str_key . "%' OR admin_note LIKE '%" . $str_key . "%')";
@@ -831,4 +825,3 @@ class MODEL_ADMIN {
 		return $this->adminIds;
 	}
 }
-?>

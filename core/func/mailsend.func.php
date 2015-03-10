@@ -161,4 +161,3 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		"str_alert" => "y030201",
 	);
 }
-?>

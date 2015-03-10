@@ -44,4 +44,3 @@ switch ($GLOBALS["act_post"]) {
 		$ajax_app->ajax_notice(); //通知测试
 	break;
 }
-?>

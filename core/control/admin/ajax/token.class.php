@@ -48,4 +48,3 @@ class AJAX_TOKEN {
 		exit(json_encode($arr_re));
 	}
 }
-?>

@@ -112,4 +112,3 @@ class API_ADMIN {
 	}
 
 }
-?>

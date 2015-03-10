@@ -38,4 +38,3 @@ class AJAX_SECCODE {
 		exit(json_encode($arr_re));
 	}
 }
-?>

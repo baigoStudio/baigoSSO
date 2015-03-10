@@ -37,4 +37,3 @@ return array(
 		"disable" => "禁用", //禁用
 	),
 );
-?>

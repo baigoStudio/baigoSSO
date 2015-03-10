@@ -17,7 +17,7 @@
 
 	<div class="form-group">
 		<div class="pull-left">
-			<a href="{$smarty.const.BG_URL_HELP}?lang=zh_CN&mod=help&act=log" target="_blank">
+			<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=log" target="_blank">
 				<span class="glyphicon glyphicon-question-sign"></span>
 				{$lang.href.help}
 			</a>
@@ -26,20 +26,30 @@
 			<form name="log_search" id="log_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
 				<input type="hidden" name="mod" value="log">
 				<input type="hidden" name="act_get" value="list">
-				<select name="type" class="form-control input-sm">
-					<option value="">{$lang.option.allType}</option>
-					{foreach $type.log as $key=>$value}
-						<option {if $tplData.search.type == $key}selected{/if} value="{$key}">{$value}</option>
-					{/foreach}
-				</select>
-				<select name="status" class="form-control input-sm">
-					<option value="">{$lang.option.allStatus}</option>
-					{foreach $status.log as $key=>$value}
-						<option {if $tplData.search.status == $key}selected{/if} value="{$key}">{$value}</option>
-					{/foreach}
-				</select>
-				<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
-				<button type="submit" class="btn btn-default btn-sm">{$lang.btn.filter}</button>
+				<div class="form-group">
+					<select name="type" class="form-control input-sm">
+						<option value="">{$lang.option.allType}</option>
+						{foreach $type.log as $key=>$value}
+							<option {if $tplData.search.type == $key}selected{/if} value="{$key}">{$value}</option>
+						{/foreach}
+					</select>
+				</div>
+				<div class="form-group">
+					<select name="status" class="form-control input-sm">
+						<option value="">{$lang.option.allStatus}</option>
+						{foreach $status.log as $key=>$value}
+							<option {if $tplData.search.status == $key}selected{/if} value="{$key}">{$value}</option>
+						{/foreach}
+					</select>
+				</div>
+				<div class="form-group">
+					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</div>
 			</form>
 		</div>
 		<div class="clearfix"></div>
@@ -76,28 +86,34 @@
 								<td class="td_mn"><input type="checkbox" name="log_id[]" value="{$value.log_id}" id="log_id_{$value.log_id}" group="log_id" class="validate chk_all"></td>
 								<td class="td_mn">{$value.log_id}</td>
 								<td>
-									<div>
-										{$value.log_title}
-									</div>
-									<div>
-										<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&act_get=show&log_id={$value.log_id}&view=iframe" data-toggle="modal" data-target="#log_modal">{$lang.href.show}</a>
-									</div>
+									<ul class="list-unstyled">
+										<li>
+											{$value.log_title}
+										</li>
+										<li>
+											<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&act_get=show&log_id={$value.log_id}&view=iframe" data-toggle="modal" data-target="#log_modal">{$lang.href.show}</a>
+										</li>
+									</ul>
 								</td>
 								<td class="td_bg">
-									<div>
-										{if $value.log_type != "system"}
-											<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&act_get=log&operator_id={$value.log_operator_id}">{$value.log_operator_name}</a>
-										{else}
-											{$type.log[$value.log_type]}
-										{/if}
-									</div>
-									<div>{$value.log_operator_name|date_format:"{$smarty.const.BG_SITE_DATE} {$smarty.const.BG_SITE_TIME}"}</div>
+									<ul class="list-unstyled">
+										<li>
+											{if $value.log_type != "system"}
+												<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&act_get=log&operator_id={$value.log_operator_id}">{$value.log_operator_name}</a>
+											{else}
+												{$type.log[$value.log_type]}
+											{/if}
+										</li>
+										<li>{$value.log_operator_name|date_format:"{$smarty.const.BG_SITE_DATESHORT} {$smarty.const.BG_SITE_TIME}"}</li>
+									</ul>
 								</td>
 								<td class="td_sm">
-									<div>
-										<span class="label label-{$_css_status}">{$status.log[$value.log_status]}</span>
-									</div>
-									<div>{$type.log[$value.log_type]}</div>
+									<ul class="list-unstyled">
+										<li>
+											<span class="label label-{$_css_status}">{$status.log[$value.log_status]}</span>
+										</li>
+										<li>{$type.log[$value.log_type]}</li>
+									</ul>
 								</td>
 							</tr>
 						{/foreach}
@@ -106,15 +122,21 @@
 						<tr>
 							<td colspan="2"><span id="msg_log_id"></span></td>
 							<td colspan="3">
-								<select name="act_post" id="act_post" class="validate form-control input-sm">
-									<option value="">{$lang.option.batch}</option>
-									{foreach $status.log as $key=>$value}
-										<option value="{$key}">{$value}</option>
-									{/foreach}
-									<option value="del">{$lang.option.del}</option>
-								</select>
-								<button type="button" id="go_list" class="btn btn-sm btn-primary">{$lang.btn.submit}</button>
-								<span id="msg_act_post"></span>
+								<div class="form-group">
+									<select name="act_post" id="act_post" class="validate form-control input-sm">
+										<option value="">{$lang.option.batch}</option>
+										{foreach $status.log as $key=>$value}
+											<option value="{$key}">{$value}</option>
+										{/foreach}
+										<option value="del">{$lang.option.del}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<button type="button" id="go_list" class="btn btn-sm btn-primary">{$lang.btn.submit}</button>
+								</div>
+								<div class="form-group">
+									<span id="msg_act_post"></span>
+								</div>
 							</td>
 						</tr>
 					</tfoot>

@@ -16,7 +16,7 @@
 	{include "include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
-		<a href="{$smarty.const.BG_URL_HELP}?lang=zh_CN&mod=help&act=opt#db" target="_blank">
+		<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=opt#db" target="_blank">
 			<span class="glyphicon glyphicon-question-sign"></span>
 			{$lang.href.help}
 		</a>

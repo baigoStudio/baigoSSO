@@ -141,7 +141,7 @@ function fn_token($token_action = "mk", $session_method = "post", $cookie_method
 			if (BG_SWITCH_TOKEN == true) {
 				$_num_tokenSessionDiff = fn_session("token_sessionTime_" . BG_SITE_SSIN) + 300; //session有效期
 				if (!fn_session("token_session_" . BG_SITE_SSIN) || !fn_session("token_sessionTime_" . BG_SITE_SSIN) || $_num_tokenSessionDiff < time()) {
-					$_str_tokenSession = fn_rand();
+					$_str_tokenSession                             = fn_rand();
 					$_SESSION["token_session_" . BG_SITE_SSIN]     = $_str_tokenSession;
 					$_SESSION["token_sessionTime_" . BG_SITE_SSIN] = time();
 				} else {
@@ -150,7 +150,7 @@ function fn_token($token_action = "mk", $session_method = "post", $cookie_method
 
 				$_num_tokenCookieDiff = fn_session("token_cookieTime_" . BG_SITE_SSIN) + 300; //cookie有效期
 				if (!fn_session("token_cookie_" . BG_SITE_SSIN) || !fn_session("token_cookieTime_" . BG_SITE_SSIN) || $_num_tokenCookieDiff < time()) {
-					$_str_tokenCookie = fn_rand();
+					$_str_tokenCookie                              = fn_rand();
 					$_SESSION["token_cookie_" . BG_SITE_SSIN]      = $_str_tokenCookie;
 					$_SESSION["token_cookieTime_" . BG_SITE_SSIN]  = time();
 				} else {
@@ -222,9 +222,9 @@ function fn_getSafe($str_string, $str_type = "txt", $str_default = "") {
  * @return void
  */
 function fn_strlen_utf8($str) {
-	$i = 0;
+	$i     = 0;
 	$count = 0;
-	$len = strlen($str);
+	$len   = strlen($str);
 	while ($i < $len) {
 		$chr = ord($str[$i]);
 		$count++;
@@ -255,11 +255,11 @@ function fn_strlen_utf8($str) {
  */
 function fn_substr_utf8($str_string, $begin, $length) {
 	//對字串做URL Eecode
-	$str_string = mb_substr($str_string, $begin, mb_strlen($str_string));
-	$iString = urlencode($str_string);
-	$lstrResult = "";
-	$ilength = 0;
-	$k = 0;
+	$str_string    = mb_substr($str_string, $begin, mb_strlen($str_string));
+	$iString       = urlencode($str_string);
+	$lstrResult    = "";
+	$ilength       = 0;
+	$k             = 0;
 	do {
 		$lstrChar = substr($iString, $k, 1);
 		if ($lstrChar == "%") {
@@ -294,10 +294,10 @@ function fn_substr_utf8($str_string, $begin, $length) {
  *
  * @access public
  * @param mixed $num_total
- * @param mixed $num_per (default: BG_SITE_PERPAGE)
+ * @param mixed $num_per (default: BG_DEFAULT_PERPAGE)
  * @return void
  */
-function fn_page($num_total, $num_per = BG_SITE_PERPAGE) {
+function fn_page($num_total, $num_per = BG_DEFAULT_PERPAGE) {
 
 	$_num_pageThis = fn_getSafe(fn_get("page"), "int", 1);
 
@@ -563,4 +563,3 @@ function fn_server($key) {
 		return null;
 	}
 }
-?>

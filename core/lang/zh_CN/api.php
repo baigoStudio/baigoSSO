@@ -23,4 +23,3 @@ return array(
 		"userRand"    => "验证码：",
 	),
 );
-?>

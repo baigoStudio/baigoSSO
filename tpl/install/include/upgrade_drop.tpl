@@ -4,5 +4,5 @@
 							<span class="caret"></span>
 						</button>
 
-						{include "include/install_menu.tpl" cfg=$cfg}
+						{include "include/upgrade_menu.tpl" cfg=$cfg}
 					</div>

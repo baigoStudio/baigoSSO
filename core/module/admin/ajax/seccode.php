@@ -21,4 +21,3 @@ switch ($GLOBALS["act_get"]) {
 		$ajax_seccode->ajax_chk(); //验证
 	break;
 }
-?>

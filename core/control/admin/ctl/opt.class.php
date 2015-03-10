@@ -137,4 +137,3 @@ class CONTROL_OPT {
 		);
 	}
 }
-?>

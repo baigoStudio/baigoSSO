@@ -11,4 +11,4 @@ define("BG_DB_PASS", ""); //数据库密码
 define("BG_DB_NAME", "sso"); //数据库名
 define("BG_DB_CHARSET", "utf8"); //数据库编码
 define("BG_DB_TABLE", "sso_"); //数据表前缀
-?>
+

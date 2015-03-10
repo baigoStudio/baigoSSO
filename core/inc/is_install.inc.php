@@ -23,4 +23,3 @@ if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
 	header("Location: " . BG_URL_INSTALL . "ctl.php");
 	exit;
 }
-?>

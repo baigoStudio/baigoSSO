@@ -46,13 +46,12 @@ class AJAX_INSTALL {
 		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
 
 		$_str_content = "<?php" . PHP_EOL;
-			$_str_content .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
-			$_str_content .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
-			$_str_content .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
-			$_str_content .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
-			$_str_content .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
-			$_str_content .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
-		$_str_content .= "?>";
+		$_str_content .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
 
 		file_put_contents(BG_PATH_CONFIG . "config_db.inc.php", $_str_content);
 
@@ -176,6 +175,7 @@ class AJAX_INSTALL {
 		$this->table_app_belong();
 		$this->table_log();
 		$this->table_opt();
+		$this->view_user();
 
 		$this->record_app();
 
@@ -191,7 +191,6 @@ class AJAX_INSTALL {
 		$_str_content .= "define(\"BG_INSTALL_VER\", \"" . PRD_SSO_VER . "\");" . PHP_EOL;
 		$_str_content .= "define(\"BG_INSTALL_PUB\", " . PRD_SSO_PUB . ");" . PHP_EOL;
 		$_str_content .= "define(\"BG_INSTALL_TIME\", " . time() . ");" . PHP_EOL;
-		$_str_content .= "?>";
 
 		file_put_contents(BG_PATH_CONFIG . "is_install.php", $_str_content);
 
@@ -227,8 +226,6 @@ class AJAX_INSTALL {
 			$_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
 		}
 
-		$_str_content .= "?>";
-
 		$_str_content = str_replace("||", "", $_str_content);
 
 		file_put_contents(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
@@ -238,7 +235,7 @@ class AJAX_INSTALL {
 	private function table_admin() {
 		include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
 		$_mdl_admin       = new MODEL_ADMIN();
-		$_arr_adminRow    = $_mdl_admin->mdl_create();
+		$_arr_adminRow    = $_mdl_admin->mdl_create_table();
 
 		if ($_arr_adminRow["str_alert"] != "y020105") {
 			$this->obj_ajax->halt_alert($_arr_adminRow["str_alert"]);
@@ -249,7 +246,7 @@ class AJAX_INSTALL {
 	private function table_user() {
 		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
 		$_mdl_user    = new MODEL_USER();
-		$_arr_userRow = $_mdl_user->mdl_create();
+		$_arr_userRow = $_mdl_user->mdl_create_table();
 
 		if ($_arr_userRow["str_alert"] != "y010105") {
 			$this->obj_ajax->halt_alert($_arr_userRow["str_alert"]);
@@ -260,7 +257,7 @@ class AJAX_INSTALL {
 	private function table_app() {
 		include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
 		$_mdl_app     = new MODEL_APP();
-		$_arr_appRow  = $_mdl_app->mdl_create();
+		$_arr_appRow  = $_mdl_app->mdl_create_table();
 
 		if ($_arr_appRow["str_alert"] != "y050105") {
 			$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
@@ -271,15 +268,9 @@ class AJAX_INSTALL {
 	private function table_app_belong() {
 		include_once(BG_PATH_MODEL . "appBelong.class.php"); //载入管理帐号模型
 		$_mdl_appBelong       = new MODEL_APP_BELONG();
-		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create();
+		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_table();
 
 		if ($_arr_appBelongRow["str_alert"] != "y070105") {
-			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
-		}
-
-		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_view();
-
-		if ($_arr_appBelongRow["str_alert"] != "y070108") {
 			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
 		}
 	}
@@ -288,7 +279,7 @@ class AJAX_INSTALL {
 	private function table_log() {
 		include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 		$_mdl_log     = new MODEL_LOG();
-		$_arr_logRow  = $_mdl_log->mdl_create();
+		$_arr_logRow  = $_mdl_log->mdl_create_table();
 
 		if ($_arr_logRow["str_alert"] != "y060105") {
 			$this->obj_ajax->halt_alert($_arr_logRow["str_alert"]);
@@ -299,10 +290,21 @@ class AJAX_INSTALL {
 	private function table_opt() {
 		include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
 		$_mdl_opt     = new MODEL_OPT();
-		$_arr_optRow  = $_mdl_opt->mdl_create();
+		$_arr_optRow  = $_mdl_opt->mdl_create_table();
 
 		if ($_arr_optRow["str_alert"] != "y040105") {
 			$this->obj_ajax->halt_alert($_arr_optRow["str_alert"]);
+		}
+	}
+
+
+	private function view_user() {
+		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
+		$_mdl_user       = new MODEL_USER();
+		$_arr_user    = $_mdl_user->mdl_create_view();
+
+		if ($_arr_user["str_alert"] != "y070108") {
+			$this->obj_ajax->halt_alert($_arr_user["str_alert"]);
 		}
 	}
 
@@ -365,11 +367,10 @@ class AJAX_INSTALL {
 		}
 
 		$_str_content = "<?php" . PHP_EOL;
-			$_str_content .= "define(\"" . $_str_const . "SSO_URL\", \"" . BG_SITE_URL . BG_URL_API . "api.php\");" . PHP_EOL;
-			$_str_content .= "define(\"" . $_str_const . "SSO_APPID\", " . $_num_appId . ");" . PHP_EOL;
-			$_str_content .= "define(\"" . $_str_const . "SSO_APPKEY\", \"" . $_str_appKey . "\");" . PHP_EOL;
-			$_str_content .= "define(\"" . $_str_const . "SSO_SYNLOGON\", \"on\");" . PHP_EOL;
-		$_str_content .= "?>";
+		$_str_content .= "define(\"" . $_str_const . "SSO_URL\", \"" . BG_SITE_URL . BG_URL_API . "api.php\");" . PHP_EOL;
+		$_str_content .= "define(\"" . $_str_const . "SSO_APPID\", " . $_num_appId . ");" . PHP_EOL;
+		$_str_content .= "define(\"" . $_str_const . "SSO_APPKEY\", \"" . $_str_appKey . "\");" . PHP_EOL;
+		$_str_content .= "define(\"" . $_str_const . "SSO_SYNLOGON\", \"on\");" . PHP_EOL;
 
 		file_put_contents($this->pathParent . "opt_sso.inc.php", $_str_content);
 	}
@@ -383,26 +384,29 @@ class AJAX_INSTALL {
 		if (strlen(BG_DB_HOST) < 1 || strlen(BG_DB_NAME) < 1 || strlen(BG_DB_USER) < 1 || strlen(BG_DB_PASS) < 1 || strlen(BG_DB_CHARSET) < 1) {
 			$this->obj_ajax->halt_alert("x030404");
 		} else {
-			$GLOBALS["obj_db"]   = new CLASS_MYSQL(); //初始化基类
+			$_cfg_host = array(
+				"host"      => BG_DB_HOST,
+				"name"      => BG_DB_NAME,
+				"user"      => BG_DB_USER,
+				"pass"      => BG_DB_PASS,
+				"charset"   => BG_DB_CHARSET,
+				"debug"     => BG_DB_DEBUG,
+			);
+			$GLOBALS["obj_db"]   = new CLASS_MYSQL($_cfg_host); //初始化基类
 			$this->obj_db        = $GLOBALS["obj_db"];
 		}
 	}
 
-	private function check_opt() {
-		$_arr_tableSelect = array(
-			"table_name",
-		);
 
-		$_str_sqlWhere    = "table_schema='" . BG_DB_NAME . "'";
-		$_arr_tableRows   = $GLOBALS["obj_db"]->select_array("information_schema`.`tables", $_arr_tableSelect, $_str_sqlWhere, 100, 0);
+	private function check_opt() {
+		$_arr_tableRows = $this->obj_db->show_tables();
 
 		foreach ($_arr_tableRows as $_key=>$_value) {
-			$_arr_chks[] = $_value["table_name"];
+			$_arr_tables[] = $_value["Tables_in_" . BG_DB_NAME];
 		}
 
-		if (!in_array(BG_DB_TABLE . "opt", $_arr_chks)) {
-			$this->obj_ajax->halt_alert("x030409");
+		if (!in_array(BG_DB_TABLE . "opt", $_arr_tables)) {
+			$this->obj_ajax->halt_alert("x030412");
 		}
 	}
 }
-?>

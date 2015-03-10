@@ -209,4 +209,3 @@ class CLASS_API {
 		exit(json_encode($arr_re)); //输出错误信息
 	}
 }
-?>

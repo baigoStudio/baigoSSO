@@ -23,4 +23,3 @@ if ($GLOBALS["adminLogged"]["str_alert"] != "y020102") {
 	header($_str_location);  //未登录就跳转至登录界面
 	exit;
 }
-?>

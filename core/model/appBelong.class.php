@@ -19,53 +19,17 @@ class MODEL_APP_BELONG {
 	}
 
 
-	/** 创建视图
-	 * mdl_create_view function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function mdl_create_view() {
-		$_arr_userCreat = array(
-			"user_id"            => BG_DB_TABLE . "user",
-			"user_name"          => BG_DB_TABLE . "user",
-			"user_mail"          => BG_DB_TABLE . "user",
-			"user_nick"          => BG_DB_TABLE . "user",
-			"user_note"          => BG_DB_TABLE . "user",
-			"user_status"        => BG_DB_TABLE . "user",
-			"user_time"          => BG_DB_TABLE . "user",
-			"user_time_login"    => BG_DB_TABLE . "user",
-			"user_ip"            => BG_DB_TABLE . "user",
-			"belong_app_id"      => BG_DB_TABLE . "app_belong",
-		);
-
-		$_str_sqlJoin = "LEFT JOIN `" . BG_DB_TABLE . "app_belong` ON (`" . BG_DB_TABLE . "user`.`user_id`=`" . BG_DB_TABLE . "app_belong`.`belong_user_id`)";
-
-		$_num_mysql = $this->obj_db->create_view(BG_DB_TABLE . "user_view", $_arr_userCreat, BG_DB_TABLE . "user", $_str_sqlJoin);
-
-		if ($_num_mysql > 0) {
-			$_str_alert = "y070108"; //更新成功
-		} else {
-			$_str_alert = "x070108"; //更新成功
-		}
-
-		return array(
-			"str_alert" => $_str_alert, //更新成功
-		);
-	}
-
-
 	/** 创建表
 	 * mdl_create function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	function mdl_create() {
+	function mdl_create_table() {
 		$_arr_belongCreat = array(
-			"belong_id"          => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-			"belong_app_id"     => "int(11) NOT NULL COMMENT '应用 ID'",
-			"belong_user_id"  => "int(11) NOT NULL COMMENT '用户 ID'",
+			"belong_id"      => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+			"belong_app_id"  => "smallint NOT NULL COMMENT '应用 ID'",
+			"belong_user_id" => "int NOT NULL COMMENT '用户 ID'",
 		);
 
 		$_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "app_belong", $_arr_belongCreat, "belong_id", "应用从属");
@@ -81,7 +45,6 @@ class MODEL_APP_BELONG {
 		);
 	}
 
-
 	/** 检查字段
 	 * mdl_column function.
 	 *
@@ -89,16 +52,10 @@ class MODEL_APP_BELONG {
 	 * @return void
 	 */
 	function mdl_column() {
-		$_arr_colSelect = array(
-			"column_name"
-		);
-
-		$_str_sqlWhere = "table_schema='" . BG_DB_NAME . "' AND table_name='" . BG_DB_TABLE . "app_belong'";
-
-		$_arr_colRows = $this->obj_db->select_array("information_schema`.`columns", $_arr_colSelect, $_str_sqlWhere, 100, 0);
+		$_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "app_belong");
 
 		foreach ($_arr_colRows as $_key=>$_value) {
-			$_arr_col[] = $_value["column_name"];
+			$_arr_col[] = $_value["Field"];
 		}
 
 		return $_arr_col;
@@ -160,7 +117,7 @@ class MODEL_APP_BELONG {
 			"belong_app_id",
 		);
 
-		$_str_sqlWhere = "belong_id>0";
+		$_str_sqlWhere = "1=1";
 
 		if ($num_userId > 0) {
 			$_str_sqlWhere .= " AND belong_user_id=" . $num_userId;
@@ -236,7 +193,7 @@ class MODEL_APP_BELONG {
 	 */
 	function mdl_count($num_appId = 0, $num_userId = 0, $arr_userIds = false) {
 
-		$_str_sqlWhere = "belong_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($num_appId > 0) {
 			$_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
@@ -274,7 +231,7 @@ class MODEL_APP_BELONG {
 	 */
 	function mdl_del($num_appId = 0, $num_userId = 0, $arr_appIds = false, $arr_userIds = false, $arr_notAppIds = false, $arr_notUserIds = false) {
 
-		$_str_sqlWhere = "belong_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($num_appId > 0) {
 			$_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
@@ -320,4 +277,3 @@ class MODEL_APP_BELONG {
 		); //成功
 	}
 }
-?>

@@ -31,4 +31,3 @@ switch ($GLOBALS["act_post"]) {
 		$ajax_opt->ajax_db(); //数据库
 	break;
 }
-?>

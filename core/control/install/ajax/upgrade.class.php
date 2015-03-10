@@ -34,11 +34,12 @@ class AJAX_UPGRADE {
 		$this->check_db();
 
 		$this->table_admin();
-		//$this->table_user();
-		//$this->table_app();
+		$this->table_user();
+		$this->table_app();
 		$this->table_app_belong();
-		//$this->table_log();
-		//$this->table_opt();
+		$this->table_log();
+		$this->table_opt();
+		$this->view_user();
 
 		$this->obj_ajax->halt_alert("y030103");
 	}
@@ -84,7 +85,6 @@ class AJAX_UPGRADE {
 		$_str_content .= "define(\"BG_INSTALL_VER\", \"" . PRD_SSO_VER . "\");" . PHP_EOL;
 		$_str_content .= "define(\"BG_INSTALL_PUB\", " . PRD_SSO_PUB . ");" . PHP_EOL;
 		$_str_content .= "define(\"BG_INSTALL_TIME\", " . time() . ");" . PHP_EOL;
-		$_str_content .= "?>";
 
 		file_put_contents(BG_PATH_CONFIG . "is_install.php", $_str_content);
 
@@ -119,8 +119,6 @@ class AJAX_UPGRADE {
 			$_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
 		}
 
-		$_str_content .= "?>";
-
 		$_str_content = str_replace("||", "", $_str_content);
 
 		file_put_contents(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
@@ -130,12 +128,29 @@ class AJAX_UPGRADE {
 		include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
 		$_mdl_admin   = new MODEL_ADMIN();
 		$_arr_col     = $_mdl_admin->mdl_column();
+		$_arr_alert   = array();
 
 		if (!in_array("admin_nick", $_arr_col)) {
 			$_arr_alert["admin_nick"] = array("ADD", "varchar(30) NOT NULL COMMENT '昵称'");
 		}
 
-		if (isset($_arr_alert)) {
+		if (in_array("admin_id", $_arr_col)) {
+			$_arr_alert["admin_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "admin_id");
+		}
+
+		if (in_array("admin_status", $_arr_col)) {
+			$_arr_alert["admin_status"] = array("CHANGE", "enum('enable','disable') NOT NULL COMMENT '状态'", "admin_status");
+		}
+
+		if (in_array("admin_pass", $_arr_col)) {
+			$_arr_alert["admin_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "admin_pass");
+		}
+
+		if (in_array("admin_rand", $_arr_col)) {
+			$_arr_alert["admin_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "admin_rand");
+		}
+
+		if ($_arr_alert) {
 			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "admin", $_arr_alert);
 			if (!$_reselt) {
 				$this->obj_ajax->halt_alert("x020106");
@@ -145,62 +160,152 @@ class AJAX_UPGRADE {
 
 
 	private function table_user() {
-		/*include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
+		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
 		$_mdl_user    = new MODEL_USER();
-		$_arr_userRow = $_mdl_user->mdl_create();
+		$_arr_col     = $_mdl_user->mdl_column();
+		$_arr_alert   = array();
 
-		if ($_arr_userRow["str_alert"] != "y010105") {
-			$this->obj_ajax->halt_alert($_arr_userRow["str_alert"]);
-		}*/
+		if (in_array("user_status", $_arr_col)) {
+			$_arr_alert["user_status"] = array("CHANGE", "enum('wait','enable','disable') NOT NULL COMMENT '状态'", "user_status");
+		}
+
+		if (in_array("user_pass", $_arr_col)) {
+			$_arr_alert["user_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "user_pass");
+		}
+
+		if (in_array("user_rand", $_arr_col)) {
+			$_arr_alert["user_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "user_rand");
+		}
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "user", $_arr_alert);
+			if (!$_reselt) {
+				$this->obj_ajax->halt_alert("x010106");
+			}
+		}
 	}
 
 
 	private function table_app() {
-		/*include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
+		include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
 		$_mdl_app     = new MODEL_APP();
-		$_arr_appRow  = $_mdl_app->mdl_create();
+		$_arr_col     = $_mdl_app->mdl_column();
+		$_arr_alert   = array();
 
-		if ($_arr_appRow["str_alert"] != "y050105") {
-			$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
-		}*/
+		if (in_array("app_id", $_arr_col)) {
+			$_arr_alert["app_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "app_id");
+		}
+
+		if (in_array("app_status", $_arr_col)) {
+			$_arr_alert["app_status"] = array("CHANGE", "enum('enable','disable') NOT NULL COMMENT '状态'", "app_status");
+		}
+
+		if (in_array("app_sync", $_arr_col)) {
+			$_arr_alert["app_sync"] = array("CHANGE", "enum('on','off') NOT NULL COMMENT '状态'", "app_sync");
+		}
+
+		if (in_array("app_key", $_arr_col)) {
+			$_arr_alert["app_key"] = array("CHANGE", "char(64) NOT NULL COMMENT '校验码'", "app_key");
+		}
+
+		if (in_array("app_token", $_arr_col)) {
+			$_arr_alert["app_token"] = array("CHANGE", "char(64) NOT NULL COMMENT '访问口令'", "app_token");
+		}
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "app", $_arr_alert);
+			if (!$_reselt) {
+				$this->obj_ajax->halt_alert("x050106");
+			}
+		}
 	}
 
 
 	private function table_app_belong() {
 		include_once(BG_PATH_MODEL . "appBelong.class.php"); //载入管理帐号模型
 		$_mdl_appBelong       = new MODEL_APP_BELONG();
-		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create();
+		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_table();
 
 		if ($_arr_appBelongRow["str_alert"] != "y070105") {
 			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
 		}
 
-		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_view();
+		$_arr_col     = $_mdl_appBelong->mdl_column();
+		$_arr_alert   = array();
 
-		if ($_arr_appBelongRow["str_alert"] != "y070108") {
-			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
+		if (in_array("belong_app_id", $_arr_col)) {
+			$_arr_alert["belong_app_id"] = array("CHANGE", "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
+		}
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "app_belong", $_arr_alert);
+			if (!$_reselt) {
+				$this->obj_ajax->halt_alert("x070106");
+			}
 		}
 	}
 
 
 	private function table_log() {
-		/*include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
+		include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 		$_mdl_log     = new MODEL_LOG();
-		$_arr_logRow  = $_mdl_log->mdl_create();
+		$_arr_col     = $_mdl_log->mdl_column();
+		$_arr_alert   = array();
 
-		if ($_arr_logRow["str_alert"] != "y060105") {
-			$this->obj_ajax->halt_alert($_arr_logRow["str_alert"]);
-		}*/
+		if (in_array("log_operator_id", $_arr_col)) {
+			$_arr_alert["log_operator_id"] = array("CHANGE", "smallint NOT NULL COMMENT '操作者 ID'", "log_operator_id");
+		}
+
+		if (in_array("log_target_type", $_arr_col)) {
+			$_arr_alert["log_target_type"] = array("CHANGE", "enum('admin','app','user','log','opt') NOT NULL COMMENT '目标类型'", "log_target_type");
+		}
+
+		if (in_array("log_type", $_arr_col)) {
+			$_arr_alert["log_type"] = array("CHANGE", "enum('admin','app','system') NOT NULL COMMENT '目标类型'", "log_type");
+		}
+
+		if (in_array("log_status", $_arr_col)) {
+			$_arr_alert["log_status"] = array("CHANGE", "enum('wait','read')", "log_status");
+		}
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "log", $_arr_alert);
+			if (!$_reselt) {
+				$this->obj_ajax->halt_alert("x060106");
+			}
+		}
 	}
 
 
 	private function table_opt() {
 		include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
 		$_mdl_opt     = new MODEL_OPT();
-		$_arr_optRow  = $_mdl_opt->mdl_create();
+		$_arr_col     = $_mdl_opt->mdl_column();
+		$_arr_alert   = array();
 
-		if ($_arr_optRow["str_alert"] != "y040105") {
-			$this->obj_ajax->halt_alert($_arr_optRow["str_alert"]);
+		if (!in_array("opt_id", $_arr_col)) {
+			$_arr_alert["opt_id"] = array("ADD", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID' FIRST");
+		}
+
+		$_arr_alert[] = array("DROP PRIMARY KEY");
+		$_arr_alert[] = array("ADD PRIMARY KEY", "opt_id");
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "opt", $_arr_alert);
+			if (!$_reselt) {
+				$this->obj_ajax->halt_alert("x040106");
+			}
+		}
+	}
+
+
+	private function view_user() {
+		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
+		$_mdl_user       = new MODEL_USER();
+		$_arr_user    = $_mdl_user->mdl_create_view();
+
+		if ($_arr_user["str_alert"] != "y010108") {
+			$this->obj_ajax->halt_alert($_arr_user["str_alert"]);
 		}
 	}
 
@@ -213,27 +318,29 @@ class AJAX_UPGRADE {
 		if (strlen(BG_DB_HOST) < 1 || strlen(BG_DB_NAME) < 1 || strlen(BG_DB_USER) < 1 || strlen(BG_DB_PASS) < 1 || strlen(BG_DB_CHARSET) < 1) {
 			$this->obj_ajax->halt_alert("x030404");
 		} else {
-			$GLOBALS["obj_db"]   = new CLASS_MYSQL(); //初始化基类
+			$_cfg_host = array(
+				"host"      => BG_DB_HOST,
+				"name"      => BG_DB_NAME,
+				"user"      => BG_DB_USER,
+				"pass"      => BG_DB_PASS,
+				"charset"   => BG_DB_CHARSET,
+				"debug"     => BG_DB_DEBUG,
+			);
+			$GLOBALS["obj_db"]   = new CLASS_MYSQL($_cfg_host); //初始化基类
 			$this->obj_db        = $GLOBALS["obj_db"];
 		}
 	}
 
 
 	private function check_opt() {
-		$_arr_tableSelect = array(
-			"table_name",
-		);
-
-		$_str_sqlWhere    = "table_schema='" . BG_DB_NAME . "'";
-		$_arr_tableRows   = $GLOBALS["obj_db"]->select_array("information_schema`.`tables", $_arr_tableSelect, $_str_sqlWhere, 100, 0);
+		$_arr_tableRows = $this->obj_db->show_tables();
 
 		foreach ($_arr_tableRows as $_key=>$_value) {
-			$_arr_chks[] = $_value["table_name"];
+			$_arr_tables[] = $_value["Tables_in_" . BG_DB_NAME];
 		}
 
-		if (!in_array(BG_DB_TABLE . "opt", $_arr_chks)) {
+		if (!in_array(BG_DB_TABLE . "opt", $_arr_tables)) {
 			$this->obj_ajax->halt_alert("x030409");
 		}
 	}
 }
-?>

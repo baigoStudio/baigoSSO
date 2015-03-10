@@ -73,7 +73,7 @@
 			<div class="well">
 				<div class="form-group">
 					<label class="control-label static_label">{$lang.label.id}</label>
-					<p class="form-control-static static_input">{$tplData.adminRow.admin_id}</p>
+					<p class="form-control-static">{$tplData.adminRow.admin_id}</p>
 				</div>
 
 				{if $tplData.adminRow.admin_status == "enable"}

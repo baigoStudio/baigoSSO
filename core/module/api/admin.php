@@ -21,4 +21,3 @@ switch ($GLOBALS["act_post"]) {
 		$api_admin->api_add();
 	break;
 }
-?>

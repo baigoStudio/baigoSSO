@@ -128,7 +128,7 @@ class CONTROL_ADMIN {
 		$_num_adminCount  = $this->mdl_admin->mdl_count($_str_key, $_str_status);
 		$_arr_page        = fn_page($_num_adminCount); //取得分页数据
 		$_str_query       = http_build_query($_arr_search);
-		$_arr_adminRows   = $this->mdl_admin->mdl_list(BG_SITE_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
+		$_arr_adminRows   = $this->mdl_admin->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
 
 		$_arr_tpl = array(
 			"query"      => $_str_query,
@@ -145,4 +145,3 @@ class CONTROL_ADMIN {
 		);
 	}
 }
-?>

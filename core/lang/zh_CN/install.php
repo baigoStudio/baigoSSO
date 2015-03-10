@@ -26,4 +26,3 @@ return array(
 		</ol>"
 
 );
-?>

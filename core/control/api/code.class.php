@@ -195,4 +195,3 @@ class API_CODE {
 		exit($_str_result);
 	}
 }
-?>

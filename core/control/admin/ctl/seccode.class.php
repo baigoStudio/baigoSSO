@@ -26,4 +26,3 @@ class CONTROL_SECCODE {
 		$this->obj_seccode->secDo();
 	}
 }
-?>

@@ -61,4 +61,3 @@ function fn_ssin_end() {
 	unset($_SESSION["admin_ssintime_" . BG_SITE_SSIN]);
 	unset($_SESSION["admin_hash_" . BG_SITE_SSIN]);
 }
-?>

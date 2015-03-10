@@ -87,4 +87,3 @@ class AJAX_PROFILE {
 	}
 
 }
-?>

@@ -24,17 +24,17 @@ class MODEL_LOG {
 	 * @access public
 	 * @return void
 	 */
-	function mdl_create() {
+	function mdl_create_table() {
 		$_arr_logCreate = array(
-			"log_id"             => "int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-			"log_time"           => "int(11) NOT NULL COMMENT '时间'",
-			"log_operator_id"    => "int(11) NOT NULL COMMENT '操作者 ID'",
+			"log_id"             => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+			"log_time"           => "int NOT NULL COMMENT '时间'",
+			"log_operator_id"    => "smallint NOT NULL COMMENT '操作者 ID'",
 			"log_targets"        => "text NOT NULL COMMENT '目标 JSON'",
-			"log_target_type"    => "varchar(20) NOT NULL COMMENT '目标类型'",
+			"log_target_type"    => "enum('admin','app','user','log','opt') NOT NULL COMMENT '目标类型'",
 			"log_title"          => "varchar(1000) NOT NULL COMMENT '操作标题'",
 			"log_result"         => "varchar(1000) NOT NULL COMMENT '操作结果'",
-			"log_type"           => "varchar(30) NOT NULL COMMENT '日志类型'",
-			"log_status"         => "varchar(20) NOT NULL COMMENT '状态'",
+			"log_type"           => "enum('admin','app','system') NOT NULL COMMENT '日志类型'",
+			"log_status"         => "enum('wait','read') NOT NULL COMMENT '状态'",
 			"log_level"          => "varchar(30) NOT NULL COMMENT '日志级别'",
 		);
 
@@ -59,16 +59,10 @@ class MODEL_LOG {
 	 * @return void
 	 */
 	function mdl_column() {
-		$_arr_colSelect = array(
-			"column_name"
-		);
-
-		$_str_sqlWhere = "table_schema='" . BG_DB_NAME . "' AND table_name='" . BG_DB_TABLE . "log'";
-
-		$_arr_colRows = $this->obj_db->select_array("information_schema`.`columns", $_arr_colSelect, $_str_sqlWhere, 100, 0);
+		$_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "log");
 
 		foreach ($_arr_colRows as $_key=>$_value) {
-			$_arr_col[] = $_value["column_name"];
+			$_arr_col[] = $_value["Field"];
 		}
 
 		return $_arr_col;
@@ -224,7 +218,7 @@ class MODEL_LOG {
 			"log_operator_id",
 		);
 
-		$_str_sqlWhere = "log_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (log_title LIKE '%" . $str_key . "%')";
@@ -280,7 +274,7 @@ class MODEL_LOG {
 	返回数量
 	*/
 	function mdl_count($str_key = "", $str_type = "", $str_status = "", $str_level = "", $num_operatorId = 0) {
-		$_str_sqlWhere = "log_id > 0";
+		$_str_sqlWhere = "1=1";
 
 		if ($str_key) {
 			$_str_sqlWhere .= " AND (log_target_type LIKE '%" . $str_key . "%' OR log_result LIKE '%" . $str_key . "%')";
@@ -342,4 +336,3 @@ class MODEL_LOG {
 	}
 
 }
-?>

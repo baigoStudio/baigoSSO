@@ -15,6 +15,7 @@ return array(
 		"main" => array(
 			"title"  => "用户管理",
 			"mod"    => "user",
+			"icon"   => "user",
 		),
 		"sub" => array(
 			"list" => array(
@@ -34,6 +35,7 @@ return array(
 		"main" => array(
 			"title"  => "应用管理",
 			"mod"    => "app",
+			"icon"   => "transfer",
 		),
 		"sub" => array(
 			"list" => array(
@@ -58,6 +60,7 @@ return array(
 		"main" => array(
 			"title"  => "日志管理",
 			"mod"    => "log",
+			"icon"   => "time",
 		),
 		"sub" => array(
 			"list" => array(
@@ -76,6 +79,7 @@ return array(
 		"main" => array(
 			"title"  => "管理员",
 			"mod"    => "admin",
+			"icon"   => "lock",
 		),
 		"sub" => array(
 			"list" => array(
@@ -100,6 +104,7 @@ return array(
 		"main" => array(
 			"title"  => "系统设置",
 			"mod"    => "opt",
+			"icon"   => "cog",
 		),
 		"sub" => array(
 			"base" => array(
@@ -131,4 +136,3 @@ return array(
 		),
 	),
 );
-?>

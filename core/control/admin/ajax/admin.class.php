@@ -187,4 +187,3 @@ class AJAX_ADMIN {
 		exit(json_encode($arr_re));
 	}
 }
-?>
