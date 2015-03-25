@@ -82,7 +82,7 @@ return array(
 		"hits"            => "点击数",
 		"count"           => "统计",
 		"noname"          => "未命名",
-		"unknow"          => "未知",
+		"unknown"         => "未知",
 		"custom"          => "自定义",
 		"modOnly"         => "（需要修改时输入）", //需要修改时输入
 		"status"          => "状态",

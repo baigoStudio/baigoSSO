@@ -6,6 +6,7 @@
 	baigoCheckall  => "true",
 	baigoValidator => "true",
 	baigoSubmit    => "true",
+	tokenReload    => "true",
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&{$tplData.query}"
 ]}
 
@@ -104,7 +105,7 @@
 												{$type.log[$value.log_type]}
 											{/if}
 										</li>
-										<li>{$value.log_operator_name|date_format:"{$smarty.const.BG_SITE_DATESHORT} {$smarty.const.BG_SITE_TIME}"}</li>
+										<li>{$value.log_time|date_format:"{$smarty.const.BG_SITE_DATESHORT} {$smarty.const.BG_SITE_TIME}"}</li>
 									</ul>
 								</td>
 								<td class="td_sm">

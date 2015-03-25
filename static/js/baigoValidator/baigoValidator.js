@@ -1,6 +1,6 @@
 /*
-v1.0.0 jQuery baigoValidator plugin 表单全选插件
-(c) 2013 baigo studio - http://www.baigo.net/jQuery/baigoValidator/
+v0.1.0 jQuery baigoValidator plugin 表单验证插件
+(c) 2015 baigo studio - http://www.baigo.net/jQueryPlugins/baigoValidator/
 License: http://www.opensource.org/licenses/mit-license.php
 */
 
@@ -19,9 +19,9 @@ License: http://www.opensource.org/licenses/mit-license.php
 			return this;
 		}
 
-    	var _err = 0; //定义错误数
-    	var thisForm = $(this); //定义表单对象
-		var el = this;
+    	var _err       = 0; //定义错误数
+    	var thisForm   = $(this); //定义表单对象
+		var el         = this;
 		var _status; //定义状态
 
 		var defaults = {
@@ -107,7 +107,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 					var _reg = /^[a-z|A-Z|\d]*$/; //字母和数字
 				break;
 				case "strDigit":
-					var _reg = /^[\u4e00-\u9fa5|\uf900-\ufa2d|\w]*$/; //字母中文数字下划线
+					var _reg = /^[\u4e00-\u9fa5|\uf900-\ufa2d|\w]*$/; //字母中文数字下划线减号
 				break;
 				case "ip":
 					var _reg = /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/; //IP 地址
@@ -225,6 +225,10 @@ License: http://www.opensource.org/licenses/mit-license.php
 				if (_ajax.attach) {
 					_ajaxData = _ajaxData + "&" + _ajax.attach;
 				}
+				if (_ajax.attach_id && _ajax.attach_key) {
+					var _str_attach    = $("#" + _ajax.attach_id).val();
+					_ajaxData          = _ajaxData + "&" + _ajax.attach_key + "=" + _str_attach;
+				}
 				$.ajax({
 					url: _ajax.url, //url
 					//async: false, //设置为同步
@@ -269,48 +273,48 @@ License: http://www.opensource.org/licenses/mit-license.php
 		}
 
 		var validateStr = function (_validate_id) {
-			var _set_data = fileds[_validate_id]; //获取验证设置
+			var _set_data    = fileds[_validate_id]; //获取验证设置
 			//alert(_set_data.validate.type);
-			var _length = _set_data.length; //长度
-			var _validate = _set_data.validate; //格式
-			var _msg = _set_data.msg; //消息
+			var _length      = _set_data.length; //长度
+			var _validate    = _set_data.validate; //格式
+			var _msg         = _set_data.msg; //消息
 			var _result;
 			//alert(_validate.type);
 			switch (_validate.type) {
 				case "digit":
-					var _str = $("#" + _validate_id).val(); //获取表单值
-					_status = isDigit(_str, _length, _validate.format); //验证字符串
+					var _str   = $("#" + _validate_id).val(); //获取表单值
+					_status    = isDigit(_str, _length, _validate.format); //验证字符串
 				break;
 				case "radio":
 				case "checkbox":
-					var _num = $("[group='" + _validate_id + "']:checked").size(); //获取表单选中数
-					_status = isNum(_num, _length); //验证个数
+					var _num   = $("[group='" + _validate_id + "']:checked").size(); //获取表单选中数
+					_status    = isNum(_num, _length); //验证个数
 				break;
 				case "select":
 					if (_length.min > 1) { //如最少大于 1 为多选，则验证个数
-						var _num = $("#" + _validate_id + " :selected").size(); //获取表单选中数
-						_status = isNum(_num, _length); //验证个数
+						var _num  = $("#" + _validate_id + " :selected").size(); //获取表单选中数
+						_status   = isNum(_num, _length); //验证个数
 					} else { //单选则验证值
-						var _str = $("#" + _validate_id).val(); //获取表单值
-						_status = isText(_str, _length, "text"); //验证字符串
+						var _str  = $("#" + _validate_id).val(); //获取表单值
+						_status   = isText(_str, _length, "text"); //验证字符串
 						if (_status == "too_short") {
 							_status = "too_few";
 						}
 					}
 				break;
 				case "ajax":
-					var _ajax = _set_data.ajax; //ajax
-					var _str = $("#" + _validate_id).val(); //获取表单值
-					_status = isAjax(_str, _length, _validate, _ajax, _msg, _validate_id); //ajax验证
+					var _ajax  = _set_data.ajax; //ajax
+					var _str   = $("#" + _validate_id).val(); //获取表单值
+					_status    = isAjax(_str, _length, _validate, _ajax, _msg, _validate_id); //ajax验证
 				break;
 				case "confirm":
-					var _str = $("#" + _validate_id).val(); //获取表单值
-					var _str_target = $("#" + _validate.target).val(); //获取表单值
-					_status = isConfirm(_str, _str_target, _length); //验证字符串
+					var _str           = $("#" + _validate_id).val(); //获取表单值
+					var _str_target    = $("#" + _validate.target).val(); //获取表单值
+					_status            = isConfirm(_str, _str_target, _length); //验证字符串
 				break;
 				default:
-					var _str = $("#" + _validate_id).val(); //获取表单值
-					_status = isText(_str, _length, _validate.format); //验证字符串
+					var _str   = $("#" + _validate_id).val(); //获取表单值
+					_status    = isText(_str, _length, _validate.format); //验证字符串
 				break;
 			}
 			switch (_status) {
@@ -331,8 +335,8 @@ License: http://www.opensource.org/licenses/mit-license.php
 			_err = 0;
 			$(thisForm).find(".validate:visible").each(function(){
 	        	//_err = 0; //定义错误数
-				var _group = $(this).attr("group");
-				var _id = $(this).attr("id");
+				var _group  = $(this).attr("group");
+				var _id     = $(this).attr("id");
 				if (typeof _group == "undefined") {
 					_validate_id = _id;
 				} else {
@@ -352,8 +356,8 @@ License: http://www.opensource.org/licenses/mit-license.php
 		}
 
 		$(thisForm).find(".validate:visible").change(function(){
-			var _group = $(this).attr("group");
-			var _id = $(this).attr("id");
+			var _group   = $(this).attr("group");
+			var _id      = $(this).attr("id");
 			if (typeof _group == "undefined") {
 				_validate_id = _id;
 			} else {

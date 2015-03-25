@@ -5,6 +5,7 @@
 	sub_active     => "db",
 	baigoValidator => "true",
 	baigoSubmit    => "true",
+	tokenReload    => "true",
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get=db"
 ]}
 

@@ -9,6 +9,14 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
+if (isset($_GET["ssid"])) {
+	session_id($_GET["ssid"]); //将当前的SessionId设置成客户端传递回来的SessionId
+}
+
+session_start(); //开启session
+$GLOBALS["ssid"] = session_id();
+
+header("Content-type: application/json");
 include_once(BG_PATH_INC . "common_global.inc.php"); //载入通用
 include_once(BG_PATH_CLASS . "mysql.class.php"); //载入数据库类
 include_once(BG_PATH_CLASS . "base.class.php"); //载入基类

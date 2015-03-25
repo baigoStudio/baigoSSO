@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_admin.inc.php"); //管理员通用
+include_once(BG_PATH_INC . "common_admin_ajax.inc.php"); //管理员通用
 include_once(BG_PATH_CONTROL_ADMIN . "ajax/admin.class.php"); //载入管理员 ajax 控制器
 
 $ajax_admin = new AJAX_ADMIN(); //初始化管理员对象

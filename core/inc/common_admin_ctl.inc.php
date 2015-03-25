@@ -9,7 +9,6 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "is_install.inc.php"); //验证是否已登录
 include_once(BG_PATH_INC . "common_global.inc.php"); //载入全局通用
 include_once(BG_PATH_FUNC . "session.func.php"); //载入 session 函数
 include_once(BG_PATH_CLASS . "mysql.class.php"); //载入数据库类
