@@ -35,7 +35,7 @@ class CONTROL_ADMIN {
 	function ctl_show() {
 		$_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0);
 
-		if ($this->adminLogged["admin_allow"]["admin"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) {
 			return array(
 				"str_alert" => "x020303",
 			);
@@ -67,7 +67,7 @@ class CONTROL_ADMIN {
 		$_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0);
 
 		if ($_num_adminId > 0) {
-			if ($this->adminLogged["admin_allow"]["admin"]["edit"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
 				return array(
 					"str_alert" => "x020303",
 				);
@@ -79,7 +79,7 @@ class CONTROL_ADMIN {
 				exit;
 			}
 		} else {
-			if ($this->adminLogged["admin_allow"]["admin"]["add"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) {
 				return array(
 					"str_alert" => "x020302",
 				);
@@ -110,7 +110,7 @@ class CONTROL_ADMIN {
 	 * @return void
 	 */
 	function ctl_list() {
-		if ($this->adminLogged["admin_allow"]["admin"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) {
 			return array(
 				"str_alert" => "x020301",
 			);

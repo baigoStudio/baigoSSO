@@ -106,7 +106,7 @@
 										</label>
 										{foreach $value_m.allow as $key_s=>$value_s}
 											<label for="allow_{$key_m}_{$key_s}" class="checkbox-inline">
-												<input type="checkbox" name="admin_allow[{$key_m}][{$key_s}]" value="1" id="allow_{$key_m}_{$key_s}" class="allow_{$key_m}" {if $tplData.adminRow.admin_allow[$key_m][$key_s] == 1}checked{/if}>
+												<input type="checkbox" name="admin_allow[{$key_m}][{$key_s}]" value="1" id="allow_{$key_m}_{$key_s}" class="allow_{$key_m}" {if isset($tplData.adminRow.admin_allow[$key_m][$key_s])}checked{/if}>
 												{$value_s}
 											</label>
 										{/foreach}

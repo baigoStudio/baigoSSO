@@ -103,16 +103,10 @@ class CLASS_BASE {
 	无返回字符串
 	*/
 	function setTimezone() {
-		$_str_timezone_chk = substr(BG_SITE_TIMEZONE, 7, 1);
-		switch ($_str_timezone_chk) {
-			case "+";
-				$_str_timezone = str_replace("+", "-", BG_SITE_TIMEZONE);
-			break;
-			case "-";
-				$_str_timezone = str_replace("-", "+", BG_SITE_TIMEZONE);
-			break;
+		if(!defined("BG_SITE_TIMEZONE")) {
+			define("BG_SITE_TIMEZONE", "Asia/Shanghai");
 		}
 
-		date_default_timezone_set($_str_timezone);
+		date_default_timezone_set(BG_SITE_TIMEZONE);
 	}
 }

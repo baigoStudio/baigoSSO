@@ -59,7 +59,7 @@ class AJAX_USER {
 		}
 
 		if ($_arr_userSubmit["user_id"] > 0) {
-			if ($this->adminLogged["admin_allow"]["user"]["edit"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
 				$this->obj_ajax->halt_alert("x010303");
 			}
 			$_str_userPass = fn_post("user_pass");
@@ -68,7 +68,7 @@ class AJAX_USER {
 				$_str_userPassDo    = fn_baigoEncrypt($_str_userPass, $_str_userRand);
 			}
 		} else {
-			if ($this->adminLogged["admin_allow"]["user"]["add"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["user"]["add"])) {
 				$this->obj_ajax->halt_alert("x010302");
 			}
 			$_arr_userPass = validateStr(fn_post("user_pass"), 1, 0);
@@ -97,7 +97,7 @@ class AJAX_USER {
 	返回提示信息
 	*/
 	function ajax_status() {
-		if ($this->adminLogged["admin_allow"]["user"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
 			$this->obj_ajax->halt_alert("x010303");
 		}
 
@@ -119,7 +119,7 @@ class AJAX_USER {
 	返回提示信息
 	*/
 	function ajax_del() {
-		if ($this->adminLogged["admin_allow"]["user"]["del"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["user"]["del"])) {
 			$this->obj_ajax->halt_alert("x010304");
 		}
 

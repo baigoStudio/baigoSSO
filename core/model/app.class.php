@@ -250,7 +250,7 @@ class MODEL_APP {
 			$_str_sqlWhere .= " AND app_id<>" . $num_notId;
 		}
 
-		$_arr_appRows = $this->obj_db->select_array(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
+		$_arr_appRows = $this->obj_db->select(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
 
 		if (isset($_arr_appRows[0])) { //用户名不存在则返回错误
 			$_arr_appRow = $_arr_appRows[0];
@@ -262,7 +262,7 @@ class MODEL_APP {
 		}
 
 		if (isset($_arr_appRow["app_allow"])) {
-			$_arr_appRow["app_allow"] = json_decode($_arr_appRow["app_allow"], true);
+			$_arr_appRow["app_allow"] = fn_jsonDecode($_arr_appRow["app_allow"], "no");
 		} else {
 			$_arr_appRow["app_allow"] = array();
 
@@ -314,7 +314,7 @@ class MODEL_APP {
 			$_str_sqlWhere .= " AND LENGTH(app_notice)>0";
 		}
 
-		$_arr_appRows = $this->obj_db->select_array(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere . " ORDER BY app_id DESC", $num_appNo, $num_appExcept); //查询数据
+		$_arr_appRows = $this->obj_db->select(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere, "", "app_id DESC", $num_appNo, $num_appExcept); //查询数据
 
 		return $_arr_appRows;
 	}
@@ -525,7 +525,7 @@ class MODEL_APP {
 			break;
 		}
 
-		$this->appSubmit["app_allow"] = json_encode(fn_post("app_allow"));
+		$this->appSubmit["app_allow"] = fn_jsonEncode(fn_post("app_allow"), "no");
 		$this->appSubmit["str_alert"] = "ok";
 
 		return $this->appSubmit;

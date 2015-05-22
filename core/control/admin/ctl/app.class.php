@@ -43,7 +43,7 @@ class CONTROL_APP {
 	返回提示
 	*/
 	function ctl_show() {
-		if ($this->adminLogged["admin_allow"]["app"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["browse"])) {
 			return array(
 				"str_alert" => "x050301",
 			);
@@ -80,7 +80,7 @@ class CONTROL_APP {
 		$_num_appId = fn_getSafe(fn_get("app_id"), "int", 0);
 
 		if ($_num_appId > 0) {
-			if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 				return array(
 					"str_alert" => "x050303",
 				);
@@ -92,7 +92,7 @@ class CONTROL_APP {
 				exit;
 			}
 		} else {
-			if ($this->adminLogged["admin_allow"]["app"]["add"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["app"]["add"])) {
 				return array(
 					"str_alert" => "x050302",
 				);
@@ -121,7 +121,7 @@ class CONTROL_APP {
 
 
 	function ctl_belong() {
-		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 			return array(
 				"str_alert" => "x050303",
 			);
@@ -152,9 +152,9 @@ class CONTROL_APP {
 			"key_belong" => $_str_keyBelong,
 		);
 
-		$_arr_userBelongs  = $this->mdl_user->mdl_view("", $_num_appId);
+		$_arr_userBelongs = $this->mdl_user->mdl_view("", $_num_appId);
 
-		$_arr_notIds = array();
+		$_arr_notIds      = array();
 
 		foreach ($_arr_userBelongs as $_key=>$_value) {
 			$_arr_notIds[] = $_value["user_id"];
@@ -188,7 +188,7 @@ class CONTROL_APP {
 	无返回
 	*/
 	function ctl_list() {
-		if ($this->adminLogged["admin_allow"]["app"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["browse"])) {
 			return array(
 				"str_alert" => "x050301",
 			);

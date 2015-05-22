@@ -18,13 +18,13 @@ return "<h3>概述</h3>
 				<tbody>
 					<tr>
 						<td class=\"nowrap\">admin</td>
-						<td class=\"nowrap\">管理后台</td>
+						<td class=\"nowrap\">管理后台入口</td>
 						<td>管理后台入口，所有后台管理功能，均通过此目录实现。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">api</td>
-						<td class=\"nowrap\">API 接口</td>
-						<td>API 接口目录，所有提供给第三方的接口，均通过此目录实现。</td>
+						<td class=\"nowrap\">API 接口入口</td>
+						<td>API 接口入口，所有提供给第三方的接口，均通过此目录实现。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">config</td>
@@ -33,18 +33,18 @@ return "<h3>概述</h3>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">core</td>
-						<td class=\"nowrap\">核心文件</td>
-						<td>核心文件目录，整个系统的重中之重，所有系统的核心功能，均保存在此。</td>
+						<td class=\"nowrap\">系统内核</td>
+						<td>系统内核，整个系统的重中之重，所有系统的核心功能，均保存在此。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">help</td>
-						<td class=\"nowrap\">帮助文档</td>
-						<td>帮助文档保存在此。</td>
+						<td class=\"nowrap\">帮助文档入口</td>
+						<td>帮助文档入口，提供详细的帮助信息。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">install</td>
-						<td class=\"nowrap\">安装程序</td>
-						<td>安装程序目录，系统的初次安装，均通过此目录实现。</td>
+						<td class=\"nowrap\">安装程序入口</td>
+						<td>安装程序入口，系统的初次安装、升级，均通过此目录实现。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">static</td>

@@ -29,6 +29,31 @@ class AJAX_UPGRADE {
 		}
 	}
 
+	function ajax_dbconfig() {
+		if (!fn_token("chk")) { //令牌
+			$this->obj_ajax->halt_alert("x030102");
+		}
+
+		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
+		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
+		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
+		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
+		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
+		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
+
+		$_str_content = "<?php" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
+
+		file_put_contents(BG_PATH_CONFIG . "config_db.inc.php", $_str_content);
+
+		$this->obj_ajax->halt_alert("y030404");
+	}
+
 
 	function ajax_dbtable() {
 		$this->check_db();
@@ -41,7 +66,7 @@ class AJAX_UPGRADE {
 		$this->table_opt();
 		$this->view_user();
 
-		$this->obj_ajax->halt_alert("y030103");
+		$this->obj_ajax->halt_alert("y030113");
 	}
 
 
@@ -316,8 +341,12 @@ class AJAX_UPGRADE {
 		}
 
 		if (strlen(BG_DB_HOST) < 1 || strlen(BG_DB_NAME) < 1 || strlen(BG_DB_USER) < 1 || strlen(BG_DB_PASS) < 1 || strlen(BG_DB_CHARSET) < 1) {
-			$this->obj_ajax->halt_alert("x030404");
+			$this->obj_ajax->halt_alert("x030412");
 		} else {
+			if (!defined("BG_DB_PORT")) {
+				define("BG_DB_PORT", "3306");
+			}
+
 			$_cfg_host = array(
 				"host"      => BG_DB_HOST,
 				"name"      => BG_DB_NAME,
@@ -325,9 +354,19 @@ class AJAX_UPGRADE {
 				"pass"      => BG_DB_PASS,
 				"charset"   => BG_DB_CHARSET,
 				"debug"     => BG_DB_DEBUG,
+				"port"      => BG_DB_PORT,
 			);
-			$GLOBALS["obj_db"]   = new CLASS_MYSQL($_cfg_host); //初始化基类
+
+			$GLOBALS["obj_db"]   = new CLASS_MYSQLI($_cfg_host); //设置数据库对象
 			$this->obj_db        = $GLOBALS["obj_db"];
+
+			if (!$this->obj_db->connect()) {
+				$this->obj_ajax->halt_alert("x030111");
+			}
+
+			if (!$this->obj_db->select_db()) {
+				$this->obj_ajax->halt_alert("x030112");
+			}
 		}
 	}
 

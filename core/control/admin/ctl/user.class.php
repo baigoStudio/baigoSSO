@@ -51,7 +51,7 @@ class CONTROL_USER {
 		);
 
 		if ($_num_userId > 0) {
-			if ($this->adminLogged["admin_allow"]["user"]["edit"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
 				return array(
 					"str_alert" => "x010303",
 				);
@@ -63,7 +63,7 @@ class CONTROL_USER {
 				exit;
 			}
 		} else {
-			if ($this->adminLogged["admin_allow"]["user"]["browse"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["user"]["browse"])) {
 				return array(
 					"str_alert" => "x010301",
 				);

@@ -21,11 +21,11 @@ define("BG_DEFAULT_PERPAGE", 30); //默认会话过期时间，秒
 define("BG_DEFAULT_TOKEN", 604800); //默认口令过期时间，秒
 
 /*-------------------------目录名称-------------------------*/
+define("BG_NAME_CONFIG", "config"); //配置文件
 define("BG_NAME_TPL", "tpl"); //模板
 define("BG_NAME_COMPILE", "compile"); //模板
 
 define("BG_NAME_HELP", "help"); //生成文件目录
-define("BG_NAME_CONFIG", "config");
 
 define("BG_NAME_CORE", "core"); //源代码存放目录
 define("BG_NAME_MODULE", "module"); //模块文件
@@ -50,7 +50,7 @@ define("BG_NAME_IMAGE", "image"); //图片
 
 /*-------------------------路径-------------------------*/
 define("BG_PATH_ROOT", str_replace("\\", "/", substr(dirname(__FILE__), 0, strrpos(dirname(__FILE__), BG_NAME_CONFIG)))); //根目录
-define("BG_PATH_CONFIG", BG_PATH_ROOT . BG_NAME_CONFIG . "/"); //共用
+define("BG_PATH_CONFIG", BG_PATH_ROOT . BG_NAME_CONFIG . "/"); //配置文件目录
 
 define("BG_PATH_TPL", BG_PATH_ROOT . BG_NAME_TPL . "/"); //模板
 define("BG_PATH_TPL_ADMIN", BG_PATH_TPL . BG_NAME_ADMIN . "/"); //模板
@@ -95,6 +95,7 @@ define("BG_URL_IMAGE", BG_URL_STATIC . BG_NAME_IMAGE . "/"); //JS
 define("BG_URL_STATIC_ADMIN", BG_URL_STATIC . BG_NAME_ADMIN . "/"); //静态文件目录
 define("BG_URL_STATIC_INSTALL", BG_URL_STATIC . BG_NAME_INSTALL . "/"); //静态文件目录
 define("BG_URL_STATIC_HELP", BG_URL_STATIC . BG_NAME_HELP . "/"); //静态文件目录
+
 
 /*-------------------------载入其他配置-------------------------*/
 include_once(BG_PATH_INC . "version.inc.php"); //版本信息

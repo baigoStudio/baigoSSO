@@ -39,8 +39,8 @@ class AJAX_INSTALL {
 		}
 
 		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
-		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "sso");
-		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "sso");
+		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
+		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
 		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
 		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
 		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
@@ -338,9 +338,14 @@ class AJAX_INSTALL {
 				$_str_const   = "BG_";
 			break;
 
-			case "sm":
-				$_str_appName = "SmartMuseum";
-				$_str_const   = "SM_";
+			case "im":
+				$_str_appName = "iWee Museum";
+				$_str_const   = "IW_";
+			break;
+
+			case "ib":
+				$_str_appName = "iWee Book";
+				$_str_const   = "IW_";
 			break;
 		}
 
@@ -384,6 +389,10 @@ class AJAX_INSTALL {
 		if (strlen(BG_DB_HOST) < 1 || strlen(BG_DB_NAME) < 1 || strlen(BG_DB_USER) < 1 || strlen(BG_DB_PASS) < 1 || strlen(BG_DB_CHARSET) < 1) {
 			$this->obj_ajax->halt_alert("x030404");
 		} else {
+			if (!defined("BG_DB_PORT")) {
+				define("BG_DB_PORT", "3306");
+			}
+
 			$_cfg_host = array(
 				"host"      => BG_DB_HOST,
 				"name"      => BG_DB_NAME,
@@ -391,9 +400,19 @@ class AJAX_INSTALL {
 				"pass"      => BG_DB_PASS,
 				"charset"   => BG_DB_CHARSET,
 				"debug"     => BG_DB_DEBUG,
+				"port"      => BG_DB_PORT,
 			);
-			$GLOBALS["obj_db"]   = new CLASS_MYSQL($_cfg_host); //初始化基类
+
+			$GLOBALS["obj_db"]   = new CLASS_MYSQLI($_cfg_host); //设置数据库对象
 			$this->obj_db        = $GLOBALS["obj_db"];
+
+			if (!$this->obj_db->connect()) {
+				$this->obj_ajax->halt_alert("x030111");
+			}
+
+			if (!$this->obj_db->select_db()) {
+				$this->obj_ajax->halt_alert("x030112");
+			}
 		}
 	}
 

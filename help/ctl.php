@@ -6,7 +6,7 @@
 $base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));
 include_once($base . "config/config.inc.php"); //载入配置
 
-$arr_mod = array("intro", "install", "upgrade", "admin", "api");
+$arr_mod = array("intro", "install", "upgrade", "deploy", "admin", "api");
 
 if (isset($_GET["mod"])) {
 	$mod = $_GET["mod"];

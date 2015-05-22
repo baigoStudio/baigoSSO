@@ -28,7 +28,7 @@ $GLOBALS["ssid"] = session_id();
 
 header("Content-Type: text/html; charset=utf-8");
 include_once(BG_PATH_INC . "common_global.inc.php"); //载入通用
-include_once(BG_PATH_CLASS . "mysql.class.php"); //载入数据库类
+include_once(BG_PATH_CLASS . "mysqli.class.php"); //载入数据库类
 include_once(BG_PATH_CLASS . "base.class.php"); //载入基类
 include_once(BG_PATH_CONTROL_INSTALL . "ctl/install.class.php"); //载入栏目控制器
 
@@ -84,8 +84,16 @@ switch ($GLOBALS["act_get"]) {
 		}
 	break;
 
-	default:
+	case "dbconfig":
 		$arr_installRow = $ctl_install->ctl_dbconfig();
+		if ($arr_installRow["str_alert"] != "y030403") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+			exit;
+		}
+	break;
+
+	default:
+		$arr_installRow = $ctl_install->ctl_ext();
 		if ($arr_installRow["str_alert"] != "y030403") {
 			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
 			exit;

@@ -125,7 +125,7 @@ class MODEL_OPT {
 
 		$_str_sqlWhere = "opt_key='" . $str_optKey . "'";
 
-		$_arr_optRows = $this->obj_db->select_array(BG_DB_TABLE . "opt", $_arr_optSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
+		$_arr_optRows = $this->obj_db->select(BG_DB_TABLE . "opt", $_arr_optSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
 
 		if (isset($_arr_optRows[0])) { //用户名不存在则返回错误
 			$_arr_optRow = $_arr_optRows[0];

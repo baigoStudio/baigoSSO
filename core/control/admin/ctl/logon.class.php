@@ -66,9 +66,9 @@ class CONTROL_LOGON {
 
 		$this->mdl_admin->mdl_login($_arr_adminRow["admin_id"], fn_baigoEncrypt($_arr_adminLogin["admin_pass"], $_str_adminRand), $_str_adminRand);
 
-		$_SESSION["admin_id_" . BG_SITE_SSIN]         = $_arr_adminRow["admin_id"];
-		$_SESSION["admin_ssintime_" . BG_SITE_SSIN]   = time();
-		$_SESSION["admin_hash_" . BG_SITE_SSIN]       = fn_baigoEncrypt($_arr_adminRow["admin_time"], $_str_adminRand);
+		fn_session("admin_id", "mk", $_arr_adminRow["admin_id"]);
+		fn_session("admin_ssin_time", "mk", time());
+		fn_session("admin_hash", "mk", fn_baigoEncrypt($_arr_adminRow["admin_time"], $_str_adminRand));
 
 		return array(
 			"admin_id"   => $_arr_adminLogin["admin_id"],

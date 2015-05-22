@@ -18,8 +18,45 @@ class CONTROL_UPGRADE {
 	private $mdl_opt;
 
 	function __construct() { //构造函数
-		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL);
+		$this->obj_base   = $GLOBALS["obj_base"];
+		$this->config     = $this->obj_base->config;
+		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL . $this->config["ui"]);
+		$this->upgrade_init();
 	}
+
+
+	function ctl_ext() {
+		$this->obj_tpl->tplDisplay("upgrade_ext.tpl", $this->tplData);
+
+		return array(
+			"str_alert" => "y030403",
+		);
+	}
+
+
+	/**
+	 * upgrade_1 function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function ctl_dbconfig() {
+		if ($this->errCount > 0) {
+			return array(
+				"str_alert" => "x030414",
+			);
+			exit;
+		}
+
+		$_arr_tplData = array();
+
+		$this->obj_tpl->tplDisplay("upgrade_dbconfig.tpl", $_arr_tplData);
+
+		return array(
+			"str_alert" => "y030403",
+		);
+	}
+
 
 	/**
 	 * upgrade_2 function.
@@ -28,9 +65,16 @@ class CONTROL_UPGRADE {
 	 * @return void
 	 */
 	function ctl_dbtable() {
+		if ($this->errCount > 0) {
+			return array(
+				"str_alert" => "x030414",
+			);
+			exit;
+		}
+
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"str_alert" => "x030412",
 			);
 			exit;
 		}
@@ -52,9 +96,16 @@ class CONTROL_UPGRADE {
 	 * @return void
 	 */
 	function ctl_base() {
+		if ($this->errCount > 0) {
+			return array(
+				"str_alert" => "x030414",
+			);
+			exit;
+		}
+
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"str_alert" => "x030412",
 			);
 			exit;
 		}
@@ -87,9 +138,16 @@ class CONTROL_UPGRADE {
 	 * @return void
 	 */
 	function ctl_reg() {
+		if ($this->errCount > 0) {
+			return array(
+				"str_alert" => "x030414",
+			);
+			exit;
+		}
+
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"str_alert" => "x030412",
 			);
 			exit;
 		}
@@ -116,9 +174,16 @@ class CONTROL_UPGRADE {
 
 
 	function ctl_over() {
+		if ($this->errCount > 0) {
+			return array(
+				"str_alert" => "x030414",
+			);
+			exit;
+		}
+
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"str_alert" => "x030412",
 			);
 			exit;
 		}
@@ -144,6 +209,10 @@ class CONTROL_UPGRADE {
 		if (strlen(BG_DB_HOST) < 1 || strlen(BG_DB_NAME) < 1 || strlen(BG_DB_USER) < 1 || strlen(BG_DB_PASS) < 1 || strlen(BG_DB_CHARSET) < 1) {
 			return false;
 		} else {
+			if (!defined("BG_DB_PORT")) {
+				define("BG_DB_PORT", "3306");
+			}
+
 			$_cfg_host = array(
 				"host"      => BG_DB_HOST,
 				"name"      => BG_DB_NAME,
@@ -151,9 +220,22 @@ class CONTROL_UPGRADE {
 				"pass"      => BG_DB_PASS,
 				"charset"   => BG_DB_CHARSET,
 				"debug"     => BG_DB_DEBUG,
+				"port"      => BG_DB_PORT,
 			);
-			$GLOBALS["obj_db"]   = new CLASS_MYSQL($_cfg_host); //初始化基类
+
+			$GLOBALS["obj_db"]   = new CLASS_MYSQLI($_cfg_host); //设置数据库对象
 			$this->obj_db        = $GLOBALS["obj_db"];
+
+			if (!$this->obj_db->connect()) {
+				return false;
+				exit;
+			}
+
+			if (!$this->obj_db->select_db()) {
+				return false;
+				exit;
+			}
+
 			$this->mdl_opt       = new MODEL_OPT(); //设置管理员模型
 			return true;
 		}
@@ -172,5 +254,21 @@ class CONTROL_UPGRADE {
 		} else {
 			return true;
 		}
+	}
+
+	private function upgrade_init() {
+		$_arr_extRow      = get_loaded_extensions();
+		$this->errCount   = 0;
+
+		foreach ($this->obj_tpl->type["ext"] as $_key=>$_value) {
+			if (!in_array($_key, $_arr_extRow)) {
+				$this->errCount++;
+			}
+		}
+
+		$this->tplData = array(
+			"errCount"   => $this->errCount,
+			"extRow"     => $_arr_extRow,
+		);
 	}
 }

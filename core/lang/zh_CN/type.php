@@ -37,6 +37,14 @@ return array(
 
 	"prd" => array(
 		"cms"   => "bg_install",
-		"sm"    => "install",
+		"im"    => "install",
+		"ib"    => "install",
+	),
+
+	"ext" => array(
+		"mysqli"      => "Mysqli 扩展库", //栏目类型
+		"gd"          => "GD 扩展库", //栏目类型
+		"mbstring"    => "mbstring 扩展库", //栏目类型
+		"curl"        => "cURL 扩展库", //栏目类型
 	),
 );

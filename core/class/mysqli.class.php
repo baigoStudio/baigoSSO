@@ -10,23 +10,29 @@ if(!defined("IN_BAIGO")) {
 }
 
 /*-------------数据库类-------------*/
-class CLASS_MYSQL {
+class CLASS_MYSQLI {
 
+	public $obj_mysqli;
 	private $db_host;
+	private $db_port;
 	private $db_user;
 	private $db_pass;
 	public $db_name;
 	private $db_charset;
 	private $db_debug;
 	public $db_rs;
-	public $db_link;
-	public $db_select;
 
 	function __construct($cfg_host) {
 		if (isset($cfg_host["host"])) {
 			$this->db_host       = $cfg_host["host"];
 		} else {
 			$this->db_host       = "localhost";
+		}
+
+		if (isset($cfg_host["port"])) {
+			$this->db_port       = $cfg_host["port"];
+		} else {
+			$this->db_port       = "3306";
 		}
 
 		if (isset($cfg_host["user"])) {
@@ -58,182 +64,67 @@ class CLASS_MYSQL {
 		} else {
 			$this->db_debug      = false;
 		}
-
-		$this->connect();
-		$this->select_db();
-		unset($this->db_host);
-		unset($this->db_user);
-		unset($this->db_pass);
-		unset($this->db_charset);
-		unset($this->db_debug);
 	}
 
-	function connect($db_host = "", $db_user = "", $db_pass = "", $db_charset = "") {
-		$db_host          = $db_host ? $db_host : $this->db_host;
-		$db_user          = $db_user ? $db_user : $this->db_user;
-		$db_pass          = $db_pass ? $db_pass : $this->db_pass;
-		$db_charset       = $db_charset ? $db_charset : $this->db_charset;
-		$this->db_link    = mysql_connect($db_host, $db_user, $db_pass);
-
-		if ($this->db_link) {
-			mysql_set_charset($db_charset);
-			//mysql_query("SET NAMES " . $db_charset);
-			return $this->db_link;
+	function connect() {
+		$this->obj_mysqli = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name, $this->db_port);
+		if ($this->obj_mysqli) {
+			//$this->obj_mysqli->set_charset($this->db_charset);
+			$this->obj_mysqli->query("SET NAMES " . $this->db_charset);
+			return true;
 		} else {
-			return $this->halt("Can't connect database");
+			return false;
 		}
 	}
 
-	function select_db($db_name = "", $db_link = "") {
-		$db_name          = $db_name ? $db_name : $this->db_name;
-		$db_link          = $db_link ? $db_link : $this->db_link;
-		$this->db_select  = mysql_select_db($db_name, $db_link);
+	function select_db() {
+		$_is_select  = $this->obj_mysqli->select_db($this->db_name);
 
-		if ($this->db_select) {
-			return $this->db_select;
-		} else {
-			return $this->halt("Database not exist");
-		}
+		return $_is_select;
 	}
 
 	function query($sql) {
-		$query = mysql_query($sql, $this->db_link);
+		$query = $this->obj_mysqli->query($sql);
 		if ($query) {
 			$this->db_rs = $query;
 			return $query;
 		} else {
-			return $this->halt($sql . " Query error");
+			return false;
 		}
-	}
-
-	function fetch_object($rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_fetch_object($rs);
-	}
-
-	function fetch_array($rs = "", $result_type = MYSQL_ASSOC) {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_fetch_array($rs, $result_type);
 	}
 
 	function fetch_row($rs = "") {
 		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_fetch_row($rs);
+		return $rs->fetch_row();
 	}
 
 	function fetch_assoc($rs = "") {
 		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_fetch_assoc($rs);
-	}
-
-	function num_rows($rs = "") {
-		$rs = $rs ? $rs :$this->db_rs;
-		return mysql_num_rows($rs);
+		return $rs->fetch_assoc();
 	}
 
 	function affected_rows() {
-		return mysql_affected_rows();
+		return $this->obj_mysqli->affected_rows;
 	}
 
 	function insert_id() {
-		$this->db_rs = $this->fetch_row($this->query("SELECT LAST_INSERT_ID()"));
+		$_obj_temp    = $this->query("SELECT LAST_INSERT_ID()");
+		$this->db_rs  = $this->fetch_row($_obj_temp);
 		return $this->db_rs[0];
 	}
 
-	function error() {
-		return mysql_error();
-	}
-
-	function errno() {
-		return mysql_errno();
-	}
-
-	function halt($message) {
-		if(isset($this->db_debug)) {
-			echo "<div>" . $message . "</div>";
-			echo "<div>Error: " . $this->error() . "</div>";
-			echo "<div>Error number: " . $this->errno() . "</div>";
-		}
-		exit;
-	}
-
 	function close() {
-		mysql_close($this->db_link);
+		$this->obj_mysqli->close();
 	}
 
-	function client_encoding() {
-		return mysql_client_encoding();
-	}
-
-	function data_seek($row_number = 1, $rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_data_seek($rs, $row_number);
-	}
-
-	function fetch_lengths($rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_fetch_lengths($rs);
-	}
-
-	function field_flags($field_offset = 1, $rs = "") {
-		$rs = $rs ? $rs : $this->rs;
-		return mysql_field_flags($rs, $field_offset);
-	}
-
-	function field_len($field_offset = 1, $rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_field_len($rs, $field_offset);
-	}
-
-	function field_name($field_index, $rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_field_name($rs, $field_index);
-	}
-
-	function field_seek($field_offset = 1, $rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_field_seek($rs, $field_offset);
-	}
-
-	function field_type($field_offset = 1, $rs = "") {
-		$rs = $rs ? $rs : $this->db_rs;
-		return mysql_field_type($rs, $field_offset);
-	}
-
-	function get_client_info() {
-		return mysql_get_client_info();
-	}
-
-	function get_host_info() {
-		return mysql_get_host_info();
-	}
-
-	function get_proto_info() {
-		return mysql_get_proto_info();
-	}
-
-	function get_server_info() {
-		return mysql_get_server_info();
-	}
-
-	function info() {
-		return mysql_info();
-	}
-
-	function back_structure($table) {
-		$this->rs         = $this->query("SHOW CREATE TABLE " . $table);
-		$array_structute  = $this->fetch_row($this->rs);
-		return $array_structute[1];
-	}
-
-	function create_table($table, $data, $primary, $comment = "", $engine = "MyISAM", $charset = "utf8") {
+	function create_table($table, $data, $primary, $comment = "", $engine = "MyISAM") {
 		$sql      = "CREATE TABLE IF NOT EXISTS `" . $table . "` (";
 		$values   = array();
 		foreach ($data as $key => $value) {
 			$values[] = "`" . $key . "` " . $value;
 		}
 		$sql         .= implode(",", $values);
-		$sql         .= ", PRIMARY KEY (`" . $primary . "`)) ENGINE=" . $engine . "  DEFAULT CHARSET=" . $charset . " COMMENT='" . $comment . "' AUTO_INCREMENT=1";
+		$sql         .= ", PRIMARY KEY (`" . $primary . "`)) ENGINE=" . $engine . "  DEFAULT CHARSET=" . $this->db_charset . " COMMENT='" . $comment . "' AUTO_INCREMENT=1";
 		$this->db_rs  = $this->query($sql);
 		return $this->db_rs;
 	}
@@ -258,8 +149,14 @@ class CLASS_MYSQL {
 	function create_view($view, $data, $table, $join) {
 		$sql      = "CREATE OR REPLACE VIEW `" . $view . "` AS SELECT ";
 		$values   = array();
-		foreach ($data as $key => $value) {
-			$values[] = "`" . $value . "`.`" . $key . "` AS `" . $key . "`";
+		foreach ($data as $value) {
+			$_str_view = "`" . $value[1] . "`.`" . $value[0] . "`";
+			if (isset($value[2])) {
+				$_str_view .= " AS `" . $value[2] . "`";
+			} else {
+				$_str_view .= " AS `" . $value[0] . "`";
+			}
+			$values[] = $_str_view;
 		}
 		$sql         .= implode(",", $values);
 		$sql         .= " FROM `" . $table . "` " . $join;
@@ -268,7 +165,7 @@ class CLASS_MYSQL {
 		return $this->db_rs;
 	}
 
-	function copy_table($table, $table_src, $data, $primary, $comment = "", $engine = "MyISAM", $charset = "utf8") {
+	function copy_table($table, $table_src, $data, $primary, $comment = "", $engine = "MyISAM") {
 		$sql  = "CREATE TABLE IF NOT EXISTS `" . $table . "` (";
 
 		$values   = array();
@@ -277,7 +174,7 @@ class CLASS_MYSQL {
 		}
 		$sql     .= implode(",", $values);
 
-		$sql     .= ", PRIMARY KEY (`" . $primary . "`)) ENGINE=" . $engine . " DEFAULT CHARSET=" . $charset . " COMMENT='" . $comment . "' ";
+		$sql     .= ", PRIMARY KEY (`" . $primary . "`)) ENGINE=" . $engine . " DEFAULT CHARSET=" . $this->db_charset . " COMMENT='" . $comment . "' ";
 		$sql     .= " SELECT ";
 
 		$values   = array();
@@ -332,10 +229,13 @@ class CLASS_MYSQL {
 		}
 		$sql         .= implode(",", $values);
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		return $this->insert_id();
 	}
 
-	function update($table, $data, $condition = "", $field = false) {
+	function update($table, $data, $where = "", $field = false) {
 		$sql      = "UPDATE `" . $table . "` SET ";
 		$values   = array();
 		foreach ($data as $key => $value) {
@@ -346,34 +246,43 @@ class CLASS_MYSQL {
 			}
 		}
 		$sql         .= implode(",", $values);
-		$sql          = ($condition == "") ? $sql : $sql . " WHERE " . $condition;
+		$sql          = ($where == "") ? $sql : $sql . " WHERE " . $where;
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		return $this->affected_rows();
 	}
 
-	function delete($table, $condition) {
-		$sql          = "DELETE FROM `" . $table . "` WHERE " . $condition;
+	function delete($table, $where) {
+		$sql          = "DELETE FROM `" . $table . "` WHERE " . $where;
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		return $this->affected_rows();
 	}
 
-	function count($table, $condition = "", $distinct = "") {
+	function count($table, $where = "", $distinct = "") {
 		$sql = "SELECT";
 		if ($distinct) {
 			$sql .= " COUNT(DISTINCT `" . implode("`,`", $distinct) . "`) FROM `" . $table . "`";
 		} else {
 			$sql .= " COUNT(*) FROM `" . $table . "`";
 		}
-		if ($condition) {
-			$sql .= " WHERE " . $condition;
+		if ($where) {
+			$sql .= " WHERE " . $where;
 		}
 		//print_r($sql);
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		$obj_temp     = $this->fetch_row($this->db_rs);
 		return $obj_temp[0];
 	}
 
-	function select_obj($table, $data = "", $condition = "", $length = 0, $start = 0, $distinct = "", $field = false) {
+	function select($table, $data = "", $where = "", $group = "", $order = "", $length = 0, $start = 0, $distinct = "", $field = false) {
 		$sql = "SELECT";
 		if ($data) {
 			if ($field) {
@@ -388,39 +297,14 @@ class CLASS_MYSQL {
 			$sql .= ", COUNT(DISTINCT `" . implode(",", $distinct) . "`)";
 		}
 		$sql .= " FROM `" . $table . "`";
-		if ($condition) {
-			$sql .= " WHERE " . $condition;
+		if ($where) {
+			$sql .= " WHERE " . $where;
 		}
-		if ($length > 0) {
-			$sql .= " LIMIT " . $start . ", " . $length;
+		if ($group) {
+			$sql .= " GROUP BY " . $group;
 		}
-		$this->db_rs  = $this->query($sql);
-		$obj          = array();
-
-		while ($obj_temp = $this->fetch_object($this->db_rs)) {
-			$obj[] = $obj_temp;
-			unset($obj_temp);
-		}
-		return $obj;
-	}
-
-	function select_array($table, $data = "", $condition = "", $length = 0, $start = 0, $distinct = "", $field = false) {
-		$sql = "SELECT";
-		if ($data) {
-			if ($field) {
-				$sql .= " " . implode(",", $data);
-			} else {
-				$sql .= " `" . implode("`,`", $data) . "`";
-			}
-		} else {
-			$sql .= " *";
-		}
-		if ($distinct) {
-			$sql .= ", COUNT(DISTINCT `" . implode(",", $distinct) . "`)";
-		}
-		$sql .= " FROM `" . $table . "`";
-		if ($condition) {
-			$sql .= " WHERE " . $condition;
+		if ($order) {
+			$sql .= " ORDER BY " . $order;
 		}
 		if ($length > 0) {
 			$sql .= " LIMIT " . $start . ", " . $length;
@@ -432,6 +316,9 @@ class CLASS_MYSQL {
 		}*/
 
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		$obj          = array();
 
 		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
@@ -444,6 +331,9 @@ class CLASS_MYSQL {
 	function show_columns($table) {
 		$sql = "SHOW COLUMNS FROM `" . $table . "`";
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		$obj          = array();
 
 		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
@@ -457,6 +347,9 @@ class CLASS_MYSQL {
 	function show_index($table) {
 		$sql = "SHOW INDEX FROM `" . $table . "`";
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		$obj          = array();
 
 		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
@@ -470,6 +363,9 @@ class CLASS_MYSQL {
 	function show_tables() {
 		$sql = "SHOW TABLES FROM `" . $this->db_name . "`";
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		$obj          = array();
 
 		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
@@ -483,6 +379,9 @@ class CLASS_MYSQL {
 	function show_databases() {
 		$sql = "SHOW DATABASES";
 		$this->db_rs  = $this->query($sql);
+		if (!$this->db_rs) {
+			return false;
+		}
 		$obj          = array();
 
 		while ($obj_temp = $this->fetch_assoc($this->db_rs)) {
@@ -494,9 +393,9 @@ class CLASS_MYSQL {
 
 
 	function __destruct() {
-		if ($this->db_link) {
+		if ($this->obj_mysqli) {
 			//$this->close();
-			//unset($this->db_link);
+			//unset($this->obj_mysqli);
 		}
 	}
 }

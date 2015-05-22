@@ -16,7 +16,9 @@ class CONTROL_ALERT {
 	private $obj_tpl;
 
 	function __construct() { //构造函数
-		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL);
+		$this->obj_base       = $GLOBALS["obj_base"];
+		$this->config         = $this->obj_base->config;
+		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL . $this->config["ui"]);
 	}
 
 	/**

@@ -9,13 +9,6 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-if (isset($_GET["ssid"])) {
-	session_id($_GET["ssid"]); //将当前的 SessionId 设置成客户端传递回来的 SessionId
-}
-
-session_start(); //开启session
-$GLOBALS["ssid"] = session_id();
-
 if (defined("BG_SYS_DEBUG") && BG_SYS_DEBUG == true) {
 	error_reporting(E_ALL);
 } else {

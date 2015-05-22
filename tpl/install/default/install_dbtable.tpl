@@ -1,6 +1,6 @@
 {* install_1.tpl 登录界面 *}
 {$cfg = [
-	sub_title => $lang.page.installTable,
+	sub_title => $lang.page.installDbtable,
 	mod_help   => "install",
 	act_help   => "dbtable"
 ]}
@@ -13,7 +13,7 @@
 		<div class="alert alert-warning">
 			<h4>
 				<span class="glyphicon glyphicon-warning-sign"></span>
-				{$lang.label.installTable}
+				{$lang.label.installDbtable}
 			</h4>
 		</div>
 

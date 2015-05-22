@@ -47,6 +47,125 @@ class API_CODE {
 
 
 	/**
+	 * api_signature function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function api_signature() {
+		$this->app_check("get");
+
+		if (!isset($this->appAllow["code"]["signature"])) {
+			$_arr_return = array(
+				"str_alert" => "x050312",
+			);
+
+			$this->log_do($_arr_return, "signature");
+			$this->obj_api->halt_re($_arr_return);
+		}
+
+		$_tm_time     = fn_get("timestamp");
+		$_str_rand    = fn_get("random");
+		$_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand);
+
+		$_arr_return = array(
+			"signature"  => $_str_sign,
+			"str_alert"  => "y050404",
+		);
+
+		$this->obj_api->halt_re($_arr_return);
+	}
+
+
+	/**
+	 * api_verify function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function api_verify() {
+		$this->app_check("get");
+
+		if (!isset($this->appAllow["code"]["verify"])) {
+			$_arr_return = array(
+				"str_alert" => "x050313",
+			);
+			$this->log_do($_arr_return, "verify");
+			$this->obj_api->halt_re($_arr_return);
+		}
+
+		$_tm_time     = fn_get("timestamp");
+		$_str_rand    = fn_get("random");
+		$_str_sign    = fn_get("signature");
+
+		if (fn_baigoSignChk($_tm_time, $_str_rand, $_str_sign)) {
+			$_str_alert = "y050403";
+		} else {
+			$_str_alert = "x050403";
+		}
+
+		$_arr_return = array(
+			"str_alert" => $_str_alert,
+		);
+
+		$this->obj_api->halt_re($_arr_return);
+	}
+
+
+	/**
+	 * api_encode function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function api_encode() {
+		$this->app_check("get");
+		if (!isset($this->appAllow["code"]["encode"])) {
+			$_arr_return = array(
+				"str_alert" => "x050314",
+			);
+			$this->log_do($_arr_return, "encode");
+			$this->obj_api->halt_re($_arr_return);
+		}
+
+		$_str_userRand    = fn_rand(6);
+		$_str_code        = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
+
+		$_arr_return = array(
+			"code"       => $_str_code,
+			"key"        => $_str_userRand,
+			"str_alert"  => "y050405",
+		);
+
+		$this->obj_api->halt_re($_arr_return);
+	}
+
+
+	/**
+	 * api_decode function.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	function api_decode() {
+		$this->app_check("get");
+		if (!isset($this->appAllow["code"]["decode"])) {
+			$_arr_return = array(
+				"str_alert" => "x050315",
+			);
+			$this->log_do($_arr_return, "decode");
+			$this->obj_api->halt_re($_arr_return);
+		}
+
+		$_str_code    = fn_get("code");
+		$_str_key     = fn_get("key");
+		$_str_result  = fn_baigoDecode($_str_code, $_str_key);
+
+		exit($_str_result);
+	}
+
+
+	/**
 	 * app_check function.
 	 *
 	 * @access private
@@ -89,124 +208,4 @@ class API_CODE {
 		$_str_targets     = json_encode($_arr_targets);
 		$_str_logResult   = json_encode($arr_logResult);
 		$this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"][$str_logType], $_str_logResult, "app", $this->appGet["app_id"]);
-	}
-
-
-	/**
-	 * api_signature function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function api_signature() {
-		$this->app_check("get");
-
-		if ($this->appAllow["code"]["signature"] != 1) {
-			$_arr_return = array(
-				"str_alert" => "x050312",
-			);
-
-			$this->log_do($_arr_return, "signature");
-			$this->obj_api->halt_re($_arr_return);
-		}
-
-		$_tm_time     = fn_get("timestamp");
-		$_str_rand    = fn_get("random");
-		$_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand);
-
-		$_arr_return = array(
-			"signature"  => $_str_sign,
-			"str_alert"  => "y050404",
-		);
-
-		$this->obj_api->halt_re($_arr_return);
-	}
-
-
-	/**
-	 * api_verify function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function api_verify() {
-		$this->app_check("get");
-
-		if ($this->appAllow["code"]["verify"] != 1) {
-			$_arr_return = array(
-				"str_alert" => "x050313",
-			);
-			$this->log_do($_arr_return, "verify");
-			$this->obj_api->halt_re($_arr_return);
-		}
-
-		$_tm_time     = fn_get("timestamp");
-		$_str_rand    = fn_get("random");
-		$_str_sign    = fn_get("signature");
-
-		if (fn_baigoSignChk($_tm_time, $_str_rand, $_str_sign)) {
-			$_str_alert = "y050403";
-		} else {
-			$_str_alert = "x050403";
-		}
-
-		$_arr_return = array(
-			"str_alert" => $_str_alert,
-		);
-
-		$this->obj_api->halt_re($_arr_return);
-	}
-
-
-	/**
-	 * api_encode function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function api_encode() {
-		$this->app_check("get");
-		if ($this->appAllow["code"]["encode"] != 1) {
-			$_arr_return = array(
-				"str_alert" => "x050314",
-			);
-			$this->log_do($_arr_return, "encode");
-			$this->obj_api->halt_re($_arr_return);
-		}
-
-		$_str_userRand    = fn_rand(6);
-		$_str_code        = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
-
-		$_arr_return = array(
-			"code"       => $_str_code,
-			"key"        => $_str_userRand,
-			"str_alert"  => "y050405",
-		);
-
-		$this->obj_api->halt_re($_arr_return);
-	}
-
-
-	/**
-	 * api_decode function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function api_decode() {
-		$this->app_check("get");
-		if ($this->appAllow["code"]["decode"] != 1) {
-			$_arr_return = array(
-				"str_alert" => "x050315",
-			);
-			$this->log_do($_arr_return, "decode");
-			$this->obj_api->halt_re($_arr_return);
-		}
-
-		$_str_code    = fn_get("code");
-		$_str_key     = fn_get("key");
-		$_str_result  = fn_baigoDecode($_str_code, $_str_key);
-
-		exit($_str_result);
-	}
-}
+	}}

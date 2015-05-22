@@ -1,7 +1,7 @@
 	{foreach $opt[$cfg.sub_active] as $key=>$value}
 		{if $smarty.const[$key]}
 			{$_this_value = $smarty.const[$key]}
-		{else if $tplData.optRows[$key].opt_value}
+		{else if isset($tplData.optRows[$key].opt_value) && $tplData.optRows[$key].opt_value}
 			{$_this_value = $tplData.optRows[$key].opt_value}
 		{else}
 			{$_this_value = $value.default}

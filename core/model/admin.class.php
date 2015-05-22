@@ -296,7 +296,7 @@ class MODEL_ADMIN {
 			$_str_sqlWhere .= " AND admin_id<>" . $num_notId;
 		}
 
-		$_arr_adminRows = $this->obj_db->select_array(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
+		$_arr_adminRows = $this->obj_db->select(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
 
 		if (isset($_arr_adminRows[0])) { //用户名不存在则返回错误
 			$_arr_adminRow = $_arr_adminRows[0];
@@ -308,7 +308,7 @@ class MODEL_ADMIN {
 		}
 
 		if (isset($_arr_adminRow["admin_allow"])) {
-			$_arr_adminRow["admin_allow"] = json_decode($_arr_adminRow["admin_allow"], true); //json解码
+			$_arr_adminRow["admin_allow"] = fn_jsonDecode($_arr_adminRow["admin_allow"], "no"); //json解码
 		} else {
 			$_arr_adminRow["admin_allow"] = array();
 		}
@@ -360,7 +360,7 @@ class MODEL_ADMIN {
 			$_str_sqlWhere .= " AND admin_status='" . $str_status . "'";
 		}
 
-		$_arr_adminRows = $this->obj_db->select_array(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere . " ORDER BY admin_id DESC", $num_adminNo, $num_adminExcept); //查询数据
+		$_arr_adminRows = $this->obj_db->select(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere, "", "admin_id DESC", $num_adminNo, $num_adminExcept); //查询数据
 
 		return $_arr_adminRows;
 	}
@@ -702,7 +702,7 @@ class MODEL_ADMIN {
 			break;
 		}
 
-		$this->adminSubmit["admin_allow"] = json_encode(fn_post("admin_allow"));
+		$this->adminSubmit["admin_allow"] = fn_jsonEncode(fn_post("admin_allow"), "no");
 		$this->adminSubmit["str_alert"]   = "ok";
 
 		return $this->adminSubmit;
@@ -785,7 +785,7 @@ class MODEL_ADMIN {
 			),
 		);
 
-		$this->adminSubmit["admin_allow"] = json_encode($_arr_adminAllow);
+		$this->adminSubmit["admin_allow"] = fn_jsonEncode($_arr_adminAllow, "no");
 		$this->adminSubmit["str_alert"]   = "ok";
 
 		return $this->adminSubmit;

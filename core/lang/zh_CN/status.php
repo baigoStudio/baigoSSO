@@ -36,4 +36,9 @@ return array(
 		"enable"  => "启用", //生效
 		"disable" => "禁用", //禁用
 	),
+
+	"ext" => array(
+		"installed"   => "已安装", //栏目类型
+		"uninstall"   => "未安装", //栏目类型
+	),
 );

@@ -3,6 +3,7 @@ return array(
 	"title" => "管理后台",
 	"menu" => array(
 		"outline" => "后台概述",
+		"faq"     => "常见问题",
 		"user"    => "用户管理",
 		"app"     => "应用管理",
 		"log"     => "日志管理",

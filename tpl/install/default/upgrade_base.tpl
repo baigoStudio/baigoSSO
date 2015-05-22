@@ -1,4 +1,4 @@
-{* install_1.tpl 登录界面 *}
+{* upgrade_base.tpl 登录界面 *}
 {$cfg = [
 	sub_title  => $lang.page.installBase,
 	sub_active => "base",
@@ -7,7 +7,7 @@
 ]}
 {include "include/upgrade_head.tpl" cfg=$cfg}
 
-	<form name="install_form_base" id="install_form_base">
+	<form name="upgrade_form_base" id="upgrade_form_base">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="base">
 
@@ -32,8 +32,8 @@
 	};
 
 	$(document).ready(function(){
-		var obj_validator_form = $("#install_form_base").baigoValidator(opts_validator_form);
-		var obj_submit_form = $("#install_form_base").baigoSubmit(opts_submit_form);
+		var obj_validator_form    = $("#upgrade_form_base").baigoValidator(opts_validator_form);
+		var obj_submit_form       = $("#upgrade_form_base").baigoSubmit(opts_submit_form);
 		$("#go_next").click(function(){
 			if (obj_validator_form.validateSubmit()) {
 				obj_submit_form.formSubmit();

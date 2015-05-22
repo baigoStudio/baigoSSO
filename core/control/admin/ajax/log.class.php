@@ -46,7 +46,7 @@ class AJAX_LOG {
 	返回提示信息
 	*/
 	function ajax_status() {
-		if ($this->adminLogged["admin_allow"]["log"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["log"]["edit"])) {
 			$this->obj_ajax->halt_alert("x060303");
 		}
 
@@ -68,7 +68,7 @@ class AJAX_LOG {
 	返回提示信息
 	*/
 	function ajax_del() {
-		if ($this->adminLogged["admin_allow"]["log"]["del"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["log"]["del"])) {
 			$this->obj_ajax->halt_alert("x060304");
 		}
 

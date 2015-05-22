@@ -1,19 +1,19 @@
-{* install_1.tpl 登录界面 *}
+{* upgrade_dbtable.tpl 登录界面 *}
 {$cfg = [
-	sub_title => $lang.page.upgradeTable,
+	sub_title => $lang.page.upgradeDbtable,
 	mod_help   => "upgrade",
 	act_help   => "dbtable"
 ]}
 {include "include/upgrade_head.tpl" cfg=$cfg}
 
-	<form name="install_form_dbtable" id="install_form_dbtable">
+	<form name="upgrade_form_dbtable" id="upgrade_form_dbtable">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="dbtable">
 
 		<div class="alert alert-warning">
 			<h4>
 				<span class="glyphicon glyphicon-warning-sign"></span>
-				{$lang.label.upgradeTable}
+				{$lang.label.upgradeDbtable}
 			</h4>
 		</div>
 
@@ -36,7 +36,7 @@
 	};
 
 	$(document).ready(function(){
-		var obj_submit_form = $("#install_form_dbtable").baigoSubmit(opts_submit_form);
+		var obj_submit_form = $("#upgrade_form_dbtable").baigoSubmit(opts_submit_form);
 		$("#go_next").click(function(){
 			obj_submit_form.formSubmit();
 		});

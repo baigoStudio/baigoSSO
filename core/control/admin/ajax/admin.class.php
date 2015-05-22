@@ -60,7 +60,7 @@ class AJAX_ADMIN {
 		$_str_adminRand   = "";
 
 		if ($_arr_adminSubmit["admin_id"] > 0) {
-			if ($this->adminLogged["admin_allow"]["admin"]["edit"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
 				$this->obj_ajax->halt_alert("x020303");
 			}
 			$_str_adminPass = fn_post("admin_pass");
@@ -69,7 +69,7 @@ class AJAX_ADMIN {
 				$_str_adminPassDo   = fn_baigoEncrypt($_str_adminPass, $_str_adminRand);
 			}
 		} else {
-			if ($this->adminLogged["admin_allow"]["admin"]["add"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) {
 				$this->obj_ajax->halt_alert("x020302");
 			}
 			$_arr_adminPass = validateStr(fn_post("admin_pass"), 1, 0);
@@ -113,7 +113,7 @@ class AJAX_ADMIN {
 	 * @return void
 	 */
 	function ajax_status() {
-		if ($this->adminLogged["admin_allow"]["admin"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
 			$this->obj_ajax->halt_alert("x020303");
 		}
 
@@ -148,7 +148,7 @@ class AJAX_ADMIN {
 	 * @return void
 	 */
 	function ajax_del() {
-		if ($this->adminLogged["admin_allow"]["admin"]["del"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["admin"]["del"])) {
 			$this->obj_ajax->halt_alert("x020304");
 		}
 

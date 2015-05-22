@@ -53,14 +53,14 @@
 					<div class="panel-body">
 						<div class="form-group">
 							<div id="group_app_name">
-								<label for="" class="control-label">{$lang.label.appName}<span id="msg_app_name">*</span></label>
+								<label class="control-label">{$lang.label.appName}<span id="msg_app_name">*</span></label>
 								<input type="text" name="app_name" id="app_name" value="{$tplData.appRow.app_name}" class="validate form-control">
 							</div>
 						</div>
 
 						<div class="form-group">
 							<div id="group_app_notice">
-								<label for="" class="control-label">{$lang.label.appNotice}<span id="msg_app_notice">*</span></label>
+								<label class="control-label">{$lang.label.appNotice}<span id="msg_app_notice">*</span></label>
 								<input type="text" name="app_notice" id="app_notice" value="{$tplData.appRow.app_notice}" class="validate form-control">
 							</div>
 						</div>
@@ -85,7 +85,7 @@
 										</label>
 										{foreach $value_m.allow as $key_s=>$value_s}
 											<label for="allow_{$key_m}_{$key_s}" class="checkbox-inline">
-												<input type="checkbox" name="app_allow[{$key_m}][{$key_s}]" value="1" id="allow_{$key_m}_{$key_s}" class="allow_{$key_m}" {if $tplData.appRow.app_allow[$key_m][$key_s] == 1}checked{/if}>
+												<input type="checkbox" name="app_allow[{$key_m}][{$key_s}]" value="1" id="allow_{$key_m}_{$key_s}" class="allow_{$key_m}" {if isset($tplData.appRow.app_allow[$key_m][$key_s])}checked{/if}>
 												{$value_s}
 											</label>
 										{/foreach}

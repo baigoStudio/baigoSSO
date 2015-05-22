@@ -41,7 +41,7 @@ class CONTROL_OPT {
 	 * @return void
 	 */
 	function ctl_reg() {
-		if ($this->adminLogged["admin_allow"]["opt"]["reg"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["reg"])) {
 			return array(
 				"str_alert" => "x040302",
 			);
@@ -68,7 +68,7 @@ class CONTROL_OPT {
 	 * @return void
 	 */
 	function ctl_mail() {
-		if ($this->adminLogged["admin_allow"]["opt"]["mail"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["mail"])) {
 			return array(
 				"str_alert" => "x040303",
 			);
@@ -95,7 +95,7 @@ class CONTROL_OPT {
 	 * @return void
 	 */
 	function ctl_base() {
-		if ($this->adminLogged["admin_allow"]["opt"]["base"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["base"])) {
 			return array(
 				"str_alert" => "x040301",
 			);
@@ -123,7 +123,7 @@ class CONTROL_OPT {
 	 * @return void
 	 */
 	function ctl_db() {
-		if ($this->adminLogged["admin_allow"]["opt"]["db"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["db"])) {
 			return array(
 				"str_alert" => "x040304",
 			);

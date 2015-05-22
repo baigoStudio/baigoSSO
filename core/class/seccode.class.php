@@ -95,6 +95,6 @@ class CLASS_SECCODE {
 		$this->createLine();
 		$this->createFont();
 		$this->secOutput();
-		$_SESSION["seccode_" . BG_SITE_SSIN] = strtolower($this->code);
+		fn_session("seccode", "mk", strtolower($this->code));
 	}
 }

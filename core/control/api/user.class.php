@@ -60,7 +60,7 @@ class API_USER {
 	function api_reg() {
 		$this->app_check("post");
 
-		if ($this->appAllow["user"]["reg"] != 1) {
+		if (!isset($this->appAllow["user"]["reg"])) {
 			$_arr_return = array(
 				"str_alert" => "x050305",
 			);
@@ -109,7 +109,7 @@ class API_USER {
 	function api_login() {
 		$this->app_check("post");
 
-		if ($this->appAllow["user"]["login"] != 1) {
+		if (!isset($this->appAllow["user"]["login"])) {
 			$_arr_return = array(
 				"str_alert" => "x050306",
 			);
@@ -173,7 +173,7 @@ class API_USER {
 	function api_get() {
 		$this->app_check("get");
 
-		if ($this->appAllow["user"]["get"] != 1) {
+		if (!isset($this->appAllow["user"]["get"])) {
 			$_arr_return = array(
 				"str_alert" => "x050307",
 			);
@@ -220,7 +220,7 @@ class API_USER {
 	function api_edit() {
 		$this->app_check("post");
 
-		if ($this->appAllow["user"]["edit"] != 1) {
+		if (!isset($this->appAllow["user"]["edit"])) {
 			$_arr_return = array(
 				"str_alert" => "x050308",
 			);
@@ -243,7 +243,7 @@ class API_USER {
 			$this->obj_api->halt_re($_arr_userRow);
 		}
 
-		if ($this->appAllow["user"]["global"] != 1) {
+		if (!isset($this->appAllow["user"]["global"])) {
 			$_arr_appBelongRow = $this->mdl_appBelong->mdl_read($_arr_userRow["user_id"], $this->appGet["app_id"]);
 			if ($_arr_appBelongRow["str_alert"] != "y070102") {
 				$_arr_return = array(
@@ -310,7 +310,7 @@ class API_USER {
 	function api_del() {
 		$this->app_check("post");
 
-		if ($this->appAllow["user"]["del"] != 1) {
+		if (!isset($this->appAllow["user"]["del"])) {
 			$_arr_return = array(
 				"str_alert" => "x050309",
 			);
@@ -330,7 +330,7 @@ class API_USER {
 			}
 		}
 
-		if ($this->appAllow["user"]["global"] != 1) {
+		if (!isset($this->appAllow["user"]["global"])) {
 			$_arr_users = $this->mdl_appBelong->mdl_list(1000, 0, 0, $this->appGet["app_id"], $_arr_userIds);
 		} else {
 			$_arr_users = $_arr_userIds;
@@ -366,7 +366,7 @@ class API_USER {
 	function api_chkname() {
 		$this->app_check("get");
 
-		if ($this->appAllow["user"]["chkname"] != 1) {
+		if (!isset($this->appAllow["user"]["chkname"])) {
 			$_arr_return = array(
 				"str_alert" => "x050310",
 			);
@@ -401,7 +401,7 @@ class API_USER {
 		if (BG_REG_ONEMAIL == "false" && BG_REG_NEEDMAIL == "on") {
 			$this->app_check("get");
 
-			if ($this->appAllow["user"]["chkmail"] != 1) {
+			if (!isset($this->appAllow["user"]["chkmail"])) {
 				$_arr_return = array(
 					"str_alert" => "x050311",
 				);

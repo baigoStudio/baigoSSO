@@ -166,7 +166,7 @@ class MODEL_LOG {
 
 		$_str_sqlWhere = "log_id=" . $num_logId;
 
-		$_arr_logRows = $this->obj_db->select_array(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
+		$_arr_logRows = $this->obj_db->select(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
 
 		if (isset($_arr_logRows[0])) { //用户名不存在则返回错误
 			$_arr_logRow = $_arr_logRows[0];
@@ -182,7 +182,7 @@ class MODEL_LOG {
 		}*/
 
 		if (isset($_arr_logRow["log_targets"])) {
-			$_arr_logRow["log_targets"]   = json_decode($_arr_logRow["log_targets"], true);
+			$_arr_logRow["log_targets"]   = fn_jsonDecode($_arr_logRow["log_targets"], "no");
 		} else {
 			$_arr_logRow["log_targets"]   = array();
 		}
@@ -240,7 +240,7 @@ class MODEL_LOG {
 			$_str_sqlWhere .= " AND log_operator_id=" . $num_operatorId;
 		}
 
-		$_arr_logRows = $this->obj_db->select_array(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere . " ORDER BY log_id DESC", $num_no, $num_except); //查询数据
+		$_arr_logRows = $this->obj_db->select(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere, "", "log_id DESC", $num_no, $num_except); //查询数据
 
 		return $_arr_logRows;
 	}

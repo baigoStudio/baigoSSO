@@ -127,7 +127,7 @@ class MODEL_APP_BELONG {
 			$_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
 		}
 
-		$_arr_belongRows  = $this->obj_db->select_array(BG_DB_TABLE . "app_belong",  $_arr_belongSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
+		$_arr_belongRows  = $this->obj_db->select(BG_DB_TABLE . "app_belong",  $_arr_belongSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
 
 		if (isset($_arr_belongRows[0])) {
 			$_arr_belongRow   = $_arr_belongRows[0];
@@ -176,7 +176,7 @@ class MODEL_APP_BELONG {
 			$_str_sqlWhere  .= " AND belong_user_id IN (" . $_str_userIds . ")";
 		}
 
-		$_arr_belongRows = $this->obj_db->select_array(BG_DB_TABLE . "app_belong", $_arr_belongSelect, $_str_sqlWhere . " ORDER BY belong_id DESC", $num_belongNo, $num_belongExcept);
+		$_arr_belongRows = $this->obj_db->select(BG_DB_TABLE . "app_belong", $_arr_belongSelect, $_str_sqlWhere, "", "belong_id DESC", $num_belongNo, $num_belongExcept);
 
 		return $_arr_belongRows;
 	}

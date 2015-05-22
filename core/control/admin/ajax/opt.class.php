@@ -50,7 +50,7 @@ class AJAX_OPT {
 	 * @return void
 	 */
 	function ajax_reg() {
-		if ($this->adminLogged["admin_allow"]["opt"]["reg"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["reg"])) {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
@@ -67,7 +67,7 @@ class AJAX_OPT {
 	 * @return void
 	 */
 	function ajax_mail() {
-		if ($this->adminLogged["admin_allow"]["opt"]["mail"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["mail"])) {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
@@ -90,7 +90,7 @@ class AJAX_OPT {
 	 * @return void
 	 */
 	function ajax_base() {
-		if ($this->adminLogged["admin_allow"]["opt"]["base"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["base"])) {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
@@ -107,13 +107,13 @@ class AJAX_OPT {
 	 * @return void
 	 */
 	function ajax_db() {
-		if ($this->adminLogged["admin_allow"]["opt"]["db"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["db"])) {
 			$this->obj_ajax->halt_alert("x040304");
 		}
 
 		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
-		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "sso");
-		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "sso");
+		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
+		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
 		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
 		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
 		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");

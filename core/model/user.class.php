@@ -61,16 +61,16 @@ class MODEL_USER {
 	 */
 	function mdl_create_view() {
 		$_arr_userCreat = array(
-			"user_id"            => BG_DB_TABLE . "user",
-			"user_name"          => BG_DB_TABLE . "user",
-			"user_mail"          => BG_DB_TABLE . "user",
-			"user_nick"          => BG_DB_TABLE . "user",
-			"user_note"          => BG_DB_TABLE . "user",
-			"user_status"        => BG_DB_TABLE . "user",
-			"user_time"          => BG_DB_TABLE . "user",
-			"user_time_login"    => BG_DB_TABLE . "user",
-			"user_ip"            => BG_DB_TABLE . "user",
-			"belong_app_id"      => BG_DB_TABLE . "app_belong",
+			array("user_id",            BG_DB_TABLE . "user"),
+			array("user_name",          BG_DB_TABLE . "user"),
+			array("user_mail",          BG_DB_TABLE . "user"),
+			array("user_nick",          BG_DB_TABLE . "user"),
+			array("user_note",          BG_DB_TABLE . "user"),
+			array("user_status",        BG_DB_TABLE . "user"),
+			array("user_time",          BG_DB_TABLE . "user"),
+			array("user_time_login",    BG_DB_TABLE . "user"),
+			array("user_ip",            BG_DB_TABLE . "user"),
+			array("belong_app_id",      BG_DB_TABLE . "app_belong"),
 		);
 
 		$_str_sqlJoin = "LEFT JOIN `" . BG_DB_TABLE . "app_belong` ON (`" . BG_DB_TABLE . "user`.`user_id`=`" . BG_DB_TABLE . "app_belong`.`belong_user_id`)";
@@ -321,7 +321,7 @@ class MODEL_USER {
 			$_str_sqlWhere .= " AND user_id<>" . $num_notId;
 		}
 
-		$_arr_userRows    = $this->obj_db->select_array(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, 1, 0); //检查本地表是否存在记录
+		$_arr_userRows    = $this->obj_db->select(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
 
 		if (isset($_arr_userRows[0])) { //用户名不存在则返回错误
 			$_arr_userRow = $_arr_userRows[0];
@@ -370,7 +370,7 @@ class MODEL_USER {
 			$_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
 		}
 
-		$_arr_userRows = $this->obj_db->select_array(BG_DB_TABLE . "user_view", $_arr_userSelect, $_str_sqlWhere . " ORDER BY user_id DESC"); //查询数据
+		$_arr_userRows = $this->obj_db->select(BG_DB_TABLE . "user_view", $_arr_userSelect, $_str_sqlWhere, "", "user_id DESC"); //查询数据
 
 		return $_arr_userRows;
 	}
@@ -415,7 +415,7 @@ class MODEL_USER {
 			$_str_sqlWhere .= " AND user_id NOT IN (" . $_str_notIn . ")";
 		}
 
-		$_arr_userRows = $this->obj_db->select_array(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere . " ORDER BY user_id DESC", $num_userNo, $num_userExcept); //查询数据
+		$_arr_userRows = $this->obj_db->select(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, "", "user_id DESC", $num_userNo, $num_userExcept); //查询数据
 
 		return $_arr_userRows;
 	}

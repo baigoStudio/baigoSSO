@@ -51,7 +51,7 @@ class AJAX_APP {
 
 
 	function ajax_reset() {
-		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 			$this->obj_ajax->halt_alert("x050303");
 		}
 
@@ -76,7 +76,7 @@ class AJAX_APP {
 
 
 	function ajax_deauth() {
-		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 			$this->obj_ajax->halt_alert("x050303");
 		}
 
@@ -103,7 +103,7 @@ class AJAX_APP {
 
 
 	function ajax_auth() {
-		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 			$this->obj_ajax->halt_alert("x050303");
 		}
 
@@ -144,7 +144,7 @@ class AJAX_APP {
 			$this->obj_ajax->halt_alert("x050203");
 		}
 
-		if ($this->adminLogged["admin_allow"]["app"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["browse"])) {
 			$this->obj_ajax->halt_alert("x050301");
 		}
 
@@ -204,11 +204,11 @@ class AJAX_APP {
 		}
 
 		if ($_arr_appSubmit["app_id"] > 0) {
-			if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 				$this->obj_ajax->halt_alert("x050303");
 			}
 		} else {
-			if ($this->adminLogged["admin_allow"]["app"]["add"] != 1) {
+			if (!isset($this->adminLogged["admin_allow"]["app"]["add"])) {
 				$this->obj_ajax->halt_alert("x050302");
 			}
 		}
@@ -240,7 +240,7 @@ class AJAX_APP {
 	 * @return void
 	 */
 	function ajax_status() {
-		if ($this->adminLogged["admin_allow"]["app"]["edit"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
 			$this->obj_ajax->halt_alert("x050303");
 		}
 
@@ -275,7 +275,7 @@ class AJAX_APP {
 	 * @return void
 	 */
 	function ajax_del() {
-		if ($this->adminLogged["admin_allow"]["app"]["del"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["app"]["del"])) {
 			$this->obj_ajax->halt_alert("x050304");
 		}
 

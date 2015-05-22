@@ -50,7 +50,7 @@ class CONTROL_LOG {
 			);
 		}
 
-		if ($this->adminLogged["admin_allow"]["log"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["log"]["browse"])) {
 			return array(
 				"str_alert" => "x060301",
 			);
@@ -139,7 +139,7 @@ class CONTROL_LOG {
 	 * @return void
 	 */
 	function ctl_list() {
-		if ($this->adminLogged["admin_allow"]["log"]["browse"] != 1) {
+		if (!isset($this->adminLogged["admin_allow"]["log"]["browse"])) {
 			return array(
 				"str_alert" => "x060301",
 			);

@@ -10,6 +10,7 @@ return array(
 			"sub"    => array(
 				"install"   => "安装",
 				"upgrade"   => "升级",
+				"deploy"    => "高级部署",
 			),
 		),
 		"admin" => array(

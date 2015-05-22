@@ -20,11 +20,26 @@ class CONTROL_INTRO {
 		$this->obj_base       = $GLOBALS["obj_base"];
 		$this->config         = $this->obj_base->config;
 		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL_HELP . $this->config["ui"]); //初始化视图对象
+
+		$this->mod = "intro";
+
+		if (file_exists(BG_PATH_LANG . $this->config["lang"] . "/help/config.php")) {
+			$_arr_helpConfig = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/config.php");
+		} else {
+			$_arr_helpConfig = array();
+		}
+
+		if (file_exists(BG_PATH_LANG . $this->config["lang"] . "/help/" . $this->mod . "/config.php")) {
+			$_arr_config = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/" . $this->mod . "/config.php");
+		} else {
+			$_arr_config = array();
+		}
+
 		$this->tplData = array(
-			"helpConfig" => include_once(BG_PATH_LANG . $this->config["lang"] . "/help/config.php"),
-			"config"     => include_once(BG_PATH_LANG . $this->config["lang"] . "/help/intro/config.php"),
-			"active"     => "intro",
-			"mod"        => "intro",
+			"helpConfig" => $_arr_helpConfig,
+			"config"     => $_arr_config,
+			"active"     => $this->mod,
+			"mod"        => $this->mod,
 		);
 	}
 
@@ -39,8 +54,13 @@ class CONTROL_INTRO {
 	}
 
 	private function str_process($str_load) {
-		$_str_content = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/intro/" . $str_load . ".php");
-		$_str_content = str_replace("{images}", BG_URL_STATIC_HELP . $this->config["ui"] . "/intro/", $_str_content);
+		if (file_exists(BG_PATH_LANG . $this->config["lang"] . "/help/" . $this->mod . "/" . $str_load . ".php")) {
+			$_str_content = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/" . $this->mod . "/" . $str_load . ".php");
+		} else {
+			$_str_content = "";
+		}
+
+		$_str_content = str_replace("{images}", BG_URL_STATIC_HELP . $this->config["ui"] . "/" . $this->mod . "/", $_str_content);
 		$_str_content = str_replace("{BG_URL_HELP}", BG_URL_HELP, $_str_content);
 		return $_str_content;
 	}

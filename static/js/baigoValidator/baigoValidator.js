@@ -1,5 +1,5 @@
 /*
-v0.1.0 jQuery baigoValidator plugin 表单验证插件
+v1.0 jQuery baigoValidator plugin 表单验证插件
 (c) 2015 baigo studio - http://www.baigo.net/jQueryPlugins/baigoValidator/
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -225,10 +225,13 @@ License: http://www.opensource.org/licenses/mit-license.php
 				if (_ajax.attach) {
 					_ajaxData = _ajaxData + "&" + _ajax.attach;
 				}
-				if (_ajax.attach_id && _ajax.attach_key) {
-					var _str_attach    = $("#" + _ajax.attach_id).val();
-					_ajaxData          = _ajaxData + "&" + _ajax.attach_key + "=" + _str_attach;
+				if (_ajax.attach_selectors && _ajax.attach_keys) {
+					$.each(_ajax.attach_selectors, function(_index, _selector){
+						var _str_attachs    = $(_selector).val();
+						_ajaxData = _ajaxData + "&" + _ajax.attach_keys[_index] + "=" + _str_attachs;
+					});
 				}
+
 				$.ajax({
 					url: _ajax.url, //url
 					//async: false, //设置为同步

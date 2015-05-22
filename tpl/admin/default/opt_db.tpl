@@ -38,16 +38,23 @@
 				</div>
 
 				<div class="form-group">
+					<div id="group_db_port">
+						<label class="control-label">{$lang.label.dbPort}<span id="msg_db_port">*</span></label>
+						<input type="text" name="db_port" id="db_port" class="validate form-control" value="{if $smarty.const.BG_DB_PORT}{$smarty.const.BG_DB_PORT}{else}3306{/if}">
+					</div>
+				</div>
+
+				<div class="form-group">
 					<div id="group_db_name">
 						<label for="db_name" class="control-label">{$lang.label.dbName}<span id="msg_db_name">*</span></label>
-						<input type="text" name="db_name" id="db_name" class="validate form-control" value="{if $smarty.const.BG_DB_NAME}{$smarty.const.BG_DB_NAME}{else}sso{/if}">
+						<input type="text" name="db_name" id="db_name" class="validate form-control" value="{if $smarty.const.BG_DB_NAME}{$smarty.const.BG_DB_NAME}{else}baigo_sso{/if}">
 					</div>
 				</div>
 
 				<div class="form-group">
 					<div id="group_db_user">
 						<label for="db_user" class="control-label">{$lang.label.dbUser}<span id="msg_db_user">*</span></label>
-						<input type="text" name="db_user" id="db_user" class="validate form-control" value="{if $smarty.const.BG_DB_USER}{$smarty.const.BG_DB_USER}{else}sso{/if}">
+						<input type="text" name="db_user" id="db_user" class="validate form-control" value="{if $smarty.const.BG_DB_USER}{$smarty.const.BG_DB_USER}{else}baigo_sso{/if}">
 					</div>
 				</div>
 
@@ -87,6 +94,11 @@
 			length: { min: 1, max: 0 },
 			validate: { type: "str", format: "text", group: "group_db_host" },
 			msg: { id: "msg_db_host", too_short: "{$alert.x030204}" }
+		},
+		db_port: {
+			length: { min: 1, max: 0 },
+			validate: { type: "str", format: "text", group: "group_db_port" },
+			msg: { id: "msg_db_port", too_short: "{$alert.x030211}" }
 		},
 		db_name: {
 			length: { min: 1, max: 0 },

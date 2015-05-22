@@ -69,7 +69,7 @@
 										<ul class="list-inline">
 											{foreach $value_m.allow as $key_s=>$value_s}
 												<li>
-													<span class="glyphicon glyphicon-{if $tplData.appRow.app_allow[$key_m][$key_s] == 1}ok-circle text-success{else}remove-circle text-danger{/if}"></span>
+													<span class="glyphicon glyphicon-{if isset($tplData.appRow.app_allow[$key_m][$key_s])}ok-circle text-success{else}remove-circle text-danger{/if}"></span>
 													{$value_s}
 												</li>
 											{/foreach}

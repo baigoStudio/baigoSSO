@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{$config.lang}">
+<html lang="{$config.lang|truncate:2:''}">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,7 +8,7 @@
 
 	<!--jQuery 库-->
 	<script src="{$smarty.const.BG_URL_JS}jquery.min.js" type="text/javascript"></script>
-	<link href="{$smarty.const.BG_URL_STATIC_INSTALL}css/install.css" type="text/css" rel="stylesheet">
+	<link href="{$smarty.const.BG_URL_STATIC_INSTALL}{$config.ui}/css/install.css" type="text/css" rel="stylesheet">
 
 	<!--bootstrap-->
 	<link href="{$smarty.const.BG_URL_JS}bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
@@ -31,12 +31,12 @@
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<a class="navbar-brand" href="{$smarty.const.PRD_SSO_URL}" target="_blank">
-						<img alt="baigo SSO" src="{$smarty.const.BG_URL_STATIC_ADMIN}default/image/admin_logo.png">
+						<img alt="baigo SSO" src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
 					</a>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<a href="#" class="dropdown-toggle {if $tplData.errCount > 0}disabled{/if}" data-toggle="dropdown">
 							{$lang.btn.jump}
 							<span class="caret"></span>
 						</a>

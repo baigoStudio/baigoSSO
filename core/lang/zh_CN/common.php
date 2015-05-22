@@ -31,12 +31,13 @@ return array(
 		"appBelong"       => "授权用户",
 
 		"upgrade"         => "baigo SSO 升级程序",
-		"upgradeTable"    => "升级数据库",
+		"upgradeDbtable"  => "升级数据库",
 		"upgradeOver"     => "完成升级",
 
 		"install"         => "baigo SSO 安装程序",
-		"installDb"       => "数据库设置",
-		"installTable"    => "创建数据表",
+		"installExt"      => "服务器环境检查",
+		"installDbconfig" => "数据库设置",
+		"installDbtable"  => "创建数据表",
 		"installBase"     => "基本设置",
 		"installReg"      => "注册设置",
 		"installAdmin"    => "创建管理员",
@@ -124,6 +125,7 @@ return array(
 		"profilePass"     => "禁止修改密码",
 
 		"dbHost"          => "数据库服务器",
+		"dbPort"          => "服务器端口",
 		"dbName"          => "数据库名称",
 		"dbUser"          => "数据库用户名",
 		"dbPass"          => "数据库密码",
@@ -140,11 +142,11 @@ return array(
 		"passNew"         => "新密码", //密码
 		"passConfirm"     => "确认密码", //密码
 
-		"upgradeTable"    => "即将升级数据库",
+		"upgradeDbtable"    => "即将升级数据库",
 		"upgradeOver"     => "还差最后一步，完成升级",
 
 		"installOver"     => "还差最后一步，完成安装",
-		"installTable"    => "即将创建数据表",
+		"installDbtable"  => "即将创建数据表",
 		"installAuto"     => "即将执行自动部署第二步",
 
 		"nick"            => "昵称",
@@ -196,6 +198,11 @@ return array(
 		"empty"           => "确认清空回收站吗？此操作不可恢复！",
 		"deauth"          => "取消授权将使此应用失去对这些用户的编辑权限，确认取消吗？",
 		"resetKey"        => "确认重置吗？此操作不可恢复！",
+	),
+
+	"text" => array(
+		"extErr"          => "服务器环境检查未通过，请检查上述扩展库是否已经正确安装。",
+		"extOk"           => "服务器环境检查通过，可以继续安装。",
 	),
 
 	/*------图片说明------*/
