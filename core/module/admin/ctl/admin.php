@@ -19,24 +19,24 @@ $ctl_admin = new CONTROL_ADMIN(); //初始化管理员对象
 switch ($GLOBALS["act_get"]) {
 	case "show": //显示
 		$arr_adminRow = $ctl_admin->ctl_show();
-		if ($arr_adminRow["str_alert"] != "y020102") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_adminRow["str_alert"]);
+		if ($arr_adminRow["alert"] != "y020102") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_adminRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "form": //创建、编辑表单
 		$arr_adminRow = $ctl_admin->ctl_form();
-		if ($arr_adminRow["str_alert"] != "y020102") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_adminRow["str_alert"]);
+		if ($arr_adminRow["alert"] != "y020102") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_adminRow["alert"]);
 			exit;
 		}
 	break;
 
 	default: //列出
 		$arr_adminRow = $ctl_admin->ctl_list();
-		if ($arr_adminRow["str_alert"] != "y020302") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_adminRow["str_alert"]);
+		if ($arr_adminRow["alert"] != "y020302") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_adminRow["alert"]);
 			exit;
 		}
 	break;

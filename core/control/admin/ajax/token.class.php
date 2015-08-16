@@ -16,8 +16,8 @@ class AJAX_TOKEN {
 	function __construct() { //构造函数
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
 		$this->obj_ajax       = new CLASS_AJAX();
-		/*if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		/*if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}*/
 	}
 
@@ -29,7 +29,7 @@ class AJAX_TOKEN {
 	 * @return void
 	 */
 	function ajax_make() {
-		if ($this->adminLogged["str_alert"] == "y020102") { //未登录，抛出错误信息
+		if ($this->adminLogged["alert"] == "y020102") { //未登录，抛出错误信息
 			$_str_token  = fn_token(); //生成口令
 			$_str_alert  = "y030102";
 			$_str_msg    = "ok";

@@ -41,7 +41,7 @@ class MODEL_APP_BELONG {
 		}
 
 		return array(
-			"str_alert" => $_str_alert, //更新成功
+			"alert" => $_str_alert, //更新成功
 		);
 	}
 
@@ -79,26 +79,26 @@ class MODEL_APP_BELONG {
 
 		$_arr_belongRow = $this->mdl_read($num_userId, $num_appId);
 
-		if ($_arr_belongRow["str_alert"] == "x070102" && $num_userId > 0 && $num_appId > 0) { //插入
+		if ($_arr_belongRow["alert"] == "x070102" && $num_userId > 0 && $num_appId > 0) { //插入
 			$_num_belongId = $this->obj_db->insert(BG_DB_TABLE . "app_belong", $_arr_belongData);
 
 			if ($_num_belongId > 0) { //数据库插入是否成功
 				$_str_alert = "y070101";
 			} else {
 				return array(
-					"str_alert" => "x070101",
+					"alert" => "x070101",
 				);
 				exit;
 			}
 		} else {
 			return array(
-				"str_alert" => "x070101",
+				"alert" => "x070101",
 			);
 			exit;
 		}
 
 		return array(
-			"str_alert"  => $_str_alert,
+			"alert"  => $_str_alert,
 		);
 	}
 
@@ -133,12 +133,12 @@ class MODEL_APP_BELONG {
 			$_arr_belongRow   = $_arr_belongRows[0];
 		} else {
 			return array(
-				"str_alert" => "x070102", //不存在记录
+				"alert" => "x070102", //不存在记录
 			);
 			exit;
 		}
 
-		$_arr_belongRow["str_alert"] = "y070102";
+		$_arr_belongRow["alert"] = "y070102";
 
 		return $_arr_belongRow;
 	}
@@ -273,7 +273,7 @@ class MODEL_APP_BELONG {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		); //成功
 	}
 }

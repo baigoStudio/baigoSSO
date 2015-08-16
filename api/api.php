@@ -6,7 +6,7 @@
 $base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));
 include_once($base . "config/config.inc.php"); //载入配置
 
-$arr_mod = array("user", "code", "admin");
+$arr_mod = array("user", "code", "signature", "sync", "admin");
 
 if (isset($_GET["mod"])) {
 	$mod = $_GET["mod"];

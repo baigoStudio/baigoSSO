@@ -1,5 +1,5 @@
 /*
-v1.0 jQuery baigoValidator plugin 表单验证插件
+v1.0.1 jQuery baigoValidator plugin 表单验证插件
 (c) 2015 baigo studio - http://www.baigo.net/jQueryPlugins/baigoValidator/
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -98,10 +98,10 @@ License: http://www.opensource.org/licenses/mit-license.php
 					var _reg = /^([+-]?)\d*\.?\d+$/; //数值，可以包含小数点
 				break;
 				case "email":
-					var _reg = /^\w{0,}(\.)?(\w{0,})@\w+(\.\w+).*$/; //Email
+					var _reg = /^\w{0,}(\.)?(\w+)@\w+(\.\w+).*$/; //Email
 				break;
 				case "url":
-					var _reg = /^http[s]?:\/\/\w+(\.\w+).*$/; //URL地址
+					var _reg = /^http[s]?:\/\/(\w|-)+(\.(\w|-)+).*$/; //URL地址
 				break;
 				case "alphabetDigit":
 					var _reg = /^[a-z|A-Z|\d]*$/; //字母和数字

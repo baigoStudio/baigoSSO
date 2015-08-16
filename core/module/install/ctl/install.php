@@ -38,64 +38,64 @@ $ctl_install            = new CONTROL_INSTALL(); //初始化商家
 switch ($GLOBALS["act_get"]) {
 	case "admin":
 		$arr_installRow = $ctl_install->ctl_admin();
-		if ($arr_installRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "reg":
 		$arr_installRow = $ctl_install->ctl_reg();
-		if ($arr_installRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "base":
 		$arr_installRow = $ctl_install->ctl_base();
-		if ($arr_installRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "dbtable":
 		$arr_installRow = $ctl_install->ctl_dbtable();
-		if ($arr_installRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "over":
 		$arr_installRow = $ctl_install->ctl_over();
-		if ($arr_installRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "auto":
 		$arr_installRow = $ctl_install->ctl_auto();
-		if ($arr_installRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "dbconfig":
 		$arr_installRow = $ctl_install->ctl_dbconfig();
-		if ($arr_installRow["str_alert"] != "y030403") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030403") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;
 
 	default:
 		$arr_installRow = $ctl_install->ctl_ext();
-		if ($arr_installRow["str_alert"] != "y030403") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["str_alert"]);
+		if ($arr_installRow["alert"] != "y030403") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
 	break;

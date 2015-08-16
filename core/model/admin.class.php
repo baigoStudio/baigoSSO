@@ -48,7 +48,7 @@ class MODEL_ADMIN {
 		}
 
 		return array(
-			"str_alert" => $_str_alert, //更新成功
+			"alert" => $_str_alert, //更新成功
 		);
 	}
 
@@ -92,7 +92,7 @@ class MODEL_ADMIN {
 			$_str_alert = "y020103"; //更新成功
 		} else {
 			return array(
-				"str_alert" => "x020103", //更新失败
+				"alert" => "x020103", //更新失败
 			);
 			exit;
 
@@ -100,7 +100,7 @@ class MODEL_ADMIN {
 
 		return array(
 			"admin_id" => $_num_adminId,
-			"str_alert" => $_str_alert, //成功
+			"alert" => $_str_alert, //成功
 		);
 	}
 
@@ -123,14 +123,14 @@ class MODEL_ADMIN {
 			$_str_alert = "y020108"; //更新成功
 		} else {
 			return array(
-				"str_alert" => "x020103", //更新失败
+				"alert" => "x020103", //更新失败
 			);
 			exit;
 		}
 
 		return array(
 			"admin_id"   => $_num_adminId,
-			"str_alert"  => $_str_alert, //成功
+			"alert"  => $_str_alert, //成功
 		);
 	}
 
@@ -154,14 +154,14 @@ class MODEL_ADMIN {
 			$_str_alert = "y020109"; //更新成功
 		} else {
 			return array(
-				"str_alert" => "x020103", //更新失败
+				"alert" => "x020103", //更新失败
 			);
 			exit;
 		}
 
 		return array(
 			"admin_id"   => $_num_adminId,
-			"str_alert"  => $_str_alert, //成功
+			"alert"  => $_str_alert, //成功
 		);
 	}
 
@@ -198,7 +198,7 @@ class MODEL_ADMIN {
 				$_str_alert = "y020101"; //更新成功
 			} else {
 				return array(
-					"str_alert" => "x020101", //更新失败
+					"alert" => "x020101", //更新失败
 				);
 				exit;
 
@@ -216,7 +216,7 @@ class MODEL_ADMIN {
 				$_str_alert = "y020103"; //更新成功
 			} else {
 				return array(
-					"str_alert" => "x020103", //更新失败
+					"alert" => "x020103", //更新失败
 				);
 				exit;
 
@@ -225,7 +225,7 @@ class MODEL_ADMIN {
 
 		return array(
 			"admin_id"   => $_num_adminId,
-			"str_alert"  => $_str_alert, //成功
+			"alert"  => $_str_alert, //成功
 		);
 	}
 
@@ -254,7 +254,7 @@ class MODEL_ADMIN {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 
@@ -302,7 +302,7 @@ class MODEL_ADMIN {
 			$_arr_adminRow = $_arr_adminRows[0];
 		} else {
 			return array(
-				"str_alert" => "x020102", //不存在记录
+				"alert" => "x020102", //不存在记录
 			);
 			exit;
 		}
@@ -321,7 +321,7 @@ class MODEL_ADMIN {
 			$_arr_adminRow["admin_allow"]["pass"] = 0;
 		}
 
-		$_arr_adminRow["str_alert"]   = "y020102";
+		$_arr_adminRow["alert"]   = "y020102";
 
 		return $_arr_adminRow;
 
@@ -385,7 +385,7 @@ class MODEL_ADMIN {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 
@@ -424,7 +424,7 @@ class MODEL_ADMIN {
 	function input_profile() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030102",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -433,7 +433,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminNick["status"]) {
 			case "too_long":
 				return array(
-					"str_alert" => "x020212",
+					"alert" => "x020212",
 				);
 				exit;
 			break;
@@ -444,7 +444,7 @@ class MODEL_ADMIN {
 
 		}
 
-		$this->adminProfile["str_alert"]  = "ok";
+		$this->adminProfile["alert"]  = "ok";
 
 		return $this->adminProfile;
 	}
@@ -459,7 +459,7 @@ class MODEL_ADMIN {
 	function input_pass() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030102",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -468,7 +468,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminPassOld["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x020210",
+					"alert" => "x020210",
 				);
 				exit;
 			break;
@@ -482,7 +482,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminPassNew["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x020213",
+					"alert" => "x020213",
 				);
 				exit;
 			break;
@@ -496,7 +496,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminPassConfirm["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x020215",
+					"alert" => "x020215",
 				);
 				exit;
 			break;
@@ -508,14 +508,14 @@ class MODEL_ADMIN {
 
 		if ($this->adminPass["admin_pass_new"] != $this->adminPass["admin_pass_confirm"]) {
 			return array(
-				"str_alert" => "x020211",
+				"alert" => "x020211",
 			);
 			exit;
 		}
 
 		$this->adminPass["admin_rand"]    = fn_rand(6);
 		$this->adminPass["admin_pass_do"] = fn_baigoEncrypt($this->adminPass["admin_pass_new"], $this->adminPass["admin_rand"]);
-		$this->adminPass["str_alert"]     = "ok";
+		$this->adminPass["alert"]     = "ok";
 
 		return $this->adminPass;
 	}
@@ -531,7 +531,7 @@ class MODEL_ADMIN {
 		if (!fn_seccode()) { //验证码
 			return array(
 				"forward"    => $this->adminLogin["forward"],
-				"str_alert"  => "x030101",
+				"alert"  => "x030101",
 			);
 			exit;
 		}
@@ -539,7 +539,7 @@ class MODEL_ADMIN {
 		if (!fn_token("chk")) { //令牌
 			return array(
 				"forward"    => $this->adminLogin["forward"],
-				"str_alert"  => "x030102",
+				"alert"  => "x030102",
 			);
 			exit;
 		}
@@ -555,7 +555,7 @@ class MODEL_ADMIN {
 			case "too_short":
 				return array(
 					"forward"   => $this->adminLogin["forward"],
-					"str_alert" => "x020201",
+					"alert" => "x020201",
 				);
 				exit;
 			break;
@@ -563,7 +563,7 @@ class MODEL_ADMIN {
 			case "too_long":
 				return array(
 					"forward"   => $this->adminLogin["forward"],
-					"str_alert" => "x020202",
+					"alert" => "x020202",
 				);
 				exit;
 			break;
@@ -571,7 +571,7 @@ class MODEL_ADMIN {
 			case "format_err":
 				return array(
 					"forward"   => $this->adminLogin["forward"],
-					"str_alert" => "x020203",
+					"alert" => "x020203",
 				);
 				exit;
 			break;
@@ -587,7 +587,7 @@ class MODEL_ADMIN {
 			case "too_short":
 				return array(
 					"forward"   => $this->adminLogin["forward"],
-					"str_alert" => "x020205",
+					"alert" => "x020205",
 				);
 				exit;
 			break;
@@ -598,7 +598,7 @@ class MODEL_ADMIN {
 
 		}
 
-		$this->adminLogin["str_alert"]  = "ok";
+		$this->adminLogin["alert"]  = "ok";
 
 		return $this->adminLogin;
 	}
@@ -613,7 +613,7 @@ class MODEL_ADMIN {
 	function input_submit() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030102",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -623,7 +623,7 @@ class MODEL_ADMIN {
 		if ($this->adminSubmit["admin_id"] > 0) {
 			//检验用户是否存在
 			$_arr_adminRow = $this->mdl_read($this->adminSubmit["admin_id"]);
-			if ($_arr_adminRow["str_alert"] != "y020102") {
+			if ($_arr_adminRow["alert"] != "y020102") {
 				return $_arr_adminRow;
 			}
 		}
@@ -632,14 +632,14 @@ class MODEL_ADMIN {
 		switch ($_arr_adminName["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x020201",
+					"alert" => "x020201",
 				);
 				exit;
 			break;
 
 			case "too_long":
 				return array(
-					"str_alert" => "x020202",
+					"alert" => "x020202",
 				);
 				exit;
 			break;
@@ -652,9 +652,9 @@ class MODEL_ADMIN {
 
 		//检验用户名是否重复
 		$_arr_adminRow = $this->mdl_read($this->adminSubmit["admin_name"], "admin_name", $this->adminSubmit["admin_id"]);
-		if ($_arr_adminRow["str_alert"] == "y020102") {
+		if ($_arr_adminRow["alert"] == "y020102") {
 			return array(
-				"str_alert" => "x020204",
+				"alert" => "x020204",
 			);
 			exit;
 		}
@@ -663,7 +663,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminNote["status"]) {
 			case "too_long":
 				return array(
-					"str_alert" => "x020208",
+					"alert" => "x020208",
 				);
 				exit;
 			break;
@@ -677,7 +677,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminStatus["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x020209",
+					"alert" => "x020209",
 				);
 				exit;
 			break;
@@ -692,7 +692,7 @@ class MODEL_ADMIN {
 		switch ($_arr_adminNick["status"]) {
 			case "too_long":
 				return array(
-					"str_alert" => "x020212",
+					"alert" => "x020212",
 				);
 				exit;
 			break;
@@ -703,7 +703,7 @@ class MODEL_ADMIN {
 		}
 
 		$this->adminSubmit["admin_allow"] = fn_jsonEncode(fn_post("admin_allow"), "no");
-		$this->adminSubmit["str_alert"]   = "ok";
+		$this->adminSubmit["alert"]   = "ok";
 
 		return $this->adminSubmit;
 	}
@@ -718,7 +718,7 @@ class MODEL_ADMIN {
 	function api_add() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030102",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -727,14 +727,14 @@ class MODEL_ADMIN {
 		switch ($_arr_adminName["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x020201",
+					"alert" => "x020201",
 				);
 				exit;
 			break;
 
 			case "too_long":
 				return array(
-					"str_alert" => "x020202",
+					"alert" => "x020202",
 				);
 				exit;
 			break;
@@ -747,7 +747,7 @@ class MODEL_ADMIN {
 
 		//检验用户名是否重复
 		$_arr_adminRow = $this->mdl_read($this->adminSubmit["admin_name"], "admin_name", $this->adminSubmit["admin_id"]);
-		if ($_arr_adminRow["str_alert"] == "y020102") {
+		if ($_arr_adminRow["alert"] == "y020102") {
 			$this->adminSubmit["admin_id"] = $_arr_adminRow["admin_id"];
 		}
 
@@ -786,7 +786,7 @@ class MODEL_ADMIN {
 		);
 
 		$this->adminSubmit["admin_allow"] = fn_jsonEncode($_arr_adminAllow, "no");
-		$this->adminSubmit["str_alert"]   = "ok";
+		$this->adminSubmit["alert"]   = "ok";
 
 		return $this->adminSubmit;
 	}
@@ -801,7 +801,7 @@ class MODEL_ADMIN {
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030102",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -818,7 +818,7 @@ class MODEL_ADMIN {
 		}
 
 		$this->adminIds = array(
-			"str_alert"   => $_str_alert,
+			"alert"   => $_str_alert,
 			"admin_ids"   => $_arr_adminIds
 		);
 

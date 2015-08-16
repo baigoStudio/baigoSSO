@@ -30,10 +30,17 @@ return array(
 	"code" => array(
 		"title" => "密文",
 		"allow" => array(
-			"signature"  => "生成签名",
-			"verify"     => "验证签名",
 			"encode"     => "加密",
 			"decode"     => "解密",
+		),
+	),
+
+	/*------签名------*/
+	"signature" => array(
+		"title" => "签名",
+		"allow" => array(
+			"signature"  => "生成签名",
+			"verify"     => "验证签名",
 		),
 	),
 );

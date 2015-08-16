@@ -22,11 +22,19 @@
 
 	<footer class="bg-success page_foot">
 		<div class="pull-left foot_logo">
-			<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME} {$smarty.const.PRD_SSO_VER}</a>
+			{if $config.ui == "default"}
+				<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME} {$smarty.const.PRD_SSO_VER}</a>
+			{else}
+				<a href="#">{$config.ui} SSO</a>
+			{/if}
 		</div>
 		<div class="pull-right foot_power">
 			{$smarty.const.PRD_SSO_POWERED}
-			<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_NAME}</a>
+			{if $config.ui == "default"}
+				<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_NAME}</a>
+			{else}
+				{$config.ui} SSO
+			{/if}
 			{$smarty.const.PRD_SSO_VER}
 		</div>
 		<div class="clearfix"></div>

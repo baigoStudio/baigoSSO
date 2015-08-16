@@ -19,8 +19,8 @@ $ctl_user = new CONTROL_USER(); //初始化用户
 switch ($GLOBALS["act_get"]) {
 	default:
 		$arr_userRow = $ctl_user->ctl_list(); //列出
-		if ($arr_userRow["str_alert"] != "y010302") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_userRow["str_alert"]);
+		if ($arr_userRow["alert"] != "y010302") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_userRow["alert"]);
 			exit;
 		}
 	break;

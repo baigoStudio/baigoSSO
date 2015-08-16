@@ -11,157 +11,107 @@ if(!defined("IN_BAIGO")) {
 
 /*-------------设置项模型-------------*/
 class MODEL_OPT {
-	private $obj_db;
 
-	function __construct() { //构造函数
-		$this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
-	}
-
-
-	/** 创建表
-	 * mdl_create function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function mdl_create_table() {
-		$_arr_optCreate = array(
-			"opt_id"     => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-			"opt_key"    => "varchar(100) NOT NULL COMMENT '设置键名'",
-			"opt_value"  => "varchar(1000) NOT NULL COMMENT '设置键值'",
-		);
-
-		$_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "opt", $_arr_optCreate, "opt_id", "设置项");
-
-		if ($_num_mysql > 0) {
-			$_str_alert = "y040105"; //更新成功
-		} else {
-			$_str_alert = "x040105"; //更新成功
+	function mdl_const($str_type) {
+		if (!fn_token("chk")) { //令牌
+			$this->obj_ajax->halt_alert("x030102");
 		}
 
-		return array(
-			"str_alert" => $_str_alert, //更新成功
-		);
-	}
+		$_arr_opt = fn_post("opt");
 
-
-	/** 检查字段
-	 * mdl_column function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function mdl_column() {
-		$_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "opt");
-
-		foreach ($_arr_colRows as $_key=>$_value) {
-			$_arr_col[] = $_value["Field"];
-		}
-
-		return $_arr_col;
-	}
-
-
-	/** 提交
-	 * mdl_submit function.
-	 *
-	 * @access public
-	 * @param mixed $str_optKey
-	 * @param mixed $str_optValue
-	 * @return void
-	 */
-	function mdl_submit($str_optKey, $str_optValue) {
-		$_arr_optData = array(
-			"opt_key"    => $str_optKey,
-			"opt_value"  => $str_optValue,
-		);
-
-		$_arr_optRow = $this->mdl_read($str_optKey);
-
-		if ($_arr_optRow["str_alert"] != "y040102") {
-			$_str_optKey = $this->obj_db->insert(BG_DB_TABLE . "opt", $_arr_optData); //更新数据
-			if ($_str_optKey) {
-				$_str_alert = "y040101"; //更新成功
+		$_str_content = "<?php" . PHP_EOL;
+		foreach ($_arr_opt as $_key=>$_value) {
+			$_arr_optChk = validateStr($_value, 1, 900);
+			$_str_optValue = $_arr_optChk["str"];
+			if (is_numeric($_value)) {
+				$_str_content .= "define(\"" . $_key . "\", " . $_str_optValue . ");" . PHP_EOL;
 			} else {
-				return array(
-					"str_alert" => "x040101", //更新失败
-				);
-				exit;
-
-			}
-		} else {
-			$_str_optKey = $str_optKey;
-			$_num_mysql = $this->obj_db->update(BG_DB_TABLE . "opt", $_arr_optData, "opt_key='" . $_str_optKey . "'"); //更新数据
-			if ($_num_mysql > 0) {
-				$_str_alert = "y040103"; //更新成功
-			} else {
-				return array(
-					"str_alert" => "x040103", //更新失败
-				);
-				exit;
-
+				$_str_content .= "define(\"" . $_key . "\", \"" . str_replace(PHP_EOL, "|", $_str_optValue) . "\");" . PHP_EOL;
 			}
 		}
 
+		if ($str_type == "base") {
+			$_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
+		}
+
+		$_str_content = str_replace("||", "", $_str_content);
+
+		$_num_size    = file_put_contents(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
+
+		if ($_num_size > 0) {
+			$_str_alert = "y040101";
+		} else {
+			$_str_alert = "x040101";
+		}
+
 		return array(
-			"opt_key"    => $_str_optKey,
-			"str_alert"  => $_str_alert, //成功
+			"alert" => $_str_alert,
 		);
 	}
 
 
-	/** 读取
-	 * mdl_read function.
-	 *
-	 * @access public
-	 * @param mixed $str_optKey
-	 * @return void
-	 */
-	function mdl_read($str_optKey) {
-		$_arr_optSelect = array(
-			"opt_key",
-			"opt_value",
-		);
-
-		$_str_sqlWhere = "opt_key='" . $str_optKey . "'";
-
-		$_arr_optRows = $this->obj_db->select(BG_DB_TABLE . "opt", $_arr_optSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
-
-		if (isset($_arr_optRows[0])) { //用户名不存在则返回错误
-			$_arr_optRow = $_arr_optRows[0];
-		} else {
+	function mdl_dbconfig() {
+		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x040102", //不存在记录
+				"alert" => "x030102",
 			);
 			exit;
 		}
 
-		$_arr_optRow["str_alert"] = "y040102";
+		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
+		$_str_dbPort      = fn_getSafe(fn_post("db_port"), "txt", "3306");
+		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
+		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
+		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
+		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
+		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
 
-		return $_arr_optRow;
+		$_str_content     = "<?php" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_PORT\", \"" . $_str_dbPort . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
 
-	}
+		$_num_size        = file_put_contents(BG_PATH_CONFIG . "config_db.inc.php", $_str_content);
 
-
-	/** 删除
-	 * mdl_del function.
-	 *
-	 * @access public
-	 * @param mixed $str_optKey
-	 * @return void
-	 */
-	function mdl_del($str_optKey) {
-		$_num_mysql = $this->obj_db->delete(BG_DB_TABLE . "opt", "opt_key='" . $str_optKey . "'"); //删除数据
-
-		//如车影响行数小于0则返回错误
-		if ($_num_mysql > 0) {
-			$_str_alert = "y040104"; //成功
+		if ($_num_size > 0) {
+			$_str_alert = "y040101";
 		} else {
-			$_str_alert = "x040104"; //失败
+			$_str_alert = "x040101";
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
+
+
+	function mdl_over() {
+		if (!fn_token("chk")) { //令牌
+			return array(
+				"alert" => "x030102",
+			);
+			exit;
+		}
+
+		$_str_content = "<?php" . PHP_EOL;
+		$_str_content .= "define(\"BG_INSTALL_VER\", \"" . PRD_SSO_VER . "\");" . PHP_EOL;
+		$_str_content .= "define(\"BG_INSTALL_PUB\", " . PRD_SSO_PUB . ");" . PHP_EOL;
+		$_str_content .= "define(\"BG_INSTALL_TIME\", " . time() . ");" . PHP_EOL;
+
+		$_num_size = file_put_contents(BG_PATH_CONFIG . "is_install.php", $_str_content);
+		if ($_num_size > 0) {
+			$_str_alert = "y040101";
+		} else {
+			$_str_alert = "x040101";
+		}
+
+		return array(
+			"alert" => $_str_alert,
+		);
+	}
+
 }

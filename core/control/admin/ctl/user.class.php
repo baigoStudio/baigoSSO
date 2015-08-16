@@ -53,19 +53,19 @@ class CONTROL_USER {
 		if ($_num_userId > 0) {
 			if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
 				return array(
-					"str_alert" => "x010303",
+					"alert" => "x010303",
 				);
 				exit;
 			}
 			$_arr_userRow = $this->mdl_user->mdl_read($_num_userId);
-			if ($_arr_userRow["str_alert"] != "y010102") {
+			if ($_arr_userRow["alert"] != "y010102") {
 				return $_arr_userRow;
 				exit;
 			}
 		} else {
 			if (!isset($this->adminLogged["admin_allow"]["user"]["browse"])) {
 				return array(
-					"str_alert" => "x010301",
+					"alert" => "x010301",
 				);
 				exit;
 			}
@@ -95,7 +95,7 @@ class CONTROL_USER {
 
 		$this->obj_tpl->tplDisplay("user_list.tpl", $_arr_tplData);
 		return array(
-			"str_alert" => "y010302",
+			"alert" => "y010302",
 		);
 	}
 }

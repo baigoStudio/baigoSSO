@@ -38,8 +38,8 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x030410");
 		}
 
-		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}
 	}
 
@@ -54,9 +54,19 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
-		$_arr_optPost = $this->opt_post("reg");
+		$_arr_return = $this->mdl_opt->mdl_const("reg");
 
-		$this->obj_ajax->halt_alert($_arr_optPost["str_alert"]);
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
+		}
+
+		$_arr_targets[]   = "reg";
+		$_str_targets     = json_encode($_arr_targets);
+		$_str_return      = json_encode($_arr_return);
+
+		$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
+
+		$this->obj_ajax->halt_alert("y040402");
 	}
 
 
@@ -71,13 +81,17 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
-		$this->opt_post("mail");
+		$_arr_return = $this->mdl_opt->mdl_const("mail");
+
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
+		}
 
 		$_arr_mail    = array(BG_MAIL_FROM);
 		$_arr_mailRow = fn_mailsend($_arr_mail, "test", "test", false);
 
-		if ($_arr_mailRow["str_alert"] != "y030201") {
-			$this->obj_ajax->halt_alert("x040101");
+		if ($_arr_mailRow["alert"] != "y030201") {
+			$this->obj_ajax->halt_alert("x040403");
 		}
 
 		$this->obj_ajax->halt_alert("y040403");
@@ -94,9 +108,19 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
-		$_arr_optPost = $this->opt_post("base");
+		$_arr_return = $this->mdl_opt->mdl_const("base");
 
-		$this->obj_ajax->halt_alert($_arr_optPost["str_alert"]);
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
+		}
+
+		$_arr_targets[]   = "base";
+		$_str_targets     = json_encode($_arr_targets);
+		$_str_return      = json_encode($_arr_return);
+
+		$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
+
+		$this->obj_ajax->halt_alert("y040401");
 	}
 
 
@@ -111,90 +135,19 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x040304");
 		}
 
-		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
-		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
-		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
-		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
-		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
-		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
+		$_arr_return = $this->mdl_opt->mdl_dbconfig();
 
-		$_str_content = "<?php" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
+		}
 
-		file_put_contents(BG_PATH_CONFIG . "config_db.inc.php", $_str_content);
+		$_arr_targets[]   = "dbconfig";
+		$_str_targets     = json_encode($_arr_targets);
+		$_str_return      = json_encode($_arr_return);
+
+		$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
 
 		$this->obj_ajax->halt_alert("y040404");
 	}
 
-	/**
-	 * opt_post function.
-	 *
-	 * @access private
-	 * @param mixed $str_type
-	 * @return void
-	 */
-	private function opt_post($str_type) {
-		if (!fn_token("chk")) { //令牌
-			return array(
-				"str_alert" => "x030102",
-			);
-			exit;
-		}
-
-		$_arr_opt = fn_post("opt");
-
-		$_str_content = "<?php" . PHP_EOL;
-		foreach ($_arr_opt as $_key=>$_value) {
-			$_arr_optChk = validateStr($_value, 1, 900);
-			$_str_optValue = $_arr_optChk["str"];
-			if (is_numeric($_value)) {
-				$_str_content .= "define(\"" . $_key . "\", " . $_str_optValue . ");" . PHP_EOL;
-			} else {
-				$_str_content .= "define(\"" . $_key . "\", \"" . str_replace(PHP_EOL, "|", $_str_optValue) . "\");" . PHP_EOL;
-			}
-			$_arr_optRow = $this->mdl_opt->mdl_submit($_key, $_str_optValue);
-			if ($_arr_optRow["str_alert"] == "y040101" || $_arr_optRow["str_alert"] == "y040103") {
-				$_arr_targets[] = array(
-					"opt_key" => $_key,
-				);
-			}
-		}
-
-		if ($str_type == "base") {
-			$_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
-		}
-
-		$_str_content = str_replace("||", "", $_str_content);
-
-		file_put_contents(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
-
-		switch ($str_type) {
-			case "base":
-				$_arr_return = array(
-					"opt_type"     => "base",
-					"str_alert"    => "y040401",
-				);
-			break;
-
-			case "reg":
-				$_arr_return = array(
-					"opt_type"     => "reg",
-					"str_alert"    => "y040402",
-				);
-			break;
-		}
-
-		if ($_arr_targets) {
-			$_str_targets    = json_encode($_arr_targets);
-			$_str_return     = json_encode($_arr_return);
-			$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
-		}
-
-		return $_arr_return;
-	}
 }

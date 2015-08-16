@@ -4,7 +4,7 @@
 	mod_help   => "install",
 	act_help   => "admin"
 ]}
-{include "include/install_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_head.tpl" cfg=$cfg}
 
 	<form name="install_form_admin" id="install_form_admin">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
@@ -40,12 +40,12 @@
 		<div class="form-group">
 			<div class="btn-group">
 				<button type="button" id="go_next" class="btn btn-primary btn-lg">{$lang.btn.submit}</button>
-				{include "include/install_drop.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_drop.tpl" cfg=$cfg}
 			</div>
 		</div>
 	</form>
 
-{include "include/install_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_form = {

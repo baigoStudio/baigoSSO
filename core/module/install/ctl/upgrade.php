@@ -36,48 +36,48 @@ $ctl_upgrade            = new CONTROL_UPGRADE(); //初始化商家
 switch ($GLOBALS["act_get"]) {
 	case "reg":
 		$arr_upgradeRow = $ctl_upgrade->ctl_reg();
-		if ($arr_upgradeRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["str_alert"]);
+		if ($arr_upgradeRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "base":
 		$arr_upgradeRow = $ctl_upgrade->ctl_base();
-		if ($arr_upgradeRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["str_alert"]);
+		if ($arr_upgradeRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "over":
 		$arr_upgradeRow = $ctl_upgrade->ctl_over();
-		if ($arr_upgradeRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["str_alert"]);
+		if ($arr_upgradeRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "dbconfig":
 		$arr_upgradeRow = $ctl_upgrade->ctl_dbconfig();
-		if ($arr_upgradeRow["str_alert"] != "y030403") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["str_alert"]);
+		if ($arr_upgradeRow["alert"] != "y030403") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "dbtable":
 		$arr_upgradeRow = $ctl_upgrade->ctl_dbtable();
-		if ($arr_upgradeRow["str_alert"] != "y030404") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["str_alert"]);
+		if ($arr_upgradeRow["alert"] != "y030404") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}
 	break;
 
 	default:
 		$arr_upgradeRow = $ctl_upgrade->ctl_ext();
-		if ($arr_upgradeRow["str_alert"] != "y030403") {
-			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["str_alert"]);
+		if ($arr_upgradeRow["alert"] != "y030403") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=display&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}
 	break;

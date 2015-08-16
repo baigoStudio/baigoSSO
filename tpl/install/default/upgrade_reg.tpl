@@ -5,23 +5,23 @@
 	mod_help   => "upgrade",
 	act_help   => "reg"
 ]}
-{include "include/upgrade_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/upgrade_head.tpl" cfg=$cfg}
 
 	<form name="upgrade_form_reg" id="upgrade_form_reg">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="reg">
 
-		{include "include/install_form.tpl" cfg=$cfg}
+		{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_form.tpl" cfg=$cfg}
 
 		<div class="form-group">
 			<div class="btn-group">
 				<button type="button" id="go_next" class="btn btn-primary btn-lg">{$lang.btn.save}</button>
-				{include "include/upgrade_drop.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/upgrade_drop.tpl" cfg=$cfg}
 			</div>
 		</div>
 	</form>
 
-{include "include/install_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_submit_form = {

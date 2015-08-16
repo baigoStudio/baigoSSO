@@ -47,7 +47,7 @@ class MODEL_LOG {
 		}
 
 		return array(
-			"str_alert" => $_str_alert, //更新成功
+			"alert" => $_str_alert, //更新成功
 		);
 	}
 
@@ -101,7 +101,7 @@ class MODEL_LOG {
 			$_str_alert = "y060101"; //更新成功
 		} else {
 			return array(
-				"str_alert" => "x060101", //更新失败
+				"alert" => "x060101", //更新失败
 			);
 			exit;
 
@@ -109,7 +109,7 @@ class MODEL_LOG {
 
 		return array(
 			"log_id"     => $_num_logId,
-			"str_alert"  => $_str_alert, //成功
+			"alert"  => $_str_alert, //成功
 		);
 	}
 
@@ -138,7 +138,7 @@ class MODEL_LOG {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 
@@ -172,7 +172,7 @@ class MODEL_LOG {
 			$_arr_logRow = $_arr_logRows[0];
 		} else {
 			return array(
-				"str_alert" => "x060102", //不存在记录
+				"alert" => "x060102", //不存在记录
 			);
 			exit;
 		}
@@ -187,7 +187,7 @@ class MODEL_LOG {
 			$_arr_logRow["log_targets"]   = array();
 		}
 
-		$_arr_logRow["str_alert"]     = "y060102";
+		$_arr_logRow["alert"]     = "y060102";
 
 		return $_arr_logRow;
 	}
@@ -265,7 +265,7 @@ class MODEL_LOG {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 
@@ -311,7 +311,7 @@ class MODEL_LOG {
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030101",
+				"alert" => "x030101",
 			);
 			exit;
 		}
@@ -328,7 +328,7 @@ class MODEL_LOG {
 		}
 
 		$this->logIds = array(
-			"str_alert"  => $_str_alert,
+			"alert"  => $_str_alert,
 			"log_ids"    => $_arr_logIds
 		);
 

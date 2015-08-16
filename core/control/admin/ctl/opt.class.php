@@ -10,7 +10,6 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_CLASS . "tpl.class.php"); //载入模板类
-include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
 
 /*-------------管理员控制器-------------*/
 class CONTROL_OPT {
@@ -19,14 +18,12 @@ class CONTROL_OPT {
 	private $obj_base;
 	private $config; //配置
 	private $obj_tpl;
-	private $mdl_opt;
 	private $tplData;
 
 	function __construct() { //构造函数
 		$this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
 		$this->config         = $this->obj_base->config;
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
-		$this->mdl_opt        = new MODEL_OPT(); //设置管理员模型
 		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]); //初始化视图对象
 		$this->tplData = array(
 			"adminLogged" => $this->adminLogged
@@ -43,21 +40,15 @@ class CONTROL_OPT {
 	function ctl_reg() {
 		if (!isset($this->adminLogged["admin_allow"]["opt"]["reg"])) {
 			return array(
-				"str_alert" => "x040302",
+				"alert" => "x040302",
 			);
 			exit;
 		}
 
-		foreach ($this->obj_tpl->opt["reg"] as $_key=>$_value) {
-			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
-		}
-
-		$this->tplData["optRows"] = $_arr_optRows;
-
 		$this->obj_tpl->tplDisplay("opt_reg.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y040302",
+			"alert" => "y040302",
 		);
 	}
 
@@ -70,21 +61,15 @@ class CONTROL_OPT {
 	function ctl_mail() {
 		if (!isset($this->adminLogged["admin_allow"]["opt"]["mail"])) {
 			return array(
-				"str_alert" => "x040303",
+				"alert" => "x040303",
 			);
 			exit;
 		}
 
-		foreach ($this->obj_tpl->opt["mail"] as $_key=>$_value) {
-			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
-		}
-
-		$this->tplData["optRows"] = $_arr_optRows;
-
 		$this->obj_tpl->tplDisplay("opt_mail.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y040303",
+			"alert" => "y040303",
 		);
 	}
 
@@ -97,21 +82,15 @@ class CONTROL_OPT {
 	function ctl_base() {
 		if (!isset($this->adminLogged["admin_allow"]["opt"]["base"])) {
 			return array(
-				"str_alert" => "x040301",
+				"alert" => "x040301",
 			);
 			exit;
 		}
 
-		foreach ($this->obj_tpl->opt["base"] as $_key=>$_value) {
-			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
-		}
-
-		$this->tplData["optRows"] = $_arr_optRows;
-
 		$this->obj_tpl->tplDisplay("opt_base.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y040301",
+			"alert" => "y040301",
 		);
 	}
 
@@ -125,7 +104,7 @@ class CONTROL_OPT {
 	function ctl_db() {
 		if (!isset($this->adminLogged["admin_allow"]["opt"]["db"])) {
 			return array(
-				"str_alert" => "x040304",
+				"alert" => "x040304",
 			);
 			exit;
 		}
@@ -133,7 +112,7 @@ class CONTROL_OPT {
 		$this->obj_tpl->tplDisplay("opt_db.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y040304",
+			"alert" => "y040304",
 		);
 	}
 }

@@ -48,7 +48,7 @@ class CLASS_DIR {
 		} else {
 			$_arr_dir = $this->mk_dir(dirname($str_path));
 			//创建目录
-			if ($_arr_dir["str_alert"] == "y030201") {
+			if ($_arr_dir["alert"] == "y030201") {
 				if (mkdir($str_path)) { //创建成功
 					$_str_alert = "y030201";
 				} else {
@@ -60,7 +60,7 @@ class CLASS_DIR {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 

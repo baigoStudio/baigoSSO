@@ -10,12 +10,10 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_CLASS . "tpl.class.php"); //载入模板类
-include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
 
 class CONTROL_INSTALL {
 
 	private $obj_tpl;
-	private $mdl_opt;
 
 	function __construct() { //构造函数
 		$this->obj_base   = $GLOBALS["obj_base"];
@@ -26,10 +24,11 @@ class CONTROL_INSTALL {
 
 
 	function ctl_ext() {
+
 		$this->obj_tpl->tplDisplay("install_ext.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030403",
+			"alert" => "y030403",
 		);
 	}
 
@@ -43,17 +42,15 @@ class CONTROL_INSTALL {
 	function ctl_dbconfig() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
-		$_arr_tplData = array();
-
-		$this->obj_tpl->tplDisplay("install_dbconfig.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_dbconfig.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030403",
+			"alert" => "y030403",
 		);
 	}
 
@@ -67,24 +64,22 @@ class CONTROL_INSTALL {
 	function ctl_dbtable() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"alert" => "x030404",
 			);
 			exit;
 		}
 
-		$_arr_tplData = array();
-
-		$this->obj_tpl->tplDisplay("install_dbtable.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_dbtable.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030404",
+			"alert" => "y030404",
 		);
 	}
 
@@ -98,36 +93,22 @@ class CONTROL_INSTALL {
 	function ctl_base() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"alert" => "x030404",
 			);
 			exit;
 		}
 
-		if (!$this->check_opt()) {
-			return array(
-				"str_alert" => "x030409",
-			);
-			exit;
-		}
-
-
-		foreach ($this->obj_tpl->opt["base"] as $_key=>$_value) {
-			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
-		}
-
-		$_arr_tplData["optRows"] = $_arr_optRows;
-
-		$this->obj_tpl->tplDisplay("install_base.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_base.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030404",
+			"alert" => "y030404",
 		);
 	}
 
@@ -141,35 +122,22 @@ class CONTROL_INSTALL {
 	function ctl_reg() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"alert" => "x030404",
 			);
 			exit;
 		}
 
-		if (!$this->check_opt()) {
-			return array(
-				"str_alert" => "x030409",
-			);
-			exit;
-		}
-
-		foreach ($this->obj_tpl->opt["reg"] as $_key=>$_value) {
-			$_arr_optRows[$_key] = $this->mdl_opt->mdl_read($_key);
-		}
-
-		$_arr_tplData["optRows"] = $_arr_optRows;
-
-		$this->obj_tpl->tplDisplay("install_reg.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_reg.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030404",
+			"alert" => "y030404",
 		);
 	}
 
@@ -177,14 +145,14 @@ class CONTROL_INSTALL {
 	function ctl_auto() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"alert" => "x030404",
 			);
 			exit;
 		}
@@ -193,16 +161,14 @@ class CONTROL_INSTALL {
 		$_str_path    = fn_getSafe(fn_get("path"), "txt", "");
 		$_str_target  = fn_getSafe(fn_get("target"), "txt", "");
 
-		$_arr_tplData = array(
-			"url"    => base64_decode($_str_url),
-			"path"   => $_str_path,
-			"target" => $_str_target,
-		);
+		$this->tplData["url"]     = base64_decode($_str_url);
+		$this->tplData["path"]    = $_str_path;
+		$this->tplData["target"]  = $_str_target;
 
-		$this->obj_tpl->tplDisplay("install_auto.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_auto.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030404",
+			"alert" => "y030404",
 		);
 	}
 
@@ -216,31 +182,22 @@ class CONTROL_INSTALL {
 	function ctl_admin() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"alert" => "x030404",
 			);
 			exit;
 		}
 
-		if (!$this->check_opt()) {
-			return array(
-				"str_alert" => "x030409",
-			);
-			exit;
-		}
-
-		$_arr_tplData = array();
-
-		$this->obj_tpl->tplDisplay("install_admin.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_admin.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030404",
+			"alert" => "y030404",
 		);
 	}
 
@@ -248,31 +205,22 @@ class CONTROL_INSTALL {
 	function ctl_over() {
 		if ($this->errCount > 0) {
 			return array(
-				"str_alert" => "x030413",
+				"alert" => "x030413",
 			);
 			exit;
 		}
 
 		if (!$this->check_db()) {
 			return array(
-				"str_alert" => "x030404",
+				"alert" => "x030404",
 			);
 			exit;
 		}
 
-		if (!$this->check_opt()) {
-			return array(
-				"str_alert" => "x030409",
-			);
-			exit;
-		}
-
-		$_arr_tplData = array();
-
-		$this->obj_tpl->tplDisplay("install_over.tpl", $_arr_tplData);
+		$this->obj_tpl->tplDisplay("install_over.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y030404",
+			"alert" => "y030404",
 		);
 	}
 
@@ -309,22 +257,6 @@ class CONTROL_INSTALL {
 				exit;
 			}
 
-			$this->mdl_opt       = new MODEL_OPT(); //设置管理员模型
-			return true;
-		}
-	}
-
-
-	private function check_opt() {
-		$_arr_tableRows = $this->obj_db->show_tables();
-
-		foreach ($_arr_tableRows as $_key=>$_value) {
-			$_arr_tables[] = $_value["Tables_in_" . BG_DB_NAME];
-		}
-
-		if (!in_array(BG_DB_TABLE . "opt", $_arr_tables)) {
-			return false;
-		} else {
 			return true;
 		}
 	}

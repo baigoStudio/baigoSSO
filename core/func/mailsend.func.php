@@ -39,7 +39,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 	//连接 SMTP 服务器
 	if(!$_obj_fp) {
 		return array(
-			"str_alert" => "x030201",
+			"alert" => "x030201",
 		);
 	}
 
@@ -48,7 +48,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 	$_str_getMsg = fgets($_obj_fp, 512); //获取服务器信息
 	if(substr($_str_getMsg, 0, 3) != "220") {
 		return array(
-			"str_alert" => "x030202",
+			"alert" => "x030202",
 		);
 	}
 
@@ -62,7 +62,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 	$_str_getMsg = fgets($_obj_fp, 512);
 	if(substr($_str_getMsg, 0, 3) != 220 && substr($_str_getMsg, 0, 3) != 250) {
 		return array(
-			"str_alert" => "x030203",
+			"alert" => "x030203",
 		);
 	}
 
@@ -78,7 +78,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		$_str_getMsg = fgets($_obj_fp, 512);
 		if(substr($_str_getMsg, 0, 3) != 334) {
 			return array(
-				"str_alert" => "x030204",
+				"alert" => "x030204",
 			);
 		}
 
@@ -86,7 +86,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		$_str_getMsg = fgets($_obj_fp, 512);
 		if(substr($_str_getMsg, 0, 3) != 334) {
 			return array(
-				"str_alert" => "x030205",
+				"alert" => "x030205",
 			);
 		}
 
@@ -94,7 +94,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		$_str_getMsg = fgets($_obj_fp, 512);
 		if(substr($_str_getMsg, 0, 3) != 235) {
 			return array(
-				"str_alert" => "x030206",
+				"alert" => "x030206",
 			);
 		}
 	}
@@ -107,7 +107,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		$_str_getMsg = fgets($_obj_fp, 512);
 		if(substr($_str_getMsg, 0, 3) != 250) {
 			return array(
-				"str_alert" => "x030207",
+				"alert" => "x030207",
 			);
 		}
 	}
@@ -122,7 +122,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 				fputs($_obj_fp, "RCPT TO: <" . preg_replace("/.*\<(.+?)\>.*/", "\\1", $_value) . ">" . PHP_EOL);
 				$_str_getMsg = fgets($_obj_fp, 512);
 				return array(
-					"str_alert" => "x030208",
+					"alert" => "x030208",
 				);
 			}
 		}
@@ -135,7 +135,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		$_str_getMsg = fgets($_obj_fp, 512);
 		if(substr($_str_getMsg, 0, 3) != 354) {
 			return array(
-				"str_alert" => "x030209",
+				"alert" => "x030209",
 			);
 		}
 
@@ -149,7 +149,7 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 		$_str_getMsg = fgets($_obj_fp, 512);
 		if(substr($_str_getMsg, 0, 3) != 250) {
 			return array(
-				"str_alert" => "x030210",
+				"alert" => "x030210",
 			);
 		}
 
@@ -158,6 +158,6 @@ function fn_mailsend($arr_mailTo, $str_mailSubject, $str_mailContent, $is_send =
 	fputs($_obj_fp, "QUIT" . PHP_EOL);
 
 	return array(
-		"str_alert" => "y030201",
+		"alert" => "y030201",
 	);
 }

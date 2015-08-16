@@ -44,8 +44,8 @@ class AJAX_APP {
 			$this->obj_ajax->halt_alert("x030410");
 		}
 
-		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}
 	}
 
@@ -59,19 +59,19 @@ class AJAX_APP {
 
 		if ($_num_appId == 0) {
 			return array(
-				"str_alert" => "x050203",
+				"alert" => "x050203",
 			);
 		}
 
 		$_arr_appRow = $this->mdl_app->mdl_read($_num_appId);
-		if ($_arr_appRow["str_alert"] != "y050102") {
+		if ($_arr_appRow["alert"] != "y050102") {
 			return $_arr_appRow;
 			exit;
 		}
 
 		$_arr_appRow  = $this->mdl_app->mdl_reset($_num_appId);
 
-		$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_appRow["alert"]);
 	}
 
 
@@ -84,8 +84,8 @@ class AJAX_APP {
 
 		//print_r($_arr_userIds);
 
-		if ($_arr_userIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
+		if ($_arr_userIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userIds["alert"]);
 		}
 
 		$_num_appId = fn_getSafe(fn_post("app_id"), "int", 0);
@@ -109,8 +109,8 @@ class AJAX_APP {
 
 		$_arr_userIds = $this->mdl_user->input_ids();
 
-		if ($_arr_userIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
+		if ($_arr_userIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userIds["alert"]);
 		}
 
 		$_num_appId = fn_getSafe(fn_post("app_id"), "int", 0);
@@ -121,7 +121,7 @@ class AJAX_APP {
 
 		foreach ($_arr_userIds["user_ids"] as $_value) {
 			$_arr_userRow = $this->mdl_user->mdl_read($_value);
-			if ($_arr_userRow["str_alert"] == "y010102") {
+			if ($_arr_userRow["alert"] == "y010102") {
 				$this->mdl_appBelong->mdl_submit($_value, $_num_appId);
 			}
 		}
@@ -149,8 +149,8 @@ class AJAX_APP {
 		}
 
 		$_arr_appRow = $this->mdl_app->mdl_read($_num_appId);
-		if ($_arr_appRow["str_alert"] != "y050102") {
-			$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
+		if ($_arr_appRow["alert"] != "y050102") {
+			$this->obj_ajax->halt_alert($_arr_appRow["alert"]);
 		}
 
 		$_tm_time    = time();
@@ -159,7 +159,7 @@ class AJAX_APP {
 		$_str_echo   = fn_rand();
 
 		$_arr_data = array(
-			"timestamp"  => $_tm_time,
+			"time"  => $_tm_time,
 			"random"     => $_str_rand,
 			"signature"  => $_str_sign,
 			"echostr"    => $_str_echo,
@@ -199,8 +199,8 @@ class AJAX_APP {
 	function ajax_submit() {
 		$_arr_appSubmit = $this->mdl_app->input_submit();
 
-		if ($_arr_appSubmit["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_appSubmit["str_alert"]);
+		if ($_arr_appSubmit["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_appSubmit["alert"]);
 		}
 
 		if ($_arr_appSubmit["app_id"] > 0) {
@@ -215,12 +215,12 @@ class AJAX_APP {
 
 		$_arr_appRow = $this->mdl_app->mdl_submit();
 
-		if ($_arr_appRow["str_alert"] == "y050101" || $_arr_appRow["str_alert"] == "y050103") {
+		if ($_arr_appRow["alert"] == "y050101" || $_arr_appRow["alert"] == "y050103") {
 			$_arr_targets[] = array(
 				"app_id" => $_arr_appRow["app_id"],
 			);
 			$_str_targets = json_encode($_arr_targets);
-			if ($_arr_appRow["str_alert"] == "y050101") {
+			if ($_arr_appRow["alert"] == "y050101") {
 				$_type = "add";
 			} else {
 				$_type = "edit";
@@ -229,7 +229,7 @@ class AJAX_APP {
 			$this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"][$_type], $_str_appRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_appRow["alert"]);
 	}
 
 
@@ -247,13 +247,13 @@ class AJAX_APP {
 		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_appIds = $this->mdl_app->input_ids();
-		if ($_arr_appIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_appIds["str_alert"]);
+		if ($_arr_appIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_appIds["alert"]);
 		}
 
 		$_arr_appRow = $this->mdl_app->mdl_status($_str_status);
 
-		if ($_arr_appRow["str_alert"] == "y050103") {
+		if ($_arr_appRow["alert"] == "y050103") {
 			foreach ($_arr_appIds["app_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"app_id" => $_value,
@@ -264,7 +264,7 @@ class AJAX_APP {
 			$this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"]["edit"], $_str_appRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_appRow["alert"]);
 	}
 
 
@@ -280,13 +280,13 @@ class AJAX_APP {
 		}
 
 		$_arr_appIds = $this->mdl_app->input_ids();
-		if ($_arr_appIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_appIds["str_alert"]);
+		if ($_arr_appIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_appIds["alert"]);
 		}
 
 		$_arr_appRow = $this->mdl_app->mdl_del();
 
-		if ($_arr_appRow["str_alert"] == "y050104") {
+		if ($_arr_appRow["alert"] == "y050104") {
 			foreach ($_arr_appIds["app_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"app_id" => $_value,
@@ -297,6 +297,6 @@ class AJAX_APP {
 			$this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"]["del"], $_str_appRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_appRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_appRow["alert"]);
 	}
 }

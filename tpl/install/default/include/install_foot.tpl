@@ -4,7 +4,11 @@
 
 			<div class="panel-footer">
 				<div class="pull-left">
-					<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME}</a>
+					{if $config.ui == "default"}
+						<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME}</a>
+					{else}
+						{$config.ui} SSO
+					{/if}
 				</div>
 				<div class="pull-right">
 					<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod={$cfg.mod_help}&act_get={$cfg.act_help}" target="_blank">

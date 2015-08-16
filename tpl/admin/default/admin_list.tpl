@@ -10,11 +10,11 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&{$tplData.query}"
 ]}
 
-{include "include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
 
 	<li>{$adminMod.admin.main.title}</li>
 
-	{include "include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
 		<div class="pull-left">
@@ -146,10 +146,10 @@
 	</form>
 
 	<div class="text-right">
-		{include "include/page.tpl" cfg=$cfg}
+		{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/page.tpl" cfg=$cfg}
 	</div>
 
-{include "include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_list = {
@@ -186,4 +186,4 @@
 	})
 	</script>
 
-{include "include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}

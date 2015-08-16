@@ -12,19 +12,15 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_api.inc.php"); //验证是否已登录
-include_once(BG_PATH_CONTROL_API . "code.class.php"); //载入商家控制器
-$api_code = new API_CODE(); //初始化商家
+include_once(BG_PATH_CONTROL_API . "signature.class.php"); //载入商家控制器
+$api_signature = new API_SIGNATURE(); //初始化商家
 
-switch ($GLOBALS["act_post"]) {
-	case "encode":
-		$api_code->api_encode();
+switch ($GLOBALS["act_get"]) {
+	case "signature":
+		$api_signature->api_signature();
 	break;
 
-	default:
-		switch ($GLOBALS["act_get"]) {
-			case "decode":
-				$api_code->api_decode();
-			break;
-		}
+	case "verify":
+		$api_signature->api_verify();
 	break;
 }

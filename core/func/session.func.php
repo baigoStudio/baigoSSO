@@ -28,7 +28,7 @@ function fn_ssin_begin() {
 
 	if (!fn_session("admin_id") || !fn_session("admin_ssin_time") || !fn_session("admin_hash") || $_num_adminTimeDiff < time()) {
 		fn_ssin_end();
-		$_arr_adminRow["str_alert"] = "x020401";
+		$_arr_adminRow["alert"] = "x020401";
 		return $_arr_adminRow;
 		exit;
 	}
@@ -39,7 +39,7 @@ function fn_ssin_begin() {
 
 	if (fn_baigoEncrypt($_arr_adminRow["admin_time"], $_arr_adminRow["admin_rand"]) != fn_session("admin_hash")){
 		fn_ssin_end();
-		$_arr_adminRow["str_alert"] = "x020403";
+		$_arr_adminRow["alert"] = "x020403";
 		return $_arr_adminRow;
 		exit;
 	}

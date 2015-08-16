@@ -7,12 +7,12 @@
 	sub_active     => "list"
 ]}
 
-{include "include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">{$adminMod.admin.main.title}</a></li>
 	<li>{$lang.page.show}</li>
 
-	{include "include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
 		<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">
@@ -99,5 +99,5 @@
 		</div>
 	</div>
 
-{include "include/admin_foot.tpl" cfg=$cfg}
-{include "include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}

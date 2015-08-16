@@ -10,12 +10,12 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&{$tplData.query}"
 ]}
 
-{include "include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=list">{$adminMod.app.main.title}</a></li>
 	<li>{$lang.page.appBelong}</li>
 
-	{include "include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
 		<ul class="list-inline">
@@ -200,12 +200,12 @@
 			</form>
 
 			<div class="text-right">
-				{include "include/page.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/page.tpl" cfg=$cfg}
 			</div>
 		</div>
 	</div>
 
-{include "include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_belong = {
@@ -261,4 +261,4 @@
 	})
 	</script>
 
-{include "include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}

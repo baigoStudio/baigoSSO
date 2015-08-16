@@ -15,7 +15,7 @@ include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 
 /*-------------用户类-------------*/
-class API_CODE {
+class API_SIGNATURE {
 
 	private $obj_api;
 	private $log;
@@ -47,42 +47,56 @@ class API_CODE {
 
 
 	/**
-	 * api_encode function.
+	 * api_signature function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	function api_encode() {
-		$this->app_check("post");
-		if (!isset($this->appAllow["code"]["encode"])) {
+	function api_signature() {
+		$this->app_check("get");
+
+		if (!isset($this->appAllow["signature"]["signature"])) {
 			$_arr_return = array(
-				"alert" => "x050314",
+				"alert" => "x050312",
 			);
-			$this->log_do($_arr_return, "encode");
+
+			$this->log_do($_arr_return, "signature");
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_arr_data = validateStr(fn_post("data"), 1, 0);
-		switch ($_arr_data["status"]) {
+		$_arr_time = validateStr(fn_get("time"), 1, 0);
+		switch ($_arr_time["status"]) {
 			case "too_short":
 				$_arr_return = array(
-					"alert" => "x080201",
+					"alert" => "x090201",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			break;
 
 			case "ok":
-				$_str_data = html_entity_decode($_arr_data["str"]);
+				$_tm_time = $_arr_time["str"];
 			break;
 		}
 
-		$_str_key     = fn_rand(6);
-		$_str_code    = fn_baigoEncode($_str_data, $_str_key);
+		$_arr_random = validateStr(fn_get("random"), 1, 0);
+		switch ($_arr_random["status"]) {
+			case "too_short":
+				$_arr_return = array(
+					"alert" => "x090202",
+				);
+				$this->obj_api->halt_re($_arr_return);
+			break;
+
+			case "ok":
+				$_str_rand = $_arr_random["str"];
+			break;
+		}
+
+		$_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand);
 
 		$_arr_return = array(
-			"code"   => $_str_code,
-			"key"    => $_str_key,
-			"alert"  => "y050405",
+			"signature"  => $_str_sign,
+			"alert"      => "y050404",
 		);
 
 		$this->obj_api->halt_re($_arr_return);
@@ -90,52 +104,75 @@ class API_CODE {
 
 
 	/**
-	 * api_decode function.
+	 * api_verify function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	function api_decode() {
+	function api_verify() {
 		$this->app_check("get");
-		if (!isset($this->appAllow["code"]["decode"])) {
+
+		if (!isset($this->appAllow["signature"]["verify"])) {
 			$_arr_return = array(
-				"alert" => "x050315",
+				"alert" => "x050313",
 			);
-			$this->log_do($_arr_return, "decode");
+			$this->log_do($_arr_return, "verify");
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_arr_code = validateStr(fn_get("code"), 1, 0);
-		switch ($_arr_code["status"]) {
+		$_arr_time = validateStr(fn_get("time"), 1, 0);
+		switch ($_arr_time["status"]) {
 			case "too_short":
 				$_arr_return = array(
-					"alert" => "x080202",
+					"alert" => "x090201",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			break;
 
 			case "ok":
-				$_str_code = $_arr_code["str"];
+				$_tm_time = $_arr_time["str"];
 			break;
 		}
 
-		$_arr_key = validateStr(fn_get("key"), 1, 0);
-		switch ($_arr_key["status"]) {
+		$_arr_random = validateStr(fn_get("random"), 1, 0);
+		switch ($_arr_random["status"]) {
 			case "too_short":
 				$_arr_return = array(
-					"alert" => "x080203",
+					"alert" => "x090202",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			break;
 
 			case "ok":
-				$_str_key = $_arr_key["str"];
+				$_str_rand = $_arr_random["str"];
 			break;
 		}
 
-		$_str_result  = fn_baigoDecode($_str_code, $_str_key);
+		$_arr_signature = validateStr(fn_get("signature"), 1, 0);
+		switch ($_arr_signature["status"]) {
+			case "too_short":
+				$_arr_return = array(
+					"alert" => "x090203",
+				);
+				$this->obj_api->halt_re($_arr_return);
+			break;
 
-		exit($_str_result);
+			case "ok":
+				$_str_sign = $_arr_signature["str"];
+			break;
+		}
+
+		if (fn_baigoSignChk($_tm_time, $_str_rand, $_str_sign)) {
+			$_str_alert = "y050403";
+		} else {
+			$_str_alert = "x050403";
+		}
+
+		$_arr_return = array(
+			"alert" => $_str_alert,
+		);
+
+		$this->obj_api->halt_re($_arr_return);
 	}
 
 

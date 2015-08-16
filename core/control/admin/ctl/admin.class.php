@@ -37,12 +37,12 @@ class CONTROL_ADMIN {
 
 		if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) {
 			return array(
-				"str_alert" => "x020303",
+				"alert" => "x020303",
 			);
 			exit;
 		}
 		$_arr_adminRow = $this->mdl_admin->mdl_read($_num_adminId);
-		if ($_arr_adminRow["str_alert"] != "y020102") {
+		if ($_arr_adminRow["alert"] != "y020102") {
 			return $_arr_adminRow;
 			exit;
 		}
@@ -52,7 +52,7 @@ class CONTROL_ADMIN {
 		$this->obj_tpl->tplDisplay("admin_show.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y020102",
+			"alert" => "y020102",
 		);
 	}
 
@@ -69,19 +69,19 @@ class CONTROL_ADMIN {
 		if ($_num_adminId > 0) {
 			if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
 				return array(
-					"str_alert" => "x020303",
+					"alert" => "x020303",
 				);
 				exit;
 			}
 			$_arr_adminRow = $this->mdl_admin->mdl_read($_num_adminId);
-			if ($_arr_adminRow["str_alert"] != "y020102") {
+			if ($_arr_adminRow["alert"] != "y020102") {
 				return $_arr_adminRow;
 				exit;
 			}
 		} else {
 			if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) {
 				return array(
-					"str_alert" => "x020302",
+					"alert" => "x020302",
 				);
 				exit;
 			}
@@ -98,7 +98,7 @@ class CONTROL_ADMIN {
 		$this->obj_tpl->tplDisplay("admin_form.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y020102",
+			"alert" => "y020102",
 		);
 	}
 
@@ -112,7 +112,7 @@ class CONTROL_ADMIN {
 	function ctl_list() {
 		if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) {
 			return array(
-				"str_alert" => "x020301",
+				"alert" => "x020301",
 			);
 			exit;
 		}
@@ -141,7 +141,7 @@ class CONTROL_ADMIN {
 
 		$this->obj_tpl->tplDisplay("admin_list.tpl", $_arr_tplData);
 		return array(
-			"str_alert" => "y020302",
+			"alert" => "y020302",
 		);
 	}
 }

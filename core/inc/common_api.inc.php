@@ -32,14 +32,14 @@ $GLOBALS["obj_db"]      = new CLASS_MYSQLI($_cfg_host); //设置数据库对象
 
 if (!$GLOBALS["obj_db"]->connect()) {
 	$arr_re    = array(
-		"str_alert" => "x030111",
+		"alert" => "x030111",
 	);
 	exit(json_encode($arr_re));
 }
 
 if (!$GLOBALS["obj_db"]->select_db()) {
 	$arr_re    = array(
-		"str_alert" => "x030112",
+		"alert" => "x030112",
 	);
 	exit(json_encode($arr_re));
 }

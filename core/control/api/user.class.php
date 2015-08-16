@@ -39,13 +39,13 @@ class API_USER {
 			include_once(BG_PATH_CONFIG . "is_install.php");
 			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
 				$_arr_return = array(
-					"str_alert" => "x030411"
+					"alert" => "x030411"
 				);
 				$this->obj_api->halt_re($_arr_return);
 			}
 		} else {
 			$_arr_return = array(
-				"str_alert" => "x030410"
+				"alert" => "x030410"
 			);
 			$this->obj_api->halt_re($_arr_return);
 		}
@@ -62,7 +62,7 @@ class API_USER {
 
 		if (!isset($this->appAllow["user"]["reg"])) {
 			$_arr_return = array(
-				"str_alert" => "x050305",
+				"alert" => "x050305",
 			);
 			$_arr_logType = array("user", "reg");
 			$_arr_logTarget[] = array(
@@ -73,28 +73,30 @@ class API_USER {
 		}
 
 		$_arr_userReg = $this->mdl_user->api_reg(); //获取数据
-		if ($_arr_userReg["str_alert"] != "ok") {
+		if ($_arr_userReg["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userReg);
 		}
 
 
-		$_str_userRand    = fn_rand(6);
-		$_str_userPass    = fn_baigoEncrypt($_arr_userReg["user_pass"], $_str_userRand, true);
-		$_arr_userRow     = $this->mdl_user->mdl_submit($_str_userPass, $_str_userRand);
-		$_str_code        = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
+		$_str_rand        = fn_rand(6);
+		$_str_userPass    = fn_baigoEncrypt($_arr_userReg["user_pass"], $_str_rand, true);
+		$_arr_userRow     = $this->mdl_user->mdl_submit($_str_userPass, $_str_rand);
+
+		$_str_key        = fn_rand(6);
+		$_str_code        = $this->obj_api->api_encode($_arr_userRow, $_str_key);
 		$this->mdl_appBelong->mdl_submit($_arr_userRow["user_id"], $this->appGet["app_id"]);
 
 		$_arr_return = array(
 			"code"   => $_str_code,
-			"key"    => $_str_userRand,
+			"key"    => $_str_key,
 		);
 
 		//通知
 		$_arr_notice              = $_arr_return;
-		$_arr_notice["action"]    = "reg";
+		$_arr_notice["act_post"]  = "reg";
 		$this->obj_api->api_notice($_arr_notice, $this->appRows);
 
-		$_arr_return["str_alert"] = $_arr_userRow["str_alert"];
+		$_arr_return["alert"] = $_arr_userRow["alert"];
 
 		$this->obj_api->halt_re($_arr_return);
 	}
@@ -111,7 +113,7 @@ class API_USER {
 
 		if (!isset($this->appAllow["user"]["login"])) {
 			$_arr_return = array(
-				"str_alert" => "x050306",
+				"alert" => "x050306",
 			);
 			$_arr_logType = array("user", "login");
 			$_arr_logTarget[] = array(
@@ -122,25 +124,25 @@ class API_USER {
 		}
 
 		$_arr_userLogin = $this->mdl_user->api_login();
-		if ($_arr_userLogin["str_alert"] != "ok") {
+		if ($_arr_userLogin["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userLogin);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_read($_arr_userLogin["user_str"], $_arr_userLogin["user_by"]);
-		if ($_arr_userRow["str_alert"] != "y010102") {
+		if ($_arr_userRow["alert"] != "y010102") {
 			$this->obj_api->halt_re($_arr_userRow);
-		}
-
-		if (fn_baigoEncrypt($_arr_userLogin["user_pass"], $_arr_userRow["user_rand"], true) != $_arr_userRow["user_pass"]) {
-			$_arr_return = array(
-				"str_alert" => "x010213",
-			);
-			$this->obj_api->halt_re($_arr_return);
 		}
 
 		if ($_arr_userRow["user_status"] != "enable") {
 			$_arr_return = array(
-				"str_alert" => "x010401",
+				"alert" => "x010401",
+			);
+			$this->obj_api->halt_re($_arr_return);
+		}
+
+		if (fn_baigoEncrypt($_arr_userLogin["user_pass"], $_arr_userRow["user_rand"], true) != $_arr_userRow["user_pass"]) {
+			$_arr_return = array(
+				"alert" => "x010213",
 			);
 			$this->obj_api->halt_re($_arr_return);
 		}
@@ -150,15 +152,16 @@ class API_USER {
 		$this->mdl_user->mdl_login($_arr_userRow["user_id"]);
 
 		unset($_arr_userRow["user_rand"], $_arr_userRow["user_pass"], $_arr_userRow["user_status"], $_arr_userRow["user_note"]);
-		$_str_userRand    = fn_rand(6);
-		$_str_code = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
+
+		$_str_key     = fn_rand(6);
+		$_str_code    = $this->obj_api->api_encode($_arr_userRow, $_str_key);
 
 		$_arr_return = array(
 			"code"   => $_str_code,
-			"key"    => $_str_userRand,
+			"key"    => $_str_key,
 		);
 
-		$_arr_return["str_alert"]  = "y010401";
+		$_arr_return["alert"]  = "y010401";
 
 		$this->obj_api->halt_re($_arr_return);
 	}
@@ -175,7 +178,7 @@ class API_USER {
 
 		if (!isset($this->appAllow["user"]["get"])) {
 			$_arr_return = array(
-				"str_alert" => "x050307",
+				"alert" => "x050307",
 			);
 			$_arr_logTarget[] = array(
 				"app_id" => $this->appGet["app_id"],
@@ -187,24 +190,24 @@ class API_USER {
 
 		$_arr_userGet = $this->mdl_user->input_get_by("get");
 
-		if ($_arr_userGet["str_alert"] != "ok") {
+		if ($_arr_userGet["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userGet);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_read($_arr_userGet["user_str"], $_arr_userGet["user_by"]);
-		if ($_arr_userRow["str_alert"] != "y010102") {
+		if ($_arr_userRow["alert"] != "y010102") {
 			$this->obj_api->halt_re($_arr_userRow);
 		}
 
 		unset($_arr_userRow["user_rand"], $_arr_userRow["user_pass"], $_arr_userRow["user_status"], $_arr_userRow["user_note"]);
 
-		$_str_userRand    = fn_rand(6);
-		$_str_code = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
+		$_str_key    = fn_rand(6);
+		$_str_code    = $this->obj_api->api_encode($_arr_userRow, $_str_key);
 
 		$_arr_return = array(
-			"code"       => $_str_code,
-			"key"        => $_str_userRand,
-			"str_alert"  => $_arr_userRow["str_alert"],
+			"code"   => $_str_code,
+			"key"    => $_str_key,
+			"alert"  => $_arr_userRow["alert"],
 		);
 
 		$this->obj_api->halt_re($_arr_return);
@@ -222,7 +225,7 @@ class API_USER {
 
 		if (!isset($this->appAllow["user"]["edit"])) {
 			$_arr_return = array(
-				"str_alert" => "x050308",
+				"alert" => "x050308",
 			);
 			$_arr_logTarget[] = array(
 				"app_id" => $this->appGet["app_id"],
@@ -234,20 +237,20 @@ class API_USER {
 
 		$_arr_userEdit = $this->mdl_user->api_edit();
 
-		if ($_arr_userEdit["str_alert"] != "ok") {
+		if ($_arr_userEdit["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userEdit);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_read($_arr_userEdit["user_str"], $_arr_userEdit["user_by"]);
-		if ($_arr_userRow["str_alert"] != "y010102") {
+		if ($_arr_userRow["alert"] != "y010102") {
 			$this->obj_api->halt_re($_arr_userRow);
 		}
 
 		if (!isset($this->appAllow["user"]["global"])) {
 			$_arr_appBelongRow = $this->mdl_appBelong->mdl_read($_arr_userRow["user_id"], $this->appGet["app_id"]);
-			if ($_arr_appBelongRow["str_alert"] != "y070102") {
+			if ($_arr_appBelongRow["alert"] != "y070102") {
 				$_arr_return = array(
-					"str_alert" => "x050308",
+					"alert" => "x050308",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			}
@@ -256,7 +259,7 @@ class API_USER {
 		if ($_arr_userEdit["user_check_pass"] == true) {
 			if (fn_baigoEncrypt($_arr_userEdit["user_pass"], $_arr_userRow["user_rand"], true) != $_arr_userRow["user_pass"]) {
 				$_arr_return = array(
-					"str_alert" => "x010213",
+					"alert" => "x010213",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			}
@@ -264,38 +267,39 @@ class API_USER {
 
 		if ($_arr_userRow["user_status"] != "enable") {
 			return array(
-				"str_alert" => "x010401",
+				"alert" => "x010401",
 			);
 			exit;
 		}
 
 		if (BG_REG_ONEMAIL == "false" && BG_REG_NEEDMAIL == "on" && $_arr_userEdit["user_mail"]) {
 			$_arr_userRow = $this->mdl_user->mdl_read($_arr_userEdit["user_mail"], "user_mail", $_arr_userRow["user_id"]);
-			if ($_arr_userRow["str_alert"] == "y010102") {
+			if ($_arr_userRow["alert"] == "y010102") {
 				$_arr_return = array(
-					"str_alert" => "x010211",
+					"alert" => "x010211",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			}
 		}
 
-		//file_put_contents(BG_PATH_ROOT . "test.txt", $_str_userPass . "||" . $_str_userRand);
+		//file_put_contents(BG_PATH_ROOT . "test.txt", $_str_userPass . "||" . $_str_rand);
 
-		$_str_userRand    = fn_rand(6);
-		$_arr_userRow     = $this->mdl_user->mdl_edit($_arr_userRow["user_id"]);
-		$_str_code        = $this->obj_api->api_encode($_arr_userRow, $_str_userRand);
+		$_str_key                     = fn_rand(6);
+		$_arr_userUpdate              = $this->mdl_user->mdl_edit($_arr_userRow["user_id"]);
+		$_arr_userUpdate["user_name"] = $_arr_userRow["user_name"];
+		$_str_code                    = $this->obj_api->api_encode($_arr_userUpdate, $_str_key);
 
 		$_arr_return = array(
 			"code"   => $_str_code,
-			"key"    => $_str_userRand,
+			"key"    => $_str_key,
 		);
 
 		//通知
 		$_arr_notice              = $_arr_return;
-		$_arr_notice["action"]    = "edit";
+		$_arr_notice["act_post"]  = "edit";
 		$this->obj_api->api_notice($_arr_notice, $this->appRows);
 
-		$_arr_return["str_alert"]  = $_arr_userRow["str_alert"];
+		$_arr_return["alert"]  = $_arr_userUpdate["alert"];
 
 		$this->obj_api->halt_re($_arr_return);
 	}
@@ -312,7 +316,7 @@ class API_USER {
 
 		if (!isset($this->appAllow["user"]["del"])) {
 			$_arr_return = array(
-				"str_alert" => "x050309",
+				"alert" => "x050309",
 			);
 			$_arr_logTarget[] = array(
 				"app_id" => $this->appGet["app_id"],
@@ -338,7 +342,7 @@ class API_USER {
 
 		$_arr_userDel = $this->mdl_user->mdl_del($_arr_users);
 
-		if ($_arr_userDel["str_alert"] == "y010104") {
+		if ($_arr_userDel["alert"] == "y010104") {
 			foreach ($_arr_userIds["user_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"user_id" => $_value,
@@ -348,8 +352,8 @@ class API_USER {
 			$this->mdl_log->mdl_submit($_str_targets, "user", $this->log["user"]["del"], $_str_targets, "app", $this->appGet["app_id"]);
 		}
 
-		$_arr_notice              = $_arr_userDel;
-		$_arr_notice["action"]    = "del";
+		$_arr_notice["user_ids"]  = $_arr_userIds;
+		$_arr_notice["act_post"]  = "del";
 
 		$this->obj_api->api_notice($_arr_notice, $this->appRows);
 
@@ -368,24 +372,24 @@ class API_USER {
 
 		if (!isset($this->appAllow["user"]["chkname"])) {
 			$_arr_return = array(
-				"str_alert" => "x050310",
+				"alert" => "x050310",
 			);
 			$this->obj_api->halt_re($_arr_return);
 		}
 
 		$_arr_userName = $this->mdl_user->input_user_name();
-		if ($_arr_userName["str_alert"] != "ok") {
+		if ($_arr_userName["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userName);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_read($_arr_userName["user_name"], "user_name", $_arr_userName["not_id"]);
-		if ($_arr_userRow["str_alert"] == "y010102") {
+		if ($_arr_userRow["alert"] == "y010102") {
 			$_str_alert = "x010205";
 		} else {
 			$_str_alert = "y010205";
 		}
 		$_arr_return = array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 		$this->obj_api->halt_re($_arr_return);
 	}
@@ -403,18 +407,18 @@ class API_USER {
 
 			if (!isset($this->appAllow["user"]["chkmail"])) {
 				$_arr_return = array(
-					"str_alert" => "x050311",
+					"alert" => "x050311",
 				);
 				$this->obj_api->halt_re($_arr_return);
 			}
 
 			$_arr_userMail = fn_userChkMail();
-			if ($_arr_userMail["str_alert"] != "ok") {
+			if ($_arr_userMail["alert"] != "ok") {
 				$this->obj_api->halt_re($_arr_userMail);
 			}
 
 			$_arr_userRow = $this->mdl_user->mdl_read($_arr_userName["user_mail"], "user_mail", $_arr_userMail["not_id"]);
-			if ($_arr_userRow["str_alert"] == "y010102") {
+			if ($_arr_userRow["alert"] == "y010102") {
 				$_str_alert = "x010211";
 			} else {
 				$_str_alert = "y010211";
@@ -424,7 +428,7 @@ class API_USER {
 		}
 
 		$_arr_return = array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 		$this->obj_api->halt_re($_arr_return);
 	}
@@ -440,18 +444,17 @@ class API_USER {
 	 */
 	private function app_check($str_method = "get") {
 		$this->appGet = $this->obj_api->app_get($str_method);
+
+		if ($this->appGet["alert"] != "ok") {
+			$this->obj_api->halt_re($this->appGet);
+		}
+
 		$_arr_logTarget[] = array(
 			"app_id" => $this->appGet["app_id"]
 		);
 
-		if ($this->appGet["str_alert"] != "ok") {
-			$_arr_logType = array("app", "get");
-			$this->log_do($_arr_logTarget, "app", $this->appGet, $_arr_logType);
-			$this->obj_api->halt_re($this->appGet);
-		}
-
 		$_arr_appRow = $this->mdl_app->mdl_read($this->appGet["app_id"]);
-		if ($_arr_appRow["str_alert"] != "y050102") {
+		if ($_arr_appRow["alert"] != "y050102") {
 			$_arr_logType = array("app", "read");
 			$this->log_do($_arr_logTarget, "app", $_arr_appRow, $_arr_logType);
 			$this->obj_api->halt_re($_arr_appRow);
@@ -459,7 +462,7 @@ class API_USER {
 		$this->appAllow = $_arr_appRow["app_allow"];
 
 		$_arr_appChk = $this->obj_api->app_chk($this->appGet, $_arr_appRow);
-		if ($_arr_appChk["str_alert"] != "ok") {
+		if ($_arr_appChk["alert"] != "ok") {
 			$_arr_logType = array("app", "check");
 			$this->log_do($_arr_logTarget, "app", $_arr_appChk, $_arr_logType);
 			$this->obj_api->halt_re($_arr_appChk);
@@ -481,4 +484,5 @@ class API_USER {
 		$_str_targets = json_encode($arr_logTarget);
 		$_str_result  = json_encode($arr_logResult);
 		$this->mdl_log->mdl_submit($_str_targets, $str_targetType, $this->log[$arr_logType[0]][$arr_logType[1]], $_str_result, "app", $this->appGet["app_id"]);
-	}}
+	}
+}

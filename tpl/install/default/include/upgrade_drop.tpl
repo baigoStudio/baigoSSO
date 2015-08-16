@@ -4,5 +4,5 @@
 							<span class="caret"></span>
 						</button>
 
-						{include "include/upgrade_menu.tpl" cfg=$cfg}
+						{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/upgrade_menu.tpl" cfg=$cfg}
 					</div>

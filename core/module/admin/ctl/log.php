@@ -19,16 +19,16 @@ $ctl_log = new CONTROL_LOG(); //初始化日志
 switch ($GLOBALS["act_get"]) {
 	case "show": //显示
 		$arr_logRow = $ctl_log->ctl_show();
-		if ($arr_logRow["str_alert"] != "y060102") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_logRow["str_alert"]);
+		if ($arr_logRow["alert"] != "y060102") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_logRow["alert"]);
 			exit;
 		}
 	break;
 
 	default: //列出
 		$arr_logRow = $ctl_log->ctl_list();
-		if ($arr_logRow["str_alert"] != "y060302") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_logRow["str_alert"]);
+		if ($arr_logRow["alert"] != "y060302") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_logRow["alert"]);
 			exit;
 		}
 	break;

@@ -21,6 +21,10 @@ class CLASS_API {
 		$this->obj_base   = $GLOBALS["obj_base"]; //获取界面类型
 		$this->config     = $this->obj_base->config;
 		$this->log        = include_once(BG_PATH_LANG . $this->config["lang"] . "/log.php"); //载入日志内容
+		$this->arr_return = array(
+			"prd_sso_ver" => PRD_SSO_VER,
+			"prd_sso_pub" => PRD_SSO_PUB,
+		);
 	}
 
 
@@ -33,13 +37,13 @@ class CLASS_API {
 	 * @return void
 	 */
 	function app_chk($arr_appGet, $arr_appRow) {
-		if ($arr_appGet["str_alert"] != "ok") {
+		if ($arr_appGet["alert"] != "ok") {
 			return $arr_appRow;
 		}
 
 		if ($arr_appRow["app_status"] != "enable") {
 			return array(
-				"str_alert" => "x050402",
+				"alert" => "x050402",
 			);
 			exit;
 		}
@@ -50,7 +54,7 @@ class CLASS_API {
 			$_str_ipAllow = str_replace(PHP_EOL, "|", $arr_appRow["app_ip_allow"]);
 			if (!fn_regChk($_str_ip, $_str_ipAllow, true)) {
 				return array(
-					"str_alert" => "x050212",
+					"alert" => "x050212",
 				);
 				exit;
 			}
@@ -58,7 +62,7 @@ class CLASS_API {
 			$_str_ipBad = str_replace(PHP_EOL, "|", $arr_appRow["app_ip_bad"]);
 			if (fn_regChk($_str_ip, $_str_ipBad)) {
 				return array(
-					"str_alert" => "x050213",
+					"alert" => "x050213",
 				);
 				exit;
 			}
@@ -66,13 +70,13 @@ class CLASS_API {
 
 		if ($arr_appRow["app_key"] != $arr_appGet["app_key"]) {
 			return array(
-				"str_alert" => "x050217",
+				"alert" => "x050217",
 			);
 			exit;
 		}
 
 		return array(
-			"str_alert" => "ok",
+			"alert" => "ok",
 		);
 	}
 
@@ -97,14 +101,14 @@ class CLASS_API {
 		switch ($_arr_appId["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x050203",
+					"alert" => "x050203",
 				);
 				exit;
 			break;
 
 			case "format_err":
 				return array(
-					"str_alert" => "x050204",
+					"alert" => "x050204",
 				);
 				exit;
 			break;
@@ -119,21 +123,21 @@ class CLASS_API {
 		switch ($_arr_appKey["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x050214",
+					"alert" => "x050214",
 				);
 				exit;
 			break;
 
 			case "too_long":
 				return array(
-					"str_alert" => "x050215",
+					"alert" => "x050215",
 				);
 				exit;
 			break;
 
 			case "format_err":
 				return array(
-					"str_alert" => "x050216",
+					"alert" => "x050216",
 				);
 				exit;
 			break;
@@ -144,7 +148,7 @@ class CLASS_API {
 
 		}
 
-		$_arr_appGet["str_alert"] = "ok";
+		$_arr_appGet["alert"] = "ok";
 
 		return $_arr_appGet;
 	}
@@ -165,7 +169,7 @@ class CLASS_API {
 			$_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand);
 
 			$_arr_query = array(
-				"timestamp" => $_tm_time,
+				"time" => $_tm_time,
 				"random"    => $_str_rand,
 				"signature" => $_str_sign,
 				"app_id"    => $_value["app_id"],
@@ -189,14 +193,15 @@ class CLASS_API {
 	 * @param mixed $str_key
 	 * @return void
 	 */
-	function api_encode($arr_data, $str_key) {
-		unset($arr_data["str_alert"]);
+	function api_encode($arr_data, $str_key, $method = "encode") {
+		unset($arr_data["alert"]);
 
-		$_str_src     = fn_jsonEncode($arr_data, "encode");
+		$_str_src     = fn_jsonEncode($arr_data, $method);
 		$_str_code    = fn_baigoEncode($_str_src, $str_key);
 
 		return $_str_code;
 	}
+
 
 	/** 返回结果
 	 * halt_re function.
@@ -206,6 +211,8 @@ class CLASS_API {
 	 * @return void
 	 */
 	function halt_re($arr_re) {
-		exit(json_encode($arr_re)); //输出错误信息
+		$arr_halt = array_merge($this->arr_return, $arr_re)
+
+		exit(json_encode($arr_halt)); //输出错误信息
 	}
 }

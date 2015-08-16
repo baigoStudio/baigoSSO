@@ -19,32 +19,32 @@ $ctl_opt = new CONTROL_OPT(); //初始化设置对象
 switch ($GLOBALS["act_get"]) {
 	case "reg": //注册
 		$arr_optRow = $ctl_opt->ctl_reg();
-		if ($arr_optRow["str_alert"] != "y040302") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["str_alert"]);
+		if ($arr_optRow["alert"] != "y040302") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "mail": //邮件发送
 		$arr_optRow = $ctl_opt->ctl_mail();
-		if ($arr_optRow["str_alert"] != "y040303") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["str_alert"]);
+		if ($arr_optRow["alert"] != "y040303") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["alert"]);
 			exit;
 		}
 	break;
 
 	case "db": //数据库
 		$arr_optRow = $ctl_opt->ctl_db();
-		if ($arr_optRow["str_alert"] != "y040304") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["str_alert"]);
+		if ($arr_optRow["alert"] != "y040304") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["alert"]);
 			exit;
 		}
 	break;
 
 	default: //基本
 		$arr_optRow = $ctl_opt->ctl_base();
-		if ($arr_optRow["str_alert"] != "y040301") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["str_alert"]);
+		if ($arr_optRow["alert"] != "y040301") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $arr_optRow["alert"]);
 			exit;
 		}
 	break;

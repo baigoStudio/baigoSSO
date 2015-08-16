@@ -56,8 +56,8 @@ $ctl_logon              = new CONTROL_LOGON(); //初始化登录
 switch ($GLOBALS["act_post"]) {
 	case "login": //登录
 		$arr_logonRow = $ctl_logon->ctl_login();
-		if ($arr_logonRow["str_alert"] != "y020201") {
-			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=logon&act_get=logon&forward=" . $arr_logonRow["forward"] . "&alert=" . $arr_logonRow["str_alert"]);
+		if ($arr_logonRow["alert"] != "y020201") {
+			header("Location: " . BG_URL_ADMIN . "ctl.php?mod=logon&act_get=logon&forward=" . $arr_logonRow["forward"] . "&alert=" . $arr_logonRow["alert"]);
 		} else {
 			header("Location: " . base64_decode($arr_logonRow["forward"]));
 		}

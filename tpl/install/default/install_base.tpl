@@ -5,23 +5,23 @@
 	mod_help   => "install",
 	act_help   => "base"
 ]}
-{include "include/install_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_head.tpl" cfg=$cfg}
 
 	<form name="install_form_base" id="install_form_base">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="base">
 
-		{include "include/install_form.tpl" cfg=$cfg}
+		{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_form.tpl" cfg=$cfg}
 
 		<div class="form-group">
 			<div class="btn-group">
 				<button type="button" id="go_next" class="btn btn-primary btn-lg">{$lang.btn.save}</button>
-				{include "include/install_drop.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_drop.tpl" cfg=$cfg}
 			</div>
 		</div>
 	</form>
 
-{include "include/install_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_submit_form = {

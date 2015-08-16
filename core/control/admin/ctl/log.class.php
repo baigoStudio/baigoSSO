@@ -46,20 +46,20 @@ class CONTROL_LOG {
 
 		if ($_num_logId == 0) {
 			return array(
-				"str_alert" => "x050201",
+				"alert" => "x050201",
 			);
 		}
 
 		if (!isset($this->adminLogged["admin_allow"]["log"]["browse"])) {
 			return array(
-				"str_alert" => "x060301",
+				"alert" => "x060301",
 			);
 			exit;
 		}
 
 		$_arr_logRow = $this->mdl_log->mdl_read($_num_logId);
 
-		if ($_arr_logRow["str_alert"] != "y060102") {
+		if ($_arr_logRow["alert"] != "y060102") {
 			return $_arr_logRow;
 			exit;
 		}
@@ -100,11 +100,6 @@ class CONTROL_LOG {
 					$_arr_logRow["log_targets"][$_key]["target_id"]   = $_value["log_id"];
 					$_arr_logRow["log_targets"][$_key]["target_name"] = "log";
 				break;
-
-				case "opt":
-					$_arr_logRow["log_targets"][$_key]["target_id"]    = $_value["opt_key"];
-					$_arr_logRow["log_targets"][$_key]["target_name"]  = $_value["opt_key"];
-				break;
 			}
 		}
 
@@ -127,7 +122,7 @@ class CONTROL_LOG {
 		$this->obj_tpl->tplDisplay("log_show.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y060102",
+			"alert" => "y060102",
 		);
 	}
 
@@ -141,7 +136,7 @@ class CONTROL_LOG {
 	function ctl_list() {
 		if (!isset($this->adminLogged["admin_allow"]["log"]["browse"])) {
 			return array(
-				"str_alert" => "x060301",
+				"alert" => "x060301",
 			);
 			exit;
 		}
@@ -189,7 +184,7 @@ class CONTROL_LOG {
 
 		$this->obj_tpl->tplDisplay("log_list.tpl", $_arr_tplData);
 		return array(
-			"str_alert" => "y060302",
+			"alert" => "y060302",
 		);
 	}
 }

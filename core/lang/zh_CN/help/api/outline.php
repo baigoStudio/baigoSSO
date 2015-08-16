@@ -4,7 +4,7 @@ return "<h3>API 概述</h3>
 		各种应用整合 baigo SSO 都是通过 API 接口实现的，您可以在各类应用程序中使用该接口，通过发起 HTTP 请求方式调用 baigo SSO 服务，返回 JSON 数据。
 	</p>
 	<p>
-		使用 API 接口，您需先在 baigo SSO 创建应用，创建成功后会给出 APP ID 和 APP KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。
+		使用 API 接口，您需先在 baigo SSO 创建应用，创建成功后会给出 APP ID 和 APP KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。
 	</p>
 
 	<hr>
@@ -33,19 +33,19 @@ return "<h3>API 概述</h3>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">str_alert</td>
+						<td class=\"nowrap\">alert</td>
 						<td class=\"nowrap\">string</td>
 						<td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">code</td>
 						<td class=\"nowrap\">string</td>
-						<td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code\">密文接口</a>。</td>
+						<td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">key</td>
 						<td class=\"nowrap\">string</td>
-						<td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code\">密文接口</a>。</td>
+						<td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
 					</tr>
 				</tbody>
 			</table>

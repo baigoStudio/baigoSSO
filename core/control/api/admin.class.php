@@ -36,7 +36,7 @@ class API_ADMIN {
 		//本接口只在安装状态下起作用
 		if (file_exists(BG_PATH_CONFIG . "is_install.php")) {
 			$_arr_return = array(
-				"str_alert" => "x030403"
+				"alert" => "x030403"
 			);
 			$this->obj_api->halt_re($_arr_return);
 		}
@@ -45,18 +45,17 @@ class API_ADMIN {
 
 	private function app_check($str_method = "get") {
 		$this->appGet = $this->obj_api->app_get($str_method);
+
+		if ($this->appGet["alert"] != "ok") {
+			$this->obj_api->halt_re($this->appGet);
+		}
+
 		$_arr_logTarget[] = array(
 			"app_id" => $this->appGet["app_id"]
 		);
 
-		if ($this->appGet["str_alert"] != "ok") {
-			$_arr_logType = array("app", "get");
-			$this->log_do($_arr_logTarget, "app", $this->appGet, $_arr_logType);
-			$this->obj_api->halt_re($this->appGet);
-		}
-
 		$_arr_appRow = $this->mdl_app->mdl_read($this->appGet["app_id"]);
-		if ($_arr_appRow["str_alert"] != "y050102") {
+		if ($_arr_appRow["alert"] != "y050102") {
 			$_arr_logType = array("app", "read");
 			$this->log_do($_arr_logTarget, "app", $_arr_appRow, $_arr_logType);
 			$this->obj_api->halt_re($_arr_appRow);
@@ -64,7 +63,7 @@ class API_ADMIN {
 		$this->appAllow = $_arr_appRow["app_allow"];
 
 		$_arr_appChk = $this->obj_api->app_chk($this->appGet, $_arr_appRow);
-		if ($_arr_appChk["str_alert"] != "ok") {
+		if ($_arr_appChk["alert"] != "ok") {
 			$_arr_logType = array("app", "check");
 			$this->log_do($_arr_logTarget, "app", $_arr_appChk, $_arr_logType);
 			$this->obj_api->halt_re($_arr_appChk);
@@ -92,23 +91,24 @@ class API_ADMIN {
 
 		$_arr_adminAdd = $this->mdl_admin->api_add();
 
-		if ($_arr_adminAdd["str_alert"] != "ok") {
+		if ($_arr_adminAdd["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_adminAdd);
 		}
 
-		$_str_adminRand   = fn_rand(6);
-		$_str_adminPassDo = fn_baigoEncrypt($_arr_adminAdd["admin_pass"], $_str_adminRand, true);
-		$_arr_adminRow    = $this->mdl_admin->mdl_submit($_str_adminPassDo, $_str_adminRand);
-		$_str_code        = $this->obj_api->api_encode($_arr_adminRow, $_str_adminRand);
+		$_str_rand        = fn_rand(6);
+		$_str_adminPassDo = fn_baigoEncrypt($_arr_adminAdd["admin_pass"], $_str_rand, true);
+		$_arr_adminRow    = $this->mdl_admin->mdl_submit($_str_adminPassDo, $_str_rand);
+
+		$_str_key        = fn_rand(6);
+		$_str_code        = $this->obj_api->api_encode($_arr_adminRow, $_str_key);
 
 		$_arr_return = array(
 			"code"   => $_str_code,
-			"key"    => $_str_userRand,
+			"key"    => $_str_key,
 		);
 
-		$_arr_return["str_alert"] = $_arr_adminRow["str_alert"];
+		$_arr_return["alert"] = $_arr_adminRow["alert"];
 
 		$this->obj_api->halt_re($_arr_return);
 	}
-
 }

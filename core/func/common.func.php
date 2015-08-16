@@ -223,30 +223,15 @@ function fn_getSafe($str_string, $str_type = "txt", $str_default = "") {
  * @param mixed $str
  * @return void
  */
-function fn_strlen_utf8($str) {
-	$i     = 0;
-	$count = 0;
-	$len   = strlen($str);
-	while ($i < $len) {
-		$chr = ord($str[$i]);
-		$count++;
-		$i++;
-		if ($i >= $len) {
-			break;
-		}
-		if ($chr & 0x80) {
-			$chr <<= 1;
-			while ($chr & 0x80) {
-				$i++;
-				$chr <<= 1;
-			}
-		}
-	}
-	return $count;
+function fn_strlen_utf8($str_string) {
+	// 将字符串分解为单元
+	preg_match_all("/./us", $str_string, $match);
+	// 返回单元个数
+	return count($match[0]);
 }
 
 
-/** 截取 UTF8 字符
+/**
  * fn_substr_utf8 function.
  *
  * @access public
@@ -256,38 +241,9 @@ function fn_strlen_utf8($str) {
  * @return void
  */
 function fn_substr_utf8($str_string, $begin, $length) {
-	//對字串做URL Eecode
-	$str_string    = mb_substr($str_string, $begin, mb_strlen($str_string));
-	$iString       = urlencode($str_string);
-	$lstrResult    = "";
-	$ilength       = 0;
-	$k             = 0;
-	do {
-		$lstrChar = substr($iString, $k, 1);
-		if ($lstrChar == "%") {
-			$ThisChr = hexdec(substr($iString, $k+1, 2));
-			if ($ThisChr >= 128) {
-				if ($ilength + 3 < $length) {
-					$lstrResult .= urldecode(substr($iString, $k, 9));
-					$k = $k + 9;
-					$ilength += 3;
-				} else {
-					$k = $k + 9;
-					$ilength += 3;
-				}
-			} else {
-				$lstrResult .= urldecode(substr($iString, $k, 3));
-				$k = $k + 3;
-				$ilength += 2;
-			}
-		} else {
-			$lstrResult .= urldecode(substr($iString, $k, 1));
-			$k = $k + 1;
-			$ilength++;
-		}
-	}
-	while ($k < strlen($iString) && $ilength < $length);
-	return $lstrResult;
+	preg_match_all("/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/i", $str_string, $_arr);
+
+    return join("", array_slice($_arr[0], $begin, $length));
 }
 
 

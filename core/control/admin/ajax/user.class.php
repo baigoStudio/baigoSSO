@@ -38,8 +38,8 @@ class AJAX_USER {
 			$this->obj_ajax->halt_alert("x030410");
 		}
 
-		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}
 	}
 
@@ -54,8 +54,8 @@ class AJAX_USER {
 		$_str_userPassDo  = "";
 		$_str_userRand    = "";
 
-		if ($_arr_userSubmit["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_userSubmit["str_alert"]);
+		if ($_arr_userSubmit["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userSubmit["alert"]);
 		}
 
 		if ($_arr_userSubmit["user_id"] > 0) {
@@ -87,7 +87,7 @@ class AJAX_USER {
 
 		$_arr_userRow = $this->mdl_user->mdl_submit($_str_userPassDo, $_str_userRand);
 
-		$this->obj_ajax->halt_alert($_arr_userRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_userRow["alert"]);
 	}
 
 	/*============更改用户状态============
@@ -104,13 +104,13 @@ class AJAX_USER {
 		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_userIds = $this->mdl_user->input_ids();
-		if ($_arr_userIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
+		if ($_arr_userIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userIds["alert"]);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_status($_str_status);
 
-		$this->obj_ajax->halt_alert($_arr_userRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_userRow["alert"]);
 	}
 
 	/*============删除用户============
@@ -124,13 +124,13 @@ class AJAX_USER {
 		}
 
 		$_arr_userIds = $this->mdl_user->input_ids();
-		if ($_arr_userIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_userIds["str_alert"]);
+		if ($_arr_userIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userIds["alert"]);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds["user_ids"]);
 
-		if ($_arr_userRow["str_alert"] == "y010104") {
+		if ($_arr_userRow["alert"] == "y010104") {
 			foreach ($_arr_userIds["user_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"user_id" => $_value,
@@ -141,7 +141,7 @@ class AJAX_USER {
 			$this->mdl_log->mdl_submit($_str_targets, "user", $this->log["user"]["del"], $_str_userRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_userRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_userRow["alert"]);
 	}
 
 
@@ -154,13 +154,13 @@ class AJAX_USER {
 	function ajax_chkname() {
 		$_arr_userName = $this->mdl_user->input_user_name();
 
-		if ($_arr_userName["str_alert"] != "ok") {
-			$this->obj_ajax->halt_re($_arr_userName["str_alert"]);
+		if ($_arr_userName["alert"] != "ok") {
+			$this->obj_ajax->halt_re($_arr_userName["alert"]);
 		}
 
 		$_arr_userRow = $this->mdl_user->mdl_read($_arr_userName["user_name"], "user_name", $_arr_userName["not_id"]);
 
-		if ($_arr_userRow["str_alert"] == "y010102") {
+		if ($_arr_userRow["alert"] == "y010102") {
 			$this->obj_ajax->halt_re("x010205");
 		}
 
@@ -180,13 +180,13 @@ class AJAX_USER {
 	function ajax_chkmail() {
 		$_arr_userMail = $this->mdl_user->input_user_mail();
 
-		if ($_arr_userMail["str_alert"] != "ok") {
-			$this->obj_ajax->halt_re($_arr_userMail["str_alert"]);
+		if ($_arr_userMail["alert"] != "ok") {
+			$this->obj_ajax->halt_re($_arr_userMail["alert"]);
 		}
 
 		if ($_arr_userMail["user_mail"]) {
 			$_arr_userRow = $this->mdl_user->mdl_read($_arr_userMail["user_mail"], "user_mail", $_arr_userMail["not_id"]);
-			if ($_arr_userRow["str_alert"] == "y010102") {
+			if ($_arr_userRow["alert"] == "y010102") {
 				$this->obj_ajax->halt_re("x010211");
 			}
 		}

@@ -40,7 +40,7 @@ class CONTROL_PROFILE {
 		$this->obj_tpl->tplDisplay("profile_info.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y020108",
+			"alert" => "y020108",
 		);
 	}
 
@@ -49,7 +49,7 @@ class CONTROL_PROFILE {
 		$this->obj_tpl->tplDisplay("profile_pass.tpl", $this->tplData);
 
 		return array(
-			"str_alert" => "y020109",
+			"alert" => "y020109",
 		);
 	}
 

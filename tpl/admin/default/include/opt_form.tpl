@@ -1,8 +1,6 @@
 	{foreach $opt[$cfg.sub_active] as $key=>$value}
 		{if $smarty.const[$key]}
 			{$_this_value = $smarty.const[$key]}
-		{else if isset($tplData.optRows[$key].opt_value) && $tplData.optRows[$key].opt_value}
-			{$_this_value = $tplData.optRows[$key].opt_value}
 		{else}
 			{$_this_value = $value.default}
 		{/if}
@@ -13,22 +11,22 @@
 
 				{if $value.type == "select"}
 					<select name="opt[{$key}]" id="opt_{$key}" class="validate form-control">
-						{foreach $value.option as $_key=>$_value}
-							<option {if $_this_value == $_key}selected{/if} value="{$_key}">{$_value}</option>
+						{foreach $value.option as $key_opt=>$value_opt}
+							<option {if $_this_value == $key_opt}selected{/if} value="{$key_opt}">{$value_opt}</option>
 						{/foreach}
 					</select>
 				{else if $value.type == "radio"}
 					<dl>
-						{foreach $value.option as $_key=>$_value}
+						{foreach $value.option as $key_opt=>$value_opt}
 							<dt>
 								<div class="radio">
-									<label for="opt_{$key}_{$_key}">
-										<input type="radio" {if $_this_value == $_key}checked{/if} value="{$_key}" class="validate" group="opt_{$key}" name="opt[{$key}]" id="opt_{$key}_{$_key}">
-										{$_value.value}
+									<label for="opt_{$key}_{$key_opt}">
+										<input type="radio" {if $_this_value == $key_opt}checked{/if} value="{$key_opt}" class="validate" group="opt_{$key}" name="opt[{$key}]" id="opt_{$key}_{$key_opt}">
+										{$value_opt.value}
 									</label>
 								</div>
 							</dt>
-							<dd>{if isset($_value.note)}{$_value.note}{/if}</dd>
+							<dd>{if isset($value_opt.note)}{$value_opt.note}{/if}</dd>
 						{/foreach}
 					</dl>
 				{else if $value.type == "textarea"}

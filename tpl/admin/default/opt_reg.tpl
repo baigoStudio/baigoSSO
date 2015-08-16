@@ -9,12 +9,12 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt"
 ]}
 
-{include "include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get=base">{$adminMod.opt.main.title}</a></li>
 	<li>{$adminMod.opt.sub.reg.title}</li>
 
-	{include "include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
 		<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg" target="_blank">
@@ -31,7 +31,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 
-				{include "include/opt_form.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/opt_form.tpl" cfg=$cfg}
 
 				<div class="form-group">
 					<button type="button" id="go_form" class="btn btn-primary">{$lang.btn.save}</button>
@@ -41,7 +41,7 @@
 		</div>
 	</form>
 
-{include "include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_submit_form = {
@@ -62,4 +62,4 @@
 	})
 	</script>
 
-{include "include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}

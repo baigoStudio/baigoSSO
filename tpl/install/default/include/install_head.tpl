@@ -30,9 +30,15 @@
 		<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<a class="navbar-brand" href="{$smarty.const.PRD_SSO_URL}" target="_blank">
-						<img alt="baigo SSO" src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
-					</a>
+					{if $config.ui == "default"}
+						<a class="navbar-brand" href="{$smarty.const.PRD_SSO_URL}" target="_blank">
+							<img src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
+						</a>
+					{else}
+						<a class="navbar-brand" href="#">
+							<img src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
+						</a>
+					{/if}
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
@@ -40,7 +46,7 @@
 							{$lang.btn.jump}
 							<span class="caret"></span>
 						</a>
-						{include "include/install_menu.tpl" cfg=$cfg}
+						{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_menu.tpl" cfg=$cfg}
 					</li>
 				</ul>
 			</div>

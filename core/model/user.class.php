@@ -48,7 +48,7 @@ class MODEL_USER {
 		}
 
 		return array(
-			"str_alert" => $_str_alert, //更新成功
+			"alert" => $_str_alert, //更新成功
 		);
 	}
 
@@ -84,7 +84,7 @@ class MODEL_USER {
 		}
 
 		return array(
-			"str_alert" => $_str_alert, //更新成功
+			"alert" => $_str_alert, //更新成功
 		);
 	}
 
@@ -126,7 +126,7 @@ class MODEL_USER {
 			$_str_alert = "y010103"; //更新成功
 		} else {
 			return array(
-				"str_alert" => "x010103", //更新失败
+				"alert" => "x010103", //更新失败
 			);
 			exit;
 
@@ -134,7 +134,7 @@ class MODEL_USER {
 
 		return array(
 			"user_id"    => $num_userId,
-			"str_alert"  => $_str_alert, //成功
+			"alert"  => $_str_alert, //成功
 		);
 	}
 
@@ -171,14 +171,16 @@ class MODEL_USER {
 			$_str_alert = "y010103"; //更新成功
 		} else {
 			return array(
-				"str_alert" => "x010103", //更新失败
+				"alert" => "x010103", //更新失败
 			);
 			exit;
 		}
 
 		return array(
 			"user_id"    => $_num_userId,
-			"str_alert"  => $_str_alert, //成功
+			"user_nick"  => $this->apiEdit["user_nick"],
+			"user_mail"  => $this->apiEdit["user_mail"],
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -223,7 +225,7 @@ class MODEL_USER {
 				$_str_alert = "y010101"; //更新成功
 			} else {
 				return array(
-					"str_alert" => "x010101", //更新失败
+					"alert" => "x010101", //更新失败
 				);
 				exit;
 
@@ -241,7 +243,7 @@ class MODEL_USER {
 				$_str_alert = "y010103"; //更新成功
 			} else {
 				return array(
-					"str_alert" => "x010103", //更新失败
+					"alert" => "x010103", //更新失败
 				);
 				exit;
 
@@ -250,7 +252,10 @@ class MODEL_USER {
 
 		return array(
 			"user_id"    => $_num_userId,
-			"str_alert"  => $_str_alert, //成功
+			"user_name"  => $this->userSubmit["user_name"],
+			"user_mail"  => $this->userSubmit["user_mail"],
+			"user_nick"  => $this->userSubmit["user_nick"],
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -279,7 +284,7 @@ class MODEL_USER {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 
@@ -327,12 +332,12 @@ class MODEL_USER {
 			$_arr_userRow = $_arr_userRows[0];
 		} else {
 			return array(
-				"str_alert" => "x010102", //不存在记录
+				"alert" => "x010102", //不存在记录
 			);
 			exit;
 		}
 
-		$_arr_userRow["str_alert"]    = "y010102";
+		$_arr_userRow["alert"]    = "y010102";
 
 		return $_arr_userRow;
 
@@ -441,7 +446,7 @@ class MODEL_USER {
 		}
 
 		return array(
-			"str_alert" => $_str_alert,
+			"alert" => $_str_alert,
 		);
 	}
 
@@ -509,12 +514,12 @@ class MODEL_USER {
 			}
 		}
 
-		if ($_arr_userChk["str_alert"] != "ok") {
+		if ($_arr_userChk["alert"] != "ok") {
 			return $_arr_userChk;
 			exit;
 		}
 
-		$_arr_userGet["str_alert"] = "ok";
+		$_arr_userGet["alert"] = "ok";
 
 		return $_arr_userGet;
 	}
@@ -533,14 +538,14 @@ class MODEL_USER {
 		switch ($_arr_userId["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x010217",
+					"alert" => "x010217",
 				);
 				exit;
 			break;
 
 			case "format_err":
 				return array(
-					"str_alert" => "x010218",
+					"alert" => "x010218",
 				);
 				exit;
 			break;
@@ -552,7 +557,7 @@ class MODEL_USER {
 
 		return array(
 			"user_id"     => $_num_userId,
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -570,21 +575,21 @@ class MODEL_USER {
 		switch ($_arr_userName["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x010201",
+					"alert" => "x010201",
 				);
 				exit;
 			break;
 
 			case "too_long":
 				return array(
-					"str_alert" => "x010202",
+					"alert" => "x010202",
 				);
 				exit;
 			break;
 
 			case "format_err":
 				return array(
-					"str_alert" => "x010203",
+					"alert" => "x010203",
 				);
 				exit;
 			break;
@@ -596,7 +601,7 @@ class MODEL_USER {
 
 		return array(
 			"user_name"   => $_str_userName,
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -622,21 +627,21 @@ class MODEL_USER {
 		switch ($_arr_userMail["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x010206",
+					"alert" => "x010206",
 				);
 				exit;
 			break;
 
 			case "too_long":
 				return array(
-					"str_alert" => "x010207",
+					"alert" => "x010207",
 				);
 				exit;
 			break;
 
 			case "format_err":
 				return array(
-					"str_alert" => "x010208",
+					"alert" => "x010208",
 				);
 				exit;
 			break;
@@ -648,7 +653,7 @@ class MODEL_USER {
 
 		return array(
 			"user_mail"   => $_str_userMail,
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -665,7 +670,7 @@ class MODEL_USER {
 		switch ($_arr_userPass["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x010212",
+					"alert" => "x010212",
 				);
 				exit;
 			break;
@@ -677,7 +682,7 @@ class MODEL_USER {
 
 		return array(
 			"user_pass"   => $_str_userPass,
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -694,7 +699,7 @@ class MODEL_USER {
 		switch ($_arr_userNick["status"]) {
 			case "too_long":
 				return array(
-					"str_alert" => "x010214",
+					"alert" => "x010214",
 				);
 				exit;
 			break;
@@ -707,7 +712,7 @@ class MODEL_USER {
 
 		return array(
 			"user_nick"   => $_str_userNick,
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -724,7 +729,7 @@ class MODEL_USER {
 		switch ($_arr_userNote["status"]) {
 			case "too_long":
 				return array(
-					"str_alert" => "x010215",
+					"alert" => "x010215",
 				);
 				exit;
 			break;
@@ -737,7 +742,7 @@ class MODEL_USER {
 
 		return array(
 			"user_note"   => $_str_userNote,
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -752,14 +757,14 @@ class MODEL_USER {
 		$_num_notId = fn_getSafe(fn_get("not_id"), "int", 0);
 
 		$_arr_userName = $this->input_name_chk(fn_get("user_name"));
-		if ($_arr_userName["str_alert"] != "ok") {
+		if ($_arr_userName["alert"] != "ok") {
 			return $_arr_userName;
 			exit;
 		}
 		if (defined("BG_BAD_NAME") && strlen(BG_BAD_NAME)) {
 			if (fn_regChk($_arr_userName["user_name"], BG_BAD_NAME, true)) {
 				return array(
-					"str_alert" => "x010204",
+					"alert" => "x010204",
 				);
 				exit;
 			}
@@ -768,7 +773,7 @@ class MODEL_USER {
 		return array(
 			"not_id"      => $_num_notId,
 			"user_name"   => $_arr_userName["user_name"],
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -783,7 +788,7 @@ class MODEL_USER {
 		$_num_notId   = fn_getSafe(fn_get("not_id"), "int", 0);
 
 		$_arr_userMail = $this->input_mail_chk(fn_get("user_mail"));
-		if ($_arr_userMail["str_alert"] != "ok") {
+		if ($_arr_userMail["alert"] != "ok") {
 			return $_arr_userMail;
 			exit;
 		}
@@ -791,14 +796,14 @@ class MODEL_USER {
 		if (defined("BG_ACC_MAIL") && strlen(BG_ACC_MAIL)) {
 			if (!fn_regChk($_arr_userMail["user_mail"], BG_ACC_MAIL)) {
 				return array(
-					"str_alert" => "x010209",
+					"alert" => "x010209",
 				);
 				exit;
 			}
 		} else if (defined("BG_BAD_MAIL") && strlen(BG_BAD_MAIL)) {
 			if (fn_regChk($_arr_userMail["user_mail"], BG_BAD_MAIL)) {
 				return array(
-					"str_alert" => "x010210",
+					"alert" => "x010210",
 				);
 				exit;
 			}
@@ -807,7 +812,7 @@ class MODEL_USER {
 		return array(
 			"not_id"      => $_num_notId,
 			"user_mail"   => $_arr_userMail["user_mail"],
-			"str_alert"   => "ok",
+			"alert"   => "ok",
 		);
 	}
 
@@ -820,7 +825,7 @@ class MODEL_USER {
 	 */
 	function api_reg() {
 		$_arr_userName = $this->input_name_chk(fn_post("user_name"));
-		if ($_arr_userName["str_alert"] != "ok") {
+		if ($_arr_userName["alert"] != "ok") {
 			return $_arr_userName;
 			exit;
 		}
@@ -829,22 +834,22 @@ class MODEL_USER {
 		if (defined("BG_BAD_NAME") && strlen(BG_BAD_NAME)) {
 			if (fn_regChk($this->userSubmit["user_name"], BG_BAD_NAME, true)) {
 				return array(
-					"str_alert" => "x010204",
+					"alert" => "x010204",
 				);
 				exit;
 			}
 		}
 
 		$_arr_userRow = $this->mdl_read($this->userSubmit["user_name"], "user_name");
-		if ($_arr_userRow["str_alert"] == "y010102") {
+		if ($_arr_userRow["alert"] == "y010102") {
 			return array(
-				"str_alert" => "x010205",
+				"alert" => "x010205",
 			);
 			exit;
 		}
 
 		$_arr_userMail = $this->input_mail_chk(fn_post("user_mail"));
-		if ($_arr_userMail["str_alert"] != "ok") {
+		if ($_arr_userMail["alert"] != "ok") {
 			return $_arr_userMail;
 			exit;
 		}
@@ -852,9 +857,9 @@ class MODEL_USER {
 
 		if (BG_REG_ONEMAIL == "false" && BG_REG_NEEDMAIL == "on") {
 			$_arr_userRow = $this->mdl_read($this->userSubmit["user_mail"], "user_mail"); //检查Email
-			if ($_arr_userRow["str_alert"] == "y010102") {
+			if ($_arr_userRow["alert"] == "y010102") {
 				return array(
-					"str_alert" => "x010211",
+					"alert" => "x010211",
 				);
 				exit;
 			}
@@ -863,34 +868,34 @@ class MODEL_USER {
 		if (defined("BG_ACC_MAIL") && strlen(BG_ACC_MAIL)) {
 			if (!fn_regChk($this->userSubmit["user_mail"], BG_ACC_MAIL)) {
 				return array(
-					"str_alert" => "x010209",
+					"alert" => "x010209",
 				);
 				exit;
 			}
 		} else if (defined("BG_BAD_MAIL") && strlen(BG_BAD_MAIL)) {
 			if (fn_regChk($this->userSubmit["user_mail"], BG_BAD_MAIL)) {
 				return array(
-					"str_alert" => "x010210",
+					"alert" => "x010210",
 				);
 				exit;
 			}
 		}
 
 		$_arr_userPass = $this->input_pass_chk(fn_post("user_pass"));
-		if ($_arr_userPass["str_alert"] != "ok") {
+		if ($_arr_userPass["alert"] != "ok") {
 			return $_arr_userPass;
 			exit;
 		}
 		$this->userSubmit["user_pass"] = $_arr_userPass["user_pass"];
 
 		$_arr_userNick = $this->input_nick_chk(fn_post("user_nick"));
-		if ($_arr_userNick["str_alert"] != "ok") {
+		if ($_arr_userNick["alert"] != "ok") {
 			return $_arr_userNick;
 			exit;
 		}
 		$this->userSubmit["user_nick"]    = $_arr_userNick["user_nick"];
 		$this->userSubmit["user_status"]  = "enable";
-		$this->userSubmit["str_alert"]    = "ok";
+		$this->userSubmit["alert"]    = "ok";
 
 		return $this->userSubmit;
 	}
@@ -905,14 +910,14 @@ class MODEL_USER {
 	function api_login() {
 		$_arr_userGet = $this->input_get_by("post");
 
-		if ($_arr_userGet["str_alert"] != "ok") {
+		if ($_arr_userGet["alert"] != "ok") {
 			return $_arr_userGet;
 			exit;
 		}
 
 		$this->apiLogin   = $_arr_userGet;
 		$_arr_userPass    = $this->input_pass_chk(fn_post("user_pass"));
-		if ($_arr_userPass["str_alert"] != "ok") {
+		if ($_arr_userPass["alert"] != "ok") {
 			return $_arr_userPass;
 			exit;
 		}
@@ -920,7 +925,7 @@ class MODEL_USER {
 		$this->apiLogin["user_pass"]      = $_arr_userPass["user_pass"];
 		$this->apiLogin["user_rand"]      = fn_rand(6);
 		$this->apiLogin["user_pass_do"]   = fn_baigoEncrypt($this->apiLogin["user_pass"], $this->apiLogin["user_rand"], true);
-		$this->apiLogin["str_alert"]      = "ok";
+		$this->apiLogin["alert"]      = "ok";
 
 		return $this->apiLogin;
 	}
@@ -935,7 +940,7 @@ class MODEL_USER {
 	function api_edit() {
 		$_arr_userGet = $this->input_get_by("post");
 
-		if ($_arr_userGet["str_alert"] != "ok") {
+		if ($_arr_userGet["alert"] != "ok") {
 			return $_arr_userGet;
 			exit;
 		}
@@ -944,7 +949,7 @@ class MODEL_USER {
 
 		if (fn_post("user_mail")) {
 			$_arr_userMail = $this->input_mail_chk(fn_post("user_mail"));
-			if ($_arr_userMail["str_alert"] != "ok") {
+			if ($_arr_userMail["alert"] != "ok") {
 				return $_arr_userMail;
 				exit;
 			}
@@ -953,14 +958,14 @@ class MODEL_USER {
 			if (defined("BG_ACC_MAIL") && strlen(BG_ACC_MAIL)) {
 				if (!fn_regChk($this->apiEdit["user_mail"], BG_ACC_MAIL)) {
 					return array(
-						"str_alert" => "x010209",
+						"alert" => "x010209",
 					);
 					exit;
 				}
 			} else if (defined("BG_BAD_MAIL") && strlen(BG_BAD_MAIL)) {
 				if (fn_regChk($this->apiEdit["user_mail"], BG_BAD_MAIL)) {
 					return array(
-						"str_alert" => "x010210",
+						"alert" => "x010210",
 					);
 					exit;
 				}
@@ -971,7 +976,7 @@ class MODEL_USER {
 
 		if ($this->apiEdit["user_check_pass"] == true) {
 			$_arr_userPass = $this->input_pass_chk(fn_post("user_pass"));
-			if ($_arr_userPass["str_alert"] != "ok") {
+			if ($_arr_userPass["alert"] != "ok") {
 				return $_arr_userPass;
 				exit;
 			}
@@ -985,12 +990,12 @@ class MODEL_USER {
 		}
 
 		$_arr_userNick = $this->input_nick_chk(fn_post("user_nick"));
-		if ($_arr_userNick["str_alert"] != "ok") {
+		if ($_arr_userNick["alert"] != "ok") {
 			return $_arr_userNick;
 			exit;
 		}
-		$this->apiEdit["user_nick"] = $_arr_userNick["user_nick"];
-		$this->apiEdit["str_alert"] = "ok";
+		$this->apiEdit["user_nick"]   = $_arr_userNick["user_nick"];
+		$this->apiEdit["alert"]       = "ok";
 
 		return $this->apiEdit;
 	}
@@ -1005,7 +1010,7 @@ class MODEL_USER {
 	function input_submit() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030101",
+				"alert" => "x030101",
 			);
 			exit;
 		}
@@ -1015,13 +1020,13 @@ class MODEL_USER {
 		if ($this->userSubmit["user_id"] > 0) {
 			//检查用户是否存在
 			$_arr_userRow = $this->mdl_read($this->userSubmit["user_id"]);
-			if ($_arr_userRow["str_alert"] != "y010102") {
+			if ($_arr_userRow["alert"] != "y010102") {
 				return $_arr_userRow;
 			}
 		}
 
 		$_arr_userName = $this->input_name_chk(fn_post("user_name"));
-		if ($_arr_userName["str_alert"] != "ok") {
+		if ($_arr_userName["alert"] != "ok") {
 			return $_arr_userName;
 			exit;
 		}
@@ -1029,30 +1034,30 @@ class MODEL_USER {
 
 		//检验用户名是否重复
 		$_arr_userRow = $this->mdl_read($this->userSubmit["user_name"], "user_name", $this->userSubmit["user_id"]);
-		if ($_arr_userRow["str_alert"] == "y010102") {
+		if ($_arr_userRow["alert"] == "y010102") {
 			return array(
-				"str_alert" => "x010205",
+				"alert" => "x010205",
 			);
 			exit;
 		}
 
 
 		$_arr_userMail = $this->input_mail_chk(fn_post("user_mail"));
-		if ($_arr_userMail["str_alert"] != "ok") {
+		if ($_arr_userMail["alert"] != "ok") {
 			return $_arr_userMail;
 			exit;
 		}
 		$this->userSubmit["user_mail"] = $_arr_userMail["user_mail"];
 
 		$_arr_userNick = $this->input_nick_chk(fn_post("user_nick"));
-		if ($_arr_userNick["str_alert"] != "ok") {
+		if ($_arr_userNick["alert"] != "ok") {
 			return $_arr_userNick;
 			exit;
 		}
 		$this->userSubmit["user_nick"] = $_arr_userNick["user_nick"];
 
 		$_arr_userNote = $this->input_note_chk(fn_post("user_note"));
-		if ($_arr_userNote["str_alert"] != "ok") {
+		if ($_arr_userNote["alert"] != "ok") {
 			return $_arr_userNote;
 			exit;
 		}
@@ -1062,7 +1067,7 @@ class MODEL_USER {
 		switch ($_arr_userStatus["status"]) {
 			case "too_short":
 				return array(
-					"str_alert" => "x010216",
+					"alert" => "x010216",
 				);
 				exit;
 			break;
@@ -1072,7 +1077,7 @@ class MODEL_USER {
 			break;
 		}
 
-		$this->userSubmit["str_alert"] = "ok";
+		$this->userSubmit["alert"] = "ok";
 		return $this->userSubmit;
 	}
 
@@ -1086,7 +1091,7 @@ class MODEL_USER {
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"str_alert" => "x030101",
+				"alert" => "x030101",
 			);
 			exit;
 		}
@@ -1103,8 +1108,8 @@ class MODEL_USER {
 		}
 
 		$this->userIds = array(
-			"str_alert"   => $_str_alert,
-			"user_ids"    => $_arr_userIds
+			"alert"      => $_str_alert,
+			"user_ids"   => $_arr_userIds
 		);
 
 		return $this->userIds;

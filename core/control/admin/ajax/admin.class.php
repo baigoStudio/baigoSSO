@@ -37,8 +37,8 @@ class AJAX_ADMIN {
 			$this->obj_ajax->halt_alert("x030410");
 		}
 
-		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}
 	}
 
@@ -52,8 +52,8 @@ class AJAX_ADMIN {
 	function ajax_submit() {
 		$_arr_adminSubmit = $this->mdl_admin->input_submit();
 
-		if ($_arr_adminSubmit["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_adminSubmit["str_alert"]);
+		if ($_arr_adminSubmit["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_adminSubmit["alert"]);
 		}
 
 		$_str_adminPassDo = "";
@@ -88,12 +88,12 @@ class AJAX_ADMIN {
 
 		$_arr_adminRow = $this->mdl_admin->mdl_submit($_str_adminPassDo, $_str_adminRand);
 
-		if ($_arr_adminRow["str_alert"] == "y020101" || $_arr_adminRow["str_alert"] == "y020103") {
+		if ($_arr_adminRow["alert"] == "y020101" || $_arr_adminRow["alert"] == "y020103") {
 			$_arr_targets[] = array(
 				"admin_id" => $_arr_adminRow["admin_id"],
 			);
 			$_str_targets = json_encode($_arr_targets);
-			if ($_arr_adminRow["str_alert"] == "y020101") {
+			if ($_arr_adminRow["alert"] == "y020101") {
 				$_type = "add";
 			} else {
 				$_type = "edit";
@@ -102,7 +102,7 @@ class AJAX_ADMIN {
 			$this->mdl_log->mdl_submit($_str_targets, "admin", $this->log["admin"][$_type], $_str_adminRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_adminRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
 	}
 
 
@@ -120,13 +120,13 @@ class AJAX_ADMIN {
 		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_adminIds = $this->mdl_admin->input_ids();
-		if ($_arr_adminIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_adminIds["str_alert"]);
+		if ($_arr_adminIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_adminIds["alert"]);
 		}
 
 		$_arr_adminRow = $this->mdl_admin->mdl_status($_str_status);
 
-		if ($_arr_adminRow["str_alert"] == "y020103") {
+		if ($_arr_adminRow["alert"] == "y020103") {
 			foreach ($_arr_adminIds["admin_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"admin_id" => $_value,
@@ -137,7 +137,7 @@ class AJAX_ADMIN {
 			$this->mdl_log->mdl_submit($_str_targets, "admin", $this->log["admin"]["edit"], $_str_adminRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_adminRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
 	}
 
 
@@ -153,13 +153,13 @@ class AJAX_ADMIN {
 		}
 
 		$_arr_adminIds = $this->mdl_admin->input_ids();
-		if ($_arr_adminIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_adminIds["str_alert"]);
+		if ($_arr_adminIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_adminIds["alert"]);
 		}
 
 		$_arr_adminRow = $this->mdl_admin->mdl_del();
 
-		if ($_arr_adminRow["str_alert"] == "y020104") {
+		if ($_arr_adminRow["alert"] == "y020104") {
 			foreach ($_arr_adminIds["admin_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"admin_id" => $_value,
@@ -170,7 +170,7 @@ class AJAX_ADMIN {
 			$this->mdl_log->mdl_submit($_str_targets, "admin", $this->log["admin"]["del"], $_str_adminRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_adminRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
 	}
 
 
@@ -186,7 +186,7 @@ class AJAX_ADMIN {
 
 		$_arr_adminRow = $this->mdl_admin->mdl_read($_str_adminName, "admin_name", $_num_adminId);
 
-		if ($_arr_adminRow["str_alert"] == "y020102") {
+		if ($_arr_adminRow["alert"] == "y020102") {
 			$this->obj_ajax->halt_re("x020204");
 		}
 

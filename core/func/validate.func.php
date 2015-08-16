@@ -22,7 +22,7 @@ if (!defined("IN_BAIGO")) {
 */
 function validateStr($str, $min, $max, $type = "str", $format = "text") {
 	$_obj_v = new CLASS_VALIDATE();
-	
+
 	switch ($type) {
 		case "str":
 			$_status = $_obj_v->is_text($str, $min, $max, $format); //验证字符串
@@ -47,7 +47,7 @@ class CLASS_VALIDATE {
 	/*------验证长度------
 	@str 需验证字符串
 	@length(min, max) 数组，(最小长度, 最大长度) 0 为不限制
-	
+
 	返回字符
 	too_short 太短
 	too_long 太长
@@ -63,7 +63,7 @@ class CLASS_VALIDATE {
 		}
 		return $_status;
 	}
-	
+
 	/*------验证格式------
 	@str 需验证字符串
 	@format 格式，text 为任意
@@ -86,10 +86,10 @@ class CLASS_VALIDATE {
 				$_reg = "/^([+-]?)\d*\.?\d+$/"; //数值，可以包含小数点
 			break;
 			case "email":
-				$_reg = "/^\w{0,}(\.)?(\w{0,})@\w+(\.\w+)+$/"; //Email
+				$_reg = "/^\w{0,}(\.)?(\w+)@\w+(\.\w+)+$/"; //Email
 			break;
 			case "url":
-				$_reg = "/^http[s]?:\/\/.*?\..*?$/"; //URL地址
+				$_reg = "/^http[s]?:\/\/(.*|-)+\.(.*|-)+$/"; //URL地址
 			break;
 			case "alphabetDigit":
 				$_reg = "/^[a-z|A-Z|\d]*$/"; //URL地址
@@ -101,7 +101,7 @@ class CLASS_VALIDATE {
 				$_reg = ""; //默认
 			break;
 		}
-	
+
 		if ($str && $format != "text") { //如果值不为空，且格式不为text则验证
 			if (preg_match($_reg, $str)) {
 				return true; //验证通过，返回正确
@@ -112,7 +112,7 @@ class CLASS_VALIDATE {
 			return true; //如果为text，直接返回正确
 		}
 	}
-	
+
 	/*------验证是否为字符串------
 	@str 需验证的字符串
 	@length(min, max) 数组，(最小长度, 最大长度) 0 为不限制
@@ -131,7 +131,7 @@ class CLASS_VALIDATE {
 		}
 		return $_status;
 	}
-	
+
 	/*------验证数字------
 	@num 需验证的数字
 	@length(min, max) 数组，(最小个数, 最大个数) 0 为不限制
@@ -150,7 +150,7 @@ class CLASS_VALIDATE {
 		}
 		return $_status;
 	}
-	
+
 	/*------验证个数------
 	@num 需验证的个数
 	@length(min, max) 数组，(最小个数, 最大个数) 0 为不限制

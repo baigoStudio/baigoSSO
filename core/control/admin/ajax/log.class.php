@@ -34,8 +34,8 @@ class AJAX_LOG {
 			$this->obj_ajax->halt_alert("x030410");
 		}
 
-		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}
 	}
 
@@ -53,13 +53,13 @@ class AJAX_LOG {
 		$_str_status = fn_getSafe($GLOBALS["act_post"], "txt", "");
 
 		$_arr_logIds = $this->mdl_log->input_ids();
-		if ($_arr_logIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_logIds["str_alert"]);
+		if ($_arr_logIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_logIds["alert"]);
 		}
 
 		$_arr_logRow = $this->mdl_log->mdl_status($_str_status);
 
-		$this->obj_ajax->halt_alert($_arr_logRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_logRow["alert"]);
 	}
 
 	/*============删除用户============
@@ -73,13 +73,13 @@ class AJAX_LOG {
 		}
 
 		$_arr_logIds = $this->mdl_log->input_ids();
-		if ($_arr_logIds["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_logIds["str_alert"]);
+		if ($_arr_logIds["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_logIds["alert"]);
 		}
 
 		$_arr_logRow = $this->mdl_log->mdl_del();
 
-		if ($_arr_logRow["str_alert"] == "y060104") {
+		if ($_arr_logRow["alert"] == "y060104") {
 			foreach ($_arr_logIds["log_ids"] as $_value) {
 				$_arr_targets[] = array(
 					"log_id" => $_value,
@@ -90,6 +90,6 @@ class AJAX_LOG {
 			$this->mdl_log->mdl_submit($_str_targets, "log", $this->log["log"]["del"], $_str_logRow, "admin", $this->adminLogged["admin_id"]);
 		}
 
-		$this->obj_ajax->halt_alert($_arr_logRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_logRow["alert"]);
 	}
 }

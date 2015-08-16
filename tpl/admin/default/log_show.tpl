@@ -34,7 +34,7 @@
 			{foreach $tplData.logRow.log_targets as $_key=>$_value}
 				<div>
 					{if $tplData.logRow.log_target_type == "opt"}
-						{$type.logTarget[$tplData.logRow.log_target_type]}: {$_value.target_name}
+						{$type.logTarget[$tplData.logRow.log_target_type]}: {$_value}
 					{else}
 						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod={$tplData.logRow.log_target_type}&act_get=show&{$tplData.logRow.log_target_type}_id={$_value.target_id}">
 							{$type.logTarget[$tplData.logRow.log_target_type]}: {$_value.target_name} [ {$lang.label.id}: {$_value.target_id} ]

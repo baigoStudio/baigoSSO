@@ -27,29 +27,16 @@ class AJAX_UPGRADE {
 				$this->obj_ajax->halt_alert("x030403");
 			}
 		}
+		$this->upgrade_init();
+		$this->mdl_opt = new MODEL_OPT();
 	}
 
 	function ajax_dbconfig() {
-		if (!fn_token("chk")) { //令牌
-			$this->obj_ajax->halt_alert("x030102");
+		$_arr_return = $this->mdl_opt->mdl_dbconfig();
+
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
 		}
-
-		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
-		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
-		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
-		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
-		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
-		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
-
-		$_str_content = "<?php" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
-
-		file_put_contents(BG_PATH_CONFIG . "config_db.inc.php", $_str_content);
 
 		$this->obj_ajax->halt_alert("y030404");
 	}
@@ -63,7 +50,6 @@ class AJAX_UPGRADE {
 		$this->table_app();
 		$this->table_app_belong();
 		$this->table_log();
-		$this->table_opt();
 		$this->view_user();
 
 		$this->obj_ajax->halt_alert("y030113");
@@ -78,9 +64,12 @@ class AJAX_UPGRADE {
 	 */
 	function ajax_base() {
 		$this->check_db();
-		$this->check_opt();
 
-		$_arr_optPost = $this->opt_post("base");
+		$_arr_return = $this->mdl_opt->mdl_const("base");
+
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
+		}
 
 		$this->obj_ajax->halt_alert("y030405");
 	}
@@ -94,9 +83,12 @@ class AJAX_UPGRADE {
 	 */
 	function ajax_reg() {
 		$this->check_db();
-		$this->check_opt();
 
-		$_arr_optPost = $this->opt_post("reg");
+		$_arr_return = $this->mdl_opt->mdl_const("reg");
+
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
+		}
 
 		$this->obj_ajax->halt_alert("y030406");
 	}
@@ -104,50 +96,16 @@ class AJAX_UPGRADE {
 
 	function ajax_over() {
 		$this->check_db();
-		$this->check_opt();
 
-		$_str_content = "<?php" . PHP_EOL;
-		$_str_content .= "define(\"BG_INSTALL_VER\", \"" . PRD_SSO_VER . "\");" . PHP_EOL;
-		$_str_content .= "define(\"BG_INSTALL_PUB\", " . PRD_SSO_PUB . ");" . PHP_EOL;
-		$_str_content .= "define(\"BG_INSTALL_TIME\", " . time() . ");" . PHP_EOL;
+		$_arr_return = $this->mdl_opt->mdl_over();
 
-		file_put_contents(BG_PATH_CONFIG . "is_install.php", $_str_content);
-
-		$this->obj_ajax->halt_alert("y030408");
-	}
-
-	/**
-	 * opt_post function.
-	 *
-	 * @access private
-	 * @param mixed $str_type
-	 * @return void
-	 */
-	private function opt_post($str_type) {
-		$_mdl_opt = new MODEL_OPT(); //设置管理组模型
-
-		$_arr_opt = fn_post("opt");
-
-		$_str_content = "<?php" . PHP_EOL;
-		foreach ($_arr_opt as $_key=>$_value) {
-			$_arr_optChk = validateStr($_value, 1, 900);
-			$_str_optValue = $_arr_optChk["str"];
-			if (is_numeric($_value)) {
-				$_str_content .= "define(\"" . $_key . "\", " . $_str_optValue . ");" . PHP_EOL;
-			} else {
-				$_str_content .= "define(\"" . $_key . "\", \"" . str_replace(PHP_EOL, "|", $_str_optValue) . "\");" . PHP_EOL;
-			}
-			$_arr_optRow = $_mdl_opt->mdl_submit($_key, $_str_optValue);
+		if ($_arr_return["alert"] != "y040101") {
+			$this->obj_ajax->halt_alert($_arr_return["alert"]);
 		}
 
-		if ($str_type == "base") {
-			$_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
-		}
-
-		$_str_content = str_replace("||", "", $_str_content);
-
-		file_put_contents(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
+		$this->obj_ajax->halt_alert("y030409");
 	}
+
 
 	private function table_admin() {
 		include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
@@ -251,8 +209,8 @@ class AJAX_UPGRADE {
 		$_mdl_appBelong       = new MODEL_APP_BELONG();
 		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_table();
 
-		if ($_arr_appBelongRow["str_alert"] != "y070105") {
-			$this->obj_ajax->halt_alert($_arr_appBelongRow["str_alert"]);
+		if ($_arr_appBelongRow["alert"] != "y070105") {
+			$this->obj_ajax->halt_alert($_arr_appBelongRow["alert"]);
 		}
 
 		$_arr_col     = $_mdl_appBelong->mdl_column();
@@ -302,35 +260,13 @@ class AJAX_UPGRADE {
 	}
 
 
-	private function table_opt() {
-		include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
-		$_mdl_opt     = new MODEL_OPT();
-		$_arr_col     = $_mdl_opt->mdl_column();
-		$_arr_alert   = array();
-
-		if (!in_array("opt_id", $_arr_col)) {
-			$_arr_alert["opt_id"] = array("ADD", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID' FIRST");
-		}
-
-		$_arr_alert[] = array("DROP PRIMARY KEY");
-		$_arr_alert[] = array("ADD PRIMARY KEY", "opt_id");
-
-		if ($_arr_alert) {
-			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "opt", $_arr_alert);
-			if (!$_reselt) {
-				$this->obj_ajax->halt_alert("x040106");
-			}
-		}
-	}
-
-
 	private function view_user() {
 		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
 		$_mdl_user       = new MODEL_USER();
 		$_arr_user    = $_mdl_user->mdl_create_view();
 
-		if ($_arr_user["str_alert"] != "y010108") {
-			$this->obj_ajax->halt_alert($_arr_user["str_alert"]);
+		if ($_arr_user["alert"] != "y010108") {
+			$this->obj_ajax->halt_alert($_arr_user["alert"]);
 		}
 	}
 
@@ -371,15 +307,18 @@ class AJAX_UPGRADE {
 	}
 
 
-	private function check_opt() {
-		$_arr_tableRows = $this->obj_db->show_tables();
+	private function upgrade_init() {
+		$_arr_extRow      = get_loaded_extensions();
+		$_num_errCount    = 0;
 
-		foreach ($_arr_tableRows as $_key=>$_value) {
-			$_arr_tables[] = $_value["Tables_in_" . BG_DB_NAME];
+		foreach ($this->obj_ajax->type["ext"] as $_key=>$_value) {
+			if (!in_array($_key, $_arr_extRow)) {
+				$_num_errCount++;
+			}
 		}
 
-		if (!in_array(BG_DB_TABLE . "opt", $_arr_tables)) {
-			$this->obj_ajax->halt_alert("x030409");
+		if ($_num_errCount > 0) {
+			$this->obj_ajax->halt_alert("x030418");
 		}
 	}
 }

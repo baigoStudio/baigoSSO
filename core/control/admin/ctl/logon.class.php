@@ -35,13 +35,13 @@ class CONTROL_LOGON {
 	 */
 	function ctl_login() {
 		$_arr_adminLogin = $this->mdl_admin->input_login();
-		if ($_arr_adminLogin["str_alert"] != "ok") {
+		if ($_arr_adminLogin["alert"] != "ok") {
 			return $_arr_adminLogin;
 			exit;
 		}
 
 		$_arr_adminRow = $this->mdl_admin->mdl_read($_arr_adminLogin["admin_name"], "admin_name");
-		if ($_arr_adminRow["str_alert"] != "y020102") {
+		if ($_arr_adminRow["alert"] != "y020102") {
 			return $_arr_adminRow;
 			exit;
 		}
@@ -49,7 +49,7 @@ class CONTROL_LOGON {
 		if (fn_baigoEncrypt($_arr_adminLogin["admin_pass"], $_arr_adminRow["admin_rand"]) != $_arr_adminRow["admin_pass"]) {
 			return array(
 				"forward"   => $_arr_adminLogin["forward"],
-				"str_alert" => "x020207",
+				"alert" => "x020207",
 			);
 			exit;
 		}
@@ -57,7 +57,7 @@ class CONTROL_LOGON {
 		if ($_arr_adminRow["admin_status"] != "enable") {
 			return array(
 				"forward"   => $_arr_adminLogin["forward"],
-				"str_alert" => "x020402",
+				"alert" => "x020402",
 			);
 			exit;
 		}
@@ -73,7 +73,7 @@ class CONTROL_LOGON {
 		return array(
 			"admin_id"   => $_arr_adminLogin["admin_id"],
 			"forward"    => $_arr_adminLogin["forward"],
-			"str_alert"  => "y020201",
+			"alert"  => "y020201",
 		);
 	}
 

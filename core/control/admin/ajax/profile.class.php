@@ -37,8 +37,8 @@ class AJAX_PROFILE {
 			$this->obj_ajax->halt_alert("x030410");
 		}
 
-		if ($this->adminLogged["str_alert"] != "y020102") { //未登录，抛出错误信息
-			$this->obj_ajax->halt_alert($this->adminLogged["str_alert"]);
+		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
+			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
 		}
 	}
 
@@ -55,19 +55,19 @@ class AJAX_PROFILE {
 		}
 
 		$_arr_adminProfile = $this->mdl_admin->input_profile();
-		if ($_arr_adminProfile["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_adminProfile["str_alert"]);
+		if ($_arr_adminProfile["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_adminProfile["alert"]);
 		}
 
 		$_arr_adminRow = $this->mdl_admin->mdl_read($this->adminLogged["admin_id"]);
-		if ($_arr_adminRow["str_alert"] != "y020102") {
+		if ($_arr_adminRow["alert"] != "y020102") {
 			return $_arr_adminRow;
 			exit;
 		}
 
 		$_arr_adminRow = $this->mdl_admin->mdl_profile($this->adminLogged["admin_id"]);
 
-		$this->obj_ajax->halt_alert($_arr_adminRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
 	}
 
 
@@ -77,12 +77,12 @@ class AJAX_PROFILE {
 		}
 
 		$_arr_adminPass = $this->mdl_admin->input_pass();
-		if ($_arr_adminPass["str_alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_adminPass["str_alert"]);
+		if ($_arr_adminPass["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_adminPass["alert"]);
 		}
 
 		$_arr_adminRow = $this->mdl_admin->mdl_read($this->adminLogged["admin_id"]);
-		if ($_arr_adminRow["str_alert"] != "y020102") {
+		if ($_arr_adminRow["alert"] != "y020102") {
 			return $_arr_adminRow;
 			exit;
 		}
@@ -93,7 +93,7 @@ class AJAX_PROFILE {
 
 		$_arr_adminRow = $this->mdl_admin->mdl_pass($this->adminLogged["admin_id"]);
 
-		$this->obj_ajax->halt_alert($_arr_adminRow["str_alert"]);
+		$this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
 	}
 
 }
