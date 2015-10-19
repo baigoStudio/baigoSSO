@@ -15,13 +15,13 @@ if (!in_array($mod, $arr_mod)) {
 	exit("Access Denied");
 }
 
-include_once("../install/init.class.php");
+$base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));
 
-$obj_init = new INSTALL_INIT();
+include_once($base . "config/init.class.php");
 
-if (!file_exists($obj_init->str_pathRoot . "config/config.inc.php")) {
-	$obj_init->config_gen();
-}
+$obj_init = new CLASS_INIT();
+
+$obj_init->config_gen();
 
 include_once($obj_init->str_pathRoot . "config/config.inc.php"); //载入配置
 

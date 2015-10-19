@@ -3,7 +3,9 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-include_once("../config/init.class.php");
+$base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));
+
+include_once($base . "config/init.class.php");
 
 $obj_init = new CLASS_INIT();
 
