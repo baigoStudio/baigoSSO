@@ -18,7 +18,7 @@ return "<h3>API 概述</h3>
 
 	<h3>返回结果</h3>
 	<p>
-		baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，请查看具体的接口。
+		baigo SSO 所有 API 接口均返回加密字符串（安装接口除外），真正内容需要调用密文接口进行解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，请查看具体的接口。
 	</p>
 	<div class=\"panel panel-default\">
 		<div class=\"panel-heading\">返回结果</div>

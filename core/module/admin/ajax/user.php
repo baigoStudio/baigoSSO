@@ -10,7 +10,7 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_admin_ajax.inc.php"); //管理员通用
-include_once(BG_PATH_CONTROL_ADMIN . "ajax/user.class.php"); //载入用户控制器
+include_once(BG_PATH_CONTROL . "admin/ajax/user.class.php"); //载入用户控制器
 
 $ajax_user = new AJAX_USER(); //初始化用户
 

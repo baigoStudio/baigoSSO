@@ -7,18 +7,22 @@
 	sub_active     => "list"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">{$adminMod.admin.main.title}</a></li>
 	<li>{$lang.page.show}</li>
 
-	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
-		<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">
-			<span class="glyphicon glyphicon-chevron-left"></span>
-			{$lang.href.back}
-		</a>
+		<ul class="nav nav-pills nav_baigo">
+			<li>
+				<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+					{$lang.href.back}
+				</a>
+			</li>
+		</ul>
 	</div>
 
 	<div class="row">
@@ -37,7 +41,7 @@
 
 					<div class="form-group">
 						<label class="control-label static_label">{$lang.label.allow}</label>
-						<dl class="list_baigo">
+						<dl class="list_dl">
 							{foreach $adminMod as $key_m=>$value_m}
 								<dt>{$value_m.main.title}</dt>
 								<dd>
@@ -84,8 +88,8 @@
 
 				<div class="form-group">
 					<label class="control-label static_label">{$lang.label.status}</label>
-					<p class="form-control-static">
-						<span class="label label-{$_css_status}">{$status.admin[$tplData.adminLogged.admin_status]}</span>
+					<p class="form-control-static label_baigo">
+						<span class="label label-{$_css_status}">{$status.admin[$tplData.adminRow.admin_status]}</span>
 					</p>
 				</div>
 
@@ -99,5 +103,5 @@
 		</div>
 	</div>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_foot.tpl" cfg=$cfg}

@@ -3,19 +3,12 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-$base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));
-include_once($base . "config/config.inc.php"); //载入配置
+include_once("../config/init.class.php");
 
-$arr_mod = array("intro", "install", "upgrade", "deploy", "admin", "api");
+$obj_init = new CLASS_INIT();
 
-if (isset($_GET["mod"])) {
-	$mod = $_GET["mod"];
-} else {
-	$mod = $arr_mod[0];
-}
+$obj_init->config_gen();
 
-if (!in_array($mod, $arr_mod)) {
-	exit("Access Denied");
-}
+include_once($obj_init->str_pathRoot . "config/config.inc.php"); //载入配置
 
-include_once(BG_PATH_MODULE_HELP . $mod . ".php");
+include_once(BG_PATH_MODULE . "help/help.php");

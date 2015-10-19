@@ -10,8 +10,8 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_help.inc.php"); //验证是否已登录
-include_once(BG_PATH_CONTROL_HELP . "upgrade.class.php"); //载入文章类
+include_once(BG_PATH_CONTROL . "help/help.class.php"); //载入文章类
 
-$ctl_upgrade = new CONTROL_UPGRADE();
+$ctl_help = new CONTROL_HELP();
 
-$ctl_upgrade->ctl_show($GLOBALS["act_get"]);
+$ctl_help->ctl_show();

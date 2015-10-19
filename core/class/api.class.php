@@ -21,6 +21,8 @@ class CLASS_API {
 		$this->obj_base   = $GLOBALS["obj_base"]; //获取界面类型
 		$this->config     = $this->obj_base->config;
 		$this->log        = include_once(BG_PATH_LANG . $this->config["lang"] . "/log.php"); //载入日志内容
+		$this->type       = include_once(BG_PATH_LANG . $this->config["lang"] . "/type.php"); //载入类型文件
+		$this->opt        = include_once(BG_PATH_LANG . $this->config["lang"] . "/opt.php"); //载入类型文件
 		$this->arr_return = array(
 			"prd_sso_ver" => PRD_SSO_VER,
 			"prd_sso_pub" => PRD_SSO_PUB,
@@ -162,7 +164,7 @@ class CLASS_API {
 	 * @param mixed $arr_appRows
 	 * @return void
 	 */
-	function api_notice($arr_data, $arr_appRows) {
+	function api_notice($arr_data, $arr_appRows, $method = "post") {
 		foreach ($arr_appRows as $_key=>$_value) {
 			$_tm_time    = time();
 			$_str_rand   = fn_rand();
@@ -178,7 +180,13 @@ class CLASS_API {
 
 			$_arr_data = array_merge($arr_data, $_arr_query);
 
-			$_arr_return[$_key] = fn_http($_value["app_notice"], $_arr_data, "post");
+			if (stristr($_value["app_notice"], "?")) {
+				$_str_conn = "&";
+			} else {
+				$_str_conn = "?";
+			}
+
+			$_arr_return[$_key] = fn_http($_value["app_notice"] . $_str_conn . "mod=notice", $_arr_data, $method);
 		}
 
 		return $_arr_return;
@@ -211,8 +219,26 @@ class CLASS_API {
 	 * @return void
 	 */
 	function halt_re($arr_re) {
-		$arr_halt = array_merge($this->arr_return, $arr_re)
+		$arr_halt = array_merge($this->arr_return, $arr_re);
 
 		exit(json_encode($arr_halt)); //输出错误信息
+	}
+
+
+	function chk_install() {
+		if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
+			include_once(BG_PATH_CONFIG . "is_install.php");
+			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
+				$_arr_return = array(
+					"alert" => "x030411"
+				);
+				$this->halt_re($_arr_return);
+			}
+		} else {
+			$_arr_return = array(
+				"alert" => "x030410"
+			);
+			$this->halt_re($_arr_return);
+		}
 	}
 }

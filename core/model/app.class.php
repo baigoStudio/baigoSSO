@@ -141,12 +141,13 @@ class MODEL_APP {
 		);
 
 		if ($this->appSubmit["app_id"] == 0) {
+			$_str_appKey = fn_rand(64);
 			$_arr_insert = array(
-				"app_key"           => fn_rand(64),
+				"app_key"           => $_str_appKey,
 				"app_time"          => time(),
 				"app_token"         => fn_rand(64),
 				"app_token_time"    => time(),
-				"app_token_expire"  => BG_DEFAULT_TOKEN,
+				//"app_token_expire"  => BG_DEFAULT_TOKEN,
 			);
 			$_arr_data = array_merge($_arr_appData, $_arr_insert);
 
@@ -161,8 +162,9 @@ class MODEL_APP {
 
 			}
 		} else {
-			$_num_appId = $this->appSubmit["app_id"];
-			$_num_mysql = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "app_id=" . $_num_appId); //更新数据
+			$_str_appKey = "";
+			$_num_appId  = $this->appSubmit["app_id"];
+			$_num_mysql  = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "app_id=" . $_num_appId); //更新数据
 			if ($_num_mysql > 0) {
 				$_str_alert = "y050103"; //更新成功
 			} else {
@@ -176,7 +178,8 @@ class MODEL_APP {
 
 		return array(
 			"app_id"     => $_num_appId,
-			"alert"  => $_str_alert, //成功
+			"app_key"    => $_str_appKey,
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -393,7 +396,7 @@ class MODEL_APP {
 	function input_submit() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"alert" => "x030101",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -531,7 +534,90 @@ class MODEL_APP {
 		}
 
 		$this->appSubmit["app_allow"] = fn_jsonEncode(fn_post("app_allow"), "no");
-		$this->appSubmit["alert"] = "ok";
+		$this->appSubmit["alert"]     = "ok";
+
+		return $this->appSubmit;
+	}
+
+
+	function api_add() {
+		$_arr_appName = validateStr(fn_post("app_name"), 1, 30);
+		switch ($_arr_appName["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x050201",
+				);
+				exit;
+			break;
+
+			case "too_long":
+				return array(
+					"alert" => "x050202",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->appSubmit["app_name"] = $_arr_appName["str"];
+			break;
+
+		}
+
+		$_arr_appNotice = validateStr(fn_post("app_notice"), 1, 3000);
+		switch ($_arr_appNotice["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x050207",
+				);
+				exit;
+			break;
+
+			case "too_long":
+				return array(
+					"alert" => "x050208",
+				);
+				exit;
+			break;
+
+			case "format_err":
+				return array(
+					"alert" => "x050209",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->appSubmit["app_notice"] = $_arr_appNotice["str"];
+			break;
+		}
+
+		$_arr_appAllow = array(
+			"user" => array(
+				"reg"       => 1,
+				"login"     => 1,
+				"get"       => 1,
+				"edit"      => 1,
+				"del"       => 1,
+				"chkname"   => 1,
+				"chkmail"   => 1,
+			),
+			"code" => array(
+				"signature" => 1,
+				"verify"    => 1,
+				"encode"    => 1,
+				"decode"    => 1,
+			),
+		);
+
+
+		$this->appSubmit["app_note"]      = $this->appSubmit["app_name"];
+		$this->appSubmit["app_status"]    = "enable";
+		$this->appSubmit["app_ip_allow"]  = "";
+		$this->appSubmit["app_ip_bad"]    = "";
+		$this->appSubmit["app_sync"]      = "on";
+		$this->appSubmit["app_allow"]     = json_encode($_arr_appAllow);
+
+		$this->appSubmit["alert"]         = "ok";
 
 		return $this->appSubmit;
 	}
@@ -546,7 +632,7 @@ class MODEL_APP {
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"alert" => "x030101",
+				"alert" => "x030102",
 			);
 			exit;
 		}

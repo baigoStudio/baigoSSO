@@ -16,7 +16,7 @@ y开头为成功
 return array(
 	"x030403" => "<h3>如需重新安装，请执行如下步骤：</h3>
 		<ol>
-			<li>删除 ./" . BG_NAME_CONFIG . "/is_install.php 文件</li>
+			<li>删除 ./config/is_install.php 文件</li>
 			<li>重新运行 <a href=\"" . BG_URL_INSTALL . "ctl.php\">" . BG_URL_INSTALL . "ctl.php</a></li>
 		<ol>",
 

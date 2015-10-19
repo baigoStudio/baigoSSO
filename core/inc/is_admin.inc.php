@@ -13,7 +13,7 @@ if(!defined("IN_BAIGO")) {
 
 if ($GLOBALS["adminLogged"]["alert"] != "y020102") {
 	if ($GLOBALS["view"]) {
-		$_str_location = "Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=display&alert=" . $GLOBALS["adminLogged"]["alert"] . "&view=" . $GLOBALS["view"];
+		$_str_location = "Location: " . BG_URL_ADMIN . "ctl.php?mod=alert&act_get=show&alert=" . $GLOBALS["adminLogged"]["alert"] . "&view=" . $GLOBALS["view"];
 	} else {
 		if (fn_server("REQUEST_URI")) {
 			$_str_attach = base64_encode(fn_server("REQUEST_URI"));

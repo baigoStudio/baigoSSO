@@ -5,12 +5,12 @@
 	act_help   => "ext"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/install_head.tpl" cfg=$cfg}
 
 		{foreach $type.ext as $key=>$value}
 			<div class="form-group">
 				<label class="control-label">{$value}</label>
-				<p class="form-control-static">
+				<p class="form-control-static label_baigo">
 					{if $key|in_array:$tplData.extRow}
 						<span class="label label-success">{$status.ext.installed}</span>
 					{else}
@@ -31,10 +31,10 @@
 			<div class="form-group">
 				<div class="btn-group">
 					<a id="go_next" class="btn btn-primary btn-lg" href="{$smarty.const.BG_URL_INSTALL}ctl.php?mod=install&act_get=dbconfig">{$lang.btn.stepNext}</a>
-					{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_drop.tpl" cfg=$cfg}
+					{include "{$smarty.const.BG_PATH_TPL}install/default/include/install_drop.tpl" cfg=$cfg}
 				</div>
 			</div>
 		{/if}
 
-{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/install_foot.tpl" cfg=$cfg}
 </html>

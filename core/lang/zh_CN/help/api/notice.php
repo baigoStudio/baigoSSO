@@ -4,8 +4,17 @@ return "<h3>通知概述</h3>
 
 	<hr>
 
-	<h3>通知的验证</h3>
-	<p>系统在推送通知时，会附带用于验证的数据，结构如下。其中 APP ID 与 APP KEY 请与当前应用进行对比验证，time、random、signature 用于验证签名，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</p>
+	<a name=\"test\"></a>
+	<h3>通知测试</h3>
+
+	<p class=\"text-success\">接口说明</p>
+	<p>本接口用于测试通知接口是否正常。</p>
+
+	<p class=\"text-success\">HTTP 推送方式</p>
+	<p>GET</p>
+
+	<p class=\"text-success\">通知的验证</p>
+	<p>系统在推送通知时，会在“通知接口 URL”中附加用于验证的数据，结构如下。time、random、signature 用于验证签名，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</p>
 
 	<div class=\"panel panel-default\">
 		<div class=\"panel-heading\">数据结构</div>
@@ -19,6 +28,26 @@ return "<h3>通知概述</h3>
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td class=\"nowrap\">mod</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知组件名称，在通知接口中，值均为 notice。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">act_get</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知动作，值为 test。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_id</td>
+						<td class=\"nowrap\">int</td>
+						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_key</td>
+						<td class=\"nowrap\">string</td>
+						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+					</tr>
 					<tr>
 						<td class=\"nowrap\">time</td>
 						<td class=\"nowrap\">string</td>
@@ -35,14 +64,9 @@ return "<h3>通知概述</h3>
 						<td>签名字符串</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">app_id</td>
-						<td class=\"nowrap\">int</td>
-						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_key</td>
+						<td class=\"nowrap\">echostr</td>
 						<td class=\"nowrap\">string</td>
-						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+						<td>输出字符串，直接将该字符串输出便可确认该应用的通知接口正常。</td>
 					</tr>
 				</tbody>
 			</table>
@@ -60,6 +84,9 @@ return "<h3>通知概述</h3>
 	<p class=\"text-success\">HTTP 推送方式</p>
 	<p>POST</p>
 
+	<p class=\"text-success\">通知的验证</p>
+	<p>系统在推送通知时，会在“通知接口 URL”中附加用于验证的数据，结构如下。time、random、signature 用于验证签名，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</p>
+
 	<div class=\"panel panel-default\">
 		<div class=\"panel-heading\">数据结构</div>
 		<div class=\"table-responsive\">
@@ -73,9 +100,24 @@ return "<h3>通知概述</h3>
 				</thead>
 				<tbody>
 					<tr>
+						<td class=\"nowrap\">mod</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知组件名称，在通知接口中，值均为 notice。</td>
+					</tr>
+					<tr>
 						<td class=\"nowrap\">act_post</td>
 						<td class=\"nowrap\">string</td>
 						<td>通知动作，值为 reg。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_id</td>
+						<td class=\"nowrap\">int</td>
+						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_key</td>
+						<td class=\"nowrap\">string</td>
+						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">time</td>
@@ -91,16 +133,6 @@ return "<h3>通知概述</h3>
 						<td class=\"nowrap\">signature</td>
 						<td class=\"nowrap\">string</td>
 						<td>签名字符串</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_id</td>
-						<td class=\"nowrap\">int</td>
-						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_key</td>
-						<td class=\"nowrap\">string</td>
-						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">code</td>
@@ -184,6 +216,9 @@ return "<h3>通知概述</h3>
 	<p class=\"text-success\">HTTP 推送方式</p>
 	<p>POST</p>
 
+	<p class=\"text-success\">通知的验证</p>
+	<p>系统在推送通知时，会在“通知接口 URL”中附加用于验证的数据，结构如下。time、random、signature 用于验证签名，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</p>
+
 	<div class=\"panel panel-default\">
 		<div class=\"panel-heading\">数据结构</div>
 		<div class=\"table-responsive\">
@@ -197,9 +232,24 @@ return "<h3>通知概述</h3>
 				</thead>
 				<tbody>
 					<tr>
+						<td class=\"nowrap\">mod</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知组件名称，在通知接口中，值均为 notice。</td>
+					</tr>
+					<tr>
 						<td class=\"nowrap\">act_post</td>
 						<td class=\"nowrap\">string</td>
 						<td>通知动作，值为 edit。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_id</td>
+						<td class=\"nowrap\">int</td>
+						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_key</td>
+						<td class=\"nowrap\">string</td>
+						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">time</td>
@@ -215,16 +265,6 @@ return "<h3>通知概述</h3>
 						<td class=\"nowrap\">signature</td>
 						<td class=\"nowrap\">string</td>
 						<td>签名字符串</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_id</td>
-						<td class=\"nowrap\">int</td>
-						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_key</td>
-						<td class=\"nowrap\">string</td>
-						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">code</td>
@@ -308,6 +348,9 @@ return "<h3>通知概述</h3>
 	<p class=\"text-success\">HTTP 推送方式</p>
 	<p>POST</p>
 
+	<p class=\"text-success\">通知的验证</p>
+	<p>系统在推送通知时，会在“通知接口 URL”中附加用于验证的数据，结构如下。time、random、signature 用于验证签名，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</p>
+
 	<div class=\"panel panel-default\">
 		<div class=\"panel-heading\">数据结构</div>
 		<div class=\"table-responsive\">
@@ -321,9 +364,24 @@ return "<h3>通知概述</h3>
 				</thead>
 				<tbody>
 					<tr>
+						<td class=\"nowrap\">mod</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知组件名称，在通知接口中，值均为 notice。</td>
+					</tr>
+					<tr>
 						<td class=\"nowrap\">act_post</td>
 						<td class=\"nowrap\">string</td>
 						<td>通知动作，值为 del。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_id</td>
+						<td class=\"nowrap\">int</td>
+						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+					</tr>
+					<tr>
+						<td class=\"nowrap\">app_key</td>
+						<td class=\"nowrap\">string</td>
+						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">time</td>
@@ -339,16 +397,6 @@ return "<h3>通知概述</h3>
 						<td class=\"nowrap\">signature</td>
 						<td class=\"nowrap\">string</td>
 						<td>签名字符串</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_id</td>
-						<td class=\"nowrap\">int</td>
-						<td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-					</tr>
-					<tr>
-						<td class=\"nowrap\">app_key</td>
-						<td class=\"nowrap\">string</td>
-						<td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
 					</tr>
 					<tr>
 						<td class=\"nowrap\">code</td>

@@ -311,7 +311,7 @@ class MODEL_LOG {
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"alert" => "x030101",
+				"alert" => "x030102",
 			);
 			exit;
 		}

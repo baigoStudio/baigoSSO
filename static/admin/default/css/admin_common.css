@@ -11,6 +11,9 @@
 .td_bg { width: 200px; white-space: nowrap; }
 .td_lg { width: 250px; white-space: nowrap; }
 
+.label_baigo { margin-bottom: 5px; }
+.label_baigo .label { font-size: 12px; }
+
 .text_bg { height: 400px!important; }
 .text_md { height: 200px!important; }
 
@@ -59,4 +62,10 @@ label.control-label > span { color: #c30; margin-left: 10px; }
   display: inline;
   font-weight: normal;
   cursor: pointer;
+}
+
+.nav_baigo a { padding: 4px 8px!important; }
+
+.list_dl dd {
+	margin-bottom: 10px;
 }

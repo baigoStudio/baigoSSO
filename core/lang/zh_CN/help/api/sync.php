@@ -148,7 +148,7 @@ return "<h3>同步概述</h3>
 	<h3>同步登录通知</h3>
 
 	<p class=\"text-success\">接口说明</p>
-	<p>应用调用同步接口以后，将会以 iFrame 得形式直接访问“通知接口 URL”，并且在 URL 中附带通知的数据。</p>
+	<p>应用调用同步接口以后，将会直接访问“通知接口 URL”，并且在 URL 中附带通知的数据。</p>
 
 	<p class=\"text-success\">HTTP 推送方式</p>
 	<p>GET</p>
@@ -168,6 +168,11 @@ return "<h3>同步概述</h3>
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td class=\"nowrap\">mod</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知组件名称，值为 sync。</td>
+					</tr>
 					<tr>
 						<td class=\"nowrap\">act_get</td>
 						<td class=\"nowrap\">string</td>
@@ -395,7 +400,7 @@ return "<h3>同步概述</h3>
 	<h3>同步登出通知</h3>
 
 	<p class=\"text-success\">接口说明</p>
-	<p>应用调用同步接口以后，将会以 iFrame 得形式直接访问“通知接口 URL”，并且在 URL 中附带通知的数据。</p>
+	<p>应用调用同步接口以后，将会直接访问“通知接口 URL”，并且在 URL 中附带通知的数据。</p>
 
 	<p class=\"text-success\">HTTP 推送方式</p>
 	<p>GET</p>
@@ -415,6 +420,11 @@ return "<h3>同步概述</h3>
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td class=\"nowrap\">mod</td>
+						<td class=\"nowrap\">string</td>
+						<td>通知组件名称，值为 sync。</td>
+					</tr>
 					<tr>
 						<td class=\"nowrap\">act_get</td>
 						<td class=\"nowrap\">string</td>

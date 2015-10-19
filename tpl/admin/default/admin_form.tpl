@@ -18,15 +18,15 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">{$adminMod.admin.main.title}</a></li>
 	<li>{$title_sub}</li>
 
-	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
-		<ul class="list-inline">
+		<ul class="nav nav-pills nav_baigo">
 			<li>
 				<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=list">
 					<span class="glyphicon glyphicon-chevron-left"></span>
@@ -45,7 +45,7 @@
 	<form name="admin_form" id="admin_form" autocomplete="off">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
 		<input type="hidden" name="act_post" value="submit">
-		<input type="hidden" name="admin_id" value="{$tplData.adminRow.admin_id}">
+		<input type="hidden" name="admin_id" id="admin_id" value="{$tplData.adminRow.admin_id}">
 
 		<div class="row">
 			<div class="col-md-9">
@@ -88,7 +88,7 @@
 
 						<div class="form-group">
 							<label class="control-label">{$lang.label.allow}<span id="msg_admin_allow">*</span></label>
-							<dl class="list_baigo">
+							<dl class="list_dl">
 								<dd>
 									<div class="checkbox_baigo">
 										<label for="chk_all">
@@ -154,13 +154,13 @@
 					<div class="form-group">
 						<div class="checkbox_baigo">
 							<label for="admin_allow_info">
-								<input type="checkbox" name="admin_allow[info]" id="admin_allow_info" value="1" {if $tplData.adminRow.admin_allow.info == "1"}checked{/if}>
+								<input type="checkbox" name="admin_allow[info]" id="admin_allow_info" value="1" {if isset($tplData.adminRow.admin_allow.info)}checked{/if}>
 								{$lang.label.profileInfo}
 							</label>
 						</div>
 						<div class="checkbox_baigo">
 							<label for="admin_allow_pass">
-								<input type="checkbox" name="admin_allow[pass]" id="admin_allow_pass" value="1" {if $tplData.adminRow.admin_allow.pass == "1"}checked{/if}>
+								<input type="checkbox" name="admin_allow[pass]" id="admin_allow_pass" value="1" {if isset($tplData.adminRow.admin_allow.pass)}checked{/if}>
 								{$lang.label.profilePass}
 							</label>
 						</div>
@@ -171,7 +171,7 @@
 
 	</form>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_form = {
@@ -179,7 +179,7 @@
 			length: { min: 1, max: 30 },
 			validate: { type: "ajax", format: "strDigit", group: "group_admin_name" },
 			msg: { id: "msg_admin_name", too_short: "{$alert.x020201}", too_long: "{$alert.x020202}", format_err: "{$alert.x020203}" },
-			ajax: { url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=admin&act_get=chkname", key: "admin_name", type: "str", attach: "admin_id={$tplData.adminRow.admin_id}" }
+			ajax: { url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=admin&act_get=chkname", key: "admin_name", type: "str", attach_selectors: ["#admin_id"], attach_keys: ["admin_id"] }
 		},
 		admin_pass: {
 			length: { min: 1, max: 0 },
@@ -204,14 +204,15 @@
 	};
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=admin",
+		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.ok}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$cfg.str_url}"
 	};
 
 	$(document).ready(function(){
-		var obj_validator_form = $("#admin_form").baigoValidator(opts_validator_form);
-		var obj_submit_form = $("#admin_form").baigoSubmit(opts_submit_form);
+		var obj_validator_form    = $("#admin_form").baigoValidator(opts_validator_form);
+		var obj_submit_form       = $("#admin_form").baigoSubmit(opts_submit_form);
 		$(".go_form").click(function(){
 			if (obj_validator_form.validateSubmit()) {
 				obj_submit_form.formSubmit();
@@ -221,4 +222,4 @@
 	})
 	</script>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_foot.tpl" cfg=$cfg}

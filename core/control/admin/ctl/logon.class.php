@@ -10,7 +10,6 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_CLASS . "tpl.class.php"); //载入模板类
-include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
 
 /*-------------管理员控制器-------------*/
 class CONTROL_LOGON {
@@ -97,7 +96,7 @@ class CONTROL_LOGON {
 	无返回
 	*/
 	function ctl_logon() {
-		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]);
+		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]);
 		$_str_forward     = fn_getSafe(fn_get("forward"), "txt", "");
 		$_str_alert       = fn_getSafe(fn_get("alert"), "txt", "");
 

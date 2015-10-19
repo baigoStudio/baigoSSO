@@ -10,7 +10,7 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_admin_ajax.inc.php"); //管理员通用
-include_once(BG_PATH_CONTROL_ADMIN . "ajax/log.class.php"); //载入日志 ajax 控制器
+include_once(BG_PATH_CONTROL . "admin/ajax/log.class.php"); //载入日志 ajax 控制器
 
 $ajax_log = new AJAX_LOG(); //初始化日志对象
 

@@ -16,7 +16,7 @@ return "<h3>概述</h3>
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">文件 / 文件夹</th>
+						<th class=\"nowrap\">文件 / 目录</th>
 						<th class=\"nowrap\">用途</th>
 						<th>建议路径</th>
 					</tr>

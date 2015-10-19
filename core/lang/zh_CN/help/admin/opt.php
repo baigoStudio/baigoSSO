@@ -78,7 +78,7 @@ return "<h3>基本设置</h3>
 	<a name=\"reg\"></a>
 	<h3>注册设置</h3>
 	<p>
-		点左侧子菜单访问方式，进入如下界面，可以对访问方式进行设置。
+		点左侧子菜单注册设置，进入如下界面，可以对访问方式进行设置。
 	</p>
 	<p>
 		<img src=\"{images}opt_reg.jpg\" class=\"img-responsive thumbnail\">

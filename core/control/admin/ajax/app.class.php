@@ -29,20 +29,12 @@ class AJAX_APP {
 	function __construct() { //构造函数
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //已登录用户信息
 		$this->obj_ajax       = new CLASS_AJAX(); //获取界面类型
+		$this->obj_ajax->chk_install();
 		$this->log            = $this->obj_ajax->log; //初始化 AJAX 基对象
 		$this->mdl_app        = new MODEL_APP(); //设置用户模型
 		$this->mdl_appBelong  = new MODEL_APP_BELONG();
 		$this->mdl_user       = new MODEL_USER(); //设置管理员模型
 		$this->mdl_log        = new MODEL_LOG(); //设置管理员模型
-
-		if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
-			include_once(BG_PATH_CONFIG . "is_install.php");
-			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
-				$this->obj_ajax->halt_alert("x030411");
-			}
-		} else {
-			$this->obj_ajax->halt_alert("x030410");
-		}
 
 		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
 			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
@@ -159,7 +151,8 @@ class AJAX_APP {
 		$_str_echo   = fn_rand();
 
 		$_arr_data = array(
-			"time"  => $_tm_time,
+			"act_get"    => "test",
+			"time"       => $_tm_time,
 			"random"     => $_str_rand,
 			"signature"  => $_str_sign,
 			"echostr"    => $_str_echo,
@@ -167,7 +160,13 @@ class AJAX_APP {
 			"app_key"    => $_arr_appRow["app_key"],
 		);
 
-		$_arr_notice = fn_http($_arr_appRow["app_notice"], $_arr_data, "post");
+		if (stristr($_arr_appRow["app_notice"], "?")) {
+			$_str_conn = "&";
+		} else {
+			$_str_conn = "?";
+		}
+
+		$_arr_notice = fn_http($_arr_appRow["app_notice"] . $_str_conn . "mod=notice", $_arr_data, "get");
 		//print_r($_arr_notice);
 		//exit;
 

@@ -9,12 +9,12 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=info"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=info">{$lang.page.profile}</a></li>
 	<li>{$lang.page.pass}</li>
 
-	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_left.tpl" cfg=$cfg}
 
 	<form name="profile_form" id="profile_form" autocomplete="off">
 
@@ -58,11 +58,11 @@
 				</div>
 			</div>
 
-			{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/profile_left.tpl" cfg=$cfg}
+			{include "{$smarty.const.BG_PATH_TPL}admin/default/include/profile_left.tpl" cfg=$cfg}
 		</div>
 	</form>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_form = {
@@ -84,14 +84,15 @@
 	};
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=profile",
+		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.ok}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$cfg.str_url}"
 	};
 
 	$(document).ready(function(){
-		var obj_validator_form = $("#profile_form").baigoValidator(opts_validator_form);
-		var obj_submit_form = $("#profile_form").baigoSubmit(opts_submit_form);
+		var obj_validator_form    = $("#profile_form").baigoValidator(opts_validator_form);
+		var obj_submit_form       = $("#profile_form").baigoSubmit(opts_submit_form);
 		$("#go_form").click(function(){
 			if (obj_validator_form.validateSubmit()) {
 				obj_submit_form.formSubmit();
@@ -100,4 +101,4 @@
 	})
 	</script>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_foot.tpl" cfg=$cfg}

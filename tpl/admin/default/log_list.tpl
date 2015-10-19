@@ -10,18 +10,22 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&{$tplData.query}"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_head.tpl" cfg=$cfg}
 
 	<li>{$adminMod.log.main.title}</li>
 
-	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
 		<div class="pull-left">
-			<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=log" target="_blank">
-				<span class="glyphicon glyphicon-question-sign"></span>
-				{$lang.href.help}
-			</a>
+			<ul class="nav nav-pills nav_baigo">
+				<li>
+					<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=log" target="_blank">
+						<span class="glyphicon glyphicon-question-sign"></span>
+						{$lang.href.help}
+					</a>
+				</li>
+			</ul>
 		</div>
 		<div class="pull-right">
 			<form name="log_search" id="log_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
@@ -99,7 +103,7 @@
 								<td class="td_bg">
 									<ul class="list-unstyled">
 										<li>
-											{if $value.log_type != "system"}
+											{if $value.log_type != "system" && isset($value.log_operator_name)}
 												<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=log&act_get=log&operator_id={$value.log_operator_id}">{$value.log_operator_name}</a>
 											{else}
 												{$type.log[$value.log_type]}
@@ -110,7 +114,7 @@
 								</td>
 								<td class="td_sm">
 									<ul class="list-unstyled">
-										<li>
+										<li class="label_baigo">
 											<span class="label label-{$_css_status}">{$status.log[$value.log_status]}</span>
 										</li>
 										<li>{$type.log[$value.log_type]}</li>
@@ -148,7 +152,7 @@
 	</form>
 
 	<div class="text-right">
-		{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/page.tpl" cfg=$cfg}
+		{include "{$smarty.const.BG_PATH_TPL}admin/default/include/page.tpl" cfg=$cfg}
 	</div>
 
 	<div class="modal fade" id="log_modal">
@@ -157,7 +161,7 @@
 		</div>
 	</div>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_list = {
@@ -177,6 +181,7 @@
 		confirm_id: "act_post",
 		confirm_val: "del",
 		confirm_msg: "{$lang.confirm.del}",
+		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.ok}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$cfg.str_url}"
@@ -197,4 +202,4 @@
 	})
 	</script>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_foot.tpl" cfg=$cfg}

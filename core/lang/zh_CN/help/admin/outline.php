@@ -5,7 +5,7 @@ return "<h3>后台概述</h3>
 	</p>
 
 	<p>
-		<img src=\"{images}logon.jpg\" class=\"img-responsive\">
+		<img src=\"{images}logon.jpg\" class=\"img-responsive thumbnail\">
 	</p>
 
 	<hr>

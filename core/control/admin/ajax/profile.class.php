@@ -24,18 +24,10 @@ class AJAX_PROFILE {
 	function __construct() { //构造函数
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //已登录商家信息
 		$this->obj_ajax       = new CLASS_AJAX(); //初始化 AJAX 基对象
+		$this->obj_ajax->chk_install();
 		$this->log            = $this->obj_ajax->log; //初始化 AJAX 基对象
 		$this->mdl_admin      = new MODEL_ADMIN(); //设置管理组模型
 		$this->mdl_log        = new MODEL_LOG(); //设置管理员模型
-
-		if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
-			include_once(BG_PATH_CONFIG . "is_install.php");
-			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
-				$this->obj_ajax->halt_alert("x030411");
-			}
-		} else {
-			$this->obj_ajax->halt_alert("x030410");
-		}
 
 		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
 			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
@@ -50,7 +42,7 @@ class AJAX_PROFILE {
 	 * @return void
 	 */
 	function ajax_info() {
-		if (isset($this->adminLogged["admin_allow"]["info"]) {
+		if (isset($this->adminLogged["admin_allow"]["info"]) && $this->adminLogged["admin_allow"]["info"] == 1) {
 			$this->obj_ajax->halt_alert("x020108");
 		}
 

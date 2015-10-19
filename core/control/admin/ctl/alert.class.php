@@ -24,10 +24,10 @@ class CONTROL_ALERT {
 		$this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
 		$this->config         = $this->obj_base->config;
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
-		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]); //初始化视图对象
+		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]); //初始化视图对象
 	}
 
-	function ctl_display() {
+	function ctl_show() {
 		$_str_alert   = fn_getSafe(fn_get("alert"), "txt", "");
 		//$_str_view    = fn_getSafe(fn_get("view"), "txt", "");
 

@@ -1,5 +1,5 @@
 {* admin_head.tpl 管理后台头部，包含菜单 *}
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_head.tpl"}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_head.tpl"}
 
 <body>
 
@@ -14,11 +14,11 @@
 				</button>
 				{if $config.ui == "default"}
 					<a class="navbar-brand" href="{$smarty.const.PRD_SSO_URL}" target="_blank">
-						<img src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
+						<img src="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/image/admin_logo.png">
 					</a>
 				{else}
 					<a class="navbar-brand" href="#">
-						<img src="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/image/admin_logo.png">
+						<img src="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/image/admin_logo.png">
 					</a>
 				{/if}
 			</div>

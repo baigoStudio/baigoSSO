@@ -7,18 +7,19 @@
 	<title>{$cfg.title} - {$lang.page.admin} - {$smarty.const.BG_SITE_NAME}</title>
 
 	<!--jQuery 库-->
-	<script src="{$smarty.const.BG_URL_JS}jquery.min.js" type="text/javascript"></script>
-	<link href="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/css/admin_common.css" type="text/css" rel="stylesheet">
-	<link href="{$smarty.const.BG_URL_JS}bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+	<script src="{$smarty.const.BG_URL_STATIC}js/jquery.min.js" type="text/javascript"></script>
+	<link href="{$smarty.const.BG_URL_STATIC}js/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
 
 	{if isset($cfg.baigoValidator)}
 		<!--表单验证 js-->
-		<link href="{$smarty.const.BG_URL_JS}baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
+		<link href="{$smarty.const.BG_URL_STATIC}js/baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
 	{/if}
 
 	{if isset($cfg.baigoSubmit)}
 		<!--表单 ajax 提交 js-->
-		<link href="{$smarty.const.BG_URL_JS}baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
+		<link href="{$smarty.const.BG_URL_STATIC}js/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
 	{/if}
+
+	<link href="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/css/admin_common.css" type="text/css" rel="stylesheet">
 
 </head>

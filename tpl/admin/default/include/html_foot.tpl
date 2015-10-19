@@ -2,22 +2,22 @@
 
 	{if isset($cfg.baigoValidator)}
 		<!--表单验证 js-->
-		<script src="{$smarty.const.BG_URL_JS}baigoValidator/baigoValidator.js" type="text/javascript"></script>
+		<script src="{$smarty.const.BG_URL_STATIC}js/baigoValidator/baigoValidator.js" type="text/javascript"></script>
 	{/if}
 
 	{if isset($cfg.baigoSubmit)}
 		<!--表单 ajax 提交 js-->
-		<script src="{$smarty.const.BG_URL_JS}baigoSubmit/baigoSubmit.js" type="text/javascript"></script>
+		<script src="{$smarty.const.BG_URL_STATIC}js/baigoSubmit/baigoSubmit.js" type="text/javascript"></script>
 	{/if}
 
 	{if isset($cfg.reloadImg)}
 		<!--重新载入图片 js-->
-		<script src="{$smarty.const.BG_URL_JS}reloadImg.js" type="text/javascript"></script>
+		<script src="{$smarty.const.BG_URL_STATIC}js/reloadImg.js" type="text/javascript"></script>
 	{/if}
 
 	{if isset($cfg.baigoCheckall)}
 		<!--全选 js-->
-		<script src="{$smarty.const.BG_URL_JS}baigoCheckall.js" type="text/javascript"></script>
+		<script src="{$smarty.const.BG_URL_STATIC}js/baigoCheckall.js" type="text/javascript"></script>
 	{/if}
 
 	{if isset($cfg.tokenReload)}
@@ -36,13 +36,13 @@
 			});
 			setTimeout("tokenReload();", 300000);
 		}
-	
+
 		$(document).ready(function(){
 			setTimeout("tokenReload();", 300000);
 		});
 		</script>
 	{/if}
 
-	<script src="{$smarty.const.BG_URL_JS}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
 </html>

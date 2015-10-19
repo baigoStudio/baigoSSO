@@ -1,7 +1,8 @@
 <?php
 return array(
-	"title" => "安装方法",
-	"menu" => array(
+	"title"    => "安装方法",
+	"active"   => "install",
+	"menu"     => array(
 		"outline"     => "安装概述",
 		"ext"         => "服务器环境检查",
 		"dbconfig"    => "数据库设置",

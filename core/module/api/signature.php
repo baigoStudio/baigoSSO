@@ -12,7 +12,7 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_api.inc.php"); //验证是否已登录
-include_once(BG_PATH_CONTROL_API . "signature.class.php"); //载入商家控制器
+include_once(BG_PATH_CONTROL . "api/signature.class.php"); //载入商家控制器
 $api_signature = new API_SIGNATURE(); //初始化商家
 
 switch ($GLOBALS["act_get"]) {

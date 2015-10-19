@@ -25,7 +25,7 @@ $_cfg_host = array(
 	"user"      => BG_DB_USER,
 	"pass"      => BG_DB_PASS,
 	"charset"   => BG_DB_CHARSET,
-	"debug"     => BG_DB_DEBUG,
+	"debug"     => BG_DEBUG_DB,
 );
 
 $GLOBALS["obj_db"]      = new CLASS_MYSQLI($_cfg_host); //设置数据库对象

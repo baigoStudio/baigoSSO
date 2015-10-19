@@ -4,7 +4,7 @@
 	mod_help   => "upgrade",
 	act_help   => "over"
 ]}
-{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/upgrade_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/upgrade_head.tpl" cfg=$cfg}
 
 	<form name="upgrade_form_dbtable" id="upgrade_form_dbtable">
 		<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
@@ -20,16 +20,17 @@
 		<div class="form-group">
 			<div class="btn-group">
 				<button type="button" id="go_next" class="btn btn-primary btn-lg">{$lang.btn.over}</button>
-				{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/upgrade_drop.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL}install/default/include/upgrade_drop.tpl" cfg=$cfg}
 			</div>
 		</div>
 	</form>
 
-{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/install_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_INSTALL}ajax.php?mod=upgrade",
+		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.login}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$smarty.const.BG_URL_ADMIN}ctl.php"

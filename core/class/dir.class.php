@@ -73,7 +73,8 @@ class CLASS_DIR {
 	*/
 	function list_dir($str_path) {
 
-		$_arr_dir = scandir($str_path);
+		$_arr_return  = array();
+		$_arr_dir     = scandir($str_path);
 
 		if ($_arr_dir) {
 			foreach ($_arr_dir as $_key=>$_value) {

@@ -10,15 +10,15 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&{$tplData.query}"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=list">{$adminMod.app.main.title}</a></li>
 	<li>{$lang.page.appBelong}</li>
 
-	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
-		<ul class="list-inline">
+		<ul class="nav nav-pills nav_baigo">
 			<li>
 				<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=list">
 					<span class="glyphicon glyphicon-chevron-left"></span>
@@ -94,7 +94,7 @@
 										</td>
 										<td class="td_md">
 											<ul class="list-unstyled">
-												<li>
+												<li class="label_baigo">
 													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
 												</li>
 												<li>{$value.user_note}</li>
@@ -175,7 +175,7 @@
 										</td>
 										<td class="td_md">
 											<ul class="list-unstyled">
-												<li>
+												<li class="label_baigo">
 													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
 												</li>
 												<li>{$value.user_note}</li>
@@ -200,12 +200,12 @@
 			</form>
 
 			<div class="text-right">
-				{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/page.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL}admin/default/include/page.tpl" cfg=$cfg}
 			</div>
 		</div>
 	</div>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_validator_belong = {
@@ -221,6 +221,7 @@
 		confirm_id: "act_post",
 		confirm_val: "deauth",
 		confirm_msg: "{$lang.confirm.deauth}",
+		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.ok}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$cfg.str_url}"
@@ -236,21 +237,22 @@
 
 	var opts_submit_list = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=app",
+		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.ok}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$cfg.str_url}"
 	};
 
 	$(document).ready(function(){
-		var obj_validate_belong = $("#belong_list").baigoValidator(opts_validator_belong);
-		var obj_submit_belong = $("#belong_list").baigoSubmit(opts_submit_belong);
+		var obj_validate_belong   = $("#belong_list").baigoValidator(opts_validator_belong);
+		var obj_submit_belong     = $("#belong_list").baigoSubmit(opts_submit_belong);
 		$("#go_belong").click(function(){
 			if (obj_validate_belong.validateSubmit()) {
 				obj_submit_belong.formSubmit();
 			}
 		});
 		var obj_validate_list = $("#user_list").baigoValidator(opts_validator_list);
-		var obj_submit_list = $("#user_list").baigoSubmit(opts_submit_list);
+		var obj_submit_list   = $("#user_list").baigoSubmit(opts_submit_list);
 		$("#go_list").click(function(){
 			if (obj_validate_list.validateSubmit()) {
 				obj_submit_list.formSubmit();
@@ -261,4 +263,4 @@
 	})
 	</script>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_foot.tpl" cfg=$cfg}

@@ -9,18 +9,22 @@
 	str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt"
 ]}
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_head.tpl" cfg=$cfg}
 
 	<li><a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get=base">{$adminMod.opt.main.title}</a></li>
 	<li>{$adminMod.opt.sub.base.title}</li>
 
-	{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_left.tpl" cfg=$cfg}
+	{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_left.tpl" cfg=$cfg}
 
 	<div class="form-group">
-		<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=opt" target="_blank">
-			<span class="glyphicon glyphicon-question-sign"></span>
-			{$lang.href.help}
-		</a>
+		<ul class="nav nav-pills nav_baigo">
+			<li>
+				<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=opt" target="_blank">
+					<span class="glyphicon glyphicon-question-sign"></span>
+					{$lang.href.help}
+				</a>
+			</li>
+		</ul>
 	</div>
 
 	<form name="opt_form" id="opt_form">
@@ -30,7 +34,7 @@
 
 		<div class="panel panel-default">
 			<div class="panel-body">
-				{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/opt_form.tpl" cfg=$cfg}
+				{include "{$smarty.const.BG_PATH_TPL}admin/default/include/opt_form.tpl" cfg=$cfg}
 
 				<div class="form-group">
 					<button type="button" id="go_form" class="btn btn-primary">{$lang.btn.save}</button>
@@ -39,11 +43,13 @@
 		</div>
 	</form>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/admin_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/admin_foot.tpl" cfg=$cfg}
 
 	<script type="text/javascript">
 	var opts_submit_form = {
 		ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=opt",
+		text_submitting: "{$lang.label.submitting}",
+		btn_text: "{$lang.btn.ok}",
 		btn_text: "{$lang.btn.ok}",
 		btn_close: "{$lang.btn.close}",
 		btn_url: "{$cfg.str_url}"
@@ -60,4 +66,4 @@
 	})
 	</script>
 
-{include "{$smarty.const.BG_PATH_TPL_ADMIN}default/include/html_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}admin/default/include/html_foot.tpl" cfg=$cfg}

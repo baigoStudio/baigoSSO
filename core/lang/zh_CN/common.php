@@ -41,7 +41,6 @@ return array(
 		"installBase"     => "基本设置",
 		"installReg"      => "注册设置",
 		"installAdmin"    => "创建管理员",
-		"installAuto"     => "SSO 自动部署",
 		"installOver"     => "完成安装",
 	),
 
@@ -110,6 +109,8 @@ return array(
 		"belongUser"      => "已授权用户",
 		"selectUser"      => "待授权用户",
 
+		"submitting"      => "正在提交 ...",
+
 		"appName"         => "应用名称",
 		"appId"           => "APP ID",
 		"appKey"          => "APP KEY",
@@ -131,7 +132,6 @@ return array(
 		"dbPass"          => "数据库密码",
 		"dbCharset"       => "数据库字符编码",
 		"dbTable"         => "数据表名前缀",
-		"dbDebug"         => "数据库调试模式",
 
 		"user"            => "用户",
 		"admin"           => "管理员",
@@ -147,7 +147,6 @@ return array(
 
 		"installOver"     => "还差最后一步，完成安装",
 		"installDbtable"  => "即将创建数据表",
-		"installAuto"     => "即将执行自动部署第二步",
 
 		"nick"            => "昵称",
 		"email"           => "E-mail 地址",

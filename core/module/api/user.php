@@ -12,7 +12,7 @@ if(!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_INC . "common_api.inc.php"); //验证是否已登录
-include_once(BG_PATH_CONTROL_API . "user.class.php"); //载入商家控制器
+include_once(BG_PATH_CONTROL . "api/user.class.php"); //载入商家控制器
 
 $api_user = new API_USER(); //初始化商家
 

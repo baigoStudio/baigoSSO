@@ -18,7 +18,7 @@ class CONTROL_ALERT {
 	function __construct() { //构造函数
 		$this->obj_base       = $GLOBALS["obj_base"];
 		$this->config         = $this->obj_base->config;
-		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL . $this->config["ui"]);
+		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL . "install/" . $this->config["ui"]);
 	}
 
 	/**
@@ -27,7 +27,7 @@ class CONTROL_ALERT {
 	 * @access public
 	 * @return void
 	 */
-	function ctl_display() {
+	function ctl_show() {
 		$_str_alert = fn_getSafe(fn_get("alert"), "txt", "");
 		$this->tplData = array(
 			"alert"  => $_str_alert,

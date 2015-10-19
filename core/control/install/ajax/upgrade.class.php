@@ -11,7 +11,6 @@ if(!defined("IN_BAIGO")) {
 
 include_once(BG_PATH_CLASS . "ajax.class.php"); //载入 AJAX 基类
 include_once(BG_PATH_MODEL . "opt.class.php"); //载入管理帐号模型
-include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
 
 class AJAX_UPGRADE {
 
@@ -32,6 +31,11 @@ class AJAX_UPGRADE {
 	}
 
 	function ajax_dbconfig() {
+		$_arr_dbconfig = $this->mdl_opt->input_dbconfig();
+		if ($_arr_dbconfig["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_dbconfig["alert"]);
+		}
+
 		$_arr_return = $this->mdl_opt->mdl_dbconfig();
 
 		if ($_arr_return["alert"] != "y040101") {
@@ -65,6 +69,22 @@ class AJAX_UPGRADE {
 	function ajax_base() {
 		$this->check_db();
 
+		$_num_countSrc = 0;
+
+		foreach ($this->obj_ajax->opt["base"] as $_key=>$_value) {
+			if ($_value["min"] > 0) {
+				$_num_countSrc++;
+			}
+		}
+
+		$_arr_const = $this->mdl_opt->input_const("base");
+
+		$_num_countInput = count(array_filter($_arr_const));
+
+		if ($_num_countInput < $_num_countSrc) {
+			$this->obj_ajax->halt_alert("x030212");
+		}
+
 		$_arr_return = $this->mdl_opt->mdl_const("base");
 
 		if ($_arr_return["alert"] != "y040101") {
@@ -83,6 +103,22 @@ class AJAX_UPGRADE {
 	 */
 	function ajax_reg() {
 		$this->check_db();
+
+		$_num_countSrc = 0;
+
+		foreach ($this->obj_ajax->opt["reg"] as $_key=>$_value) {
+			if ($_value["min"] > 0) {
+				$_num_countSrc++;
+			}
+		}
+
+		$_arr_const = $this->mdl_opt->input_const("reg");
+
+		$_num_countInput = count(array_filter($_arr_const));
+
+		if ($_num_countInput < $_num_countSrc) {
+			$this->obj_ajax->halt_alert("x030212");
+		}
 
 		$_arr_return = $this->mdl_opt->mdl_const("reg");
 
@@ -289,7 +325,7 @@ class AJAX_UPGRADE {
 				"user"      => BG_DB_USER,
 				"pass"      => BG_DB_PASS,
 				"charset"   => BG_DB_CHARSET,
-				"debug"     => BG_DB_DEBUG,
+				"debug"     => BG_DEBUG_DB,
 				"port"      => BG_DB_PORT,
 			);
 

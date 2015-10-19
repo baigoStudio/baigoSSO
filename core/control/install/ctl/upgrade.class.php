@@ -18,7 +18,7 @@ class CONTROL_UPGRADE {
 	function __construct() { //构造函数
 		$this->obj_base   = $GLOBALS["obj_base"];
 		$this->config     = $this->obj_base->config;
-		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL . $this->config["ui"]);
+		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL . "install/" . $this->config["ui"]);
 		$this->upgrade_init();
 	}
 
@@ -178,7 +178,7 @@ class CONTROL_UPGRADE {
 				"user"      => BG_DB_USER,
 				"pass"      => BG_DB_PASS,
 				"charset"   => BG_DB_CHARSET,
-				"debug"     => BG_DB_DEBUG,
+				"debug"     => BG_DEBUG_DB,
 				"port"      => BG_DB_PORT,
 			);
 

@@ -1,6 +1,6 @@
 /*
-v0.0.9 jQuery baigoSubmit plugin 表单全选插件
-(c) 2013 baigo studio - http://www.baigo.net/baigoSubmit/
+v1.0 jQuery baigoSubmit plugin 表单全选插件
+(c) 2013 baigo studio - http://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
 
@@ -28,6 +28,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 			class_ok: "baigoSubmit_y",
 			class_err: "baigoSubmit_x",
 			class_loading: "baigoSubmit_loading",
+			text_submitting: "Submitting ...",
 			btn_url: "",
 			btn_text: "OK",
 			btn_close: "Close",
@@ -89,7 +90,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 						$("#btn_jump").hide();
 						$("#box_msg").empty();
 						$("#box_msg").attr("class", opts.class_loading);
-						$("#box_msg").append("loading ..."); //填充消息内容
+						$("#box_msg").append(opts.text_submitting); //填充消息内容
 						callModal(); //输出消息
 					}, //输出消息
 					success: function(_result){ //读取返回结果

@@ -32,7 +32,7 @@ class CONTROL_LOG {
 		$this->mdl_admin      = new MODEL_ADMIN(); //设置管理员模型
 		$this->mdl_user       = new MODEL_USER(); //设置管理员模型
 		$this->mdl_app        = new MODEL_APP(); //设置管理员模型
-		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]); //初始化视图对象
+		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]); //初始化视图对象
 		$this->tplData = array(
 			"adminLogged" => $this->adminLogged
 		);
@@ -164,11 +164,15 @@ class CONTROL_LOG {
 			switch ($_value["log_type"]) {
 				case "admin":
 					$_arr_adminRow = $this->mdl_admin->mdl_read($_value["log_operator_id"]);
-					$_arr_logRows[$_key]["log_operator_name"] = $_arr_adminRow["admin_name"];
+					if ($_arr_adminRow["alert"] == "y020102") {
+						$_arr_logRows[$_key]["log_operator_name"] = $_arr_adminRow["admin_name"];
+					}
 				break;
 				case "app":
 					$_arr_appRow = $this->mdl_app->mdl_read($_value["log_operator_id"]);
-					$_arr_logRows[$_key]["log_operator_name"] = $_arr_appRow["app_name"];
+					if ($_arr_adminRow["alert"] == "y050102") {
+						$_arr_logRows[$_key]["log_operator_name"] = $_arr_appRow["app_name"];
+					}
 				break;
 			}
 		}

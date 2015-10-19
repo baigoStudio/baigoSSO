@@ -12,21 +12,22 @@ if(!defined("IN_BAIGO")) {
 /*-------------设置项模型-------------*/
 class MODEL_OPT {
 
+	public $arr_const;
+
 	function mdl_const($str_type) {
 		if (!fn_token("chk")) { //令牌
-			$this->obj_ajax->halt_alert("x030102");
+			return array(
+				"alert" => "x030102",
+			);
+			exit;
 		}
 
-		$_arr_opt = fn_post("opt");
-
 		$_str_content = "<?php" . PHP_EOL;
-		foreach ($_arr_opt as $_key=>$_value) {
-			$_arr_optChk = validateStr($_value, 1, 900);
-			$_str_optValue = $_arr_optChk["str"];
+		foreach ($this->arr_const[$str_type] as $_key=>$_value) {
 			if (is_numeric($_value)) {
-				$_str_content .= "define(\"" . $_key . "\", " . $_str_optValue . ");" . PHP_EOL;
+				$_str_content .= "define(\"" . $_key . "\", " . $_value . ");" . PHP_EOL;
 			} else {
-				$_str_content .= "define(\"" . $_key . "\", \"" . str_replace(PHP_EOL, "|", $_str_optValue) . "\");" . PHP_EOL;
+				$_str_content .= "define(\"" . $_key . "\", \"" . str_replace(PHP_EOL, "|", $_value) . "\");" . PHP_EOL;
 			}
 		}
 
@@ -58,22 +59,14 @@ class MODEL_OPT {
 			exit;
 		}
 
-		$_str_dbHost      = fn_getSafe(fn_post("db_host"), "txt", "localhost");
-		$_str_dbPort      = fn_getSafe(fn_post("db_port"), "txt", "3306");
-		$_str_dbName      = fn_getSafe(fn_post("db_name"), "txt", "baigo_sso");
-		$_str_dbUser      = fn_getSafe(fn_post("db_user"), "txt", "baigo_sso");
-		$_str_dbPass      = fn_getSafe(fn_post("db_pass"), "txt", "");
-		$_str_dbCharset   = fn_getSafe(fn_post("db_charset"), "txt", "utf8");
-		$_str_dbTable     = fn_getSafe(fn_post("db_table"), "txt", "sso_");
-
 		$_str_content     = "<?php" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_HOST\", \"" . $_str_dbHost . "\");" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_PORT\", \"" . $_str_dbPort . "\");" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_NAME\", \"" . $_str_dbName . "\");" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_USER\", \"" . $_str_dbUser . "\");" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_PASS\", \"" . $_str_dbPass . "\");" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_CHARSET\", \"" . $_str_dbCharset . "\");" . PHP_EOL;
-		$_str_content    .= "define(\"BG_DB_TABLE\", \"" . $_str_dbTable . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_HOST\", \"" . $this->dbconfig["db_host"] . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_PORT\", \"" . $this->dbconfig["db_port"] . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_NAME\", \"" . $this->dbconfig["db_name"] . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_USER\", \"" . $this->dbconfig["db_user"] . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_PASS\", \"" . $this->dbconfig["db_pass"] . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_CHARSET\", \"" . $this->dbconfig["db_charset"] . "\");" . PHP_EOL;
+		$_str_content    .= "define(\"BG_DB_TABLE\", \"" . $this->dbconfig["db_table"] . "\");" . PHP_EOL;
 
 		$_num_size        = file_put_contents(BG_PATH_CONFIG . "config_db.inc.php", $_str_content);
 
@@ -114,4 +107,115 @@ class MODEL_OPT {
 		);
 	}
 
+
+	function input_dbconfig() {
+		$_arr_dbHost = validateStr(fn_post("db_host"), 1, 0);
+		switch ($_arr_dbHost["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030204",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_host"] = $_arr_dbHost["str"];
+			break;
+		}
+
+		$_arr_dbPort = validateStr(fn_post("db_port"), 1, 0);
+		switch ($_arr_dbPort["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030211",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_port"] = $_arr_dbPort["str"];
+			break;
+		}
+
+		$_arr_dbName = validateStr(fn_post("db_name"), 1, 0);
+		switch ($_arr_dbName["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030205",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_name"] = $_arr_dbName["str"];
+			break;
+		}
+
+		$_arr_dbUser = validateStr(fn_post("db_user"), 1, 0);
+		switch ($_arr_dbUser["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030206",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_user"] = $_arr_dbUser["str"];
+			break;
+		}
+
+		$_arr_dbPass = validateStr(fn_post("db_pass"), 1, 0);
+		switch ($_arr_dbPass["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030207",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_pass"] = $_arr_dbPass["str"];
+			break;
+		}
+
+		$_arr_dbCharset = validateStr(fn_post("db_charset"), 1, 0);
+		switch ($_arr_dbCharset["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030208",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_charset"] = $_arr_dbCharset["str"];
+			break;
+		}
+
+		$_arr_dbTable = validateStr(fn_post("db_table"), 1, 0);
+		switch ($_arr_dbTable["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x030209",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->dbconfig["db_table"] = $_arr_dbTable["str"];
+			break;
+		}
+
+		$this->dbconfig["alert"] = "ok";
+
+		return $this->dbconfig;
+	}
+
+
+	function input_const($str_type) {
+		$this->arr_const = fn_post("opt");
+
+		return $this->arr_const[$str_type];
+	}
 }

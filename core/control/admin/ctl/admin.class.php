@@ -26,7 +26,7 @@ class CONTROL_ADMIN {
 		$this->config         = $this->obj_base->config;
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
 		$this->mdl_admin      = new MODEL_ADMIN(); //设置管理员模型
-		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL_ADMIN . $this->config["ui"]); //初始化视图对象
+		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]); //初始化视图对象
 		$this->tplData = array(
 			"adminLogged" => $this->adminLogged
 		);
@@ -70,6 +70,12 @@ class CONTROL_ADMIN {
 			if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
 				return array(
 					"alert" => "x020303",
+				);
+				exit;
+			}
+			if ($_num_adminId == $this->adminLogged["admin_id"]) {
+				return array(
+					"alert" => "x020306",
 				);
 				exit;
 			}

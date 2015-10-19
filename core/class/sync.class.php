@@ -21,6 +21,10 @@ class CLASS_SYNC {
 		$this->obj_base   = $GLOBALS["obj_base"]; //获取界面类型
 		$this->config     = $this->obj_base->config;
 		$this->log        = include_once(BG_PATH_LANG . $this->config["lang"] . "/log.php"); //载入日志内容
+		$this->arr_return = array(
+			"prd_sso_ver" => PRD_SSO_VER,
+			"prd_sso_pub" => PRD_SSO_PUB,
+		);
 	}
 
 
@@ -233,6 +237,26 @@ class CLASS_SYNC {
 	 * @return void
 	 */
 	function halt_re($arr_re) {
-		exit(json_encode($arr_re)); //输出错误信息
+		$arr_halt = array_merge($this->arr_return, $arr_re);
+
+		exit(fn_jsonEncode($arr_halt, "no")); //输出错误信息
+	}
+
+
+	function chk_install() {
+		if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
+			include_once(BG_PATH_CONFIG . "is_install.php");
+			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
+				$_arr_return = array(
+					"alert" => "x030411"
+				);
+				$this->halt_re($_arr_return);
+			}
+		} else {
+			$_arr_return = array(
+				"alert" => "x030410"
+			);
+			$this->halt_re($_arr_return);
+		}
 	}
 }

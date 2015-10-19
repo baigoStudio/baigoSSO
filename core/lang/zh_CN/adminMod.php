@@ -23,6 +23,11 @@ return array(
 				"mod"       => "user",
 				"act_get"   => "list",
 			),
+			"form" => array(
+				"title"     => "创建用户",
+				"mod"       => "user",
+				"act_get"   => "form",
+			),
 		),
 		"allow" => array(
 			"browse" => "浏览",

@@ -99,8 +99,8 @@ class MODEL_ADMIN {
 		}
 
 		return array(
-			"admin_id" => $_num_adminId,
-			"alert" => $_str_alert, //成功
+			"admin_id"   => $_num_adminId,
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -130,7 +130,7 @@ class MODEL_ADMIN {
 
 		return array(
 			"admin_id"   => $_num_adminId,
-			"alert"  => $_str_alert, //成功
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -161,7 +161,7 @@ class MODEL_ADMIN {
 
 		return array(
 			"admin_id"   => $_num_adminId,
-			"alert"  => $_str_alert, //成功
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -225,7 +225,7 @@ class MODEL_ADMIN {
 
 		return array(
 			"admin_id"   => $_num_adminId,
-			"alert"  => $_str_alert, //成功
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -311,14 +311,6 @@ class MODEL_ADMIN {
 			$_arr_adminRow["admin_allow"] = fn_jsonDecode($_arr_adminRow["admin_allow"], "no"); //json解码
 		} else {
 			$_arr_adminRow["admin_allow"] = array();
-		}
-
-		if (!isset($_arr_adminRow["admin_allow"]["info"])) {
-			$_arr_adminRow["admin_allow"]["info"] = 0;
-		}
-
-		if (!isset($_arr_adminRow["admin_allow"]["pass"])) {
-			$_arr_adminRow["admin_allow"]["pass"] = 0;
 		}
 
 		$_arr_adminRow["alert"]   = "y020102";
@@ -530,16 +522,16 @@ class MODEL_ADMIN {
 	function input_login() {
 		if (!fn_seccode()) { //验证码
 			return array(
-				"forward"    => $this->adminLogin["forward"],
-				"alert"  => "x030101",
+				"forward"   => $this->adminLogin["forward"],
+				"alert"     => "x030101",
 			);
 			exit;
 		}
 
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"forward"    => $this->adminLogin["forward"],
-				"alert"  => "x030102",
+				"forward"   => $this->adminLogin["forward"],
+				"alert"     => "x030102",
 			);
 			exit;
 		}
@@ -647,7 +639,6 @@ class MODEL_ADMIN {
 			case "ok":
 				$this->adminSubmit["admin_name"] = $_arr_adminName["str"];
 			break;
-
 		}
 
 		//检验用户名是否重复
@@ -703,7 +694,7 @@ class MODEL_ADMIN {
 		}
 
 		$this->adminSubmit["admin_allow"] = fn_jsonEncode(fn_post("admin_allow"), "no");
-		$this->adminSubmit["alert"]   = "ok";
+		$this->adminSubmit["alert"]       = "ok";
 
 		return $this->adminSubmit;
 	}
@@ -742,17 +733,32 @@ class MODEL_ADMIN {
 			case "ok":
 				$this->adminSubmit["admin_name"] = $_arr_adminName["str"];
 			break;
-
 		}
 
 		//检验用户名是否重复
-		$_arr_adminRow = $this->mdl_read($this->adminSubmit["admin_name"], "admin_name", $this->adminSubmit["admin_id"]);
+		$_arr_adminRow = $this->mdl_read($this->adminSubmit["admin_name"], "admin_name");
 		if ($_arr_adminRow["alert"] == "y020102") {
-			$this->adminSubmit["admin_id"] = $_arr_adminRow["admin_id"];
+			return array(
+				"alert" => "x020204",
+			);
+			exit;
+		}
+
+		$_arr_adminPass = validateStr(fn_post("admin_pass"), 1, 0);
+		switch ($_arr_adminPass["status"]) {
+			case "too_short":
+				return array(
+					"alert" => "x020210",
+				);
+				exit;
+			break;
+
+			case "ok":
+				$this->adminSubmit["admin_pass"] = $_arr_adminPass["str"];
+			break;
 		}
 
 		$this->adminSubmit["admin_status"]    = "enable";
-		$this->adminSubmit["admin_pass"]      = fn_post("admin_pass");
 
 		$_arr_adminAllow = array(
 			"user" => array(
@@ -779,14 +785,14 @@ class MODEL_ADMIN {
 				"del"      => 1,
 			),
 			"opt" => array(
-				"db"   => 1,
-				"base" => 1,
-				"reg"  => 1,
+				"db"       => 1,
+				"base"     => 1,
+				"reg"      => 1,
 			),
 		);
 
 		$this->adminSubmit["admin_allow"] = fn_jsonEncode($_arr_adminAllow, "no");
-		$this->adminSubmit["alert"]   = "ok";
+		$this->adminSubmit["alert"]       = "ok";
 
 		return $this->adminSubmit;
 	}
@@ -818,8 +824,8 @@ class MODEL_ADMIN {
 		}
 
 		$this->adminIds = array(
-			"alert"   => $_str_alert,
-			"admin_ids"   => $_arr_adminIds
+			"alert"      => $_str_alert,
+			"admin_ids"  => $_arr_adminIds
 		);
 
 		return $this->adminIds;

@@ -2,7 +2,7 @@
 {$cfg = [
 	sub_title => $lang.page.alert
 ]}
-{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_head.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/install_head.tpl" cfg=$cfg}
 
 	<div class="alert alert-{if $tplData.status == "y"}success{else}danger{/if}">
 		<span class="glyphicon glyphicon-{if $tplData.status == "y"}ok-circle{else}remove-circle{/if}"></span>
@@ -11,4 +11,4 @@
 
 	{$install[$tplData.alert]}
 
-{include "{$smarty.const.BG_PATH_TPL_INSTALL}default/include/install_foot.tpl" cfg=$cfg}
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/install_foot.tpl" cfg=$cfg}

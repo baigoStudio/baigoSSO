@@ -13,19 +13,19 @@
 
 			<div class="form-group">
 				<label class="control-label">{$lang.label.status}</label>
-				<p class="form-control-static">
+				<p class="form-control-static label_baigo">
 					<span class="label label-{$_css_status}">{$status.admin[$tplData.adminLogged.admin_status]}</span>
 				</p>
 			</div>
 
 			{if isset($tplData.adminLogged.admin_allow.info)}
-				<div class="form-group">
+				<div class="form-group label_baigo">
 					<span class="label label-danger">{$lang.label.profileInfo}</span>
 				</div>
 			{/if}
 
 			{if isset($tplData.adminLogged.admin_allow.pass)}
-				<div class="form-group">
+				<div class="form-group label_baigo">
 					<span class="label label-danger">{$lang.label.profilePass}</span>
 				</div>
 			{/if}

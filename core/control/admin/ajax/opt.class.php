@@ -25,18 +25,10 @@ class AJAX_OPT {
 	function __construct() { //构造函数
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //已登录商家信息
 		$this->obj_ajax       = new CLASS_AJAX(); //初始化 AJAX 基对象
+		$this->obj_ajax->chk_install();
 		$this->log            = $this->obj_ajax->log; //初始化 AJAX 基对象
 		$this->mdl_opt        = new MODEL_OPT(); //设置管理组模型
 		$this->mdl_log        = new MODEL_LOG(); //设置管理员模型
-
-		if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
-			include_once(BG_PATH_CONFIG . "is_install.php");
-			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
-				$this->obj_ajax->halt_alert("x030411");
-			}
-		} else {
-			$this->obj_ajax->halt_alert("x030410");
-		}
 
 		if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
 			$this->obj_ajax->halt_alert($this->adminLogged["alert"]);
@@ -52,6 +44,22 @@ class AJAX_OPT {
 	function ajax_reg() {
 		if (!isset($this->adminLogged["admin_allow"]["opt"]["reg"])) {
 			$this->obj_ajax->halt_alert("x040301");
+		}
+
+		$_num_countSrc = 0;
+
+		foreach ($this->obj_ajax->opt["reg"] as $_key=>$_value) {
+			if ($_value["min"] > 0) {
+				$_num_countSrc++;
+			}
+		}
+
+		$_arr_const = $this->mdl_opt->input_const("reg");
+
+		$_num_countInput = count(array_filter($_arr_const));
+
+		if ($_num_countInput < $_num_countSrc) {
+			$this->obj_ajax->halt_alert("x030212");
 		}
 
 		$_arr_return = $this->mdl_opt->mdl_const("reg");
@@ -108,6 +116,22 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
+		$_num_countSrc = 0;
+
+		foreach ($this->obj_ajax->opt["base"] as $_key=>$_value) {
+			if ($_value["min"] > 0) {
+				$_num_countSrc++;
+			}
+		}
+
+		$_arr_const = $this->mdl_opt->input_const("base");
+
+		$_num_countInput = count(array_filter($_arr_const));
+
+		if ($_num_countInput < $_num_countSrc) {
+			$this->obj_ajax->halt_alert("x030212");
+		}
+
 		$_arr_return = $this->mdl_opt->mdl_const("base");
 
 		if ($_arr_return["alert"] != "y040101") {
@@ -135,8 +159,12 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x040304");
 		}
 
-		$_arr_return = $this->mdl_opt->mdl_dbconfig();
+		$_arr_dbconfig = $this->mdl_opt->input_dbconfig();
+		if ($_arr_dbconfig["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_dbconfig["alert"]);
+		}
 
+		$_arr_return = $this->mdl_opt->mdl_dbconfig();
 		if ($_arr_return["alert"] != "y040101") {
 			$this->obj_ajax->halt_alert($_arr_return["alert"]);
 		}

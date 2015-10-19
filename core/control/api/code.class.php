@@ -25,24 +25,10 @@ class API_CODE {
 
 	function __construct() { //构造函数
 		$this->obj_api    = new CLASS_API();
+		$this->obj_api->chk_install();
 		$this->log        = $this->obj_api->log; //初始化 AJAX 基对象
 		$this->mdl_app    = new MODEL_APP(); //设置管理组模型
 		$this->mdl_log    = new MODEL_LOG(); //设置管理员模型
-
-		if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //验证是否已经安装
-			include_once(BG_PATH_CONFIG . "is_install.php");
-			if (!defined("BG_INSTALL_PUB") || PRD_SSO_PUB > BG_INSTALL_PUB) {
-				$_arr_return = array(
-					"alert" => "x030411"
-				);
-				$this->obj_api->halt_re($_arr_return);
-			}
-		} else {
-			$_arr_return = array(
-				"alert" => "x030410"
-			);
-			$this->obj_api->halt_re($_arr_return);
-		}
 	}
 
 

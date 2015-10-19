@@ -48,11 +48,11 @@ function fn_baigoKey($txt, $encrypt_key) {
 
 //生成签名
 function fn_baigoSignMk($tm_time, $str_rand) {
-	$_num_time    = intval($tm_time);
-	$_arr_temp         = array($_num_time, $str_rand);
+	$_num_time = intval($tm_time);
+	$_arr_temp = array($_num_time, $str_rand);
 	sort($_arr_temp);
-	$_str_temp         = implode($_arr_temp);
-	$_str_temp         = sha1($_str_temp);
+	$_str_temp = implode($_arr_temp);
+	$_str_temp = sha1($_str_temp);
 
 	return $_str_temp;
 }

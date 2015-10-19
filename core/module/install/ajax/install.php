@@ -20,7 +20,7 @@ header("Content-type: application/json");
 include_once(BG_PATH_INC . "common_global.inc.php"); //载入通用
 include_once(BG_PATH_CLASS . "mysqli.class.php"); //载入数据库类
 include_once(BG_PATH_CLASS . "base.class.php"); //载入基类
-include_once(BG_PATH_CONTROL_INSTALL . "ajax/install.class.php"); //载入栏目控制器
+include_once(BG_PATH_CONTROL . "install/ajax/install.class.php"); //载入栏目控制器
 
 $GLOBALS["obj_base"]    = new CLASS_BASE(); //初始化基类
 $ajax_install           = new AJAX_INSTALL(); //初始化商家
@@ -40,10 +40,6 @@ switch ($GLOBALS["act_post"]) {
 
 	case "over":
 		$ajax_install->ajax_over();
-	break;
-
-	case "auto":
-		$ajax_install->ajax_auto();
 	break;
 
 	case "dbtable":

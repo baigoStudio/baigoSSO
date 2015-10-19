@@ -134,7 +134,7 @@ class MODEL_USER {
 
 		return array(
 			"user_id"    => $num_userId,
-			"alert"  => $_str_alert, //成功
+			"alert"      => $_str_alert, //成功
 		);
 	}
 
@@ -1010,7 +1010,7 @@ class MODEL_USER {
 	function input_submit() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"alert" => "x030101",
+				"alert" => "x030102",
 			);
 			exit;
 		}
@@ -1091,7 +1091,7 @@ class MODEL_USER {
 	function input_ids() {
 		if (!fn_token("chk")) { //令牌
 			return array(
-				"alert" => "x030101",
+				"alert" => "x030102",
 			);
 			exit;
 		}

@@ -1,7 +1,8 @@
 <?php
 return array(
-	"title" => "管理后台",
-	"menu" => array(
+	"title"    => "管理后台",
+	"active"   => "admin",
+	"menu"     => array(
 		"outline" => "后台概述",
 		"faq"     => "常见问题",
 		"user"    => "用户管理",

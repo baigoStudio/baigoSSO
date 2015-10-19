@@ -8,104 +8,98 @@
 	<title>{$lang.page.adminLogin} - {$lang.page.admin} - {$smarty.const.BG_SITE_NAME}</title>
 
 	<!--jQuery 库-->
-	<script src="{$smarty.const.BG_URL_JS}jquery.min.js" type="text/javascript"></script>
-	<link href="{$smarty.const.BG_URL_STATIC_ADMIN}{$config.ui}/css/admin_logon.css" type="text/css" rel="stylesheet">
-	<link href="{$smarty.const.BG_URL_JS}bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-	<link href="{$smarty.const.BG_URL_JS}baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
+	<script src="{$smarty.const.BG_URL_STATIC}js/jquery.min.js" type="text/javascript"></script>
+	<link href="{$smarty.const.BG_URL_STATIC}js/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+	<link href="{$smarty.const.BG_URL_STATIC}js/baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
+	<link href="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/css/admin_logon.css" type="text/css" rel="stylesheet">
 
 </head>
-
-
-{$cfg = [
-	title          => $lang.page.adminLogin,
-	css            => "admin_logon",
-	reloadImg      => "true",
-	baigoValidator => "true"
-]}
-
 <body>
 
-<div class="container global">
+	<div class="container global">
 
-	<div class="panel panel-success">
-		<div class="panel-heading">
-			<h4>
-				{$smarty.const.BG_SITE_NAME}
-				<span class="label label-success">{$lang.page.adminLogin}</span>
-			</h4>
-		</div>
+		<h3>{$smarty.const.BG_SITE_NAME}</h3>
 
-		<div class="panel-body">
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h4>
+					{$lang.page.adminLogin}
+				</h4>
+			</div>
 
-			<form action="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=logon" method="post" id="login_form">
-				<input type="hidden" name="act_post" value="login">
-				<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
-				<input type="hidden" name="forward" value="{$tplData.forward}">
+			<div class="panel-body">
 
-				<div class="form-group">
-					{if $tplData.alert}
-						<div class="alert alert-danger">{$alert[$tplData.alert]}</div>
-					{/if}
-				</div>
+				<form action="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=logon" method="post" id="login_form">
+					<input type="hidden" name="act_post" value="login">
+					<input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+					<input type="hidden" name="forward" value="{$tplData.forward}">
 
-				<div class="form-group">
-					<div id="group_admin_name">
-						<label for="admin_name" class="control-label">{$lang.label.username}<span id="msg_admin_name">*</span></label>
-						<input type="text" name="admin_name" id="admin_name" placeholder="{$alert.x020201}" class="validate form-control input-lg">
+					<div class="form-group">
+						{if $tplData.alert}
+							<div class="alert alert-danger">{$alert[$tplData.alert]}</div>
+						{/if}
 					</div>
-				</div>
 
-				<div class="form-group">
-					<div id="group_admin_pass">
-						<label for="admin_pass" class="control-label">{$lang.label.password}<span id="msg_admin_pass">*</span></label>
-						<input type="password" name="admin_pass" id="admin_pass" placeholder="{$alert.x020205}" class="validate form-control input-lg">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div id="group_seccode">
-						<label for="admin_name" class="control-label">{$lang.label.seccode}<span id="msg_seccode">*</span></label>
-						<div class="input-group">
-							<input type="text" name="seccode" id="seccode" placeholder="{$alert.x030201}" class="validate form-control input-lg">
-							<span class="input-group-addon">
-								<a href="javascript:reloadImg('seccodeImg', '{$smarty.const.BG_URL_ADMIN}ctl.php?mod=seccode&act_get=make');" title="{$lang.alt.seccode}">
-									<img src="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=seccode&act_get=make" id="seccodeImg" alt="{$lang.alt.seccode}" height="32">
-								</a>
-							</span>
+					<div class="form-group">
+						<div id="group_admin_name">
+							<label for="admin_name" class="control-label">{$lang.label.username}<span id="msg_admin_name">*</span></label>
+							<input type="text" name="admin_name" id="admin_name" placeholder="{$alert.x020201}" class="validate form-control input-lg">
 						</div>
 					</div>
+
+					<div class="form-group">
+						<div id="group_admin_pass">
+							<label for="admin_pass" class="control-label">{$lang.label.password}<span id="msg_admin_pass">*</span></label>
+							<input type="password" name="admin_pass" id="admin_pass" placeholder="{$alert.x020205}" class="validate form-control input-lg">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div id="group_seccode">
+							<label for="admin_name" class="control-label">{$lang.label.seccode}<span id="msg_seccode">*</span></label>
+							<div class="input-group">
+								<input type="text" name="seccode" id="seccode" placeholder="{$alert.x030201}" class="validate form-control input-lg">
+								<span class="input-group-addon">
+									<a href="javascript:reloadImg('seccodeImg', '{$smarty.const.BG_URL_ADMIN}ctl.php?mod=seccode&act_get=make');" title="{$lang.alt.seccode}">
+										<img src="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=seccode&act_get=make" id="seccodeImg" alt="{$lang.alt.seccode}" height="32">
+									</a>
+								</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<button type="button" class="btn btn-primary btn-lg btn-block" id="go_login">{$lang.btn.login}</button>
+					</div>
+
+					<div class="form-group">
+					</div>
+
+				</form>
+
+			</div>
+
+			<div class="panel-footer">
+				<div class="pull-left">
+					{$smarty.const.PRD_SSO_POWERED}
+					{if $config.ui == "default"}
+						<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_NAME}</a>
+					{else}
+						{$config.ui} SSO
+					{/if}
+					{$smarty.const.PRD_SSO_VER}
 				</div>
-
-				<div class="form-group">
-					<button type="button" class="btn btn-primary btn-lg btn-block" id="go_login">{$lang.btn.login}</button>
+				<div class="pull-right foot_logo">
+					{if $config.ui == "default"}
+						<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME} {$smarty.const.PRD_SSO_VER}</a>
+					{else}
+						<a href="#">{$config.ui} SSO</a>
+					{/if}
 				</div>
-
-				<div class="form-group">
-				</div>
-
-			</form>
-
+				<div class="clearfix"></div>
+			</div>
 		</div>
 
-		<div class="panel-footer">
-			<div class="pull-left">
-				{$smarty.const.PRD_SSO_POWERED}
-				{if $config.ui == "default"}
-					<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_NAME}</a>
-				{else}
-					{$config.ui} SSO
-				{/if}
-				{$smarty.const.PRD_SSO_VER}
-			</div>
-			<div class="pull-right foot_logo">
-				{if $config.ui == "default"}
-					<a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME} {$smarty.const.PRD_SSO_VER}</a>
-				{else}
-					<a href="#">{$config.ui} SSO</a>
-				{/if}
-			</div>
-			<div class="clearfix"></div>
-		</div>
 	</div>
 
 </body>
@@ -131,7 +125,7 @@
 	};
 
 	function go_login() {
-		var obj_validator_form = $("#go_login").baigoValidator(opts_validator_form);
+		var obj_validator_form = $("#login_form").baigoValidator(opts_validator_form);
 		if (obj_validator_form.validateSubmit()) {
 			$("#login_form").submit();
 		}
@@ -149,8 +143,8 @@
 	})
 	</script>
 
-	<script src="{$smarty.const.BG_URL_JS}baigoValidator/baigoValidator.js" type="text/javascript"></script>
-	<script src="{$smarty.const.BG_URL_JS}reloadImg.js" type="text/javascript"></script>
-	<script src="{$smarty.const.BG_URL_JS}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="{$smarty.const.BG_URL_STATIC}js/baigoValidator/baigoValidator.js" type="text/javascript"></script>
+	<script src="{$smarty.const.BG_URL_STATIC}js/reloadImg.js" type="text/javascript"></script>
+	<script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
 </html>

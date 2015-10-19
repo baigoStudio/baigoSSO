@@ -18,7 +18,7 @@
 
 	<div class="form-group">
 		<label class="control-label static_label">{$lang.label.status}</label>
-		<p class="form-control-static">
+		<p class="form-control-static label_baigo">
 			<span class="label label-{$_css_status}">{$status.log[$tplData.logRow.log_status]}</span>
 		</p>
 	</div>

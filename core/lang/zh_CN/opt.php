@@ -437,7 +437,7 @@ return array(
 			"type"       => "str",
 			"format"     => "text",
 			"min"        => 1,
-			"default"    => PRD_SSO_NAME,
+			"default"    => BG_SITE_NAME,
 		),
 		"BG_SITE_DOMAIN" => array(
 			"label"      => "域名",
@@ -567,7 +567,7 @@ return array(
 			"note"       => "每行一个用户名，可使用通配符 * 如 *版主*",
 		),
 	),
-	"mail" => array(
+	/*"mail" => array(
 		"BG_MAIL_FROM" => array(
 			"label"      => "邮件来源地址",
 			"type"       => "str",
@@ -617,6 +617,6 @@ return array(
 			"min"        => 0,
 			"default"    => "password",
 		),
-	)
+	),*/
 );
 

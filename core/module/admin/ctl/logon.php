@@ -21,7 +21,7 @@ include_once(BG_PATH_INC . "common_global.inc.php"); //载入通用
 include_once(BG_PATH_FUNC . "session.func.php"); //载入 session 函数
 include_once(BG_PATH_CLASS . "mysqli.class.php"); //载入数据库类
 include_once(BG_PATH_CLASS . "base.class.php"); //载入基类
-include_once(BG_PATH_CONTROL_ADMIN . "ctl/logon.class.php"); //载入登录控制器
+include_once(BG_PATH_CONTROL . "admin/ctl/logon.class.php"); //载入登录控制器
 
 header("Content-Type: text/html; charset=utf-8");
 
@@ -35,7 +35,7 @@ $_cfg_host = array(
 	"user"      => BG_DB_USER,
 	"pass"      => BG_DB_PASS,
 	"charset"   => BG_DB_CHARSET,
-	"debug"     => BG_DB_DEBUG,
+	"debug"     => BG_DEBUG_DB,
 );
 
 $GLOBALS["obj_db"]      = new CLASS_MYSQLI($_cfg_host); //设置数据库对象

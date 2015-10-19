@@ -18,7 +18,7 @@ class CONTROL_INSTALL {
 	function __construct() { //构造函数
 		$this->obj_base   = $GLOBALS["obj_base"];
 		$this->config     = $this->obj_base->config;
-		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL_INSTALL . $this->config["ui"]);
+		$this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL . "install/" . $this->config["ui"]);
 		$this->install_init();
 	}
 
@@ -142,37 +142,6 @@ class CONTROL_INSTALL {
 	}
 
 
-	function ctl_auto() {
-		if ($this->errCount > 0) {
-			return array(
-				"alert" => "x030413",
-			);
-			exit;
-		}
-
-		if (!$this->check_db()) {
-			return array(
-				"alert" => "x030404",
-			);
-			exit;
-		}
-
-		$_str_url     = fn_getSafe(fn_get("url"), "txt", "");
-		$_str_path    = fn_getSafe(fn_get("path"), "txt", "");
-		$_str_target  = fn_getSafe(fn_get("target"), "txt", "");
-
-		$this->tplData["url"]     = base64_decode($_str_url);
-		$this->tplData["path"]    = $_str_path;
-		$this->tplData["target"]  = $_str_target;
-
-		$this->obj_tpl->tplDisplay("install_auto.tpl", $this->tplData);
-
-		return array(
-			"alert" => "y030404",
-		);
-	}
-
-
 	/**
 	 * ctl_admin function.
 	 *
@@ -240,7 +209,7 @@ class CONTROL_INSTALL {
 				"user"      => BG_DB_USER,
 				"pass"      => BG_DB_PASS,
 				"charset"   => BG_DB_CHARSET,
-				"debug"     => BG_DB_DEBUG,
+				"debug"     => BG_DEBUG_DB,
 				"port"      => BG_DB_PORT,
 			);
 
