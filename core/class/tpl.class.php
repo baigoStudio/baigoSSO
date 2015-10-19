@@ -31,7 +31,7 @@ class CLASS_TPL {
 
 		$this->obj_smarty                 = new Smarty(); //初始化 Smarty 对象
 		$this->obj_smarty->template_dir   = $str_pathTpl;
-		$this->obj_smarty->compile_dir    = BG_PATH_TPL . "compile";
+		$this->obj_smarty->compile_dir    = BG_PATH_COMPILE;
 		$this->obj_smarty->debugging      = BG_SWITCH_SMARTY_DEBUG; //调试模式
 
 		$this->lang       = include_once(BG_PATH_LANG . $this->config["lang"] . "/common.php"); //载入语言文件
