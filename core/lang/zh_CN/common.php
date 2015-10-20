@@ -84,7 +84,7 @@ return array(
 		"noname"          => "未命名",
 		"unknown"         => "未知",
 		"custom"          => "自定义",
-		"modOnly"         => "（需要修改时输入）", //需要修改时输入
+		"modOnly"         => "需要修改时输入", //需要修改时输入
 		"status"          => "状态",
 		"box"             => "保存为",
 		"allow"           => "权限",

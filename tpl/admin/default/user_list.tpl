@@ -88,8 +88,8 @@
 							</div>
 
 							<div class="form-group">
-								<label for="user_pass" class="control-label">{$lang.label.password}{$lang.label.modOnly}</label>
-								<input type="text" name="user_pass" id="user_pass" class="form-control">
+								<label for="user_pass" class="control-label">{$lang.label.password}</label>
+								<input type="text" name="user_pass" id="user_pass" class="form-control" placeholder="{$lang.label.modOnly}">
 							</div>
 						{else}
 							<div class="form-group">

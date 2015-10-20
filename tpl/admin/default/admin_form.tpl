@@ -59,8 +59,8 @@
 
 							<div class="form-group">
 								<div id="group_admin_pass">
-									<label class="control-label">{$lang.label.password}{$lang.label.modOnly}</label>
-									<input type="text" name="admin_pass" id="admin_pass" class="form-control">
+									<label class="control-label">{$lang.label.password}</label>
+									<input type="text" name="admin_pass" id="admin_pass" class="form-control" placeholder="{$lang.label.modOnly}">
 								</div>
 							</div>
 						{else}
