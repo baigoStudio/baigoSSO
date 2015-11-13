@@ -1,7 +1,7 @@
 <?php
 return "<h3>基本设置</h3>
 	<p>
-		点左侧菜单系统设置，进入如下界面，可以对系统进行设置。
+		点右上角菜单系统设置，进入如下界面，可以对系统进行设置。
 	</p>
 	<p>
 		<img src=\"{images}opt_base.jpg\" class=\"img-responsive thumbnail\">
@@ -44,10 +44,10 @@ return "<h3>基本设置</h3>
 	<a name=\"db\"></a>
 	<h3>数据库设置</h3>
 	<p>
-		点左侧子菜单数据库设置，进入如下界面，可以对数据库进行设置。
+		点右上角子菜单数据库设置，进入如下界面，可以对数据库进行设置。
 	</p>
 	<p>
-		<img src=\"{images}opt_db.jpg\" class=\"img-responsive thumbnail\">
+		<img src=\"{images}opt_dbconfig.jpg\" class=\"img-responsive thumbnail\">
 	</p>
 
 	<div class=\"panel panel-default\">
@@ -78,7 +78,7 @@ return "<h3>基本设置</h3>
 	<a name=\"reg\"></a>
 	<h3>注册设置</h3>
 	<p>
-		点左侧子菜单注册设置，进入如下界面，可以对访问方式进行设置。
+		点右上角子菜单注册设置，进入如下界面，可以对访问方式进行设置。
 	</p>
 	<p>
 		<img src=\"{images}opt_reg.jpg\" class=\"img-responsive thumbnail\">

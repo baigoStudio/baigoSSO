@@ -15,9 +15,23 @@
 		<script src="{$smarty.const.BG_URL_STATIC}js/reloadImg.js" type="text/javascript"></script>
 	{/if}
 
+	{if isset($cfg.md5)}
+		<!--重新载入图片 js-->
+		<script src="{$smarty.const.BG_URL_STATIC}js/md5.js" type="text/javascript"></script>
+	{/if}
+
 	{if isset($cfg.baigoCheckall)}
 		<!--全选 js-->
 		<script src="{$smarty.const.BG_URL_STATIC}js/baigoCheckall.js" type="text/javascript"></script>
+	{/if}
+
+	{if isset($cfg.upload)}
+		<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+		<script src="{$smarty.const.BG_URL_STATIC}js/jQuery-File-Upload/jquery.ui.widget.js" type="text/javascript"></script>
+		<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+		<script src="{$smarty.const.BG_URL_STATIC}js/jQuery-File-Upload/jquery.iframe-transport.js" type="text/javascript"></script>
+		<!-- The basic File Upload plugin -->
+		<script src="{$smarty.const.BG_URL_STATIC}js/jQuery-File-Upload/jquery.fileupload.js" type="text/javascript"></script>
 	{/if}
 
 	{if isset($cfg.tokenReload)}
@@ -45,4 +59,7 @@
 
 	<script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
+    <!-- {$smarty.const.PRD_SSO_POWERED} {if $config.ui == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$config.ui} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
+
+</body>
 </html>

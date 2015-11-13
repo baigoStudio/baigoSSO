@@ -34,28 +34,34 @@ class API_INSTALL {
 	}
 
 
-	/**
-	 * ajax_submit function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function api_dbconfig() {
-		$_arr_dbconfig = $this->mdl_opt->input_dbconfig();
+	function api_submit() {
+    	$_act_post = fn_getSafe($GLOBALS["act_post"], "txt", "base");
 
-		if ($_arr_dbconfig["alert"] != "ok") {
-			$this->obj_api->halt_re($_arr_dbconfig);
+		if ($_act_post != "dbconfig") {
+    		$this->check_db();
 		}
 
-		$_arr_return = $this->mdl_opt->mdl_dbconfig();
+		$_num_countSrc = 0;
 
-		if ($_arr_return["alert"] != "y040101") {
-			$this->obj_api->halt_re($_arr_return);
+		foreach ($this->obj_api->opt[$_act_post]["list"] as $_key=>$_value) {
+			if ($_value["min"] > 0) {
+				$_num_countSrc++;
+			}
 		}
 
-		$_arr_return = array(
-			"alert" => "y030404"
-		);
+		$_arr_const = $this->mdl_opt->input_const($_act_post);
+
+		$_num_countInput = count(array_filter($_arr_const));
+
+		if ($_num_countInput < $_num_countSrc) {
+			$_arr_return = array(
+    			"alert" => "x030212"
+    		);
+    		$this->obj_api->halt_re($_arr_return);
+		}
+
+		$_arr_return = $this->mdl_opt->mdl_const($_act_post);
+
 		$this->obj_api->halt_re($_arr_return);
 	}
 
@@ -72,28 +78,6 @@ class API_INSTALL {
 
 		$_arr_return = array(
 			"alert"          => "y030103"
-		);
-		$this->obj_api->halt_re($_arr_return);
-	}
-
-
-	function api_base() {
-		$this->check_db();
-
-		foreach ($this->obj_api->opt["base"] as $_key=>$_value) {
-			$_arr_const["base"][$_key] = $_value["default"];
-		}
-
-		$this->mdl_opt->arr_const = $_arr_const;
-
-		$_arr_return = $this->mdl_opt->mdl_const("base");
-
-		if ($_arr_return["alert"] != "y040101") {
-			$this->obj_api->halt_re($_arr_return);
-		}
-
-		$_arr_return = array(
-			"alert" => "y030405"
 		);
 		$this->obj_api->halt_re($_arr_return);
 	}
@@ -125,7 +109,7 @@ class API_INSTALL {
 
 		$_arr_return = $this->mdl_opt->mdl_over();
 
-		if ($_arr_return["alert"] != "y040101") {
+		if ($_arr_return["alert"] != "y030405") {
 			$this->obj_api->halt_re($_arr_return);
 		}
 

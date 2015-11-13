@@ -27,12 +27,39 @@ class CONTROL_USER {
 		$this->config         = $this->obj_base->config;
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
 		$this->mdl_user       = new MODEL_USER(); //设置管理员模型
-		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]); //初始化视图对象
+		$_arr_cfg["admin"]    = true;
+		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
 		$this->tplData = array(
 			"adminLogged" => $this->adminLogged
 		);
 	}
 
+
+	function ctl_import() {
+		if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+			return array(
+				"alert" => "x010305",
+			);
+			exit;
+		}
+
+		$_arr_csvRows = $this->mdl_user->mdl_import();
+
+        //print_r(stream_get_filters());
+        //print_r($_arr_csvRows);
+
+		$_arr_tpl = array(
+			"csvRows" => $_arr_csvRows,
+		);
+
+		$_arr_tplData = array_merge($this->tplData, $_arr_tpl);
+
+		$this->obj_tpl->tplDisplay("user_import.tpl", $_arr_tplData);
+
+		return array(
+			"alert" => "y010305",
+		);
+    }
 
 	/**
 	 * ctl_list function.
@@ -95,6 +122,7 @@ class CONTROL_USER {
 		$_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
 		$this->obj_tpl->tplDisplay("user_list.tpl", $_arr_tplData);
+
 		return array(
 			"alert" => "y010302",
 		);

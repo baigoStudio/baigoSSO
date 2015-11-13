@@ -42,7 +42,7 @@ class AJAX_PROFILE {
 	 * @return void
 	 */
 	function ajax_info() {
-		if (isset($this->adminLogged["admin_allow"]["info"]) && $this->adminLogged["admin_allow"]["info"] == 1) {
+		if (isset($this->adminLogged["admin_allow"]["info"])) {
 			$this->obj_ajax->halt_alert("x020108");
 		}
 

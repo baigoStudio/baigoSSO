@@ -35,26 +35,23 @@ class AJAX_OPT {
 		}
 	}
 
-	/**
-	 * ajax_reg function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ajax_reg() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["reg"])) {
+
+	function ajax_submit() {
+		$_act_post = fn_getSafe($GLOBALS["act_post"], "txt", "base");
+
+		if (!isset($this->adminLogged["admin_allow"]["opt"][$_act_post])) {
 			$this->obj_ajax->halt_alert("x040301");
 		}
 
 		$_num_countSrc = 0;
 
-		foreach ($this->obj_ajax->opt["reg"] as $_key=>$_value) {
+		foreach ($this->obj_ajax->opt[$_act_post]["list"] as $_key=>$_value) {
 			if ($_value["min"] > 0) {
 				$_num_countSrc++;
 			}
 		}
 
-		$_arr_const = $this->mdl_opt->input_const("reg");
+		$_arr_const = $this->mdl_opt->input_const($_act_post);
 
 		$_num_countInput = count(array_filter($_arr_const));
 
@@ -62,83 +59,13 @@ class AJAX_OPT {
 			$this->obj_ajax->halt_alert("x030212");
 		}
 
-		$_arr_return = $this->mdl_opt->mdl_const("reg");
+		$_arr_return = $this->mdl_opt->mdl_const($_act_post);
 
 		if ($_arr_return["alert"] != "y040101") {
 			$this->obj_ajax->halt_alert($_arr_return["alert"]);
 		}
 
-		$_arr_targets[]   = "reg";
-		$_str_targets     = json_encode($_arr_targets);
-		$_str_return      = json_encode($_arr_return);
-
-		$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
-
-		$this->obj_ajax->halt_alert("y040402");
-	}
-
-
-	/**
-	 * ajax_mail function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ajax_mail() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["mail"])) {
-			$this->obj_ajax->halt_alert("x040301");
-		}
-
-		$_arr_return = $this->mdl_opt->mdl_const("mail");
-
-		if ($_arr_return["alert"] != "y040101") {
-			$this->obj_ajax->halt_alert($_arr_return["alert"]);
-		}
-
-		$_arr_mail    = array(BG_MAIL_FROM);
-		$_arr_mailRow = fn_mailsend($_arr_mail, "test", "test", false);
-
-		if ($_arr_mailRow["alert"] != "y030201") {
-			$this->obj_ajax->halt_alert("x040403");
-		}
-
-		$this->obj_ajax->halt_alert("y040403");
-	}
-
-	/**
-	 * ajax_base function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ajax_base() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["base"])) {
-			$this->obj_ajax->halt_alert("x040301");
-		}
-
-		$_num_countSrc = 0;
-
-		foreach ($this->obj_ajax->opt["base"] as $_key=>$_value) {
-			if ($_value["min"] > 0) {
-				$_num_countSrc++;
-			}
-		}
-
-		$_arr_const = $this->mdl_opt->input_const("base");
-
-		$_num_countInput = count(array_filter($_arr_const));
-
-		if ($_num_countInput < $_num_countSrc) {
-			$this->obj_ajax->halt_alert("x030212");
-		}
-
-		$_arr_return = $this->mdl_opt->mdl_const("base");
-
-		if ($_arr_return["alert"] != "y040101") {
-			$this->obj_ajax->halt_alert($_arr_return["alert"]);
-		}
-
-		$_arr_targets[]   = "base";
+		$_arr_targets[]   = $_act_post;
 		$_str_targets     = json_encode($_arr_targets);
 		$_str_return      = json_encode($_arr_return);
 
@@ -146,36 +73,4 @@ class AJAX_OPT {
 
 		$this->obj_ajax->halt_alert("y040401");
 	}
-
-
-	/**
-	 * ajax_db function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ajax_db() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["db"])) {
-			$this->obj_ajax->halt_alert("x040304");
-		}
-
-		$_arr_dbconfig = $this->mdl_opt->input_dbconfig();
-		if ($_arr_dbconfig["alert"] != "ok") {
-			$this->obj_ajax->halt_alert($_arr_dbconfig["alert"]);
-		}
-
-		$_arr_return = $this->mdl_opt->mdl_dbconfig();
-		if ($_arr_return["alert"] != "y040101") {
-			$this->obj_ajax->halt_alert($_arr_return["alert"]);
-		}
-
-		$_arr_targets[]   = "dbconfig";
-		$_str_targets     = json_encode($_arr_targets);
-		$_str_return      = json_encode($_arr_return);
-
-		$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
-
-		$this->obj_ajax->halt_alert("y040404");
-	}
-
 }

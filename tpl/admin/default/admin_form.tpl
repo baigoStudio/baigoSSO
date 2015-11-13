@@ -112,6 +112,20 @@
 										{/foreach}
 									</dd>
 								{/foreach}
+
+								<dt>{$lang.label.opt}</dt>
+								<dd>
+									<label for="allow_opt" class="checkbox-inline">
+										<input type="checkbox" id="allow_opt" class="chk_all">
+										{$lang.label.all}
+									</label>
+									{foreach $opt as $key_s=>$value_s}
+										<label for="allow_opt_{$key_s}" class="checkbox-inline">
+											<input type="checkbox" name="admin_allow[opt][{$key_s}]" value="1" id="allow_opt_{$key_s}" class="allow_opt" {if isset($tplData.adminRow.admin_allow.opt[$key_s])}checked{/if}>
+											{$value_s.title}
+										</label>
+									{/foreach}
+								</dd>
 							</dl>
 						</div>
 

@@ -24,95 +24,30 @@ class CONTROL_OPT {
 		$this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
 		$this->config         = $this->obj_base->config;
 		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
-		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]); //初始化视图对象
+		$_arr_cfg["admin"]    = true;
+		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
 		$this->tplData = array(
 			"adminLogged" => $this->adminLogged
 		);
 	}
 
 
-	/**
-	 * ctl_reg function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_reg() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["reg"])) {
-			return array(
-				"alert" => "x040302",
-			);
-			exit;
-		}
+	function ctl_form() {
+		$_act_get = fn_getSafe($GLOBALS["act_get"], "txt", "base");
 
-		$this->obj_tpl->tplDisplay("opt_reg.tpl", $this->tplData);
-
-		return array(
-			"alert" => "y040302",
-		);
-	}
-
-	/**
-	 * ctl_reg function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_mail() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["mail"])) {
-			return array(
-				"alert" => "x040303",
-			);
-			exit;
-		}
-
-		$this->obj_tpl->tplDisplay("opt_mail.tpl", $this->tplData);
-
-		return array(
-			"alert" => "y040303",
-		);
-	}
-
-	/**
-	 * ctl_base function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_base() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["base"])) {
+		if (!isset($this->adminLogged["admin_allow"]["opt"][$_act_get])) {
 			return array(
 				"alert" => "x040301",
 			);
 			exit;
 		}
 
-		$this->obj_tpl->tplDisplay("opt_base.tpl", $this->tplData);
+		$this->tplData["act_get"] = $_act_get;
+
+		$this->obj_tpl->tplDisplay("opt_form.tpl", $this->tplData);
 
 		return array(
 			"alert" => "y040301",
-		);
-	}
-
-
-	/**
-	 * ctl_db function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_db() {
-		if (!isset($this->adminLogged["admin_allow"]["opt"]["db"])) {
-			return array(
-				"alert" => "x040304",
-			);
-			exit;
-		}
-
-		$this->obj_tpl->tplDisplay("opt_db.tpl", $this->tplData);
-
-		return array(
-			"alert" => "y040304",
 		);
 	}
 }

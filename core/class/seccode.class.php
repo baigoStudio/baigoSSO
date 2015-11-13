@@ -83,7 +83,6 @@ class CLASS_SECCODE {
 
 	//输出
 	private function secOutput() {
-		header("Content-type: image/png");
 		imagepng($this->image);
 		imagedestroy($this->image);
 	}

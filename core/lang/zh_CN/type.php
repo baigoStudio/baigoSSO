@@ -35,12 +35,6 @@ return array(
 		"opt"     => "设置",
 	),
 
-	"prd" => array(
-		"cms"   => "bg_install",
-		"im"    => "install",
-		"ib"    => "install",
-	),
-
 	"ext" => array(
 		"mysqli"      => "Mysqli 扩展库", //栏目类型
 		"gd"          => "GD 扩展库", //栏目类型

@@ -9,7 +9,9 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_admin_ajax.inc.php"); //管理员通用
+include_once(BG_PATH_FUNC . "include.func.php"); //管理员通用
+fn_include(true, true, "Content-type: application/json", true, "ajax", true);
+
 include_once(BG_PATH_CONTROL . "admin/ajax/log.class.php"); //载入日志 ajax 控制器
 
 $ajax_log = new AJAX_LOG(); //初始化日志对象

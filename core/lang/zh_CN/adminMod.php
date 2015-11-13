@@ -28,14 +28,45 @@ return array(
 				"mod"       => "user",
 				"act_get"   => "form",
 			),
+			"import" => array(
+				"title"     => "批量导入",
+				"mod"       => "user",
+				"act_get"   => "import",
+			),
 		),
 		"allow" => array(
 			"browse" => "浏览",
 			"add"    => "创建",
 			"edit"   => "编辑",
 			"del"    => "删除",
+			"import" => "批量导入",
 		),
 	),
+	/*"msg" => array(
+		"main" => array(
+			"title"  => "短消息管理",
+			"mod"    => "msg",
+			"icon"   => "envelope",
+		),
+		"sub" => array(
+			"list" => array(
+				"title"     => "所有短消息",
+				"mod"       => "msg",
+				"act_get"   => "list",
+			),
+			"form" => array(
+				"title"     => "群发短消息",
+				"mod"       => "msg",
+				"act_get"   => "form",
+			),
+		),
+		"allow" => array(
+			"browse" => "浏览",
+			"batch"  => "群发",
+			//"edit" => "编辑",
+			"del"    => "删除",
+		),
+	),*/
 	"app" => array(
 		"main" => array(
 			"title"  => "应用管理",
@@ -103,41 +134,6 @@ return array(
 			"add"    => "创建",
 			"edit"   => "编辑",
 			"del"    => "删除",
-		),
-	),
-	"opt" => array(
-		"main" => array(
-			"title"  => "系统设置",
-			"mod"    => "opt",
-			"icon"   => "cog",
-		),
-		"sub" => array(
-			"base" => array(
-				"title"     => "基本设置",
-				"mod"       => "opt",
-				"act_get"   => "base",
-			),
-			"db" => array(
-				"title"     => "数据库设置",
-				"mod"       => "opt",
-				"act_get"   => "db",
-			),
-			"reg" => array(
-				"title"     => "注册设置",
-				"mod"       => "opt",
-				"act_get"   => "reg",
-			),
-			/*"mail" => array(
-				"title"     => "邮件设置",
-				"mod"       => "opt",
-				"act_get"   => "mail",
-			),*/
-		),
-		"allow" => array(
-			"base"   => "基本设置",
-			"db"     => "数据库设置",
-			"reg"    => "注册设置",
-			//"mail" => "邮件设置",
 		),
 	),
 );

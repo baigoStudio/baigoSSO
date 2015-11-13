@@ -48,12 +48,14 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
+                    <div class="input-group">
+    					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
+    					<span class="input-group-btn">
+        					<button type="submit" class="btn btn-default btn-sm">
+        						<span class="glyphicon glyphicon-search"></span>
+        					</button>
+    					</span>
+                    </div>
 				</div>
 			</form>
 		</div>
@@ -68,16 +70,16 @@
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
-							<th class="td_mn">
+							<th class="text-nowrap td_mn">
 								<label for="chk_all" class="checkbox-inline">
 									<input type="checkbox" name="chk_all" id="chk_all" class="first">
 									{$lang.label.all}
 								</label>
 							</th>
-							<th class="td_mn">{$lang.label.id}</th>
+							<th class="text-nowrap td_mn">{$lang.label.id}</th>
 							<th>{$lang.label.title}</th>
-							<th class="td_bg">{$lang.label.operator}</th>
-							<th class="td_sm">{$lang.label.status} / {$lang.label.type}</th>
+							<th class="text-nowrap td_bg">{$lang.label.operator}</th>
+							<th class="text-nowrap td_sm">{$lang.label.status} / {$lang.label.type}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -88,8 +90,8 @@
 								{$_css_status = "warning"}
 							{/if}
 							<tr>
-								<td class="td_mn"><input type="checkbox" name="log_id[]" value="{$value.log_id}" id="log_id_{$value.log_id}" group="log_id" class="validate chk_all"></td>
-								<td class="td_mn">{$value.log_id}</td>
+								<td class="text-nowrap td_mn"><input type="checkbox" name="log_id[]" value="{$value.log_id}" id="log_id_{$value.log_id}" group="log_id" class="validate chk_all"></td>
+								<td class="text-nowrap td_mn">{$value.log_id}</td>
 								<td>
 									<ul class="list-unstyled">
 										<li>
@@ -100,7 +102,7 @@
 										</li>
 									</ul>
 								</td>
-								<td class="td_bg">
+								<td class="text-nowrap td_bg">
 									<ul class="list-unstyled">
 										<li>
 											{if $value.log_type != "system" && isset($value.log_operator_name)}
@@ -112,7 +114,7 @@
 										<li>{$value.log_time|date_format:"{$smarty.const.BG_SITE_DATESHORT} {$smarty.const.BG_SITE_TIME}"}</li>
 									</ul>
 								</td>
-								<td class="td_sm">
+								<td class="text-nowrap td_sm">
 									<ul class="list-unstyled">
 										<li class="label_baigo">
 											<span class="label label-{$_css_status}">{$status.log[$value.log_status]}</span>

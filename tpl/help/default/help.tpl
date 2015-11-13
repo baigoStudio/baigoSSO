@@ -11,11 +11,7 @@
 
 	<!--bootstrap-->
 	<link href="{$smarty.const.BG_URL_STATIC}js/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-	<script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-
 	<link href="{$smarty.const.BG_URL_STATIC}js/prism/prism.css" type="text/css" rel="stylesheet">
-	<script src="{$smarty.const.BG_URL_STATIC}js/prism/prism.min.js" type="text/javascript"></script>
-
 	<link href="{$smarty.const.BG_URL_STATIC}help/{$config.ui}/css/help.css" type="text/css" rel="stylesheet">
 </head>
 
@@ -72,7 +68,7 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th class="nowrap">代码</th>
+										<th class="text-nowrap">代码</th>
 										<th>具体描述</th>
 									</tr>
 								</thead>
@@ -106,12 +102,18 @@
 				<li><a href="http://www.baigo.net/" target="_blank">baigo Studio</a></li>
 				<li><a href="http://www.baigo.net/cms/" target="_blank">baigo CMS</a></li>
 				<li><a href="http://www.baigo.net/sso/" target="_blank">baigo SSO</a></li>
-				<li><a href="http://www.baigo.net/adms/" target="_blank">baigo SSO</a></li>
+				<li><a href="http://www.baigo.net/ads/" target="_blank">baigo ADS</a></li>
 			{else}
 				<li>{$config.ui} SSO</li>
 			{/if}
 		</ul>
 	</footer>
+
+	<!--bootstrap-->
+	<script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="{$smarty.const.BG_URL_STATIC}js/prism/prism.min.js" type="text/javascript"></script>
+
+    <!-- {$smarty.const.PRD_SSO_POWERED} {if $config.ui == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$config.ui} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
 
 </body>
 </html>

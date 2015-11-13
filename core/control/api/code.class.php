@@ -82,7 +82,7 @@ class API_CODE {
 	 * @return void
 	 */
 	function api_decode() {
-		$this->app_check("get");
+		$this->app_check("post");
 		if (!isset($this->appAllow["code"]["decode"])) {
 			$_arr_return = array(
 				"alert" => "x050315",
@@ -91,7 +91,7 @@ class API_CODE {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_arr_code = validateStr(fn_get("code"), 1, 0);
+		$_arr_code = validateStr(fn_post("code"), 1, 0);
 		switch ($_arr_code["status"]) {
 			case "too_short":
 				$_arr_return = array(
@@ -105,7 +105,7 @@ class API_CODE {
 			break;
 		}
 
-		$_arr_key = validateStr(fn_get("key"), 1, 0);
+		$_arr_key = validateStr(fn_post("key"), 1, 0);
 		switch ($_arr_key["status"]) {
 			case "too_short":
 				$_arr_return = array(

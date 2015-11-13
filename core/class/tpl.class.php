@@ -25,7 +25,8 @@ class CLASS_TPL {
 	public $adminMod; //语言 后台
 	public $opt; //语言 后台
 
-	function __construct($str_pathTpl) { //构造函数
+	function __construct($str_pathTpl, $arr_cfg = false) { //构造函数
+		//$this->arr_cfg = $arr_cfg;
 		$this->obj_base                   = $GLOBALS["obj_base"];
 		$this->config                     = $this->obj_base->config;
 
@@ -41,7 +42,9 @@ class CLASS_TPL {
 		$this->alert      = include_once(BG_PATH_LANG . $this->config["lang"] . "/alert.php"); //载入返回代码
 		$this->install    = include_once(BG_PATH_LANG . $this->config["lang"] . "/install.php"); //载入返回代码
 		$this->opt        = include_once(BG_PATH_LANG . $this->config["lang"] . "/opt.php"); //载入管理权限配置
-		$this->adminMod   = include_once(BG_PATH_LANG . $this->config["lang"] . "/adminMod.php"); //载入管理权限配置
+		//if (isset($arr_cfg["admin"])) {
+    		$this->adminMod   = include_once(BG_PATH_LANG . $this->config["lang"] . "/adminMod.php"); //载入管理权限配置
+		//}
 	}
 
 
@@ -55,9 +58,6 @@ class CLASS_TPL {
 	 */
 	function tplDisplay($str_view, $arr_tplData = "") {
 		$this->common["token_session"]    = fn_token();
-		if (fn_server("REQUEST_URI")) {
-			$this->common["thisUrl"]      = base64_encode(fn_server("REQUEST_URI"));
-		}
 		$this->common["ssid"]             = session_id();
 		$this->common["view"]             = $GLOBALS["view"];
 
@@ -70,7 +70,11 @@ class CLASS_TPL {
 		$this->obj_smarty->assign("alert", $this->alert);
 		$this->obj_smarty->assign("install", $this->install);
 		$this->obj_smarty->assign("opt", $this->opt);
-		$this->obj_smarty->assign("adminMod", $this->adminMod);
+
+		//if (isset($this->arr_cfg["admin"])) {
+    		$this->obj_smarty->assign("adminMod", $this->adminMod);
+        //}
+
 		$this->obj_smarty->assign("tplData", $arr_tplData);
 
 		$this->obj_smarty->display($str_view);

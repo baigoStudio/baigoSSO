@@ -34,6 +34,12 @@
 					</a>
 				</li>
 				<li>
+					<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=user&act_get=import">
+						<span class="glyphicon glyphicon-import"></span>
+						{$lang.href.import}
+					</a>
+				</li>
+				<li>
 					<a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=user" target="_blank">
 						<span class="glyphicon glyphicon-question-sign"></span>
 						{$lang.href.help}
@@ -55,12 +61,14 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
+					<div class="input-group">
+    					<input type="text" name="key" value="{$tplData.search.key}" placeholder="{$lang.label.key}" class="form-control input-sm">
+    					<span class="input-group-btn">
+        					<button type="submit" class="btn btn-default btn-sm">
+        						<span class="glyphicon glyphicon-search"></span>
+        					</button>
+    					</span>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -149,15 +157,15 @@
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th class="td_mn">
+								<th class="text-nowrap td_mn">
 									<label for="chk_all" class="checkbox-inline">
 										<input type="checkbox" name="chk_all" id="chk_all" class="first">
 										{$lang.label.all}
 									</label>
 								</th>
-								<th class="td_mn">{$lang.label.id}</th>
+								<th class="text-nowrap td_mn">{$lang.label.id}</th>
 								<th>{$lang.label.user}</th>
-								<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
+								<th class="text-nowrap td_md">{$lang.label.status} / {$lang.label.note}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -170,8 +178,8 @@
 									{$_css_status = "danger"}
 								{/if}
 								<tr>
-									<td class="td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_id_{$value.user_id}" group="user_id" class="validate chk_all"></td>
-									<td class="td_mn">{$value.user_id}</td>
+									<td class="text-nowrap td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_id_{$value.user_id}" group="user_id" class="validate chk_all"></td>
+									<td class="text-nowrap td_mn">{$value.user_id}</td>
 									<td>
 										<ul class="list-unstyled">
 											<li>
@@ -183,7 +191,7 @@
 											</li>
 										</ul>
 									</td>
-									<td class="td_sm">
+									<td class="text-nowrap td_sm">
 										<ul class="list-unstyled">
 											<li class="label_baigo">
 												<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
@@ -273,7 +281,7 @@
 		user_note: {
 			length: { min: 0, max: 30 },
 			validate: { type: "str", format: "text" },
-			msg: { id: "msg_user_note", too_long: "{$alert.x020206}" }
+			msg: { id: "msg_user_note", too_long: "{$alert.x020208}" }
 		},
 		user_status: {
 			length: { min: 1, max: 0 },

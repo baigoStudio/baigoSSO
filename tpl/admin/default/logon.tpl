@@ -102,23 +102,21 @@
 
 	</div>
 
-</body>
-
 	<script type="text/javascript">
 	var opts_validator_form = {
 		admin_name: {
 			length: { min: 1, max: 30 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_admin_name" },
 			msg: { id: "msg_admin_name", too_short: "{$alert.x020201}", too_long: "{$alert.x020202}", format_err: "{$alert.x020203}" }
 		},
 		admin_pass: {
 			length: { min: 1, max: 0 },
-			validate: { type: "str", format: "text" },
+			validate: { type: "str", format: "text", group: "group_admin_pass" },
 			msg: { id: "msg_admin_pass", too_short: "{$alert.x020205}" }
 		},
 		seccode: {
 			length: { min: 4, max: 4 },
-			validate: { type: "ajax", format: "text" },
+			validate: { type: "ajax", format: "text", group: "group_seccode" },
 			msg: { id: "msg_seccode", too_short: "{$alert.x030201}", too_long: "{$alert.x030201}", ajaxIng: "{$alert.x030401}", ajax_err: "{$alert.x030402}" },
 			ajax: { url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=seccode&act_get=chk", key: "seccode", type: "str" }
 		}
@@ -147,4 +145,7 @@
 	<script src="{$smarty.const.BG_URL_STATIC}js/reloadImg.js" type="text/javascript"></script>
 	<script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
+    <!-- {$smarty.const.PRD_SSO_POWERED} {if $config.ui == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$config.ui} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
+
+</body>
 </html>

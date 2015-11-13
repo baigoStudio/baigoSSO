@@ -11,7 +11,9 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_api.inc.php"); //验证是否已登录
+include_once(BG_PATH_FUNC . "include.func.php"); //管理员通用
+fn_include(true, true, "Content-type: application/json", true, "ajax");
+
 include_once(BG_PATH_CONTROL . "api/code.class.php"); //载入商家控制器
 $api_code = new API_CODE(); //初始化商家
 
@@ -20,11 +22,7 @@ switch ($GLOBALS["act_post"]) {
 		$api_code->api_encode();
 	break;
 
-	default:
-		switch ($GLOBALS["act_get"]) {
-			case "decode":
-				$api_code->api_decode();
-			break;
-		}
+	case "decode":
+		$api_code->api_decode();
 	break;
 }

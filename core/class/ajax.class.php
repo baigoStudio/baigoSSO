@@ -14,7 +14,7 @@ class CLASS_AJAX {
 
 	private $obj_base; //配置
 	private $config; //配置
-	private $alert; //配置
+	public $alert; //配置
 	public $log; //配置
 
 	function __construct() { //构造函数

@@ -1,4 +1,5 @@
 <?php
+define("BG_REG_ACC", "enable");
 define("BG_REG_NEEDMAIL", "off");
 define("BG_REG_ONEMAIL", "false");
 define("BG_ACC_MAIL", "");

@@ -33,7 +33,7 @@
 		text_submitting: "{$lang.label.submitting}",
 		btn_text: "{$lang.btn.stepNext}",
 		btn_close: "{$lang.btn.close}",
-		btn_url: "{$smarty.const.BG_URL_INSTALL}ctl.php?mod=install&act_get=base"
+		btn_url: "{$smarty.const.BG_URL_INSTALL}ctl.php?mod=install&act_get=admin"
 	};
 
 	$(document).ready(function(){
@@ -44,4 +44,4 @@
 	})
 	</script>
 
-</html>
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/html_foot.tpl" cfg=$cfg}

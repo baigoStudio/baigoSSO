@@ -11,7 +11,9 @@ if(!defined("IN_BAIGO")) {
 
 /*-------------用户模型-------------*/
 class MODEL_USER {
+
 	private $obj_db;
+	private $csvRows;
 
 	function __construct() { //构造函数
 		$this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -392,7 +394,7 @@ class MODEL_USER {
 	 * @param bool $arr_notIn (default: false)
 	 * @return void
 	 */
-	function mdl_list($num_userNo, $num_userExcept = 0, $str_key = "", $str_status = "", $arr_notIn = false) {
+	function mdl_list($num_userNo, $num_userExcept = 0, $str_key = "", $str_status = "", $arr_notIn = false, $arr_ids = false) {
 		$_arr_userSelect = array(
 			"user_id",
 			"user_name",
@@ -418,6 +420,11 @@ class MODEL_USER {
 		if ($arr_notIn) {
 			$_str_notIn = implode(",", $arr_notIn);
 			$_str_sqlWhere .= " AND user_id NOT IN (" . $_str_notIn . ")";
+		}
+
+		if ($arr_ids) {
+			$_str_ids = implode(",", $arr_ids);
+			$_str_sqlWhere .= " AND user_id IN (" . $_str_ids . ")";
 		}
 
 		$_arr_userRows = $this->obj_db->select(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, "", "user_id DESC", $num_userNo, $num_userExcept); //查询数据
@@ -491,32 +498,32 @@ class MODEL_USER {
 	 */
 	function input_get_by($str_method = "get") {
 		if ($str_method == "post") {
-			$_str_getBy = fn_getSafe(fn_post("user_by"), "txt", "");
-			if ($_str_getBy == "user_id") {
+			if (isset($_POST["user_id"])) {
 				$_arr_userGet["user_by"]     = "user_id";
 				$_arr_userChk                = $this->input_id_chk(fn_post("user_id"));
-				$_arr_userGet["user_str"]    = $_arr_userChk["user_id"];
 			} else {
 				$_arr_userGet["user_by"]     = "user_name";
 				$_arr_userChk                = $this->input_name_chk(fn_post("user_name"));
-				$_arr_userGet["user_str"]    = $_arr_userChk["user_name"];
 			}
 		} else {
-			$_str_getBy = fn_getSafe(fn_get("user_by"), "txt", "");
-			if ($_str_getBy == "user_id") {
+			if (isset($_GET["user_id"])) {
 				$_arr_userGet["user_by"]     = "user_id";
 				$_arr_userChk                = $this->input_id_chk(fn_get("user_id"));
-				$_arr_userGet["user_str"]    = $_arr_userChk["user_id"];
 			} else {
 				$_arr_userGet["user_by"]     = "user_name";
 				$_arr_userChk                = $this->input_name_chk(fn_get("user_name"));
-				$_arr_userGet["user_str"]    = $_arr_userChk["user_name"];
 			}
 		}
 
 		if ($_arr_userChk["alert"] != "ok") {
 			return $_arr_userChk;
 			exit;
+		}
+
+		if ($_arr_userGet["user_by"] == "user_id") {
+			$_arr_userGet["user_str"]    = $_arr_userChk["user_id"];
+		} else {
+			$_arr_userGet["user_str"]    = $_arr_userChk["user_name"];
 		}
 
 		$_arr_userGet["alert"] = "ok";
@@ -556,8 +563,8 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_id"     => $_num_userId,
-			"alert"   => "ok",
+			"user_id"    => $_num_userId,
+			"alert"      => "ok",
 		);
 	}
 
@@ -600,8 +607,8 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_name"   => $_str_userName,
-			"alert"   => "ok",
+			"user_name"  => $_str_userName,
+			"alert"      => "ok",
 		);
 	}
 
@@ -652,8 +659,8 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_mail"   => $_str_userMail,
-			"alert"   => "ok",
+			"user_mail"  => $_str_userMail,
+			"alert"      => "ok",
 		);
 	}
 
@@ -681,8 +688,8 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_pass"   => $_str_userPass,
-			"alert"   => "ok",
+			"user_pass"  => $_str_userPass,
+			"alert"      => "ok",
 		);
 	}
 
@@ -711,8 +718,8 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_nick"   => $_str_userNick,
-			"alert"   => "ok",
+			"user_nick"  => $_str_userNick,
+			"alert"      => "ok",
 		);
 	}
 
@@ -741,8 +748,8 @@ class MODEL_USER {
 		}
 
 		return array(
-			"user_note"   => $_str_userNote,
-			"alert"   => "ok",
+			"user_note"  => $_str_userNote,
+			"alert"      => "ok",
 		);
 	}
 
@@ -771,9 +778,9 @@ class MODEL_USER {
 		}
 
 		return array(
-			"not_id"      => $_num_notId,
-			"user_name"   => $_arr_userName["user_name"],
-			"alert"   => "ok",
+			"not_id"     => $_num_notId,
+			"user_name"  => $_arr_userName["user_name"],
+			"alert"      => "ok",
 		);
 	}
 
@@ -810,20 +817,20 @@ class MODEL_USER {
 		}
 
 		return array(
-			"not_id"      => $_num_notId,
-			"user_mail"   => $_arr_userMail["user_mail"],
-			"alert"   => "ok",
+			"not_id"     => $_num_notId,
+			"user_mail"  => $_arr_userMail["user_mail"],
+			"alert"      => "ok",
 		);
 	}
 
 
 	/** api 注册
-	 * api_reg function.
+	 * api_input_reg function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	function api_reg() {
+	function api_input_reg() {
 		$_arr_userName = $this->input_name_chk(fn_post("user_name"));
 		if ($_arr_userName["alert"] != "ok") {
 			return $_arr_userName;
@@ -895,19 +902,19 @@ class MODEL_USER {
 		}
 		$this->userSubmit["user_nick"]    = $_arr_userNick["user_nick"];
 		$this->userSubmit["user_status"]  = "enable";
-		$this->userSubmit["alert"]    = "ok";
+		$this->userSubmit["alert"]        = "ok";
 
 		return $this->userSubmit;
 	}
 
 
 	/** api 登录
-	 * api_login function.
+	 * api_input_login function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	function api_login() {
+	function api_input_login() {
 		$_arr_userGet = $this->input_get_by("post");
 
 		if ($_arr_userGet["alert"] != "ok") {
@@ -925,19 +932,19 @@ class MODEL_USER {
 		$this->apiLogin["user_pass"]      = $_arr_userPass["user_pass"];
 		$this->apiLogin["user_rand"]      = fn_rand(6);
 		$this->apiLogin["user_pass_do"]   = fn_baigoEncrypt($this->apiLogin["user_pass"], $this->apiLogin["user_rand"], true);
-		$this->apiLogin["alert"]      = "ok";
+		$this->apiLogin["alert"]          = "ok";
 
 		return $this->apiLogin;
 	}
 
 
 	/** api 编辑
-	 * api_edit function.
+	 * api_input_edit function.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	function api_edit() {
+	function api_input_edit() {
 		$_arr_userGet = $this->input_get_by("post");
 
 		if ($_arr_userGet["alert"] != "ok") {
@@ -1079,6 +1086,137 @@ class MODEL_USER {
 
 		$this->userSubmit["alert"] = "ok";
 		return $this->userSubmit;
+	}
+
+
+	function mdl_import() {
+		if (file_exists(BG_PATH_CONFIG . "user_import.csv")) {
+			$_obj_csv    = fopen(BG_PATH_CONFIG . "user_import.csv", "r");
+
+            $_str_sample = fread($_obj_csv, 1000) + 'e';
+            rewind($_obj_csv);
+
+            $_str_encode = mb_detect_encoding($_str_sample, "GB2312, GBK, UTF-8, BIG5, EUC-JP, SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP, UTF-7, ASCII", true);
+
+            //print_r($_str_encode);
+
+            if ($_str_encode && $_str_encode != "UTF-8" && $_str_encode != "ASCII") {
+                stream_filter_append($_obj_csv, "convert.iconv." . $_str_encode . "/UTF-8");
+            }
+
+			$_num_row    = 0;
+			while ($_arr_data = fgetcsv($_obj_csv)) {
+				if ($_arr_data[0]) {
+					foreach ($_arr_data as $_key=>$_value) {
+						if ($_value) {
+							/*$_str_encode = mb_detect_encoding($_value , array("UTF-8", "GBK", "GB2312", "BIG5"));
+
+							if ($_str_encode != "UTF-8") {
+								$_str_value = mb_convert_encoding($_value, "UTF-8", "UTF-8, GBK, GB2312, BIG5");
+							} else {*/
+								$_str_value = $_value;
+							//}
+							$this->csvRows[$_num_row][] = fn_getSafe($_str_value, "txt", "");
+						} else {
+							$this->csvRows[$_num_row][] = "";
+						}
+					}
+					$_num_row++;
+				}
+			}
+			fclose($_obj_csv);
+		}
+
+		return $this->csvRows;
+	}
+
+
+    function mdl_convert() {
+		$_num_errChk      = 0;
+		$_arr_csvRows     = $this->mdl_import();
+
+		/*print_r($this->userConvert["user_list"]["convert"]);
+		exit;*/
+
+		foreach ($_arr_csvRows as $_key_row=>$_value_row) {
+			foreach ($this->userConvert["user_convert"] as $_key_cel=>$_value_cel) {
+        		$_arr_userRow = $this->mdl_read($_value_row["user_name"], "user_name");
+        		if ($_arr_userRow["alert"] == "x010102") {
+                    $_str_rand                  = fn_rand(6);
+                    $_arr_userData["user_rand"] = $_str_rand;
+
+    				switch ($_value_cel) {
+        				case "user_pass":
+                            $_str_userPass              = fn_baigoEncrypt($_value_row[$_key_cel], $_str_rand, true);
+                            $_arr_userData["user_pass"] = $_str_userPass;
+        				break;
+
+        				case "abort":
+
+        				break;
+
+        				default:
+        					$_arr_userData[$_value_cel] = $_value_row[$_key_cel];
+        				break;
+    				}
+        		}
+			}
+
+			//print_r($_arr_userData);
+
+			$_num_userId = 0;
+
+			if ($_key_row > 0) {
+				$_num_userId = $this->obj_db->insert(BG_DB_TABLE . "user", $_arr_userData);
+			}
+
+			if ($_num_userId > 0) { //数据库插入是否成功
+				$_num_errChk++;
+			}
+
+			unset($_arr_userData["user_abort"]);
+		}
+
+		if ($_num_errChk > 0) {
+			$_str_alert = "y010402";
+		} else {
+			$_str_alert = "x010402";
+		}
+
+		return array(
+			"user_id"    => $_num_userId,
+			"alert"      => $_str_alert,
+		);
+	}
+
+
+	function input_convert() {
+		if (!fn_token("chk")) { //令牌
+			return array(
+				"alert" => "x030102",
+			);
+			exit;
+		}
+
+		$this->userConvert["user_convert"] = fn_post("user_convert");
+
+		if (!in_array("user_name", $this->userConvert["user_convert"])) {
+			return array(
+				"alert" => "x010220",
+			);
+			exit;
+		}
+
+		if (!in_array("user_pass", $this->userConvert["user_convert"])) {
+			return array(
+				"alert" => "x010221",
+			);
+			exit;
+		}
+
+		$this->userConvert["alert"]   = "ok";
+
+		return $this->userConvert;
 	}
 
 

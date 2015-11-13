@@ -16,50 +16,50 @@ return "<h3>概述</h3>
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">文件 / 目录</th>
-						<th class=\"nowrap\">用途</th>
+						<th class=\"text-nowrap\">文件 / 目录</th>
+						<th class=\"text-nowrap\">用途</th>
 						<th>建议路径</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">core</td>
-						<td class=\"nowrap\">系统内核</td>
+						<td class=\"text-nowrap\">core</td>
+						<td class=\"text-nowrap\">系统内核</td>
 						<td>/web</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">tpl</td>
-						<td class=\"nowrap\">模板文件</td>
+						<td class=\"text-nowrap\">tpl</td>
+						<td class=\"text-nowrap\">模板文件</td>
 						<td>/web</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">admin</td>
-						<td class=\"nowrap\">管理后台入口</td>
+						<td class=\"text-nowrap\">admin</td>
+						<td class=\"text-nowrap\">管理后台入口</td>
 						<td>/web/wwwroot</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">api</td>
-						<td class=\"nowrap\">API 接口入口</td>
+						<td class=\"text-nowrap\">api</td>
+						<td class=\"text-nowrap\">API 接口入口</td>
 						<td>/web/wwwroot</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">config</td>
-						<td class=\"nowrap\">配置文件</td>
+						<td class=\"text-nowrap\">config</td>
+						<td class=\"text-nowrap\">配置文件</td>
 						<td>/web/wwwroot</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">help</td>
-						<td class=\"nowrap\">帮助文档入口</td>
+						<td class=\"text-nowrap\">help</td>
+						<td class=\"text-nowrap\">帮助文档入口</td>
 						<td>/web/wwwroot</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">install</td>
-						<td class=\"nowrap\">安装程序入口</td>
+						<td class=\"text-nowrap\">install</td>
+						<td class=\"text-nowrap\">安装程序入口</td>
 						<td>/web/wwwroot</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">static</td>
-						<td class=\"nowrap\">静态文件</td>
+						<td class=\"text-nowrap\">static</td>
+						<td class=\"text-nowrap\">静态文件</td>
 						<td>/web/wwwroot</td>
 					</tr>
 				</tbody>
@@ -71,7 +71,7 @@ return "<h3>概述</h3>
 
 	<h3>修改配置文件</h3>
 
-	<p>在 <mark>/web/wwwroot/bg_confg</mark> 目录下找到 <mark>config.inc.php</mark> 文件，如没有，请将 <mark>config_sample.inc.php</mark> 另存为 <mark>config.inc.php</mark>，找到以下配置项目，建议以如下方式修改：</p>
+	<p>在 <mark>/web/wwwroot/config</mark> 目录下找到 <mark>config.inc.php</mark> 文件，如没有，请将 <mark>config_sample.inc.php</mark> 另存为 <mark>config.inc.php</mark>，找到以下配置项目，建议以如下方式修改：</p>
 	<p>
 <pre><code class=\"language-php\">define(\"BG_PATH_CORE\", \"/web/core/\");
 define(\"BG_PATH_TPL\", \"/web/tpl/\");</code></pre>

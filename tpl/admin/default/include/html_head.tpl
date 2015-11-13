@@ -20,6 +20,12 @@
 		<link href="{$smarty.const.BG_URL_STATIC}js/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
 	{/if}
 
+	{if isset($cfg.upload)}
+		<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+		<link href="{$smarty.const.BG_URL_STATIC}js/jQuery-File-Upload/jquery.fileupload.css" type="text/css" rel="stylesheet">
+	{/if}
+
 	<link href="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/css/admin_common.css" type="text/css" rel="stylesheet">
 
 </head>
+<body>

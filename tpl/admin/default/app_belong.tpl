@@ -32,7 +32,7 @@
 				</a>
 			</li>
 			<li>
-				{$lang.label.appName}: {$tplData.appRow.app_name}
+				<a href="#">{$lang.label.appName}: {$tplData.appRow.app_name}</a>
 			</li>
 		</ul>
 	</div>
@@ -46,12 +46,14 @@
 					<input type="hidden" name="act_get" value="belong">
 					<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 					<div class="form-group">
-						<input type="text" name="key_belong" class="form-control input-sm" value="{$tplData.search.key_belong}" placeholder="{$lang.label.key}">
-					</div>
-					<div class="form-group">
-						<button class="btn btn-default btn-sm" type="submit">
-							<span class="glyphicon glyphicon-search"></span>
-						</button>
+						<div class="input-group">
+    						<input type="text" name="key_belong" class="form-control input-sm" value="{$tplData.search.key_belong}" placeholder="{$lang.label.key}">
+        					<span class="input-group-btn">
+        						<button class="btn btn-default btn-sm" type="submit">
+        							<span class="glyphicon glyphicon-search"></span>
+        						</button>
+        					</span>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -65,15 +67,15 @@
 						<table class="table table-striped table-hover">
 							<thead>
 								<tr>
-									<th class="td_mn">
+									<th class="text-nowrap td_mn">
 										<label for="belong_all" class="checkbox-inline">
 											<input type="checkbox" name="belong_all" id="belong_all" class="first">
 											{$lang.label.all}
 										</label>
 									</th>
-									<th class="td_mn">{$lang.label.id}</th>
+									<th class="text-nowrap td_mn">{$lang.label.id}</th>
 									<th>{$lang.label.user}</th>
-									<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
+									<th class="text-nowrap td_md">{$lang.label.status} / {$lang.label.note}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -86,13 +88,13 @@
 										{$_css_status = "danger"}
 									{/if}
 									<tr>
-										<td class="td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_belong_{$value.user_id}" group="user_id" class="validate belong_all"></td>
-										<td class="td_mn">{$value.user_id}</td>
+										<td class="text-nowrap td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_belong_{$value.user_id}" group="user_id" class="validate belong_all"></td>
+										<td class="text-nowrap td_mn">{$value.user_id}</td>
 										<td>
 											{$value.user_name}
 											{if $value.user_nick}[ {$value.user_nick} ]{/if}
 										</td>
-										<td class="td_md">
+										<td class="text-nowrap td_md">
 											<ul class="list-unstyled">
 												<li class="label_baigo">
 													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>
@@ -127,12 +129,14 @@
 					<input type="hidden" name="act_get" value="belong">
 					<input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 					<div class="form-group">
-						<input type="text" name="key" class="form-control input-sm" value="{$tplData.search.key}" placeholder="{$lang.label.key}">
-					</div>
-					<div class="form-group">
-						<button class="btn btn-default btn-sm" type="submit">
-							<span class="glyphicon glyphicon-search"></span>
-						</button>
+    					<div class="input-group">
+    						<input type="text" name="key" class="form-control input-sm" value="{$tplData.search.key}" placeholder="{$lang.label.key}">
+    						<span class="input-group-btn">
+        						<button class="btn btn-default btn-sm" type="submit">
+        							<span class="glyphicon glyphicon-search"></span>
+        						</button>
+        					</span>
+    					</div>
 					</div>
 				</form>
 			</div>
@@ -146,15 +150,15 @@
 						<table class="table table-striped table-hover">
 							<thead>
 								<tr>
-									<th class="td_mn">
+									<th class="text-nowrap td_mn">
 										<label for="user_all" class="checkbox-inline">
 											<input type="checkbox" name="user_all" id="user_all" class="first">
 											{$lang.label.all}
 										</label>
 									</th>
-									<th class="td_mn">{$lang.label.id}</th>
+									<th class="text-nowrap td_mn">{$lang.label.id}</th>
 									<th>{$lang.label.user}</th>
-									<th class="td_md">{$lang.label.status} / {$lang.label.note}</th>
+									<th class="text-nowrap td_md">{$lang.label.status} / {$lang.label.note}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -167,13 +171,13 @@
 										{$_css_status = "danger"}
 									{/if}
 									<tr>
-										<td class="td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_id_{$value.user_id}" group="user_id" class="validate user_all"></td>
-										<td class="td_mn">{$value.user_id}</td>
+										<td class="text-nowrap td_mn"><input type="checkbox" name="user_id[]" value="{$value.user_id}" id="user_id_{$value.user_id}" group="user_id" class="validate user_all"></td>
+										<td class="text-nowrap td_mn">{$value.user_id}</td>
 										<td>
 											{$value.user_name}
 											{if $value.user_nick}[ {$value.user_nick} ]{/if}
 										</td>
-										<td class="td_md">
+										<td class="text-nowrap td_md">
 											<ul class="list-unstyled">
 												<li class="label_baigo">
 													<span class="label label-{$_css_status}">{$status.user[$value.user_status]}</span>

@@ -25,10 +25,10 @@ return array(
 		"add"             => "创建",
 		"detail"          => "详情",
 		"show"            => "查看",
-		"order"           => "优先级",
 		"profile"         => "管理员个人信息",
 		"pass"            => "修改密码",
 		"appBelong"       => "授权用户",
+		"opt"             => "系统设置",
 
 		"upgrade"         => "baigo SSO 升级程序",
 		"upgradeDbtable"  => "升级数据库",
@@ -36,10 +36,7 @@ return array(
 
 		"install"         => "baigo SSO 安装程序",
 		"installExt"      => "服务器环境检查",
-		"installDbconfig" => "数据库设置",
 		"installDbtable"  => "创建数据表",
-		"installBase"     => "基本设置",
-		"installReg"      => "注册设置",
 		"installAdmin"    => "创建管理员",
 		"installOver"     => "完成安装",
 	),
@@ -47,17 +44,18 @@ return array(
 	/*------链接文字------*/
 	"href"             => array(
 		"all"             => "全部",
-		"agree"           => "同意",
 		"logout"          => "退出",
 		"back"            => "返回",
 		"add"             => "创建",
 		"edit"            => "编辑",
 		"order"           => "优先级",
-		"draft"           => "草稿",
-		"recycle"         => "回收站",
 		"help"            => "帮助",
+		"opt"             => "系统设置",
+		"import"          => "批量导入",
+
 		"appBelong"       => "授权用户",
 
+		"infoModi"        => "个人信息",
 		"passModi"        => "修改密码",
 		"show"            => "查看",
 		"noticeTest"      => "通知接口测试",
@@ -79,23 +77,13 @@ return array(
 		"key"             => "关键词",
 		"type"            => "类型",
 		"alert"           => "返回代码",
-		"hits"            => "点击数",
-		"count"           => "统计",
-		"noname"          => "未命名",
-		"unknown"         => "未知",
-		"custom"          => "自定义",
+		"unknow"          => "未知",
 		"modOnly"         => "需要修改时输入", //需要修改时输入
 		"status"          => "状态",
-		"box"             => "保存为",
 		"allow"           => "权限",
 		"note"            => "备注",
 		"title"           => "标题",
-		"pic"             => "图片",
 		"content"         => "内容",
-		"draft"           => "草稿",
-		"recycle"         => "回收站",
-		"check"           => "选中",
-		"preview"         => "预览",
 		"target"          => "目标",
 		"result"          => "结果",
 		"sync"            => "同步通知",
@@ -105,11 +93,20 @@ return array(
 		"apiUrl"          => "API 接口 URL",
 		"upgrade"         => "正在进行升级安装",
 		"to"              => "至",
+		"opt"             => "系统设置",
+		"preview"         => "预览",
+		"convert"         => "转换为",
+		"source"          => "原始数据",
+		"md5tool"         => "MD5 加密工具",
+		"md5result"       => "加密结果",
+
 		"complete"        => "升级安装无法创建管理员，点完成完成安装",
 		"belongUser"      => "已授权用户",
 		"selectUser"      => "待授权用户",
 
 		"submitting"      => "正在提交 ...",
+		"uploading"       => "正在上传",
+		"uploadSucc"      => "上传成功",
 
 		"appName"         => "应用名称",
 		"appId"           => "APP ID",
@@ -125,14 +122,6 @@ return array(
 		"profileInfo"     => "禁止修改个人信息",
 		"profilePass"     => "禁止修改密码",
 
-		"dbHost"          => "数据库服务器",
-		"dbPort"          => "服务器端口",
-		"dbName"          => "数据库名称",
-		"dbUser"          => "数据库用户名",
-		"dbPass"          => "数据库密码",
-		"dbCharset"       => "数据库字符编码",
-		"dbTable"         => "数据表名前缀",
-
 		"user"            => "用户",
 		"admin"           => "管理员",
 
@@ -142,7 +131,7 @@ return array(
 		"passNew"         => "新密码", //密码
 		"passConfirm"     => "确认密码", //密码
 
-		"upgradeDbtable"    => "即将升级数据库",
+		"upgradeDbtable"  => "即将升级数据库",
 		"upgradeOver"     => "还差最后一步，完成升级",
 
 		"installOver"     => "还差最后一步，完成安装",
@@ -156,17 +145,12 @@ return array(
 
 	/*------选择项------*/
 	"option"           => array(
-		"allStatus"       => "所有状态",
-		"allType"         => "所有类型",
-		"allYear"         => "所有年份",
-		"allMonth"        => "所有月份",
-		"please"          => "请选择",
-		"batch"           => "批量操作",
-		"del"             => "永久删除",
-		"normal"          => "正常",
-		"revert"          => "放回原处",
-		"draft"           => "存为草稿",
-		"recycle"         => "放入回收站",
+		"allStatus"   => "所有状态",
+		"allType"     => "所有类型",
+		"please"      => "请选择",
+		"batch"       => "批量操作",
+		"del"         => "永久删除",
+		"abort"       => "忽略",
 	),
 
 	/*------按钮------*/
@@ -177,8 +161,8 @@ return array(
 		"complete"        => "完成",
 		"search"          => "搜索",
 		"filter"          => "筛选",
-		"recycle"         => "移至回收站",
 		"empty"           => "清空回收站",
+		"send"            => "发送",
 		"login"           => "登录",
 		"skip"            => "跳过",
 		"save"            => "保存",
@@ -187,6 +171,10 @@ return array(
 		"over"            => "完成",
 		"auth"            => "授权",
 		"deauth"          => "取消授权",
+		"convert"         => "导入",
+		"md5gen"          => "生成加密结果",
+		"uploadCsv"       => "上传 CSV 文件 ...",
+		"delCsv"          => "删除 CSV 文件",
 		"stepNext"        => "下一步",
 		"resetKey"        => "重置 APP KEY",
 	),
@@ -200,6 +188,7 @@ return array(
 	),
 
 	"text" => array(
+		"refreshImport"   => "CSV 文件第一行必须为字段名，建议使用三列，其中密码列必须使用 MD5 加密，加密工具请看下方表单。上传 CSV 文件后，请刷新本页查看预览，点此 <a href=\"javascript:location.reload();\" class=\"alert-link\">刷新</a>。",
 		"extErr"          => "服务器环境检查未通过，请检查上述扩展库是否已经正确安装。",
 		"extOk"           => "服务器环境检查通过，可以继续安装。",
 	),

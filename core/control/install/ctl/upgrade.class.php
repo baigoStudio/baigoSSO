@@ -32,13 +32,7 @@ class CONTROL_UPGRADE {
 	}
 
 
-	/**
-	 * upgrade_1 function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_dbconfig() {
+	function ctl_form() {
 		if ($this->errCount > 0) {
 			return array(
 				"alert" => "x030414",
@@ -46,10 +40,17 @@ class CONTROL_UPGRADE {
 			exit;
 		}
 
-		$this->obj_tpl->tplDisplay("upgrade_dbconfig.tpl", $this->tplData);
+		if (!$this->check_db()) {
+			return array(
+				"alert" => "x030412",
+			);
+			exit;
+		}
+
+		$this->obj_tpl->tplDisplay("upgrade_form.tpl", $this->tplData);
 
 		return array(
-			"alert" => "y030403",
+			"alert" => "y030404",
 		);
 	}
 
@@ -76,64 +77,6 @@ class CONTROL_UPGRADE {
 		}
 
 		$this->obj_tpl->tplDisplay("upgrade_dbtable.tpl", $this->tplData);
-
-		return array(
-			"alert" => "y030404",
-		);
-	}
-
-
-	/**
-	 * upgrade_3 function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_base() {
-		if ($this->errCount > 0) {
-			return array(
-				"alert" => "x030414",
-			);
-			exit;
-		}
-
-		if (!$this->check_db()) {
-			return array(
-				"alert" => "x030412",
-			);
-			exit;
-		}
-
-		$this->obj_tpl->tplDisplay("upgrade_base.tpl", $this->tplData);
-
-		return array(
-			"alert" => "y030404",
-		);
-	}
-
-
-	/**
-	 * upgrade_4 function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_reg() {
-		if ($this->errCount > 0) {
-			return array(
-				"alert" => "x030414",
-			);
-			exit;
-		}
-
-		if (!$this->check_db()) {
-			return array(
-				"alert" => "x030412",
-			);
-			exit;
-		}
-
-		$this->obj_tpl->tplDisplay("upgrade_reg.tpl", $this->tplData);
 
 		return array(
 			"alert" => "y030404",
@@ -210,9 +153,26 @@ class CONTROL_UPGRADE {
 			}
 		}
 
+		$_act_get = fn_getSafe($GLOBALS["act_get"], "txt", "base");
+
 		$this->tplData = array(
 			"errCount"   => $this->errCount,
 			"extRow"     => $_arr_extRow,
+			"act_get"    => $_act_get,
+			"act_next"   => $this->install_next($_act_get),
 		);
+	}
+
+	private function install_next($act_get) {
+		$_arr_optKeys = array_keys($this->obj_tpl->opt);
+		$_index       = array_search($act_get, $_arr_optKeys);
+		$_arr_opt     = array_slice($this->obj_tpl->opt, $_index + 1, 1);
+        if ($_arr_opt) {
+    		$_key = key($_arr_opt);
+        } else {
+    		$_key = "dbtable";
+        }
+
+		return $_key;
 	}
 }

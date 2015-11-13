@@ -9,11 +9,11 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_global.inc.php"); //载入通用
-include_once(BG_PATH_CLASS . "base.class.php"); //载入基类
+include_once(BG_PATH_FUNC . "include.func.php"); //管理员通用
+fn_include(true);
+
 include_once(BG_PATH_CONTROL . "install/ctl/alert.class.php"); //载入栏目控制器
 
-$GLOBALS["obj_base"]    = new CLASS_BASE(); //初始化基类
 $ctl_alert              = new CONTROL_ALERT(); //初始化商家
 
 switch ($GLOBALS["act_get"]) {

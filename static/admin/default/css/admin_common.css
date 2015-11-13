@@ -5,17 +5,18 @@
 .foot_logo > a { display: block; width: 150px; height: 0px; padding-top: 40px; overflow: hidden; background: url(../image/admin_foot.png); }
 .foot_power { padding: 10px 20px; }
 
-.td_mn { width: 50px; white-space: nowrap; text-align: center; }
-.td_sm { width: 110px; white-space: nowrap; }
-.td_md { width: 150px; white-space: nowrap; }
-.td_bg { width: 200px; white-space: nowrap; }
-.td_lg { width: 250px; white-space: nowrap; }
+.td_mn { width: 50px; text-align: center; }
+.td_sm { width: 110px; }
+.td_md { width: 150px; }
+.td_bg { width: 200px; }
+.td_lg { width: 250px; }
 
 .label_baigo { margin-bottom: 5px; }
 .label_baigo .label { font-size: 12px; }
 
 .text_bg { height: 400px!important; }
 .text_md { height: 200px!important; }
+.table_convert th, .table_convert td { padding: 10px; }
 
 .static_label { color: #999; font-weight: normal; }
 .static_input { font-size: 20px; }

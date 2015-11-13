@@ -26,12 +26,26 @@ return array(
 		),
 	),
 
+	/*------短消息------*/
+	/*"msg" => array(
+		"title" => "短消息",
+		"allow" => array(
+			"send"   => "发送",
+			"list"   => "列出",
+			"get"    => "读取",
+			"status" => "更改状态",
+			"rev"    => "撤回",
+			"del"    => "删除",
+			"check"  => "检查新消息",
+		),
+	),*/
+
 	/*------密文------*/
 	"code" => array(
 		"title" => "密文",
 		"allow" => array(
-			"encode"     => "加密",
-			"decode"     => "解密",
+			"encode" => "加密",
+			"decode" => "解密",
 		),
 	),
 

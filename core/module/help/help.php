@@ -9,7 +9,9 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-include_once(BG_PATH_INC . "common_help.inc.php"); //验证是否已登录
+include_once(BG_PATH_FUNC . "include.func.php"); //管理员通用
+fn_include(true);
+
 include_once(BG_PATH_CONTROL . "help/help.class.php"); //载入文章类
 
 $ctl_help = new CONTROL_HELP();

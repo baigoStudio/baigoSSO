@@ -32,6 +32,11 @@ return array(
 		"read"    => "已读", //禁用
 	),
 
+	"msg" => array(
+		"wait"    => "未读", //生效
+		"read"    => "已读", //禁用
+	),
+
 	"admin" => array(
 		"enable"  => "启用", //生效
 		"disable" => "禁用", //禁用

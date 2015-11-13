@@ -29,59 +29,59 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
-						<th class=\"nowrap\">必须</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
+						<th class=\"text-nowrap\">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">act_post</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">act_post</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 dbconfig。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_host</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_host</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>数据库服务器</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_port</td>
-						<td class=\"nowrap\">int</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_port</td>
+						<td class=\"text-nowrap\">int</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>服务器端口</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_name</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_name</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>数据库名称</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_user</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_user</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>数据库用户名</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_pass</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_pass</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>数据库密码</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_charset</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_charset</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>数据库字符编码</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">db_table</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">db_table</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>数据表名前缀</td>
 					</tr>
 				</tbody>
@@ -95,31 +95,42 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">alert</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">alert</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_ver</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_ver</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本号。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_pub</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_pub</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本发布时间，格式为年月日。</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<p>&nbsp;</p>
+
+	<h4>返回结果示例</h4>
+	<p>
+<pre><code class=\"language-javascript\">{
+    &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
+    &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
+    &quot;alert&quot;: &quot;y010102&quot; //返回代码
+}</code></pre>
+	</p>
 
 	<hr>
 
@@ -143,17 +154,17 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
-						<th class=\"nowrap\">必须</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
+						<th class=\"text-nowrap\">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">act_post</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">act_post</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 base。</td>
 					</tr>
 				</tbody>
@@ -167,31 +178,42 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">alert</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">alert</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_ver</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_ver</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本号。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_pub</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_pub</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本发布时间，格式为年月日。</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<p>&nbsp;</p>
+
+	<h4>返回结果示例</h4>
+	<p>
+<pre><code class=\"language-javascript\">{
+    &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
+    &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
+    &quot;alert&quot;: &quot;y010102&quot; //返回代码
+}</code></pre>
+	</p>
 
 	<hr>
 
@@ -215,17 +237,17 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
-						<th class=\"nowrap\">必须</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
+						<th class=\"text-nowrap\">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">act_post</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">act_post</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 dbtable。</td>
 					</tr>
 				</tbody>
@@ -239,31 +261,42 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">alert</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">alert</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_ver</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_ver</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本号。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_pub</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_pub</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本发布时间，格式为年月日。</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<p>&nbsp;</p>
+
+	<h4>返回结果示例</h4>
+	<p>
+<pre><code class=\"language-javascript\">{
+    &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
+    &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
+    &quot;alert&quot;: &quot;y010102&quot; //返回代码
+}</code></pre>
+	</p>
 
 	<hr>
 
@@ -287,29 +320,29 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
-						<th class=\"nowrap\">必须</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
+						<th class=\"text-nowrap\">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">act_post</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">act_post</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 admin。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">admin_name</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">admin_name</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>管理员用户名</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">admin_pass</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">admin_pass</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>密码，必须用 <mark>MD5</mark> 加密后传输。</td>
 					</tr>
 				</tbody>
@@ -323,36 +356,48 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">alert</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">alert</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">admin_id</td>
+						<td class=\"text-nowrap\">admin_id</td>
 						<td>int</td>
 						<td>管理员 ID</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_ver</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_ver</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本号。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_pub</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_pub</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本发布时间，格式为年月日。</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<p>&nbsp;</p>
+
+	<h4>返回结果示例</h4>
+	<p>
+<pre><code class=\"language-javascript\">{
+    &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
+    &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
+    &quot;admin_id&quot;: &quot;MTA=&quot;, //管理员 ID
+    &quot;alert&quot;: &quot;y010102&quot; //返回代码
+}</code></pre>
+	</p>
 
 	<hr>
 
@@ -376,23 +421,23 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
-						<th class=\"nowrap\">必须</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
+						<th class=\"text-nowrap\">必须</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">act_post</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">act_post</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 over。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">app_name</td>
-						<td class=\"nowrap\">string</td>
-						<td class=\"nowrap\">true</td>
+						<td class=\"text-nowrap\">app_name</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
 						<td>应用名称。</td>
 					</tr>
 				</tbody>
@@ -406,43 +451,56 @@ return "<div class=\"alert alert-warning\">
 			<table class=\"table\">
 				<thead>
 					<tr>
-						<th class=\"nowrap\">名称</th>
-						<th class=\"nowrap\">类型</th>
+						<th class=\"text-nowrap\">名称</th>
+						<th class=\"text-nowrap\">类型</th>
 						<th>具体描述</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class=\"nowrap\">alert</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">alert</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">sso_url</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">sso_url</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>SSO API 接口的 URL。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">app_id</td>
-						<td class=\"nowrap\">int</td>
+						<td class=\"text-nowrap\">app_id</td>
+						<td class=\"text-nowrap\">int</td>
 						<td>调用 API 接口所需的 APP ID。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">app_key</td>
-						<td class=\"nowrap\">int</td>
+						<td class=\"text-nowrap\">app_key</td>
+						<td class=\"text-nowrap\">int</td>
 						<td>调用 API 接口所需的 APP KEY。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_ver</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_ver</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本号。</td>
 					</tr>
 					<tr>
-						<td class=\"nowrap\">prd_sso_pub</td>
-						<td class=\"nowrap\">string</td>
+						<td class=\"text-nowrap\">prd_sso_pub</td>
+						<td class=\"text-nowrap\">string</td>
 						<td>baigo SSO 版本发布时间，格式为年月日。</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-	</div>";
+	</div>
+
+	<p>&nbsp;</p>
+
+	<h4>返回结果示例</h4>
+	<p>
+<pre><code class=\"language-javascript\">{
+    &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
+    &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
+    &quot;app_id&quot;: &quot;MTA=&quot;, //应用 APP ID
+    &quot;app_key&quot;: &quot;sfewrw8084382h2r9fdsw9ey5whfDISORwegds&quot;, //应用 APP KEY
+    &quot;alert&quot;: &quot;y010102&quot; //返回代码
+}</code></pre>
+	</p>";

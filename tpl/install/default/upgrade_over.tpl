@@ -44,4 +44,4 @@
 	})
 	</script>
 
-</html>
+{include "{$smarty.const.BG_PATH_TPL}install/default/include/html_foot.tpl" cfg=$cfg}

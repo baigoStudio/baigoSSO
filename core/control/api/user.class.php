@@ -46,6 +46,13 @@ class API_USER {
 	function api_reg() {
 		$this->app_check("post");
 
+		if (defined(BG_REG_ACC) && BG_REG_ACC != "enable") {
+			$_arr_return = array(
+				"alert" => "x050316",
+			);
+			$this->obj_api->halt_re($_arr_return);
+		}
+
 		if (!isset($this->appAllow["user"]["reg"])) {
 			$_arr_return = array(
 				"alert" => "x050305",
@@ -58,7 +65,7 @@ class API_USER {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_arr_userReg = $this->mdl_user->api_reg(); //获取数据
+		$_arr_userReg = $this->mdl_user->api_input_reg(); //获取数据
 		if ($_arr_userReg["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userReg);
 		}
@@ -109,7 +116,7 @@ class API_USER {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_arr_userLogin = $this->mdl_user->api_login();
+		$_arr_userLogin = $this->mdl_user->api_input_login();
 		if ($_arr_userLogin["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userLogin);
 		}
@@ -221,7 +228,7 @@ class API_USER {
 			$this->obj_api->halt_re($_arr_return);
 		}
 
-		$_arr_userEdit = $this->mdl_user->api_edit();
+		$_arr_userEdit = $this->mdl_user->api_input_edit();
 
 		if ($_arr_userEdit["alert"] != "ok") {
 			$this->obj_api->halt_re($_arr_userEdit);

@@ -35,6 +35,67 @@ class AJAX_USER {
 		}
 	}
 
+
+	function ajax_convert() {
+		if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+			$this->obj_ajax->halt_alert("x010305");
+		}
+
+		$_arr_userSubmit = $this->mdl_user->input_convert();
+		if ($_arr_userSubmit["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_userSubmit["alert"]);
+		}
+
+		$_arr_userRow = $this->mdl_user->mdl_convert();
+
+		$this->obj_ajax->halt_alert($_arr_userRow["alert"]);
+	}
+
+
+	function ajax_csvDel() {
+		if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+			$this->obj_ajax->halt_alert("x010305");
+		}
+
+		if (!fn_token("chk")) { //令牌
+			return array(
+				"alert" => "x030102",
+			);
+			exit;
+		}
+
+		$_bool = false;
+
+		if (file_exists(BG_PATH_CONFIG . "user_import.csv")) {
+    		$_bool = unlink(BG_PATH_CONFIG . "user_import.csv");
+		}
+
+		if ($_bool) {
+			$_str_alert = "y010404";
+		} else {
+			$_str_alert = "x010404";
+		}
+
+		$this->obj_ajax->halt_alert($_str_alert);
+	}
+
+
+	function ajax_import() {
+		if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+			$this->obj_ajax->halt_alert("x010305");
+		}
+
+		$_arr_userImport = $this->validate_import();
+		if ($_arr_userImport["alert"] != "ok") {
+			$this->show_err($_arr_userImport["alert"], $this->csvFiles["name"]);
+		}
+
+		move_uploaded_file($this->userImport["file_temp"], BG_PATH_CONFIG . "user_import.csv");
+
+		$this->show_err("y010403", $this->csvFiles["name"]);
+	}
+
+
 	/*============提交用户============
 	返回数组
 		user_id ID
@@ -188,5 +249,78 @@ class AJAX_USER {
 		);
 
 		exit(json_encode($arr_re));
+	}
+
+
+	private function show_err($str_alert, $file_name = "") {
+		$_arr_re = array(
+			"alert"  => $str_alert,
+			"file_name"  => $file_name,
+			"msg"        => $this->obj_ajax->alert[$str_alert],
+		);
+		exit(json_encode($_arr_re));
+	}
+
+
+	private function validate_import() {
+		if (!fn_token("chk")) { //令牌
+			return array(
+				"alert" => "x030102",
+			);
+			exit;
+		}
+
+		$this->csvFiles = $_FILES["csv_files"];
+
+		$_str_alert = $this->upload_init($this->csvFiles["error"]);
+		if ($_str_alert != "ok") {
+			return array(
+				"alert" => $_str_alert,
+			);
+			exit;
+		}
+
+		$this->userImport["file_ext"] = pathinfo($this->csvFiles["name"], PATHINFO_EXTENSION); //取得扩展名
+		$this->userImport["file_ext"] = strtolower($this->userImport["file_ext"]);
+
+		if ($this->userImport["file_ext"] != "csv") {
+			return array(
+				"alert" => "x010219",
+			);
+			exit;
+		}
+
+		$this->userImport["file_temp"]    = $this->csvFiles["tmp_name"];
+		$this->userImport["alert"]        = "ok";
+
+		return $this->userImport;
+	}
+
+
+	private function upload_init($num_error) {
+		switch ($num_error) { //返回错误
+			case 1:
+				$_str_alert = "x030301";
+			break;
+			case 2:
+				$_str_alert = "x030302";
+			break;
+			case 3:
+				$_str_alert = "x030303";
+			break;
+			case 4:
+				$_str_alert = "x030304";
+			break;
+			case 6:
+				$_str_alert = "x030306";
+			break;
+			case 7:
+				$_str_alert = "x030307";
+			break;
+			default:
+				$_str_alert = "ok";
+			break;
+		}
+		return $_str_alert;
 	}
 }
