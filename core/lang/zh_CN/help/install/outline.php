@@ -27,6 +27,11 @@ return "<h3>概述</h3>
 						<td>API 接口入口，所有提供给第三方的接口，均通过此目录实现。</td>
 					</tr>
 					<tr>
+						<td class=\"text-nowrap\">cache</td>
+						<td class=\"text-nowrap\">缓存文件</td>
+						<td>缓存文件目录，包括模板编译等数据，均保存在此。</td>
+					</tr>
+					<tr>
 						<td class=\"text-nowrap\">config</td>
 						<td class=\"text-nowrap\">配置文件</td>
 						<td>配置文件目录，所有系统的配置信息，均保存在此。</td>
