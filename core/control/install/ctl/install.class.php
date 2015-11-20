@@ -41,11 +41,13 @@ class CONTROL_INSTALL {
 			exit;
 		}
 
-		if (!$this->check_db()) {
-			return array(
-				"alert" => "x030404",
-			);
-			exit;
+		if ($this->act_get != "dbconfig")
+    		if (!$this->check_db()) {
+    			return array(
+    				"alert" => "x030404",
+    			);
+    			exit;
+    		}
 		}
 
 		$this->obj_tpl->tplDisplay("install_form.tpl", $this->tplData);
@@ -184,13 +186,13 @@ class CONTROL_INSTALL {
 			}
 		}
 
-		$_act_get = fn_getSafe($GLOBALS["act_get"], "txt", "base");
+		$this->act_get = fn_getSafe($GLOBALS["act_get"], "txt", "base");
 
 		$this->tplData = array(
 			"errCount"   => $this->errCount,
 			"extRow"     => $_arr_extRow,
-			"act_get"    => $_act_get,
-			"act_next"   => $this->install_next($_act_get),
+			"act_get"    => $this->act_get,
+			"act_next"   => $this->install_next($this->act_get),
 		);
 	}
 
