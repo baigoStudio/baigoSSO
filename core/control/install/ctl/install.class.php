@@ -41,7 +41,7 @@ class CONTROL_INSTALL {
 			exit;
 		}
 
-		if ($this->act_get != "dbconfig")
+		if ($this->act_get != "dbconfig") {
     		if (!$this->check_db()) {
     			return array(
     				"alert" => "x030404",
