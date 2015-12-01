@@ -32,8 +32,26 @@ class CONTROL_OPT {
 	}
 
 
+	function ctl_dbconfig() {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["dbconfig"])) {
+			return array(
+				"alert" => "x040301",
+			);
+			exit;
+		}
+
+		$this->tplData["act_get"] = $GLOBALS["act_get"];
+
+		$this->obj_tpl->tplDisplay("opt_dbconfig.tpl", $this->tplData);
+
+		return array(
+			"alert" => "y040301",
+		);
+	}
+
+
 	function ctl_form() {
-		$_act_get = fn_getSafe($GLOBALS["act_get"], "txt", "base");
+        $_act_get = fn_getSafe($GLOBALS["act_get"], "text", "base");
 
 		if (!isset($this->adminLogged["admin_allow"]["opt"][$_act_get])) {
 			return array(

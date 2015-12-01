@@ -435,7 +435,7 @@ return array(
 		"title"   => "基本设置",
 		"list"    => array(
     		"BG_SITE_NAME" => array(
-    			"label"      => "名称",
+    			"label"      => "站点名称",
     			"type"       => "str",
     			"format"     => "text",
     			"min"        => 1,
@@ -454,7 +454,7 @@ return array(
     			"format"     => "url",
     			"min"        => 1,
     			"default"    => "http://" . $_SERVER["SERVER_NAME"],
-    			"note"       => "末尾请勿加 /",
+    			"note"       => "末尾请勿加 /，仅需 http:// 和域名部分，如：http://" . $_SERVER["SERVER_NAME"],
     		),
     		"BG_SITE_PERPAGE" => array(
     			"label"      => "每页显示数",
@@ -516,60 +516,6 @@ return array(
     		),
 		),
 	),
-	"dbconfig" => array(
-		"title"   => "数据库设置",
-		"list"    => array(
-            "BG_DB_HOST" => array(
-    			"label"      => "数据库服务器",
-    			"type"       => "str",
-    			"format"     => "text",
-    			"min"        => 1,
-    			"default"    => "localhost",
-    		),
-            "BG_DB_PORT" => array(
-    			"label"      => "服务器端口",
-    			"type"       => "str",
-    			"format"     => "int",
-    			"min"        => 1,
-    			"default"    => 3306,
-    		),
-            "BG_DB_NAME" => array(
-    			"label"      => "数据库名称",
-    			"type"       => "str",
-    			"format"     => "text",
-    			"min"        => 1,
-    			"default"    => "baigo_ads",
-    		),
-            "BG_DB_USER" => array(
-    			"label"      => "用户名",
-    			"type"       => "str",
-    			"format"     => "text",
-    			"min"        => 1,
-    			"default"    => "baigo_ads",
-    		),
-            "BG_DB_PASS" => array(
-    			"label"      => "密码",
-    			"type"       => "str",
-    			"format"     => "text",
-    			"min"        => 1,
-    			"default"    => "******",
-    		),
-            "BG_DB_CHARSET" => array(
-    			"label"      => "数据编码",
-    			"type"       => "str",
-    			"format"     => "text",
-    			"min"        => 1,
-    			"default"    => "utf8",
-    		),
-            "BG_DB_TABLE" => array(
-    			"label"      => "数据表前缀",
-    			"type"       => "str",
-    			"format"     => "text",
-    			"min"        => 1,
-    			"default"    => "ads_",
-    		),
-		),
-    ),
 	"reg" => array(
 		"title"   => "注册设置",
 		"list"    => array(

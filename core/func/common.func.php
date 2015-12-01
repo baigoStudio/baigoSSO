@@ -126,7 +126,7 @@ function fn_token($token_action = "mk", $session_method = "post", $cookie_method
 				break;
 			}
 
-			if (BG_SWITCH_TOKEN == true) {
+			if (BG_SWITCH_TOKEN == 1) {
 				 if ($_str_tokenSession != fn_session("token_session") || $_str_tokenCookie != fn_session("token_cookie")) {
 					$_str_return = false;
 				 } else {
@@ -138,7 +138,7 @@ function fn_token($token_action = "mk", $session_method = "post", $cookie_method
 		break;
 
 		default:
-			if (BG_SWITCH_TOKEN == true) {
+			if (BG_SWITCH_TOKEN == 1) {
 				$_num_tokenSessionDiff = fn_session("token_session_time") + 300; //session有效期
 				if (!fn_session("token_session") || !fn_session("token_session_time") || $_num_tokenSessionDiff < time()) {
 					$_str_tokenSession                 = fn_rand();
@@ -490,11 +490,11 @@ function fn_post($key) {
 function fn_cookie($key, $method = "get", $value = "") {
 	switch ($method) {
 		case "mk":
-			setcookie($key . "_" . BG_SITE_SSIN, $value, time()+300);
+			setcookie($key . "_" . BG_SITE_SSIN, $value);
 		break;
 
 		case "unset":
-			setcookie($key . "_" . BG_SITE_SSIN, "", time() - 3600);
+			unset($_COOKIE[$key . "_" . BG_SITE_SSIN]);
 		break;
 
 		default:

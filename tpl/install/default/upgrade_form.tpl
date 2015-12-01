@@ -1,7 +1,6 @@
 {* upgrade_base.tpl 登录界面 *}
 {$cfg = [
-	sub_title  => $opt[$tplData.act_get],
-	sub_active => $tplData.act_get,
+	sub_title  => $opt[$tplData.act_get].title,
 	mod_help   => "upgrade"
 ]}
 {include "{$smarty.const.BG_PATH_TPL}install/default/include/upgrade_head.tpl" cfg=$cfg}

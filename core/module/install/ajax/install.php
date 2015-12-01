@@ -15,9 +15,13 @@ fn_include(true, true, "Content-type: application/json");
 include_once(BG_PATH_CLASS . "mysqli.class.php"); //载入数据库类
 include_once(BG_PATH_CONTROL . "install/ajax/install.class.php"); //载入栏目控制器
 
-$ajax_install           = new AJAX_INSTALL(); //初始化商家
+$ajax_install = new AJAX_INSTALL(); //初始化商家
 
 switch ($GLOBALS["act_post"]) {
+	case "dbconfig":
+		$ajax_install->ajax_dbconfig();
+	break;
+
 	case "admin":
 		$ajax_install->ajax_admin();
 	break;
@@ -26,13 +30,8 @@ switch ($GLOBALS["act_post"]) {
 		$ajax_install->ajax_over();
 	break;
 
-	case "dbtable":
-		$ajax_install->ajax_dbtable();
-	break;
-
 	case "reg":
 	case "base":
-	case "dbconfig":
 		$ajax_install->ajax_submit();
 	break;
 }

@@ -29,6 +29,19 @@ class AJAX_INSTALL {
 	}
 
 
+	function ajax_dbconfig() {
+		$_arr_dbconfigSubmit = $this->mdl_opt->input_dbconfig();
+
+		if ($_arr_dbconfigSubmit["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_dbconfigSubmit["alert"]);
+		}
+
+		$_arr_return = $this->mdl_opt->mdl_dbconfig();
+
+		$this->obj_ajax->halt_alert($_arr_return["alert"]);
+	}
+
+
 	function ajax_submit() {
     	$_act_post = fn_getSafe($GLOBALS["act_post"], "txt", "base");
 
@@ -59,20 +72,6 @@ class AJAX_INSTALL {
 		}
 
 		$this->obj_ajax->halt_alert("y030405");
-	}
-
-
-	function ajax_dbtable() {
-		$this->check_db();
-
-		$this->table_admin();
-		$this->table_user();
-		$this->table_app();
-		$this->table_app_belong();
-		$this->table_log();
-		$this->view_user();
-
-		$this->obj_ajax->halt_alert("y030103");
 	}
 
 
@@ -133,72 +132,6 @@ class AJAX_INSTALL {
 		}
 
 		$this->obj_ajax->halt_alert("y030408");
-	}
-
-
-	private function table_admin() {
-		include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
-		$_mdl_admin       = new MODEL_ADMIN();
-		$_arr_adminRow    = $_mdl_admin->mdl_create_table();
-
-		if ($_arr_adminRow["alert"] != "y020105") {
-			$this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
-		}
-	}
-
-
-	private function table_user() {
-		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
-		$_mdl_user    = new MODEL_USER();
-		$_arr_userRow = $_mdl_user->mdl_create_table();
-
-		if ($_arr_userRow["alert"] != "y010105") {
-			$this->obj_ajax->halt_alert($_arr_userRow["alert"]);
-		}
-	}
-
-
-	private function table_app() {
-		include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
-		$_mdl_app     = new MODEL_APP();
-		$_arr_appRow  = $_mdl_app->mdl_create_table();
-
-		if ($_arr_appRow["alert"] != "y050105") {
-			$this->obj_ajax->halt_alert($_arr_appRow["alert"]);
-		}
-	}
-
-
-	private function table_app_belong() {
-		include_once(BG_PATH_MODEL . "appBelong.class.php"); //载入管理帐号模型
-		$_mdl_appBelong       = new MODEL_APP_BELONG();
-		$_arr_appBelongRow    = $_mdl_appBelong->mdl_create_table();
-
-		if ($_arr_appBelongRow["alert"] != "y070105") {
-			$this->obj_ajax->halt_alert($_arr_appBelongRow["alert"]);
-		}
-	}
-
-
-	private function table_log() {
-		include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
-		$_mdl_log     = new MODEL_LOG();
-		$_arr_logRow  = $_mdl_log->mdl_create_table();
-
-		if ($_arr_logRow["alert"] != "y060105") {
-			$this->obj_ajax->halt_alert($_arr_logRow["alert"]);
-		}
-	}
-
-
-	private function view_user() {
-		include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
-		$_mdl_user    = new MODEL_USER();
-		$_arr_user    = $_mdl_user->mdl_create_view();
-
-		if ($_arr_user["alert"] != "y010108") {
-			$this->obj_ajax->halt_alert($_arr_user["alert"]);
-		}
 	}
 
 

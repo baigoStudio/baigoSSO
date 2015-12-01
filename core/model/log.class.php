@@ -302,6 +302,43 @@ class MODEL_LOG {
 	}
 
 
+
+	function mdl_alert_table() {
+        $_arr_col     = $this->mdl_column();
+		$_arr_alert   = array();
+
+		if (in_array("log_operator_id", $_arr_col)) {
+			$_arr_alert["log_operator_id"] = array("CHANGE", "smallint NOT NULL COMMENT '操作者 ID'", "log_operator_id");
+		}
+
+		if (in_array("log_target_type", $_arr_col)) {
+			$_arr_alert["log_target_type"] = array("CHANGE", "enum('admin','app','user','log','opt') NOT NULL COMMENT '目标类型'", "log_target_type");
+		}
+
+		if (in_array("log_type", $_arr_col)) {
+			$_arr_alert["log_type"] = array("CHANGE", "enum('admin','app','system') NOT NULL COMMENT '目标类型'", "log_type");
+		}
+
+		if (in_array("log_status", $_arr_col)) {
+			$_arr_alert["log_status"] = array("CHANGE", "enum('wait','read')", "log_status");
+		}
+
+		$_str_alert = "x060106";
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "log", $_arr_alert);
+
+			if ($_reselt) {
+        		$_str_alert = "y060106";
+			}
+		}
+
+		return array(
+    		"alert" => $_str_alert,
+		);
+	}
+
+
 	/** 选择
 	 * input_ids function.
 	 *

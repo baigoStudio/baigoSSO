@@ -407,6 +407,46 @@ class MODEL_ADMIN {
 	}
 
 
+	function mdl_alert_table() {
+        $_arr_col     = $this->mdl_column();
+		$_arr_alert   = array();
+
+		if (!in_array("admin_nick", $_arr_col)) {
+			$_arr_alert["admin_nick"] = array("ADD", "varchar(30) NOT NULL COMMENT '昵称'");
+		}
+
+		if (in_array("admin_id", $_arr_col)) {
+			$_arr_alert["admin_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "admin_id");
+		}
+
+		if (in_array("admin_status", $_arr_col)) {
+			$_arr_alert["admin_status"] = array("CHANGE", "enum('enable','disable') NOT NULL COMMENT '状态'", "admin_status");
+		}
+
+		if (in_array("admin_pass", $_arr_col)) {
+			$_arr_alert["admin_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "admin_pass");
+		}
+
+		if (in_array("admin_rand", $_arr_col)) {
+			$_arr_alert["admin_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "admin_rand");
+		}
+
+		$_str_alert = "x020106";
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "admin", $_arr_alert);
+
+			if ($_reselt) {
+				$_str_alert = "y020106";
+			}
+		}
+
+		return array(
+    		"alert" => $_str_alert,
+		);
+	}
+
+
 	/** 修改个人信息表单验证
 	 * input_profile function.
 	 *
@@ -785,7 +825,7 @@ class MODEL_ADMIN {
 				"del"      => 1,
 			),
 			"opt" => array(
-				"db"       => 1,
+				"dbconfig" => 1,
 				"base"     => 1,
 				"reg"      => 1,
 			),

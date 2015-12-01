@@ -9,7 +9,7 @@ if(!defined("IN_BAIGO")) {
 	exit("Access Denied");
 }
 
-if (defined("BG_DEBUG_SYS") && BG_DEBUG_SYS == true) {
+if (defined("BG_DEBUG_SYS") && BG_DEBUG_SYS == 1) {
 	error_reporting(E_ALL);
 } else {
 	error_reporting(E_ALL & ~E_NOTICE);
@@ -28,12 +28,11 @@ if ($GLOBALS["view"]) {
 
 function fn_include($base = false, $ssin = false, $header = "Content-Type: text/html; charset=utf-8", $db = false, $ajax = "", $admin = false) {
     if ($ssin) {
-        /*if (isset($_GET["ssid"])) {
-        	session_id($_GET["ssid"]); //将当前的 SessionId 设置成客户端传递回来的 SessionId
-        }*/
-
+        $_str_iniSsin = ini_get("session.save_path");
+        if (!$_str_iniSsin) {
+            ini_set("session.save_path", BG_PATH_CACHE . "ssin");
+        }
         session_start(); //开启session
-        //$GLOBALS["ssid"] = session_id();
     }
 
     if ($header) {

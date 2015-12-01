@@ -37,12 +37,12 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-    						<li{if isset($cfg.sub_active) && $cfg.sub_active == "info"} class="active"{/if}>
+    						<li{if $tplData.act_get == "info"} class="active"{/if}>
         						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=info">
         							{$lang.href.infoModi}
         						</a>
     						</li>
-    						<li{if isset($cfg.sub_active) && $cfg.sub_active == "pass"} class="active"{/if}>
+    						<li{if $tplData.act_get == "pass"} class="active"{/if}>
         						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=profile&act_get=pass">
         							{$lang.href.passModi}
         						</a>
@@ -56,8 +56,13 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-    						{foreach $opt as $key_opt=>$value_opt}
-        						<li{if isset($cfg.sub_active) && $cfg.sub_active == $key_opt} class="active"{/if}>
+    						<li{if $tplData.act_get == "dbconfig"} class="active"{/if}>
+        						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get=dbconfig">
+        							{$lang.page.installDbConfig}
+        						</a>
+    						</li>
+            				{foreach $opt as $key_opt=>$value_opt}
+        						<li{if $tplData.act_get == $key_opt} class="active"{/if}>
             						<a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get={$key_opt}">
             							{$value_opt.title}
             						</a>

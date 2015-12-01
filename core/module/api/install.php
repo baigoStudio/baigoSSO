@@ -20,6 +20,10 @@ include_once(BG_PATH_CONTROL . "api/install.class.php"); //载入商家控制器
 $api_install = new API_INSTALL(); //初始化商家
 
 switch ($GLOBALS["act_post"]) {
+	case "dbconfig":
+		$api_install->api_dbconfig();
+	break;
+
 	case "dbtable":
 		$api_install->api_dbtable();
 	break;
@@ -32,7 +36,6 @@ switch ($GLOBALS["act_post"]) {
 		$api_install->api_over();
 	break;
 
-	case "dbconfig":
 	case "base":
 		$api_install->api_submit();
 	break;

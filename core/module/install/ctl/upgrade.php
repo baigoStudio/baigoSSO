@@ -27,8 +27,8 @@ include_once(BG_PATH_CONTROL . "install/ctl/upgrade.class.php"); //载入栏目�
 $ctl_upgrade = new CONTROL_UPGRADE(); //初始化商家
 
 switch ($GLOBALS["act_get"]) {
-	case "over":
-		$arr_upgradeRow = $ctl_upgrade->ctl_over();
+	case "dbconfig":
+		$arr_upgradeRow = $ctl_upgrade->ctl_dbconfig();
 		if ($arr_upgradeRow["alert"] != "y030404") {
 			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_upgradeRow["alert"]);
 			exit;
@@ -43,11 +43,18 @@ switch ($GLOBALS["act_get"]) {
 		}
 	break;
 
+	case "over":
+		$arr_upgradeRow = $ctl_upgrade->ctl_over();
+		if ($arr_upgradeRow["alert"] != "y030405") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_upgradeRow["alert"]);
+			exit;
+		}
+	break;
+
 	case "reg":
 	case "base":
-	case "dbconfig":
 		$arr_upgradeRow = $ctl_upgrade->ctl_form();
-		if ($arr_upgradeRow["alert"] != "y030404") {
+		if ($arr_upgradeRow["alert"] != "y030405") {
 			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_upgradeRow["alert"]);
 			exit;
 		}

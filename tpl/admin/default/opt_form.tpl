@@ -2,7 +2,6 @@
 {$cfg = [
 	title          => "{$lang.page.opt} - {$opt[$tplData.act_get].title}",
 	menu_active    => "opt",
-	sub_active     => $tplData.act_get,
 	baigoValidator => "true",
 	baigoSubmit    => "true",
 	tokenReload    => "true",

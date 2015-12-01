@@ -36,6 +36,29 @@ class AJAX_OPT {
 	}
 
 
+	function ajax_dbconfig() {
+		if (!isset($this->adminLogged["admin_allow"]["opt"]["dbconfig"])) {
+			$this->obj_ajax->halt_alert("x040301");
+		}
+
+		$_arr_dbconfigSubmit = $this->mdl_opt->input_dbconfig();
+
+		if ($_arr_dbconfigSubmit["alert"] != "ok") {
+			$this->obj_ajax->halt_alert($_arr_dbconfigSubmit["alert"]);
+		}
+
+		$_arr_return = $this->mdl_opt->mdl_dbconfig();
+
+		$_arr_targets[]   = "dbconfig";
+		$_str_targets     = json_encode($_arr_targets);
+		$_str_return      = json_encode($_arr_return);
+
+		$this->mdl_log->mdl_submit($_str_targets, "opt", $this->log["opt"]["edit"], $_str_return, "admin", $this->adminLogged["admin_id"]);
+
+		$this->obj_ajax->halt_alert($_arr_return["alert"]);
+	}
+
+
 	function ajax_submit() {
 		$_act_post = fn_getSafe($GLOBALS["act_post"], "txt", "base");
 

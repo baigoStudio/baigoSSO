@@ -21,7 +21,7 @@ include_once($base . "config/init.class.php");
 
 $obj_init = new CLASS_INIT();
 
-$obj_init->config_gen();
+$obj_init->config_gen(true);
 
 include_once($obj_init->str_pathRoot . "config/config.inc.php"); //载入配置
 

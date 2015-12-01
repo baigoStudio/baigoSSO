@@ -19,17 +19,16 @@ $GLOBALS["obj_base"]    = new CLASS_BASE(); //初始化基类
 $ajax_upgrade           = new AJAX_UPGRADE(); //初始化商家
 
 switch ($GLOBALS["act_post"]) {
+	case "dbconfig":
+		$ajax_upgrade->ajax_dbconfig();
+	break;
+
 	case "over":
 		$ajax_upgrade->ajax_over();
 	break;
 
-	case "dbtable":
-		$ajax_upgrade->ajax_dbtable();
-	break;
-
 	case "reg":
 	case "base":
-	case "dbconfig":
 		$ajax_upgrade->ajax_submit();
 	break;
 }

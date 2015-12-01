@@ -28,8 +28,8 @@ include_once(BG_PATH_CONTROL . "install/ctl/install.class.php"); //载入栏目�
 $ctl_install            = new CONTROL_INSTALL(); //初始化商家
 
 switch ($GLOBALS["act_get"]) {
-	case "admin":
-		$arr_installRow = $ctl_install->ctl_admin();
+	case "dbconfig":
+		$arr_installRow = $ctl_install->ctl_dbconfig();
 		if ($arr_installRow["alert"] != "y030404") {
 			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_installRow["alert"]);
 			exit;
@@ -44,9 +44,17 @@ switch ($GLOBALS["act_get"]) {
 		}
 	break;
 
+	case "admin":
+		$arr_installRow = $ctl_install->ctl_admin();
+		if ($arr_installRow["alert"] != "y030405") {
+			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_installRow["alert"]);
+			exit;
+		}
+	break;
+
 	case "over":
 		$arr_installRow = $ctl_install->ctl_over();
-		if ($arr_installRow["alert"] != "y030404") {
+		if ($arr_installRow["alert"] != "y030405") {
 			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_installRow["alert"]);
 			exit;
 		}
@@ -54,7 +62,6 @@ switch ($GLOBALS["act_get"]) {
 
 	case "reg":
 	case "base":
-	case "dbconfig":
 		$arr_installRow = $ctl_install->ctl_form();
 		if ($arr_installRow["alert"] != "y030405") {
 			header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_installRow["alert"]);

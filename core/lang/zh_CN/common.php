@@ -31,12 +31,13 @@ return array(
 		"opt"             => "系统设置",
 
 		"upgrade"         => "baigo SSO 升级程序",
-		"upgradeDbtable"  => "升级数据库",
+		"upgradeDbTable"  => "升级数据库",
 		"upgradeOver"     => "完成升级",
 
 		"install"         => "baigo SSO 安装程序",
 		"installExt"      => "服务器环境检查",
-		"installDbtable"  => "创建数据表",
+		"installDbConfig" => "数据库设置",
+		"installDbTable"  => "创建数据表",
 		"installAdmin"    => "创建管理员",
 		"installOver"     => "完成安装",
 	),
@@ -100,6 +101,14 @@ return array(
 		"md5tool"         => "MD5 加密工具",
 		"md5result"       => "加密结果",
 
+        "dbHost"          => "数据库服务器",
+        "dbPort"          => "服务器端口",
+        "dbName"          => "数据库名称",
+        "dbUser"          => "用户名",
+        "dbPass"          => "密码",
+        "dbCharset"       => "数据编码",
+        "dbTable"         => "数据表前缀",
+
 		"complete"        => "升级安装无法创建管理员，点完成完成安装",
 		"belongUser"      => "已授权用户",
 		"selectUser"      => "待授权用户",
@@ -131,11 +140,11 @@ return array(
 		"passNew"         => "新密码", //密码
 		"passConfirm"     => "确认密码", //密码
 
-		"upgradeDbtable"  => "即将升级数据库",
+		"upgradeDbTable"  => "即将升级数据库",
 		"upgradeOver"     => "还差最后一步，完成升级",
 
 		"installOver"     => "还差最后一步，完成安装",
-		"installDbtable"  => "即将创建数据表",
+		"installDbTable"  => "即将创建数据表",
 
 		"nick"            => "昵称",
 		"email"           => "E-mail 地址",

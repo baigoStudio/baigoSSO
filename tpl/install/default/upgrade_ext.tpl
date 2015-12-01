@@ -30,7 +30,7 @@
 
 			<div class="form-group">
 				<div class="btn-group">
-					<a id="go_next" class="btn btn-primary btn-lg" href="{$smarty.const.BG_URL_INSTALL}ctl.php?mod=upgrade&act_get=base">{$lang.btn.stepNext}</a>
+					<a id="go_next" class="btn btn-primary btn-lg" href="{$smarty.const.BG_URL_INSTALL}ctl.php?mod=upgrade&act_get=dbconfig">{$lang.btn.stepNext}</a>
 					{include "{$smarty.const.BG_PATH_TPL}install/default/include/upgrade_drop.tpl" cfg=$cfg}
 				</div>
 			</div>

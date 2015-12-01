@@ -489,6 +489,37 @@ class MODEL_USER {
 	}
 
 
+	function mdl_alert_table() {
+		$_arr_col     = $this->mdl_column();
+		$_arr_alert   = array();
+
+		if (in_array("user_status", $_arr_col)) {
+			$_arr_alert["user_status"] = array("CHANGE", "enum('wait','enable','disable') NOT NULL COMMENT '状态'", "user_status");
+		}
+
+		if (in_array("user_pass", $_arr_col)) {
+			$_arr_alert["user_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "user_pass");
+		}
+
+		if (in_array("user_rand", $_arr_col)) {
+			$_arr_alert["user_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "user_rand");
+		}
+
+		$_str_alert = "x010106";
+
+		if ($_arr_alert) {
+			$_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "user", $_arr_alert);
+
+			if ($_reselt) {
+        		$_str_alert = "y010106";
+			}
+		}
+
+		return array(
+    		"alert" => $_str_alert,
+		);
+	}
+
 	/**
 	 * input_get_by function.
 	 *

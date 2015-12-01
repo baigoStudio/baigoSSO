@@ -42,47 +42,47 @@ return "<div class=\"alert alert-warning\">
 						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 dbconfig。</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_host</td>
-						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>数据库服务器</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_port</td>
-						<td class=\"text-nowrap\">int</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>服务器端口</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_name</td>
-						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>数据库名称</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_user</td>
-						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>数据库用户名</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_pass</td>
-						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>数据库密码</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_charset</td>
-						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>数据库字符编码</td>
 					</tr>
-					<tr>
+                    <tr>
 						<td class=\"text-nowrap\">db_table</td>
-						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">str</td>
 						<td class=\"text-nowrap\">true</td>
-						<td>数据表名前缀</td>
+						<td>数据表前缀</td>
 					</tr>
 				</tbody>
 			</table>
@@ -167,10 +167,39 @@ return "<div class=\"alert alert-warning\">
 						<td class=\"text-nowrap\">true</td>
 						<td>接口调用动作，值只能为 base。</td>
 					</tr>
+					<tr>
+						<td class=\"text-nowrap\">opt</td>
+						<td class=\"text-nowrap\">array</td>
+						<td class=\"text-nowrap\">true</td>
+						<td>安装参数，详情请看示例。</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<p>&nbsp;</p>
+
+	<h4>安装参数示例</h4>
+	<p>
+<pre><code class=\"language-php\">array(
+    &quot;opt&quot; =&gt; array(
+        &quot;dbconfig&quot; =&gt; array(
+            &quot;BG_SITE_NAME&quot;        =&gt; &quot;baigo SSO&quot; //站点名称
+            &quot;BG_SITE_DOMAIN&quot;      =&gt; &quot;" . $_SERVER["SERVER_NAME"] . "&quot; //域名
+            &quot;BG_SITE_URL&quot;         =&gt; &quot;http://" . $_SERVER["SERVER_NAME"] . "&quot; //首页 URL
+            &quot;BG_SITE_PERPAGE&quot;     =&gt; 30 //每页显示数
+            &quot;BG_SITE_TIMEZONE&quot;    =&gt; &quot;Asia/Shanghai&quot; //时区
+            &quot;BG_SITE_DATE&quot;        =&gt; &quot;Y-m-d&quot; //日期格式，等同于 PHP date 函数
+            &quot;BG_SITE_DATESHORT&quot;   =&gt; &quot;m-d&quot; //短日期格式，等同于 PHP date 函数
+            &quot;BG_SITE_TIME&quot;        =&gt; &quot;H:i:s&quot; //时间格式，等同于 PHP date 函数
+            &quot;BG_SITE_TIMESHORT&quot;   =&gt; &quot;H:s&quot; //短时间格式，等同于 PHP date 函数
+        )
+    )
+);</code></pre>
+	</p>
+
+    <p>&nbsp;</p>
 
 	<div class=\"panel panel-default\">
 		<div class=\"panel-heading\">返回结果</div>
@@ -439,6 +468,12 @@ return "<div class=\"alert alert-warning\">
 						<td class=\"text-nowrap\">string</td>
 						<td class=\"text-nowrap\">true</td>
 						<td>应用名称。</td>
+					</tr>
+					<tr>
+						<td class=\"text-nowrap\">app_notice</td>
+						<td class=\"text-nowrap\">string</td>
+						<td class=\"text-nowrap\">true</td>
+						<td>通知 URL。</td>
 					</tr>
 				</tbody>
 			</table>
