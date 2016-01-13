@@ -1,6 +1,6 @@
-		</ol>
-	</div>
+        </ol>
+    </div>
 
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-10 col-md-push-2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 col-md-push-2">

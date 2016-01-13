@@ -6,44 +6,49 @@
 
 //不能非法包含或直接执行
 if(!defined("IN_BAIGO")) {
-	exit("Access Denied");
+    exit("Access Denied");
 }
 
 /*-------------------------状态-------------------------*/
 return array(
-	"user" => array(
-		"enable"  => "启用", //生效
-		"wait"    => "待审", //待审
-		"disable" => "禁用", //禁用
-	),
+    "user" => array(
+        "enable"  => "激活", //生效
+        "wait"    => "待审", //待审
+        "disable" => "禁用", //禁用
+    ),
 
-	"app" => array(
-		"enable"  => "启用", //生效
-		"disable" => "禁用", //禁用
-	),
+    "app" => array(
+        "enable"  => "启用", //生效
+        "disable" => "禁用", //禁用
+    ),
 
-	"appSync" => array(
-		"on"  => "打开", //生效
-		"off" => "关闭", //禁用
-	),
+    "appSync" => array(
+        "on"  => "打开", //生效
+        "off" => "关闭", //禁用
+    ),
 
-	"log" => array(
-		"wait"    => "未读", //生效
-		"read"    => "已读", //禁用
-	),
+    "log" => array(
+        "wait"    => "未读", //生效
+        "read"    => "已读", //禁用
+    ),
 
-	"msg" => array(
-		"wait"    => "未读", //生效
-		"read"    => "已读", //禁用
-	),
+    "msg" => array(
+        "wait"    => "未读", //生效
+        "read"    => "已读", //禁用
+    ),
 
-	"admin" => array(
-		"enable"  => "启用", //生效
-		"disable" => "禁用", //禁用
-	),
+    "admin" => array(
+        "enable"  => "启用", //生效
+        "disable" => "禁用", //禁用
+    ),
 
-	"ext" => array(
-		"installed"   => "已安装", //栏目类型
-		"uninstall"   => "未安装", //栏目类型
-	),
+    "verify" => array(
+        "enable"  => "有效", //生效
+        "disable" => "失效", //禁用
+    ),
+
+    "ext" => array(
+        "installed"   => "已安装", //栏目类型
+        "uninstall"   => "未安装", //栏目类型
+    ),
 );

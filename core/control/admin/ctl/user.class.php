@@ -6,7 +6,7 @@
 
 //不能非法包含或直接执行
 if(!defined("IN_BAIGO")) {
-	exit("Access Denied");
+    exit("Access Denied");
 }
 
 include_once(BG_PATH_CLASS . "tpl.class.php"); //载入模板类
@@ -15,116 +15,133 @@ include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
 /*-------------管理员控制器-------------*/
 class CONTROL_USER {
 
-	private $adminLogged;
-	private $obj_base;
-	private $config; //配置
-	private $obj_tpl;
-	private $mdl_user;
-	private $tplData;
+    private $adminLogged;
+    private $obj_base;
+    private $config; //配置
+    private $obj_tpl;
+    private $mdl_user;
+    private $tplData;
 
-	function __construct() { //构造函数
-		$this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
-		$this->config         = $this->obj_base->config;
-		$this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
-		$this->mdl_user       = new MODEL_USER(); //设置管理员模型
-		$_arr_cfg["admin"]    = true;
-		$this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
-		$this->tplData = array(
-			"adminLogged" => $this->adminLogged
-		);
-	}
+    function __construct() { //构造函数
+        $this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
+        $this->config         = $this->obj_base->config;
+        $this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
+        $this->mdl_user       = new MODEL_USER(); //设置管理员模型
+        $_arr_cfg["admin"]    = true;
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->tplData = array(
+            "adminLogged" => $this->adminLogged
+        );
+    }
 
 
-	function ctl_import() {
-		if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
-			return array(
-				"alert" => "x010305",
-			);
-			exit;
-		}
+    function ctl_import() {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+            return array(
+                "alert" => "x010305",
+            );
+        }
 
-		$_arr_csvRows = $this->mdl_user->mdl_import();
+        $_arr_csvRows = $this->mdl_user->mdl_import();
 
         //print_r(stream_get_filters());
         //print_r($_arr_csvRows);
 
-		$_arr_tpl = array(
-			"csvRows" => $_arr_csvRows,
-		);
+        $_arr_tpl = array(
+            "csvRows" => $_arr_csvRows,
+        );
 
-		$_arr_tplData = array_merge($this->tplData, $_arr_tpl);
+        $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
-		$this->obj_tpl->tplDisplay("user_import.tpl", $_arr_tplData);
+        $this->obj_tpl->tplDisplay("user_import.tpl", $_arr_tplData);
 
-		return array(
-			"alert" => "y010305",
-		);
+        return array(
+            "alert" => "y010305",
+        );
     }
 
-	/**
-	 * ctl_list function.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function ctl_list() {
-		$_num_userId  = fn_getSafe(fn_get("user_id"), "int", 0);
-		$_str_key     = fn_getSafe(fn_get("key"), "txt", "");
-		$_str_status  = fn_getSafe(fn_get("status"), "txt", "");
 
-		$_arr_search = array(
-			"act_get"    => $GLOBALS["act_get"],
-			"key"        => $_str_key,
-			"status"     => $_str_status,
-		);
+    function ctl_form() {
+        $_num_userId  = fn_getSafe(fn_get("user_id"), "int", 0);
 
-		if ($_num_userId > 0) {
-			if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
-				return array(
-					"alert" => "x010303",
-				);
-				exit;
-			}
-			$_arr_userRow = $this->mdl_user->mdl_read($_num_userId);
-			if ($_arr_userRow["alert"] != "y010102") {
-				return $_arr_userRow;
-				exit;
-			}
-		} else {
-			if (!isset($this->adminLogged["admin_allow"]["user"]["browse"])) {
-				return array(
-					"alert" => "x010301",
-				);
-				exit;
-			}
-			$_arr_userRow = array(
-				"user_id"       => 0,
-				"user_mail"     => "",
-				"user_nick"     => "",
-				"user_note"     => "",
-				"user_status"   => "enable",
-			);
-		}
+        if ($_num_userId > 0) {
+            if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
+                return array(
+                    "alert" => "x010303",
+                );
+            }
+            $_arr_userRow = $this->mdl_user->mdl_read($_num_userId);
+            if ($_arr_userRow["alert"] != "y010102") {
+                return $_arr_userRow;
+            }
+        } else {
+            if (!isset($this->adminLogged["admin_allow"]["user"]["add"])) {
+                return array(
+                    "alert" => "x010301",
+                );
+            }
+            $_arr_userRow = array(
+                "user_id"           => 0,
+                "user_mail"         => "",
+                "user_nick"         => "",
+                "user_note"         => "",
+                "user_status"       => "enable",
+            );
+        }
 
-		$_num_userCount   = $this->mdl_user->mdl_count($_str_key, $_str_status);
-		$_arr_page        = fn_page($_num_userCount); //取得分页数据
-		$_str_query       = http_build_query($_arr_search);
-		$_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
+        $_arr_tpl = array(
+            "userRow"    => $_arr_userRow,
+        );
 
-		$_arr_tpl = array(
-			"query"      => $_str_query,
-			"pageRow"    => $_arr_page,
-			"search"     => $_arr_search,
-			"userRow"    => $_arr_userRow,
-			"userRows"   => $_arr_userRows,
-		);
+        $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
-		$_arr_tplData = array_merge($this->tplData, $_arr_tpl);
+        $this->obj_tpl->tplDisplay("user_form.tpl", $_arr_tplData);
 
-		$this->obj_tpl->tplDisplay("user_list.tpl", $_arr_tplData);
+        return array(
+            "alert" => "y010102",
+        );
+    }
 
-		return array(
-			"alert" => "y010302",
-		);
-	}
+    /**
+     * ctl_list function.
+     *
+     * @access public
+     * @return void
+     */
+    function ctl_list() {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["browse"])) {
+            return array(
+                "alert" => "x010301",
+            );
+        }
+
+        $_str_key     = fn_getSafe(fn_get("key"), "txt", "");
+        $_str_status  = fn_getSafe(fn_get("status"), "txt", "");
+
+        $_arr_search = array(
+            "act_get"    => $GLOBALS["act_get"],
+            "key"        => $_str_key,
+            "status"     => $_str_status,
+        );
+
+        $_num_userCount   = $this->mdl_user->mdl_count($_str_key, $_str_status);
+        $_arr_page        = fn_page($_num_userCount); //取得分页数据
+        $_str_query       = http_build_query($_arr_search);
+        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
+
+        $_arr_tpl = array(
+            "query"      => $_str_query,
+            "pageRow"    => $_arr_page,
+            "search"     => $_arr_search,
+            "userRows"   => $_arr_userRows,
+        );
+
+        $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
+
+        $this->obj_tpl->tplDisplay("user_list.tpl", $_arr_tplData);
+
+        return array(
+            "alert" => "y010302",
+        );
+    }
 }

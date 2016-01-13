@@ -19,7 +19,6 @@
 .table_convert th, .table_convert td { padding: 10px; }
 
 .static_label { color: #999; font-weight: normal; }
-.static_input { font-size: 20px; }
 
 .list_padding { margin: 0 25px; }
 
@@ -68,5 +67,5 @@ label.control-label > span { color: #c30; margin-left: 10px; }
 .nav_baigo a { padding: 4px 8px!important; }
 
 .list_dl dd {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }

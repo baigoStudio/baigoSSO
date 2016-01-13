@@ -6,18 +6,18 @@
 
 //不能非法包含或直接执行
 if(!defined("IN_BAIGO")) {
-	exit("Access Denied");
+    exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "include.func.php"); //管理员通用
-fn_include(true);
+include_once(BG_PATH_FUNC . "init.func.php"); //管理员通用
+fn_init(true);
 
 include_once(BG_PATH_CONTROL . "install/ctl/alert.class.php"); //载入栏目控制器
 
 $ctl_alert              = new CONTROL_ALERT(); //初始化商家
 
 switch ($GLOBALS["act_get"]) {
-	case "show":
-		$arr_alertRow = $ctl_alert->ctl_show();
-	break;
+    case "show":
+        $arr_alertRow = $ctl_alert->ctl_show();
+    break;
 }

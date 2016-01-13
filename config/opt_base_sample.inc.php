@@ -8,4 +8,7 @@ define("BG_SITE_DATE", "Y-m-d");
 define("BG_SITE_DATESHORT", "m-d");
 define("BG_SITE_TIME", "H:i:s");
 define("BG_SITE_TIMESHORT", "H:i");
+define("BG_TOKEN_EXPIRE", 60);
+define("BG_VERIFY_EXPIRE", 30);
 define("BG_SITE_SSIN", "SeXqP8");
+

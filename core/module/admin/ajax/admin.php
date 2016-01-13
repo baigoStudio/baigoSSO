@@ -6,35 +6,35 @@
 
 //不能非法包含或直接执行
 if(!defined("IN_BAIGO")) {
-	exit("Access Denied");
+    exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "include.func.php"); //管理员通用
-fn_include(true, true, "Content-type: application/json", true, "ajax", true);
+include_once(BG_PATH_FUNC . "init.func.php"); //管理员通用
+fn_init(true, true, "Content-type: application/json", true, "ajax", true);
 
 include_once(BG_PATH_CONTROL . "admin/ajax/admin.class.php"); //载入管理员 ajax 控制器
 
 $ajax_admin = new AJAX_ADMIN(); //初始化管理员对象
 
 switch ($GLOBALS["act_post"]) {
-	case "submit":
-		$ajax_admin->ajax_submit(); //创建、编辑
-	break;
+    case "submit":
+        $ajax_admin->ajax_submit(); //创建、编辑
+    break;
 
-	case "del":
-		$ajax_admin->ajax_del(); //删除
-	break;
+    case "del":
+        $ajax_admin->ajax_del(); //删除
+    break;
 
-	case "enable":
-	case "disable":
-		$ajax_admin->ajax_status(); //状态
-	break;
+    case "enable":
+    case "disable":
+        $ajax_admin->ajax_status(); //状态
+    break;
 
-	default:
-		switch ($GLOBALS["act_get"]) {
-			case "chkname":
-				$ajax_admin->ajax_chkname(); //验证用户名
-			break;
-		}
-	break;
+    default:
+        switch ($GLOBALS["act_get"]) {
+            case "chkname":
+                $ajax_admin->ajax_chkname(); //验证用户名
+            break;
+        }
+    break;
 }

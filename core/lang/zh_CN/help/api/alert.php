@@ -1,2 +1,3 @@
 <?php
-return "<h3>返回代码</h3>";
+return "<a name=\"top\"></a>
+    <h3>返回代码</h3>";

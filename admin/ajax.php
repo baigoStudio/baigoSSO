@@ -3,16 +3,16 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-$arr_mod = array("user", "app", "log", "admin", "opt", "profile", "token", "seccode");
+$arr_mod = array("user", "app", "log", "verify", "admin", "opt", "profile", "token");
 
 if (isset($_GET["mod"])) {
-	$mod = $_GET["mod"];
+    $mod = $_GET["mod"];
 } else {
-	$mod = $arr_mod[0];
+    $mod = $arr_mod[0];
 }
 
 if (!in_array($mod, $arr_mod)) {
-	exit("Access Denied");
+    exit("Access Denied");
 }
 
 $base = $_SERVER["DOCUMENT_ROOT"] . str_replace(basename(dirname($_SERVER["PHP_SELF"])), "", dirname($_SERVER["PHP_SELF"]));

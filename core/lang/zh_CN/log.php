@@ -6,46 +6,48 @@
 
 //不能非法包含或直接执行
 if(!defined("IN_BAIGO")) {
-	exit("Access Denied");
+    exit("Access Denied");
 }
 
 /*-------------------------日志内容-------------------------*/
 return array(
-	"admin" => array(
-		"add"     => "创建管理员",
-		"edit"    => "编辑管理员",
-		"del"     => "删除管理员",
-	),
+    "admin" => array(
+        "add"     => "创建管理员",
+        "edit"    => "编辑管理员",
+        "del"     => "删除管理员",
+    ),
 
-	"user" => array(
-		"del"     => "删除用户",
-		"delErr"  => "无删除用户权限",
-		"reg"     => "无注册权限",
-		"login"   => "无登录权限",
-		"get"     => "无获取用户权限",
-		"edit"    => "无编辑用户权限",
-	),
+    "user" => array(
+        "del"     => "删除用户",
+        "delErr"  => "无删除用户权限",
+        "reg"     => "无注册权限",
+        "edit"    => "无编辑用户权限",
+    ),
 
-	"app" => array(
-		"notice"      => "通知",
-		"noticeTest"  => "通知测试失败",
-		"get"         => "获取应用信息错误",
-		"read"        => "应用数据不存在",
-		"check"       => "验证应用失败",
-		"signature"   => "无签名权限",
-		"verify"      => "无验证签名权限",
-		"encode"      => "无加密权限",
-		"decode"      => "无解密权限",
-		"add"         => "创建应用",
-		"edit"        => "编辑应用",
-		"del"         => "删除应用",
-	),
+    "app" => array(
+        "notice"      => "通知",
+        "noticeTest"  => "通知测试失败",
+        "get"         => "获取应用信息错误",
+        "read"        => "应用数据不存在",
+        "check"       => "验证应用失败",
+        "signature"   => "无签名权限",
+        "verify"      => "无验证签名权限",
+        "encode"      => "无加密权限",
+        "decode"      => "无解密权限",
+        "add"         => "创建应用",
+        "edit"        => "编辑应用",
+        "del"         => "删除应用",
+    ),
 
-	"log" => array(
-		"del"         => "删除日志",
-	),
+    "log" => array(
+        "del"         => "删除日志",
+    ),
 
-	"opt" => array(
-		"edit"        => "编辑设置",
-	),
+    "verify" => array(
+        "del"         => "删除验证",
+    ),
+
+    "opt" => array(
+        "edit"        => "编辑设置",
+    ),
 );
