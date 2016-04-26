@@ -69,7 +69,7 @@ class API_SIGNATURE {
             break;
         }
 
-        $_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand);
+        $_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"]);
 
         $_arr_return = array(
             "signature"  => $_str_sign,
@@ -131,7 +131,7 @@ class API_SIGNATURE {
             break;
         }
 
-        if (fn_baigoSignChk($_tm_time, $_str_rand, $_str_sign)) {
+        if (fn_baigoSignChk($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"], $_str_sign)) {
             $_str_alert = "y050403";
         } else {
             $_str_alert = "x050403";
@@ -152,7 +152,7 @@ class API_SIGNATURE {
      * @return void
      */
     private function app_check($str_method = "get") {
-        $this->appRequest = $this->obj_api->app_fetch($str_method);
+        $this->appRequest = $this->obj_api->app_request($str_method);
 
         if ($this->appRequest["alert"] != "ok") {
             $this->obj_api->halt_re($this->appRequest);

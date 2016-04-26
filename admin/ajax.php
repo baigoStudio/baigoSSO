@@ -3,7 +3,7 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-$arr_mod = array("user", "app", "log", "verify", "admin", "opt", "profile", "token");
+$arr_mod = array("user", "pm", "app", "log", "verify", "admin", "opt", "profile", "token");
 
 if (isset($_GET["mod"])) {
     $mod = $_GET["mod"];

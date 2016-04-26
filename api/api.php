@@ -3,7 +3,7 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-$arr_mod = array("user", "code", "signature", "sync", "install");
+$arr_mod = array("user", "pm", "code", "signature", "sync", "install");
 
 if (isset($_GET["mod"])) {
     $mod = $_GET["mod"];

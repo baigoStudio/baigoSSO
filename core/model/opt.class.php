@@ -14,10 +14,17 @@ class MODEL_OPT {
 
     public $arr_const;
 
+    /** 处理常量并生成配置文件
+     * mdl_const function.
+     *
+     * @access public
+     * @param mixed $str_type
+     * @return void
+     */
     function mdl_const($str_type) {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -50,10 +57,16 @@ class MODEL_OPT {
     }
 
 
+    /** 生成已安装文件
+     * mdl_over function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_over() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -74,6 +87,13 @@ class MODEL_OPT {
         );
     }
 
+
+    /** 生成数据库配置文件
+     * mdl_dbconfig function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_dbconfig() {
         $_str_content = "<?php" . PHP_EOL;
         $_str_content .= "define(\"BG_DB_HOST\", \"" . $this->dbconfigSubmit["db_host"] . "\");" . PHP_EOL;
@@ -97,11 +117,20 @@ class MODEL_OPT {
     }
 
 
-    function input_dbconfig() {
-        if (!fn_token("chk")) { //令牌
-            return array(
-                "alert" => "x030214",
-            );
+    /** 数据库配置表单验证
+     * input_dbconfig function.
+     *
+     * @access public
+     * @param bool $is_token (default: true)
+     * @return void
+     */
+    function input_dbconfig($is_token = true) {
+        if ($is_token) {
+            if (!fn_token("chk")) { //令牌
+                return array(
+                    "alert" => "x030206",
+                );
+            }
         }
 
         $_arr_dbHost = validateStr(fn_post("db_host"), 1, 900);
@@ -243,6 +272,13 @@ class MODEL_OPT {
     }
 
 
+    /** 表单输入处理
+     * input_const function.
+     *
+     * @access public
+     * @param mixed $str_type
+     * @return void
+     */
     function input_const($str_type) {
         $this->arr_const = fn_post("opt");
 

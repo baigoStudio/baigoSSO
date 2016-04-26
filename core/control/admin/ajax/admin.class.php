@@ -124,7 +124,7 @@ class AJAX_ADMIN {
         $_arr_adminRow = $this->mdl_admin->mdl_status($_str_status);
 
         if ($_arr_adminRow["alert"] == "y020103") {
-            foreach ($_arr_adminIds["admin_ids"] as $_value) {
+            foreach ($_arr_adminIds["admin_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "admin_id" => $_value,
                 );
@@ -157,7 +157,7 @@ class AJAX_ADMIN {
         $_arr_adminRow = $this->mdl_admin->mdl_del();
 
         if ($_arr_adminRow["alert"] == "y020104") {
-            foreach ($_arr_adminIds["admin_ids"] as $_value) {
+            foreach ($_arr_adminIds["admin_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "admin_id" => $_value,
                 );

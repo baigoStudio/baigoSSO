@@ -91,13 +91,6 @@ class CLASS_SYNC {
             break;
         }
 
-        if (!fn_baigoSignChk($_tm_time, $_str_rand, $_str_sign)) {
-            $_arr_return = array(
-                "alert" => "x050403",
-            );
-            return $_arr_return;
-        }
-
         $_arr_code = validateStr(fn_get("code"), 1, 0);
         switch ($_arr_code["status"]) {
             case "too_short":
@@ -180,6 +173,13 @@ class CLASS_SYNC {
             case "ok":
                 $_arr_syncGet["app_key"] = $_arr_appKey["str"];
             break;
+        }
+
+        if (!fn_baigoSignChk($_tm_time, $_str_rand, $_arr_syncGet["app_id"], $_arr_syncGet["app_key"], $_str_sign)) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            return $_arr_return;
         }
 
         $_arr_syncGet["user_id"]  = $_arr_result["user_id"];

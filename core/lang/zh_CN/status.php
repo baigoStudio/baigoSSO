@@ -32,7 +32,7 @@ return array(
         "read"    => "已读", //禁用
     ),
 
-    "msg" => array(
+    "pm" => array(
         "wait"    => "未读", //生效
         "read"    => "已读", //禁用
     ),
@@ -48,7 +48,7 @@ return array(
     ),
 
     "ext" => array(
-        "installed"   => "已安装", //栏目类型
-        "uninstall"   => "未安装", //栏目类型
+        "installed"   => "已安装",
+        "uninstall"   => "未安装",
     ),
 );

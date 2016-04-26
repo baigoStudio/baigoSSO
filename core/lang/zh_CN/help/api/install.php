@@ -91,6 +91,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -106,7 +108,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -181,7 +183,7 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">opt</td>
                         <td class=\"text-nowrap\">array</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>安装参数，详情请看示例。</td>
+                        <td>安装参数，详情查看示例。</td>
                     </tr>
                 </tbody>
             </table>
@@ -226,7 +228,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -302,6 +304,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -317,7 +321,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -405,6 +409,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -420,7 +426,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">admin_id</td>
@@ -504,15 +510,23 @@ return "<a name=\"top\"></a>
                         <td>应用名称。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_notice</td>
+                        <td class=\"text-nowrap\">app_url_notice</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>通知 URL。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">app_url_sync</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>同步 URL。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
@@ -529,7 +543,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">sso_url</td>

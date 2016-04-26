@@ -137,7 +137,7 @@ class CLASS_MYSQLI {
 
         $sql      = "CREATE INDEX `" . $index . "` ON `" . $table . "` (";
         $values   = array();
-        foreach ($data as $value) {
+        foreach ($data as $key=>$value) {
             $values[] = "`" . $value . "` ";
         }
         $sql         .= implode(",", $values);
@@ -149,7 +149,7 @@ class CLASS_MYSQLI {
     function create_view($view, $data, $table, $join) {
         $sql      = "CREATE OR REPLACE VIEW `" . $view . "` AS SELECT ";
         $values   = array();
-        foreach ($data as $value) {
+        foreach ($data as $key=>$value) {
             $_str_view = "`" . $value[1] . "`.`" . $value[0] . "`";
             if (isset($value[2])) {
                 $_str_view .= " AS `" . $value[2] . "`";

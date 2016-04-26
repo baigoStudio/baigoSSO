@@ -18,7 +18,7 @@ return "<a name=\"top\"></a>
             <p>请根据实际情况填写，如：<mark>www.domain.com</mark>，默认为当前网站域名。</p>
 
             <h4 class=\"text-success\">首页 URL</h4>
-            <p>请根据实际情况填写，如：<mark>http://www.domain.com</mark>，默认为当前网站 URL，末尾请勿加 <mark>/</mark>。</p>
+            <p>请根据实际情况填写，如：<mark>http://www.domain.com</mark>，默认为当前网站 URL，末尾请勿加 <kbd>/</kbd>。</p>
 
             <h4 class=\"text-success\">每页显示数</h4>
             <p>管理后台以及前台页面，在对文章、TAG 等进行分页管理的时候，每一页所显示的数量，默认为 30。</p>
@@ -120,7 +120,7 @@ return "<a name=\"top\"></a>
             <p>禁止注册的邮箱，只需要填写域名部分，每行一个域名，如：<mark>@hotmail.com</mark>，此时，<mark>@hotmail.com</mark> 为后缀的邮箱<mark>禁止</mark> 注册。</p>
 
             <h4 class=\"text-success\">禁止注册的用户名</h4>
-            <p>禁止注册的用户名，可使用通配符 <mark>*</mark>，每行一个用户名，如：<mark>*版主*</mark>，此时，只要用户名中含有 <mark>版主</mark> 两字时，<mark>禁止</mark> 注册。</p>
+            <p>禁止注册的用户名，可使用通配符 <kbd>*</kbd>，每行一个用户名，如：<mark>*版主*</mark>，此时，只要用户名中含有 <mark>版主</mark> 两字时，<mark>禁止</mark> 注册。</p>
         </div>
     </div>
 

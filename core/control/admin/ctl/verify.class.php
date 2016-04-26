@@ -30,7 +30,7 @@ class CONTROL_VERIFY {
         $this->mdl_verify   = new MODEL_VERIFY();
         $this->mdl_user     = new MODEL_USER();
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
@@ -86,13 +86,8 @@ class CONTROL_VERIFY {
             );
         }
 
-        $_arr_search = array(
-            "act_get"    => $GLOBALS["act_get"],
-        );
-
         $_num_verifyCount   = $this->mdl_verify->mdl_count();
         $_arr_page          = fn_page($_num_verifyCount); //取得分页数据
-        $_str_query         = http_build_query($_arr_search);
         $_arr_verifyRows    = $this->mdl_verify->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"]);
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
@@ -100,9 +95,7 @@ class CONTROL_VERIFY {
         }
 
         $_arr_tpl = array(
-            "query"         => $_str_query,
             "pageRow"       => $_arr_page,
-            "search"        => $_arr_search,
             "verifyRows"    => $_arr_verifyRows,
         );
 

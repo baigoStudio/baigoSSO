@@ -72,7 +72,7 @@ class AJAX_LOG {
         $_arr_logRow = $this->mdl_log->mdl_del();
 
         if ($_arr_logRow["alert"] == "y060104") {
-            foreach ($_arr_logIds["log_ids"] as $_value) {
+            foreach ($_arr_logIds["log_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "log_id" => $_value,
                 );

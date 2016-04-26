@@ -14,6 +14,7 @@ class MODEL_USER {
 
     private $obj_db;
     private $csvRows;
+    public $userStatus = array();
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -27,20 +28,28 @@ class MODEL_USER {
      * @return void
      */
     function mdl_create_table() {
+        foreach ($this->userStatus as $_key=>$_value) {
+            $_arr_status[] = $_key;
+        }
+        $_str_status = implode("','", $_arr_status);
+
         $_arr_userCreate = array(
-            "user_id"           => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-            "user_name"         => "varchar(30) NOT NULL COMMENT '用户名'",
-            "user_mail"         => "varchar(300) NOT NULL COMMENT '邮箱'",
-            "user_pass"         => "char(32) NOT NULL COMMENT '密码'",
-            "user_rand"         => "char(6) NOT NULL COMMENT '随机串'",
-            "user_nick"         => "varchar(30) NOT NULL COMMENT '昵称'",
-            "user_status"       => "enum('wait','enable','disable') NOT NULL COMMENT '状态'",
-            "user_note"         => "varchar(30) NOT NULL COMMENT '备注'",
-            "user_time"         => "int NOT NULL COMMENT '创建时间'",
-            "user_time_login"   => "int NOT NULL COMMENT '登录时间'",
-            "user_ip"           => "varchar(15) NOT NULL COMMENT '最后 IP 地址'",
-            "user_token"        => "char(64) NOT NULL COMMENT '访问口令'",
-            "user_token_expire" => "int NOT NULL COMMENT '口令过期时间'",
+            "user_id"               => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+            "user_name"             => "varchar(30) NOT NULL COMMENT '用户名'",
+            "user_mail"             => "varchar(300) NOT NULL COMMENT '邮箱'",
+            "user_contact"          => "varchar(3000) NOT NULL COMMENT '联系方式'",
+            "user_pass"             => "char(32) NOT NULL COMMENT '密码'",
+            "user_rand"             => "char(6) NOT NULL COMMENT '随机串'",
+            "user_nick"             => "varchar(30) NOT NULL COMMENT '昵称'",
+            "user_status"           => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
+            "user_note"             => "varchar(30) NOT NULL COMMENT '备注'",
+            "user_time"             => "int NOT NULL COMMENT '创建时间'",
+            "user_time_login"       => "int NOT NULL COMMENT '登录时间'",
+            "user_ip"               => "varchar(15) NOT NULL COMMENT '最后 IP 地址'",
+            "user_access_token"     => "char(32) NOT NULL COMMENT '访问口令'",
+            "user_access_expire"    => "int NOT NULL COMMENT '访问过期时间'",
+            "user_refresh_token"    => "char(32) NOT NULL COMMENT '刷新口令'",
+            "user_refresh_expire"   => "int NOT NULL COMMENT '刷新过期时间'",
         );
 
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "user", $_arr_userCreate, "user_id", "用户");
@@ -57,13 +66,29 @@ class MODEL_USER {
     }
 
 
+    /** 修改表
+     * mdl_alert_table function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_alert_table() {
+        foreach ($this->userStatus as $_key=>$_value) {
+            $_arr_status[] = $_key;
+        }
+        $_str_status = implode("','", $_arr_status);
+
         $_arr_col     = $this->mdl_column();
         $_arr_alert   = array();
 
         if (in_array("user_status", $_arr_col)) {
-            $_arr_alert["user_status"] = array("CHANGE", "enum('wait','enable','disable') NOT NULL COMMENT '状态'", "user_status");
+            $_arr_alert["user_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "user_status");
         }
+
+        $_arr_userData = array(
+            "user_status" => $_arr_status[0],
+        );
+        $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "LENGTH(user_status) < 1"); //更新数据
 
         if (in_array("user_pass", $_arr_col)) {
             $_arr_alert["user_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "user_pass");
@@ -73,15 +98,31 @@ class MODEL_USER {
             $_arr_alert["user_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "user_rand");
         }
 
-        if (!in_array("user_token", $_arr_col)) {
-            $_arr_alert["user_token"] = array("ADD", "char(64) NOT NULL COMMENT '访问口令'");
+        if (in_array("user_token", $_arr_col)) {
+            $_arr_alert["user_token"] = array("CHANGE", "char(32) NOT NULL COMMENT '访问口令'", "user_access_token");
+        } else if (!in_array("user_access_token", $_arr_col)) {
+            $_arr_alert["user_access_token"] = array("ADD", "char(32) NOT NULL COMMENT '访问口令'");
         }
 
-        if (!in_array("user_token_expire", $_arr_col)) {
-            $_arr_alert["user_token_expire"] = array("ADD", "int NOT NULL COMMENT '口令过期时间'");
+        if (in_array("user_token_expire", $_arr_col)) {
+            $_arr_alert["user_token_expire"] = array("CHANGE", "int NOT NULL COMMENT '访问过期时间'", "user_access_expire");
+        } else if (!in_array("user_access_expire", $_arr_col)) {
+            $_arr_alert["user_access_expire"] = array("ADD", "int NOT NULL COMMENT '访问过期时间'");
         }
 
-        $_str_alert = "x010106";
+        if (!in_array("user_refresh_token", $_arr_col)) {
+            $_arr_alert["user_refresh_token"] = array("ADD", "char(32) NOT NULL COMMENT '刷新口令'");
+        }
+
+        if (!in_array("user_refresh_expire", $_arr_col)) {
+            $_arr_alert["user_refresh_expire"] = array("ADD", "int NOT NULL COMMENT '刷新过期时间'");
+        }
+
+        if (!in_array("user_contact", $_arr_col)) {
+            $_arr_alert["user_contact"] = array("ADD", "varchar(3000) NOT NULL COMMENT '联系方式'");
+        }
+
+        $_str_alert = "y010111";
 
         if ($_arr_alert) {
             $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "user", $_arr_alert);
@@ -133,7 +174,7 @@ class MODEL_USER {
     }
 
 
-    /** 检查字段
+    /** 列出字段
      * mdl_column function.
      *
      * @access public
@@ -158,16 +199,20 @@ class MODEL_USER {
      * @return void
      */
     function mdl_login($num_userId) {
-        $_str_token         = fn_rand(64);
-        $_num_tokenExpire   = time() + BG_TOKEN_EXPIRE * 60;
+        $_str_accessToken   = fn_rand(32);
+        $_tm_accessExpire   = time() + BG_ACCESS_EXPIRE * 60;
+        $_str_refreshToken  = fn_rand(32);
+        $_tm_refreshExpire  = time() + BG_REFRESH_EXPIRE * 86400;
 
         $_arr_userData = array(
-            "user_pass"         => $this->apiLogin["user_pass_do"],
-            "user_rand"         => $this->apiLogin["user_rand"],
-            "user_time_login"   => time(),
-            "user_ip"           => fn_getIp(true),
-            "user_token"        => $_str_token,
-            "user_token_expire" => $_num_tokenExpire,
+            "user_pass"             => $this->apiLogin["user_pass_do"],
+            "user_rand"             => $this->apiLogin["user_rand"],
+            "user_time_login"       => time(),
+            "user_ip"               => fn_getIp(true),
+            "user_access_token"     => md5($_str_accessToken),
+            "user_access_expire"    => $_tm_accessExpire,
+            "user_refresh_token"    => md5($_str_refreshToken),
+            "user_refresh_expire"   => $_tm_refreshExpire,
         );
 
         $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "user_id=" . $num_userId); //更新数据
@@ -180,10 +225,46 @@ class MODEL_USER {
         }
 
         return array(
-            "user_id"           => $num_userId,
-            "user_token"        => $_str_token,
-            "user_token_expire" => $_num_tokenExpire,
-            "alert"             => $_str_alert, //成功
+            "user_id"               => $num_userId,
+            "user_access_token"     => $_str_accessToken,
+            "user_access_expire"    => $_tm_accessExpire,
+            "user_refresh_token"    => $_str_refreshToken,
+            "user_refresh_expire"   => $_tm_refreshExpire,
+            "alert"                 => $_str_alert, //成功
+        );
+    }
+
+
+    /** 刷新访问口令
+     * mdl_refresh function.
+     *
+     * @access public
+     * @param mixed $num_userId
+     * @return void
+     */
+    function mdl_refresh($num_userId) {
+        $_str_accessToken   = fn_rand(32);
+        $_tm_accessExpire   = time() + BG_ACCESS_EXPIRE * 60;
+
+        $_arr_userData = array(
+            "user_access_token"     => md5($_str_accessToken),
+            "user_access_expire"    => $_tm_accessExpire,
+        );
+
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "user_id=" . $num_userId); //更新数据
+        if ($_num_mysql > 0) {
+            $_str_alert = "y010103"; //更新成功
+        } else {
+            return array(
+                "alert" => "x010103", //更新失败
+            );
+        }
+
+        return array(
+            "user_id"               => $num_userId,
+            "user_access_token"     => $_str_accessToken,
+            "user_access_expire"    => $_tm_accessExpire,
+            "alert"                 => $_str_alert, //成功
         );
     }
 
@@ -203,12 +284,16 @@ class MODEL_USER {
             $_arr_userData["user_rand"] = $this->apiEdit["user_rand"];
         }
 
-        if ($this->apiEdit["user_mail_new"]) { //如果 新邮箱 为空，则不修改
-            $_arr_userData["user_mail_new"] = $this->apiEdit["user_mail_new"];
+        if (isset($this->apiEdit["user_mail_new"]) && $this->apiEdit["user_mail_new"]) { //如果 新邮箱 为空，则不修改
+            $_arr_userData["user_mail"] = $this->apiEdit["user_mail_new"];
         }
 
-        if ($this->apiEdit["user_nick"]) { //如果 昵称 为空，则不修改
+        if (isset($this->apiEdit["user_nick"]) && $this->apiEdit["user_nick"]) { //如果 昵称 为空，则不修改
             $_arr_userData["user_nick"] = $this->apiEdit["user_nick"];
+        }
+
+        if (isset($this->apiEdit["user_contact"])) { //如果 联系方式 为空，则不修改
+            $_arr_userData["user_contact"] = $this->apiEdit["user_contact"];
         }
 
         if ($_arr_userData) {
@@ -231,6 +316,13 @@ class MODEL_USER {
     }
 
 
+    /** 忘记密码
+     * mdl_forgot function.
+     *
+     * @access public
+     * @param mixed $num_userId
+     * @return void
+     */
     function mdl_forgot($num_userId) {
         $_arr_userData = array();
 
@@ -256,6 +348,14 @@ class MODEL_USER {
     }
 
 
+    /** 修改邮箱
+     * mdl_mail function.
+     *
+     * @access public
+     * @param mixed $num_userId
+     * @param mixed $str_mail
+     * @return void
+     */
     function mdl_mail($num_userId, $str_mail) {
         $_arr_userData = array(
             "user_mail" => $str_mail,
@@ -281,6 +381,13 @@ class MODEL_USER {
     }
 
 
+    /** 激活用户
+     * mdl_confirm function.
+     *
+     * @access public
+     * @param mixed $num_userId
+     * @return void
+     */
     function mdl_confirm($num_userId) {
         $_arr_userData = array();
 
@@ -314,11 +421,27 @@ class MODEL_USER {
      * @return void
      */
     function mdl_submit($str_userPass = "", $str_userRand = "", $str_status = "") {
+        $_str_accessToken       = fn_rand(32);
+        $_tm_accessExpire       = time() + BG_ACCESS_EXPIRE * 60;
+        $_str_refreshToken      = fn_rand(32);
+        $_tm_refreshExpire      = time() + BG_REFRESH_EXPIRE * 86400;
+
         $_arr_userData = array(
-            "user_name"         => $this->userSubmit["user_name"],
-            "user_mail"         => $this->userSubmit["user_mail"],
-            "user_nick"         => $this->userSubmit["user_nick"],
+            "user_name"             => $this->userSubmit["user_name"],
+            "user_mail"             => $this->userSubmit["user_mail"],
+            "user_access_token"     => md5($_str_accessToken),
+            "user_access_expire"    => $_tm_accessExpire,
+            "user_refresh_token"    => md5($_str_refreshToken),
+            "user_refresh_expire"   => $_tm_refreshExpire,
         );
+
+        if (isset($this->userSubmit["user_nick"])) {
+            $_arr_userData["user_nick"] = $this->userSubmit["user_nick"];
+        }
+
+        if (isset($this->userSubmit["user_contact"])) {
+            $_arr_userData["user_contact"] = $this->userSubmit["user_contact"];
+        }
 
         if ($str_status) {
             $_arr_userData["user_status"] = $str_status;
@@ -367,11 +490,15 @@ class MODEL_USER {
         }
 
         return array(
-            "user_id"    => $_num_userId,
-            "user_name"  => $this->userSubmit["user_name"],
-            "user_mail"  => $this->userSubmit["user_mail"],
-            "user_nick"  => $this->userSubmit["user_nick"],
-            "alert"      => $_str_alert, //成功
+            "user_id"               => $_num_userId,
+            "user_name"             => $this->userSubmit["user_name"],
+            "user_mail"             => $this->userSubmit["user_mail"],
+            "user_nick"             => $this->userSubmit["user_nick"],
+            "user_access_token"     => $_str_accessToken,
+            "user_access_expire"    => $_tm_accessExpire,
+            "user_refresh_token"    => $_str_refreshToken,
+            "user_refresh_expire"   => $_tm_refreshExpire,
+            "alert"                 => $_str_alert, //成功
         );
     }
 
@@ -410,16 +537,17 @@ class MODEL_USER {
      *
      * @access public
      * @param mixed $str_user
-     * @param string $str_readBy (default: "user_id")
+     * @param string $str_by (default: "user_id")
      * @param int $num_notId (default: 0)
      * @return void
      */
-    function mdl_read($str_user, $str_readBy = "user_id", $num_notId = 0) {
+    function mdl_read($str_user, $str_by = "user_id", $num_notId = 0) {
         $_arr_userSelect = array(
             "user_id",
             "user_name",
             "user_pass",
             "user_mail",
+            "user_contact",
             "user_nick",
             "user_note",
             "user_rand",
@@ -427,15 +555,16 @@ class MODEL_USER {
             "user_time",
             "user_time_login",
             "user_ip",
+            "user_access_token",
+            "user_access_expire",
+            "user_refresh_token",
+            "user_refresh_expire",
         );
 
-        switch ($str_readBy) {
-            case "user_id":
-                $_str_sqlWhere = $str_readBy . "=" . $str_user;
-            break;
-            default:
-                $_str_sqlWhere = $str_readBy . "='" . $str_user . "'";
-            break;
+        if (is_numeric($str_user)) {
+            $_str_sqlWhere = $str_by . "=" . $str_user;
+        } else {
+            $_str_sqlWhere = $str_by . "='" . $str_user . "'";
         }
 
         if ($num_notId > 0) {
@@ -452,17 +581,28 @@ class MODEL_USER {
             );
         }
 
-        $_arr_userRow["alert"]    = "y010102";
+        $_arr_userRow["user_contact"]   = fn_jsonDecode($_arr_userRow["user_contact"], "decode");
+        $_arr_userRow["alert"]          = "y010102";
 
         return $_arr_userRow;
     }
 
 
-    function mdl_read_api($str_user, $str_readBy = "user_id", $num_notId = 0) {
+    /** api 读取
+     * mdl_read_api function.
+     *
+     * @access public
+     * @param mixed $str_user
+     * @param string $str_by (default: "user_id")
+     * @param int $num_notId (default: 0)
+     * @return void
+     */
+    function mdl_read_api($str_user, $str_by = "user_id", $num_notId = 0) {
         $_arr_userSelect = array(
             "user_id",
             "user_name",
             "user_mail",
+            "user_contact",
             "user_nick",
             "user_status",
             "user_time",
@@ -470,12 +610,12 @@ class MODEL_USER {
             "user_ip",
         );
 
-        switch ($str_readBy) {
+        switch ($str_by) {
             case "user_id":
                 $_str_sqlWhere = "user_id=" . $str_user;
             break;
             default:
-                $_str_sqlWhere = $str_readBy . "='" . $str_user . "'";
+                $_str_sqlWhere = $str_by . "='" . $str_user . "'";
             break;
         }
 
@@ -493,21 +633,21 @@ class MODEL_USER {
             );
         }
 
-        $_arr_userRow["alert"]    = "y010102";
+        $_arr_userRow["user_contact"]   = fn_jsonDecode($_arr_userRow["user_contact"], "decode");
+        $_arr_userRow["alert"]          = "y010102";
 
         return $_arr_userRow;
     }
 
 
     /** 从视图列出
-     * mdl_view function.
+     * mdl_list_view function.
      *
      * @access public
-     * @param string $str_key (default: "")
-     * @param int $num_appId (default: 0)
+     * @param array $arr_search (default: array())
      * @return void
      */
-    function mdl_list_view($str_key = "", $num_appId = 0) {
+    function mdl_list_view($arr_search = array()) {
         $_arr_userSelect = array(
             "user_id",
             "user_name",
@@ -522,12 +662,12 @@ class MODEL_USER {
 
         $_str_sqlWhere = "1=1";
 
-        if ($str_key) {
-            $_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
+        if (isset($arr_search["key"]) && $arr_search["key"]) {
+            $_str_sqlWhere .= " AND (user_name LIKE '%" . $arr_search["key"] . "%' OR user_nick LIKE '%" . $arr_search["key"] . "%' OR user_note LIKE '%" . $arr_search["key"] . "%')";
         }
 
-        if ($num_appId > 0) {
-            $_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
+        if (isset($arr_search["app_id"]) && $arr_search["app_id"] > 0) {
+            $_str_sqlWhere .= " AND belong_app_id=" . $arr_search["app_id"];
         }
 
         $_arr_userRows = $this->obj_db->select(BG_DB_TABLE . "user_view", $_arr_userSelect, $_str_sqlWhere, "", "user_id DESC"); //查询数据
@@ -540,14 +680,12 @@ class MODEL_USER {
      * mdl_list function.
      *
      * @access public
-     * @param mixed $num_userNo
-     * @param int $num_userExcept (default: 0)
-     * @param string $str_key (default: "")
-     * @param string $str_status (default: "")
-     * @param bool $arr_notIn (default: false)
+     * @param mixed $num_no
+     * @param int $num_except (default: 0)
+     * @param array $arr_search (default: array())
      * @return void
      */
-    function mdl_list($num_userNo, $num_userExcept = 0, $str_key = "", $str_status = "", $arr_notIn = false, $arr_ids = false) {
+    function mdl_list($num_no, $num_except = 0, $arr_search = array()) {
         $_arr_userSelect = array(
             "user_id",
             "user_name",
@@ -560,33 +698,33 @@ class MODEL_USER {
             "user_ip",
         );
 
-        $_str_sqlWhere = "1=1";
+        $_str_sqlWhere = $this->sql_process($arr_search);
 
-        if ($str_key) {
-            $_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
-        }
-
-        if ($str_status) {
-            $_str_sqlWhere .= " AND user_status='" . $str_status . "'";
-        }
-
-        if ($arr_notIn) {
-            $_str_notIn = implode(",", $arr_notIn);
-            $_str_sqlWhere .= " AND user_id NOT IN (" . $_str_notIn . ")";
-        }
-
-        if ($arr_ids) {
-            $_str_ids = implode(",", $arr_ids);
-            $_str_sqlWhere .= " AND user_id IN (" . $_str_ids . ")";
-        }
-
-        $_arr_userRows = $this->obj_db->select(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, "", "user_id DESC", $num_userNo, $num_userExcept); //查询数据
+        $_arr_userRows = $this->obj_db->select(BG_DB_TABLE . "user", $_arr_userSelect, $_str_sqlWhere, "", "user_id DESC", $num_no, $num_except); //查询数据
 
         return $_arr_userRows;
     }
 
 
-    /** 删除
+    /** 计数
+     * mdl_count function.
+     *
+     * @access public
+     * @param array $arr_search (default: array())
+     * @return void
+     */
+    function mdl_count($arr_search = array()) {
+        $_str_sqlWhere = "1=1";
+
+        $_str_sqlWhere = $this->sql_process($arr_search);
+
+        $_num_userCount = $this->obj_db->count(BG_DB_TABLE . "user", $_str_sqlWhere); //查询数据
+
+        return $_num_userCount;
+    }
+
+
+     /** 删除
      * mdl_del function.
      *
      * @access public
@@ -611,37 +749,12 @@ class MODEL_USER {
     }
 
 
-    /** 计数
-     * mdl_count function.
+    /** 导入预览
+     * mdl_import function.
      *
      * @access public
-     * @param string $str_key (default: "")
-     * @param string $str_status (default: "")
-     * @param bool $arr_notIn (default: false)
      * @return void
      */
-    function mdl_count($str_key = "", $str_status = "", $arr_notIn = false) {
-        $_str_sqlWhere = "1=1";
-
-        if ($str_key) {
-            $_str_sqlWhere .= " AND (user_name LIKE '%" . $str_key . "%' OR user_nick LIKE '%" . $str_key . "%' OR user_note LIKE '%" . $str_key . "%')";
-        }
-
-        if ($str_status) {
-            $_str_sqlWhere .= " AND user_status='" . $str_status . "'";
-        }
-
-        if ($arr_notIn) {
-            $_str_notIn = implode(",", $arr_notIn);
-            $_str_sqlWhere .= " AND user_id NOT IN (" . $_str_notIn . ")";
-        }
-
-        $_num_userCount = $this->obj_db->count(BG_DB_TABLE . "user", $_str_sqlWhere); //查询数据
-
-        return $_num_userCount;
-    }
-
-
     function mdl_import() {
         if (file_exists(BG_PATH_CONFIG . "user_import.csv")) {
             $_obj_csv    = fopen(BG_PATH_CONFIG . "user_import.csv", "r");
@@ -684,6 +797,12 @@ class MODEL_USER {
     }
 
 
+    /** 转换并导入数据库
+     * mdl_convert function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_convert() {
         $_num_errChk      = 0;
         $_arr_csvRows     = $this->mdl_import();
@@ -743,7 +862,7 @@ class MODEL_USER {
     }
 
 
-    /**
+    /** 以 get 或 post 方式读取
      * input_get_by function.
      *
      * @access public
@@ -803,29 +922,26 @@ class MODEL_USER {
     }
 
 
-    /**
+    /** 表单验证用户名
      * input_chk_name function.
      *
      * @access public
      * @return void
      */
     function input_chk_name() {
-        $_num_notId = fn_getSafe(fn_get("not_id"), "int", 0);
-
         $_arr_userName = $this->chk_user_name(fn_get("user_name"));
         if ($_arr_userName["alert"] != "ok") {
             return $_arr_userName;
         }
 
         return array(
-            "not_id"     => $_num_notId,
             "user_name"  => $_arr_userName["user_name"],
             "alert"      => "ok",
         );
     }
 
 
-    /**
+    /** 表单验证邮箱
      * input_chk_mail function.
      *
      * @access public
@@ -847,7 +963,7 @@ class MODEL_USER {
     }
 
 
-    /** api 注册
+    /** api 注册表单验证
      * input_reg_api function.
      *
      * @access public
@@ -895,13 +1011,17 @@ class MODEL_USER {
             return $_arr_userNick;
         }
         $this->userSubmit["user_nick"]    = $_arr_userNick["user_nick"];
+
+        $_arr_userContact = fn_post("user_contact");
+        $this->userSubmit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
+
         $this->userSubmit["alert"]        = "ok";
 
         return $this->userSubmit;
     }
 
 
-    /** api 登录
+    /** api 登录表单验证
      * input_login_api function.
      *
      * @access public
@@ -920,15 +1040,21 @@ class MODEL_USER {
             return $_arr_userPass;
         }
 
-        $this->apiLogin["user_pass"]      = $_arr_userPass["user_pass"];
-        $this->apiLogin["user_rand"]      = fn_rand(6);
-        $this->apiLogin["user_pass_do"]   = fn_baigoEncrypt($this->apiLogin["user_pass"], $this->apiLogin["user_rand"], true);
-        $this->apiLogin["alert"]          = "ok";
+        $this->apiLogin["user_rand"]                = fn_rand(6);
+        $this->apiLogin["user_pass"]                = $_arr_userPass["user_pass"];
+        $this->apiLogin["user_pass_do"]             = fn_baigoEncrypt($this->apiLogin["user_pass"], $this->apiLogin["user_rand"], true);
+        $this->apiLogin["alert"]                    = "ok";
 
         return $this->apiLogin;
     }
 
 
+    /** 忘记密码表单验证
+     * input_forgot_verify function.
+     *
+     * @access public
+     * @return void
+     */
     function input_forgot_verify() {
         $_arr_userPassNew = validateStr(fn_post("user_pass_new"), 1, 0);
         switch ($_arr_userPassNew["status"]) {
@@ -971,7 +1097,7 @@ class MODEL_USER {
     }
 
 
-    /** api 编辑
+    /** api 编辑表单验证
      * input_edit_api function.
      *
      * @access public
@@ -1016,12 +1142,22 @@ class MODEL_USER {
         }
         $this->apiEdit["user_nick"]   = $_arr_userNick["user_nick"];
 
+        $_arr_userContact = fn_post("user_contact");
+
+        $this->apiEdit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
+
         $this->apiEdit["alert"]       = "ok";
 
         return $this->apiEdit;
     }
 
 
+    /** api 更换邮箱表单验证
+     * input_mail_api function.
+     *
+     * @access public
+     * @return void
+     */
     function input_mail_api() {
         $_arr_userGet = $this->input_get_by("post");
 
@@ -1053,6 +1189,93 @@ class MODEL_USER {
     }
 
 
+    /**  api 验证访问口令
+     * input_token_api function.
+     *
+     * @access public
+     * @param string $str_method (default: "get")
+     * @return void
+     */
+    function input_token_api($str_method = "get") {
+        $_arr_userGet = $this->input_get_by($str_method);
+        if ($_arr_userGet["alert"] != "ok") {
+            return $_arr_userGet;
+        }
+
+        $_arr_userRequest = $_arr_userGet;
+
+        if ($str_method == "post") {
+            $str_accessToken    = fn_post("user_access_token");
+        } else {
+            $str_accessToken    = fn_get("user_access_token");
+        }
+
+        $_arr_accessToken = validateStr($str_accessToken, 1, 32);
+        switch ($_arr_accessToken["status"]) {
+            case "too_short":
+                return array(
+                    "alert" => "x010228",
+                );
+            break;
+
+            case "too_long":
+                return array(
+                    "alert" => "x010229",
+                );
+            break;
+
+            case "ok":
+                $_arr_userRequest["user_access_token"] = $_arr_accessToken["str"];
+            break;
+
+        }
+
+        $_arr_userRequest["alert"] = "ok";
+
+        return $_arr_userRequest;
+    }
+
+
+    /** api 刷新访问口令表单验证
+     * input_refresh_api function.
+     *
+     * @access public
+     * @return void
+     */
+    function input_refresh_api() {
+        $_arr_userGet = $this->input_get_by("post");
+        if ($_arr_userGet["alert"] != "ok") {
+            return $_arr_userGet;
+        }
+
+        $this->apiRefresh = $_arr_userGet;
+
+        $_arr_refreshToken = validateStr(fn_post("user_refresh_token"), 1, 32);
+        switch ($_arr_refreshToken["status"]) {
+            case "too_short":
+                return array(
+                    "alert" => "x010232",
+                );
+            break;
+
+            case "too_long":
+                return array(
+                    "alert" => "x010233",
+                );
+            break;
+
+            case "ok":
+                $this->apiRefresh["user_refresh_token"] = $_arr_refreshToken["str"];
+            break;
+
+        }
+
+        $this->apiRefresh["alert"] = "ok";
+
+        return $this->apiRefresh;
+    }
+
+
     /** 表单验证
      * input_submit function.
      *
@@ -1062,7 +1285,7 @@ class MODEL_USER {
     function input_submit() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -1130,16 +1353,27 @@ class MODEL_USER {
             break;
         }
 
+
+        $_arr_userContact = fn_post("user_contact");
+
+        $this->userSubmit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
+
         $this->userSubmit["alert"] = "ok";
 
         return $this->userSubmit;
     }
 
 
+    /** 转换表单验证
+     * input_convert function.
+     *
+     * @access public
+     * @return void
+     */
     function input_convert() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -1172,11 +1406,11 @@ class MODEL_USER {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
-        $_arr_userIds = fn_post("user_id");
+        $_arr_userIds = fn_post("user_ids");
 
         if ($_arr_userIds) {
             foreach ($_arr_userIds as $_key=>$_value) {
@@ -1184,7 +1418,7 @@ class MODEL_USER {
             }
             $_str_alert = "ok";
         } else {
-            $_str_alert = "none";
+            $_str_alert = "x030202";
         }
 
         $this->userIds = array(
@@ -1196,7 +1430,7 @@ class MODEL_USER {
     }
 
 
-    /**
+    /** 验证用户 ID
      * chk_user_id function.
      *
      * @access private
@@ -1225,13 +1459,13 @@ class MODEL_USER {
         }
 
         return array(
-            "user_id"    => $_num_userId,
-            "alert"      => "ok",
+            "user_id"   => $_num_userId,
+            "alert"     => "ok",
         );
     }
 
 
-    /**
+    /** 验证用户名
      * chk_user_name function.
      *
      * @access public
@@ -1280,7 +1514,7 @@ class MODEL_USER {
     }
 
 
-    /**
+    /** 验证邮箱
      * chk_user_mail function.
      *
      * @access public
@@ -1342,7 +1576,7 @@ class MODEL_USER {
     }
 
 
-    /**
+    /** 验证密码
      * chk_user_pass function.
      *
      * @access public
@@ -1370,7 +1604,7 @@ class MODEL_USER {
     }
 
 
-    /**
+    /** 验证昵称
      * chk_user_nick function.
      *
      * @access public
@@ -1399,8 +1633,8 @@ class MODEL_USER {
     }
 
 
-    /**
-     * $this->chk_user_note function.
+    /** 验证备注
+     * chk_user_note function.
      *
      * @access public
      * @param mixed $str_note
@@ -1425,5 +1659,65 @@ class MODEL_USER {
             "user_note"  => $_str_userNote,
             "alert"      => "ok",
         );
+    }
+
+
+    /** 列出及统计 SQL 处理
+     * sql_process function.
+     *
+     * @access private
+     * @param array $arr_search (default: array())
+     * @return void
+     */
+    private function sql_process($arr_search = array()) {
+        $_str_sqlWhere = "1=1";
+
+        if (isset($arr_search["key"]) && $arr_search["key"]) {
+            $_str_sqlWhere .= " AND (user_name LIKE '%" . $arr_search["key"] . "%' OR user_name LIKE '%" . $arr_search["key"] . "%' OR user_mail LIKE '%" . $arr_search["key"] . "%' OR user_note LIKE '%" . $arr_search["key"] . "%')";
+        }
+
+        if (isset($arr_search["key_name"]) && $arr_search["key_name"]) {
+            $_str_sqlWhere .= " AND user_name LIKE '%" . $arr_search["key_name"] . "%'";
+        }
+
+        if (isset($arr_search["key_mail"]) && $arr_search["key_mail"]) {
+            $_str_sqlWhere .= " AND user_mail LIKE '%" . $arr_search["key_mail"] . "%'";
+        }
+
+        if (isset($arr_search["begin_id"]) && $arr_search["begin_id"] > 0) {
+            $_str_sqlWhere .= " AND user_id>=" . $arr_search["begin_id"];
+        }
+
+        if (isset($arr_search["end_id"]) && $arr_search["end_id"] > 0) {
+            $_str_sqlWhere .= " AND user_id<=" . $arr_search["end_id"];
+        }
+
+        if (isset($arr_search["begin_time"]) && $arr_search["begin_time"] > 0) {
+            $_str_sqlWhere .= " AND user_time>=" . $arr_search["begin_time"];
+        }
+
+        if (isset($arr_search["end_time"]) && $arr_search["end_time"] > 0) {
+            $_str_sqlWhere .= " AND user_time<=" . $arr_search["end_time"];
+        }
+
+        if (isset($arr_search["begin_login"]) && $arr_search["begin_login"] > 0) {
+            $_str_sqlWhere .= " AND user_time_login>=" . $arr_search["begin_login"];
+        }
+
+        if (isset($arr_search["end_login"]) && $arr_search["end_login"] > 0) {
+            $_str_sqlWhere .= " AND user_time_login<=" . $arr_search["end_login"];
+        }
+
+        if (isset($arr_search["status"]) && $arr_search["status"]) {
+            $_str_sqlWhere .= " AND user_status='" . $arr_search["status"] . "'";
+        }
+
+        if (isset($arr_search["user_names"]) && $arr_search["user_names"]) {
+            $_str_userNames    = implode("','", $arr_search["user_names"]);
+            $_str_sqlWhere .= " AND user_name IN ('" . $_str_userNames . "')";
+
+        }
+
+        return $_str_sqlWhere;
     }
 }

@@ -21,11 +21,12 @@ class CONTROL_OPT {
     private $tplData;
 
     function __construct() { //构造函数
-        $this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
-        $this->config         = $this->obj_base->config;
-        $this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
-        $_arr_cfg["admin"]    = true;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_base     = $GLOBALS["obj_base"]; //获取界面类型
+        $this->config       = $this->obj_base->config;
+        $this->adminLogged  = $GLOBALS["adminLogged"]; //获取已登录信息
+        $_arr_cfg["admin"]  = true;
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_dir      = new CLASS_DIR();
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
@@ -56,6 +57,22 @@ class CONTROL_OPT {
             return array(
                 "alert" => "x040301",
             );
+        }
+
+        if ($_act_get == "base") {
+            $this->tplData["tplRows"]     = $this->obj_dir->list_dir(BG_PATH_TPL . "user/");;
+
+            $_arr_timezoneRows  = include_once(BG_PATH_LANG . $this->config["lang"] . "/timezone.php");
+
+            $_arr_timezone[] = "";
+
+            if (stristr(BG_SITE_TIMEZONE, "/")) {
+                $_arr_timezone = explode("/", BG_SITE_TIMEZONE);
+            }
+
+            $this->tplData["timezoneRows"]  = $_arr_timezoneRows;
+            $this->tplData["timezoneJson"]  = json_encode($_arr_timezoneRows);
+            $this->tplData["timezoneType"]  = $_arr_timezone[0];
         }
 
         $this->tplData["act_get"] = $_act_get;

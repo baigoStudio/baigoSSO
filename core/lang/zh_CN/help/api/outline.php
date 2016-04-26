@@ -246,7 +246,7 @@ return "<a name=\"top\"></a>
 
     <h3>返回结果</h3>
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串（安装接口除外），真正内容需要调用密文接口进行解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，请查看具体的接口。
+        baigo SSO 大部分 API 接口返回加密字符串，详情请查看具体接口，真正内容需要调用密文接口进行解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，请查看具体的接口。
     </p>
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
@@ -263,17 +263,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>

@@ -9,18 +9,25 @@ if(!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "init.func.php"); //管理员通用
-fn_init(true, true, "Content-Type: text/html; charset=utf-8", true, "ctl");
+include_once(BG_PATH_FUNC . "init.func.php"); //初始化
+$arr_set = array(
+    "base"          => true, //基本设置
+    "ssin"          => true, //启用会话
+    "header"        => "Content-Type: text/html; charset=utf-8", //header
+    "db"            => true, //连接数据库
+    "type"          => "ctl", //模块类型
+);
+fn_init($arr_set);
 
-include_once(BG_PATH_INC . "is_install.inc.php"); //验证是否已登录
+include_once(BG_PATH_INC . "is_install.inc.php"); //验证是否已安装
 include_once(BG_PATH_FUNC . "session.func.php"); //载入 session 函数
-include_once(BG_PATH_CONTROL . "admin/ctl/logon.class.php"); //载入设置控制器
+include_once(BG_PATH_CONTROL . "admin/ctl/logon.class.php"); //载入登录控制器
 
 $ctl_logon = new CONTROL_LOGON(); //初始化登录
 
 switch ($GLOBALS["act_post"]) {
-    case "login": //登录
-        $arr_logonRow = $ctl_logon->ctl_login();
+    case "login":
+        $arr_logonRow = $ctl_logon->ctl_login(); //登录
         if ($arr_logonRow["alert"] != "y020201") {
             header("Location: " . BG_URL_ADMIN . "ctl.php?mod=logon&act_get=logon&forward=" . $arr_logonRow["forward"] . "&alert=" . $arr_logonRow["alert"]);
         } else {
@@ -35,14 +42,14 @@ switch ($GLOBALS["act_post"]) {
 
     default:
         switch ($GLOBALS["act_get"]) {
-            case "logout": //登出
-                $arr_logonRow = $ctl_logon->ctl_logout();
+            case "logout":
+                $arr_logonRow = $ctl_logon->ctl_logout(); //登出
                 header("Location: " . base64_decode($arr_logonRow["forward"]));
                 exit;
             break;
 
-            default: //登录界面
-                $arr_logonRow = $ctl_logon->ctl_logon();
+            default:
+                $arr_logonRow = $ctl_logon->ctl_logon(); //登录界面
             break;
         }
     break;

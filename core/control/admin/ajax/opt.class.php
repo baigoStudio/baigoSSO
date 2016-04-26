@@ -78,7 +78,7 @@ class AJAX_OPT {
         $_num_countInput = count(array_filter($_arr_const));
 
         if ($_num_countInput < $_num_countSrc) {
-            $this->obj_ajax->halt_alert("x030212");
+            $this->obj_ajax->halt_alert("x030204");
         }
 
         $_arr_return = $this->mdl_opt->mdl_const($_act_post);

@@ -34,7 +34,7 @@ class CONTROL_APP {
         $this->mdl_belong   = new MODEL_BELONG();
         $this->mdl_user     = new MODEL_USER(); //设置管理员模型
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
@@ -94,14 +94,15 @@ class CONTROL_APP {
                 );
             }
             $_arr_appRow = array(
-                "app_id"        => 0,
-                "app_name"      => "",
-                "app_notice"    => "",
-                "app_ip_allow"  => "",
-                "app_ip_bad"    => "",
-                "app_note"      => "",
-                "app_status"    => "enable",
-                "app_sync"      => "off",
+                "app_id"            => 0,
+                "app_name"          => "",
+                "app_url_notice"    => "",
+                "app_url_sync"      => "",
+                "app_ip_allow"      => "",
+                "app_ip_bad"        => "",
+                "app_note"          => "",
+                "app_status"        => "enable",
+                "app_sync"          => "off",
             );
         }
 
@@ -138,25 +139,21 @@ class CONTROL_APP {
         }
 
         $_arr_search = array(
-            "act_get"    => $GLOBALS["act_get"],
-            "app_id"     => $_num_appId,
-            "key"        => $_str_key,
-            "key_belong" => $_str_keyBelong,
+            "app_id"        => $_num_appId,
+            "key"           => $_str_key,
+            "key_belong"    => $_str_keyBelong,
         );
 
-        $_arr_userBelongs = $this->mdl_user->mdl_list_view("", $_num_appId);
-
-        $_arr_notIds      = array();
-
-        foreach ($_arr_userBelongs as $_key=>$_value) {
-            $_arr_notIds[] = $_value["user_id"];
-        }
-
-        $_num_userCount   = $this->mdl_user->mdl_count($_str_key, "", $_arr_notIds);
+        $_num_userCount   = $this->mdl_user->mdl_count($_arr_search);
         $_arr_page        = fn_page($_num_userCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search);
-        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, "", $_arr_notIds);
-        $_arr_userViews   = $this->mdl_user->mdl_list_view($_str_keyBelong, $_num_appId);
+        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_arr_search);
+
+        $_arr_searchView = array(
+            "key"        => $_str_keyBelong,
+            "app_id"     => $_num_appId,
+        );
+        $_arr_userViews   = $this->mdl_user->mdl_list_view($_arr_searchView);
 
         $_arr_tpl = array(
             "query"      => $_str_query,
@@ -186,18 +183,15 @@ class CONTROL_APP {
             );
         }
 
-        $_str_key     = fn_getSafe(fn_get("key"), "txt", "");
-        $_str_status  = fn_getSafe(fn_get("status"), "txt", "");
-
         $_arr_search = array(
-            "key"    => $_str_key,
-            "status" => $_str_status,
+            "key"    => fn_getSafe(fn_get("key"), "txt", ""),
+            "status" => fn_getSafe(fn_get("status"), "txt", ""),
         );
 
-        $_num_appCount    = $this->mdl_app->mdl_count($_str_key, $_str_status);
+        $_num_appCount    = $this->mdl_app->mdl_count($_arr_search);
         $_arr_page        = fn_page($_num_appCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search);
-        $_arr_appRows     = $this->mdl_app->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
+        $_arr_appRows     = $this->mdl_app->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_arr_search);
 
         $_arr_tpl = array(
             "query"      => $_str_query,

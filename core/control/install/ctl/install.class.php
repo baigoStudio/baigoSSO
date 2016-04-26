@@ -19,7 +19,9 @@ class CONTROL_INSTALL {
         $this->obj_base     = $GLOBALS["obj_base"];
         $this->config       = $this->obj_base->config;
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPL . "install/" . $this->config["ui"], $_arr_cfg);
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "install/" . $this->config["ui"], $_arr_cfg);
+        $this->obj_dir      = new CLASS_DIR();
+        $this->obj_dir->mk_dir(BG_PATH_CACHE . "ssin");
         $this->install_init();
     }
 
@@ -95,6 +97,7 @@ class CONTROL_INSTALL {
         $this->table_log();
         $this->table_session();
         $this->table_verify();
+        $this->table_pm();
         $this->view_user();
 
         $this->obj_tpl->tplDisplay("install_dbtable.tpl", $this->tplData);
@@ -224,8 +227,9 @@ class CONTROL_INSTALL {
 
     private function table_admin() {
         include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
-        $_mdl_admin       = new MODEL_ADMIN();
-        $_arr_adminTable  = $_mdl_admin->mdl_create_table();
+        $_mdl_admin                 = new MODEL_ADMIN();
+        $_mdl_admin->adminStatus    = $this->obj_tpl->status["admin"];
+        $_arr_adminTable            = $_mdl_admin->mdl_create_table();
 
         $this->tplData["db_alert"]["admin_table"] = array(
             "alert"   => $_arr_adminTable["alert"],
@@ -236,8 +240,9 @@ class CONTROL_INSTALL {
 
     private function table_user() {
         include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
-        $_mdl_user        = new MODEL_USER();
-        $_arr_userTable   = $_mdl_user->mdl_create_table();
+        $_mdl_user              = new MODEL_USER();
+        $_mdl_user->userStatus  = $this->obj_tpl->status["user"];
+        $_arr_userTable         = $_mdl_user->mdl_create_table();
 
         $this->tplData["db_alert"]["user_table"] = array(
             "alert"   => $_arr_userTable["alert"],
@@ -248,8 +253,10 @@ class CONTROL_INSTALL {
 
     private function table_app() {
         include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
-        $_mdl_app         = new MODEL_APP();
-        $_arr_appTable    = $_mdl_app->mdl_create_table();
+        $_mdl_app               = new MODEL_APP();
+        $_mdl_app->appStatus    = $this->obj_tpl->status["app"];
+        $_mdl_app->appSyncs     = $this->obj_tpl->status["appSync"];
+        $_arr_appTable          = $_mdl_app->mdl_create_table();
 
         $this->tplData["db_alert"]["app_table"] = array(
             "alert"   => $_arr_appTable["alert"],
@@ -272,8 +279,11 @@ class CONTROL_INSTALL {
 
     private function table_log() {
         include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
-        $_mdl_log         = new MODEL_LOG();
-        $_arr_logTable    = $_mdl_log->mdl_create_table();
+        $_mdl_log               = new MODEL_LOG();
+        $_mdl_log->logStatus    = $this->obj_tpl->status["log"];
+        $_mdl_log->logTypes     = $this->obj_tpl->type["log"];
+        $_mdl_log->logTargets   = $this->obj_tpl->type["logTarget"];
+        $_arr_logTable          = $_mdl_log->mdl_create_table();
 
         $this->tplData["db_alert"]["log_table"] = array(
             "alert"   => $_arr_logTable["alert"],
@@ -296,12 +306,27 @@ class CONTROL_INSTALL {
 
     private function table_verify() {
         include_once(BG_PATH_MODEL . "verify.class.php"); //载入管理帐号模型
-        $_mdl_verify         = new MODEL_SESSION();
-        $_arr_verifyTable    = $_mdl_verify->mdl_create_table();
+        $_mdl_verify                = new MODEL_VERIFY();
+        $_mdl_verify->verifyStatus  = $this->obj_tpl->status["verify"];
+        $_arr_verifyTable           = $_mdl_verify->mdl_create_table();
 
         $this->tplData["db_alert"]["verify_table"] = array(
             "alert"   => $_arr_verifyTable["alert"],
             "status"  => substr($_arr_verifyTable["alert"], 0, 1),
+        );
+    }
+
+
+    private function table_pm() {
+        include_once(BG_PATH_MODEL . "pm.class.php"); //载入管理帐号模型
+        $_mdl_pm            = new MODEL_PM();
+        $_mdl_pm->pmStatus  = $this->obj_tpl->status["pm"];
+        $_mdl_pm->pmTypes   = $this->obj_tpl->type["pm"];
+        $_arr_pmTable       = $_mdl_pm->mdl_create_table();
+
+        $this->tplData["db_alert"]["pm_table"] = array(
+            "alert"   => $_arr_pmTable["alert"],
+            "status"  => substr($_arr_pmTable["alert"], 0, 1),
         );
     }
 

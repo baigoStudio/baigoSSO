@@ -110,7 +110,7 @@ class AJAX_APP {
             $this->obj_ajax->halt_alert("x050203");
         }
 
-        foreach ($_arr_userIds["user_ids"] as $_value) {
+        foreach ($_arr_userIds["user_ids"] as $_key=>$_value) {
             $_arr_userRow = $this->mdl_user->mdl_read($_value);
             if ($_arr_userRow["alert"] == "y010102") {
                 $this->mdl_belong->mdl_submit($_value, $_num_appId);
@@ -146,7 +146,7 @@ class AJAX_APP {
 
         $_tm_time    = time();
         $_str_rand   = fn_rand();
-        $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand);
+        $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand, $_arr_appRow["app_id"], $_arr_appRow["app_key"]);
         $_str_echo   = fn_rand();
 
         $_arr_data = array(
@@ -159,13 +159,13 @@ class AJAX_APP {
             "app_key"    => $_arr_appRow["app_key"],
         );
 
-        if (stristr($_arr_appRow["app_notice"], "?")) {
+        if (stristr($_arr_appRow["app_url_notice"], "?")) {
             $_str_conn = "&";
         } else {
             $_str_conn = "?";
         }
 
-        $_arr_notice = fn_http($_arr_appRow["app_notice"] . $_str_conn . "mod=notice", $_arr_data, "get");
+        $_arr_notice = fn_http($_arr_appRow["app_url_notice"] . $_str_conn . "mod=notice", $_arr_data, "get");
         //print_r($_arr_notice);
 
         if ($_arr_notice["ret"] == $_str_echo) {
@@ -251,7 +251,7 @@ class AJAX_APP {
         $_arr_appRow = $this->mdl_app->mdl_status($_str_status);
 
         if ($_arr_appRow["alert"] == "y050103") {
-            foreach ($_arr_appIds["app_ids"] as $_value) {
+            foreach ($_arr_appIds["app_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "app_id" => $_value,
                 );
@@ -284,7 +284,7 @@ class AJAX_APP {
         $_arr_appRow = $this->mdl_app->mdl_del();
 
         if ($_arr_appRow["alert"] == "y050104") {
-            foreach ($_arr_appIds["app_ids"] as $_value) {
+            foreach ($_arr_appIds["app_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "app_id" => $_value,
                 );

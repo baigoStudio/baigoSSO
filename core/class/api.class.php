@@ -18,12 +18,13 @@ class CLASS_API {
     public $log; //配置
 
     function __construct() { //构造函数
-        $this->obj_base   = $GLOBALS["obj_base"]; //获取界面类型
-        $this->config     = $this->obj_base->config;
-        $this->log        = include_once(BG_PATH_LANG . $this->config["lang"] . "/log.php"); //载入日志内容
-        $this->type       = include_once(BG_PATH_LANG . $this->config["lang"] . "/type.php"); //载入类型文件
-        $this->opt        = include_once(BG_PATH_LANG . $this->config["lang"] . "/opt.php");
-        $this->mail       = include_once(BG_PATH_LANG . $this->config["lang"] . "/mail.php");
+        $this->obj_base = $GLOBALS["obj_base"]; //获取界面类型
+        $this->config   = $this->obj_base->config;
+        $this->log      = include_once(BG_PATH_LANG . $this->config["lang"] . "/log.php"); //载入日志内容
+        $this->type     = include_once(BG_PATH_LANG . $this->config["lang"] . "/type.php"); //载入类型文件
+        $this->opt      = include_once(BG_PATH_LANG . $this->config["lang"] . "/opt.php");
+        $this->mail     = include_once(BG_PATH_LANG . $this->config["lang"] . "/mail.php");
+        $this->status   = include_once(BG_PATH_LANG . $this->config["lang"] . "/status.php");
         $this->arr_return = array(
             "prd_sso_ver" => PRD_SSO_VER,
             "prd_sso_pub" => PRD_SSO_PUB,
@@ -81,13 +82,12 @@ class CLASS_API {
 
 
     /** 读取 app 信息
-     * app_fetch function.
+     * app_request function.
      *
      * @access public
-     * @param bool $chk_token (default: false)
      * @return void
      */
-    function app_fetch($str_method = "get", $chk_token = false) {
+    function app_request($str_method = "get") {
         if ($str_method == "post") {
             $num_appId       = fn_post("app_id");
             $str_appKey      = fn_post("app_key");
@@ -160,7 +160,7 @@ class CLASS_API {
         foreach ($arr_appRows as $_key=>$_value) {
             $_tm_time    = time();
             $_str_rand   = fn_rand();
-            $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand);
+            $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
 
             $_arr_query = array(
                 "time" => $_tm_time,
@@ -172,13 +172,13 @@ class CLASS_API {
 
             $_arr_data = array_merge($arr_data, $_arr_query);
 
-            if (stristr($_value["app_notice"], "?")) {
+            if (stristr($_value["app_url_notice"], "?")) {
                 $_str_conn = "&";
             } else {
                 $_str_conn = "?";
             }
 
-            $_arr_return[$_key] = fn_http($_value["app_notice"] . $_str_conn . "mod=notice", $_arr_data, $method);
+            $_arr_return[$_key] = fn_http($_value["app_url_notice"] . $_str_conn . "mod=notice", $_arr_data, $method);
         }
 
         return $_arr_return;

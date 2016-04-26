@@ -24,7 +24,7 @@
             <div id="group_seccode">
                 <label class="control-label">{$lang.label.seccode}<span id="msg_seccode">*</span></label>
                 <div class="input-group">
-                    <input type="text" name="seccode" id="seccode" placeholder="{$alert.x030201}" class="validate form-control input-lg">
+                    <input type="text" name="seccode" id="seccode" placeholder="{$alert.x030201}" data-validate class="form-control input-lg">
                     <span class="input-group-addon">
                         <a href="javascript:reloadImg('seccodeImg','{$smarty.const.BG_URL_MISC}ctl.php?mod=seccode&act_get=make');" title="{$lang.alt.seccode}">
                             <img src="{$smarty.const.BG_URL_MISC}ctl.php?mod=seccode&act_get=make" id="seccodeImg" alt="{$lang.alt.seccode}" height="32">
@@ -45,9 +45,9 @@
     <script type="text/javascript">
     var opts_validator_form = {
         seccode: {
-            length: { min: 4, max: 4 },
-            validate: { type: "ajax", format: "text", group: "group_seccode" },
-            msg: { id: "msg_seccode", too_short: "{$alert.x030201}", too_long: "{$alert.x030201}", ajaxIng: "{$alert.x030401}", ajax_err: "{$alert.x030402}" },
+            len: { min: 4, max: 4 },
+            validate: { type: "ajax", format: "text", group: "#group_seccode" },
+            msg: { selector: "#msg_seccode", too_short: "{$alert.x030201}", too_long: "{$alert.x030201}", ajaxIng: "{$alert.x030401}", ajax_err: "{$alert.x030402}" },
             ajax: { url: "{$smarty.const.BG_URL_MISC}ajax.php?mod=seccode&act_get=chk", key: "seccode", type: "str" }
         }
     };
@@ -64,7 +64,7 @@
         var obj_validator_form    = $("#mailbox_form").baigoValidator(opts_validator_form);
         var obj_submit_form       = $("#mailbox_form").baigoSubmit(opts_submit_form);
         $("#go_mailbox").click(function(){
-            if (obj_validator_form.validateSubmit()) {
+            if (obj_validator_form.verify()) {
                 obj_submit_form.formSubmit();
             }
         });

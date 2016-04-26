@@ -118,7 +118,7 @@ class API_CODE {
      * @return void
      */
     private function app_check($str_method = "get") {
-        $this->appRequest = $this->obj_api->app_fetch($str_method);
+        $this->appRequest = $this->obj_api->app_request($str_method);
 
         if ($this->appRequest["alert"] != "ok") {
             $this->obj_api->halt_re($this->appRequest);

@@ -173,12 +173,12 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -219,7 +219,7 @@ return "<a name=\"top\"></a>
     <p>&nbsp;</p>
 
     <p>
-        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <p>&nbsp;</p>
@@ -265,6 +265,8 @@ return "<a name=\"top\"></a>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -348,12 +350,12 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -394,7 +396,7 @@ return "<a name=\"top\"></a>
     <p>&nbsp;</p>
 
     <p>
-        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <p>&nbsp;</p>
@@ -440,6 +442,8 @@ return "<a name=\"top\"></a>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -523,12 +527,12 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -569,7 +573,7 @@ return "<a name=\"top\"></a>
     <p>&nbsp;</p>
 
     <p>
-        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <p>&nbsp;</p>
@@ -597,6 +601,8 @@ return "<a name=\"top\"></a>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>

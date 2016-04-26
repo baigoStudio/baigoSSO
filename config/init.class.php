@@ -58,6 +58,7 @@ class CLASS_INIT {
             "BG_PATH_CLASS"          => array("BG_PATH_CORE . BG_NAME_CLASS . \"/\"", "const"),
             "BG_PATH_FUNC"           => array("BG_PATH_CORE . BG_NAME_FUNC . \"/\"", "const"),
             "BG_PATH_SMARTY"         => array("BG_PATH_CORE . BG_NAME_SMARTY . \"/\"", "const"),
+            "BG_PATH_TPLSYS"         => array("BG_PATH_CORE . BG_NAME_TPL . \"/\"", "const"),
             "BG_PATH_PHPMAILER"      => array("BG_PATH_CORE . BG_NAME_PHPMAILER . \"/\"", "const"),
             "BG_URL_ROOT"            => array("str_ireplace(str_ireplace(\"\\\\\", \"/\", \$_SERVER[\"DOCUMENT_ROOT\"]), \"\", str_ireplace(\"\\\\\", \"/\", BG_PATH_ROOT))", "const"),
             "BG_URL_HELP"            => array("BG_URL_ROOT . BG_NAME_HELP . \"/\"", "const"),
@@ -89,9 +90,11 @@ class CLASS_INIT {
             "BG_SITE_DATESHORT" => array("m-d", "str"),
             "BG_SITE_TIME"      => array("H:i:s", "str"),
             "BG_SITE_TIMESHORT" => array("H:i", "str"),
-            "BG_TOKEN_EXPIRE"   => array(60, "num"),
-            "BG_VERIFY_EXPIRE"  => array(30, "num"),
             "BG_SITE_SSIN"      => array($this->rand(6), "str"),
+            "BG_SITE_TPL"       => array("default", "str"),
+            "BG_ACCESS_EXPIRE"  => array(60, "num"),
+            "BG_REFRESH_EXPIRE" => array(30, "num"),
+            "BG_VERIFY_EXPIRE"  => array(30, "num"),
         );
 
         $this->arr_reg = array(

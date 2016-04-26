@@ -35,10 +35,15 @@ return array(
         "opt"     => "设置",
     ),
 
+    "pm" => array(
+        "out"   => "已发送",
+        "in"    => "收件箱",
+    ),
+
     "ext" => array(
-        "mysqli"      => "Mysqli 扩展库", //栏目类型
-        "gd"          => "GD 扩展库", //栏目类型
-        "mbstring"    => "mbstring 扩展库", //栏目类型
-        "curl"        => "cURL 扩展库", //栏目类型
+        "mysqli"      => "Mysqli 扩展库",
+        "gd"          => "GD 扩展库",
+        "mbstring"    => "mbstring 扩展库",
+        "curl"        => "cURL 扩展库",
     ),
 );

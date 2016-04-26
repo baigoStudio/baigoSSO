@@ -9,6 +9,7 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
+/*-------------session 模型-------------*/
 class MODEL_SESSION {
     // session-lifetime
     private $lifeTime;
@@ -17,6 +18,12 @@ class MODEL_SESSION {
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
     }
 
+    /** 创建表
+     * mdl_create_table function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_create_table() {
         $_arr_ssinCreat = array(
             "session_id"        => "varchar(255) NOT NULL COMMENT 'SESSION ID'",
@@ -38,9 +45,17 @@ class MODEL_SESSION {
     }
 
 
+    /** 打开 session
+     * mdl_open function.
+     *
+     * @access public
+     * @param mixed $str_savePath
+     * @param mixed $str_ssinName
+     * @return void
+     */
     function mdl_open($str_savePath, $str_ssinName) {
         // get session-lifetime
-        $this->lifeTime = get_cfg_var("session.gc_maxlifetime");
+        $this->lifeTime = get_cfg_var("session.gc_maxlifetime"); //从 php.ini 读取 session 生存时间
         // open database-connection
         /*$dbHandle       = @mysql_connect("server","user","password");
         $dbSel          = @mysql_select_db("database",$dbHandle);
@@ -53,6 +68,12 @@ class MODEL_SESSION {
     }
 
 
+    /** 关闭 session
+     * mdl_close function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_close() {
         /*$this->gc(ini_get("session.gc_maxlifetime"));
         // close database-connection*/
@@ -60,6 +81,13 @@ class MODEL_SESSION {
     }
 
 
+    /** 读取
+     * mdl_read function.
+     *
+     * @access public
+     * @param mixed $str_ssinId
+     * @return void
+     */
     function mdl_read($str_ssinId) {
         $_arr_ssinRow = $this->mdl_readDb($str_ssinId, time());
 
@@ -71,6 +99,14 @@ class MODEL_SESSION {
     }
 
 
+    /** 写入
+     * mdl_write function.
+     *
+     * @access public
+     * @param mixed $str_ssinId
+     * @param mixed $str_ssinData
+     * @return void
+     */
     function mdl_write($str_ssinId, $str_ssinData) {
         $tm_expire = time() + $this->lifeTime;
         // is a session with this id in the database?
@@ -107,6 +143,13 @@ class MODEL_SESSION {
     }
 
 
+    /** 销毁
+     * mdl_destroy function.
+     *
+     * @access public
+     * @param mixed $str_ssinId
+     * @return void
+     */
     function mdl_destroy($str_ssinId) {
         // delete session-data
         $_num_mysql = $this->obj_db->delete(BG_DB_TABLE . "session",  "session_id='" . $str_ssinId . "'"); //删除数据
@@ -133,6 +176,14 @@ class MODEL_SESSION {
     }
 
 
+    /** 读取数据
+     * mdl_readDb function.
+     *
+     * @access private
+     * @param mixed $str_ssinId
+     * @param int $tm_expire (default: 0)
+     * @return void
+     */
     private function mdl_readDb($str_ssinId, $tm_expire = 0) {
         $_arr_ssinSelect = array(
             "session_id",

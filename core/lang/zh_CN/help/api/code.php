@@ -57,6 +57,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -72,7 +74,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
@@ -185,6 +187,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -200,7 +204,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td colspan=\"3\">返回的其他内容均为 <mark>Base64 编码</mark>，需要对此进行 <mark>Base64 解码</mark>，请查看具体的接口。</td>

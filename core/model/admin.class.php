@@ -12,19 +12,25 @@ if(!defined("IN_BAIGO")) {
 /*-------------管理员模型-------------*/
 class MODEL_ADMIN {
     private $obj_db;
+    public $adminStatus = array(); //状态
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
     }
 
 
-    /** 创建表
+    /** 创建表 在安装或升级时调用
      * mdl_create function.
      *
      * @access public
      * @return void
      */
     function mdl_create_table() {
+        foreach ($this->adminStatus as $_key=>$_value) {
+            $_arr_status[] = $_key;
+        }
+        $_str_status = implode("','", $_arr_status);
+
         $_arr_adminCreate = array(
             "admin_id"           => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
             "admin_name"         => "varchar(30) NOT NULL COMMENT '用户名'",
@@ -32,7 +38,7 @@ class MODEL_ADMIN {
             "admin_rand"         => "char(6) NOT NULL COMMENT '随机串'",
             "admin_note"         => "varchar(30) NOT NULL COMMENT '备注'",
             "admin_nick"         => "varchar(30) NOT NULL COMMENT '昵称'",
-            "admin_status"       => "enum('enable','disable') NOT NULL COMMENT '状态'",
+            "admin_status"       => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
             "admin_allow"        => "varchar(3000) NOT NULL COMMENT '权限'",
             "admin_time"         => "int NOT NULL COMMENT '创建时间'",
             "admin_time_login"   => "int NOT NULL COMMENT '登录时间'",
@@ -53,7 +59,7 @@ class MODEL_ADMIN {
     }
 
 
-    /** 检查字段
+    /** 列出字段
      * mdl_column function.
      *
      * @access public
@@ -70,6 +76,62 @@ class MODEL_ADMIN {
     }
 
 
+    /** 修改表 升级时调用
+     * mdl_alert_table function.
+     *
+     * @access public
+     * @return void
+     */
+    function mdl_alert_table() {
+        foreach ($this->adminStatus as $_key=>$_value) {
+            $_arr_status[] = $_key;
+        }
+        $_str_status = implode("','", $_arr_status);
+
+        $_arr_col     = $this->mdl_column();
+        $_arr_alert   = array();
+
+        if (!in_array("admin_nick", $_arr_col)) {
+            $_arr_alert["admin_nick"] = array("ADD", "varchar(30) NOT NULL COMMENT '昵称'");
+        }
+
+        if (in_array("admin_id", $_arr_col)) {
+            $_arr_alert["admin_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "admin_id");
+        }
+
+        if (in_array("admin_status", $_arr_col)) {
+            $_arr_alert["admin_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "admin_status");
+        }
+
+        $_arr_adminData = array(
+            "admin_status" => $_arr_status[0],
+        );
+        $this->obj_db->update(BG_DB_TABLE . "admin", $_arr_adminData, "LENGTH(admin_status) < 1"); //将 admin_status 字段为空的记录，更新为默认值
+
+        if (in_array("admin_pass", $_arr_col)) {
+            $_arr_alert["admin_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "admin_pass");
+        }
+
+        if (in_array("admin_rand", $_arr_col)) {
+            $_arr_alert["admin_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "admin_rand");
+        }
+
+        $_str_alert = "y0201111";
+
+        if ($_arr_alert) {
+            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "admin", $_arr_alert);
+
+            if ($_reselt) {
+                $_str_alert = "y020106";
+            }
+        }
+
+        return array(
+            "alert" => $_str_alert,
+        );
+    }
+
+
     /** 登录时更新用户信息
      * mdl_login function.
      *
@@ -81,8 +143,8 @@ class MODEL_ADMIN {
      */
     function mdl_login($num_adminId, $str_adminPass, $str_adminRand) {
         $_arr_adminData = array(
-            "admin_pass"         => $str_adminPass,
-            "admin_rand"         => $str_adminRand,
+            "admin_pass"         => $str_adminPass, //密码 md5 加密，加盐后再次 md5 加密，每次登录更新加盐值
+            "admin_rand"         => $str_adminRand, //加盐
             "admin_time_login"   => time(),
             "admin_ip"           => fn_getIp(true),
         );
@@ -141,8 +203,8 @@ class MODEL_ADMIN {
      */
     function mdl_pass($num_adminId) {
         $_arr_adminData = array(
-            "admin_pass" => $this->adminPass["admin_pass_do"],
-            "admin_rand" => $this->adminPass["admin_rand"],
+            "admin_pass" => $this->adminPass["admin_pass_do"], //密码 md5 加密，加盐后再次 md5 加密
+            "admin_rand" => $this->adminPass["admin_rand"], //加盐
         );
 
         $_num_adminId = $num_adminId;
@@ -199,10 +261,10 @@ class MODEL_ADMIN {
             }
         } else {
             if ($str_adminPass) {
-                $_arr_adminData["admin_pass"] = $str_adminPass;
+                $_arr_adminData["admin_pass"] = $str_adminPass; //如果密码不为空则修改
             }
             if ($str_adminRand) {
-                $_arr_adminData["admin_rand"] = $str_adminRand;
+                $_arr_adminData["admin_rand"] = $str_adminRand; //如果密码不为空则修改
             }
             $_num_adminId    = $this->adminSubmit["admin_id"];
             $_num_mysql      = $this->obj_db->update(BG_DB_TABLE . "admin", $_arr_adminData, "admin_id=" . $_num_adminId); //更新数据
@@ -257,11 +319,11 @@ class MODEL_ADMIN {
      *
      * @access public
      * @param mixed $str_admin
-     * @param string $str_readBy (default: "admin_id")
+     * @param string $str_by (default: "admin_id")
      * @param int $num_notId (default: 0)
      * @return void
      */
-    function mdl_read($str_admin, $str_readBy = "admin_id", $num_notId = 0) {
+    function mdl_read($str_admin, $str_by = "admin_id", $num_notId = 0) {
         $_arr_adminSelect = array(
             "admin_id",
             "admin_name",
@@ -276,13 +338,10 @@ class MODEL_ADMIN {
             "admin_status",
         );
 
-        switch ($str_readBy) {
-            case "admin_id":
-                $_str_sqlWhere = $str_readBy . "=" . $str_admin;
-            break;
-            default:
-                $_str_sqlWhere = $str_readBy . "='" . $str_admin . "'";
-            break;
+        if (is_numeric($str_admin)) {
+            $_str_sqlWhere = $str_by . "=" . $str_admin; //如果读取值为数字
+        } else {
+            $_str_sqlWhere = $str_by . "='" . $str_admin . "'";
         }
 
         if ($num_notId > 0) {
@@ -300,7 +359,7 @@ class MODEL_ADMIN {
         }
 
         if (isset($_arr_adminRow["admin_allow"])) {
-            $_arr_adminRow["admin_allow"] = fn_jsonDecode($_arr_adminRow["admin_allow"], "no"); //json解码
+            $_arr_adminRow["admin_allow"] = fn_jsonDecode($_arr_adminRow["admin_allow"], "no"); //json 解码
         } else {
             $_arr_adminRow["admin_allow"] = array();
         }
@@ -312,17 +371,17 @@ class MODEL_ADMIN {
     }
 
 
+
     /** 列出
      * mdl_list function.
      *
      * @access public
-     * @param mixed $num_adminNo
-     * @param int $num_adminExcept (default: 0)
-     * @param string $str_key (default: "")
-     * @param string $str_status (default: "")
+     * @param mixed $num_no
+     * @param int $num_except (default: 0)
+     * @param array $arr_search (default: array())
      * @return void
      */
-    function mdl_list($num_adminNo, $num_adminExcept = 0, $str_key = "", $str_status = "") {
+    function mdl_list($num_no, $num_except = 0, $arr_search = array()) {
         $_arr_adminSelect = array(
             "admin_id",
             "admin_name",
@@ -334,19 +393,28 @@ class MODEL_ADMIN {
             "admin_ip",
         );
 
-        $_str_sqlWhere = "1=1";
+        $_str_sqlWhere = $this->sql_process($arr_search);
 
-        if ($str_key) {
-            $_str_sqlWhere .= " AND (admin_name LIKE '%" . $str_key . "%' OR admin_note LIKE '%" . $str_key . "%')";
-        }
-
-        if ($str_status) {
-            $_str_sqlWhere .= " AND admin_status='" . $str_status . "'";
-        }
-
-        $_arr_adminRows = $this->obj_db->select(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere, "", "admin_id DESC", $num_adminNo, $num_adminExcept); //查询数据
+        $_arr_adminRows = $this->obj_db->select(BG_DB_TABLE . "admin", $_arr_adminSelect, $_str_sqlWhere, "", "admin_id DESC", $num_no, $num_except); //查询数据
 
         return $_arr_adminRows;
+    }
+
+
+
+    /** 计数
+     * mdl_count function.
+     *
+     * @access public
+     * @param array $arr_search (default: array())
+     * @return void
+     */
+    function mdl_count($arr_search = array()) {
+        $_str_sqlWhere = $this->sql_process($arr_search);
+
+        $_num_adminCount = $this->obj_db->count(BG_DB_TABLE . "admin", $_str_sqlWhere); //查询数据
+
+        return $_num_adminCount;
     }
 
 
@@ -374,71 +442,6 @@ class MODEL_ADMIN {
     }
 
 
-    /** 计数
-     * mdl_count function.
-     *
-     * @access public
-     * @param string $str_key (default: "")
-     * @param string $str_status (default: "")
-     * @return void
-     */
-    function mdl_count($str_key = "", $str_status = "") {
-        $_str_sqlWhere = "1=1";
-
-        if ($str_key) {
-            $_str_sqlWhere .= " AND (admin_name LIKE '%" . $str_key . "%' OR admin_note LIKE '%" . $str_key . "%')";
-        }
-
-        if ($str_status) {
-            $_str_sqlWhere .= " AND admin_status='" . $str_status . "'";
-        }
-
-        $_num_adminCount = $this->obj_db->count(BG_DB_TABLE . "admin", $_str_sqlWhere); //查询数据
-
-        return $_num_adminCount;
-    }
-
-
-    function mdl_alert_table() {
-        $_arr_col     = $this->mdl_column();
-        $_arr_alert   = array();
-
-        if (!in_array("admin_nick", $_arr_col)) {
-            $_arr_alert["admin_nick"] = array("ADD", "varchar(30) NOT NULL COMMENT '昵称'");
-        }
-
-        if (in_array("admin_id", $_arr_col)) {
-            $_arr_alert["admin_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "admin_id");
-        }
-
-        if (in_array("admin_status", $_arr_col)) {
-            $_arr_alert["admin_status"] = array("CHANGE", "enum('enable','disable') NOT NULL COMMENT '状态'", "admin_status");
-        }
-
-        if (in_array("admin_pass", $_arr_col)) {
-            $_arr_alert["admin_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "admin_pass");
-        }
-
-        if (in_array("admin_rand", $_arr_col)) {
-            $_arr_alert["admin_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "admin_rand");
-        }
-
-        $_str_alert = "x020106";
-
-        if ($_arr_alert) {
-            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "admin", $_arr_alert);
-
-            if ($_reselt) {
-                $_str_alert = "y020106";
-            }
-        }
-
-        return array(
-            "alert" => $_str_alert,
-        );
-    }
-
-
     /** 修改个人信息表单验证
      * input_profile function.
      *
@@ -448,7 +451,7 @@ class MODEL_ADMIN {
     function input_profile() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -481,7 +484,7 @@ class MODEL_ADMIN {
     function input_pass() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -553,14 +556,14 @@ class MODEL_ADMIN {
         if (!fn_seccode()) { //验证码
             return array(
                 "forward"   => $this->adminLogin["forward"],
-                "alert"     => "x030213",
+                "alert"     => "x030205",
             );
         }
 
         if (!fn_token("chk")) { //令牌
             return array(
                 "forward"   => $this->adminLogin["forward"],
-                "alert"     => "x030214",
+                "alert"     => "x030206",
             );
         }
 
@@ -623,7 +626,7 @@ class MODEL_ADMIN {
     function input_submit() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -720,7 +723,7 @@ class MODEL_ADMIN {
     function api_add() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -764,7 +767,10 @@ class MODEL_ADMIN {
             break;
         }
 
-        $this->adminSubmit["admin_status"]    = "enable";
+        $this->adminSubmit["admin_nick"]    = $this->adminSubmit["admin_name"];
+        $this->adminSubmit["admin_note"]    = $this->adminSubmit["admin_name"];
+        $this->adminSubmit["admin_id"]      = 0;
+        $this->adminSubmit["admin_status"]  = "enable";
 
         $_arr_adminAllow = array(
             "user" => array(
@@ -814,11 +820,11 @@ class MODEL_ADMIN {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
-        $_arr_adminIds = fn_post("admin_id");
+        $_arr_adminIds = fn_post("admin_ids");
 
         if ($_arr_adminIds) {
             foreach ($_arr_adminIds as $_key=>$_value) {
@@ -826,7 +832,7 @@ class MODEL_ADMIN {
             }
             $_str_alert = "ok";
         } else {
-            $_str_alert = "none";
+            $_str_alert = "x030202";
         }
 
         $this->adminIds = array(
@@ -835,5 +841,27 @@ class MODEL_ADMIN {
         );
 
         return $this->adminIds;
+    }
+
+
+    /** 列出及统计 SQL 处理
+     * sql_process function.
+     *
+     * @access private
+     * @param array $arr_search (default: array())
+     * @return void
+     */
+    private function sql_process($arr_search = array()) {
+        $_str_sqlWhere = "1=1";
+
+        if (isset($arr_search["key"]) && $arr_search["key"]) {
+            $_str_sqlWhere .= " AND (admin_name LIKE '%" . $arr_search["key"] . "%' OR admin_note LIKE '%" . $arr_search["key"] . "%' OR admin_nick LIKE '%" . $arr_search["key"] . "%')";
+        }
+
+        if (isset($arr_search["status"]) && $arr_search["status"]) {
+            $_str_sqlWhere .= " AND admin_status='" . $arr_search["status"] . "'";
+        }
+
+        return $_str_sqlWhere;
     }
 }

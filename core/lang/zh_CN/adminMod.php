@@ -42,31 +42,37 @@ return array(
             "import" => "批量导入",
         ),
     ),
-    /*"msg" => array(
+    "pm" => array(
         "main" => array(
-            "title"  => "短消息管理",
-            "mod"    => "msg",
+            "title"  => "站内短信",
+            "mod"    => "pm",
             "icon"   => "envelope",
         ),
         "sub" => array(
             "list" => array(
-                "title"     => "所有短消息",
-                "mod"       => "msg",
+                "title"     => "所有短信",
+                "mod"       => "pm",
                 "act_get"   => "list",
             ),
-            "form" => array(
-                "title"     => "群发短消息",
-                "mod"       => "msg",
-                "act_get"   => "form",
+            "send" => array(
+                "title"     => "发送短信",
+                "mod"       => "pm",
+                "act_get"   => "send",
+            ),
+            "bulk" => array(
+                "title"     => "群发短信",
+                "mod"       => "pm",
+                "act_get"   => "bulk",
             ),
         ),
         "allow" => array(
-            "browse" => "浏览",
-            "batch"  => "群发",
-            //"edit" => "编辑",
-            "del"    => "删除",
+            "browse"    => "浏览",
+            "send"      => "发送",
+            "bulk"      => "群发",
+            "edit"      => "编辑",
+            "del"       => "删除",
         ),
-    ),*/
+    ),
     "app" => array(
         "main" => array(
             "title"  => "应用管理",

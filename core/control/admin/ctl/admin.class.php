@@ -27,28 +27,29 @@ class CONTROL_ADMIN {
         $this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
         $this->mdl_admin      = new MODEL_ADMIN(); //设置管理员模型
         $_arr_cfg["admin"]    = true;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
     }
 
-    function ctl_show() {
-        $_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0);
 
-        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) {
+    function ctl_show() {
+        $_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0); //get 获取 admin_id
+
+        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) { //判断权限
             return array(
                 "alert" => "x020303",
             );
         }
-        $_arr_adminRow = $this->mdl_admin->mdl_read($_num_adminId);
+        $_arr_adminRow = $this->mdl_admin->mdl_read($_num_adminId); //读取
         if ($_arr_adminRow["alert"] != "y020102") {
             return $_arr_adminRow;
         }
 
         $this->tplData["adminRow"] = $_arr_adminRow; //管理员信息
 
-        $this->obj_tpl->tplDisplay("admin_show.tpl", $this->tplData);
+        $this->obj_tpl->tplDisplay("admin_show.tpl", $this->tplData); //显示
 
         return array(
             "alert" => "y020102",
@@ -63,10 +64,10 @@ class CONTROL_ADMIN {
      * @return void
      */
     function ctl_form() {
-        $_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0);
+        $_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0); //get 获取 admin_id
 
         if ($_num_adminId > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
+            if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) { //判断权限
                 return array(
                     "alert" => "x020303",
                 );
@@ -81,7 +82,7 @@ class CONTROL_ADMIN {
                 return $_arr_adminRow;
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) {
+            if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) { //判断权限
                 return array(
                     "alert" => "x020302",
                 );
@@ -111,24 +112,21 @@ class CONTROL_ADMIN {
      * @return void
      */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) { //判断权限
             return array(
                 "alert" => "x020301",
             );
         }
 
-        $_str_key     = fn_getSafe(fn_get("key"), "txt", "");
-        $_str_status  = fn_getSafe(fn_get("status"), "txt", "");
-
         $_arr_search = array(
-            "key"        => $_str_key,
-            "status"     => $_str_status,
+            "key"        => fn_getSafe(fn_get("key"), "txt", ""), //搜索关键词
+            "status"     => fn_getSafe(fn_get("status"), "txt", ""), //搜索状态
         );
 
-        $_num_adminCount  = $this->mdl_admin->mdl_count($_str_key, $_str_status);
+        $_num_adminCount  = $this->mdl_admin->mdl_count($_arr_search); //统计记录数
         $_arr_page        = fn_page($_num_adminCount); //取得分页数据
-        $_str_query       = http_build_query($_arr_search);
-        $_arr_adminRows   = $this->mdl_admin->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
+        $_str_query       = http_build_query($_arr_search); //将搜索参数拼合成查询串
+        $_arr_adminRows   = $this->mdl_admin->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_arr_search); //列出
 
         $_arr_tpl = array(
             "query"      => $_str_query,
@@ -140,6 +138,7 @@ class CONTROL_ADMIN {
         $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
         $this->obj_tpl->tplDisplay("admin_list.tpl", $_arr_tplData);
+        
         return array(
             "alert" => "y020302",
         );

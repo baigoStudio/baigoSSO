@@ -66,28 +66,30 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">signature</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>签名字符串，需要调用签名接口来生成，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
+                        <td>签名字符串，需要调用签名接口来生成，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
                     </tr>
 
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>加密字符串，利用密文接口将下表中的“加密前数据”进行加密，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
+                        <td>加密字符串，利用密文接口将下表中的“加密前数据”进行加密，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        下表数据需要加密后提交。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。
+        下表数据需要加密后提交。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -311,7 +313,7 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">false</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">urlRows</td>
@@ -379,7 +381,7 @@ $(document).ready(function(){
     <h3>同步登录通知</h3>
 
     <p class=\"text-success\">接口说明</p>
-    <p>应用调用同步接口以后，将会直接访问“通知接口 URL”，即上一步通过 AJAX 提交的例子。</p>
+    <p>应用调用同步接口以后，将会直接访问“同步接口 URL”，即上一步通过 AJAX 提交的例子。</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>GET</p>
@@ -427,12 +429,12 @@ $(document).ready(function(){
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">callback</td>
@@ -464,7 +466,7 @@ $(document).ready(function(){
     <p>&nbsp;</p>
 
     <p>
-        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。“通知接口 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。最后需要输出回调函数，并将数据通过回调函数的参数传回。
+        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。“同步接口 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。最后需要输出回调函数，并将数据通过回调函数的参数传回。
     </p>
 
     <p>&nbsp;</p>
@@ -510,6 +512,8 @@ $(document).ready(function(){
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>得到结果后，请验证 APP ID 与 APP KEY 是否正确，然后进行下一步动作，如：生成会话，标记用户已登录等。</p>
@@ -583,20 +587,20 @@ $(document).ready(function(){
                         <td class=\"text-nowrap\">signature</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>签名字符串，需要调用签名接口来生成，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
+                        <td>签名字符串，需要调用签名接口来生成，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
                     </tr>
 
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>加密字符串，利用密文接口将下表中的“加密前数据”进行加密，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
+                        <td>加密字符串，利用密文接口将下表中的“加密前数据”进行加密，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
                     </tr>
                 </tbody>
             </table>
@@ -604,7 +608,7 @@ $(document).ready(function(){
     </div>
 
     <p>
-        下表数据需要加密后提交。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。
+        下表数据需要加密后提交。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -660,7 +664,7 @@ $(document).ready(function(){
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">false</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">urlRows</td>
@@ -687,7 +691,7 @@ $(document).ready(function(){
     <h3>同步登出通知</h3>
 
     <p class=\"text-success\">接口说明</p>
-    <p>应用调用同步接口以后，将会直接访问“通知接口 URL”。</p>
+    <p>应用调用同步接口以后，将会直接访问“同步接口 URL”。</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>GET</p>
@@ -735,12 +739,12 @@ $(document).ready(function(){
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">callback</td>
@@ -753,7 +757,7 @@ $(document).ready(function(){
     </div>
 
     <p>
-        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。“通知接口 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。最后需要输出回调函数，并将数据通过回调函数的参数传回。
+        baigo SSO 所有通知接口均推送加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。“同步接口 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。最后需要输出回调函数，并将数据通过回调函数的参数传回。
     </p>
 
     <div class=\"panel panel-default\">

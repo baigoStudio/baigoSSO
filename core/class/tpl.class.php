@@ -26,29 +26,29 @@ class CLASS_TPL {
     public $opt; //语言 后台
 
     function __construct($str_pathTpl, $arr_cfg = false) { //构造函数
-        $this->arr_cfg = $arr_cfg;
-        $this->obj_base                   = $GLOBALS["obj_base"];
-        $this->config                     = $this->obj_base->config;
+        $this->arr_cfg  = $arr_cfg;
+        $this->obj_base = $GLOBALS["obj_base"];
+        $this->config   = $this->obj_base->config;
 
-        $this->obj_smarty                 = new Smarty(); //初始化 Smarty 对象
-        $this->obj_smarty->template_dir   = $str_pathTpl;
-        $this->obj_smarty->compile_dir    = BG_PATH_CACHE . "tpl";
-        $this->obj_smarty->debugging      = BG_SWITCH_SMARTY_DEBUG; //调试模式
+        $this->obj_smarty               = new Smarty(); //初始化 Smarty 对象
+        $this->obj_smarty->template_dir = $str_pathTpl;
+        $this->obj_smarty->compile_dir  = BG_PATH_CACHE . "tpl";
+        $this->obj_smarty->debugging    = BG_SWITCH_SMARTY_DEBUG; //调试模式
 
-        $this->lang       = include_once(BG_PATH_LANG . $this->config["lang"] . "/common.php"); //载入语言文件
-        $this->type       = include_once(BG_PATH_LANG . $this->config["lang"] . "/type.php"); //载入类型文件
-        $this->allow      = include_once(BG_PATH_LANG . $this->config["lang"] . "/allow.php"); //载入权限文件
-        $this->alert      = include_once(BG_PATH_LANG . $this->config["lang"] . "/alert.php"); //载入返回代码
+        $this->lang     = include_once(BG_PATH_LANG . $this->config["lang"] . "/common.php"); //载入语言文件
+        $this->type     = include_once(BG_PATH_LANG . $this->config["lang"] . "/type.php"); //载入类型文件
+        $this->allow    = include_once(BG_PATH_LANG . $this->config["lang"] . "/allow.php"); //载入权限文件
+        $this->alert    = include_once(BG_PATH_LANG . $this->config["lang"] . "/alert.php"); //载入返回代码
 
         if (isset($arr_cfg["admin"])) {
-            $this->install    = include_once(BG_PATH_LANG . $this->config["lang"] . "/install.php"); //载入返回代码
-            $this->adminMod   = include_once(BG_PATH_LANG . $this->config["lang"] . "/adminMod.php"); //载入管理权限配置
+            $this->install  = include_once(BG_PATH_LANG . $this->config["lang"] . "/install.php"); //载入安装信息
+            $this->adminMod = include_once(BG_PATH_LANG . $this->config["lang"] . "/adminMod.php"); //载入后台模块配置
         }
 
         if (isset($arr_cfg["admin"]) || isset($arr_cfg["user"])) {
             $this->status   = include_once(BG_PATH_LANG . $this->config["lang"] . "/status.php"); //载入状态文件
-            $this->opt      = include_once(BG_PATH_LANG . $this->config["lang"] . "/opt.php"); //载入管理权限配置
-            $this->userMod  = include_once(BG_PATH_LANG . $this->config["lang"] . "/userMod.php"); //载入管理权限配置
+            $this->opt      = include_once(BG_PATH_LANG . $this->config["lang"] . "/opt.php"); //载入配置信息
+            //$this->userMod  = include_once(BG_PATH_LANG . $this->config["lang"] . "/userMod.php"); //载入用户模块配置
         }
     }
 
@@ -57,11 +57,11 @@ class CLASS_TPL {
      * tplDisplay function.
      *
      * @access public
-     * @param mixed $str_view
+     * @param mixed $str_tpl
      * @param string $arr_tplData (default: "")
      * @return void
      */
-    function tplDisplay($str_view, $arr_tplData = "") {
+    function tplDisplay($str_tpl, $arr_tplData = "") {
         $this->common["token_session"]    = fn_token();
         $this->common["ssid"]             = session_id();
         $this->common["view"]             = $GLOBALS["view"];
@@ -81,11 +81,11 @@ class CLASS_TPL {
         if (isset($this->arr_cfg["admin"]) || isset($this->arr_cfg["user"])) {
             $this->obj_smarty->assign("status", $this->status);
             $this->obj_smarty->assign("opt", $this->opt);
-            $this->obj_smarty->assign("userMod", $this->userMod);
+            //$this->obj_smarty->assign("userMod", $this->userMod);
         }
 
         $this->obj_smarty->assign("tplData", $arr_tplData);
 
-        $this->obj_smarty->display($str_view);
+        $this->obj_smarty->display($str_tpl);
     }
 }

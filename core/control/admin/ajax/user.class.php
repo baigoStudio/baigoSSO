@@ -59,7 +59,7 @@ class AJAX_USER {
 
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -183,7 +183,7 @@ class AJAX_USER {
         $_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds["user_ids"]);
 
         if ($_arr_userRow["alert"] == "y010104") {
-            foreach ($_arr_userIds["user_ids"] as $_value) {
+            foreach ($_arr_userIds["user_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "user_id" => $_value,
                 );
@@ -196,6 +196,26 @@ class AJAX_USER {
         $this->obj_ajax->halt_alert($_arr_userRow["alert"]);
     }
 
+
+    function ajax_getname() {
+        $_arr_userName = $this->mdl_user->input_chk_name();
+
+        if ($_arr_userName["alert"] != "ok") {
+            $this->obj_ajax->halt_re($_arr_userName["alert"]);
+        }
+
+        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userName["user_name"], "user_name", $_arr_userName["not_id"]);
+
+        if ($_arr_userRow["alert"] != "y010102") {
+            $this->obj_ajax->halt_re($_arr_userRow["alert"]);
+        }
+
+        $arr_re = array(
+            "re" => "ok"
+        );
+
+        exit(json_encode($arr_re));
+    }
 
     /**
      * ajax_chkname function.
@@ -264,7 +284,7 @@ class AJAX_USER {
     private function validate_import() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 

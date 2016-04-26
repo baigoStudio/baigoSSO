@@ -28,7 +28,7 @@ return "<a name=\"top\"></a>
             <p>禁止注册的邮箱，只需要填写域名部分，每行一个域名，如：<mark>@hotmail.com</mark>，此时，<mark>@hotmail.com</mark> 为后缀的邮箱<mark>禁止</mark> 注册。</p>
 
             <h4 class=\"text-success\">禁止注册的用户名</h4>
-            <p>禁止注册的用户名，可使用通配符 <mark>*</mark>，每行一个用户名，如：<mark>*版主*</mark>，此时，只要用户名中含有 <mark>版主</mark> 两字时，<mark>禁止</mark> 注册。</p>
+            <p>禁止注册的用户名，可使用通配符 <kbd>*</kbd>，每行一个用户名，如：<mark>*版主*</mark>，此时，只要用户名中含有 <mark>版主</mark> 两字时，<mark>禁止</mark> 注册。</p>
         </div>
     </div>
 

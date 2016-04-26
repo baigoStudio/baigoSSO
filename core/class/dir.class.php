@@ -23,7 +23,7 @@ class CLASS_DIR {
         if (is_dir($str_path)) {
             $_arr_dir = $this->list_dir($str_path); //逐级列出
 
-            foreach ($_arr_dir as $_value) {
+            foreach ($_arr_dir as $_key=>$_value) {
                 if ($_value["type"] == "file") {
                     unlink($str_path . "/" . $_value["name"]);  //删除
                 } else {

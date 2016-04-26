@@ -23,6 +23,9 @@ return "<a name=\"top\"></a>
             <a href=\"#forgot\">找回密码</a>
         </li>
         <li>
+            <a href=\"#refresh\">刷新访问口令</a>
+        </li>
+        <li>
             <a href=\"#del\">删除用户</a>
         </li>
         <li>
@@ -105,13 +108,21 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">false</td>
                         <td>昵称</td>
                     </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_contact</td>
+                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">false</td>
+                        <td>联系方式，详情查看 <a href=\"#contact\">联系方式格式</a>。</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -129,17 +140,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -177,10 +188,36 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">int</td>
                         <td>用户 ID</td>
                     </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>访问口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>访问口令过期时间，Unix 时间戳。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>刷新口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>刷新口令过期时间，Unix 时间戳。</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -269,8 +306,10 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -288,17 +327,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -358,6 +397,8 @@ return "<a name=\"top\"></a>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -455,8 +496,10 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -474,17 +517,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -547,18 +590,6 @@ return "<a name=\"top\"></a>
                         <td>用户状态，可能的值为 enable（激活）、wait（待审）、disable（禁用）。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">user_token</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>访问口令。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">user_token_expire</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td>口令过期时间，Unix 时间戳。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_time</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">int</td>
@@ -576,10 +607,36 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">string</td>
                         <td>最后登录 IP 地址</td>
                     </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>访问口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>访问口令过期时间，Unix 时间戳。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>刷新口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>刷新口令过期时间，Unix 时间戳。</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -674,8 +731,10 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -693,17 +752,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -754,6 +813,12 @@ return "<a name=\"top\"></a>
                         <td>邮箱</td>
                     </tr>
                     <tr>
+                        <td class=\"text-nowrap\">user_contact</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">array</td>
+                        <td>联系方式，详情查看 <a href=\"#contact\">联系方式格式</a>。</td>
+                    </tr>
+                    <tr>
                         <td class=\"text-nowrap\">user_nick</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">string</td>
@@ -783,10 +848,36 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">string</td>
                         <td>最后登录 IP 地址</td>
                     </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>访问口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>访问口令过期时间，Unix 时间戳。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>刷新口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>刷新口令过期时间，Unix 时间戳。</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -877,11 +968,17 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
+                        <td class=\"text-nowrap\">user_contact</td>
+                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">false</td>
+                        <td>联系方式，仅在需要修改时传递该参数，详情查看 <a href=\"#contact\">联系方式格式</a>。</td>
+                    </tr>
+                    <tr>
                         <td class=\"text-nowrap\">user_check_pass</td>
                         <td class=\"text-nowrap\">bool</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>
-                            <p>是否需要验证旧密码，true 为验证旧密码，false 为忽略旧密码。</p>
+                            <p>是否需要验证原密码，true 为验证原密码，false 为忽略原密码。</p>
                             <p>如果此参数为 true，则不受应用授权的限制，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#belong\">授权用户</a>。</p>
                         </td>
                     </tr>
@@ -907,15 +1004,17 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">user_nick</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">false</td>
-                        <td>昵称</td>
+                        <td>昵称，仅在需要修改时传递该参数。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -933,17 +1032,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -993,10 +1092,36 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">tring</td>
                         <td>昵称</td>
                     </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>访问口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>访问口令过期时间，Unix 时间戳。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>刷新口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>刷新口令过期时间，Unix 时间戳。</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -1087,7 +1212,7 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">bool</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>
-                            <p>是否需要验证旧密码，true 为验证旧密码，false 为忽略旧密码。</p>
+                            <p>是否需要验证原密码，true 为验证原密码，false 为忽略原密码。</p>
                             <p>如果此参数为 true，则不受应用授权的限制，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#belong\">授权用户</a>。</p>
                         </td>
                     </tr>
@@ -1108,8 +1233,10 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -1127,17 +1254,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -1198,6 +1325,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <h4>返回结果示例</h4>
     <p>
 <pre><code class=\"language-javascript\">{
@@ -1245,6 +1374,8 @@ return "<a name=\"top\"></a>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -1335,8 +1466,10 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -1354,17 +1487,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -1425,6 +1558,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <h4>返回结果示例</h4>
     <p>
 <pre><code class=\"language-javascript\">{
@@ -1432,6 +1567,184 @@ return "<a name=\"top\"></a>
     &quot;user_name&quot;: &quot;MTA=&quot; //用户名
     &quot;verify_id&quot;: &quot;MTA=&quot; //验证 ID
     &quot;verify_token&quot;: &quot;MTA=&quot; //验证口令
+}</code></pre>
+    </p>
+
+    <p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <p>&nbsp;</p>
+
+    <a name=\"refresh\"></a>
+    <h3>刷新访问口令</h3>
+
+    <p class=\"text-success\">接口说明</p>
+    <p>本接口用于刷新用户的访问口令。</p>
+
+    <p class=\"text-success\">URL</p>
+    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+
+    <p class=\"text-success\">HTTP 请求方式</p>
+    <p>POST</p>
+
+    <p class=\"text-success\">返回格式</p>
+    <p>JSON</p>
+
+    <div class=\"panel panel-default\">
+        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"table-responsive\">
+            <table class=\"table table-bordered\">
+                <thead>
+                    <tr>
+                        <th class=\"text-nowrap\">名称</th>
+                        <th class=\"text-nowrap\">类型</th>
+                        <th class=\"text-nowrap\">必须</th>
+                        <th>具体描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=\"text-nowrap\">act_post</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>接口调用动作，值只能为 refresh。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">app_id</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">app_key</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_id</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">
+                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_name</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\"> </td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_mail</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <p>
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+    </p>
+
+    <div class=\"panel panel-default\">
+        <div class=\"panel-heading\">返回结果</div>
+        <div class=\"table-responsive\">
+            <table class=\"table table-bordered\">
+                <thead>
+                    <tr>
+                        <th class=\"text-nowrap\">名称</th>
+                        <th class=\"text-nowrap\">类型</th>
+                        <th>具体描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=\"text-nowrap\">alert</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">code</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">key</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">prd_sso_ver</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>baigo SSO 版本号。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">prd_sso_pub</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>baigo SSO 版本发布时间，格式为年月日。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <div class=\"panel panel-default\">
+        <div class=\"panel-heading\">解密后的结果</div>
+        <div class=\"table-responsive\">
+            <table class=\"table table-bordered\">
+                <thead>
+                    <tr>
+                        <th class=\"text-nowrap\">名称</th>
+                        <th class=\"text-nowrap\">Base64</th>
+                        <th class=\"text-nowrap\">类型</th>
+                        <th>具体描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=\"text-nowrap\">user_id</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>用户 ID</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_token</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>访问口令。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_access_expire</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td>访问口令过期时间，Unix 时间戳。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+
+    <h4>返回结果示例</h4>
+    <p>
+<pre><code class=\"language-javascript\">{
+    &quot;user_id&quot;: &quot;MTA=&quot; //用户 ID
+    &quot;user_name&quot;: &quot;MTA=&quot; //用户名
+    &quot;user_access_token&quot;: &quot;MTA=&quot; //访问口令
+    &quot;user_access_expire&quot;: &quot;MTA=&quot; //访问口令过期时间
 }</code></pre>
     </p>
 
@@ -1492,18 +1805,20 @@ return "<a name=\"top\"></a>
                         <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">user_id</td>
+                        <td class=\"text-nowrap\">user_ids</td>
                         <td class=\"text-nowrap\">array</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>用户 ID 数组</td>
+                        <td>准备删除的用户 ID 数组</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <p>
-        baigo SSO 所有 API 接口均返回加密字符串，真正内容需要调用密文接口进行解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
+        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。
     </p>
 
     <div class=\"panel panel-default\">
@@ -1521,17 +1836,17 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>加密字符串，需要解密。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">key</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
+                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -1567,12 +1882,14 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">false</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <h4>返回结果示例</h4>
     <p>
@@ -1643,16 +1960,12 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">true</td>
                         <td>用户名</td>
                     </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">not_id</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">false</td>
-                        <td>排除用户 ID，此参数用户排除不需要验证的用户 ID，一般用在编辑用户资料前的验证。</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
@@ -1669,7 +1982,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -1768,6 +2081,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -1783,7 +2098,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -1807,6 +2122,32 @@ return "<a name=\"top\"></a>
 <pre><code class=\"language-javascript\">{
     &quot;alert&quot;: &quot;y010102&quot; //返回代码
 }</code></pre>
+    </p>
+
+    <p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+
+    <p>&nbsp;</p>
+
+    <a name=\"contact\"></a>
+    <h3>联系方式格式</h3>
+<pre><code class=\"language-php\">array(
+    \"tel\" => array( //可自定义
+        \"key\"     => \"电话\",
+        \"value\"   => \"0574-88888888\"
+    ),
+    \"addr\" => array(
+        \"key\"     => \"地址\",
+        \"value\"   => \"浙江省宁波市\"
+    )
+);
+</code></pre>
     </p>
 
     <p>&nbsp;</p>

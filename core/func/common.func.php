@@ -39,7 +39,7 @@ function fn_getIp($str_ipTrue = true) {
         if ($str_ipTrue) {
             if (fn_server("HTTP_X_FORWARDED_FOR")) {
                 $_arr_ips = explode(",", fn_server("HTTP_X_FORWARDED_FOR"));
-                foreach ($_arr_ips as $_value) {
+                foreach ($_arr_ips as $_key=>$_value) {
                     $_value = trim($_value);
                     if ($_value != "unknown") {
                         $_str_ip = $_value;

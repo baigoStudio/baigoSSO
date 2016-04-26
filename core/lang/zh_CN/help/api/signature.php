@@ -63,6 +63,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -78,7 +80,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">signature</td>
@@ -191,6 +193,8 @@ return "<a name=\"top\"></a>
         </div>
     </div>
 
+    <p>&nbsp;</p>
+
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>
         <div class=\"table-responsive\">
@@ -206,7 +210,7 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">alert</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td>返回代码，详情请看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=alert\">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>

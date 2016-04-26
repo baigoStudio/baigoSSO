@@ -35,7 +35,7 @@ class CONTROL_LOG {
         $this->mdl_verify   = new MODEL_VERIFY(); //设置管理员模型
         $this->mdl_app      = new MODEL_APP(); //设置管理员模型
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
@@ -126,24 +126,18 @@ class CONTROL_LOG {
             );
         }
 
-        $_str_key         = fn_getSafe(fn_get("key"), "txt", "");
-        $_str_type        = fn_getSafe(fn_get("type"), "txt", "");
-        $_str_status      = fn_getSafe(fn_get("status"), "txt", "");
-        $_str_level       = fn_getSafe(fn_get("level"), "txt", "");
-        $_num_operatorId  = fn_getSafe(fn_get("operator_id"), "int", 0);
-
         $_arr_search = array(
-            "key"            => $_str_key,
-            "type"           => $_str_type,
-            "status"         => $_str_status,
-            "level"          => $_str_level,
-            "operator_id"    => $_num_operatorId,
+            "key"            => fn_getSafe(fn_get("key"), "txt", ""),
+            "type"           => fn_getSafe(fn_get("type"), "txt", ""),
+            "status"         => fn_getSafe(fn_get("status"), "txt", ""),
+            "level"          => fn_getSafe(fn_get("level"), "txt", ""),
+            "operator_id"    => fn_getSafe(fn_get("operator_id"), "int", 0),
         );
 
-        $_num_logCount    = $this->mdl_log->mdl_count($_str_key, $_str_type, $_str_status, $_str_level, $_num_operatorId);
+        $_num_logCount    = $this->mdl_log->mdl_count($_arr_search);
         $_arr_page        = fn_page($_num_logCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search);
-        $_arr_logRows     = $this->mdl_log->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_type, $_str_status, $_str_level, $_num_operatorId);
+        $_arr_logRows     = $this->mdl_log->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_arr_search);
 
         foreach ($_arr_logRows as $_key=>$_value) {
             switch ($_value["log_type"]) {

@@ -1,12 +1,12 @@
 /*
-v1.0.1 jQuery baigoSubmit plugin 表单全选插件
+v1.1 jQuery baigoSubmit plugin 表单全选插件
 (c) 2013 baigo studio - http://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
 
 (function($){
     $.fn.baigoSubmit = function(options) {
-
+        "use strict";
         if(this.length < 1) {
             return this;
         }
@@ -38,13 +38,14 @@ License: http://www.opensource.org/licenses/mit-license.php
 
         //调用弹出框
         var callModal = function() {
-            $("body .modal.baigoSubmit_box").modal("show")
-        }
+            $("body .modal.baigoSubmit_box").modal("show");
+        };
 
         var _is_modal = true;
+        var obj_box;
 
         if (typeof opts.msg_box == "undefined") {
-            var obj_box = $("body .modal.baigoSubmit_box");
+            obj_box = $("body .modal.baigoSubmit_box");
             if (obj_box.length < 1) {
                 $("body").append("<div class=\"modal fade baigoSubmit_box\">" +
                     "<div class=\"modal-dialog\">" +
@@ -62,7 +63,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 "</div>");
             }
         } else {
-            var obj_box = $(opts.msg_box + " .baigoSubmit_box");
+            obj_box = $(opts.msg_box + " .baigoSubmit_box");
 
             if (obj_box.length < 1) {
                 $(opts.msg_box).append("<div class=\"baigoSubmit_box\"></div>");
@@ -87,7 +88,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                     return true;
                 }
             }
-        }
+        };
 
         //ajax提交
         el.formSubmit = function(_btn_submit) {
@@ -142,9 +143,9 @@ License: http://www.opensource.org/licenses/mit-license.php
                     }
                 });
             }
-        }
+        };
 
         return this;
-    }
+    };
 
 })(jQuery);

@@ -36,22 +36,25 @@ return "<a name=\"top\"></a>
             <p>应用的名称。</p>
 
             <h4 class=\"text-success\">通知接口 URL</h4>
-            <p>baigo SSO 在一些特殊情况下，通过此接口，告诉各个应用进行某种操作，比如删除用户、更新用户信息等，详情请看 API 接口。</p>
+            <p>baigo SSO 在一些特殊情况下，通过此接口，告诉各个应用进行某种操作，比如删除用户、更新用户信息等，详情查看 API 接口。</p>
+
+            <h4 class=\"text-success\">同步接口 URL</h4>
+            <p>应用调用同步接口以后，将会直接访问“同步接口 URL”，详情查看 API 接口。</p>
 
             <h4 class=\"text-success\">权限</h4>
             <p>选择该应用具备的各种权限。</p>
 
             <h4 class=\"text-success\">允许通信的 IP</h4>
-            <p>允许与 baigo SSO 进行通信的 IP 地址，每行一个 IP 地址，可使用通配符 <mark>*</mark>，如：<mark>192.168.1.*</mark>，此时，只有 <mark>192.168.1</mark> 网段的 IP 地址 <mark>允许</mark> 通信。</p>
+            <p>允许与 baigo SSO 进行通信的 IP 地址，每行一个 IP 地址，可使用通配符 <kbd>*</kbd>，如：<mark>192.168.1.*</mark>，此时，只有 <mark>192.168.1</mark> 网段的 IP 地址 <mark>允许</mark> 通信。</p>
 
             <h4 class=\"text-success\">禁止通信的 IP</h4>
-            <p>禁止与 baigo SSO 进行通信的 IP 地址，每行一个 IP 地址，可使用通配符 <mark>*</mark>，如：<mark>192.168.1.*</mark>，此时，<mark>192.168.1</mark> 网段的 IP 地址 <mark>禁止</mark> 通信。</p>
+            <p>禁止与 baigo SSO 进行通信的 IP 地址，每行一个 IP 地址，可使用通配符 <kbd>*</kbd>，如：<mark>192.168.1.*</mark>，此时，<mark>192.168.1</mark> 网段的 IP 地址 <mark>禁止</mark> 通信。</p>
 
             <h4 class=\"text-success\">状态</h4>
             <p>可选启用、禁用。</p>
 
             <h4 class=\"text-success\">同步通知</h4>
-            <p>如为开启状态，部分对本系统的操作，将通过通知接口 URL 通知各个应用，以供这些应用进行相应操作，详情请看 API 接口。</p>
+            <p>如为开启状态，部分对本系统的操作，将通过通知接口 URL 通知各个应用，以供这些应用进行相应操作，详情查看 API 接口。</p>
         </div>
     </div>
 

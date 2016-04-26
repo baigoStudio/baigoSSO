@@ -32,7 +32,7 @@ class AJAX_UPGRADE {
 
 
     function ajax_dbconfig() {
-        $_arr_dbconfigSubmit = $this->mdl_opt->input_dbconfig();
+        $_arr_dbconfigSubmit = $this->mdl_opt->input_dbconfig(false);
 
         if ($_arr_dbconfigSubmit["alert"] != "ok") {
             $this->obj_ajax->halt_alert($_arr_dbconfigSubmit["alert"]);
@@ -62,7 +62,7 @@ class AJAX_UPGRADE {
         $_num_countInput = count(array_filter($_arr_const));
 
         if ($_num_countInput < $_num_countSrc) {
-            $this->obj_ajax->halt_alert("x030212");
+            $this->obj_ajax->halt_alert("x030204");
         }
 
         $_arr_return = $this->mdl_opt->mdl_const($_act_post);
@@ -91,7 +91,7 @@ class AJAX_UPGRADE {
 
     private function check_db() {
         if (!fn_token("chk")) { //令牌
-            $this->obj_ajax->halt_alert("x030214");
+            $this->obj_ajax->halt_alert("x030206");
         }
 
         if (strlen(BG_DB_HOST) < 1 || strlen(BG_DB_NAME) < 1 || strlen(BG_DB_USER) < 1 || strlen(BG_DB_PASS) < 1 || strlen(BG_DB_CHARSET) < 1) {

@@ -46,19 +46,20 @@ function fn_baigoKey($txt, $encrypt_key) {
 }
 
 //生成签名
-function fn_baigoSignMk($tm_time, $str_rand) {
-    $_num_time = intval($tm_time);
-    $_arr_temp = array($_num_time, $str_rand);
+function fn_baigoSignMk($tm_time, $str_rand, $num_appId, $str_appKey) {
+    $_num_time  = intval($tm_time);
+    $_num_appId = intval($num_appId);
+    $_arr_temp  = array($_num_time, $str_rand, $num_appId, $str_appKey);
     sort($_arr_temp);
-    $_str_temp = implode($_arr_temp);
-    $_str_temp = sha1($_str_temp);
+    $_str_temp  = implode($_arr_temp);
+    $_str_temp  = sha1($_str_temp);
 
     return $_str_temp;
 }
 
 //验证签名
-function fn_baigoSignChk($tm_time, $str_rand, $str_sign) {
-    $_str_temp = fn_baigoSignMk($tm_time, $str_rand);
+function fn_baigoSignChk($tm_time, $str_rand, $num_appId, $str_appKey, $str_sign) {
+    $_str_temp = fn_baigoSignMk($tm_time, $str_rand, $num_appId, $str_appKey);
 
     if ($_str_temp == $str_sign) {
         return true;

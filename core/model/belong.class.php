@@ -11,7 +11,6 @@ if(!defined("IN_BAIGO")) {
 
 /*-------------应用归属-------------*/
 class MODEL_BELONG {
-
     private $obj_db;
 
     function __construct() { //构造函数
@@ -45,7 +44,7 @@ class MODEL_BELONG {
         );
     }
 
-    /** 检查字段
+    /** 列出字段
      * mdl_column function.
      *
      * @access public
@@ -59,6 +58,36 @@ class MODEL_BELONG {
         }
 
         return $_arr_col;
+    }
+
+
+    /** 修改表
+     * mdl_alert_table function.
+     *
+     * @access public
+     * @return void
+     */
+    function mdl_alert_table() {
+        $_arr_col     = $this->mdl_column();
+        $_arr_alert   = array();
+
+        if (in_array("belong_app_id", $_arr_col)) {
+            $_arr_alert["belong_app_id"] = array("CHANGE", "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
+        }
+
+        $_str_alert = "y070111";
+
+        if ($_arr_alert) {
+            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "belong", $_arr_alert);
+
+            if ($_reselt) {
+                $_str_alert = "y070106";
+            }
+        }
+
+        return array(
+            "alert" => $_str_alert,
+        );
     }
 
 
@@ -145,35 +174,20 @@ class MODEL_BELONG {
      * mdl_list function.
      *
      * @access public
-     * @param mixed $num_belongNo
-     * @param int $num_belongExcept (default: 0)
-     * @param int $num_appId (default: 0)
-     * @param int $num_userId (default: 0)
-     * @param bool $arr_userIds (default: false)
+     * @param mixed $num_no
+     * @param int $num_except (default: 0)
+     * @param array $arr_search (default: array())
      * @return void
      */
-    function mdl_list($num_belongNo, $num_belongExcept = 0, $num_appId = 0, $num_userId = 0, $arr_userIds = false) {
+    function mdl_list($num_no, $num_except = 0, $arr_search = array()) {
         $_arr_belongSelect = array(
             "belong_app_id",
             "belong_user_id",
         );
 
-        $_str_sqlWhere = "belong_id>0";
+        $_str_sqlWhere = $this->sql_process($arr_search);
 
-        if ($num_appId > 0) {
-            $_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
-        }
-
-        if ($num_userId > 0) {
-            $_str_sqlWhere .= " AND belong_user_id=" . $num_userId;
-        }
-
-        if ($arr_userIds) {
-            $_str_userIds = implode(",", $arr_userIds);
-            $_str_sqlWhere  .= " AND belong_user_id IN (" . $_str_userIds . ")";
-        }
-
-        $_arr_belongRows = $this->obj_db->select(BG_DB_TABLE . "belong", $_arr_belongSelect, $_str_sqlWhere, "", "belong_id DESC", $num_belongNo, $num_belongExcept);
+        $_arr_belongRows = $this->obj_db->select(BG_DB_TABLE . "belong", $_arr_belongSelect, $_str_sqlWhere, "", "belong_id DESC", $num_no, $num_except);
 
         return $_arr_belongRows;
     }
@@ -183,27 +197,12 @@ class MODEL_BELONG {
      * mdl_count function.
      *
      * @access public
-     * @param int $num_appId (default: 0)
-     * @param int $num_userId (default: 0)
-     * @param bool $arr_userIds (default: false)
+     * @param array $arr_search (default: array())
      * @return void
      */
-    function mdl_count($num_appId = 0, $num_userId = 0, $arr_userIds = false) {
+    function mdl_count($arr_search = array()) {
 
-        $_str_sqlWhere = "1=1";
-
-        if ($num_appId > 0) {
-            $_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
-        }
-
-        if ($num_userId > 0) {
-            $_str_sqlWhere .= " AND belong_user_id=" . $num_userId;
-        }
-
-        if ($arr_userIds) {
-            $_str_userIds = implode(",", $arr_userIds);
-            $_str_sqlWhere  .= " AND belong_user_id IN (" . $_str_userIds . ")";
-        }
+        $_str_sqlWhere = $this->sql_process($arr_search);
 
         $_num_belongCount = $this->obj_db->count(BG_DB_TABLE . "belong", $_str_sqlWhere); //查询数据
 
@@ -275,26 +274,29 @@ class MODEL_BELONG {
     }
 
 
-    function mdl_alert_table() {
-        $_arr_col     = $this->mdl_column();
-        $_arr_alert   = array();
+    /** 列出及统计 SQL 处理
+     * sql_process function.
+     *
+     * @access private
+     * @param array $arr_search (default: array())
+     * @return void
+     */
+    private function sql_process($arr_search = array()) {
+        $_str_sqlWhere = "1=1";
 
-        if (in_array("belong_app_id", $_arr_col)) {
-            $_arr_alert["belong_app_id"] = array("CHANGE", "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
+        if (isset($arr_search["app_id"]) && $arr_search["app_id"] > 0) {
+            $_str_sqlWhere .= " AND belong_app_id=" . $arr_search["app_id"];
         }
 
-        $_str_alert = "x070106";
-
-        if ($_arr_alert) {
-            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "belong", $_arr_alert);
-
-            if ($_reselt) {
-                $_str_alert = "y070106";
-            }
+        if (isset($arr_search["user_id"]) && $arr_search["user_id"] > 0) {
+            $_str_sqlWhere .= " AND belong_user_id=" . $arr_search["user_id"];
         }
 
-        return array(
-            "alert" => $_str_alert,
-        );
+        if (isset($arr_search["user_ids"]) && $arr_search["user_ids"]) {
+            $_str_userIds = implode(",", $arr_search["user_ids"]);
+            $_str_sqlWhere  .= " AND belong_user_id IN (" . $_str_userIds . ")";
+        }
+
+        return $_str_sqlWhere;
     }
 }

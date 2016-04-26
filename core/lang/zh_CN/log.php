@@ -24,6 +24,13 @@ return array(
         "edit"    => "无编辑用户权限",
     ),
 
+    "pm" => array(
+        "del"     => "删除用户",
+        "delErr"  => "无删除用户权限",
+        "list"    => "无列出短信权限",
+        "read"    => "无读取短信权限",
+    ),
+
     "app" => array(
         "notice"      => "通知",
         "noticeTest"  => "通知测试失败",

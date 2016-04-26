@@ -28,7 +28,7 @@ class CONTROL_USER {
         $this->adminLogged    = $GLOBALS["adminLogged"]; //获取已登录信息
         $this->mdl_user       = new MODEL_USER(); //设置管理员模型
         $_arr_cfg["admin"]    = true;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
@@ -81,11 +81,12 @@ class CONTROL_USER {
                 );
             }
             $_arr_userRow = array(
-                "user_id"           => 0,
-                "user_mail"         => "",
-                "user_nick"         => "",
-                "user_note"         => "",
-                "user_status"       => "enable",
+                "user_id"       => 0,
+                "user_mail"     => "",
+                "user_nick"     => "",
+                "user_note"     => "",
+                "user_status"   => "enable",
+                "user_contact"  => array(),
             );
         }
 
@@ -115,19 +116,15 @@ class CONTROL_USER {
             );
         }
 
-        $_str_key     = fn_getSafe(fn_get("key"), "txt", "");
-        $_str_status  = fn_getSafe(fn_get("status"), "txt", "");
-
         $_arr_search = array(
-            "act_get"    => $GLOBALS["act_get"],
-            "key"        => $_str_key,
-            "status"     => $_str_status,
+            "key"        => fn_getSafe(fn_get("key"), "txt", ""),
+            "status"     => fn_getSafe(fn_get("status"), "txt", ""),
         );
 
-        $_num_userCount   = $this->mdl_user->mdl_count($_str_key, $_str_status);
+        $_num_userCount   = $this->mdl_user->mdl_count($_arr_search);
         $_arr_page        = fn_page($_num_userCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search);
-        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_str_key, $_str_status);
+        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page["except"], $_arr_search);
 
         $_arr_tpl = array(
             "query"      => $_str_query,

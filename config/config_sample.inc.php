@@ -46,6 +46,7 @@ define("BG_PATH_LANG", BG_PATH_CORE . BG_NAME_LANG . "/");
 define("BG_PATH_CLASS", BG_PATH_CORE . BG_NAME_CLASS . "/");
 define("BG_PATH_FUNC", BG_PATH_CORE . BG_NAME_FUNC . "/");
 define("BG_PATH_SMARTY", BG_PATH_CORE . BG_NAME_SMARTY . "/");
+define("BG_PATH_TPLSYS", BG_PATH_CORE . BG_NAME_TPL . "/");
 define("BG_PATH_PHPMAILER", BG_PATH_CORE . BG_NAME_PHPMAILER . "/");
 define("BG_URL_ROOT", str_ireplace(str_ireplace("\\", "/", $_SERVER["DOCUMENT_ROOT"]), "", str_ireplace("\\", "/", BG_PATH_ROOT)));
 define("BG_URL_HELP", BG_URL_ROOT . BG_NAME_HELP . "/");

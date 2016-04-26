@@ -35,7 +35,7 @@ class API_INSTALL {
 
 
     function api_dbconfig() {
-        $_arr_dbconfigSubmit = $this->mdl_opt->input_dbconfig();
+        $_arr_dbconfigSubmit = $this->mdl_opt->input_dbconfig(false);
         if ($_arr_dbconfigSubmit["alert"] != "ok") {
             $this->obj_api->halt_re($_arr_dbconfigSubmit["alert"]);
         }
@@ -65,7 +65,7 @@ class API_INSTALL {
 
         if ($_num_countInput < $_num_countSrc) {
             $_arr_return = array(
-                "alert" => "x030212"
+                "alert" => "x030204"
             );
             $this->obj_api->halt_re($_arr_return);
         }
@@ -131,8 +131,9 @@ class API_INSTALL {
 
     private function table_admin() {
         include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
-        $_mdl_admin       = new MODEL_ADMIN();
-        $_arr_adminTable  = $_mdl_admin->mdl_create_table();
+        $_mdl_admin                 = new MODEL_ADMIN();
+        $_mdl_admin->adminStatus    = $this->obj_api->status["admin"];
+        $_arr_adminTable            = $_mdl_admin->mdl_create_table();
 
         if ($_arr_adminTable["alert"] != "y020105") {
             $this->obj_api->halt_re($_arr_adminTable);
@@ -142,8 +143,9 @@ class API_INSTALL {
 
     private function table_user() {
         include_once(BG_PATH_MODEL . "user.class.php"); //载入管理帐号模型
-        $_mdl_user        = new MODEL_USER();
-        $_arr_userTable   = $_mdl_user->mdl_create_table();
+        $_mdl_user              = new MODEL_USER();
+        $_mdl_user->userStatus  = $this->obj_api->status["user"];
+        $_arr_userTable         = $_mdl_user->mdl_create_table();
 
         if ($_arr_userTable["alert"] != "y010105") {
             $this->obj_api->halt_re($_arr_userTable);
@@ -153,8 +155,10 @@ class API_INSTALL {
 
     private function table_app() {
         include_once(BG_PATH_MODEL . "app.class.php"); //载入管理帐号模型
-        $_mdl_app         = new MODEL_APP();
-        $_arr_appTable    = $_mdl_app->mdl_create_table();
+        $_mdl_app               = new MODEL_APP();
+        $_mdl_app->appStatus    = $this->obj_api->status["app"];
+        $_mdl_app->appSyncs     = $this->obj_api->status["appSync"];
+        $_arr_appTable          = $_mdl_app->mdl_create_table();
 
         if ($_arr_appTable["alert"] != "y050105") {
             $this->obj_api->halt_re($_arr_appTable);
@@ -175,8 +179,11 @@ class API_INSTALL {
 
     private function table_log() {
         include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
-        $_mdl_log         = new MODEL_LOG();
-        $_arr_logTable    = $_mdl_log->mdl_create_table();
+        $_mdl_log               = new MODEL_LOG();
+        $_mdl_log->logStatus    = $this->obj_api->status["log"];
+        $_mdl_log->logTypes     = $this->obj_api->type["log"];
+        $_mdl_log->logTargets   = $this->obj_api->type["logTarget"];
+        $_arr_logTable          = $_mdl_log->mdl_create_table();
 
         if ($_arr_logTable["alert"] != "y060105") {
             $this->obj_api->halt_re($_arr_logTable);

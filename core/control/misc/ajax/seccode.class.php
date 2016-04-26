@@ -28,7 +28,7 @@ class AJAX_SECCODE {
     function ajax_chk() {
         $_str_seccode = strtolower(fn_get("seccode"));
         if ($_str_seccode != fn_session("seccode")) {
-            $this->obj_ajax->halt_re("x030213");
+            $this->obj_ajax->halt_re("x030205");
         }
 
         $arr_re = array(

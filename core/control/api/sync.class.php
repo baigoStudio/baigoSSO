@@ -41,18 +41,6 @@ class API_SYNC {
     function api_login() {
         $this->app_check("get");
 
-        if (!isset($this->appRow["app_allow"]["user"]["login"])) {
-            $_arr_return = array(
-                "alert" => "x050306",
-            );
-            $_arr_logTarget[] = array(
-                "app_id" => $this->appRequest["app_id"],
-            );
-            $_arr_logType = array("user", "get");
-            $this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
-            $this->obj_sync->halt_re($_arr_return);
-        }
-
         $_arr_userId = validateStr($this->appRequest["user_id"], 1, 0, "str", "int");
         switch ($_arr_userId["status"]) {
             case "too_short":
@@ -80,7 +68,7 @@ class API_SYNC {
             $this->obj_sync->halt_re($_arr_userRow);
         }
 
-        if ($_arr_userRow["user_status"] != "enable") {
+        if ($_arr_userRow["user_status"] == "disable") {
             $_arr_return = array(
                 "alert" => "x010401",
             );
@@ -100,14 +88,14 @@ class API_SYNC {
 
             $_tm_time    = time();
             $_str_rand   = fn_rand();
-            $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand);
+            $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
 
-            if (stristr($_value["app_notice"], "?")) {
+            if (stristr($_value["app_url_sync"], "?")) {
                 $_str_conn = "&";
             } else {
                 $_str_conn = "?";
             }
-            $_str_url = $_value["app_notice"] . $_str_conn . "mod=sync";
+            $_str_url = $_value["app_url_sync"] . $_str_conn . "mod=sync";
 
             $_arr_data = array(
                 "act_get"    => "login",
@@ -133,18 +121,6 @@ class API_SYNC {
     function api_logout() {
         $this->app_check("get");
 
-        if (!isset($this->appRow["app_allow"]["user"]["login"])) {
-            $_arr_return = array(
-                "alert" => "x050306",
-            );
-            $_arr_logTarget[] = array(
-                "app_id" => $this->appRequest["app_id"],
-            );
-            $_arr_logType = array("user", "get");
-            $this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
-            $this->obj_sync->halt_re($_arr_return);
-        }
-
         $_arr_userId = validateStr($this->appRequest["user_id"], 1, 0, "str", "int");
         switch ($_arr_userId["status"]) {
             case "too_short":
@@ -172,7 +148,7 @@ class API_SYNC {
             $this->obj_sync->halt_re($_arr_userRow);
         }
 
-        if ($_arr_userRow["user_status"] != "enable") {
+        if ($_arr_userRow["user_status"] == "disable") {
             $_arr_return = array(
                 "alert" => "x010401",
             );
@@ -188,17 +164,17 @@ class API_SYNC {
         foreach ($this->appRows as $_key=>$_value) {
             $_tm_time                = time();
             $_str_rand               = fn_rand();
-            $_str_sign               = fn_baigoSignMk($_tm_time, $_str_rand);
+            $_str_sign               = fn_baigoSignMk($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
             $_arr_code["app_id"]     = $_value["app_id"];
             $_arr_code["app_key"]    = $_value["app_key"];
             $_str_code               = $this->obj_sync->sync_encode($_arr_code, $_str_key);
 
-            if (stristr($_value["app_notice"], "?")) {
+            if (stristr($_value["app_url_sync"], "?")) {
                 $_str_conn = "&";
             } else {
                 $_str_conn = "?";
             }
-            $_str_url = $_value["app_notice"] . $_str_conn . "mod=sync";
+            $_str_url = $_value["app_url_sync"] . $_str_conn . "mod=sync";
 
             $_arr_data = array(
                 "act_get"    => "logout",
@@ -254,7 +230,13 @@ class API_SYNC {
             $this->obj_sync->halt_re($_arr_appChk);
         }
 
-        $this->appRows = $this->mdl_app->mdl_list(100, 0, "", "enable", "on", true, array($this->appRequest["app_id"]));
+        $_arr_search = array(
+            "status"        => "enable",
+            "sync"          => "on",
+            "has_notice"    => true,
+            "not_ids"       => array($this->appRequest["app_id"]),
+        );
+        $this->appRows = $this->mdl_app->mdl_list(100, 0, $_arr_search);
     }
 
 

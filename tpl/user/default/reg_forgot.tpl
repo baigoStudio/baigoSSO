@@ -18,14 +18,14 @@
         <div class="form-group">
             <div id="group_user_pass">
                 <label class="control-label">{$lang.label.passNew}<span id="msg_user_pass_new">*</span></label>
-                <input type="password" name="user_pass_new" id="user_pass_new" placeholder="{$alert.x010222}" class="validate form-control input-lg">
+                <input type="password" name="user_pass_new" id="user_pass_new" placeholder="{$alert.x010222}" data-validate class="form-control input-lg">
             </div>
         </div>
 
         <div class="form-group">
             <div id="group_user_pass_confirm">
                 <label class="control-label">{$lang.label.passConfirm}<span id="msg_user_pass_confirm">*</span></label>
-                <input type="password" name="user_pass_confirm" id="user_pass_confirm" placeholder="{$alert.x010224}" class="validate form-control input-lg">
+                <input type="password" name="user_pass_confirm" id="user_pass_confirm" placeholder="{$alert.x010224}" data-validate class="form-control input-lg">
             </div>
         </div>
 
@@ -33,7 +33,7 @@
             <div id="group_seccode">
                 <label class="control-label">{$lang.label.seccode}<span id="msg_seccode">*</span></label>
                 <div class="input-group">
-                    <input type="text" name="seccode" id="seccode" placeholder="{$alert.x030201}" class="validate form-control input-lg">
+                    <input type="text" name="seccode" id="seccode" placeholder="{$alert.x030201}" data-validate class="form-control input-lg">
                     <span class="input-group-addon">
                         <a href="javascript:reloadImg('seccodeImg','{$smarty.const.BG_URL_MISC}ctl.php?mod=seccode&act_get=make');" title="{$lang.alt.seccode}">
                             <img src="{$smarty.const.BG_URL_MISC}ctl.php?mod=seccode&act_get=make" id="seccodeImg" alt="{$lang.alt.seccode}" height="32">
@@ -54,19 +54,19 @@
     <script type="text/javascript">
     var opts_validator_form = {
         user_pass_new: {
-            length: { min: 1, max: 0 },
-            validate: { type: "str", format: "text", group: "group_user_pass_new" },
-            msg: { id: "msg_user_pass_new", too_short: "{$alert.x010222}" }
+            len: { min: 1, max: 0 },
+            validate: { type: "str", format: "text", group: "#group_user_pass_new" },
+            msg: { selector: "#msg_user_pass_new", too_short: "{$alert.x010222}" }
         },
         user_pass_confirm: {
-            length: { min: 1, max: 0 },
-            validate: { type: "confirm", target: "user_pass_new", group: "group_user_pass_confirm" },
-            msg: { id: "msg_user_pass_confirm", too_short: "{$alert.x010224}", not_match: "{$alert.x010225}" }
+            len: { min: 1, max: 0 },
+            validate: { type: "confirm", target: "#user_pass_new", group: "#group_user_pass_confirm" },
+            msg: { selector: "#msg_user_pass_confirm", too_short: "{$alert.x010224}", not_match: "{$alert.x010225}" }
         },
         seccode: {
-            length: { min: 4, max: 4 },
-            validate: { type: "ajax", format: "text", group: "group_seccode" },
-            msg: { id: "msg_seccode", too_short: "{$alert.x030201}", too_long: "{$alert.x030201}", ajaxIng: "{$alert.x030401}", ajax_err: "{$alert.x030402}" },
+            len: { min: 4, max: 4 },
+            validate: { type: "ajax", format: "text", group: "#group_seccode" },
+            msg: { selector: "#msg_seccode", too_short: "{$alert.x030201}", too_long: "{$alert.x030201}", ajaxIng: "{$alert.x030401}", ajax_err: "{$alert.x030402}" },
             ajax: { url: "{$smarty.const.BG_URL_MISC}ajax.php?mod=seccode&act_get=chk", key: "seccode", type: "str" }
         }
     };
@@ -83,7 +83,7 @@
         var obj_validator_form    = $("#forgot_form").baigoValidator(opts_validator_form);
         var obj_submit_form       = $("#forgot_form").baigoSubmit(opts_submit_form);
         $("#go_forgot").click(function(){
-            if (obj_validator_form.validateSubmit()) {
+            if (obj_validator_form.verify()) {
                 obj_submit_form.formSubmit();
             }
         });

@@ -12,6 +12,7 @@ if(!defined("IN_BAIGO")) {
 /*-------------验证模型-------------*/
 class MODEL_VERIFY {
     private $obj_db;
+    public $verifyStatus = array();
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -25,6 +26,11 @@ class MODEL_VERIFY {
      * @return void
      */
     function mdl_create_table() {
+        foreach ($this->verifyStatus as $_key=>$_value) {
+            $_arr_status[] = $_key;
+        }
+        $_str_status = implode("','", $_arr_status);
+
         $_arr_verifyCreate = array(
             "verify_id"             => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
             "verify_user_id"        => "int NOT NULL COMMENT '用户 ID'",
@@ -32,10 +38,10 @@ class MODEL_VERIFY {
             "verify_token_expire"   => "int NOT NULL COMMENT '口令过期时间'",
             "verify_rand"           => "char(6) NOT NULL COMMENT '随机串'",
             "verify_mail"           => "varchar(300) NOT NULL COMMENT '待验证邮箱'",
-            "verify_status"         => "enum('enable','disable') NOT NULL COMMENT '状态'",
+            "verify_status"         => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
             "verify_time"           => "int NOT NULL COMMENT '发起时间'",
             "verify_time_refresh"   => "int NOT NULL COMMENT '更新时间'",
-            "verify_time_disable"   => "int NOT NULL COMMENT '失效时间'",
+            "verify_time_disable"   => "int NOT NULL COMMENT '使用时间'",
         );
 
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "verify", $_arr_verifyCreate, "verify_id", "验证");
@@ -52,7 +58,7 @@ class MODEL_VERIFY {
     }
 
 
-    /** 检查字段
+    /** 列出字段
      * mdl_column function.
      *
      * @access public
@@ -123,6 +129,12 @@ class MODEL_VERIFY {
     }
 
 
+    /** 失效
+     * mdl_disable function.
+     *
+     * @access public
+     * @return void
+     */
     function mdl_disable() {
         $_arr_verifyUpdate = array(
             "verify_status"         => "disable",
@@ -178,11 +190,11 @@ class MODEL_VERIFY {
      *
      * @access public
      * @param mixed $str_verify
-     * @param string $str_readBy (default: "verify_id")
+     * @param string $str_by (default: "verify_id")
      * @param int $num_notId (default: 0)
      * @return void
      */
-    function mdl_read($str_verify, $str_readBy = "verify_id") {
+    function mdl_read($str_verify, $str_by = "verify_id") {
         $_arr_verifySelect = array(
             "verify_id",
             "verify_user_id",
@@ -196,15 +208,10 @@ class MODEL_VERIFY {
             "verify_time_disable",
         );
 
-        switch ($str_readBy) {
-            case "verify_id":
-            case "verify_user_id":
-                $_str_sqlWhere = $str_readBy . "=" . $str_verify;
-            break;
-
-            default:
-                $_str_sqlWhere = $str_readBy . "='" . $str_verify . "'";
-            break;
+        if (is_numeric($str_verify)) {
+            $_str_sqlWhere = $str_by . "=" . $str_verify;
+        } else {
+            $_str_sqlWhere = $str_by . "='" . $str_verify . "'";
         }
 
         $_arr_verifyRows = $this->obj_db->select(BG_DB_TABLE . "verify", $_arr_verifySelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
@@ -231,15 +238,11 @@ class MODEL_VERIFY {
      * mdl_list function.
      *
      * @access public
-     * @param mixed $num_verifyNo
-     * @param int $num_verifyExcept (default: 0)
-     * @param string $str_key (default: "")
-     * @param string $str_status (default: "")
-     * @param string $str_sync (default: "")
-     * @param bool $str_notice (default: false)
+     * @param mixed $num_no
+     * @param int $num_except (default: 0)
      * @return void
      */
-    function mdl_list($num_verifyNo, $num_verifyExcept = 0) {
+    function mdl_list($num_no, $num_except = 0) {
         $_arr_verifySelect = array(
             "verify_id",
             "verify_user_id",
@@ -252,7 +255,7 @@ class MODEL_VERIFY {
             "verify_time_disable",
         );
 
-        $_arr_verifyRows = $this->obj_db->select(BG_DB_TABLE . "verify", $_arr_verifySelect, "", "", "verify_id DESC", $num_verifyNo, $num_verifyExcept); //查询数据
+        $_arr_verifyRows = $this->obj_db->select(BG_DB_TABLE . "verify", $_arr_verifySelect, "", "", "verify_id DESC", $num_no, $num_except); //查询数据
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
             if ($_value["verify_token_expire"] < time()) {
@@ -261,6 +264,19 @@ class MODEL_VERIFY {
         }
 
         return $_arr_verifyRows;
+    }
+
+
+    /** 计数
+     * mdl_count function.
+     *
+     * @access public
+     * @return void
+     */
+    function mdl_count() {
+        $_num_verifyCount = $this->obj_db->count(BG_DB_TABLE . "verify"); //查询数据
+
+        return $_num_verifyCount;
     }
 
 
@@ -288,27 +304,16 @@ class MODEL_VERIFY {
     }
 
 
-    /** 计数
-     * mdl_count function.
+    /** 表单验证
+     * input_verify function.
      *
      * @access public
-     * @param string $str_key (default: "")
-     * @param string $str_status (default: "")
-     * @param string $str_sync (default: "")
-     * @param bool $str_notice (default: false)
      * @return void
      */
-    function mdl_count() {
-        $_num_verifyCount = $this->obj_db->count(BG_DB_TABLE . "verify"); //查询数据
-
-        return $_num_verifyCount;
-    }
-
-
     function input_verify() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
@@ -355,11 +360,11 @@ class MODEL_VERIFY {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030214",
+                "alert" => "x030206",
             );
         }
 
-        $_arr_verifyIds = fn_post("verify_id");
+        $_arr_verifyIds = fn_post("verify_ids");
 
         if ($_arr_verifyIds) {
             foreach ($_arr_verifyIds as $_key=>$_value) {
@@ -367,11 +372,11 @@ class MODEL_VERIFY {
             }
             $_str_alert = "ok";
         } else {
-            $_str_alert = "none";
+            $_str_alert = "x030202";
         }
 
         $this->verifyIds = array(
-            "alert"  => $_str_alert,
+            "alert"         => $_str_alert,
             "verify_ids"    => $_arr_verifyIds
         );
 

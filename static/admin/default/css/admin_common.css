@@ -14,11 +14,29 @@
 .label_baigo { margin-bottom: 5px; }
 .label_baigo .label { font-size: 12px; }
 
+.tooltip_baigo .tooltip-inner { max-width: 500px; }
+
 .text_bg { height: 400px!important; }
 .text_md { height: 200px!important; }
 .table_convert th, .table_convert td { padding: 10px; }
 
 .static_label { color: #999; font-weight: normal; }
+
+.input-group-addon.input_range {
+    width: auto;
+    min-width: 16px;
+    padding: 4px 5px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    vertical-align: middle;
+    background-color: #eeeeee;
+    border: solid #cccccc;
+    border-width: 1px 0;
+    margin-left: -5px;
+    margin-right: -5px;
+}
 
 .list_padding { margin: 0 25px; }
 

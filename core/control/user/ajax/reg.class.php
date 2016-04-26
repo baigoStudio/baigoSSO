@@ -108,7 +108,7 @@ class AJAX_REG {
             $this->obj_ajax->halt_alert($_arr_userRow["alert"]);
         }
 
-        if ($_arr_userRow["user_status"] != "enable") {
+        if ($_arr_userRow["user_status"] == "disable") {
             $this->obj_ajax->halt_alert("x010401");
         }
 

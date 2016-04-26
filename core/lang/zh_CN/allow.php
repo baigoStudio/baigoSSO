@@ -25,7 +25,7 @@ return array(
     ),
 
     /*------短消息------*/
-    /*"msg" => array(
+    "pm" => array(
         "title" => "短消息",
         "allow" => array(
             "send"   => "发送",
@@ -36,5 +36,5 @@ return array(
             "del"    => "删除",
             "check"  => "检查新消息",
         ),
-    ),*/
+    ),
 );

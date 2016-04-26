@@ -11,7 +11,7 @@ if(!defined("IN_BAIGO")) {
 
 include_once(BG_PATH_CLASS . "tpl.class.php"); //载入模板类
 
-/*-------------管理员控制器-------------*/
+/*-------------登录控制器-------------*/
 class CONTROL_LOGON {
 
     private $obj_base;
@@ -66,9 +66,9 @@ class CONTROL_LOGON {
         fn_session("admin_hash", "mk", fn_baigoEncrypt($_arr_adminRow["admin_time"], $_str_adminRand));
 
         return array(
-            "admin_id"   => $_arr_adminLogin["admin_id"],
-            "forward"    => $_arr_adminLogin["forward"],
-            "alert"  => "y020201",
+            "admin_id"  => $_arr_adminLogin["admin_id"],
+            "forward"   => $_arr_adminLogin["forward"],
+            "alert"     => "y020201",
         );
     }
 
@@ -92,7 +92,7 @@ class CONTROL_LOGON {
     无返回
     */
     function ctl_logon() {
-        $this->obj_tpl    = new CLASS_TPL(BG_PATH_TPL . "admin/" . $this->config["ui"]);
+        $this->obj_tpl    = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"]);
         $_str_forward     = fn_getSafe(fn_get("forward"), "txt", "");
         $_str_alert       = fn_getSafe(fn_get("alert"), "txt", "");
 

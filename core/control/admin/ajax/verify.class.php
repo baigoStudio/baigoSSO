@@ -72,7 +72,7 @@ class AJAX_VERIFY {
         $_arr_verifyRow = $this->mdl_verify->mdl_del();
 
         if ($_arr_verifyRow["alert"] == "y120104") {
-            foreach ($_arr_verifyIds["verify_ids"] as $_value) {
+            foreach ($_arr_verifyIds["verify_ids"] as $_key=>$_value) {
                 $_arr_targets[] = array(
                     "verify_id" => $_value,
                 );

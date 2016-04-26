@@ -19,7 +19,7 @@ class CONTROL_HELP {
     function __construct() { //构造函数
         $this->obj_base       = $GLOBALS["obj_base"];
         $this->config         = $this->obj_base->config;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPL . "help/" . $this->config["ui"]); //初始化视图对象
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "help/" . $this->config["ui"]); //初始化视图对象
 
         if (file_exists(BG_PATH_LANG . $this->config["lang"] . "/help/config.php")) {
             $this->helpConfig = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/config.php");
