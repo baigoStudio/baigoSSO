@@ -27,14 +27,14 @@ class AJAX_APP {
     private $mdl_log;
 
     function __construct() { //构造函数
-        $this->adminLogged    = $GLOBALS["adminLogged"]; //已登录用户信息
-        $this->obj_ajax       = new CLASS_AJAX(); //获取界面类型
+        $this->adminLogged  = $GLOBALS["adminLogged"]; //已登录用户信息
+        $this->obj_ajax     = new CLASS_AJAX(); //获取界面类型
         $this->obj_ajax->chk_install();
-        $this->log            = $this->obj_ajax->log; //初始化 AJAX 基对象
-        $this->mdl_app        = new MODEL_APP(); //设置用户模型
-        $this->mdl_belong  = new MODEL_BELONG();
-        $this->mdl_user       = new MODEL_USER(); //设置管理员模型
-        $this->mdl_log        = new MODEL_LOG(); //设置管理员模型
+        $this->log          = $this->obj_ajax->log; //初始化 AJAX 基对象
+        $this->mdl_app      = new MODEL_APP(); //设置用户模型
+        $this->mdl_belong   = new MODEL_BELONG();
+        $this->mdl_user     = new MODEL_USER(); //设置管理员模型
+        $this->mdl_log      = new MODEL_LOG(); //设置管理员模型
 
         if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
             $this->obj_ajax->halt_alert($this->adminLogged["alert"]);

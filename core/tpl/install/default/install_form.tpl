@@ -22,7 +22,7 @@
                     <label class="control-label">{$value.label}<span id="msg_{$tplData.act_get}_{$key}">{if $value.min > 0}*{/if}</span></label>
 
                     {if $value.type == "select"}
-                        <select name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}" data-validate class="form-control input-lg">
+                        <select name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}" data-validate="opt_{$tplData.act_get}_{$key}" class="form-control input-lg">
                             {foreach $value.option as $key_opt=>$value_opt}
                                 <option {if $this_value == $key_opt}selected{/if} value="{$key_opt}">{$value_opt}</option>
                             {/foreach}
@@ -38,9 +38,9 @@
                             {if isset($value_opt.note)}<p class="help-block">{$value_opt.note}</p>{/if}
                         {/foreach}
                     {else if $value.type == "textarea"}
-                        <textarea name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}" data-validate class="form-control text_md">{$this_value}</textarea>
+                        <textarea name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}" data-validate="opt_{$tplData.act_get}_{$key}" class="form-control text_md">{$this_value}</textarea>
                     {else}
-                        <input type="text" value="{$this_value}" name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}" data-validate class="form-control input-lg">
+                        <input type="text" value="{$this_value}" name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}" data-validate="opt_{$tplData.act_get}_{$key}" class="form-control input-lg">
                     {/if}
 
                     {if isset($value.note)}<p class="help-block">{$value.note}</p>{/if}
@@ -62,14 +62,16 @@
     var opts_validator_form = {
         {foreach $opt[$tplData.act_get].list as $key=>$value}
             {if $value.type == "str" || $value.type == "textarea"}
-                {$str_msg_min = "too_short"}
+                {$str_msg_min       = "too_short"}
+                {$str_msg_please    = $alert.x040201}
             {else}
-                {$str_msg_min = "too_few"}
+                {$str_msg_min       = "too_few"}
+                {$str_msg_please    = $alert.x040218}
             {/if}
             "opt_{$tplData.act_get}_{$key}": {
                 len: { min: {$value.min}, max: 0 },
-                validate: { type: "{$value.type}", {if isset($value.format)}format: "{$value.format}", {/if}group: "#group_{$tplData.act_get}_{$key}" },
-                msg: { selector: "#msg_{$tplData.act_get}_{$key}", {$str_msg_min}: "{$alert.x040201}{$value.label}", format_err: "{$value.label}{$alert.x040203}" }
+                validate: { selector: "[data-validate='opt_{$tplData.act_get}_{$key}']", type: "{$value.type}", {if isset($value.format)}format: "{$value.format}", {/if}group: "#group_{$tplData.act_get}_{$key}" },
+                msg: { selector: "#msg_{$tplData.act_get}_{$key}", {$str_msg_min}: "{$str_msg_please}{$value.label}", format_err: "{$value.label}{$alert.x040203}" }
             }{if !$value@last},{/if}
         {/foreach}
     };

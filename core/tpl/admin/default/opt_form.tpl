@@ -119,14 +119,16 @@
     var opts_validator_form = {
         {foreach $opt[$tplData.act_get].list as $key=>$value}
             {if $value.type == "str" || $value.type == "textarea"}
-                {$str_msg_min = "too_short"}
+                {$str_msg_min       = "too_short"}
+                {$str_msg_please    = $alert.x040201}
             {else}
-                {$str_msg_min = "too_few"}
+                {$str_msg_min       = "too_few"}
+                {$str_msg_please    = $alert.x040218}
             {/if}
             "opt_{$cfg.sub_active}_{$key}": {
                 len: { min: {$value.min}, max: 0 },
                 validate: { selector: "[data-validate='opt_{$tplData.act_get}_{$key}']", type: "{$value.type}", {if isset($value.format)}format: "{$value.format}", {/if}group: "#group_{$tplData.act_get}_{$key}" },
-                msg: { selector: "#msg_{$tplData.act_get}_{$key}", {$str_msg_min}: "{$alert.x040201}{$value.label}", format_err: "{$value.label}{$alert.x040203}" }
+                msg: { selector: "#msg_{$tplData.act_get}_{$key}", {$str_msg_min}: "{$str_msg_please}{$value.label}", format_err: "{$value.label}{$alert.x040203}" }
             }{if !$value@last},{/if}
         {/foreach}
     };
