@@ -92,7 +92,7 @@
                 obj_submit_form.formSubmit();
             }
         });
-    })
+    });
     </script>
 
 {include "{$smarty.const.BG_PATH_TPLSYS}install/default/include/html_foot.tpl" cfg=$cfg}

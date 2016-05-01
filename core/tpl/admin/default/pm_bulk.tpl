@@ -231,7 +231,7 @@
             bulk_type(_type_id);
         });
         $(".input_date").datetimepicker(opts_datetimepicker);
-    })
+    });
     </script>
 
 {include "{$smarty.const.BG_PATH_TPLSYS}admin/default/include/html_foot.tpl" cfg=$cfg}

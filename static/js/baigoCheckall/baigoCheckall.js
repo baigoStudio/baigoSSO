@@ -1,5 +1,5 @@
 /*
-v1.0 jQuery baigoCheckall plugin 表单全选插件
+v1.0.1 jQuery baigoCheckall plugin 表单全选插件
 (c) 2016 baigo studio - http://www.baigo.net/jquery/baigocheckall.html
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -17,8 +17,8 @@ License: http://www.opensource.org/licenses/mit-license.php
         var parent_check = function(_parent) {
             var _parent_num = $(thisForm).find("#" + _parent).size(); //获取父对象数量
             if (_parent_num > 0) { //如果有父对象
-                var _brother_num = $(thisForm).find("[data-parent=" + _parent + "]").size(); //根据parent获取兄弟对象数
-                var _brother_checked_num = $(thisForm).find("[data-parent=" + _parent + "]:checked").size(); //根据parent获取兄弟对象选中数
+                var _brother_num = $(thisForm).find("[data-parent='" + _parent + "']").size(); //根据parent获取兄弟对象数
+                var _brother_checked_num = $(thisForm).find("[data-parent='" + _parent + "']:checked").size(); //根据parent获取兄弟对象选中数
                 if (_brother_num > 0 && _brother_checked_num < _brother_num) { //如果有兄弟对象且兄弟对象选中数小于实际数，则设置父对象未选中
                     $(thisForm).find("#" + _parent).removeAttr("checked");
                 } else {

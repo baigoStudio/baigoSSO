@@ -1,5 +1,5 @@
 /*
-v2.0 jQuery baigoValidator plugin 表单验证插件
+v2.0.1 jQuery baigoValidator plugin 表单验证插件
 (c) 2016 baigo studio - http://www.baigo.net/jquery/baigovalidator.html
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -318,8 +318,8 @@ License: http://www.opensource.org/licenses/mit-license.php
                     _status     = isAjax(_str, _len, _validate, _ajax, _msg, _validate_selector); //ajax验证
                 break;
                 case "confirm":
+                    var _str_target = $(_validate.target).val(); //获取表单值
                     _str        = $(_validate_selector).val(); //获取表单值
-                    _str_target = $(_validate.target).val(); //获取表单值
                     _status     = isConfirm(_str, _str_target, _len); //验证字符串
                 break;
                 default:

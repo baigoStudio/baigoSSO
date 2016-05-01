@@ -68,7 +68,7 @@
                 obj_submit_form.formSubmit();
             }
         });
-    })
+    });
     </script>
 
 </body>

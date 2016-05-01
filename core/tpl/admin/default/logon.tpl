@@ -138,7 +138,7 @@
                 go_login();
             }
         });
-    })
+    });
     </script>
 
     <script src="{$smarty.const.BG_URL_STATIC}js/baigoValidator/baigoValidator.min.js" type="text/javascript"></script>

@@ -1,4 +1,4 @@
-v2.0 jQuery baigoValidator plugin 表单验证插件
+v2.0.1 jQuery baigoValidator plugin 表单验证插件
 (c) 2016 baigo studio - http://www.baigo.net/jquery/baigovalidator.html
 License: http://www.opensource.org/licenses/mit-license.php
 
