@@ -11,8 +11,6 @@ if(!defined("IN_BAIGO")) {
 
 include_once(BG_PATH_PHPMAILER . "PHPMailerAutoload.php"); //载入 PHPMailer 类
 
-//fn_mailSend("iwee@iwee.cn", "测试邮件", "<b><a href=\"http://www.iwee.cn\">link</a> test</b>", "test");
-
 function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = "") {
 
     $_obj_mail              = new PHPMailer; //初始化

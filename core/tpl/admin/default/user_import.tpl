@@ -200,7 +200,7 @@
             add: function(e, data) {
                 var goUpload    = true;
                 var obj_file    = data.files[0];
-                var _str_name   = obj_file.name.toLocaleLowerCase()
+                var _str_name   = obj_file.name.toLocaleLowerCase();
                 if (obj_file.type == "text/csv" || obj_file.type == "application/vnd.ms-excel" || _str_name.indexOf(".csv") > 0) {
                     _str_msg = upload_msg(obj_file.name, "{$lang.label.uploading}");
                     data.context = $("<div/>").html(_str_msg).appendTo("#csv_uploads");
