@@ -36,7 +36,7 @@
     </div>
 
     <form name="pm_form" id="pm_form">
-        <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+        <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
         <input type="hidden" name="act_post" value="bulk">
 
         <div class="panel panel-default">
@@ -84,9 +84,9 @@
                         <div id="group_pm_to_range_id">
                             <label class="control-label">{$lang.label.id}<span id="msg_pm_to_range_id">*</span></label>
                             <div class="input-group">
-                                <input type="text" name="pm_to_begin_id" id="pm_to_begin_id" data-validate class="form-control">
+                                <input type="text" name="pm_to_min_id" id="pm_to_min_id" data-validate class="form-control">
                                 <span class="input-group-addon input_range">{$lang.label.to}</span>
-                                <input type="text" name="pm_to_end_id" id="pm_to_end_id" data-validate class="form-control">
+                                <input type="text" name="pm_to_max_id" id="pm_to_max_id" data-validate class="form-control">
                             </div>
                             <p class="help-block">{$lang.label.rangeIdNote}</p>
                         </div>
@@ -172,15 +172,15 @@
             validate: { type: "str", format: "text", group: "#group_pm_to_key_mail" },
             msg: { selector: "#msg_pm_to_key_mail", too_short: "{$alert.x110207}" }
         },
-        pm_to_begin_id: {
+        pm_to_min_id: {
             len: { min: 1, max: 0 },
-            validate: { type: "str", format: "int", group: "#pm_to_begin_id" },
-            msg: { selector: "#msg_pm_to_begin_id", too_short: "{$alert.x110208}", format_err: "{$alert.x110209}" }
+            validate: { type: "str", format: "int", group: "#pm_to_min_id" },
+            msg: { selector: "#msg_pm_to_min_id", too_short: "{$alert.x110208}", format_err: "{$alert.x110209}" }
         },
-        pm_to_end_id: {
+        pm_to_max_id: {
             len: { min: 1, max: 0 },
-            validate: { type: "str", format: "int", group: "#pm_to_end_id" },
-            msg: { selector: "#msg_pm_to_end_id", too_short: "{$alert.x110210}", format_err: "{$alert.x110209}" }
+            validate: { type: "str", format: "int", group: "#pm_to_max_id" },
+            msg: { selector: "#msg_pm_to_max_id", too_short: "{$alert.x110210}", format_err: "{$alert.x110209}" }
         },
         pm_to_begin_time: {
             len: { min: 1, max: 0 },

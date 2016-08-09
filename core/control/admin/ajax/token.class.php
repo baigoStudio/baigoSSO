@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -29,18 +29,18 @@ class AJAX_TOKEN {
      * @return void
      */
     function ajax_make() {
-        if ($this->adminLogged["alert"] == "y020102") { //未登录，抛出错误信息
-            $_str_token  = fn_token(); //生成口令
+        if ($this->adminLogged["alert"] == "y020102") {
+            //$_str_token  = fn_token(); //生成令牌
             $_str_alert  = "y030102";
             $_str_msg    = "ok";
         } else {
-            $_str_token  = "none";
+            //$_str_token  = "none";
             $_str_alert  = "x020404";
-            $_str_msg    = $this->obj_ajax->alert["x020404"];
+            $_str_msg    = $this->obj_ajax->alert["x020404"]; //未登录，抛出错误信息
         }
 
         $arr_re = array(
-            "token"  => $_str_token,
+            //"token"  => $_str_token,
             "alert"  => $_str_alert,
             "msg"    => $_str_msg,
         );

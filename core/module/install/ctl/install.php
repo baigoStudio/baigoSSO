@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -21,13 +21,18 @@ if (file_exists(BG_PATH_CONFIG . "is_install.php")) { //如果已安装文件存
 
 include_once(BG_PATH_FUNC . "init.func.php"); //初始化
 switch ($GLOBALS["act_get"]) {
-    case "dbconfig":
-    case "ext":
+    case "dbtable":
+    case "admin":
+    case "reg":
+    case "base":
+    case "smtp":
+    case "over":
         $arr_set = array(
             "base"      => true, //基本设置
             "ssin"      => true, //启用会话
             "header"    => "Content-Type: text/html; charset=utf-8", //header
-            "ssin_file" => true, //由于安装时，session 数据表表尚未创建，故临时采用文件形式的 session
+            "db"        => true, //连接数据库
+            "type"      => "ctl", //模块类型
         );
     break;
 
@@ -36,8 +41,7 @@ switch ($GLOBALS["act_get"]) {
             "base"      => true, //基本设置
             "ssin"      => true, //启用会话
             "header"    => "Content-Type: text/html; charset=utf-8", //header
-            "db"        => true, //连接数据库
-            "type"      => "ctl", //模块类型
+            "ssin_file" => true, //由于安装时，session 数据表表尚未创建，故临时采用文件形式的 session
         );
     break;
 }
@@ -73,18 +77,18 @@ switch ($GLOBALS["act_get"]) {
         }
     break;
 
-    case "over":
-        $arr_installRow = $ctl_install->ctl_over(); //安装结束
+    case "reg":
+    case "base":
+    case "smtp":
+        $arr_installRow = $ctl_install->ctl_form(); //其他
         if ($arr_installRow["alert"] != "y030405") {
             header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_installRow["alert"]);
             exit;
         }
     break;
 
-    case "reg":
-    case "base":
-    case "smtp":
-        $arr_installRow = $ctl_install->ctl_form(); //其他
+    case "over":
+        $arr_installRow = $ctl_install->ctl_over(); //安装结束
         if ($arr_installRow["alert"] != "y030405") {
             header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=" . $arr_installRow["alert"]);
             exit;

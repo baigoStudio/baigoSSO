@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -39,7 +39,7 @@ class MODEL_PM {
 
         $_arr_pmCreate = array(
             "pm_id"         => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-            "pm_send_id"    => "int NOT NULL COMMENT '发出 ID'", //已发送短信的目标 ID
+            "pm_smax_id"    => "int NOT NULL COMMENT '发出 ID'", //已发送短信的目标 ID
             "pm_to"         => "int NOT NULL COMMENT '收件用户 ID'",
             "pm_from"       => "int NOT NULL COMMENT '发件用户 ID'",
             "pm_title"      => "varchar(90) NOT NULL COMMENT '标题'",
@@ -109,7 +109,7 @@ class MODEL_PM {
         }
 
         if ($num_pmFrom > 1) { //如果为非系统消息，在发件箱保存副本
-            $_arr_pmData["pm_send_id"]  = $_num_pmId;
+            $_arr_pmData["pm_smax_id"]  = $_num_pmId;
             $_arr_pmData["pm_type"]     = "out";
             $_arr_pmData["pm_status"]   = "read";
             $this->obj_db->insert(BG_DB_TABLE . "pm", $_arr_pmData); //更新数据
@@ -168,7 +168,7 @@ class MODEL_PM {
     function mdl_read($str_pm, $str_by = "pm_id", $num_notId = 0) {
         $_arr_pmSelect = array(
             "pm_id",
-            "pm_send_id",
+            "pm_smax_id",
             "pm_to",
             "pm_from",
             "pm_title",
@@ -217,7 +217,7 @@ class MODEL_PM {
     function mdl_list($num_no, $num_except = 0, $arr_search = array()) {
         $_arr_pmSelect = array(
             "pm_id",
-            "pm_send_id",
+            "pm_smax_id",
             "pm_to",
             "pm_from",
             "pm_title",
@@ -387,7 +387,7 @@ class MODEL_PM {
             break;
 
             case "bulkRangeId":
-                $_arr_pmBeginId = validateStr(fn_post("pm_to_begin_id"), 1, 0, "str", "int");
+                $_arr_pmBeginId = validateStr(fn_post("pm_to_min_id"), 1, 0, "str", "int");
                 switch ($_arr_pmBeginId["status"]) {
                     case "too_short":
                         return array(
@@ -402,11 +402,11 @@ class MODEL_PM {
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_begin_id"] = $_arr_pmBeginId["str"];
+                        $this->pmSubmit["pm_to_min_id"] = $_arr_pmBeginId["str"];
                     break;
                 }
 
-                $_arr_pmEndId = validateStr(fn_post("pm_to_end_id"), 1, 0, "str", "int");
+                $_arr_pmEndId = validateStr(fn_post("pm_to_max_id"), 1, 0, "str", "int");
                 switch ($_arr_pmEndId["status"]) {
                     case "too_short":
                         return array(
@@ -421,7 +421,7 @@ class MODEL_PM {
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_end_id"] = $_arr_pmEndId["str"];
+                        $this->pmSubmit["pm_to_max_id"] = $_arr_pmEndId["str"];
                     break;
                 }
             break;

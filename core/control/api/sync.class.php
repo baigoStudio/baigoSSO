@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -41,28 +41,7 @@ class API_SYNC {
     function api_login() {
         $this->app_check("get");
 
-        $_arr_userId = validateStr($this->appRequest["user_id"], 1, 0, "str", "int");
-        switch ($_arr_userId["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x010217",
-                );
-                $this->obj_sync->halt_re($_arr_return);
-            break;
-
-            case "format_err":
-                $_arr_return = array(
-                    "alert" => "x010218",
-                );
-                $this->obj_sync->halt_re($_arr_return);
-            break;
-
-            case "ok":
-                $_num_userId = $_arr_userId["str"];
-            break;
-        }
-
-        $_arr_userRow = $this->mdl_user->mdl_read($_num_userId);
+        $_arr_userRow = $this->mdl_user->mdl_read($this->appRequest["user_id"]);
 
         if ($_arr_userRow["alert"] != "y010102") {
             $this->obj_sync->halt_re($_arr_userRow);
@@ -121,28 +100,7 @@ class API_SYNC {
     function api_logout() {
         $this->app_check("get");
 
-        $_arr_userId = validateStr($this->appRequest["user_id"], 1, 0, "str", "int");
-        switch ($_arr_userId["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x010217",
-                );
-                $this->obj_sync->halt_re($_arr_return);
-            break;
-
-            case "format_err":
-                $_arr_return = array(
-                    "alert" => "x010218",
-                );
-                $this->obj_sync->halt_re($_arr_return);
-            break;
-
-            case "ok":
-                $_num_userId = $_arr_userId["str"];
-            break;
-        }
-
-        $_arr_userRow = $this->mdl_user->mdl_read($_num_userId);
+        $_arr_userRow = $this->mdl_user->mdl_read($this->appRequest["user_id"]);
 
         if ($_arr_userRow["alert"] != "y010102") {
             $this->obj_sync->halt_re($_arr_userRow);

@@ -1,5 +1,5 @@
 /*
-v1.1.2 jQuery baigoSubmit plugin 表单全选插件
+v1.1.4 jQuery baigoSubmit plugin 表单全选插件
 (c) 2013 baigo studio - http://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -22,13 +22,14 @@ License: http://www.opensource.org/licenses/mit-license.php
         var thisForm = $(this); //定义表单对象
         var el = this;
         var _str_conn = "?";
+        var _is_modal = true;
 
         var defaults = {
             width: 350,
             height: 220,
-            class_ok: "baigoSubmit_y",
-            class_err: "baigoSubmit_x",
-            class_submitting: "baigoSubmit_loading",
+            class_ok: "alert-success",
+            class_err: "alert-danger",
+            class_submitting: "alert-info",
             text_submitting: "Submitting ...",
             btn_url: "",
             btn_text: "OK",
@@ -39,70 +40,108 @@ License: http://www.opensource.org/licenses/mit-license.php
 
         var opts = $.extend(defaults, options);
 
+        if (typeof opts.msg_box != "undefined") {
+            _is_modal = false;
+        }
+
         //调用弹出框
-        var callSuccModal = function(_image_pre, _class, _msg, _alert, _attach_value) {
-            var obj_box = $("body .modal.baigoSubmit_box_succ");
+        var callModal = function(_action, _alert, _msg, _attach_value) {
+            var _obj_modal  = $("body .modal.baigoSubmit_model");
+            var _alert_pre  = _alert.substr(0, 1);
+            var _btn_href   = opts.btn_url;
+            var _class      = opts.class_submitting;
+            var _icon       = "refresh";
+
+            switch (_alert_pre) {
+                case "x":
+                    _class  = opts.class_err;
+                    _icon   = "remove-sign";
+                break;
+
+                case "y":
+                    _class  = opts.class_ok;
+                    _icon   = "ok-sign";
+                break;
+            }
+
             if (opts.btn_url.indexOf("?")) {
                 _str_conn = "&";
             }
-            var _html_box = "<div class=\"modal fade baigoSubmit_box_succ\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-body\">";
-                _html_box += "<h4 class=\"box_msg " + _class + "\">" + _msg + "</h4>";
-                _html_box += "<div class=\"box_alert\">" + _alert + "</div>";
-            _html_box += "</div><div class=\"modal-footer\">";
-                if (_image_pre == "y") {
-                    if (opts.attach_key.length > 0 && typeof _attach_value != "undefined") {
-                        _html_box += "<a href=\"" + opts.btn_url + _str_conn + opts.attach_key + "=" + _attach_value + "\" class=\"btn btn-primary btn_jump\" target=\"_top\">" + opts.btn_text + "</a>";
-                    } else {
-                        _html_box += "<a href=\"" + opts.btn_url + "\" class=\"btn btn-primary btn_jump\" target=\"_top\">" + opts.btn_text + "</a>";
-                    }
-                }
-                _html_box += "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.btn_close + "</button>";
-            _html_box += "</div></div></div></div>";
 
-            if (obj_box.length < 1) {
+            var _html_box = "<div class=\"modal fade baigoSubmit_model\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-body\"><h4 class=\"box_msg alert " + opts.class_submitting + "\">" + opts.text_submitting + "</h4><div class=\"box_alert\"></div></div><div class=\"modal-footer\"><a href=\"" + opts.btn_url + "\" class=\"btn btn-primary btn_jump\" target=\"_top\">" + opts.btn_text + "</a><button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.btn_close + "</button></div></div></div></div>";
+
+            if (_obj_modal.length < 1) {
                 $("body").append(_html_box);
             }
 
-            $("body .modal.baigoSubmit_box_succ").modal("show");
+            $(".box_msg").removeClass(opts.class_ok + " " + opts.class_err + " " + opts.class_submitting);
+            $(".box_msg").addClass(_class);
+            $(".box_msg").html("<span class=\"glyphicon glyphicon-" + _icon + "\"></span>&nbsp;" + _msg);
+            $(".box_alert").text(_alert);
 
-            $("body .modal.baigoSubmit_box_succ").on("hidden.bs.modal", function() {
-                $("body .modal.baigoSubmit_box_succ").remove();
-            });
-        };
-
-        var callPreModal = function(_action) {
-            var obj_box = $("body .modal.baigoSubmit_box_pre");
-            var _html_box = "<div class=\"modal fade baigoSubmit_box_pre\"><div class=\"modal-dialog\"><div class=\"modal-content\"><div class=\"modal-body\">";
-                _html_box += "<h4 class=\"box_msg " + opts.class_submitting + "\">" + opts.text_submitting + "</h4>";
-            _html_box += "</div><div class=\"modal-footer\">";
-                _html_box += "<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.btn_close + "</button>";
-            _html_box += "</div></div></div></div>";
-
-            if (obj_box.length < 1) {
-                $("body").append(_html_box);
+            if (opts.attach_key.length > 0 && typeof _attach_value != "undefined") {
+                _btn_href = opts.btn_url + _str_conn + opts.attach_key + "=" + _attach_value;
             }
+
+            if (_alert_pre == "y") {
+                $(".btn_jump").attr("href", _btn_href);
+                $(".btn_jump").show();
+            } else {
+                $(".btn_jump").hide();
+            }
+
 
             if (_action == "show") {
-                $("body .modal.baigoSubmit_box_pre").modal("show");
+                $("body .modal.baigoSubmit_model").modal("show");
             } else {
-                $("body .modal.baigoSubmit_box_pre").modal("hide");
+                $("body .modal.baigoSubmit_model").remove();
             }
 
-            $("body .modal.baigoSubmit_box_pre").on("hidden.bs.modal", function() {
-                $("body .modal.baigoSubmit_box_pre").remove();
+
+            $("body .modal.baigoSubmit_model").on("hidden.bs.modal", function() {
+                $("body .modal.baigoSubmit_model").remove();
             });
         };
 
-        var _is_modal = true;
-        var obj_box;
+        var callBox = function(_action, _alert, _msg) {
+            var _obj_box    = $(opts.msg_box + " .baigoSubmit_box");
+            var _alert_pre  = _alert.substr(0, 1);
+            var _btn_href   = opts.btn_url;
+            var _class      = opts.class_submitting;
+            var _icon       = "option-horizontal";
 
-        if (typeof opts.msg_box != "undefined") {
-            obj_box = $(opts.msg_box + " .baigoSubmit_box_mini");
-            if (obj_box.length < 1) {
-                $(opts.msg_box).append("<div class=\"baigoSubmit_box_mini\"></div>");
+            switch (_alert_pre) {
+                case "x":
+                    _class  = opts.class_err;
+                    _icon   = "remove-sign";
+                break;
+
+                case "y":
+                    _class  = opts.class_ok;
+                    _icon   = "ok-sign";
+                break;
             }
-            _is_modal = false;
-        }
+
+            if (opts.btn_url.indexOf("?")) {
+                _str_conn = "&";
+            }
+
+            var _html_box = "<div class=\"baigoSubmit_box alert " + opts.class_submitting + "\"></div>";
+
+            if (_obj_box.length < 1) {
+                $(opts.msg_box).append(_html_box);
+            }
+
+            $(".baigoSubmit_box").removeClass(opts.class_ok + " " + opts.class_err + " " + opts.class_submitting);
+            $(".baigoSubmit_box").addClass(_class);
+            $(".baigoSubmit_box").html("<span class=\"glyphicon glyphicon-" + _icon + "\"></span>&nbsp;" + _msg);
+
+            if (_action == "show") {
+                $(opts.msg_box + " .baigoSubmit_box").show();
+            } else {
+                $(opts.msg_box + " .baigoSubmit_box").remove();
+            }
+        };
 
         //确认消息
         var formConfirm = function() {
@@ -138,31 +177,22 @@ License: http://www.opensource.org/licenses/mit-license.php
                     data: $(thisForm).serialize(),
                     beforeSend: function(){
                         if (_is_modal) {
-                            callPreModal("show"); //输出正在提交
+                            callModal("show", "", opts.text_submitting); //输出正在提交
                         } else {
-                            $(opts.msg_box + " .baigoSubmit_box_mini").removeClass(opts.class_ok + " " + opts.class_err);
-                            $(opts.msg_box + " .baigoSubmit_box_mini").addClass(opts.class_submitting);
-                            $(opts.msg_box + " .baigoSubmit_box_mini").text(opts.text_submitting); //填充消息内容
+                            callBox("show", "", opts.text_submitting);
                         }
                         $(opts.btn_submit).attr("disabled", true);
 
                     }, //输出消息
                     success: function(_result){ //读取返回结果
-                        var _image_pre      = _result.alert.substr(0, 1);
                         var _attach_value   = _result[opts.attach_key];
-                        var _class;
-                        if (_image_pre == "x") {
-                            _class = opts.class_err;
-                        } else {
-                            _class = opts.class_ok;
-                        }
+
                         if (_is_modal) {
-                            callPreModal("hide"); //关闭正在提交
-                            callSuccModal(_image_pre, _class, _result.msg, _result.alert, _attach_value); //输出消息
+                            callModal("remove", "x", ""); //关闭正在提交
+                            callModal("show", _result.alert, _result.msg, _attach_value); //输出消息
                         } else {
-                            $(opts.msg_box + " .baigoSubmit_box_mini").removeClass(opts.class_submitting + " " + opts.class_ok + " " + opts.class_err);
-                            $(opts.msg_box + " .baigoSubmit_box_mini").addClass(_class);
-                            $(opts.msg_box + " .baigoSubmit_box_mini").text(_result.msg);
+                            callBox("remove", "x", "");
+                            callBox("show", _result.alert, _result.msg);
                         }
                         $(opts.btn_submit).removeAttr("disabled");
                     }

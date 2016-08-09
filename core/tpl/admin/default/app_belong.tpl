@@ -59,7 +59,7 @@
             </div>
 
             <form name="belong_list" id="belong_list">
-                <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+                <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
                 <input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 
                 <div class="panel panel-default">
@@ -142,7 +142,7 @@
             </div>
 
             <form name="user_list" id="user_list">
-                <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+                <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
                 <input type="hidden" name="app_id" value="{$tplData.appRow.app_id}">
 
                 <div class="panel panel-default">

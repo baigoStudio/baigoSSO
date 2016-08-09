@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -51,7 +51,7 @@ class API_CODE {
             break;
 
             case "ok":
-                $_str_data = html_entity_decode($_arr_data["str"]);
+                $_str_data = html_entity_decode($_arr_data["str"], ENT_QUOTES, "UTF-8");
             break;
         }
 

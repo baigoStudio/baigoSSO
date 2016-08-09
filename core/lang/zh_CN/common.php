@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -125,7 +125,7 @@ return array(
         "bulkRangeId"       => "用户 ID 范围",
         "bulkRangeTime"     => "注册时间范围",
         "bulkRangeLogin"    => "登录时间范围",
-        "toNote"            => "多个收件人请用 <kbd>,</kbd> 分隔",
+        "toNote"            => "多个收件人请用 <kbd>|</kbd> 分隔",
         "keyNameNote"       => "发送给用户名中包含该关键词的用户",
         "keyMailNote"       => "发送给邮箱中包含该关键词的用户",
         "rangeIdNote"       => "发送给 ID 范围内的用户",

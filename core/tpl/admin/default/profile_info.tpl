@@ -17,7 +17,7 @@
 
     <form name="profile_form" id="profile_form">
 
-        <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+        <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
         <input type="hidden" name="act_post" value="info">
 
         <div class="row">

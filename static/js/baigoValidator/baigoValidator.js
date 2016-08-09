@@ -1,5 +1,5 @@
 /*
-v2.0.1 jQuery baigoValidator plugin 表单验证插件
+v2.0.2 jQuery baigoValidator plugin 表单验证插件
 (c) 2016 baigo studio - http://www.baigo.net/jquery/baigovalidator.html
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -92,25 +92,25 @@ License: http://www.opensource.org/licenses/mit-license.php
                     _reg = /^[0-9]{4}-(((0?[13578]|(10|12))-(0?[1-9]|[1-2][0-9]|3[0-1]))|(0?2-(0[1-9]|[1-2][0-9]))|((0?[469]|11)-(0[1-9]|[1-2][0-9]|30)))\s(([1-9]{1})|([0-1][0-9])|([1-2][0-3])):([0-5][0-9])(:([0-5][0-9]))?$/;
                 break;
                 case "int":
-                    _reg = /^([+-]?)\d*$/; //整数
+                    _reg = /^(\+|-)?\d*$/; //整数
                 break;
                 case "digit":
-                    _reg = /^([+-]?)\d*\.?\d+$/; //数值，可以包含小数点
+                    _reg = /^(\+|-)?\d*(\.\d+)*$/; //数值，可以包含小数点
                 break;
                 case "email":
-                    _reg = /^\w{0,}(\.)?(\w+)@\w+(\.\w+).*$/; //Email
+                    _reg = /^\w+(-\w+)*(\.\w+(-\w+)*)*@\w+(\.\w+)+$/; //Email
                 break;
                 case "url":
-                    _reg = /^http[s]?:\/\/(\w|-)+(\.(\w|-)+).*$/; //URL地址
+                    _reg = /^(http|ftp)s?:\/\/\w+(-\w+)*(\.\w+(-\w+)*)+(\/\w+(-\w+)*)*(\.\w+)*\??(&?\w+=\w+)*(\/\w+(-\w+)*)*$/; //URL地址
                 break;
                 case "alphabetDigit":
-                    _reg = /^[a-z|A-Z|\d]*$/; //字母和数字
+                    _reg = /^[a-zA-Z\d-_]*$/; //数字英文字母
                 break;
                 case "strDigit":
-                    _reg = /^[\u4e00-\u9fa50-9A-Za-z_]+$/; // "/^[\u4e00-\u9fa5|\uf900-\ufa2d|\w]*$/" 字母中文数字下划线减号
+                    _reg = /^[\u4e00-\u9fa5a-zA-Z\d-_]*$/; // /^[\\\u4e00-\\\u9fa5|\\\uf900-\\\ufa2d|\w]*$/" 字母中文数字下划线 /
                 break;
-                case "ip":
-                    _reg = /^(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])$/; //IP 地址
+                case "alias":
+                    _reg = /^[a-zA-Z\d-_]*$/; // /^[\\\u4e00-\\\u9fa5|\\\uf900-\\\ufa2d|\w]*$/" 字母中文数字下划线
                 break;
                 default:
                     _reg = ""; //默认

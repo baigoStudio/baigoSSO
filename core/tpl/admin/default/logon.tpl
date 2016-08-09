@@ -31,11 +31,11 @@
 
                 <form action="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=logon" method="post" id="login_form">
                     <input type="hidden" name="act_post" value="login">
-                    <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+                    <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
                     <input type="hidden" name="forward" value="{$tplData.forward}">
 
                     <div class="form-group">
-                        {if $tplData.alert}
+                        {if $tplData.alert && isset($alert[$tplData.alert])}
                             <div class="alert alert-danger">{$alert[$tplData.alert]}</div>
                         {/if}
                     </div>

@@ -6,6 +6,6 @@
 define("PRD_SSO_POWERED", "Powered by");
 define("PRD_SSO_NAME", "baigo SSO");
 define("PRD_SSO_URL", "http://www.baigo.net/sso/");
-define("PRD_SSO_VER", "1.1.4");
-define("PRD_SSO_PUB", 20160426);
+define("PRD_SSO_VER", "1.1.5");
+define("PRD_SSO_PUB", 20160809);
 

@@ -45,7 +45,7 @@
                 <div class="panel-body">
                     {if $tplData.csvRows}
                         <form name="csv_convert" id="csv_convert">
-                            <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+                            <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
                             <input type="hidden" name="act_post" value="convert">
 
                             <table class="table_convert">
@@ -111,7 +111,7 @@
                     <div id="csv_uploads" class="csv_uploads"></div>
                 </form>
                 <form name="csv_del" id="csv_del">
-                    <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+                    <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
                     <input type="hidden" name="act_post" value="csvDel">
                     <div class="form-group">
                         <button class="btn btn-primary" type="button" id="go_del">{$lang.btn.delCsv}</button>
@@ -192,7 +192,7 @@
     $(document).ready(function(){
         $("#csv_files").fileupload({
             formData: [
-                { name: "token_session", value: "{$common.token_session}" },
+                { name: "token_session", value: "{$common.tokenRow.token}" },
                 { name: "act_post", value: "import" },
             ],
             dataType: "json",

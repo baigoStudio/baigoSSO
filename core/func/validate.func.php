@@ -26,7 +26,7 @@ function validateStr($str, $min, $max, $type = "str", $format = "text") {
     switch ($type) {
         case "str":
             $_status = $_obj_v->is_text($str, $min, $max, $format); //验证字符串
-            $str     = htmlentities($str, ENT_QUOTES, "UTF-8");
+            $str     = fn_safe($str);
         break;
         case "digit":
             $_status = $_obj_v->is_digit($str, $min, $max, $format); //验证字符串
@@ -80,22 +80,25 @@ class CLASS_VALIDATE {
                 $_reg = "/^[0-9]{4}-(((0?[13578]|(10|12))-(0?[1-9]|[1-2][0-9]|3[0-1]))|(0?2-(0[1-9]|[1-2][0-9]))|((0?[469]|11)-(0[1-9]|[1-2][0-9]|30)))\s(([1-9]{1})|([0-1][0-9])|([1-2][0-3])):([0-5][0-9])(:([0-5][0-9]))?$/";
             break;
             case "int":
-                $_reg = "/^([+-]?)\d*$/"; //整数
+                $_reg = "/^(\+|-)?\d*$/"; //整数
             break;
             case "digit":
-                $_reg = "/^([+-]?)\d*\.?\d+$/"; //数值，可以包含小数点
+                $_reg = "/^(\+|-)?\d*(\.\d+)*$/"; //数值，可以包含小数点
             break;
             case "email":
-                $_reg = "/^\w{0,}(\.)?(\w+)@\w+(\.\w+)+$/"; //Email
+                $_reg = "/^\w+(-\w+)*(\.\w+(-\w+)*)*@\w+(\.\w+)+$/"; //Email
             break;
             case "url":
-                $_reg = "/^http[s]?:\/\/(.*|-)+\.(.*|-)+$/"; //URL地址
+                $_reg = "/^(http|ftp)s?:\/\/\w+(-\w+)*(\.\w+(-\w+)*)+(/\w+(-\w+)*)*(\.\w+)*\??(&?\w+=\w+)*(/\w+(-\w+)*)*$/"; //URL地址
             break;
             case "alphabetDigit":
-                $_reg = "/^[a-z|A-Z|\d]*$/"; //字母数字
+                $_reg = "/^[a-zA-Z\d]*$/"; //数字英文字母
             break;
             case "strDigit":
-                $_reg = "/^[\x{4e00}-\x{9fa5}0-9A-Za-z_]+$/u"; // /^[\\\u4e00-\\\u9fa5|\\\uf900-\\\ufa2d|\w]*$/ 字母中文数字下划线
+                $_reg = "/^[\x{4e00}-\x{9fa5}a-zA-Z\d-_]*$/u"; // "/^[\\\u4e00-\\\u9fa5|\\\uf900-\\\ufa2d|\w]*$/" 中文字母数字下划线连字符
+            break;
+            case "alias":
+                $_reg = "/^[a-zA-Z\d-_]*$/"; // "/^[\\\u4e00-\\\u9fa5|\\\uf900-\\\ufa2d|\w]*$/" 字母数字下划线连字符
             break;
             default:
                 $_reg = ""; //默认

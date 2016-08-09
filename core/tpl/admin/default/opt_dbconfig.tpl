@@ -29,7 +29,7 @@
 
     <form name="opt_dbconfig" id="opt_dbconfig">
 
-        <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+        <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
         <input type="hidden" name="act_post" value="dbconfig">
 
         <div class="panel panel-default">

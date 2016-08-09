@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -83,7 +83,7 @@ class CLASS_BASE {
     无返回字符串
     */
     function setTimezone() {
-        if(!defined("BG_SITE_TIMEZONE")) {
+        if (!defined("BG_SITE_TIMEZONE")) {
             define("BG_SITE_TIMEZONE", "Asia/Shanghai");
         }
 

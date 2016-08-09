@@ -92,7 +92,8 @@ License: http://www.opensource.org/licenses/mit-license.php
                 digit：数字（可带小数点）
                 url：网址
                 alphabetDigit：字母和数字
-                strDigit：字母中文数字下划线
+                strDigit：中文字母数字下划线连字符
+                alias: 别名（字母数字下划线连字符）
                 ip：IP 地址
             validator.type 为 digit 时：
                 int：整数

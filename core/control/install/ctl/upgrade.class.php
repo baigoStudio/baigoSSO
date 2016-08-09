@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -173,7 +173,7 @@ class CONTROL_UPGRADE {
             }
         }
 
-        $this->act_get = fn_getSafe($GLOBALS["act_get"], "txt", "ext");
+        $this->act_get = fn_getSafe(fn_get("act_get"), "txt", "ext");
 
         $this->tplData = array(
             "errCount"   => $this->errCount,

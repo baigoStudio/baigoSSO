@@ -26,7 +26,9 @@
     <div class="alert alert-{if $tplData.status == "y"}success{else}danger{/if}">
         <h3>
             <span class="glyphicon glyphicon-{if $tplData.status == "y"}ok-circle{else}remove-circle{/if}"></span>
-            {$alert[$tplData.alert]}
+            {if $tplData.alert && isset($alert[$tplData.alert])}
+                {$alert[$tplData.alert]}
+            {/if}
         </h3>
         <p>
             {if isset($lang.text[$tplData.alert])}

@@ -107,7 +107,7 @@ return "<a name=\"top\"></a>
      */
     function sso_decode(\$str_code, \$str_key) {
         \$_arr_sso = array(
-            &quot;act_get&quot;    =&gt; &quot;decode&quot;, //&#26041;&#27861;
+            &quot;act_post&quot;   =&gt; &quot;decode&quot;, //&#26041;&#27861;
             &quot;code&quot;       =&gt; \$str_code, //&#21152;&#23494;&#20018;
             &quot;key&quot;        =&gt; \$str_key, //&#35299;&#30721;&#31192;&#38053;
         );

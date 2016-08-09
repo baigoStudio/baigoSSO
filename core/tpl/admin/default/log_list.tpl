@@ -63,7 +63,7 @@
     </div>
 
     <form name="log_list" id="log_list" class="form-inline">
-        <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+        <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
 
         <div class="panel panel-default">
             <div class="table-responsive">

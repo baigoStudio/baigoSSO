@@ -7,7 +7,7 @@
 {include "{$smarty.const.BG_PATH_TPLSYS}install/default/include/upgrade_head.tpl" cfg=$cfg}
 
     <form name="upgrade_form" id="upgrade_form">
-        <input type="hidden" name="token_session" class="token_session" value="{$common.token_session}">
+        <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
         <input type="hidden" name="act_post" value="{$tplData.act_get}">
 
         {foreach $opt[$tplData.act_get].list as $key=>$value}

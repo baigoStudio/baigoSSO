@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -1040,10 +1040,10 @@ class MODEL_USER {
             return $_arr_userPass;
         }
 
-        $this->apiLogin["user_rand"]                = fn_rand(6);
-        $this->apiLogin["user_pass"]                = $_arr_userPass["user_pass"];
-        $this->apiLogin["user_pass_do"]             = fn_baigoEncrypt($this->apiLogin["user_pass"], $this->apiLogin["user_rand"], true);
-        $this->apiLogin["alert"]                    = "ok";
+        $this->apiLogin["user_rand"]    = fn_rand(6);
+        $this->apiLogin["user_pass"]    = $_arr_userPass["user_pass"];
+        $this->apiLogin["user_pass_do"] = fn_baigoEncrypt($this->apiLogin["user_pass"], $this->apiLogin["user_rand"], true);
+        $this->apiLogin["alert"]        = "ok";
 
         return $this->apiLogin;
     }
@@ -1684,12 +1684,12 @@ class MODEL_USER {
             $_str_sqlWhere .= " AND user_mail LIKE '%" . $arr_search["key_mail"] . "%'";
         }
 
-        if (isset($arr_search["begin_id"]) && $arr_search["begin_id"] > 0) {
-            $_str_sqlWhere .= " AND user_id>=" . $arr_search["begin_id"];
+        if (isset($arr_search["min_id"]) && $arr_search["min_id"] > 0) {
+            $_str_sqlWhere .= " AND user_id>=" . $arr_search["min_id"];
         }
 
-        if (isset($arr_search["end_id"]) && $arr_search["end_id"] > 0) {
-            $_str_sqlWhere .= " AND user_id<=" . $arr_search["end_id"];
+        if (isset($arr_search["max_id"]) && $arr_search["max_id"] > 0) {
+            $_str_sqlWhere .= " AND user_id<=" . $arr_search["max_id"];
         }
 
         if (isset($arr_search["begin_time"]) && $arr_search["begin_time"] > 0) {

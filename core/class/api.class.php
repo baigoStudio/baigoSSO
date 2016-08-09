@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -157,6 +157,8 @@ class CLASS_API {
      * @return void
      */
     function api_notice($arr_data, $arr_appRows, $method = "post") {
+        $_arr_return = array();
+
         foreach ($arr_appRows as $_key=>$_value) {
             $_tm_time    = time();
             $_str_rand   = fn_rand();

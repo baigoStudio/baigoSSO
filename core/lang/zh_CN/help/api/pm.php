@@ -695,7 +695,7 @@ return "<a name=\"top\"></a>
                         <td>短信 ID</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">pm_send_id</td>
+                        <td class=\"text-nowrap\">pm_smax_id</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">int</td>
                         <td>已发送短信 ID，此字段只有已发送短信具备，用来定义发出的短信 ID。</td>
@@ -1002,7 +1002,7 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">pm_ids</td>
                         <td class=\"text-nowrap\">array</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>准备撤回的短信 ID 数组，此处的短信 ID 可从已发送短信的 pm_send_id 字段获得。</td>
+                        <td>准备撤回的短信 ID 数组，此处的短信 ID 可从已发送短信的 pm_smax_id 字段获得。</td>
                     </tr>
                 </tbody>
             </table>

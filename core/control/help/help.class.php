@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -30,7 +30,7 @@ class CONTROL_HELP {
 
     function ctl_show() {
         $this->mod        = fn_getSafe(fn_get("mod"), "txt", "intro");
-        $this->act_get    = fn_getSafe($GLOBALS["act_get"], "txt", "outline");
+        $this->act_get    = fn_getSafe(fn_get("act_get"), "txt", "outline");
 
         if (file_exists(BG_PATH_LANG . $this->config["lang"] . "/help/" . $this->mod . "/config.php")) {
             $_arr_config = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/" . $this->mod . "/config.php");

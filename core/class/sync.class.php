@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -52,7 +52,7 @@ class CLASS_SYNC {
 
 
     function sync_fetch($chk_token = false) {
-        $_arr_time = validateStr(fn_get("time"), 1, 0);
+        $_arr_time = validateStr(fn_post("time"), 1, 0);
         switch ($_arr_time["status"]) {
             case "too_short":
                 return array(
@@ -65,7 +65,7 @@ class CLASS_SYNC {
             break;
         }
 
-        $_arr_random = validateStr(fn_get("random"), 1, 0);
+        $_arr_random = validateStr(fn_post("random"), 1, 0);
         switch ($_arr_random["status"]) {
             case "too_short":
                 return array(
@@ -78,7 +78,7 @@ class CLASS_SYNC {
             break;
         }
 
-        $_arr_signature = validateStr(fn_get("signature"), 1, 0);
+        $_arr_signature = validateStr(fn_post("signature"), 1, 0);
         switch ($_arr_signature["status"]) {
             case "too_short":
                 return array(
@@ -91,41 +91,7 @@ class CLASS_SYNC {
             break;
         }
 
-        $_arr_code = validateStr(fn_get("code"), 1, 0);
-        switch ($_arr_code["status"]) {
-            case "too_short":
-                return array(
-                    "alert" => "x080202",
-                );
-            break;
-
-            case "ok":
-                $_str_code = $_arr_code["str"];
-            break;
-        }
-
-        $_arr_key = validateStr(fn_get("key"), 1, 0);
-        switch ($_arr_key["status"]) {
-            case "too_short":
-                return array(
-                    "alert" => "x080203",
-                );
-            break;
-
-            case "ok":
-                $_str_key = $_arr_key["str"];
-            break;
-        }
-
-        $_arr_result = $this->sync_decode($_str_code, $_str_key);
-
-        if (!isset($_arr_result["app_id"])) {
-            return array(
-                "alert" => "x050203",
-            );
-        }
-
-        $_arr_appId = validateStr($_arr_result["app_id"], 1, 0, "str", "int");
+        $_arr_appId = validateStr(fn_post("app_id"), 1, 0, "str", "int");
         switch ($_arr_appId["status"]) {
             case "too_short":
                 return array(
@@ -144,13 +110,7 @@ class CLASS_SYNC {
             break;
         }
 
-        if (!isset($_arr_result["app_key"])) {
-            return array(
-                "alert" => "x050214",
-            );
-        }
-
-        $_arr_appKey = validateStr($_arr_result["app_key"], 1, 64, "str", "alphabetDigit");
+        $_arr_appKey = validateStr(fn_post("app_key"), 1, 64, "str", "alphabetDigit");
         switch ($_arr_appKey["status"]) {
             case "too_short":
                 return array(
@@ -182,7 +142,26 @@ class CLASS_SYNC {
             return $_arr_return;
         }
 
-        $_arr_syncGet["user_id"]  = $_arr_result["user_id"];
+
+        $_arr_userId = validateStr(fn_post("user_id"), 1, 0, "str", "int");
+        switch ($_arr_userId["status"]) {
+            case "too_short":
+                return array(
+                    "alert" => "x010217",
+                );
+            break;
+
+            case "format_err":
+                return array(
+                    "alert" => "x010218",
+                );
+            break;
+
+            case "ok":
+                $_arr_syncGet["user_id"] = $_arr_userId["str"];
+            break;
+        }
+
         $_arr_syncGet["alert"]    = "ok";
 
         return $_arr_syncGet;

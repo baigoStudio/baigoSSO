@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -76,8 +76,8 @@ class AJAX_PM {
 
         switch ($_arr_pmBulk["pm_bulk_type"]) {
             case "bulkUsers":
-                if (stristr($_arr_pmBulk["pm_to_users"], ",")) {
-                    $_arr_toUsers = explode(",", $_arr_pmBulk["pm_to_users"]);
+                if (stristr($_arr_pmBulk["pm_to_users"], "|")) {
+                    $_arr_toUsers = explode("|", $_arr_pmBulk["pm_to_users"]);
                 } else {
                     $_arr_toUsers = array($_arr_pmBulk["pm_to_users"]);
                 }
@@ -103,8 +103,8 @@ class AJAX_PM {
 
             case "bulkRangeId":
                 $_arr_search = array(
-                    "begin_id"  => $_arr_pmBulk["pm_to_begin_id"],
-                    "end_id"    => $_arr_pmBulk["pm_to_end_id"],
+                    "min_id"  => $_arr_pmBulk["pm_to_min_id"],
+                    "max_id"    => $_arr_pmBulk["pm_to_max_id"],
                 );
                 $_arr_userRows = $this->mdl_user->mdl_list(1000, 0, $_arr_search);
             break;

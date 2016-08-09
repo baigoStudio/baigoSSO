@@ -60,7 +60,7 @@ class MODEL_SESSION {
         /*$dbHandle       = @mysql_connect("server","user","password");
         $dbSel          = @mysql_select_db("database",$dbHandle);
         // return success
-        if(!$dbHandle || !$dbSel) {
+        if (!$dbHandle || !$dbSel) {
             return false;
         }
         $this->dbHandle = $dbHandle;*/

@@ -26,7 +26,7 @@ return "<a name=\"top\"></a>
     <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=sync</span></p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
-    <p>GET</p>
+    <p>POST</p>
 
     <p class=\"text-success\">返回格式</p>
     <p>JSON</p>
@@ -51,61 +51,6 @@ return "<a name=\"top\"></a>
                         <td>接口调用动作，值只能为 login。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">time</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>Unix 时间戳</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">random</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>随机字符串</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">signature</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>签名字符串，需要调用签名接口来生成，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
-                    </tr>
-
-                    <tr>
-                        <td class=\"text-nowrap\">code</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>加密字符串，利用密文接口将下表中的“加密前数据”进行加密，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <p>&nbsp;</p>
-
-    <p>
-        下表数据需要加密后提交。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。
-    </p>
-
-    <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">加密前数据</div>
-        <div class=\"table-responsive\">
-            <table class=\"table table-bordered\">
-                <thead>
-                    <tr>
-                        <th class=\"text-nowrap\">名称</th>
-                        <th class=\"text-nowrap\">类型</th>
-                        <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
                         <td class=\"text-nowrap\">app_id</td>
                         <td class=\"text-nowrap\">int</td>
                         <td class=\"text-nowrap\">true</td>
@@ -123,176 +68,28 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">true</td>
                         <td>需同步登录的用户 ID。</td>
                     </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">time</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>Unix 时间戳</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">random</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>随机字符串</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">signature</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>签名字符串，需要调用签名接口来生成，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <p>&nbsp;</p>
-
-    <h4>加密示例</h4>
-
-    <pre><code class=\"language-php\">class CLASS_SSO {
-
-    \$arr_data = array(
-        &quot;app_id&quot;     =&gt; BG_SSO_APPID, //APP ID
-        &quot;app_key&quot;    =&gt; BG_SSO_APPKEY, //APP KEY
-    );
-
-    /** 加密
-     * sso_encode function.
-     *
-     * @access public
-     * @param mixed \$_str_json
-     * @return void
-     */
-    function sso_encode(\$arr_data) {
-        \$_arr_json    = array_merge(\$this-&gt;arr_data, \$arr_data); //&#21512;&#24182;&#25968;&#32452;
-        \$_str_json    = \$this->fn_jsonEncode(\$_arr_json, &quot;encode&quot;);
-
-        \$_arr_sso = array(
-            &quot;act_post&quot;   =&gt; &quot;encode&quot;, //&#26041;&#27861;
-            &quot;data&quot;       =&gt; \$_str_json,
-        );
-
-        \$_arr_ssoData = array_merge(\$this-&gt;arr_data, \$_arr_sso);
-        \$_arr_get     = \$this->fn_http(BG_SSO_URL . &quot;?mod=code&quot;, \$_arr_ssoData, &quot;post&quot;); //&#25552;&#20132;
-
-        return \$this->fn_jsonDecode(\$_arr_get[&quot;ret&quot;], &quot;no&quot;);
-    }
-
-
-    //http
-    function fn_http(\$str_url, \$arr_data, \$str_method = &quot;get&quot;) {
-
-        \$_obj_http = curl_init();
-        \$_str_data = http_build_query(\$arr_data);
-
-        \$_arr_headers = array(
-            &quot;Content-Type: application/x-www-form-urlencoded&quot;,
-        );
-
-        if (\$_arr_headers) {
-            curl_setopt(\$_obj_http, CURLOPT_HTTPHEADER, \$_arr_headers);
-        }
-
-        if (\$str_method == &quot;post&quot;) {
-            curl_setopt(\$_obj_http, CURLOPT_POST, true);
-            curl_setopt(\$_obj_http, CURLOPT_POSTFIELDS, \$_str_data);
-            curl_setopt(\$_obj_http, CURLOPT_URL, \$str_url);
-        } else {
-            if (stristr(\$str_url, &quot;?&quot;)) {
-                \$_str_conn = &quot;&amp;&quot;;
-            } else {
-                \$_str_conn = &quot;?&quot;;
-            }
-            curl_setopt(\$_obj_http, CURLOPT_URL, \$str_url . \$_str_conn . \$_str_data);
-        }
-
-        curl_setopt(\$_obj_http, CURLOPT_RETURNTRANSFER, true);
-
-        \$_obj_ret = curl_exec(\$_obj_http);
-
-        \$_arr_return = array(
-            &quot;ret&quot;     =&gt; \$_obj_ret,
-            &quot;err&quot;     =&gt; curl_error(\$_obj_http),
-            &quot;errno&quot;   =&gt; curl_errno(\$_obj_http),
-        );
-
-        curl_close(\$_obj_http);
-
-        return \$_arr_return;
-    }
-
-
-    /** JSON 编码（内容可编码成 base64）
-     * fn_jsonEncode function.
-     *
-     * @access public
-     * @param string \$arr_json
-     * @param string \$method
-     * @return void
-     */
-    function fn_jsonEncode(\$arr_json = &quot;&quot;, \$method = &quot;&quot;) {
-        if (\$arr_json) {
-            \$arr_json = fn_eachArray(\$arr_json, \$method);
-            //print_r(\$method);
-            \$str_json = json_encode(\$arr_json); //json编码
-        } else {
-            \$str_json = &quot;&quot;;
-        }
-        return \$str_json;
-    }
-
-
-    /** JSON 解码 (值可解码自 base64)
-     * fn_jsonDecode function.
-     *
-     * @access public
-     * @param string \$str_json
-     * @param string \$method
-     * @return void
-     */
-    function fn_jsonDecode(\$str_json = &quot;&quot;, \$method = &quot;&quot;) {
-        if (isset(\$str_json)) {
-            \$arr_json = json_decode(\$str_json, true); //json解码
-            \$arr_json = \$this->fn_eachArray(\$arr_json, \$method);
-        } else {
-            \$arr_json = array();
-        }
-        return \$arr_json;
-    }
-
-
-    /** 遍历数组，并进行 base64 解码编码
-     * fn_eachArray function.
-     *
-     * @access public
-     * @param mixed \$arr
-     * @param string \$method (default: &quot;encode&quot;)
-     * @return void
-     */
-    function fn_eachArray(\$arr, \$method = &quot;encode&quot;) {
-        \$_is_magic = get_magic_quotes_gpc();
-        if (is_array(\$arr)) {
-            foreach (\$arr as \$_key=&gt;\$_value) {
-                if (is_array(\$_value)) {
-                    \$arr[\$_key] = \$this->fn_eachArray(\$_value, \$method);
-                } else {
-                    switch (\$method) {
-                        case &quot;encode&quot;:
-                            if (!\$_is_magic) {
-                                \$_str = addslashes(\$_value);
-                            } else {
-                                \$_str = \$_value;
-                            }
-                            \$arr[\$_key] = base64_encode(\$_str);
-                        break;
-
-                        case &quot;decode&quot;:
-                            \$_str = base64_decode(\$_value);
-                        break;
-
-                        default:
-                            if (!\$_is_magic) {
-                                \$_str = addslashes(\$_value);
-                            } else {
-                                \$_str = \$_value;
-                            }
-                            \$arr[\$_key] = \$_str;
-                        break;
-                    }
-                }
-            }
-        } else {
-            \$arr = array();
-        }
-        return \$arr;
-    }
-}
-
-\$obj_sso       = new CLASS_SSO(); //初始化对象
-\$arr_encode    = \$obj_sso-&gt;sso_encode(\$array(1)); //调用加密接口</code></pre>
 
     <p>&nbsp;</p>
 
@@ -342,9 +139,9 @@ return "<a name=\"top\"></a>
 
     <p>&nbsp;</p>
 
-    <h4>调用 URL 示例</h4>
+    <h4>调用 URL 示例 AJAX + JSONP 方式</h4>
     <p>
-        由于 AJAX 方式提交数据会涉及到跨域问题，因此 dataType 设置为 JSONP。关于 JSONP 详见 <a href=\"http://www.baike.com/wiki/JSONP\" target=\"_blank\">互动百科</a>
+        由于 AJAX 方式提交数据会涉及到跨域问题，因此 dataType 设置为 JSONP。关于 JSONP 详见 <a href=\"http://www.baike.com/wiki/JSONP\" target=\"_blank\">互动百科</a>。AJAX 方式的优点是可以获知调用的状态，以便与判断同步是否成功，缺点是存在跨域问题，在部分浏览器可能存在兼容性问题。
     </p>
 
     <p>
@@ -366,6 +163,17 @@ $(document).ready(function(){
 });
 &lt;/script&gt;</code></pre>
     </p>
+
+    <p>&nbsp;</p>
+
+    <h4>调用 URL 示例 SCRIPT 方式</h4>
+    <p>
+        开发者也可以根据实际情况选择 SCRIPT 方式或者 IFRAME 方式，这两种方式的优点是无跨域问题，缺点是无法获知调用的状态，无法判断同步是否成功。
+    </p>
+
+<pre><code class=\"language-php\">&lt;?php foreach (\$sync[&quot;urlRows&quot;] as \$key=&gt;\$value) { ?&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;&lt;?php echo \$value; ?&gt;&quot;&gt;&lt;/script&gt;
+&lt;?php } ?&gt;</code></pre>
 
     <p>&nbsp;</p>
     <div class=\"text-right\">
@@ -547,7 +355,7 @@ $(document).ready(function(){
     <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=sync</span></p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
-    <p>GET</p>
+    <p>POST</p>
 
     <p class=\"text-success\">返回格式</p>
     <p>JSON</p>
@@ -570,6 +378,24 @@ $(document).ready(function(){
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>接口调用动作，值只能为 logout。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">app_id</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">app_key</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_id</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>需同步登出的用户 ID。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">time</td>
@@ -607,45 +433,7 @@ $(document).ready(function(){
         </div>
     </div>
 
-    <p>
-        下表数据需要加密后提交。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。
-    </p>
-
-    <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">加密前数据</div>
-        <div class=\"table-responsive\">
-            <table class=\"table table-bordered\">
-                <thead>
-                    <tr>
-                        <th class=\"text-nowrap\">名称</th>
-                        <th class=\"text-nowrap\">类型</th>
-                        <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">user_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>需同步登出的用户 ID。</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">返回结果</div>

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -51,7 +51,7 @@ class CONTROL_OPT {
 
 
     function ctl_form() {
-        $_act_get = fn_getSafe($GLOBALS["act_get"], "text", "base");
+        $_act_get = fn_getSafe(fn_get("act_get"), "text", "base");
 
         if (!isset($this->adminLogged["admin_allow"]["opt"][$_act_get])) {
             return array(

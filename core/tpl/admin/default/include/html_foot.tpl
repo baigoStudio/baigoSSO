@@ -1,4 +1,16 @@
 {* html_foot.tpl HTML 底部通用 *}
+    <div class="modal fade" id="msg_token">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p id="msg_token_content"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{$lang.btn.ok}</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {if isset($cfg.baigoValidator)}
         <!--表单验证 js-->
@@ -82,14 +94,9 @@
         <script type="text/javascript">
         function tokenReload() {
             $.getJSON("{$smarty.const.BG_URL_ADMIN}ajax.php?mod=token&act_get=make", function(result){
-                var _token = $("form input.token_session").val();
-                if (result.alert == "y030102") {
-                    if (_token != result.token) {
-                        //alert(result.str_alert);
-                        $("form input.token_session").val(result.token);
-                    }
-                } else {
-                    alert(result.msg);
+                if (result.alert != "y030102") {
+                    $("#msg_token_content").text(result.msg);
+                    $("#msg_token").modal({ show: true, backdrop: "static" });
                 }
             });
             setTimeout("tokenReload();", 300000);

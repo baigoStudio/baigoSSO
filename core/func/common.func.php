@@ -6,7 +6,7 @@
 
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -101,32 +101,23 @@ function fn_seccode() {
  * @param string $token_method (default: "post")
  * @return void
  */
-function fn_token($token_action = "mk", $session_method = "post", $cookie_method = "cookie") {
+function fn_token($token_action = "mk") {
+    if (fn_session("admin_hash")) {
+        $_str_tokenName     = fn_session("admin_hash");
+        $_str_nameSession   = "token_session_" . $_str_tokenName;
+        $_str_nameCookie    = "token_cookie_" . $_str_tokenName;
+    } else {
+        $_str_nameSession   = "token_session";
+        $_str_nameCookie    = "token_cookie";
+    }
+
     switch ($token_action) {
         case "chk":
-            switch ($session_method) {
-                case "get":
-                    $_str_tokenSession = fn_getSafe(fn_get("token_session"), "txt", "");
-                break;
-                default:
-                    $_str_tokenSession = fn_getSafe(fn_post("token_session"), "txt", "");
-                break;
-            }
-
-            switch ($cookie_method) {
-                case "get":
-                    $_str_tokenCookie = fn_getSafe(fn_get("token_cookie"), "txt", "");
-                break;
-                case "post":
-                    $_str_tokenCookie = fn_getSafe(fn_post("token_cookie"), "txt", "");
-                break;
-                default:
-                    $_str_tokenCookie = fn_cookie("token_cookie");
-                break;
-            }
+            $_str_nameSession  = fn_getSafe(fn_post($_str_nameSession), "txt", "");
+            $_str_nameCookie   = fn_cookie($_str_nameCookie);
 
             if (BG_SWITCH_TOKEN == 1) {
-                 if ($_str_tokenSession != fn_session("token_session") || $_str_tokenCookie != fn_session("token_cookie")) {
+                 if ($_str_nameSession != fn_session($_str_nameSession) || $_str_nameCookie != fn_session($_str_nameCookie)) {
                     $_str_return = false;
                  } else {
                     $_str_return = true;
@@ -138,33 +129,31 @@ function fn_token($token_action = "mk", $session_method = "post", $cookie_method
 
         default:
             if (BG_SWITCH_TOKEN == 1) {
-                $_num_tokenSessionDiff = fn_session("token_session_time") + 300; //session有效期
-                if (!fn_session("token_session") || !fn_session("token_session_time") || $_num_tokenSessionDiff < time()) {
-                    $_str_tokenSession                 = fn_rand();
-                    fn_session("token_session", "mk", $_str_tokenSession);
-                    fn_session("token_session_time", "mk", time());
+                if (!fn_session($_str_nameSession)) {
+                    $_str_tokenSession = fn_rand();
+                    fn_session($_str_nameSession, "mk", $_str_tokenSession);
                 } else {
-                    $_str_tokenSession = fn_session("token_session");
+                    $_str_tokenSession = fn_session($_str_nameSession);
                 }
 
-                $_num_tokenCookieDiff = fn_session("token_cookie_time") + 300; //cookie有效期
-                if (!fn_session("token_cookie") || !fn_session("token_cookie_time") || $_num_tokenCookieDiff < time()) {
-                    $_str_tokenCookie              = fn_rand();
-                    fn_session("token_cookie", "mk", $_str_tokenCookie);
-                    fn_session("token_cookie_time", "mk", time());
+                if (!fn_session($_str_nameCookie)) {
+                    $_str_tokenCookie = fn_rand();
+                    fn_session($_str_nameCookie, "mk", $_str_tokenCookie);
                 } else {
-                    $_str_tokenCookie = fn_session("token_cookie");
+                    $_str_tokenCookie = fn_session($_str_nameCookie);
                 }
 
                 $_str_return = $_str_tokenSession;
-                fn_cookie("token_cookie", "mk", $_str_tokenCookie);
-
-
+                fn_cookie($_str_nameCookie, "mk", $_str_tokenCookie);
             }
         break;
     }
 
-    return $_str_return;
+    return array(
+        "token"         => $_str_return,
+        "name_session"  => $_str_nameSession,
+        "name_sookie"   => $_str_nameCookie,
+    );
 }
 
 /*============清除全部cookie============
@@ -205,7 +194,7 @@ function fn_getSafe($str_string, $str_type = "txt", $str_default = "") {
         break;
 
         default: //默认
-            $_str_return = htmlentities($_str_string, ENT_QUOTES, "UTF-8");
+            $_str_return = fn_safe($_str_string);
         break;
 
     }
@@ -250,54 +239,57 @@ function fn_substr_utf8($str_string, $begin, $length) {
  * fn_page function.
  *
  * @access public
- * @param mixed $num_total
+ * @param mixed $num_count
  * @param mixed $num_per (default: BG_DEFAULT_PERPAGE)
  * @return void
  */
-function fn_page($num_total, $num_per = BG_DEFAULT_PERPAGE) {
+function fn_page($num_count, $num_per = BG_DEFAULT_PERPAGE) {
+    if ($num_per < 1) {
+        $num_per = 1;
+    }
 
-    $_num_pageThis = fn_getSafe(fn_get("page"), "int", 1);
+    $_num_this = fn_getSafe(fn_get("page"), "int", 1);
 
-    if ($_num_pageThis < 1) {
-        $_num_pageThis = 1;
+    if ($_num_this < 1) {
+        $_num_this = 1;
     } else {
-        $_num_pageThis = $_num_pageThis;
+        $_num_this = $_num_this;
     }
 
-    $_num_pageTotal = $num_total / $num_per;
+    $_num_total = $num_count / $num_per;
 
-    if (intval($_num_pageTotal) < $_num_pageTotal) {
-        $_num_pageTotal = intval($_num_pageTotal) + 1;
-    } elseif ($_num_pageTotal < 1) {
-        $_num_pageTotal = 1;
+    if (intval($_num_total) < $_num_total) {
+        $_num_total = intval($_num_total) + 1;
+    } elseif ($_num_total < 1) {
+        $_num_total = 1;
     } else {
-        $_num_pageTotal = intval($_num_pageTotal);
+        $_num_total = intval($_num_total);
     }
 
-    if ($_num_pageThis > $_num_pageTotal) {
-        $_num_pageThis = $_num_pageTotal;
+    if ($_num_this > $_num_total) {
+        $_num_this = $_num_total;
     }
 
-    if ($_num_pageThis <= 1) {
+    if ($_num_this <= 1) {
         $_num_except = 0;
     } else {
-        $_num_except = ($_num_pageThis - 1) * $num_per;
+        $_num_except = ($_num_this - 1) * $num_per;
     }
 
-    $_p        = intval(($_num_pageThis - 1) / 10); //是否存在上十页、下十页参数
-    $_begin    = $_p * 10 + 1; //列表起始页
-    $_end      = $_p * 10 + 10; //列表结束页
+    $_num_p        = intval(($_num_this - 1) / 10); //是否存在上十页、下十页参数
+    $_num_begin    = $_num_p * 10 + 1; //列表起始页
+    $_num_end      = $_num_p * 10 + 10; //列表结束页
 
-    if ($_end >= $_num_pageTotal) {
-        $_end = $_num_pageTotal;
+    if ($_num_end >= $_num_total) {
+        $_num_end = $_num_total;
     }
 
     return array(
-        "page"    => $_num_pageThis,
-        "p"       => $_p,
-        "begin"   => $_begin,
-        "end"     => $_end,
-        "total"   => $_num_pageTotal,
+        "page"    => $_num_this,
+        "p"       => $_num_p,
+        "begin"   => $_num_begin,
+        "end"     => $_num_end,
+        "total"   => $_num_total,
         "except"  => $_num_except,
     );
 }
@@ -498,7 +490,7 @@ function fn_cookie($key, $method = "get", $value = "") {
 
         default:
             if (isset($_COOKIE[$key . "_" . BG_SITE_SSIN])) {
-                return $_COOKIE[$key . "_" . BG_SITE_SSIN];
+                return fn_safe($_COOKIE[$key . "_" . BG_SITE_SSIN]);
             } else {
                 return null;
             }
@@ -519,7 +511,7 @@ function fn_session($key, $method = "get", $value = "") {
 
         default:
             if (isset($_SESSION[$key . "_" . BG_SITE_SSIN])) {
-                return $_SESSION[$key . "_" . BG_SITE_SSIN];
+                return fn_safe($_SESSION[$key . "_" . BG_SITE_SSIN]);
             } else {
                 return null;
             }
@@ -553,8 +545,97 @@ function fn_request($key) {
  */
 function fn_server($key) {
     if (isset($_SERVER[$key])) {
-        return $_SERVER[$key];
+        return fn_safe($_SERVER[$key]);
     } else {
         return null;
     }
+}
+
+
+function fn_safe($str_string) {
+    //正则剔除
+    $_arr_dangerRegs = array(
+        /* -------- 跨站 --------*/
+
+        //html 标签
+        "/<(script|frame|iframe|bgsound|link|object|applet|embed|blink|style|layer|ilayer|base|meta)\s+\S*>/i",
+
+        //html 事件
+        "/on\w+\s*=\s*(\"|')?\S*(\"|')?/i",
+
+        //html 属性包含脚本
+        "/(java|vb)script:\s*\S*/i",
+
+        //js 对象
+        "/(document|location)\s*\.\s*\S*/i",
+
+        //js 函数
+        "/(eval|alert|prompt|msgbox)\s*\(.*\)/i",
+
+        //css
+        "/expression\s*:\s*\S*/i",
+
+        /* -------- sql 注入 --------*/
+
+        //显示 数据库 | 表 | 索引 | 字段
+        "/show\s+(databases|tables|index|columns)/i",
+
+        //创建 数据库 | 表 | 索引 | 视图 | 存储过程 | 存储过程
+        "/create\s+(database|table|(unique\s+)?index|view|procedure|proc)/i",
+
+        //更新 数据库 | 表
+        "/alter\s+(database|table)/i",
+
+        //丢弃 数据库 | 表 | 索引 | 视图 | 字段
+        "/drop\s+(database|table|index|view|column)/i",
+
+        //备份 数据库 | 日志
+        "/backup\s+(database|log)/i",
+
+        //初始化 表
+        "/truncate\s+table/i",
+
+        //替换 视图
+        "/replace\s+view/i",
+
+        //创建 | 更改 字段
+        "/(add|change)\s+column/i",
+
+        //选择 | 更新 | 删除 记录
+        "/(select|update|delete)\s+\S*\s+from/i",
+
+        //插入 记录 | 选择到文件
+        "/insert\s+into/i",
+
+        //sql 函数
+        "/load_file\s*\(.*\)/i",
+
+        //sql 其他
+        "/(outfile|infile)\s+(\"|')?\S*(\"|')/i",
+    );
+
+    //直接剔除
+    $_arr_dangerChars = array(
+        ";", "$", "@", "+", "\t", "\r", "\n", "(", ")", PHP_EOL //特殊字符
+    );
+
+    $_str_return = trim($str_string);
+    /*$_str_return = rtrim($_str_return, "/"); //去除最右斜杠
+    $_str_return = rtrim($_str_return, "\\"); //去除最右反斜杠
+    $_str_return = str_replace("\\", "/", $_str_return); //反斜杠替换为斜杠
+    $_str_return = str_replace("//", "/", $_str_return); //去除重复斜杠*/
+    $_str_return = str_replace(",", "|", $_str_return); //特殊字符，内部保留
+    //$_str_return = urlencode($_str_return);
+
+    foreach ($_arr_dangerRegs as $_key=>$_value) {
+        $_str_return = preg_replace($_value, "", $_str_return);
+    }
+
+    foreach ($_arr_dangerChars as $_key=>$_value) {
+        $_str_return = str_ireplace($_value, "", $_str_return);
+    }
+
+    $_str_return = htmlentities($_str_return, ENT_QUOTES, "UTF-8");
+
+    return $_str_return;
 }

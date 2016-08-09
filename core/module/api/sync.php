@@ -6,7 +6,7 @@
 
 
 //不能非法包含或直接执行
-if(!defined("IN_BAIGO")) {
+if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
@@ -24,7 +24,7 @@ include_once(BG_PATH_CONTROL . "api/sync.class.php"); //载入同步控制器
 
 $api_sync = new API_SYNC(); //初始化同步
 
-switch ($GLOBALS["act_get"]) {
+switch ($GLOBALS["act_post"]) {
     case "login":
         $api_sync->api_login(); //同步登录
     break;
