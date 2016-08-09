@@ -192,11 +192,11 @@ return "<a name=\"top\"></a>
 
     <p>&nbsp;</p>
 
-    <h4>安装参数示例</h4>
+    <h4>安装参数</h4>
     <p>
 <pre><code class=\"language-php\">array(
     &quot;opt&quot; =&gt; array(
-        &quot;dbconfig&quot; =&gt; array(
+        &quot;base&quot; =&gt; array(
             &quot;BG_SITE_NAME&quot;        =&gt; &quot;baigo SSO&quot; //站点名称
             &quot;BG_SITE_DOMAIN&quot;      =&gt; &quot;" . $_SERVER["SERVER_NAME"] . "&quot; //域名
             &quot;BG_SITE_URL&quot;         =&gt; &quot;http://" . $_SERVER["SERVER_NAME"] . "&quot; //首页 URL
@@ -206,6 +206,10 @@ return "<a name=\"top\"></a>
             &quot;BG_SITE_DATESHORT&quot;   =&gt; &quot;m-d&quot; //短日期格式，等同于 PHP date 函数
             &quot;BG_SITE_TIME&quot;        =&gt; &quot;H:i:s&quot; //时间格式，等同于 PHP date 函数
             &quot;BG_SITE_TIMESHORT&quot;   =&gt; &quot;H:s&quot; //短时间格式，等同于 PHP date 函数
+            &quot;BG_SITE_TPL&quot;         =&gt; &quot;default&quot; //模板
+            &quot;BG_ACCESS_EXPIRE&quot;    =&gt; 60; //访问口令存活期，单位：分钟
+            &quot;BG_REFRESH_EXPIRE&quot;   =&gt; 60; //刷新口令存活期，单位：天
+            &quot;BG_VERIFY_EXPIRE&quot;    =&gt; 30 //验证链接有效期，单位：分钟
         )
     )
 );</code></pre>

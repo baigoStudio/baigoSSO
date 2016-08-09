@@ -39,6 +39,7 @@ class MODEL_OPT {
 
         if ($str_type == "base") {
             $_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
+            $_str_content .= "define(\"BG_SITE_TPL\", \"default\");" . PHP_EOL;
         }
 
         $_str_content = str_replace("||", "", $_str_content);

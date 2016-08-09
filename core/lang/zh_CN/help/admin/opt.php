@@ -37,6 +37,18 @@ return "<a name=\"top\"></a>
 
             <h4 class=\"text-success\">短时间格式</h4>
             <p>部分页面显示时间的格式，此日期为缩短的时间格式，不显示秒，默认为 xx:xx（时:分）。</p>
+
+            <h4 class=\"text-success\">模板</h4>
+            <p>前台页面模板</p>
+
+            <h4 class=\"text-success\">访问口令存活期</h4>
+            <p>主要用于 API 接口。</p>
+
+            <h4 class=\"text-success\">刷新口令存活期</h4>
+            <p>主要用于 API 接口。</p>
+
+            <h4 class=\"text-success\">验证链接有效期</h4>
+            <p>用户激活、找回密码等操作时声称的链接有效期。</p>
         </div>
     </div>
 
