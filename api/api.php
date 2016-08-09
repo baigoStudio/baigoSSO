@@ -21,7 +21,13 @@ include_once($base . "config/init.class.php");
 
 $obj_init = new CLASS_INIT();
 
-$obj_init->config_gen(true);
+if ($mod == "install") { //如果是调用安装接口
+    $is_install = true;
+} else {
+    $is_install = false;
+}
+
+$obj_init->config_gen($is_install);
 
 include_once($obj_init->str_pathRoot . "config/config.inc.php"); //载入配置
 
