@@ -39,7 +39,7 @@ class MODEL_PM {
 
         $_arr_pmCreate = array(
             "pm_id"         => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-            "pm_smax_id"    => "int NOT NULL COMMENT '发出 ID'", //已发送短信的目标 ID
+            "pm_send_id"    => "int NOT NULL COMMENT '发出 ID'", //已发送短信的目标 ID
             "pm_to"         => "int NOT NULL COMMENT '收件用户 ID'",
             "pm_from"       => "int NOT NULL COMMENT '发件用户 ID'",
             "pm_title"      => "varchar(90) NOT NULL COMMENT '标题'",
@@ -109,7 +109,7 @@ class MODEL_PM {
         }
 
         if ($num_pmFrom > 1) { //如果为非系统消息，在发件箱保存副本
-            $_arr_pmData["pm_smax_id"]  = $_num_pmId;
+            $_arr_pmData["pm_send_id"]  = $_num_pmId;
             $_arr_pmData["pm_type"]     = "out";
             $_arr_pmData["pm_status"]   = "read";
             $this->obj_db->insert(BG_DB_TABLE . "pm", $_arr_pmData); //更新数据
@@ -168,7 +168,7 @@ class MODEL_PM {
     function mdl_read($str_pm, $str_by = "pm_id", $num_notId = 0) {
         $_arr_pmSelect = array(
             "pm_id",
-            "pm_smax_id",
+            "pm_send_id",
             "pm_to",
             "pm_from",
             "pm_title",
@@ -217,7 +217,7 @@ class MODEL_PM {
     function mdl_list($num_no, $num_except = 0, $arr_search = array()) {
         $_arr_pmSelect = array(
             "pm_id",
-            "pm_smax_id",
+            "pm_send_id",
             "pm_to",
             "pm_from",
             "pm_title",
