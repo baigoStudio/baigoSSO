@@ -2,8 +2,10 @@
 return "<h3>基本设置</h3>
 
     <p>
-        <img src=\"{images}base.jpg\" class=\"img-responsive\">
+        <a href=\"{images}base.jpg\" target=\"_blank\"><img src=\"{images}base.jpg\" class=\"img-responsive\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>

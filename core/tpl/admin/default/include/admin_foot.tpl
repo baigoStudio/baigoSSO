@@ -6,9 +6,11 @@
                             <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod={$value_m.main.mod}" class="list-group-item{if $cfg.menu_active == $key_m} list-group-item-success active{/if}">
                                 <span class="glyphicon glyphicon-{$value_m.main.icon}"></span>
                                 {$value_m.main.title}
-                                <span class="caret"></span>
+                                {if isset($value_m.sub) && $value_m.sub}
+                                    <span class="caret"></span>
+                                {/if}
                             </a>
-                            {if isset($cfg.menu_active) && $cfg.menu_active == $key_m}
+                            {if isset($cfg.menu_active) && $cfg.menu_active == $key_m && isset($value_m.sub) && $value_m.sub}
                                 {foreach $value_m.sub as $key_s=>$value_s}
                                     <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod={$value_s.mod}&act_get={$value_s.act_get}" class="list-group-item {if $cfg.sub_active == $key_s}list-group-item-success{else}sub_normal{/if}">{$value_s.title}</a>
                                 {/foreach}
@@ -21,6 +23,7 @@
                             <span class="caret"></span>
                         </a>
                         {if isset($cfg.menu_active) && $cfg.menu_active == "opt"}
+                            <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get=chkver" class="list-group-item {if isset($cfg.sub_active) && $cfg.sub_active == "chkver"}list-group-item-success{else}sub_normal{/if}">{$lang.page.chkver}</a>
                             <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get=dbconfig" class="list-group-item {if isset($cfg.sub_active) && $cfg.sub_active == "dbconfig"}list-group-item-success{else}sub_normal{/if}">{$lang.page.installDbConfig}</a>
                             {foreach $opt as $key_opt=>$value_opt}
                                 <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get={$key_opt}" class="list-group-item {if isset($cfg.sub_active) && $cfg.sub_active == $key_opt}list-group-item-success{else}sub_normal{/if}">{$value_opt.title}</a>

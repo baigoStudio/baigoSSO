@@ -1,12 +1,32 @@
 <?php
-return "<a name=\"top\"></a>
+return "<h3>检查更新</h3>
+    <p>
+        点左侧子菜单检查更新，进入如下界面，系统会定时检查最新版本，也可点击“再次检查更新”按钮进行手工检查。
+    </p>
+    <p>
+        <a href=\"{images}opt_chkver.jpg\" target=\"_blank\"><img src=\"{images}opt_chkver.jpg\" class=\"img-responsive thumbnail\"></a>
+    </p>
+
+    <p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <p>&nbsp;</p>
+
+    <a name=\"base\"></a>
     <h3>基本设置</h3>
     <p>
-        点右上角菜单系统设置，进入如下界面，可以对系统进行设置。
+        点左侧菜单系统设置，进入如下界面，可以对系统进行设置。
     </p>
     <p>
-        <img src=\"{images}opt_base.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}opt_base.jpg\" target=\"_blank\"><img src=\"{images}opt_base.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -62,14 +82,16 @@ return "<a name=\"top\"></a>
     <hr>
     <p>&nbsp;</p>
 
-    <a name=\"db\"></a>
+    <a name=\"dbconfig\"></a>
     <h3>数据库设置</h3>
     <p>
-        点右上角子菜单数据库设置，进入如下界面，可以对数据库进行设置。
+        点左侧子菜单数据库设置，进入如下界面，可以对数据库进行设置。
     </p>
     <p>
-        <img src=\"{images}opt_dbconfig.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}opt_dbconfig.jpg\" target=\"_blank\"><img src=\"{images}opt_dbconfig.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -107,11 +129,13 @@ return "<a name=\"top\"></a>
     <a name=\"reg\"></a>
     <h3>注册设置</h3>
     <p>
-        点右上角子菜单注册设置，进入如下界面，可以设置注册有关项目。
+        点左侧子菜单注册设置，进入如下界面，可以设置注册有关项目。
     </p>
     <p>
-        <img src=\"{images}opt_reg.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}opt_reg.jpg\" target=\"_blank\"><img src=\"{images}opt_reg.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -149,11 +173,13 @@ return "<a name=\"top\"></a>
     <a name=\"smtp\"></a>
     <h3>邮件发送设置</h3>
     <p>
-        点右上角子菜单邮件发送设置设置，进入如下界面，可以对邮件发送方式进行设置。
+        点左侧子菜单邮件发送设置设置，进入如下界面，可以对邮件发送方式进行设置。
     </p>
     <p>
-        <img src=\"{images}opt_smtp.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}opt_smtp.jpg\" target=\"_blank\"><img src=\"{images}opt_smtp.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -179,12 +205,4 @@ return "<a name=\"top\"></a>
             <h4 class=\"text-success\">回复邮箱</h4>
             <p>收件人需要回复时的邮箱。</p>
         </div>
-    </div>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
     </div>";

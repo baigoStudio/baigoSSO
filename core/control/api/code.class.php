@@ -9,8 +9,8 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入模板类
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "crypt.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 
@@ -24,11 +24,12 @@ class API_CODE {
     private $appRequest;
 
     function __construct() { //构造函数
-        $this->obj_api    = new CLASS_API();
+        $this->obj_api      = new CLASS_API();
         $this->obj_api->chk_install();
-        $this->log        = $this->obj_api->log; //初始化 AJAX 基对象
-        $this->mdl_app    = new MODEL_APP(); //设置管理组模型
-        $this->mdl_log    = new MODEL_LOG(); //设置管理员模型
+        $this->log          = $this->obj_api->log; //初始化 AJAX 基对象
+        $this->obj_crypt    = new CLASS_CRYPT();
+        $this->mdl_app      = new MODEL_APP(); //设置管理组模型
+        $this->mdl_log      = new MODEL_LOG(); //设置管理员模型
     }
 
 
@@ -51,16 +52,14 @@ class API_CODE {
             break;
 
             case "ok":
-                $_str_data = html_entity_decode($_arr_data["str"], ENT_QUOTES, "UTF-8");
+                $_str_data = fn_htmlcode($_arr_data["str"], "decode");
             break;
         }
 
-        $_str_key     = fn_rand(6);
-        $_str_code    = fn_baigoEncode($_str_data, $_str_key);
+        $_str_code    = $this->obj_crypt->encrypt($_str_data);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
             "alert"  => "y050405",
         );
 
@@ -91,21 +90,7 @@ class API_CODE {
             break;
         }
 
-        $_arr_key = validateStr(fn_post("key"), 1, 0);
-        switch ($_arr_key["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x080203",
-                );
-                $this->obj_api->halt_re($_arr_return);
-            break;
-
-            case "ok":
-                $_str_key = $_arr_key["str"];
-            break;
-        }
-
-        $_str_result  = fn_baigoDecode($_str_code, $_str_key);
+        $_str_result  = $this->obj_crypt->decrypt($_str_code);
 
         exit($_str_result);
     }
@@ -129,7 +114,6 @@ class API_CODE {
             $this->log_do($_arr_appRow, "read");
             $this->obj_api->halt_re($_arr_appRow);
         }
-        $this->appAllow = $_arr_appRow["app_allow"];
 
         $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $_arr_appRow);
         if ($_arr_appChk["alert"] != "ok") {
@@ -153,6 +137,15 @@ class API_CODE {
         );
         $_str_targets     = json_encode($_arr_targets);
         $_str_logResult   = json_encode($arr_logResult);
-        $this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"][$str_logType], $_str_logResult, "app", $this->appRequest["app_id"]);
+
+        $_arr_logData = array(
+            "log_targets"        => $_str_targets,
+            "log_target_type"    => "app",
+            "log_title"          => $this->log["app"][$str_logType],
+            "log_result"         => $_str_logResult,
+            "log_type"           => "app",
+        );
+
+        $this->mdl_log->mdl_submit($_arr_logData, $this->appRequest["app_id"]);
     }
 }

@@ -1,12 +1,11 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>所有短信</h3>
+return "<h3>所有短信</h3>
     <p>
         点左侧菜单站内短信，进入如下界面，可以对短信进行删除、改变状态等操作。
     </p>
 
     <p>
-        <img src=\"{images}pm_list.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}pm_list.jpg\" target=\"_blank\"><img src=\"{images}pm_list.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -26,8 +25,10 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}pm_send.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}pm_send.jpg\" target=\"_blank\"><img src=\"{images}pm_send.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -60,8 +61,10 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}pm_bulk.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}pm_bulk.jpg\" target=\"_blank\"><img src=\"{images}pm_bulk.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -75,12 +78,4 @@ return "<a name=\"top\"></a>
             <h4 class=\"text-success\">内容</h4>
             <p>短信的内容。</p>
         </div>
-    </div>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
     </div>";

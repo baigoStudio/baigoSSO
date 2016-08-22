@@ -558,7 +558,7 @@ function fn_safe($str_string) {
         /* -------- 跨站 --------*/
 
         //html 标签
-        "/<(script|frame|iframe|bgsound|link|object|applet|embed|blink|style|layer|ilayer|base|meta)\s+\S*>/i",
+        "/<(script|frame|iframe|bgsound|link|blink|object|applet|embed|style|layer|ilayer|base|meta)\s+\S*>/i",
 
         //html 事件
         "/on\w+\s*=\s*(\"|')?\S*(\"|')?/i",
@@ -614,18 +614,14 @@ function fn_safe($str_string) {
         "/(outfile|infile)\s+(\"|')?\S*(\"|')/i",
     );
 
-    //直接剔除
+    //特殊字符 直接剔除
     $_arr_dangerChars = array(
-        ";", "$", "@", "+", "\t", "\r", "\n", "(", ")", PHP_EOL //特殊字符
+        "\t", "\r", "\n", PHP_EOL
     );
 
     $_str_return = trim($str_string);
-    /*$_str_return = rtrim($_str_return, "/"); //去除最右斜杠
-    $_str_return = rtrim($_str_return, "\\"); //去除最右反斜杠
-    $_str_return = str_replace("\\", "/", $_str_return); //反斜杠替换为斜杠
-    $_str_return = str_replace("//", "/", $_str_return); //去除重复斜杠*/
+
     $_str_return = str_replace(",", "|", $_str_return); //特殊字符，内部保留
-    //$_str_return = urlencode($_str_return);
 
     foreach ($_arr_dangerRegs as $_key=>$_value) {
         $_str_return = preg_replace($_value, "", $_str_return);
@@ -635,7 +631,41 @@ function fn_safe($str_string) {
         $_str_return = str_ireplace($_value, "", $_str_return);
     }
 
-    $_str_return = htmlentities($_str_return, ENT_QUOTES, "UTF-8");
+    $_str_return = fn_htmlcode($_str_return);
+
+    $_str_return = str_replace(";", "&#59;", $_str_return);
+    $_str_return = str_replace("!", "&#33;", $_str_return);
+    $_str_return = str_replace("$", "&#36;", $_str_return);
+    //$_str_return = str_replace("%", "&#37;", $_str_return);
+    $_str_return = str_replace("‘", "&#39;", $_str_return);
+    $_str_return = str_replace("(", "&#40;", $_str_return);
+    $_str_return = str_replace(")", "&#41;", $_str_return);
+    $_str_return = str_replace("+", "&#43;", $_str_return);
+    $_str_return = str_replace("-", "&#45;", $_str_return);
+    $_str_return = str_replace(":", "&#58;", $_str_return);
+    $_str_return = str_replace("=", "&#61;", $_str_return);
+    $_str_return = str_replace("?", "&#63;", $_str_return);
+    //$_str_return = str_replace("@", "&#64;", $_str_return);
+    $_str_return = str_replace("[", "&#91;", $_str_return);
+    $_str_return = str_replace("]", "&#93;", $_str_return);
+    $_str_return = str_replace("^", "&#94;", $_str_return);
+    $_str_return = str_replace("`", "&#96;", $_str_return);
+    $_str_return = str_replace("{", "&#123;", $_str_return);
+    $_str_return = str_replace("}", "&#125;", $_str_return);
+    $_str_return = str_replace("~", "&#126;", $_str_return);
 
     return $_str_return;
+}
+
+function fn_htmlcode($str_html, $method = "encode") {
+    switch ($method) {
+        case "decode":
+            $_str_html = html_entity_decode($str_html, ENT_QUOTES, "UTF-8");
+        break;
+        default:
+            $_str_html = htmlentities($str_html, ENT_QUOTES, "UTF-8");
+        break;
+    }
+
+    return $_str_html;
 }

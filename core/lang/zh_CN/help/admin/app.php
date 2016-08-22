@@ -1,12 +1,11 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>所有应用</h3>
+return "<h3>所有应用</h3>
     <p>
         点左侧菜单应用管理，进入如下界面，可以对应用进行编辑、删除、改变状态等操作。
     </p>
 
     <p>
-        <img src=\"{images}app_list.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}app_list.jpg\" target=\"_blank\"><img src=\"{images}app_list.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -26,8 +25,10 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}app_form.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}app_form.jpg\" target=\"_blank\"><img src=\"{images}app_form.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -75,7 +76,7 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}app_show.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}app_show.jpg\" target=\"_blank\"><img src=\"{images}app_show.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -95,14 +96,6 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}app_belong.jpg\" class=\"img-responsive thumbnail\">
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+        <a href=\"{images}app_belong.jpg\" target=\"_blank\"><img src=\"{images}app_belong.jpg\" class=\"img-responsive thumbnail\"></a>
+    </p>";
 

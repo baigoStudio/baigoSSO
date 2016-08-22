@@ -1,10 +1,11 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>邮件发送设置</h3>
+return "<h3>邮件发送设置</h3>
 
     <p>
-        <img src=\"{images}smtp.jpg\" class=\"img-responsive\">
+        <a href=\"{images}smtp.jpg\" target=\"_blank\"><img src=\"{images}smtp.jpg\" class=\"img-responsive\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>

@@ -1,11 +1,10 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>所有管理员</h3>
+return "<h3>所有管理员</h3>
     <p>
         点左侧菜单管理员，进入如下界面，可以对管理员进行编辑、删除、改变状态和加入组等操作。
     </p>
     <p>
-        <img src=\"{images}admin_list.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}admin_list.jpg\" target=\"_blank\"><img src=\"{images}admin_list.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -24,8 +23,10 @@ return "<a name=\"top\"></a>
         点左侧子菜单的创建管理员或者点击管理员列表的编辑菜单，进入如下界面，在此，您可以对管理员进行各项操作。
     </p>
     <p>
-        <img src=\"{images}admin_form.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}admin_form.jpg\" target=\"_blank\"><img src=\"{images}admin_form.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>
@@ -51,12 +52,4 @@ return "<a name=\"top\"></a>
             <h4 class=\"text-success\">个人权限</h4>
             <p>可选禁止修改个人信息和禁止修改密码。</p>
         </div>
-    </div>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
     </div>";

@@ -24,6 +24,7 @@ class CONTROL_PM {
     private $mdl_belong;
     private $mdl_user;
     private $tplData;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->obj_base     = $GLOBALS["obj_base"]; //获取界面类型
@@ -36,11 +37,15 @@ class CONTROL_PM {
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
 
     function ctl_send() {
-        if (!isset($this->adminLogged["admin_allow"]["pm"]["send"])) {
+        if (!isset($this->adminLogged["admin_allow"]["pm"]["send"]) && !$this->is_super) {
             return array(
                 "alert" => "x110303",
             );
@@ -58,7 +63,7 @@ class CONTROL_PM {
     返回提示
     */
     function ctl_show() {
-        if (!isset($this->adminLogged["admin_allow"]["pm"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["pm"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x110301",
             );
@@ -92,7 +97,7 @@ class CONTROL_PM {
     返回提示
     */
     function ctl_bulk() {
-        if (!isset($this->adminLogged["admin_allow"]["pm"]["bulk"])) {
+        if (!isset($this->adminLogged["admin_allow"]["pm"]["bulk"]) && !$this->is_super) {
             return array(
                 "alert" => "x110302",
             );
@@ -113,7 +118,7 @@ class CONTROL_PM {
     无返回
     */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["pm"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["pm"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x110301",
             );

@@ -42,7 +42,7 @@
 
     <div class="form-group">
         <label class="control-label static_label">{$lang.label.content}</label>
-        <p class="form-control-static input-lg">{$tplData.pmRow.pm_content}</p>
+        <p>{$tplData.pmRow.pm_content}</p>
     </div>
 
     <div class="form-group">

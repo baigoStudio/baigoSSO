@@ -1,16 +1,15 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>所有用户</h3>
+return "<h3>所有用户</h3>
     <p>
         点左侧菜单用户管理，可以对用户进行编辑、删除、改变状态等操作。
     </p>
 
     <p>
-        <img src=\"{images}user_list.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}user_list.jpg\" target=\"_blank\"><img src=\"{images}user_list.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>
-        <img src=\"{images}user_form.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}user_form.jpg\" target=\"_blank\"><img src=\"{images}user_form.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -31,13 +30,5 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}user_import.jpg\" class=\"img-responsive thumbnail\">
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+        <a href=\"{images}user_import.jpg\" target=\"_blank\"><img src=\"{images}user_import.jpg\" class=\"img-responsive thumbnail\"></a>
+    </p>";

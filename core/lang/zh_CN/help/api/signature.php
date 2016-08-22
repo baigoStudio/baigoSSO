@@ -1,7 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-    <a name=\"signature\"></a>
-    <h3>生成签名</h3>
+return "<h3>生成签名</h3>
 
     <p class=\"text-success\">接口说明</p>
     <p>本接口用于生成签名。</p>

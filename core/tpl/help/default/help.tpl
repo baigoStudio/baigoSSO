@@ -61,6 +61,7 @@
         <h2 class="page-header">{$tplData.config.title}</h2>
         <div class="row">
             <div class="col-md-10">
+                <a name="top"></a>
                 {$tplData.content}
                 {if $tplData.mod == "api" && $tplData.act_get == "alert"}
                     <div class="panel panel-default">
@@ -84,6 +85,13 @@
                         </div>
                     </div>
                 {/if}
+                <p>&nbsp;</p>
+                <div class="text-right">
+                    <a href="#top">
+                        <span class="glyphicon glyphicon-chevron-up"></span>
+                        top
+                    </a>
+                </div>
             </div>
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked nav_sso">

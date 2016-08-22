@@ -13,6 +13,7 @@ if (!defined("IN_BAIGO")) {
 class MODEL_ADMIN {
     private $obj_db;
     public $adminStatus = array(); //状态
+    public $adminTypes = array(); //类型
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -31,18 +32,24 @@ class MODEL_ADMIN {
         }
         $_str_status = implode("','", $_arr_status);
 
+        foreach ($this->adminTypes as $_key=>$_value) {
+            $_arr_types[] = $_key;
+        }
+        $_str_types = implode("','", $_arr_types);
+
         $_arr_adminCreate = array(
-            "admin_id"           => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
-            "admin_name"         => "varchar(30) NOT NULL COMMENT '用户名'",
-            "admin_pass"         => "char(32) NOT NULL COMMENT '密码'",
-            "admin_rand"         => "char(6) NOT NULL COMMENT '随机串'",
-            "admin_note"         => "varchar(30) NOT NULL COMMENT '备注'",
-            "admin_nick"         => "varchar(30) NOT NULL COMMENT '昵称'",
-            "admin_status"       => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
-            "admin_allow"        => "varchar(3000) NOT NULL COMMENT '权限'",
-            "admin_time"         => "int NOT NULL COMMENT '创建时间'",
-            "admin_time_login"   => "int NOT NULL COMMENT '登录时间'",
-            "admin_ip"           => "varchar(15) NOT NULL COMMENT '最后 IP 地址'",
+            "admin_id"          => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
+            "admin_name"        => "varchar(30) NOT NULL COMMENT '用户名'",
+            "admin_pass"        => "char(32) NOT NULL COMMENT '密码'",
+            "admin_rand"        => "char(6) NOT NULL COMMENT '随机串'",
+            "admin_note"        => "varchar(30) NOT NULL COMMENT '备注'",
+            "admin_nick"        => "varchar(30) NOT NULL COMMENT '昵称'",
+            "admin_status"      => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
+            "admin_type"        => "enum('" . $_str_types . "') NOT NULL COMMENT '类型'",
+            "admin_allow"       => "varchar(3000) NOT NULL COMMENT '权限'",
+            "admin_time"        => "int NOT NULL COMMENT '创建时间'",
+            "admin_time_login"  => "int NOT NULL COMMENT '登录时间'",
+            "admin_ip"          => "varchar(15) NOT NULL COMMENT '最后 IP 地址'",
         );
 
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "admin", $_arr_adminCreate, "admin_id", "管理员");
@@ -88,6 +95,11 @@ class MODEL_ADMIN {
         }
         $_str_status = implode("','", $_arr_status);
 
+        foreach ($this->adminTypes as $_key=>$_value) {
+            $_arr_types[] = $_key;
+        }
+        $_str_types = implode("','", $_arr_types);
+
         $_arr_col     = $this->mdl_column();
         $_arr_alert   = array();
 
@@ -103,17 +115,16 @@ class MODEL_ADMIN {
             $_arr_alert["admin_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "admin_status");
         }
 
-        $_arr_adminData = array(
-            "admin_status" => $_arr_status[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "admin", $_arr_adminData, "LENGTH(admin_status) < 1"); //将 admin_status 字段为空的记录，更新为默认值
-
         if (in_array("admin_pass", $_arr_col)) {
             $_arr_alert["admin_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "admin_pass");
         }
 
         if (in_array("admin_rand", $_arr_col)) {
             $_arr_alert["admin_rand"] = array("CHANGE", "char(6) NOT NULL COMMENT '随机串'", "admin_rand");
+        }
+
+        if (!in_array("admin_type", $_arr_col)) {
+            $_arr_alert["admin_type"] = array("ADD", "enum('" . $_str_types . "') NOT NULL COMMENT '状态'");
         }
 
         $_str_alert = "y0201111";
@@ -123,6 +134,16 @@ class MODEL_ADMIN {
 
             if ($_reselt) {
                 $_str_alert = "y020106";
+
+                $_arr_adminData = array(
+                    "admin_status" => $_arr_status[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "admin", $_arr_adminData, "LENGTH(admin_status)<1"); //将 admin_status 字段为空的记录，更新为默认值
+
+                $_arr_adminData = array(
+                    "admin_type" => $_arr_types[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "admin", $_arr_adminData, "LENGTH(admin_type)<1"); //将 admin_type 字段为空的记录，更新为默认值
             }
         }
 
@@ -234,11 +255,12 @@ class MODEL_ADMIN {
      */
     function mdl_submit($str_adminPass = "", $str_adminRand = "") {
         $_arr_adminData = array(
-            "admin_name"     => $this->adminSubmit["admin_name"],
-            "admin_note"     => $this->adminSubmit["admin_note"],
-            "admin_status"   => $this->adminSubmit["admin_status"],
-            "admin_allow"    => $this->adminSubmit["admin_allow"],
-            "admin_nick"     => $this->adminSubmit["admin_nick"],
+            "admin_name"    => $this->adminSubmit["admin_name"],
+            "admin_note"    => $this->adminSubmit["admin_note"],
+            "admin_status"  => $this->adminSubmit["admin_status"],
+            "admin_type"    => $this->adminSubmit["admin_type"],
+            "admin_allow"   => $this->adminSubmit["admin_allow"],
+            "admin_nick"    => $this->adminSubmit["admin_nick"],
         );
 
         if ($this->adminSubmit["admin_id"] < 1) {
@@ -336,6 +358,7 @@ class MODEL_ADMIN {
             "admin_ip",
             "admin_allow",
             "admin_status",
+            "admin_type",
         );
 
         if (is_numeric($str_admin)) {
@@ -388,6 +411,7 @@ class MODEL_ADMIN {
             "admin_note",
             "admin_nick",
             "admin_status",
+            "admin_type",
             "admin_time",
             "admin_time_login",
             "admin_ip",
@@ -694,6 +718,20 @@ class MODEL_ADMIN {
 
         }
 
+        $_arr_adminType = validateStr(fn_post("admin_type"), 1, 0);
+        switch ($_arr_adminType["status"]) {
+            case "too_short":
+                return array(
+                    "alert" => "x020214",
+                );
+            break;
+
+            case "ok":
+                $this->adminSubmit["admin_type"] = $_arr_adminType["str"];
+            break;
+
+        }
+
         $_arr_adminNick = validateStr(fn_post("admin_nick"), 0, 30);
         switch ($_arr_adminNick["status"]) {
             case "too_long":
@@ -771,6 +809,7 @@ class MODEL_ADMIN {
         $this->adminSubmit["admin_note"]    = $this->adminSubmit["admin_name"];
         $this->adminSubmit["admin_id"]      = 0;
         $this->adminSubmit["admin_status"]  = "enable";
+        $this->adminSubmit["admin_type"]    = "super";
 
         $_arr_adminAllow = array(
             "user" => array(
@@ -860,6 +899,10 @@ class MODEL_ADMIN {
 
         if (isset($arr_search["status"]) && $arr_search["status"]) {
             $_str_sqlWhere .= " AND admin_status='" . $arr_search["status"] . "'";
+        }
+
+        if (isset($arr_search["type"]) && $arr_search["type"]) {
+            $_str_sqlWhere .= " AND admin_type='" . $arr_search["type"] . "'";
         }
 
         return $_str_sqlWhere;

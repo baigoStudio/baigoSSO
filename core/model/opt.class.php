@@ -14,6 +14,10 @@ class MODEL_OPT {
 
     public $arr_const;
 
+    function __construct() { //构造函数
+        $this->obj_dir = new CLASS_DIR();
+    }
+
     /** 处理常量并生成配置文件
      * mdl_const function.
      *
@@ -33,7 +37,7 @@ class MODEL_OPT {
             if (is_numeric($_value)) {
                 $_str_content .= "define(\"" . $_key . "\", " . $_value . ");" . PHP_EOL;
             } else {
-                $_str_content .= "define(\"" . $_key . "\", \"" . str_replace(PHP_EOL, "|", $_value) . "\");" . PHP_EOL;
+                $_str_content .= "define(\"" . $_key . "\", \"" . rtrim(str_replace(PHP_EOL, "|", $_value), "/\\") . "\");" . PHP_EOL;
             }
         }
 
@@ -44,7 +48,7 @@ class MODEL_OPT {
 
         $_str_content = str_replace("||", "", $_str_content);
 
-        $_num_size    = file_put_contents(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
+        $_num_size    = $this->obj_dir->put_file(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
 
         if ($_num_size > 0) {
             $_str_alert = "y030405";
@@ -76,7 +80,7 @@ class MODEL_OPT {
         $_str_content .= "define(\"BG_INSTALL_PUB\", " . PRD_SSO_PUB . ");" . PHP_EOL;
         $_str_content .= "define(\"BG_INSTALL_TIME\", " . time() . ");" . PHP_EOL;
 
-        $_num_size = file_put_contents(BG_PATH_CONFIG . "is_install.php", $_str_content);
+        $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . "is_install.php", $_str_content);
         if ($_num_size > 0) {
             $_str_alert = "y030405";
         } else {
@@ -105,7 +109,7 @@ class MODEL_OPT {
         $_str_content .= "define(\"BG_DB_CHARSET\", \"" . $this->dbconfigSubmit["db_charset"] . "\");" . PHP_EOL;
         $_str_content .= "define(\"BG_DB_TABLE\", \"" . $this->dbconfigSubmit["db_table"] . "\");" . PHP_EOL;
 
-        $_num_size = file_put_contents(BG_PATH_CONFIG . "opt_dbconfig.inc.php", $_str_content);
+        $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . "opt_dbconfig.inc.php", $_str_content);
         if ($_num_size > 0) {
             $_str_alert = "y030404";
         } else {
@@ -284,5 +288,37 @@ class MODEL_OPT {
         $this->arr_const = fn_post("opt");
 
         return $this->arr_const[$str_type];
+    }
+
+
+    function chk_ver($is_check = false, $method = "auto") {
+        if (!file_exists(BG_PATH_CACHE . "sys/latest_ver.json")) {
+            $this->ver_process($method);
+        }
+
+        $_str_ver = file_get_contents(BG_PATH_CACHE . "sys/latest_ver.json");
+        $_arr_ver = json_decode($_str_ver, true);
+
+        if ($is_check || !$_arr_ver || !isset($_arr_ver["time"]) || $_arr_ver["time"] - time() > 30 * 86400 || isset($_arr_ver["err"])) {
+            $this->ver_process($method);
+            $_str_ver = file_get_contents(BG_PATH_CACHE . "sys/latest_ver.json");
+            $_arr_ver = json_decode($_str_ver, true);
+        }
+
+        return $_arr_ver;
+    }
+
+
+    function ver_process($method = "auto") {
+        $_arr_data = array(
+            "name"      => "baigoSSO",
+            "ver"       => PRD_SSO_VER,
+            "referer"   => urlencode(base64_encode($_SERVER["SERVER_NAME"] . BG_URL_ROOT)),
+            "method"    => $method,
+        );
+
+        $_str_ver = fn_http(PRD_VER_CHECK, $_arr_data, "get");
+
+        $this->obj_dir->put_file(BG_PATH_CACHE . "sys/latest_ver.json", $_str_ver["ret"]);
     }
 }

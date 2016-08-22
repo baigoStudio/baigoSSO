@@ -13,7 +13,12 @@ if (!defined("IN_BAIGO")) {
 return array(
     "ui" => array(
         "default" => "标准", //标准
-        "mobile"  => "移动设备", //标准
+        "mobile"  => "移动设备",
+    ),
+
+    "admin" => array(
+        "normal"    => "普通管理员",
+        "super"     => "超级管理员",
     ),
 
     "lang" => array(
@@ -41,9 +46,9 @@ return array(
     ),
 
     "ext" => array(
-        "mysqli"      => "Mysqli 扩展库",
-        "gd"          => "GD 扩展库",
-        "mbstring"    => "mbstring 扩展库",
-        "curl"        => "cURL 扩展库",
+        "mysqli"    => "Mysqli 扩展库",
+        "gd"        => "GD 扩展库",
+        "mbstring"  => "mbstring 扩展库",
+        "curl"      => "cURL 扩展库",
     ),
 );

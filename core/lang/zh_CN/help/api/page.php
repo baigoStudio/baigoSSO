@@ -1,12 +1,11 @@
 <?php
-return "<a name=\"page\"></a>
-    <h3>分页参数</h3>
+return "<h3>分页参数</h3>
     <p>
         在所有需要用到分页的地方，都有该参数，如：短信列表，对象名一般为 <code>pageRow</code>。
     </p>
     <div class=\"panel panel-default\">
         <div class=\"table-responsive\">
-            <table class=\"table\">
+            <table class=\"table table-bordered\">
                 <thead>
                     <tr>
                         <th class=\"text-nowrap\">键名</th>

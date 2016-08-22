@@ -1,12 +1,11 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>后台概述</h3>
+return "<h3>后台概述</h3>
     <p>
         baigo SSO 的管理后台地址为 <span class=\"text-primary\">http://www.domain.com/admin/</span>，在如下界面输入用户名、密码、验证码登录。
     </p>
 
     <p>
-        <img src=\"{images}logon.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}logon.jpg\" target=\"_blank\"><img src=\"{images}logon.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -24,7 +23,7 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}user_list.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}user_list.jpg\" target=\"_blank\"><img src=\"{images}user_list.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <div class=\"panel panel-default\">
@@ -67,12 +66,4 @@ return "<a name=\"top\"></a>
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
     </div>";

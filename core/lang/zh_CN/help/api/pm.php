@@ -1,6 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-    <ul class=\"list-inline\">
+return "<ul class=\"list-inline\">
         <li>
             <a href=\"#send\">发送短信</a>
         </li>
@@ -147,11 +146,6 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">code</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
@@ -482,11 +476,6 @@ return "<a name=\"top\"></a>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -654,11 +643,6 @@ return "<a name=\"top\"></a>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -695,7 +679,7 @@ return "<a name=\"top\"></a>
                         <td>短信 ID</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">pm_smax_id</td>
+                        <td class=\"text-nowrap\">pm_send_id</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">int</td>
                         <td>已发送短信 ID，此字段只有已发送短信具备，用来定义发出的短信 ID。</td>
@@ -1002,7 +986,7 @@ return "<a name=\"top\"></a>
                         <td class=\"text-nowrap\">pm_ids</td>
                         <td class=\"text-nowrap\">array</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>准备撤回的短信 ID 数组，此处的短信 ID 可从已发送短信的 pm_smax_id 字段获得。</td>
+                        <td>准备撤回的短信 ID 数组，此处的短信 ID 可从已发送短信的 pm_send_id 字段获得。</td>
                     </tr>
                 </tbody>
             </table>
@@ -1185,12 +1169,4 @@ return "<a name=\"top\"></a>
 <pre><code class=\"language-javascript\">{
     &quot;alert&quot;: &quot;y110104&quot; //返回代码
 }</code></pre>
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+    </p>";

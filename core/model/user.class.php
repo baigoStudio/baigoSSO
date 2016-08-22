@@ -38,6 +38,7 @@ class MODEL_USER {
             "user_name"             => "varchar(30) NOT NULL COMMENT '用户名'",
             "user_mail"             => "varchar(300) NOT NULL COMMENT '邮箱'",
             "user_contact"          => "varchar(3000) NOT NULL COMMENT '联系方式'",
+            "user_extend"           => "varchar(3000) NOT NULL COMMENT '扩展字段'",
             "user_pass"             => "char(32) NOT NULL COMMENT '密码'",
             "user_rand"             => "char(6) NOT NULL COMMENT '随机串'",
             "user_nick"             => "varchar(30) NOT NULL COMMENT '昵称'",
@@ -85,11 +86,6 @@ class MODEL_USER {
             $_arr_alert["user_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "user_status");
         }
 
-        $_arr_userData = array(
-            "user_status" => $_arr_status[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "LENGTH(user_status) < 1"); //更新数据
-
         if (in_array("user_pass", $_arr_col)) {
             $_arr_alert["user_pass"] = array("CHANGE", "char(32) NOT NULL COMMENT '密码'", "user_pass");
         }
@@ -122,6 +118,10 @@ class MODEL_USER {
             $_arr_alert["user_contact"] = array("ADD", "varchar(3000) NOT NULL COMMENT '联系方式'");
         }
 
+        if (!in_array("user_extend", $_arr_col)) {
+            $_arr_alert["user_extend"] = array("ADD", "varchar(3000) NOT NULL COMMENT '联系方式'");
+        }
+
         $_str_alert = "y010111";
 
         if ($_arr_alert) {
@@ -129,6 +129,10 @@ class MODEL_USER {
 
             if ($_reselt) {
                 $_str_alert = "y010106";
+                $_arr_userData = array(
+                    "user_status" => $_arr_status[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "LENGTH(user_status) < 1"); //更新数据
             }
         }
 
@@ -296,6 +300,10 @@ class MODEL_USER {
             $_arr_userData["user_contact"] = $this->apiEdit["user_contact"];
         }
 
+        if (isset($this->apiEdit["user_extend"])) { //如果 扩展字段 为空，则不修改
+            $_arr_userData["user_extend"] = $this->apiEdit["user_extend"];
+        }
+
         if ($_arr_userData) {
             $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . "user", $_arr_userData, "user_id=" . $num_userId); //更新数据
         }
@@ -443,6 +451,10 @@ class MODEL_USER {
             $_arr_userData["user_contact"] = $this->userSubmit["user_contact"];
         }
 
+        if (isset($this->userSubmit["user_extend"])) {
+            $_arr_userData["user_extend"] = $this->userSubmit["user_extend"];
+        }
+
         if ($str_status) {
             $_arr_userData["user_status"] = $str_status;
         } else {
@@ -548,6 +560,7 @@ class MODEL_USER {
             "user_pass",
             "user_mail",
             "user_contact",
+            "user_extend",
             "user_nick",
             "user_note",
             "user_rand",
@@ -582,6 +595,8 @@ class MODEL_USER {
         }
 
         $_arr_userRow["user_contact"]   = fn_jsonDecode($_arr_userRow["user_contact"], "decode");
+        $_arr_userRow["user_extend"]    = fn_jsonDecode($_arr_userRow["user_extend"], "decode");
+
         $_arr_userRow["alert"]          = "y010102";
 
         return $_arr_userRow;
@@ -603,6 +618,7 @@ class MODEL_USER {
             "user_name",
             "user_mail",
             "user_contact",
+            "user_extend",
             "user_nick",
             "user_status",
             "user_time",
@@ -634,6 +650,8 @@ class MODEL_USER {
         }
 
         $_arr_userRow["user_contact"]   = fn_jsonDecode($_arr_userRow["user_contact"], "decode");
+        $_arr_userRow["user_extend"]    = fn_jsonDecode($_arr_userRow["user_extend"], "decode");
+
         $_arr_userRow["alert"]          = "y010102";
 
         return $_arr_userRow;
@@ -1015,6 +1033,9 @@ class MODEL_USER {
         $_arr_userContact = fn_post("user_contact");
         $this->userSubmit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
 
+        $_arr_userExtend = fn_post("user_extend");
+        $this->userSubmit["user_extend"] = fn_jsonEncode($_arr_userExtend, "encode");
+
         $this->userSubmit["alert"]        = "ok";
 
         return $this->userSubmit;
@@ -1143,8 +1164,10 @@ class MODEL_USER {
         $this->apiEdit["user_nick"]   = $_arr_userNick["user_nick"];
 
         $_arr_userContact = fn_post("user_contact");
-
         $this->apiEdit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
+
+        $_arr_userExtend = fn_post("user_extend");
+        $this->apiEdit["user_extend"] = fn_jsonEncode($_arr_userExtend, "encode");
 
         $this->apiEdit["alert"]       = "ok";
 
@@ -1355,8 +1378,10 @@ class MODEL_USER {
 
 
         $_arr_userContact = fn_post("user_contact");
-
         $this->userSubmit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
+
+        $_arr_userExtend = fn_post("user_extend");
+        $this->userSubmit["user_extend"] = fn_jsonEncode($_arr_userExtend, "encode");
 
         $this->userSubmit["alert"] = "ok";
 

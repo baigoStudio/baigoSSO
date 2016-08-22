@@ -20,6 +20,7 @@ class AJAX_ADMIN {
     private $log;
     private $mdl_admin;
     private $mdl_log;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->adminLogged    = $GLOBALS["adminLogged"]; //已登录商家信息
@@ -31,6 +32,10 @@ class AJAX_ADMIN {
 
         if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
             $this->obj_ajax->halt_alert($this->adminLogged["alert"]);
+        }
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
         }
     }
 
@@ -52,11 +57,11 @@ class AJAX_ADMIN {
         $_str_adminRand   = "";
 
         if ($_arr_adminSubmit["admin_id"] > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
+            if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"]) && !$this->is_super) {
                 $this->obj_ajax->halt_alert("x020303");
             }
 
-            if ($_arr_adminSubmit["admin_id"] == $this->adminLogged["admin_id"]) {
+            if ($_arr_adminSubmit["admin_id"] == $this->adminLogged["admin_id"] && !$this->is_super) {
                 $this->obj_ajax->halt_alert("x020306");
             }
 
@@ -66,7 +71,7 @@ class AJAX_ADMIN {
                 $_str_adminPassDo   = fn_baigoEncrypt($_str_adminPass, $_str_adminRand);
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) {
+            if (!isset($this->adminLogged["admin_allow"]["admin"]["add"]) && !$this->is_super) {
                 $this->obj_ajax->halt_alert("x020302");
             }
             $_arr_adminPass = validateStr(fn_post("admin_pass"), 1, 0);
@@ -96,7 +101,16 @@ class AJAX_ADMIN {
                 $_type = "edit";
             }
             $_str_adminRow = json_encode($_arr_adminRow);
-            $this->mdl_log->mdl_submit($_str_targets, "admin", $this->log["admin"][$_type], $_str_adminRow, "admin", $this->adminLogged["admin_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "admin",
+                "log_title"          => $this->log["admin"][$_type],
+                "log_result"         => $_str_adminRow,
+                "log_type"           => "admin",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
         }
 
         $this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
@@ -110,7 +124,7 @@ class AJAX_ADMIN {
      * @return void
      */
     function ajax_status() {
-        if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) {
+        if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x020303");
         }
 
@@ -131,7 +145,16 @@ class AJAX_ADMIN {
                 $_str_targets = json_encode($_arr_targets);
             }
             $_str_adminRow = json_encode($_arr_adminRow);
-            $this->mdl_log->mdl_submit($_str_targets, "admin", $this->log["admin"]["edit"], $_str_adminRow, "admin", $this->adminLogged["admin_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "admin",
+                "log_title"          => $this->log["admin"]["edit"],
+                "log_result"         => $_str_adminRow,
+                "log_type"           => "admin",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
         }
 
         $this->obj_ajax->halt_alert($_arr_adminRow["alert"]);
@@ -145,7 +168,7 @@ class AJAX_ADMIN {
      * @return void
      */
     function ajax_del() {
-        if (!isset($this->adminLogged["admin_allow"]["admin"]["del"])) {
+        if (!isset($this->adminLogged["admin_allow"]["admin"]["del"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x020304");
         }
 
@@ -164,7 +187,16 @@ class AJAX_ADMIN {
                 $_str_targets = json_encode($_arr_targets);
             }
             $_str_adminRow = json_encode($_arr_adminRow);
-            $this->mdl_log->mdl_submit($_str_targets, "admin", $this->log["admin"]["del"], $_str_adminRow, "admin", $this->adminLogged["admin_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "admin",
+                "log_title"          => $this->log["admin"]["del"],
+                "log_result"         => $_str_adminRow,
+                "log_type"           => "admin",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
         }
 
         $this->obj_ajax->halt_alert($_arr_adminRow["alert"]);

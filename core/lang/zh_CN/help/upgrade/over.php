@@ -2,7 +2,7 @@
 return "<h3>完成升级</h3>
 
     <p>
-        <img src=\"{images}over.jpg\" class=\"img-responsive\">
+        <a href=\"{images}over.jpg\" target=\"_blank\"><img src=\"{images}over.jpg\" class=\"img-responsive\"></a>
     </p>
 
     <p>

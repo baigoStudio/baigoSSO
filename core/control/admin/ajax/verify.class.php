@@ -18,6 +18,7 @@ class AJAX_VERIFY {
     private $adminLogged;
     private $obj_ajax;
     private $mdl_verify;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->adminLogged  = $GLOBALS["adminLogged"]; //已登录用户信息
@@ -29,6 +30,10 @@ class AJAX_VERIFY {
         if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
             $this->obj_ajax->halt_alert($this->adminLogged["alert"]);
         }
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
     /*============更改用户状态============
@@ -38,7 +43,7 @@ class AJAX_VERIFY {
     返回提示信息
     */
     function ajax_status() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x120301");
         }
 
@@ -60,7 +65,7 @@ class AJAX_VERIFY {
     返回提示信息
     */
     function ajax_del() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x120301");
         }
 
@@ -79,7 +84,16 @@ class AJAX_VERIFY {
                 $_str_targets = json_encode($_arr_targets);
             }
             $_str_verifyRow = json_encode($_arr_verifyRow);
-            $this->mdl_log->mdl_submit($_str_targets, "verify", $this->log["verify"]["del"], $_str_verifyRow, "admin", $this->adminLogged["admin_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "verify",
+                "log_title"          => $this->log["verify"]["del"],
+                "log_result"         => $_str_verifyRow,
+                "log_type"           => "admin",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, "admin", $this->adminLogged["admin_id"]);
         }
 
         $this->obj_ajax->halt_alert($_arr_verifyRow["alert"]);

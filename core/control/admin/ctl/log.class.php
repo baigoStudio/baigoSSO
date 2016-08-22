@@ -24,6 +24,7 @@ class CONTROL_LOG {
     private $obj_tpl;
     private $mdl_log;
     private $tplData;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->obj_base     = $GLOBALS["obj_base"]; //获取界面类型
@@ -39,13 +40,17 @@ class CONTROL_LOG {
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
     /*============编辑管理员界面============
     返回提示
     */
     function ctl_show() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x060301",
             );
@@ -105,6 +110,8 @@ class CONTROL_LOG {
 
         $this->tplData["logRow"] = $_arr_logRow; //管理员信息
 
+        $_arr_logRow = $this->mdl_log->mdl_isRead($_num_logId);
+
         $this->obj_tpl->tplDisplay("log_show.tpl", $this->tplData);
 
         return array(
@@ -120,7 +127,7 @@ class CONTROL_LOG {
      * @return void
      */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x060301",
             );

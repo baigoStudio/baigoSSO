@@ -192,7 +192,7 @@
     $(document).ready(function(){
         $("#csv_files").fileupload({
             formData: [
-                { name: "token_session", value: "{$common.tokenRow.token}" },
+                { name: "{$common.tokenRow.name_session}", value: "{$common.tokenRow.token}" },
                 { name: "act_post", value: "import" },
             ],
             dataType: "json",

@@ -46,11 +46,10 @@ class CLASS_SSO {
      * @access public
      * @return void
      */
-    function sso_decode($str_code, $str_key) {
+    function sso_decode($str_code) {
         $_arr_sso = array(
             "act_post"   => "decode", //方法
             "code"       => $str_code, //加密串
-            "key"        => $str_key, //解码秘钥
         );
 
         if (isset($this->appInstall)) { //仅在安装时使用
@@ -143,7 +142,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;
@@ -173,7 +172,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;
@@ -188,21 +187,9 @@ class CLASS_SSO {
      * @return void
      */
     function sso_sync_login($num_userId) {
-        $_str_key             = fn_rand(6);
-        $_tm_time             = time();
-        $_str_rand            = fn_rand();
-        $_arr_signature       = $this->sso_signature($_tm_time, $_str_rand);
-
-        if ($_arr_signature["alert"] != "y050404") {
-            return $_arr_signature; //返回错误信息
-        }
-
         $_arr_sso = array(
             "act_post"  => "login",
             "user_id"   => $num_userId,
-            "time"      => $_tm_time,
-            "random"    => $_str_rand,
-            "signature" => $_arr_signature["signature"],
         );
 
         $_arr_ssoData   = array_merge($this->arr_data, $_arr_sso);
@@ -241,7 +228,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;
@@ -286,7 +273,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;
@@ -310,7 +297,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;
@@ -331,7 +318,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;
@@ -352,7 +339,7 @@ class CLASS_SSO {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"], $_arr_result["key"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
         $_arr_decode["alert"] = $_arr_result["alert"];
 
         return $_arr_decode;

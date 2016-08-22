@@ -1,9 +1,8 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>同步概述</h3>
+return "<h3>同步概述</h3>
     <p>如果当前应用程序在 SSO 中设置允许同步登录，那么在调用本接口时，系统会通知其他设置了同步登录的应用程序登录，以达到一点登录，所有网站登录的目的。下图是同步流程示意图。</p>
     <p>
-        <img src=\"{images}sync_process.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}sync_process.jpg\" target=\"_blank\"><img src=\"{images}sync_process.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -65,26 +64,21 @@ return "<a name=\"top\"></a>
                     <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>需同步登录的用户 ID。</td>
+                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">
+                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
+                        </td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">time</td>
+                        <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>Unix 时间戳</td>
+                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">random</td>
+                        <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>随机字符串</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">signature</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>签名字符串，需要调用签名接口来生成，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
+                        <td class=\"text-nowrap\"> </td>
                     </tr>
                 </tbody>
             </table>
@@ -240,11 +234,6 @@ $(document).ready(function(){
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">callback</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>前端通过 JSONP 提交数据时的回调函数</td>
@@ -267,7 +256,6 @@ $(document).ready(function(){
     &quot;random&quot;      =&gt; &quot;sdfwerwer&quot;, //随机字符串
     &quot;signature&quot;   =&gt; &quot;sdfdsfsdrewerwugroe7treie&quot;, //签名
     &quot;code&quot;        =&gt; &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
-    &quot;key&quot;         =&gt; &quot;tLUwyt&quot; //解密码
 );</code></pre>
     </p>
 
@@ -303,6 +291,12 @@ $(document).ready(function(){
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>用户名</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_mail</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>用户邮箱</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">app_id</td>
@@ -394,39 +388,21 @@ $(document).ready(function(){
                     <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>需同步登出的用户 ID。</td>
+                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">
+                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
+                        </td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">time</td>
+                        <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>Unix 时间戳</td>
+                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">random</td>
+                        <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>随机字符串</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">signature</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>签名字符串，需要调用签名接口来生成，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#signature\">签名接口</a>。</td>
-                    </tr>
-
-                    <tr>
-                        <td class=\"text-nowrap\">code</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>加密字符串，利用密文接口将下表中的“加密前数据”进行加密，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#encode\">密文接口</a>。</td>
+                        <td class=\"text-nowrap\"> </td>
                     </tr>
                 </tbody>
             </table>
@@ -530,11 +506,6 @@ $(document).ready(function(){
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">callback</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>前端通过 JSONP 提交数据时的回调函数</td>
@@ -574,6 +545,12 @@ $(document).ready(function(){
                         <td>用户名</td>
                     </tr>
                     <tr>
+                        <td class=\"text-nowrap\">user_mail</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td>用户邮箱</td>
+                    </tr>
+                    <tr>
                         <td class=\"text-nowrap\">app_id</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">int</td>
@@ -588,12 +565,4 @@ $(document).ready(function(){
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
     </div>";

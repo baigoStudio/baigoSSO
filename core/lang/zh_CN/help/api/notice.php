@@ -1,7 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-
-    <h3>通知概述</h3>
+return "<h3>通知概述</h3>
     <p>系统在执行一些特定操作的时候，会根据应用的设置，向指定的“通知接口 URL”推送通知，“通知接口 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。</p>
 
     <p>&nbsp;</p>
@@ -176,11 +174,6 @@ return "<a name=\"top\"></a>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -210,7 +203,6 @@ return "<a name=\"top\"></a>
     &quot;random&quot;      =&gt; &quot;sdfwerwer&quot;, //随机字符串
     &quot;signature&quot;   =&gt; &quot;sdfdsfsdrewerwugroe7treie&quot;, //签名
     &quot;code&quot;        =&gt; &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
-    &quot;key&quot;         =&gt; &quot;tLUwyt&quot;, //解密码
     &quot;prd_sso_ver&quot; =&gt; &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot; =&gt; 20150923 //SSO 版本发布时间
 );</code></pre>
@@ -353,11 +345,6 @@ return "<a name=\"top\"></a>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -387,7 +374,6 @@ return "<a name=\"top\"></a>
     &quot;random&quot;      =&gt; &quot;sdfwerwer&quot;, //随机字符串
     &quot;signature&quot;   =&gt; &quot;sdfdsfsdrewerwugroe7treie&quot;, //签名
     &quot;code&quot;        =&gt; &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
-    &quot;key&quot;         =&gt; &quot;tLUwyt&quot;, //解密码
     &quot;prd_sso_ver&quot; =&gt; &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot; =&gt; 20150923 //SSO 版本发布时间
 );</code></pre>
@@ -530,11 +516,6 @@ return "<a name=\"top\"></a>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -564,7 +545,6 @@ return "<a name=\"top\"></a>
     &quot;random&quot;      =&gt; &quot;sdfwerwer&quot;, //随机字符串
     &quot;signature&quot;   =&gt; &quot;sdfdsfsdrewerwugroe7treie&quot;, //签名
     &quot;code&quot;        =&gt; &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
-    &quot;key&quot;         =&gt; &quot;tLUwyt&quot;, //解密码
     &quot;prd_sso_ver&quot; =&gt; &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot; =&gt; 20150923 //SSO 版本发布时间
 );</code></pre>
@@ -609,12 +589,4 @@ return "<a name=\"top\"></a>
 <pre><code class=\"language-javascript\">{
     &quot;user_ids&quot;: [ 1, 2, 3 ] //用户 ID
 }</code></pre>
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+    </p>";

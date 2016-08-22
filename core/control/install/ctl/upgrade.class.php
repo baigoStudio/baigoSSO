@@ -201,6 +201,7 @@ class CONTROL_UPGRADE {
         include_once(BG_PATH_MODEL . "admin.class.php"); //载入管理帐号模型
         $_mdl_admin                 = new MODEL_ADMIN();
         $_mdl_admin->adminStatus    = $this->obj_tpl->status["admin"];
+        $_mdl_admin->adminTypes     = $this->obj_tpl->type["admin"];
         $_arr_adminTable            = $_mdl_admin->mdl_alert_table();
 
         $this->tplData["db_alert"]["admin_table"] = array(

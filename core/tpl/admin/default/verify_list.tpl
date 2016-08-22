@@ -66,7 +66,7 @@
                                     <ul class="list-unstyled">
                                         <li>
                                             {if isset($value.userRow.user_name)}
-                                                <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=verify&act_get=list&user_id={$value.userRow.user_id}">{$value.userRow.user_name}</a>
+                                                {$value.userRow.user_name}
                                             {else}
                                                 {$lang.label.unknow}
                                             {/if}

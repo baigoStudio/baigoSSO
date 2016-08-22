@@ -1,6 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>概述</h3>
+return "<h3>概述</h3>
     <ol>
         <li>高级部署方式仅适合具备一定 PHP 开发经验，且熟悉网站部署方式的高级用户，初学者不推荐；</li>
         <li>高级部署方式可能需要更高的服务器权限，请确认您拥有足够的权限。</li>
@@ -106,12 +105,4 @@ define(\"BG_PATH_TPL\", \"/web/tpl/\");</code></pre>
 
     <h3>执行安装程序</h3>
 
-    <p>打开 <mark>http://www.domain.com/install</mark> 按照安装文档的说明进行安装，升级过程类似。详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=install\">安装文档</a>。</p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+    <p>打开 <mark>http://www.domain.com/install</mark> 按照安装文档的说明进行安装，升级过程类似。详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=install\">安装文档</a>。</p>";

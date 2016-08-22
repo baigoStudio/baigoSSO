@@ -21,6 +21,7 @@ class CONTROL_USER {
     private $obj_tpl;
     private $mdl_user;
     private $tplData;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
@@ -32,11 +33,15 @@ class CONTROL_USER {
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
 
     function ctl_import() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["import"]) && !$this->is_super) {
             return array(
                 "alert" => "x010305",
             );
@@ -65,7 +70,7 @@ class CONTROL_USER {
         $_num_userId  = fn_getSafe(fn_get("user_id"), "int", 0);
 
         if ($_num_userId > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
+            if (!isset($this->adminLogged["admin_allow"]["user"]["edit"]) && !$this->is_super) {
                 return array(
                     "alert" => "x010303",
                 );
@@ -75,7 +80,7 @@ class CONTROL_USER {
                 return $_arr_userRow;
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["user"]["add"])) {
+            if (!isset($this->adminLogged["admin_allow"]["user"]["add"]) && !$this->is_super) {
                 return array(
                     "alert" => "x010301",
                 );
@@ -87,6 +92,7 @@ class CONTROL_USER {
                 "user_note"     => "",
                 "user_status"   => "enable",
                 "user_contact"  => array(),
+                "user_extend"   => array(),
             );
         }
 
@@ -110,7 +116,7 @@ class CONTROL_USER {
      * @return void
      */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x010301",
             );

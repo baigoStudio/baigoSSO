@@ -43,7 +43,7 @@ class API_SYNC {
             $this->obj_notice->halt_re($_arr_signature);
         }
 
-        $_arr_decode  = $this->obj_sso->sso_decode($_arr_noticeInput["code"], $_arr_noticeInput["key"]);
+        $_arr_decode  = $this->obj_sso->sso_decode($_arr_noticeInput["code"]);
 
         if ($_arr_decode["app_id"] != BG_SSO_APPID) {
             $_arr_return = array(
@@ -91,7 +91,7 @@ class API_SYNC {
             $this->obj_notice->halt_re($_arr_signature);
         }
 
-        $_arr_decode  = $this->obj_sso->sso_decode($_arr_noticeInput["code"], $_arr_noticeInput["key"]);
+        $_arr_decode  = $this->obj_sso->sso_decode($_arr_noticeInput["code"]);
 
         if ($_arr_decode["app_id"] != BG_SSO_APPID) {
             $_arr_return = array(

@@ -22,6 +22,7 @@ class CONTROL_VERIFY {
     private $obj_tpl;
     private $mdl_verify;
     private $tplData;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->obj_base     = $GLOBALS["obj_base"];
@@ -34,11 +35,15 @@ class CONTROL_VERIFY {
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
 
     function ctl_show() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"]) && !$this->is_super) {
             return array(
                 "alert" => "x120301",
             );
@@ -80,7 +85,7 @@ class CONTROL_VERIFY {
      * @return void
      */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["verify"]) && !$this->is_super) {
             return array(
                 "alert" => "x120301",
             );

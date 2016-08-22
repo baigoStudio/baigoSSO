@@ -1,9 +1,8 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>创建数据表</h3>
+return "<h3>创建数据表</h3>
 
     <p>
-        <img src=\"{images}dbtable.jpg\" class=\"img-responsive\">
+        <a href=\"{images}dbtable.jpg\" target=\"_blank\"><img src=\"{images}dbtable.jpg\" class=\"img-responsive\"></a>
     </p>
 
     <p>

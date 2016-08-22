@@ -39,6 +39,7 @@ return array(
         "installDbTable"  => "创建数据表",
         "installAdmin"    => "创建管理员",
         "installOver"     => "完成安装",
+        "chkver"          => "检查更新",
     ),
 
     /*------链接文字------*/
@@ -104,6 +105,16 @@ return array(
         "time"              => "时间",
         "timezone"          => "时区",
         "onlyModi"          => "需要修改时输入", //需要修改时输入
+        "userCount"         => "用户统计",
+        "appCount"          => "应用统计",
+        "total"             => "总计",
+        "installVer"        => "当前安装版本",
+        "installTime"       => "安装（升级）时间",
+        "pubTime"           => "发布时间",
+        "latestVer"         => "最新版本",
+        "announcement"      => "公告",
+        "downloadUrl"       => "下载地址",
+        "downloadUrl"       => "下载地址",
 
         "dbHost"            => "数据库服务器",
         "dbPort"            => "服务器端口",
@@ -218,6 +229,7 @@ return array(
         "delCsv"    => "删除 CSV 文件",
         "stepNext"  => "下一步",
         "resetKey"  => "重置 APP KEY",
+        "chkver"    => "再次检查更新",
     ),
 
     /*------确认框------*/
@@ -232,6 +244,8 @@ return array(
         "refreshImport"   => "CSV 文件第一行必须为字段名，建议使用三列，其中密码列必须使用 MD5 加密，加密工具请看下方表单。上传 CSV 文件后，请刷新本页查看预览，点此 <a href=\"javascript:location.reload();\" class=\"alert-link\">刷新</a>。",
         "extErr"          => "服务器环境检查未通过，请检查上述扩展库是否已经正确安装。",
         "extOk"           => "服务器环境检查通过，可以继续安装。",
+        "haveNewVer"      => "您的版本不是最新的，下面是最新版本的发布和更新帮助链接。",
+        "isNewVer"        => "恭喜！您的版本是最新的！",
     ),
 
     /*------图片说明------*/

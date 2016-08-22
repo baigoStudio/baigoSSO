@@ -10,18 +10,7 @@
         <input type="hidden" name="{$common.tokenRow.name_session}" value="{$common.tokenRow.token}">
         <input type="hidden" name="act_post" value="admin">
         <input type="hidden" name="admin_status" value="enable">
-
-        {foreach $adminMod as $key_m=>$value_m}
-            {foreach $value_m.allow as $key_s=>$value_s}
-                <input type="hidden" name="admin_allow[{$key_m}][{$key_s}]" value="1">
-            {/foreach}
-        {/foreach}
-
-        <input type="hidden" name="admin_allow[opt][dbconfig]" value="1">
-
-        {foreach $opt as $key_s=>$value_s}
-            <input type="hidden" name="admin_allow[opt][{$key_s}]" value="1">
-        {/foreach}
+        <input type="hidden" name="admin_type" value="super">
 
         <div class="form-group">
             <label class="control-label">{$lang.label.username}<span id="msg_admin_name">*</span></label>

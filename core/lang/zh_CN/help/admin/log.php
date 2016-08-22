@@ -1,12 +1,11 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>所有日志</h3>
+return "<h3>所有日志</h3>
     <p>
         点左侧菜单日志管理，进入如下界面，可以对日志进行各项操作。。
     </p>
 
     <p>
-        <img src=\"{images}log_list.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}log_list.jpg\" target=\"_blank\"><img src=\"{images}log_list.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -26,7 +25,7 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}log_show.jpg\" class=\"img-responsive thumbnail\">
+        <a href=\"{images}log_show.jpg\" target=\"_blank\"><img src=\"{images}log_show.jpg\" class=\"img-responsive thumbnail\"></a>
     </p>
 
     <p>&nbsp;</p>
@@ -47,13 +46,5 @@ return "<a name=\"top\"></a>
     </p>
 
     <p>
-        <img src=\"{images}verify_list.jpg\" class=\"img-responsive thumbnail\">
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+        <a href=\"{images}verify_list.jpg\" target=\"_blank\"><img src=\"{images}verify_list.jpg\" class=\"img-responsive thumbnail\"></a>
+    </p>";

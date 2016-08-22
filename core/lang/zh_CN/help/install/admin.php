@@ -1,14 +1,15 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>创建管理员</h3>
+return "<h3>创建管理员</h3>
 
     <p>
         本操作将创建管理员，拥有所有的管理权限。
     </p>
 
     <p>
-        <img src=\"{images}admin.jpg\" class=\"img-responsive\">
+        <a href=\"{images}admin.jpg\" target=\"_blank\"><img src=\"{images}admin.jpg\" class=\"img-responsive\"></a>
     </p>
+
+    <p>&nbsp;</p>
 
     <div class=\"panel panel-default\">
         <div class=\"panel-heading\">填写说明</div>

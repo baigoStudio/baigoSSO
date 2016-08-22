@@ -25,6 +25,7 @@ class CONTROL_APP {
     private $mdl_belong;
     private $mdl_user;
     private $tplData;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->obj_base     = $GLOBALS["obj_base"]; //获取界面类型
@@ -38,13 +39,17 @@ class CONTROL_APP {
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
     /*============编辑管理员界面============
     返回提示
     */
     function ctl_show() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["app"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x050301",
             );
@@ -78,7 +83,7 @@ class CONTROL_APP {
         $_num_appId = fn_getSafe(fn_get("app_id"), "int", 0);
 
         if ($_num_appId > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
+            if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
                 return array(
                     "alert" => "x050303",
                 );
@@ -88,7 +93,7 @@ class CONTROL_APP {
                 return $_arr_appRow;
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["app"]["add"])) {
+            if (!isset($this->adminLogged["admin_allow"]["app"]["add"]) && !$this->is_super) {
                 return array(
                     "alert" => "x050302",
                 );
@@ -117,7 +122,7 @@ class CONTROL_APP {
 
 
     function ctl_belong() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["edit"])) {
+        if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
             return array(
                 "alert" => "x050303",
             );
@@ -177,7 +182,7 @@ class CONTROL_APP {
     无返回
     */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["browse"])) {
+        if (!isset($this->adminLogged["admin_allow"]["app"]["browse"]) && !$this->is_super) {
             return array(
                 "alert" => "x050301",
             );

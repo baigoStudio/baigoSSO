@@ -9,8 +9,8 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入模板类
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "sign.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 
@@ -24,11 +24,12 @@ class API_SIGNATURE {
     private $appRequest;
 
     function __construct() { //构造函数
-        $this->obj_api    = new CLASS_API();
+        $this->obj_api  = new CLASS_API();
         $this->obj_api->chk_install();
-        $this->log        = $this->obj_api->log; //初始化 AJAX 基对象
-        $this->mdl_app    = new MODEL_APP(); //设置管理组模型
-        $this->mdl_log    = new MODEL_LOG(); //设置管理员模型
+        $this->log      = $this->obj_api->log; //初始化 AJAX 基对象
+        $this->obj_sign = new CLASS_SIGN();
+        $this->mdl_app  = new MODEL_APP(); //设置管理组模型
+        $this->mdl_log  = new MODEL_LOG(); //设置管理员模型
     }
 
 
@@ -69,7 +70,7 @@ class API_SIGNATURE {
             break;
         }
 
-        $_str_sign    = fn_baigoSignMk($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"]);
+        $_str_sign = $this->obj_sign->sign_make($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"]);
 
         $_arr_return = array(
             "signature"  => $_str_sign,
@@ -131,7 +132,7 @@ class API_SIGNATURE {
             break;
         }
 
-        if (fn_baigoSignChk($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"], $_str_sign)) {
+        if ($this->obj_sign->sign_check($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"], $_str_sign)) {
             $_str_alert = "y050403";
         } else {
             $_str_alert = "x050403";
@@ -163,7 +164,6 @@ class API_SIGNATURE {
             $this->log_do($_arr_appRow, "read");
             $this->obj_api->halt_re($_arr_appRow);
         }
-        $this->appAllow = $_arr_appRow["app_allow"];
 
         $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $_arr_appRow);
         if ($_arr_appChk["alert"] != "ok") {
@@ -187,6 +187,15 @@ class API_SIGNATURE {
         );
         $_str_targets     = json_encode($_arr_targets);
         $_str_logResult   = json_encode($arr_logResult);
-        $this->mdl_log->mdl_submit($_str_targets, "app", $this->log["app"][$str_logType], $_str_logResult, "app", $this->appRequest["app_id"]);
+
+        $_arr_logData = array(
+            "log_targets"        => $_str_targets,
+            "log_target_type"    => "app",
+            "log_title"          => $this->log["app"][$str_logType],
+            "log_result"         => $_str_logResult,
+            "log_type"           => "app",
+        );
+
+        $this->mdl_log->mdl_submit($_arr_logData, $this->appRequest["app_id"]);
     }
 }

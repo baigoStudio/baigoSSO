@@ -9,7 +9,6 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入开放平台类
 include_once(BG_PATH_CLASS . "api.class.php");
 include_once(BG_PATH_MODEL . "opt.class.php"); //载入后台用户类
 

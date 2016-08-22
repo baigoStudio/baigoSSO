@@ -41,17 +41,19 @@
                         <label class="control-label static_label">{$lang.label.allow}</label>
                         <dl class="list_dl">
                             {foreach $adminMod as $key_m=>$value_m}
-                                <dt>{$value_m.main.title}</dt>
-                                <dd>
-                                    <ul class="list-inline">
-                                        {foreach $value_m.allow as $key_s=>$value_s}
-                                            <li>
-                                                <span class="glyphicon glyphicon-{if isset($tplData.adminRow.admin_allow[$key_m][$key_s])}ok-circle text-success{else}remove-circle text-danger{/if}"></span>
-                                                {$value_s}
-                                            </li>
-                                        {/foreach}
-                                    </ul>
-                                </dd>
+                                {if isset($value_m.allow) && $value_m.allow}
+                                    <dt>{$value_m.main.title}</dt>
+                                    <dd>
+                                        <ul class="list-inline">
+                                            {foreach $value_m.allow as $key_s=>$value_s}
+                                                <li>
+                                                    <span class="glyphicon glyphicon-{if isset($tplData.adminRow.admin_allow[$key_m][$key_s])}ok-circle text-success{else}remove-circle text-danger{/if}"></span>
+                                                    {$value_s}
+                                                </li>
+                                            {/foreach}
+                                        </ul>
+                                    </dd>
+                                {/if}
                             {/foreach}
                             <dt>{$lang.label.opt}</dt>
                             <dd>
@@ -93,6 +95,11 @@
                     <p class="form-control-static">{$tplData.adminRow.admin_id}</p>
                 </div>
 
+                <div class="form-group">
+                    <label class="control-label static_label">{$lang.label.type}</label>
+                    <p class="form-control-static">{$type.admin[$tplData.adminRow.admin_type]}</p>
+                </div>
+
                 {if $tplData.adminRow.admin_status == "enable"}
                     {$css_status = "success"}
                 {else}
@@ -105,6 +112,18 @@
                         <span class="label label-{$css_status}">{$status.admin[$tplData.adminRow.admin_status]}</span>
                     </p>
                 </div>
+
+                {if isset($tplData.adminRow.admin_allow.info)}
+                    <div class="form-group label_baigo">
+                        <span class="label label-danger">{$lang.label.profileInfo}</span>
+                    </div>
+                {/if}
+
+                {if isset($tplData.adminRow.admin_allow.pass)}
+                    <div class="form-group label_baigo">
+                        <span class="label label-danger">{$lang.label.profilePass}</span>
+                    </div>
+                {/if}
 
                 <div class="form-group">
                     <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=admin&act_get=form&admin_id={$tplData.adminRow.admin_id}">

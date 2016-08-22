@@ -113,15 +113,17 @@
                     {/if}
 
                     <div class="form-group">
-                        <label class="control-label">{$lang.label.status}<span id="msg_user_status">*</span></label>
-                        {foreach $status.user as $key=>$value}
-                            <div class="radio_baigo">
-                                <label for="user_status_{$key}">
-                                    <input type="radio" name="user_status" id="user_status_{$key}" value="{$key}" {if $tplData.userRow.user_status == $key}checked{/if} data-validate="user_status">
-                                    {$value}
-                                </label>
-                            </div>
-                        {/foreach}
+                        <div id="group_user_status">
+                            <label class="control-label">{$lang.label.status}<span id="msg_user_status">*</span></label>
+                            {foreach $status.user as $key=>$value}
+                                <div class="radio_baigo">
+                                    <label for="user_status_{$key}">
+                                        <input type="radio" name="user_status" id="user_status_{$key}" value="{$key}" {if $tplData.userRow.user_status == $key}checked{/if} data-validate="user_status">
+                                        {$value}
+                                    </label>
+                                </div>
+                            {/foreach}
+                        </div>
                     </div>
 
                     {foreach $tplData.userRow.user_contact as $key=>$value}
@@ -130,6 +132,16 @@
                                 <label class="control-label">{$value.key}</label>
                                 <input type="hidden" name="user_contact[{$key}][key]" value="{$tplData.userRow.user_contact[$key].key}">
                                 <input type="text" name="user_contact[{$key}][value]" value="{$tplData.userRow.user_contact[$key].value}" class="form-control">
+                            </div>
+                        </div>
+                    {/foreach}
+
+                    {foreach $tplData.userRow.user_extend as $key=>$value}
+                        <div class="form-group">
+                            <div id="group_user_extend_{$key}">
+                                <label class="control-label">{$value.key}</label>
+                                <input type="hidden" name="user_extend[{$key}][key]" value="{$tplData.userRow.user_extend[$key].key}">
+                                <input type="text" name="user_extend[{$key}][value]" value="{$tplData.userRow.user_extend[$key].value}" class="form-control">
                             </div>
                         </div>
                     {/foreach}
@@ -171,7 +183,7 @@
         },
         user_status: {
             len: { min: 1, max: 0 },
-            validate: { selector: "[name='user_status']", type: "radio" },
+            validate: { selector: "[name='user_status']", type: "radio", group: "#group_user_status" },
             msg: { selector: "#msg_user_status", too_few: "{$alert.x020203}" }
         }
     };

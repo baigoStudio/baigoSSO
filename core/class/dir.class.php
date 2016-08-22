@@ -42,8 +42,10 @@ class CLASS_DIR {
     返回返回代码
     */
     function mk_dir($str_path) {
-
-        if (is_dir($str_path)) { //已存在
+        if (stristr($str_path, ".")) {
+            $str_path = dirname($str_path);
+        }
+        if (is_dir($str_path) || stristr($str_path, ".")) { //已存在
             $_str_alert = "y030201";
         } else {
             $_arr_dir = $this->mk_dir(dirname($str_path));
@@ -91,5 +93,12 @@ class CLASS_DIR {
         }
 
         return $_arr_return;
+    }
+
+
+    function put_file($str_path, $str_content) {
+        $this->mk_dir($str_path);
+        $_num_size = file_put_contents($str_path, $str_content);
+        return $_num_size;
     }
 }

@@ -89,7 +89,6 @@ class CLASS_NOTICE {
                 $_str_random            = fn_post("random");
                 $_str_signature         = fn_post("signature");
                 $_str_code              = fn_post("code");
-                $_str_key               = fn_post("key");
                 $this->jsonp_callback   = fn_post("callback");
             break;
 
@@ -98,7 +97,6 @@ class CLASS_NOTICE {
                 $_str_random            = fn_get("random");
                 $_str_signature         = fn_get("signature");
                 $_str_code              = fn_get("code");
-                $_str_key               = fn_get("key");
                 $this->jsonp_callback   = fn_get("callback");
             break;
         }
@@ -152,19 +150,6 @@ class CLASS_NOTICE {
 
             case "ok":
                 $_arr_noticeGet["code"] = $_arr_code["str"];
-            break;
-        }
-
-        $_arr_key = validateStr($_str_key, 1, 0);
-        switch ($_arr_key["status"]) {
-            case "too_short":
-                return array(
-                    "alert" => "x220205",
-                );
-            break;
-
-            case "ok":
-                $_arr_noticeGet["key"] = $_arr_key["str"];
             break;
         }
 

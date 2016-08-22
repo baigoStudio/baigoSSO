@@ -98,19 +98,21 @@
                                     </div>
                                 </dd>
                                 {foreach $adminMod as $key_m=>$value_m}
-                                    <dt>{$value_m.main.title}</dt>
-                                    <dd>
-                                        <label for="allow_{$key_m}" class="checkbox-inline">
-                                            <input type="checkbox" id="allow_{$key_m}" data-parent="chk_all">
-                                            {$lang.label.all}
-                                        </label>
-                                        {foreach $value_m.allow as $key_s=>$value_s}
-                                            <label for="allow_{$key_m}_{$key_s}" class="checkbox-inline">
-                                                <input type="checkbox" name="admin_allow[{$key_m}][{$key_s}]" value="1" id="allow_{$key_m}_{$key_s}" data-parent="allow_{$key_m}" {if isset($tplData.adminRow.admin_allow[$key_m][$key_s])}checked{/if}>
-                                                {$value_s}
+                                    {if isset($value_m.allow) && $value_m.allow}
+                                        <dt>{$value_m.main.title}</dt>
+                                        <dd>
+                                            <label for="allow_{$key_m}" class="checkbox-inline">
+                                                <input type="checkbox" id="allow_{$key_m}" data-parent="chk_all">
+                                                {$lang.label.all}
                                             </label>
-                                        {/foreach}
-                                    </dd>
+                                            {foreach $value_m.allow as $key_s=>$value_s}
+                                                <label for="allow_{$key_m}_{$key_s}" class="checkbox-inline">
+                                                    <input type="checkbox" name="admin_allow[{$key_m}][{$key_s}]" value="1" id="allow_{$key_m}_{$key_s}" data-parent="allow_{$key_m}" {if isset($tplData.adminRow.admin_allow[$key_m][$key_s])}checked{/if}>
+                                                    {$value_s}
+                                                </label>
+                                            {/foreach}
+                                        </dd>
+                                    {/if}
                                 {/foreach}
 
                                 <dt>{$lang.label.opt}</dt>
@@ -118,6 +120,10 @@
                                     <label for="allow_opt" class="checkbox-inline">
                                         <input type="checkbox" id="allow_opt" data-parent="chk_all">
                                         {$lang.label.all}
+                                    </label>
+                                    <label for="allow_opt_chkver" class="checkbox-inline">
+                                        <input type="checkbox" name="admin_allow[opt][chkver]" value="1" id="allow_opt_chkver" data-parent="allow_opt" {if isset($tplData.adminRow.admin_allow.opt.chkver)}checked{/if}>
+                                        {$lang.page.chkver}
                                     </label>
                                     <label for="allow_opt_dbconfig" class="checkbox-inline">
                                         <input type="checkbox" name="admin_allow[opt][dbconfig]" value="1" id="allow_opt_dbconfig" data-parent="allow_opt" {if isset($tplData.adminRow.admin_allow.opt.dbconfig)}checked{/if}>
@@ -157,15 +163,31 @@
                     {/if}
 
                     <div class="form-group">
-                        <label class="control-label">{$lang.label.status}<span id="msg_admin_status">*</span></label>
-                        {foreach $status.admin as $key=>$value}
-                            <div class="radio_baigo">
-                                <label for="admin_status_{$key}">
-                                    <input type="radio" name="admin_status" id="admin_status_{$key}" value="{$key}" {if $tplData.adminRow.admin_status == $key}checked{/if} data-validate="admin_status">
-                                    {$value}
-                                </label>
-                            </div>
-                        {/foreach}
+                        <div id="group_admin_type">
+                            <label class="control-label">{$lang.label.type}<span id="msg_admin_type">*</span></label>
+                            {foreach $type.admin as $key=>$value}
+                                <div class="radio_baigo">
+                                    <label for="admin_type_{$key}">
+                                        <input type="radio" name="admin_type" id="admin_type_{$key}" value="{$key}" {if $tplData.adminRow.admin_type == $key}checked{/if} data-validate="admin_type">
+                                        {$value}
+                                    </label>
+                                </div>
+                            {/foreach}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div id="group_admin_status">
+                            <label class="control-label">{$lang.label.status}<span id="msg_admin_status">*</span></label>
+                            {foreach $status.admin as $key=>$value}
+                                <div class="radio_baigo">
+                                    <label for="admin_status_{$key}">
+                                        <input type="radio" name="admin_status" id="admin_status_{$key}" value="{$key}" {if $tplData.adminRow.admin_status == $key}checked{/if} data-validate="admin_status">
+                                        {$value}
+                                    </label>
+                                </div>
+                            {/foreach}
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -214,9 +236,14 @@
             validate: { type: "str", format: "text", group: "#group_admin_note" },
             msg: { selector: "#msg_admin_note", too_long: "{$alert.x020208}" }
         },
+        admin_type: {
+            len: { min: 1, max: 0 },
+            validate: { selector: "[name='admin_type']", type: "radio", group: "#group_admin_type" },
+            msg: { selector: "#msg_admin_type", too_few: "{$alert.x020214}" }
+        },
         admin_status: {
             len: { min: 1, max: 0 },
-            validate: { selector: "[name='admin_status']", type: "radio" },
+            validate: { selector: "[name='admin_status']", type: "radio", group: "#group_admin_status" },
             msg: { selector: "#msg_admin_status", too_few: "{$alert.x020209}" }
         }
     };

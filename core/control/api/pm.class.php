@@ -9,8 +9,8 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入开放平台类
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "crypt.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "pm.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
@@ -26,13 +26,14 @@ class API_PM {
     private $appRequest;
 
     function __construct() { //构造函数
-        $this->obj_api  = new CLASS_API();
+        $this->obj_api      = new CLASS_API();
         $this->obj_api->chk_install();
-        $this->log      = $this->obj_api->log;
-        $this->mdl_pm   = new MODEL_PM();
-        $this->mdl_app  = new MODEL_APP();
-        $this->mdl_log  = new MODEL_LOG();
-        $this->mdl_user = new MODEL_USER();
+        $this->log          = $this->obj_api->log;
+        $this->obj_crypt    = new CLASS_CRYPT();
+        $this->mdl_pm       = new MODEL_PM();
+        $this->mdl_app      = new MODEL_APP();
+        $this->mdl_log      = new MODEL_LOG();
+        $this->mdl_user     = new MODEL_USER();
     }
 
     /**
@@ -81,12 +82,11 @@ class API_PM {
             }
         }
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_pmRows, $_str_key);  //生成结果
+        $_str_src   = fn_jsonEncode($_arr_pmRows, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         $_arr_return["alert"]   = $_arr_pmRows[$_key]["alert"];
@@ -237,12 +237,12 @@ class API_PM {
         $_arr_pmRow["fromUser"] = $this->mdl_user->mdl_read_api($_arr_pmRow["pm_from"]);
         $_arr_pmRow["toUser"]   = $this->mdl_user->mdl_read_api($_arr_pmRow["pm_to"]);
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_pmRow, $_str_key);
+        //unset($_arr_pmRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_pmRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
             "alert"  => $_arr_pmRow["alert"],
         );
 
@@ -359,12 +359,11 @@ class API_PM {
             "pageRow"   => $_arr_page,
         );
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_return, $_str_key);
+        $_str_src   = fn_jsonEncode($_arr_return, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
             "alert"  => "y110402",
         );
 
@@ -454,6 +453,15 @@ class API_PM {
     private function log_do($arr_logTarget, $str_targetType, $arr_logResult, $arr_logType) {
         $_str_targets = json_encode($arr_logTarget);
         $_str_result  = json_encode($arr_logResult);
-        $this->mdl_log->mdl_submit($_str_targets, $str_targetType, $this->log[$arr_logType[0]][$arr_logType[1]], $_str_result, "app", $this->appRequest["app_id"]);
+
+        $_arr_logData = array(
+            "log_targets"        => $_str_targets,
+            "log_target_type"    => $str_targetType,
+            "log_title"          => $this->log[$arr_logType[0]][$arr_logType[1]],
+            "log_result"         => $_str_result,
+            "log_type"           => "app",
+        );
+
+        $this->mdl_log->mdl_submit($_arr_logData, $this->appRequest["app_id"]);
     }
 }

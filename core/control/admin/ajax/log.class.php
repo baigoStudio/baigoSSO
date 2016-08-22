@@ -18,6 +18,7 @@ class AJAX_LOG {
     private $adminLogged;
     private $obj_ajax;
     private $mdl_log;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->adminLogged    = $GLOBALS["adminLogged"]; //已登录用户信息
@@ -29,6 +30,10 @@ class AJAX_LOG {
         if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
             $this->obj_ajax->halt_alert($this->adminLogged["alert"]);
         }
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
     /*============更改用户状态============
@@ -38,7 +43,7 @@ class AJAX_LOG {
     返回提示信息
     */
     function ajax_status() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["edit"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["edit"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x060303");
         }
 
@@ -60,7 +65,7 @@ class AJAX_LOG {
     返回提示信息
     */
     function ajax_del() {
-        if (!isset($this->adminLogged["admin_allow"]["log"]["del"])) {
+        if (!isset($this->adminLogged["admin_allow"]["log"]["del"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x060304");
         }
 
@@ -79,7 +84,16 @@ class AJAX_LOG {
                 $_str_targets = json_encode($_arr_targets);
             }
             $_str_logRow = json_encode($_arr_logRow);
-            $this->mdl_log->mdl_submit($_str_targets, "log", $this->log["log"]["del"], $_str_logRow, "admin", $this->adminLogged["admin_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "log",
+                "log_title"          => $this->log["log"]["del"],
+                "log_result"         => $_str_logRow,
+                "log_type"           => "admin",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
         }
 
         $this->obj_ajax->halt_alert($_arr_logRow["alert"]);

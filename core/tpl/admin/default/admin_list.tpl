@@ -37,6 +37,14 @@
             <form name="admin_search" id="admin_search" action="{$smarty.const.BG_URL_ADMIN}ctl.php" method="get" class="form-inline">
                 <input type="hidden" name="mod" value="admin">
                 <div class="form-group">
+                    <select name="type" class="form-control input-sm">
+                        <option value="">{$lang.option.allType}</option>
+                        {foreach $type.admin as $key=>$value}
+                            <option {if $tplData.search.type == $key}selected{/if} value="{$key}">{$value}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="form-group">
                     <select name="status" class="form-control input-sm">
                         <option value="">{$lang.option.allStatus}</option>
                         {foreach $status.admin as $key=>$value}
@@ -75,7 +83,8 @@
                             </th>
                             <th class="text-nowrap td_mn">{$lang.label.id}</th>
                             <th>{$lang.label.admin}</th>
-                            <th class="text-nowrap td_sm">{$lang.label.status} / {$lang.label.note}</th>
+                            <th class="text-nowrap">{$lang.label.nick} / {$lang.label.note}</th>
+                            <th class="text-nowrap td_md">{$lang.label.status} / {$lang.label.type}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,12 +99,7 @@
                                 <td class="text-nowrap td_mn">{$value.admin_id}</td>
                                 <td>
                                     <ul class="list-unstyled">
-                                        <li>
-                                            {$value.admin_name}
-                                            {if $value.admin_nick}
-                                                [ {$value.admin_nick} ]
-                                            {/if}
-                                        </li>
+                                        <li>{$value.admin_name}</li>
                                         <li>
                                             <ul class="list_menu">
                                                 <li>
@@ -108,12 +112,18 @@
                                         </li>
                                     </ul>
                                 </td>
-                                <td class="text-nowrap td_sm">
+                                <td class="text-nowrap">
+                                    <ul class="list-unstyled">
+                                        <li>{$value.admin_nick}</li>
+                                        <li>{$value.admin_note}</li>
+                                    </ul>
+                                </td>
+                                <td class="text-nowrap td_md">
                                     <ul class="list-unstyled">
                                         <li class="label_baigo">
                                             <span class="label label-{$css_status}">{$status.admin[$value.admin_status]}</span>
                                         </li>
-                                        <li>{$value.admin_note}</li>
+                                        <li>{$type.admin[$value.admin_type]}</li>
                                     </ul>
                                 </td>
                             </tr>
@@ -122,7 +132,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="2"><span id="msg_admin_id"></span></td>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <div class="form-group">
                                     <div id="group_act_post">
                                         <select name="act_post" id="act_post" data-validate class="form-control input-sm">

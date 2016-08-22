@@ -9,6 +9,7 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
+include_once(BG_PATH_FUNC . "http.func.php"); //载入模板类
 
 /*-------------API 接口类-------------*/
 class CLASS_API {
@@ -160,19 +161,13 @@ class CLASS_API {
         $_arr_return = array();
 
         foreach ($arr_appRows as $_key=>$_value) {
-            $_tm_time    = time();
-            $_str_rand   = fn_rand();
-            $_str_sign   = fn_baigoSignMk($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
-
-            $_arr_query = array(
-                "time" => $_tm_time,
-                "random"    => $_str_rand,
-                "signature" => $_str_sign,
+            $_arr_data = array(
+                "time"      => $arr_data["time"],
+                "random"    => $arr_data["random"],
+                "signature" => $_value["signature"],
                 "app_id"    => $_value["app_id"],
                 "app_key"   => $_value["app_key"],
             );
-
-            $_arr_data = array_merge($arr_data, $_arr_query);
 
             if (stristr($_value["app_url_notice"], "?")) {
                 $_str_conn = "&";
@@ -185,25 +180,6 @@ class CLASS_API {
 
         return $_arr_return;
     }
-
-
-    /** 编码
-     * api_encode function.
-     *
-     * @access public
-     * @param mixed $arr_data
-     * @param mixed $str_key
-     * @return void
-     */
-    function api_encode($arr_data, $str_key, $method = "encode") {
-        unset($arr_data["alert"]);
-
-        $_str_src     = fn_jsonEncode($arr_data, $method);
-        $_str_code    = fn_baigoEncode($_str_src, $str_key);
-
-        return $_str_code;
-    }
-
 
     /** 返回结果
      * halt_re function.

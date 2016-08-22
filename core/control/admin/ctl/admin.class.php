@@ -20,6 +20,7 @@ class CONTROL_ADMIN {
     private $obj_tpl;
     private $mdl_admin;
     private $tplData;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->obj_base       = $GLOBALS["obj_base"]; //获取界面类型
@@ -31,13 +32,17 @@ class CONTROL_ADMIN {
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
 
     function ctl_show() {
         $_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0); //get 获取 admin_id
 
-        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) { //判断权限
+        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"]) && !$this->is_super) { //判断权限
             return array(
                 "alert" => "x020303",
             );
@@ -67,12 +72,12 @@ class CONTROL_ADMIN {
         $_num_adminId = fn_getSafe(fn_get("admin_id"), "int", 0); //get 获取 admin_id
 
         if ($_num_adminId > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"])) { //判断权限
+            if (!isset($this->adminLogged["admin_allow"]["admin"]["edit"]) && !$this->is_super) { //判断权限
                 return array(
                     "alert" => "x020303",
                 );
             }
-            if ($_num_adminId == $this->adminLogged["admin_id"]) {
+            if ($_num_adminId == $this->adminLogged["admin_id"] && !$this->is_super) {
                 return array(
                     "alert" => "x020306",
                 );
@@ -82,7 +87,7 @@ class CONTROL_ADMIN {
                 return $_arr_adminRow;
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["admin"]["add"])) { //判断权限
+            if (!isset($this->adminLogged["admin_allow"]["admin"]["add"]) && !$this->is_super) { //判断权限
                 return array(
                     "alert" => "x020302",
                 );
@@ -92,6 +97,7 @@ class CONTROL_ADMIN {
                 "admin_nick"    => "",
                 "admin_note"    => "",
                 "admin_status"  => "enable",
+                "admin_type"    => "normal",
             );
         }
 
@@ -112,15 +118,16 @@ class CONTROL_ADMIN {
      * @return void
      */
     function ctl_list() {
-        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"])) { //判断权限
+        if (!isset($this->adminLogged["admin_allow"]["admin"]["browse"]) && !$this->is_super) { //判断权限
             return array(
                 "alert" => "x020301",
             );
         }
 
         $_arr_search = array(
-            "key"        => fn_getSafe(fn_get("key"), "txt", ""), //搜索关键词
-            "status"     => fn_getSafe(fn_get("status"), "txt", ""), //搜索状态
+            "key"       => fn_getSafe(fn_get("key"), "txt", ""), //搜索关键词
+            "status"    => fn_getSafe(fn_get("status"), "txt", ""), //搜索状态
+            "type"      => fn_getSafe(fn_get("type"), "txt", ""), //搜索状态
         );
 
         $_num_adminCount  = $this->mdl_admin->mdl_count($_arr_search); //统计记录数
@@ -138,7 +145,7 @@ class CONTROL_ADMIN {
         $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
         $this->obj_tpl->tplDisplay("admin_list.tpl", $_arr_tplData);
-        
+
         return array(
             "alert" => "y020302",
         );

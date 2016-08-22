@@ -69,7 +69,6 @@ return array(
             "browse"    => "浏览",
             "send"      => "发送",
             "bulk"      => "群发",
-            "edit"      => "编辑",
             "del"       => "删除",
         ),
     ),

@@ -21,6 +21,7 @@ class AJAX_USER {
     private $log;
     private $mdl_user;
     private $mdl_log;
+    private $is_super = false;
 
     function __construct() { //构造函数
         $this->adminLogged    = $GLOBALS["adminLogged"]; //已登录用户信息
@@ -33,11 +34,15 @@ class AJAX_USER {
         if ($this->adminLogged["alert"] != "y020102") { //未登录，抛出错误信息
             $this->obj_ajax->halt_alert($this->adminLogged["alert"]);
         }
+
+        if ($this->adminLogged["admin_type"] == "super") {
+            $this->is_super = true;
+        }
     }
 
 
     function ajax_convert() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["import"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x010305");
         }
 
@@ -53,7 +58,7 @@ class AJAX_USER {
 
 
     function ajax_csvDel() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["import"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x010305");
         }
 
@@ -80,7 +85,7 @@ class AJAX_USER {
 
 
     function ajax_import() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["import"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["import"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x010305");
         }
 
@@ -111,7 +116,7 @@ class AJAX_USER {
         }
 
         if ($_arr_userSubmit["user_id"] > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
+            if (!isset($this->adminLogged["admin_allow"]["user"]["edit"]) && !$this->is_super) {
                 $this->obj_ajax->halt_alert("x010303");
             }
             $_str_userPass = fn_post("user_pass");
@@ -120,7 +125,7 @@ class AJAX_USER {
                 $_str_userPassDo    = fn_baigoEncrypt($_str_userPass, $_str_userRand);
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["user"]["add"])) {
+            if (!isset($this->adminLogged["admin_allow"]["user"]["add"]) && !$this->is_super) {
                 $this->obj_ajax->halt_alert("x010302");
             }
             $_arr_userPass = validateStr(fn_post("user_pass"), 1, 0);
@@ -149,7 +154,7 @@ class AJAX_USER {
     返回提示信息
     */
     function ajax_status() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["edit"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["edit"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x010303");
         }
 
@@ -171,7 +176,7 @@ class AJAX_USER {
     返回提示信息
     */
     function ajax_del() {
-        if (!isset($this->adminLogged["admin_allow"]["user"]["del"])) {
+        if (!isset($this->adminLogged["admin_allow"]["user"]["del"]) && !$this->is_super) {
             $this->obj_ajax->halt_alert("x010304");
         }
 
@@ -190,7 +195,16 @@ class AJAX_USER {
                 $_str_targets = json_encode($_arr_targets);
             }
             $_str_userRow = json_encode($_arr_userRow);
-            $this->mdl_log->mdl_submit($_str_targets, "user", $this->log["user"]["del"], $_str_userRow, "admin", $this->adminLogged["admin_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "log",
+                "log_title"          => $this->log["user"]["del"],
+                "log_result"         => $_str_userRow,
+                "log_type"           => "admin",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
         }
 
         $this->obj_ajax->halt_alert($_arr_userRow["alert"]);

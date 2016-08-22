@@ -28,9 +28,9 @@ if ($GLOBALS["view"]) {
 }
 
 function fn_init($arr_set = array()) {
-    
+
     //$base = false, $ssin = false, $header = "Content-Type: text/html; charset=utf-8", $db = false, $ajax = "", $admin = false, $is_ssin_db = true
-    
+
     if (isset($arr_set["db"])) { //连接数据库
         include_once(BG_PATH_CLASS . "mysqli.class.php"); //载入数据库类
 
@@ -62,7 +62,7 @@ function fn_init($arr_set = array()) {
                     );
                     exit(json_encode($arr_re));
                 }
-        
+
                 if (!$GLOBALS["obj_db"]->select_db()) {
                     $arr_alert = include_once(BG_PATH_LANG . $GLOBALS["obj_base"]->config["lang"] . "/alert.php"); //载入提示信息
                     $str_alert = "x030112";
@@ -73,13 +73,13 @@ function fn_init($arr_set = array()) {
                     exit(json_encode($arr_re));
                 }
             break;
-            
+
             case "ctl":
                 if (!$GLOBALS["obj_db"]->connect()) {
                     header("Location: " . BG_URL_ROOT . "db_conn_err.html");
                     exit;
                 }
-        
+
                 if (!$GLOBALS["obj_db"]->select_db()) {
                     header("Location: " . BG_URL_ROOT . "db_select_err.html");
                     exit;

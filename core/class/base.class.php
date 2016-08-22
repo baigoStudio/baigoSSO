@@ -18,6 +18,7 @@ class CLASS_BASE {
         $this->getUi(); //获取界面类型
         $this->getLang(); //获取当前语言
         $this->setTimezone(); //设置时区
+
         setlocale(LC_ALL, $this->config["lang"] . ".UTF-8"); //设置区域格式,主要针对 csv 处理
     }
 

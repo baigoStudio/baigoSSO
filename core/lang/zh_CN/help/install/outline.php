@@ -1,6 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>概述</h3>
+return "<h3>概述</h3>
     <p>
         将下载到的程序包解压，然后将所有文件上传到服务器，假设网站 URL 为 <span class=\"text-primary\">http://www.domain.com</span> 上传到根目录 /，以下说明均以此为例。
     </p>

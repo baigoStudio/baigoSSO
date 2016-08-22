@@ -10,9 +10,9 @@ if (!defined("IN_BAIGO")) {
 }
 
 include_once(BG_PATH_FUNC . "mail.func.php");
-include_once(BG_PATH_FUNC . "http.func.php"); //载入开放平台类
-include_once(BG_PATH_FUNC . "baigocode.func.php"); //载入开放平台类
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "crypt.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "sign.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "belong.class.php");
 include_once(BG_PATH_MODEL . "user.class.php"); //载入后台用户类
@@ -33,6 +33,8 @@ class API_USER {
         $this->obj_api      = new CLASS_API();
         $this->obj_api->chk_install();
         $this->log          = $this->obj_api->log; //初始化 AJAX 基对象
+        $this->obj_crypt    = new CLASS_CRYPT();
+        $this->obj_sign     = new CLASS_SIGN();
         $this->mdl_user     = new MODEL_USER(); //设置管理组模型
         $this->mdl_app      = new MODEL_APP(); //设置管理组模型
         $this->mdl_belong   = new MODEL_BELONG();
@@ -110,22 +112,33 @@ class API_USER {
             $_arr_userRow["verify_token"]   = $_arr_returnRow["verify_token"];
         }
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_userRow, $_str_key);  //生成结果
+        //unset($_arr_userRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_userRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $this->mdl_belong->mdl_submit($_arr_userRow["user_id"], $this->appRequest["app_id"]); //用户授权
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         //通知
         $_arr_notice              = $_arr_return;
         $_arr_notice["act_post"]  = "reg";
+
+        $_tm_time    = time();
+        $_str_rand   = fn_rand();
+
+        $_arr_notice["time"]      = $_tm_time;
+        $_arr_notice["random"]    = $_str_rand;
+
+        foreach ($this->appRows as $_key=>$_value) {
+            $this->appRows[$_key]["signature"] = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
+        }
+
         $this->obj_api->api_notice($_arr_notice, $this->appRows); //返回结果
 
-        $_arr_return["alert"]   = $_arr_userRow["alert"];
+        $_arr_return["alert"] = $_arr_userRow["alert"];
 
         $this->obj_api->halt_re($_arr_return);
     }
@@ -175,12 +188,12 @@ class API_USER {
         $_arr_userRow["user_refresh_token"]     = $_arr_userRowLogin["user_refresh_token"];
         $_arr_userRow["user_refresh_expire"]    = $_arr_userRowLogin["user_refresh_expire"];
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_userRow, $_str_key);
+        //unset($_arr_userRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_userRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         $_arr_return["alert"]  = "y010401";
@@ -232,12 +245,12 @@ class API_USER {
         $_arr_userRow["user_access_token"]  = $_arr_userRowRefresh["user_access_token"];
         $_arr_userRow["user_access_expire"] = $_arr_userRowRefresh["user_access_expire"];
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_userRow, $_str_key);
+        //unset($_arr_userRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_userRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         $_arr_return["alert"]  = "y010411";
@@ -267,14 +280,14 @@ class API_USER {
         }
 
         //print_r($_arr_userRow);
-        //unset($_arr_userRow["user_rand"], $_arr_userRow["user_pass"], $_arr_userRow["user_note"]);
+        unset($_arr_userRow["user_rand"], $_arr_userRow["user_pass"], $_arr_userRow["user_note"]);
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_userRow, $_str_key);
+        //unset($_arr_userRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_userRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
             "alert"  => $_arr_userRow["alert"],
         );
 
@@ -354,19 +367,31 @@ class API_USER {
 
         //file_put_contents(BG_PATH_ROOT . "test.txt", $_str_userPass . "||" . $_str_rand);
 
-        $_str_key                   = fn_rand(6);
         $_arr_userEdit              = $this->mdl_user->mdl_edit($_arr_userRow["user_id"]);
         $_arr_userEdit["user_name"] = $_arr_userRow["user_name"];
-        $_str_code                  = $this->obj_api->api_encode($_arr_userEdit, $_str_key); //生成结果
+
+        //unset($_arr_userEdit["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_userEdit, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         //通知
         $_arr_notice                = $_arr_return;
         $_arr_notice["act_post"]    = "edit";
+
+        $_tm_time    = time();
+        $_str_rand   = fn_rand();
+
+        $_arr_notice["time"]      = $_tm_time;
+        $_arr_notice["random"]    = $_str_rand;
+
+        foreach ($this->appRows as $_key=>$_value) {
+            $this->appRows[$_key]["signature"] = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
+        }
+
         $this->obj_api->api_notice($_arr_notice, $this->appRows); //返回结果
 
         $_arr_return["alert"]       = $_arr_userEdit["alert"];
@@ -483,17 +508,28 @@ class API_USER {
         $_arr_returnRow["user_id"]      = $_arr_userRow["user_id"];
         $_arr_returnRow["user_name"]    = $_arr_userRow["user_name"];
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_returnRow, $_str_key);
+        //unset($_arr_returnRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_returnRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         //通知
         $_arr_notice                = $_arr_return;
         $_arr_notice["act_post"]    = "mailbox";
+
+        $_tm_time    = time();
+        $_str_rand   = fn_rand();
+
+        $_arr_notice["time"]      = $_tm_time;
+        $_arr_notice["random"]    = $_str_rand;
+
+        foreach ($this->appRows as $_key=>$_value) {
+            $this->appRows[$_key]["signature"] = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
+        }
+
         $this->obj_api->api_notice($_arr_notice, $this->appRows);
 
         $_arr_return["alert"]       = $_arr_returnRow["alert"];
@@ -568,12 +604,12 @@ class API_USER {
         $_arr_returnRow["user_id"]      = $_arr_userRow["user_id"];
         $_arr_returnRow["user_name"]    = $_arr_userRow["user_name"];
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_returnRow, $_str_key);
+        //unset($_arr_returnRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_returnRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         $_arr_return["alert"]       = $_arr_returnRow["alert"];
@@ -648,12 +684,12 @@ class API_USER {
 
         $_arr_returnRow["user_id"]      = $_arr_userRow["user_id"];
 
-        $_str_key   = fn_rand(6);
-        $_str_code  = $this->obj_api->api_encode($_arr_returnRow, $_str_key);
+        //unset($_arr_returnRow["alert"]);
+        $_str_src   = fn_jsonEncode($_arr_returnRow, "encode");
+        $_str_code  = $this->obj_crypt->encrypt($_str_src);
 
         $_arr_return = array(
             "code"   => $_str_code,
-            "key"    => $_str_key,
         );
 
         $_arr_return["alert"]       = $_arr_returnRow["alert"];
@@ -704,11 +740,30 @@ class API_USER {
                 );
                 $_str_targets = json_encode($_arr_targets);
             }
-            $this->mdl_log->mdl_submit($_str_targets, "user", $this->log["user"]["del"], $_str_targets, "app", $this->appRequest["app_id"]);
+
+            $_arr_logData = array(
+                "log_targets"        => $_str_targets,
+                "log_target_type"    => "user",
+                "log_title"          => $this->log["user"]["del"],
+                "log_result"         => $_str_result,
+                "log_type"           => "app",
+            );
+
+            $this->mdl_log->mdl_submit($_arr_logData, $this->appRequest["app_id"]);
         }
 
         $_arr_notice["user_ids"]  = $_arr_userIds;
         $_arr_notice["act_post"]  = "del";
+
+        $_tm_time    = time();
+        $_str_rand   = fn_rand();
+
+        $_arr_notice["time"]      = $_tm_time;
+        $_arr_notice["random"]    = $_str_rand;
+
+        foreach ($this->appRows as $_key=>$_value) {
+            $this->appRows[$_key]["signature"] = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
+        }
 
         $this->obj_api->api_notice($_arr_notice, $this->appRows);
 
@@ -833,6 +888,15 @@ class API_USER {
     private function log_do($arr_logTarget, $str_targetType, $arr_logResult, $arr_logType) {
         $_str_targets = json_encode($arr_logTarget);
         $_str_result  = json_encode($arr_logResult);
-        $this->mdl_log->mdl_submit($_str_targets, $str_targetType, $this->log[$arr_logType[0]][$arr_logType[1]], $_str_result, "app", $this->appRequest["app_id"]);
+
+        $_arr_logData = array(
+            "log_targets"        => $_str_targets,
+            "log_target_type"    => $str_targetType,
+            "log_title"          => $this->log[$arr_logType[0]][$arr_logType[1]],
+            "log_result"         => $_str_result,
+            "log_type"           => "app",
+        );
+
+        $this->mdl_log->mdl_submit($_arr_logData, $this->appRequest["app_id"]);
     }
 }

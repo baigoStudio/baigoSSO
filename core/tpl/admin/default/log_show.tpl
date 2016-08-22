@@ -103,7 +103,7 @@
 
     <div class="form-group">
         <label class="control-label static_label">{$lang.label.result}</label>
-        <p class="form-control-static input-lg">
+        <p>
             {$tplData.logRow.log_result}
         </p>
     </div>

@@ -6,7 +6,7 @@
     baigoValidator => "true",
     baigoSubmit    => "true",
     tokenReload    => "true",
-    str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt"
+    str_url        => "{$smarty.const.BG_URL_ADMIN}ctl.php?mod=opt&act_get={$tplData.act_get}"
 ]}
 
 {include "{$smarty.const.BG_PATH_TPLSYS}admin/default/include/admin_head.tpl" cfg=$cfg}
@@ -19,7 +19,7 @@
     <div class="form-group">
         <ul class="nav nav-pills nav_baigo">
             <li>
-                <a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=opt" target="_blank">
+                <a href="{$smarty.const.BG_URL_HELP}ctl.php?mod=admin&act_get=opt#{$tplData.act_get}" target="_blank">
                     <span class="glyphicon glyphicon-question-sign"></span>
                     {$lang.href.help}
                 </a>
@@ -53,7 +53,7 @@
                                 </select>
                             {else if $value.type == "radio"}
                                 {foreach $value.option as $key_opt=>$value_opt}
-                                    <div class="radio">
+                                    <div class="radio_baigo">
                                         <label for="opt_{$tplData.act_get}_{$key}_{$key_opt}">
                                             <input type="radio" {if $this_value == $key_opt}checked{/if} value="{$key_opt}" data-validate="opt_{$tplData.act_get}_{$key}" name="opt[{$tplData.act_get}][{$key}]" id="opt_{$tplData.act_get}_{$key}_{$key_opt}">
                                             {$value_opt.value}

@@ -111,19 +111,9 @@ class MODEL_APP {
             $_arr_alert["app_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "app_status");
         }
 
-        $_arr_appData = array(
-            "app_status" => $_arr_status[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_status) < 1"); //更新数据
-
         if (in_array("app_sync", $_arr_col)) {
             $_arr_alert["app_sync"] = array("CHANGE", "enum('" . $_str_syncs . "') NOT NULL COMMENT '状态'", "app_sync");
         }
-
-        $_arr_appData = array(
-            "app_sync" => $_arr_syncs[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_sync) < 1"); //更新数据
 
         if (in_array("app_key", $_arr_col)) {
             $_arr_alert["app_key"] = array("CHANGE", "char(64) NOT NULL COMMENT '校验码'", "app_key");
@@ -151,6 +141,16 @@ class MODEL_APP {
 
             if ($_reselt) {
                 $_str_alert = "y050106";
+
+                $_arr_appData = array(
+                    "app_status" => $_arr_status[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_status) < 1"); //更新数据
+
+                $_arr_appData = array(
+                    "app_sync" => $_arr_syncs[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_sync) < 1"); //更新数据
             }
         }
 

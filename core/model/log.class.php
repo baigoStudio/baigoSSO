@@ -120,28 +120,13 @@ class MODEL_LOG {
             $_arr_alert["log_target_type"] = array("CHANGE", "enum('" . $_str_targets . "') NOT NULL COMMENT '目标类型'", "log_target_type");
         }
 
-        $_arr_logData = array(
-            "log_target_type" => $_arr_targets[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_target_type) < 1"); //更新数据
-
         if (in_array("log_type", $_arr_col)) {
             $_arr_alert["log_type"] = array("CHANGE", "enum('" . $_str_types . "') NOT NULL COMMENT '目标类型'", "log_type");
         }
 
-        $_arr_logData = array(
-            "log_type" => $_arr_types[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_type) < 1"); //更新数据
-
         if (in_array("log_status", $_arr_col)) {
             $_arr_alert["log_status"] = array("CHANGE", "enum('" . $_str_status . "')", "log_status");
         }
-
-        $_arr_logData = array(
-            "log_status" => $_arr_status[0],
-        );
-        $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_status) < 1"); //更新数据
 
         $_str_alert = "y060111";
 
@@ -150,6 +135,21 @@ class MODEL_LOG {
 
             if ($_reselt) {
                 $_str_alert = "y060106";
+
+                $_arr_logData = array(
+                    "log_target_type" => $_arr_targets[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_target_type) < 1"); //更新数据
+
+                $_arr_logData = array(
+                    "log_type" => $_arr_types[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_type) < 1"); //更新数据
+
+                $_arr_logData = array(
+                    "log_status" => $_arr_status[0],
+                );
+                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_status) < 1"); //更新数据
             }
         }
 
@@ -173,14 +173,17 @@ class MODEL_LOG {
      * @param string $str_logLevel (default: "normal")
      * @return void
      */
-    function mdl_submit($str_targets, $str_targetType, $str_logTitle, $str_logResult, $str_logType, $num_operatorId = 0, $str_logStatus = "wait", $str_logLevel = "normal") {
+    function mdl_submit($arr_logData, $num_operatorId = 0, $str_logStatus = "wait", $str_logLevel = "normal") {
+
         $_arr_logData = array(
             "log_operator_id"    => $num_operatorId,
-            "log_targets"        => $str_targets,
-            "log_target_type"    => $str_targetType,
-            "log_title"          => $str_logTitle,
-            "log_result"         => $str_logResult,
-            "log_type"           => $str_logType,
+
+            "log_targets"        => $arr_logData["log_targets"],
+            "log_target_type"    => $arr_logData["log_target_type"],
+            "log_title"          => $arr_logData["log_title"],
+            "log_result"         => $arr_logData["log_result"],
+            "log_type"           => $arr_logData["log_type"],
+
             "log_status"         => $str_logStatus,
             "log_level"          => $str_logLevel,
             "log_time"           => time(),
@@ -217,6 +220,26 @@ class MODEL_LOG {
         );
 
         $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logUpdate, "log_id IN (" . $_str_logId . ")"); //删除数据
+
+        //如影响行数大于0则返回成功
+        if ($_num_mysql > 0) {
+            $_str_alert = "y060103"; //成功
+        } else {
+            $_str_alert = "x060103"; //失败
+        }
+
+        return array(
+            "alert" => $_str_alert,
+        );
+    }
+
+
+    function mdl_isRead($num_logId) {
+        $_arr_logUpdate = array(
+            "log_status" => "read",
+        );
+
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logUpdate, "log_id=" . $num_logId); //删除数据
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
@@ -273,6 +296,8 @@ class MODEL_LOG {
         } else {
             $_arr_logRow["log_targets"]   = array();
         }
+
+        //$_arr_logRow["log_result"] = fn_htmlcode($_arr_logRow["log_result"], "encode");
 
         $_arr_logRow["alert"]     = "y060102";
 

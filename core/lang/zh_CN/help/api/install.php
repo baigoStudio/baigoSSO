@@ -1,6 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-    <div class=\"alert alert-warning\">
+return "<div class=\"alert alert-warning\">
         <p>
             <span class=\"glyphicon glyphicon-warning-sign\"></span>
             注意：本接口仅在安装 SSO 时有效，安装成功后将自动失效。
@@ -590,12 +589,4 @@ return "<a name=\"top\"></a>
     &quot;app_key&quot;: &quot;sfewrw8084382h2r9fdsw9ey5whfDISORwegds&quot;, //应用 APP KEY
     &quot;alert&quot;: &quot;y010102&quot; //返回代码
 }</code></pre>
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+    </p>";

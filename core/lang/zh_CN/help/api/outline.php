@@ -1,6 +1,5 @@
 <?php
-return "<a name=\"top\"></a>
-    <h3>API 概述</h3>
+return "<h3>API 概述</h3>
     <p>
         各种应用整合 baigo SSO 都是通过 API 接口实现的，您可以在各类应用程序中使用该接口，通过发起 HTTP 请求方式调用 baigo SSO 服务，返回 JSON 数据。
     </p>
@@ -271,11 +270,6 @@ return "<a name=\"top\"></a>
                         <td>加密字符串，需要解密。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td>解密码，配合加密字符串使用，用于解码。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=code#decode\">密文接口</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">prd_sso_ver</td>
                         <td class=\"text-nowrap\">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -298,15 +292,6 @@ return "<a name=\"top\"></a>
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
     &quot;code&quot;: &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
-    &quot;key&quot;: &quot;tLUwyt&quot;, //解密码
     &quot;alert&quot;: &quot;y010102&quot; //返回代码
 }</code></pre>
-    </p>
-
-    <p>&nbsp;</p>
-    <div class=\"text-right\">
-        <a href=\"#top\">
-            <span class=\"glyphicon glyphicon-chevron-up\"></span>
-            top
-        </a>
-    </div>";
+    </p>";

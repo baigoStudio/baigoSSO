@@ -2,7 +2,7 @@
 return "<h3>升级数据库</h3>
 
     <p>
-        <img src=\"{images}dbtable.jpg\" class=\"img-responsive\">
+        <a href=\"{images}dbtable.jpg\" target=\"_blank\"><img src=\"{images}dbtable.jpg\" class=\"img-responsive\"></a>
     </p>
 
     <p>
