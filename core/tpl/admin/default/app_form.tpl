@@ -59,9 +59,9 @@
                         </div>
 
                         <div class="form-group">
-                            <div id="group_app_url_notice">
-                                <label class="control-label">{$lang.label.appUrlNotice}<span id="msg_app_url_notice">*</span></label>
-                                <input type="text" name="app_url_notice" id="app_url_notice" value="{$tplData.appRow.app_url_notice}" data-validate class="form-control">
+                            <div id="group_app_url_notify">
+                                <label class="control-label">{$lang.label.appUrlNotify}<span id="msg_app_url_notify">*</span></label>
+                                <input type="text" name="app_url_notify" id="app_url_notify" value="{$tplData.appRow.app_url_notify}" data-validate class="form-control">
                             </div>
                         </div>
 
@@ -182,10 +182,10 @@
             validate: { type: "str", format: "text", group: "#group_app_name" },
             msg: { selector: "#msg_app_name", too_short: "{$alert.x050201}", too_long: "{$alert.x050202}" }
         },
-        app_url_notice: {
+        app_url_notify: {
             len: { min: 1, max: 3000 },
-            validate: { type: "str", format: "url", group: "#group_app_url_notice" },
-            msg: { selector: "#msg_app_url_notice", too_short: "{$alert.x050207}", too_long: "{$alert.x050208}", format_err: "{$alert.x050209}" }
+            validate: { type: "str", format: "url", group: "#group_app_url_notify" },
+            msg: { selector: "#msg_app_url_notify", too_short: "{$alert.x050207}", too_long: "{$alert.x050208}", format_err: "{$alert.x050209}" }
         },
         app_url_sync: {
             len: { min: 1, max: 3000 },

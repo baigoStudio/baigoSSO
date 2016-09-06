@@ -40,37 +40,19 @@ class API_SIGNATURE {
      * @return void
      */
     function api_signature() {
-        $this->app_check("get");
+        $this->app_check("post");
 
-        $_arr_time = validateStr(fn_get("time"), 1, 0);
-        switch ($_arr_time["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x090201",
-                );
-                $this->obj_api->halt_re($_arr_return);
-            break;
+        $_arr_params = fn_post("params");
 
-            case "ok":
-                $_tm_time = $_arr_time["str"];
-            break;
+        if ($_arr_params) {
+            foreach ($_arr_params as $_key=>$_value) {
+                if (!fn_isEmpty($_value)) {
+                    $_arr_paramsSrc[$_key] = fn_getSafe($_value, "txt", "");
+                }
+            }
         }
 
-        $_arr_random = validateStr(fn_get("random"), 1, 0);
-        switch ($_arr_random["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x090202",
-                );
-                $this->obj_api->halt_re($_arr_return);
-            break;
-
-            case "ok":
-                $_str_rand = $_arr_random["str"];
-            break;
-        }
-
-        $_str_sign = $this->obj_sign->sign_make($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"]);
+        $_str_sign = $this->obj_sign->sign_make($_arr_paramsSrc);
 
         $_arr_return = array(
             "signature"  => $_str_sign,
@@ -88,41 +70,15 @@ class API_SIGNATURE {
      * @return void
      */
     function api_verify() {
-        $this->app_check("get");
+        $this->app_check("post");
 
-        $_arr_time = validateStr(fn_get("time"), 1, 0);
-        switch ($_arr_time["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x090201",
-                );
-                $this->obj_api->halt_re($_arr_return);
-            break;
+        $_arr_params = fn_post("params");
 
-            case "ok":
-                $_tm_time = $_arr_time["str"];
-            break;
-        }
-
-        $_arr_random = validateStr(fn_get("random"), 1, 0);
-        switch ($_arr_random["status"]) {
-            case "too_short":
-                $_arr_return = array(
-                    "alert" => "x090202",
-                );
-                $this->obj_api->halt_re($_arr_return);
-            break;
-
-            case "ok":
-                $_str_rand = $_arr_random["str"];
-            break;
-        }
-
-        $_arr_signature = validateStr(fn_get("signature"), 1, 0);
+        $_arr_signature = validateStr(fn_post("signature"), 1, 0);
         switch ($_arr_signature["status"]) {
             case "too_short":
                 $_arr_return = array(
-                    "alert" => "x090203",
+                    "alert" => "x050226",
                 );
                 $this->obj_api->halt_re($_arr_return);
             break;
@@ -132,7 +88,7 @@ class API_SIGNATURE {
             break;
         }
 
-        if ($this->obj_sign->sign_check($_tm_time, $_str_rand, $this->appRequest["app_id"], $this->appRequest["app_key"], $_str_sign)) {
+        if ($this->obj_sign->sign_check($_arr_params, $_str_sign)) {
             $_str_alert = "y050403";
         } else {
             $_str_alert = "x050403";

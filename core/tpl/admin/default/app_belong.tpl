@@ -32,7 +32,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">{$lang.label.appName}: {$tplData.appRow.app_name}</a>
+                <a href="javascript:void(0);">{$lang.label.appName}: {$tplData.appRow.app_name}</a>
             </li>
         </ul>
     </div>

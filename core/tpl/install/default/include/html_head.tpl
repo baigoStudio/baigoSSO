@@ -18,7 +18,7 @@
     <!--表单 ajax 提交 js-->
     <link href="{$smarty.const.BG_URL_STATIC}js/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
 
-    <link href="{$smarty.const.BG_URL_STATIC}install/{$config.ui}/css/install.css" type="text/css" rel="stylesheet">
+    <link href="{$smarty.const.BG_URL_STATIC}install/{$smarty.const.BG_DEFAULT_UI}/css/install.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>

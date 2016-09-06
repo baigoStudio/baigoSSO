@@ -15,7 +15,7 @@ class CLASS_BASE {
     public $config; //配置
 
     function __construct() { //构造函数
-        $this->getUi(); //获取界面类型
+        //$this->getUi(); //获取界面类型
         $this->getLang(); //获取当前语言
         $this->setTimezone(); //设置时区
 

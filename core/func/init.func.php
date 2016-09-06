@@ -53,6 +53,7 @@ function fn_init($arr_set = array()) {
     if (isset($arr_set["type"])) { //模块类型
         switch ($arr_set["type"]) {
             case "ajax":
+                header("Cache-Control: no-cache, no-store, max-age=0, must-revalidate");
                 if (!$GLOBALS["obj_db"]->connect()) {
                     $arr_alert = include_once(BG_PATH_LANG . $GLOBALS["obj_base"]->config["lang"] . "/alert.php"); //载入提示信息
                     $str_alert = "x030111";
@@ -82,6 +83,18 @@ function fn_init($arr_set = array()) {
 
                 if (!$GLOBALS["obj_db"]->select_db()) {
                     header("Location: " . BG_URL_ROOT . "db_select_err.html");
+                    exit;
+                }
+            break;
+
+            case "install":
+                if (!$GLOBALS["obj_db"]->connect()) {
+                    header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=x030404");
+                    exit;
+                }
+
+                if (!$GLOBALS["obj_db"]->select_db()) {
+                    header("Location: " . BG_URL_INSTALL . "ctl.php?mod=alert&act_get=show&alert=x030404");
                     exit;
                 }
             break;

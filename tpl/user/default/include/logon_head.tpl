@@ -12,7 +12,7 @@
     <link href="{$smarty.const.BG_URL_STATIC}js/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="{$smarty.const.BG_URL_STATIC}js/baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
     <link href="{$smarty.const.BG_URL_STATIC}js/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
-    <link href="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/css/admin_logon.css" type="text/css" rel="stylesheet">
+    <link href="{$smarty.const.BG_URL_STATIC}admin/{$smarty.const.BG_DEFAULT_UI}/css/admin_logon.css" type="text/css" rel="stylesheet">
 
 </head>
 <body>

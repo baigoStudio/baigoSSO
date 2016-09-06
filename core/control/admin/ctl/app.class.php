@@ -35,7 +35,7 @@ class CONTROL_APP {
         $this->mdl_belong   = new MODEL_BELONG();
         $this->mdl_user     = new MODEL_USER(); //设置管理员模型
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . BG_DEFAULT_UI, $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );
@@ -101,7 +101,7 @@ class CONTROL_APP {
             $_arr_appRow = array(
                 "app_id"            => 0,
                 "app_name"          => "",
-                "app_url_notice"    => "",
+                "app_url_notify"    => "",
                 "app_url_sync"      => "",
                 "app_ip_allow"      => "",
                 "app_ip_bad"        => "",

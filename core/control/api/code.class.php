@@ -11,6 +11,7 @@ if (!defined("IN_BAIGO")) {
 
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
 include_once(BG_PATH_CLASS . "crypt.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "sign.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
 
@@ -28,6 +29,7 @@ class API_CODE {
         $this->obj_api->chk_install();
         $this->log          = $this->obj_api->log; //初始化 AJAX 基对象
         $this->obj_crypt    = new CLASS_CRYPT();
+        $this->obj_sign     = new CLASS_SIGN();
         $this->mdl_app      = new MODEL_APP(); //设置管理组模型
         $this->mdl_log      = new MODEL_LOG(); //设置管理员模型
     }
@@ -46,7 +48,7 @@ class API_CODE {
         switch ($_arr_data["status"]) {
             case "too_short":
                 $_arr_return = array(
-                    "alert" => "x080201",
+                    "alert" => "x050222",
                 );
                 $this->obj_api->halt_re($_arr_return);
             break;
@@ -56,7 +58,19 @@ class API_CODE {
             break;
         }
 
-        $_str_code    = $this->obj_crypt->encrypt($_str_data);
+        $_arr_sign = array(
+            "act_post"   => $GLOBALS["act_post"],
+            "data"       => $_str_data,
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
+        }
+
+        $_str_code = $this->obj_crypt->encrypt($_str_data, $this->appRow["app_key"]);
 
         $_arr_return = array(
             "code"   => $_str_code,
@@ -80,7 +94,7 @@ class API_CODE {
         switch ($_arr_code["status"]) {
             case "too_short":
                 $_arr_return = array(
-                    "alert" => "x080202",
+                    "alert" => "x050223",
                 );
                 $this->obj_api->halt_re($_arr_return);
             break;
@@ -90,7 +104,19 @@ class API_CODE {
             break;
         }
 
-        $_str_result  = $this->obj_crypt->decrypt($_str_code);
+        $_arr_sign = array(
+            "act_post"   => $GLOBALS["act_post"],
+            "code"       => $_str_code,
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
+        }
+
+        $_str_result  = $this->obj_crypt->decrypt($_str_code, $this->appRow["app_key"]);
 
         exit($_str_result);
     }
@@ -103,19 +129,19 @@ class API_CODE {
      * @return void
      */
     private function app_check($str_method = "get") {
-        $this->appRequest = $this->obj_api->app_request($str_method);
+        $this->appRequest = $this->obj_api->app_request($str_method, true);
 
         if ($this->appRequest["alert"] != "ok") {
             $this->obj_api->halt_re($this->appRequest);
         }
 
-        $_arr_appRow = $this->mdl_app->mdl_read($this->appRequest["app_id"]);
-        if ($_arr_appRow["alert"] != "y050102") {
-            $this->log_do($_arr_appRow, "read");
-            $this->obj_api->halt_re($_arr_appRow);
+        $this->appRow = $this->mdl_app->mdl_read($this->appRequest["app_id"]);
+        if ($this->appRow["alert"] != "y050102") {
+            $this->log_do($this->appRow, "read");
+            $this->obj_api->halt_re($this->appRow);
         }
 
-        $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $_arr_appRow);
+        $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $this->appRow);
         if ($_arr_appChk["alert"] != "ok") {
             $this->log_do($_arr_appChk, "check");
             $this->obj_api->halt_re($_arr_appChk);

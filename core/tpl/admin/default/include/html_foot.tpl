@@ -110,7 +110,7 @@
 
     <script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
-    <!-- {$smarty.const.PRD_SSO_POWERED} {if $config.ui == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$config.ui} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
+    <!-- {$smarty.const.PRD_SSO_POWERED} {if $smarty.const.BG_DEFAULT_UI == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$smarty.const.BG_DEFAULT_UI} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
 
 </body>
 </html>

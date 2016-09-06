@@ -24,7 +24,7 @@ include_once(BG_PATH_CONTROL . "api/signature.class.php"); //载入签名控制�
 
 $api_signature = new API_SIGNATURE(); //初始化签名
 
-switch ($GLOBALS["act_get"]) {
+switch ($GLOBALS["act_post"]) {
     case "signature":
         $api_signature->api_signature(); //生成签名
     break;

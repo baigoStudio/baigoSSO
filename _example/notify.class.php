@@ -1,6 +1,6 @@
 <?php
-/*-------------NOTICE 接口类-------------*/
-class CLASS_NOTICE {
+/*-------------NOTIFY 接口类-------------*/
+class CLASS_NOTIFY {
 
     /** 验证 app
      * app_chk function.
@@ -81,23 +81,23 @@ class CLASS_NOTICE {
      * @param bool $chk_token (default: false)
      * @return void
      */
-    function notice_input($str_method = "get", $chk_token = false) {
+    function notify_input($str_method = "get", $chk_token = false) {
 
         switch ($str_method) {
             case "post":
-                $_str_time              = fn_post("time");
-                $_str_random            = fn_post("random");
-                $_str_signature         = fn_post("signature");
-                $_str_code              = fn_post("code");
-                $this->jsonp_callback   = fn_post("callback");
+                $_str_time                      = fn_post("time");
+                $_str_signature                 = fn_post("signature");
+                $_str_code                      = fn_post("code");
+                $this->jsonp_callback           = fn_post("callback");
+                $_arr_notifyInput["act_post"]   = fn_post("act_post");
             break;
 
             default:
-                $_str_time              = fn_get("time");
-                $_str_random            = fn_get("random");
-                $_str_signature         = fn_get("signature");
-                $_str_code              = fn_get("code");
-                $this->jsonp_callback   = fn_get("callback");
+                $_str_time                      = fn_get("time");
+                $_str_signature                 = fn_get("signature");
+                $_str_code                      = fn_get("code");
+                $this->jsonp_callback           = fn_get("callback");
+                $_arr_notifyInput["act_get"]    = fn_get("act_get");
             break;
         }
 
@@ -110,20 +110,7 @@ class CLASS_NOTICE {
             break;
 
             case "ok":
-                $_arr_noticeGet["time"] = $_arr_time["str"];
-            break;
-        }
-
-        $_arr_random = validateStr($_str_random, 1, 0);
-        switch ($_arr_random["status"]) {
-            case "too_short":
-                return array(
-                    "alert" => "x220202",
-                );
-            break;
-
-            case "ok":
-                $_arr_noticeGet["random"] = $_arr_random["str"];
+                $_arr_notifyInput["time"] = $_arr_time["str"];
             break;
         }
 
@@ -136,7 +123,7 @@ class CLASS_NOTICE {
             break;
 
             case "ok":
-                $_arr_noticeGet["signature"] = $_arr_signature["str"];
+                $_arr_notifyInput["signature"] = $_arr_signature["str"];
             break;
         }
 
@@ -149,13 +136,13 @@ class CLASS_NOTICE {
             break;
 
             case "ok":
-                $_arr_noticeGet["code"] = $_arr_code["str"];
+                $_arr_notifyInput["code"] = $_arr_code["str"];
             break;
         }
 
-        $_arr_noticeGet["alert"] = "ok";
+        $_arr_notifyInput["alert"] = "ok";
 
-        return $_arr_noticeGet;
+        return $_arr_notifyInput;
     }
 
 

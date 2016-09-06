@@ -31,7 +31,7 @@ class CONTROL_VERIFY {
         $this->mdl_verify   = new MODEL_VERIFY();
         $this->mdl_user     = new MODEL_USER();
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . BG_DEFAULT_UI, $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );

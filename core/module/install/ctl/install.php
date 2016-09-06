@@ -32,7 +32,7 @@ switch ($GLOBALS["act_get"]) {
             "ssin"      => true, //启用会话
             "header"    => "Content-Type: text/html; charset=utf-8", //header
             "db"        => true, //连接数据库
-            "type"      => "ctl", //模块类型
+            "type"      => "install", //模块类型
         );
     break;
 

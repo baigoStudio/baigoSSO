@@ -167,7 +167,7 @@ class MODEL_ADMIN {
             "admin_pass"         => $str_adminPass, //密码 md5 加密，加盐后再次 md5 加密，每次登录更新加盐值
             "admin_rand"         => $str_adminRand, //加盐
             "admin_time_login"   => time(),
-            "admin_ip"           => fn_getIp(true),
+            "admin_ip"           => fn_getIp(),
         );
 
         $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "admin", $_arr_adminData, "admin_id=" . $num_adminId); //更新数据
@@ -574,7 +574,7 @@ class MODEL_ADMIN {
     function input_login() {
         $this->adminLogin["forward"] = fn_getSafe(fn_post("forward"), "txt", "");
         if (!$this->adminLogin["forward"]) {
-            $this->adminLogin["forward"] = base64_encode(BG_URL_ADMIN . "ctl.php");
+            $this->adminLogin["forward"] = fn_forward(BG_URL_ADMIN . "ctl.php");
         }
 
         if (!fn_seccode()) { //验证码
@@ -876,7 +876,7 @@ class MODEL_ADMIN {
 
         $this->adminIds = array(
             "alert"      => $_str_alert,
-            "admin_ids"  => $_arr_adminIds
+            "admin_ids"  => array_unique($_arr_adminIds),
         );
 
         return $this->adminIds;

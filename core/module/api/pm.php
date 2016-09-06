@@ -38,7 +38,8 @@ switch ($GLOBALS["act_post"]) {
     break;
 
     case "rev":
-        $api_pm->api_rev(); //撤回
+    case "revoke":
+        $api_pm->api_revoke(); //撤回
     break;
 
     default:

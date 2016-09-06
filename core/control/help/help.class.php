@@ -19,7 +19,7 @@ class CONTROL_HELP {
     function __construct() { //构造函数
         $this->obj_base       = $GLOBALS["obj_base"];
         $this->config         = $this->obj_base->config;
-        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "help/" . $this->config["ui"]); //初始化视图对象
+        $this->obj_tpl        = new CLASS_TPL(BG_PATH_TPLSYS . "help/" . BG_DEFAULT_UI); //初始化视图对象
 
         if (file_exists(BG_PATH_LANG . $this->config["lang"] . "/help/config.php")) {
             $this->helpConfig = include_once(BG_PATH_LANG . $this->config["lang"] . "/help/config.php");
@@ -38,8 +38,8 @@ class CONTROL_HELP {
             $_arr_config = array();
         }
 
-        if ($this->config["ui"] != "default") {
-            $_arr_config = str_replace("baigo", $this->config["ui"], $_arr_config);
+        if (BG_DEFAULT_UI != "default") {
+            $_arr_config = str_ireplace("baigo", BG_DEFAULT_UI, $_arr_config);
         }
 
         $this->tplData = array(
@@ -60,10 +60,10 @@ class CONTROL_HELP {
             $_str_content = "";
         }
 
-        $_str_content = str_replace("{images}", BG_URL_STATIC . "help/" . $this->config["ui"] . "/" . $this->mod . "/", $_str_content);
-        $_str_content = str_replace("{BG_URL_HELP}", BG_URL_HELP, $_str_content);
-        if ($this->config["ui"] != "default") {
-            $_str_content = str_replace("baigo", $this->config["ui"], $_str_content);
+        $_str_content = str_ireplace("{images}", BG_URL_STATIC . "help/" . BG_DEFAULT_UI . "/" . $this->mod . "/", $_str_content);
+        $_str_content = str_ireplace("{BG_URL_HELP}", BG_URL_HELP, $_str_content);
+        if (BG_DEFAULT_UI != "default") {
+            $_str_content = str_ireplace("baigo", BG_DEFAULT_UI, $_str_content);
         }
         return $_str_content;
     }

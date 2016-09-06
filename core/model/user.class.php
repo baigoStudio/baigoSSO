@@ -212,7 +212,7 @@ class MODEL_USER {
             "user_pass"             => $this->apiLogin["user_pass_do"],
             "user_rand"             => $this->apiLogin["user_rand"],
             "user_time_login"       => time(),
-            "user_ip"               => fn_getIp(true),
+            "user_ip"               => fn_getIp(),
             "user_access_token"     => md5($_str_accessToken),
             "user_access_expire"    => $_tm_accessExpire,
             "user_refresh_token"    => md5($_str_refreshToken),
@@ -374,10 +374,10 @@ class MODEL_USER {
         }
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y010103"; //更新成功
+            $_str_alert = "y010405"; //更新成功
         } else {
             return array(
-                "alert" => "x010103", //更新失败
+                "alert" => "x010405", //更新失败
             );
         }
 
@@ -1030,10 +1030,20 @@ class MODEL_USER {
         }
         $this->userSubmit["user_nick"]    = $_arr_userNick["user_nick"];
 
-        $_arr_userContact = fn_post("user_contact");
+        $_str_userContact = fn_getSafe(fn_post("user_contact"), "txt", "");
+        $this->userSubmit["user_contactStr"] = $_str_userContact;
+
+        $_str_userContact = fn_htmlcode($_str_userContact, "decode", "json");
+        $_arr_userContact = json_decode($_str_userContact, true);
+
         $this->userSubmit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
 
-        $_arr_userExtend = fn_post("user_extend");
+        $_str_userExtend = fn_getSafe(fn_post("user_extend"), "txt", "");
+        $this->userSubmit["user_extendStr"] = $_str_userExtend;
+
+        $_str_userExtend = fn_htmlcode($_str_userExtend, "decode", "json");
+        $_arr_userExtend = json_decode($_str_userExtend, true);
+
         $this->userSubmit["user_extend"] = fn_jsonEncode($_arr_userExtend, "encode");
 
         $this->userSubmit["alert"]        = "ok";
@@ -1163,10 +1173,16 @@ class MODEL_USER {
         }
         $this->apiEdit["user_nick"]   = $_arr_userNick["user_nick"];
 
-        $_arr_userContact = fn_post("user_contact");
+        $_str_userContact = fn_getSafe(fn_post("user_contact"), "txt", "");
+        $this->apiEdit["user_contactStr"] = $_str_userContact;
+        $_str_userContact = fn_htmlcode($_str_userContact, "decode", "json");
+        $_arr_userContact = json_decode($_str_userContact, true);
         $this->apiEdit["user_contact"] = fn_jsonEncode($_arr_userContact, "encode");
 
-        $_arr_userExtend = fn_post("user_extend");
+        $_str_userExtend = fn_getSafe(fn_post("user_extend"), "txt", "");
+        $this->apiEdit["user_extendStr"] = $_str_userExtend;
+        $_str_userExtend = fn_htmlcode($_str_userExtend, "decode", "json");
+        $_arr_userExtend = json_decode($_str_userExtend, true);
         $this->apiEdit["user_extend"] = fn_jsonEncode($_arr_userExtend, "encode");
 
         $this->apiEdit["alert"]       = "ok";
@@ -1448,7 +1464,46 @@ class MODEL_USER {
 
         $this->userIds = array(
             "alert"      => $_str_alert,
-            "user_ids"   => $_arr_userIds
+            "user_ids"   => array_unique($_arr_userIds),
+        );
+
+        return $this->userIds;
+    }
+
+
+
+    function input_ids_api() {
+        $_str_userIds = fn_getSafe(fn_post("user_ids"), "txt", "");
+
+        if (!$_str_userIds) {
+            return array(
+                "alert" => "x010217",
+            );
+        }
+
+        $_arr_userIds = array();
+
+        if ($_str_userIds) {
+            if (stristr($_str_userIds, "|")) {
+                $_arr_userIds = explode("|", $_str_userIds);
+            } else {
+                $_arr_userIds = array($_str_userIds);
+            }
+        }
+
+        if ($_arr_userIds) {
+            foreach ($_arr_userIds as $_key=>$_value) {
+                $_arr_userIds[$_key] = fn_getSafe($_value, "int", 0);
+            }
+            $_str_alert = "ok";
+        } else {
+            $_str_alert = "x010217";
+        }
+
+        $this->userIds = array(
+            "alert"         => "ok",
+            "str_userIds"   => $_str_userIds,
+            "user_ids"      => array_unique($_arr_userIds),
         );
 
         return $this->userIds;

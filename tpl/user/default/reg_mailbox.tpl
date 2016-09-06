@@ -12,7 +12,7 @@
 
         <div class="form-group">
             <label class="control-label">{$lang.label.username}</label>
-            <p class="form-control-static input-lg">{$tplData.userRow.user_name}</p>
+            <input type="text" name="user_name" id="user_name" value="{$tplData.userRow.user_name}" readonly class="form-control input-lg">
         </div>
 
         <div class="form-group">

@@ -229,14 +229,6 @@
         btn_url: "{$cfg.str_url}"
     };
 
-    var opts_submit_notice = {
-        ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=pm",
-        text_submitting: "{$lang.label.submitting}",
-        btn_text: "{$lang.btn.ok}",
-        btn_close: "{$lang.btn.close}",
-        btn_url: "{$cfg.str_url}"
-    };
-
     $(document).ready(function(){
         $("#pm_modal").on("hidden.bs.modal", function() {
             $(this).removeData("bs.modal");

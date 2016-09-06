@@ -37,7 +37,7 @@ class MODEL_OPT {
             if (is_numeric($_value)) {
                 $_str_content .= "define(\"" . $_key . "\", " . $_value . ");" . PHP_EOL;
             } else {
-                $_str_content .= "define(\"" . $_key . "\", \"" . rtrim(str_replace(PHP_EOL, "|", $_value), "/\\") . "\");" . PHP_EOL;
+                $_str_content .= "define(\"" . $_key . "\", \"" . rtrim(str_ireplace(PHP_EOL, "|", $_value), "/\\") . "\");" . PHP_EOL;
             }
         }
 
@@ -46,7 +46,7 @@ class MODEL_OPT {
             $_str_content .= "define(\"BG_SITE_TPL\", \"default\");" . PHP_EOL;
         }
 
-        $_str_content = str_replace("||", "", $_str_content);
+        $_str_content = str_ireplace("||", "", $_str_content);
 
         $_num_size    = $this->obj_dir->put_file(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
 
@@ -313,7 +313,7 @@ class MODEL_OPT {
         $_arr_data = array(
             "name"      => "baigoSSO",
             "ver"       => PRD_SSO_VER,
-            "referer"   => urlencode(base64_encode($_SERVER["SERVER_NAME"] . BG_URL_ROOT)),
+            "referer"   => fn_forward(fn_server("SERVER_NAME") . BG_URL_ROOT),
             "method"    => $method,
         );
 

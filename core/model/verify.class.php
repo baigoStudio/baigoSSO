@@ -377,7 +377,7 @@ class MODEL_VERIFY {
 
         $this->verifyIds = array(
             "alert"         => $_str_alert,
-            "verify_ids"    => $_arr_verifyIds
+            "verify_ids"    => array_unique($_arr_verifyIds),
         );
 
         return $this->verifyIds;

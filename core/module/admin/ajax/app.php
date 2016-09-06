@@ -50,7 +50,7 @@ switch ($GLOBALS["act_post"]) {
         $ajax_app->ajax_del(); //删除
     break;
 
-    case "notice":
-        $ajax_app->ajax_notice(); //通知测试
+    case "notify":
+        $ajax_app->ajax_notify(); //通知测试
     break;
 }

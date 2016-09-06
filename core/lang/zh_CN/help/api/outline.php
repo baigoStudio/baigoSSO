@@ -58,6 +58,7 @@ return "<h3>API 概述</h3>
         );
 
         \$_arr_ssoData = array_merge(\$this-&gt;arr_data, \$_arr_sso);
+        \$_arr_ssoData[&quot;signature&quot;] = \$this->sso_signature(\$_arr_ssoData);
         \$_arr_get     = \$this->fn_http(BG_SSO_URL . &quot;?mod=user&quot;, \$_arr_ssoData, &quot;post&quot;); //&#25552;&#20132;
         \$_arr_result  = \$this-&gt;result_process(\$_arr_get);
 
@@ -95,6 +96,26 @@ return "<h3>API 概述</h3>
         }
 
         return \$_arr_result;
+    }
+
+
+    /** 签名
+     * sso_signature function.
+     *
+     * @access public
+     * @param mixed \$arr_params
+     * @return void
+     */
+    function sso_signature(\$arr_params) {
+        \$_arr_sso = array(
+            &quot;act_post&quot;  => &quot;signature&quot;, //方法
+            &quot;params&quot;    => \$arr_params,
+        );
+
+        \$_arr_ssoData     = array_merge(\$this->arr_data, \$_arr_sso); //合并数组
+        \$_arr_get         = fn_http(BG_SSO_URL . &quot;?mod=signature&quot;, \$_arr_ssoData, &quot;post&quot;); //提交
+
+        return fn_jsonDecode(\$_arr_get[&quot;ret&quot;], &quot;no&quot;);
     }
 
 
@@ -228,8 +249,8 @@ return "<h3>API 概述</h3>
 }
 
 \$obj_sso       = new CLASS_SSO(); //初始化对象
-\$user_name     = \$_GET[&quot;user_name&quot;]; //表单获取用户名
-\$user_pass     = \$_GET[&quot;user_pass&quot;]; //表单获取密码
+\$user_name     = \$_POST[&quot;user_name&quot;]; //表单获取用户名
+\$user_pass     = \$_POST[&quot;user_pass&quot;]; //表单获取密码
 \$arr_userRow   = \$obj_sso-&gt;sso_login(\$user_name, \$user_pass); //调用登录接口</code></pre>
     </p>
 
@@ -255,7 +276,7 @@ return "<h3>API 概述</h3>
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>

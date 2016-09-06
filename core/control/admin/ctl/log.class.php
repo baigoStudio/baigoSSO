@@ -36,7 +36,7 @@ class CONTROL_LOG {
         $this->mdl_verify   = new MODEL_VERIFY(); //设置管理员模型
         $this->mdl_app      = new MODEL_APP(); //设置管理员模型
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"], $_arr_cfg); //初始化视图对象
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . BG_DEFAULT_UI, $_arr_cfg); //初始化视图对象
         $this->tplData = array(
             "adminLogged" => $this->adminLogged
         );

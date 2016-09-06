@@ -34,41 +34,16 @@ function fn_rand($num_rand = 32) {
  * @access public
  * @return void
  */
-function fn_getIp($str_ipTrue = true) {
+function fn_getIp() {
     if (isset($_SERVER)) {
-        if ($str_ipTrue) {
-            if (fn_server("HTTP_X_FORWARDED_FOR")) {
-                $_arr_ips = explode(",", fn_server("HTTP_X_FORWARDED_FOR"));
-                foreach ($_arr_ips as $_key=>$_value) {
-                    $_value = trim($_value);
-                    if ($_value != "unknown") {
-                        $_str_ip = $_value;
-                        break;
-                    }
-                }
-            } elseif (fn_server("HTTP_CLIENT_IP")) {
-                $_str_ip = fn_server("HTTP_CLIENT_IP");
-            } elseif (fn_server("REMOTE_ADDR")) {
-                $_str_ip = fn_server("REMOTE_ADDR");
-            } else {
-                $_str_ip = "0.0.0.0";
-            }
+        if (fn_isEmpty(fn_server("REMOTE_ADDR"))) {
+            $_str_ip = "0.0.0.0";
         } else {
-            if (fn_server("REMOTE_ADDR")) {
-                $_str_ip = fn_server("REMOTE_ADDR");
-            } else {
-                $_str_ip = "0.0.0.0";
-            }
+            $_str_ip = fn_server("REMOTE_ADDR");
         }
     } else {
-        if ($str_ipTrue) {
-            if (getenv("HTTP_X_FORWARDED_FOR")) {
-                $_str_ip = getenv("HTTP_X_FORWARDED_FOR");
-            } elseif (getenv("HTTP_CLIENT_IP")) {
-                $_str_ip = getenv("HTTP_CLIENT_IP");
-            } else {
-                $_str_ip = getenv("REMOTE_ADDR");
-            }
+        if (fn_isEmpty(getenv("REMOTE_ADDR"))) {
+            $_str_ip = "0.0.0.0";
         } else {
             $_str_ip = getenv("REMOTE_ADDR");
         }
@@ -84,7 +59,7 @@ function fn_getIp($str_ipTrue = true) {
  * @return void
  */
 function fn_seccode() {
-    $_str_seccode = strtolower(fn_post("seccode"));
+    $_str_seccode = strtolower(fn_getSafe(fn_post("seccode"), "txt", ""));
     if ($_str_seccode != fn_session("seccode")) {
         return false;
     } else {
@@ -102,13 +77,13 @@ function fn_seccode() {
  * @return void
  */
 function fn_token($token_action = "mk") {
-    if (fn_session("admin_hash")) {
+    if (fn_isEmpty(fn_session("admin_hash"))) {
+        $_str_nameSession   = "token_session";
+        $_str_nameCookie    = "token_cookie";
+    } else {
         $_str_tokenName     = fn_session("admin_hash");
         $_str_nameSession   = "token_session_" . $_str_tokenName;
         $_str_nameCookie    = "token_cookie_" . $_str_tokenName;
-    } else {
-        $_str_nameSession   = "token_session";
-        $_str_nameCookie    = "token_cookie";
     }
 
     switch ($token_action) {
@@ -129,14 +104,14 @@ function fn_token($token_action = "mk") {
 
         default:
             if (BG_SWITCH_TOKEN == 1) {
-                if (!fn_session($_str_nameSession)) {
+                if (fn_isEmpty(fn_session($_str_nameSession))) {
                     $_str_tokenSession = fn_rand();
                     fn_session($_str_nameSession, "mk", $_str_tokenSession);
                 } else {
                     $_str_tokenSession = fn_session($_str_nameSession);
                 }
 
-                if (!fn_session($_str_nameCookie)) {
+                if (fn_isEmpty(fn_session($_str_nameCookie))) {
                     $_str_tokenCookie = fn_rand();
                     fn_session($_str_nameCookie, "mk", $_str_tokenCookie);
                 } else {
@@ -175,16 +150,13 @@ function fn_clearCookie() {
  * @return void
  */
 function fn_getSafe($str_string, $str_type = "txt", $str_default = "") {
-
-    if ($str_string) {
-        $_str_string = $str_string;
-    } else {
+    if (fn_isEmpty($str_string)) {
         $_str_string = $str_default;
-
+    } else {
+        $_str_string = $str_string;
     }
 
     switch ($str_type) {
-
         case "int": //数值型
             if (is_numeric($_str_string)) {
                 $_str_return = intval($_str_string); //如果是数值型则赋值
@@ -196,11 +168,9 @@ function fn_getSafe($str_string, $str_type = "txt", $str_default = "") {
         default: //默认
             $_str_return = fn_safe($_str_string);
         break;
-
     }
 
     return $_str_return;
-
 }
 
 
@@ -311,6 +281,7 @@ function fn_jsonEncode($arr_json = "", $method = "") {
     } else {
         $str_json = "";
     }
+
     return $str_json;
 }
 
@@ -324,12 +295,13 @@ function fn_jsonEncode($arr_json = "", $method = "") {
  * @return void
  */
 function fn_jsonDecode($str_json = "", $method = "") {
-    if (isset($str_json)) {
+    if (fn_isEmpty($str_json)) {
+        $arr_json = array();
+    } else {
         $arr_json = json_decode($str_json, true); //json解码
         $arr_json = fn_eachArray($arr_json, $method);
-    } else {
-        $arr_json = array();
     }
+
     return $arr_json;
 }
 
@@ -383,6 +355,7 @@ function fn_eachArray($arr, $method = "encode") {
     } else {
         $arr = array();
     }
+
     return $arr;
 }
 
@@ -403,6 +376,7 @@ function fn_baigoEncrypt($str, $rand, $is_md5 = false) {
         $_str = md5($str);
     }
     $_str_return = md5($_str . $rand);
+
     return $_str_return;
 }
 
@@ -421,15 +395,15 @@ function fn_regChk($str_chk, $str_reg, $str_wild = false) {
     $_str_reg = preg_quote($_str_reg, "/");
 
     if ($str_wild == true) {
-        $_str_reg = str_replace("\\*", ".*", $_str_reg);
-        $_str_reg = str_replace(" ", "", $_str_reg);
+        $_str_reg = str_ireplace("\\*", ".*", $_str_reg);
+        $_str_reg = str_ireplace(" ", "", $_str_reg);
         $_str_reg = "/^(" . $_str_reg . ")$/i";
     } else {
         $_str_reg = "/(" . $_str_reg . ")$/i";
     }
 
-    $_str_reg = str_replace("\|", "|", $_str_reg);
-    $_str_reg = str_replace("|)", ")", $_str_reg);
+    $_str_reg = str_ireplace("\|", "|", $_str_reg);
+    $_str_reg = str_ireplace("|)", ")", $_str_reg);
 
     /*print_r($_str_reg . "<br>");
     preg_match($_str_reg, $str_chk, $aaaa);
@@ -621,7 +595,7 @@ function fn_safe($str_string) {
 
     $_str_return = trim($str_string);
 
-    $_str_return = str_replace(",", "|", $_str_return); //特殊字符，内部保留
+    $_str_return = str_ireplace(",", "|", $_str_return); //特殊字符，内部保留
 
     foreach ($_arr_dangerRegs as $_key=>$_value) {
         $_str_return = preg_replace($_value, "", $_str_return);
@@ -633,39 +607,101 @@ function fn_safe($str_string) {
 
     $_str_return = fn_htmlcode($_str_return);
 
-    $_str_return = str_replace(";", "&#59;", $_str_return);
-    $_str_return = str_replace("!", "&#33;", $_str_return);
-    $_str_return = str_replace("$", "&#36;", $_str_return);
-    //$_str_return = str_replace("%", "&#37;", $_str_return);
-    $_str_return = str_replace("‘", "&#39;", $_str_return);
-    $_str_return = str_replace("(", "&#40;", $_str_return);
-    $_str_return = str_replace(")", "&#41;", $_str_return);
-    $_str_return = str_replace("+", "&#43;", $_str_return);
-    $_str_return = str_replace("-", "&#45;", $_str_return);
-    $_str_return = str_replace(":", "&#58;", $_str_return);
-    $_str_return = str_replace("=", "&#61;", $_str_return);
-    $_str_return = str_replace("?", "&#63;", $_str_return);
-    //$_str_return = str_replace("@", "&#64;", $_str_return);
-    $_str_return = str_replace("[", "&#91;", $_str_return);
-    $_str_return = str_replace("]", "&#93;", $_str_return);
-    $_str_return = str_replace("^", "&#94;", $_str_return);
-    $_str_return = str_replace("`", "&#96;", $_str_return);
-    $_str_return = str_replace("{", "&#123;", $_str_return);
-    $_str_return = str_replace("}", "&#125;", $_str_return);
-    $_str_return = str_replace("~", "&#126;", $_str_return);
+    $_str_return = str_ireplace("!", "&#33;", $_str_return);
+    $_str_return = str_ireplace("$", "&#36;", $_str_return);
+    $_str_return = str_ireplace("%", "&#37;", $_str_return);
+    $_str_return = str_ireplace("‘", "&#39;", $_str_return);
+    $_str_return = str_ireplace("(", "&#40;", $_str_return);
+    $_str_return = str_ireplace(")", "&#41;", $_str_return);
+    $_str_return = str_ireplace("+", "&#43;", $_str_return);
+    $_str_return = str_ireplace("-", "&#45;", $_str_return);
+    $_str_return = str_ireplace(":", "&#58;", $_str_return);
+    $_str_return = str_ireplace("=", "&#61;", $_str_return);
+    $_str_return = str_ireplace("?", "&#63;", $_str_return);
+    //$_str_return = str_ireplace("@", "&#64;", $_str_return);
+    $_str_return = str_ireplace("[", "&#91;", $_str_return);
+    $_str_return = str_ireplace("]", "&#93;", $_str_return);
+    $_str_return = str_ireplace("^", "&#94;", $_str_return);
+    $_str_return = str_ireplace("`", "&#96;", $_str_return);
+    $_str_return = str_ireplace("{", "&#123;", $_str_return);
+    $_str_return = str_ireplace("}", "&#125;", $_str_return);
+    $_str_return = str_ireplace("~", "&#126;", $_str_return);
 
     return $_str_return;
 }
 
-function fn_htmlcode($str_html, $method = "encode") {
+
+function fn_htmlcode($str_html, $method = "encode", $spec = false) {
     switch ($method) {
         case "decode":
-            $_str_html = html_entity_decode($str_html, ENT_QUOTES, "UTF-8");
+            $str_html = html_entity_decode($str_html, ENT_QUOTES, "UTF-8");
+
+            switch ($spec) {
+                case "json": //转换 json 特殊字符
+                    $str_html = str_ireplace("&#58;", ":", $str_html);
+                    $str_html = str_ireplace("&#91;", "[", $str_html);
+                    $str_html = str_ireplace("&#93;", "]", $str_html);
+                    $str_html = str_ireplace("&#123;", "{", $str_html);
+                    $str_html = str_ireplace("&#125;", "}", $str_html);
+                    $str_html = str_ireplace("|", ",", $str_html);
+                break;
+                case "url": //转换 加密 特殊字符
+                    $str_html = str_ireplace("&#45;", "-", $str_html);
+                    $str_html = str_ireplace("&#61;", "=", $str_html);
+                    $str_html = str_ireplace("&#63;", "?", $str_html);
+                break;
+                case "crypt": //转换 加密 特殊字符
+                    $str_html = str_ireplace("&#37;", "%", $str_html);
+                break;
+                case "base64": //转换 base64 特殊字符
+                    $str_html = str_ireplace("&#61;", "=", $str_html);
+                break;
+            }
         break;
         default:
-            $_str_html = htmlentities($str_html, ENT_QUOTES, "UTF-8");
+            $str_html = htmlentities($str_html, ENT_QUOTES, "UTF-8");
         break;
     }
 
-    return $_str_html;
+    return $str_html;
+}
+
+function fn_strtotime($str_time) {
+    $str_time   = str_ireplace("&#45;", "-", $str_time);
+    $str_time   = str_ireplace("&#58;", ":", $str_time);
+    $_tm_return = strtotime($str_time);
+
+    return $_tm_return;
+}
+
+function fn_isEmpty($string) {
+    if (!isset($string)) {
+    	return true;
+    }
+	if ($string === null) {
+		return true;
+	}
+	if (trim($string) === "") {
+		return true;
+	}
+
+	return false;
+}
+
+
+function fn_forward($str_forward, $method = "encode") {
+    switch ($method) {
+        case "decode":
+            $str_forward = fn_htmlcode($str_forward, "decode", "crypt");
+            $str_forward = urldecode($str_forward);
+            $str_forward = fn_htmlcode($str_forward, "decode", "base64");
+            $str_forward = base64_decode($str_forward);
+            $str_forward = fn_htmlcode($str_forward, "decode", "url");
+            return $str_forward;
+        break;
+
+        default:
+            return urlencode(base64_encode($str_forward));
+        break;
+    }
 }

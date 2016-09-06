@@ -71,11 +71,9 @@ class API_SYNC {
 
             //unset($_arr_userRow["alert"]);
             $_str_src     = fn_jsonEncode($_arr_userRow, "encode");
-            $_str_code    = $this->obj_crypt->encrypt($_str_src);
+            $_str_code    = $this->obj_crypt->encrypt($_str_src, $_value["app_key"]);
 
-            $_tm_time    = time();
-            $_str_rand   = fn_rand();
-            $_str_sign   = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
+            $_tm_time     = time();
 
             if (stristr($_value["app_url_sync"], "?")) {
                 $_str_conn = "&";
@@ -85,12 +83,14 @@ class API_SYNC {
             $_str_url = $_value["app_url_sync"] . $_str_conn . "mod=sync";
 
             $_arr_data = array(
-                "act_get"    => "login",
-                "time"       => $_tm_time,
-                "random"     => $_str_rand,
-                "signature"  => $_str_sign,
-                "code"       => $_str_code,
+                "act_get"   => "login",
+                "app_id"    => $_value["app_id"],
+                "app_key"   => $_value["app_key"],
+                "time"      => $_tm_time,
+                "code"      => $_str_code,
             );
+
+            $_arr_data["signature"] = $this->obj_sign->sign_make($_arr_data);
 
             $_arr_urlRows[] = urlencode($_str_url . "&" . http_build_query($_arr_data));
         }
@@ -132,14 +132,12 @@ class API_SYNC {
 
         foreach ($this->appRows as $_key=>$_value) {
             $_tm_time                = time();
-            $_str_rand               = fn_rand();
-            $_str_sign               = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_value["app_id"], $_value["app_key"]);
             $_arr_code["app_id"]     = $_value["app_id"];
             $_arr_code["app_key"]    = $_value["app_key"];
 
             //unset($_arr_code["alert"]);
             $_str_src     = fn_jsonEncode($_arr_code, "encode");
-            $_str_code    = $this->obj_crypt->encrypt($_str_src);
+            $_str_code    = $this->obj_crypt->encrypt($_str_src, $_value["app_key"]);
 
             if (stristr($_value["app_url_sync"], "?")) {
                 $_str_conn = "&";
@@ -149,12 +147,14 @@ class API_SYNC {
             $_str_url = $_value["app_url_sync"] . $_str_conn . "mod=sync";
 
             $_arr_data = array(
-                "act_get"    => "logout",
-                "time"       => $_tm_time,
-                "random"     => $_str_rand,
-                "signature"  => $_str_sign,
-                "code"       => $_str_code,
+                "act_get"   => "logout",
+                "app_id"    => $_value["app_id"],
+                "app_key"   => $_value["app_key"],
+                "time"      => $_tm_time,
+                "code"      => $_str_code,
             );
+
+            $_arr_data["signature"] = $this->obj_sign->sign_make($_arr_data);
 
             $_arr_urlRows[] = urlencode($_str_url . "&" . http_build_query($_arr_data));
         }
@@ -177,7 +177,7 @@ class API_SYNC {
      * @return void
      */
     private function app_check() {
-        $this->appRequest = $this->obj_api->app_request("post");
+        $this->appRequest = $this->obj_api->app_request("post", true);
 
         if ($this->appRequest["alert"] != "ok") {
             $this->obj_api->halt_re($this->appRequest);
@@ -204,7 +204,7 @@ class API_SYNC {
         $_arr_search = array(
             "status"        => "enable",
             "sync"          => "on",
-            "has_notice"    => true,
+            "has_notify"    => true,
             "not_ids"       => array($this->appRequest["app_id"]),
         );
         $this->appRows = $this->mdl_app->mdl_list(100, 0, $_arr_search);

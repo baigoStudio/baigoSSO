@@ -130,13 +130,13 @@ class AJAX_APP {
 
 
     /**
-     * ajax_notice function.
+     * ajax_notify function.
      *
      * @access public
      * @return void
      */
-    function ajax_notice() {
-        $_num_appId = fn_getSafe(fn_post("app_id_notice"), "int", 0);
+    function ajax_notify() {
+        $_num_appId = fn_getSafe(fn_post("app_id_notify"), "int", 0);
         if ($_num_appId < 1) {
             $this->obj_ajax->halt_alert("x050203");
         }
@@ -151,31 +151,27 @@ class AJAX_APP {
         }
 
         $_tm_time   = time();
-        $_str_rand  = fn_rand();
-        $_str_sign  = $this->obj_sign->sign_make($_tm_time, $_str_rand, $_arr_appRow["app_id"], $_arr_appRow["app_key"]);
-
         $_str_echo  = fn_rand();
 
         $_arr_data = array(
             "act_get"    => "test",
             "time"       => $_tm_time,
-            "random"     => $_str_rand,
-            "signature"  => $_str_sign,
             "echostr"    => $_str_echo,
             "app_id"     => $_arr_appRow["app_id"],
             "app_key"    => $_arr_appRow["app_key"],
         );
 
-        if (stristr($_arr_appRow["app_url_notice"], "?")) {
+        $_arr_data["signature"] = $this->obj_sign->sign_make($_arr_data);
+
+        if (stristr($_arr_appRow["app_url_notify"], "?")) {
             $_str_conn = "&";
         } else {
             $_str_conn = "?";
         }
 
-        $_arr_notice = fn_http($_arr_appRow["app_url_notice"] . $_str_conn . "mod=notice", $_arr_data, "get");
-        //print_r($_arr_notice);
+        $_arr_notify = fn_http($_arr_appRow["app_url_notify"] . $_str_conn . "mod=notify", $_arr_data, "get");
 
-        if ($_arr_notice["ret"] == $_str_echo) {
+        if ($_arr_notify["ret"] == $_str_echo) {
             $_str_alert = "y050401";
         } else {
             $_str_alert = "x050401";
@@ -184,14 +180,14 @@ class AJAX_APP {
                 "app_id" => $_num_appId,
             );
             $_str_targets    = json_encode($_arr_targets);
-            $_str_notice     = fn_htmlcode($_arr_notice["ret"]);
-            //exit($_str_notice);
+            $_str_notify     = fn_htmlcode($_arr_notify["ret"]);
+            //exit($_str_notify);
 
             $_arr_logData = array(
                 "log_targets"        => $_str_targets,
                 "log_target_type"    => "app",
-                "log_title"          => $this->log["app"]["noticeTest"],
-                "log_result"         => $_str_notice,
+                "log_title"          => $this->log["app"]["notifyTest"],
+                "log_result"         => $_str_notify,
                 "log_type"           => "admin",
             );
 

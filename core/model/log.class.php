@@ -400,7 +400,7 @@ class MODEL_LOG {
 
         $this->logIds = array(
             "alert"     => $_str_alert,
-            "log_ids"   => $_arr_logIds
+            "log_ids"   => array_unique($_arr_logIds),
         );
 
         return $this->logIds;

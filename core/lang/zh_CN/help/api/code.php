@@ -1,20 +1,8 @@
 <?php
-return "<h3>加密</h3>
-
-    <p class=\"text-success\">接口说明</p>
-    <p>本接口用于将数据进行加密。</p>
-
-    <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=code</span></p>
-
-    <p class=\"text-success\">HTTP 请求方式</p>
-    <p>POST</p>
-
-    <p class=\"text-success\">返回格式</p>
-    <p>JSON</p>
-
+return "<h3>公共请求参数</h3>
+    <p>公共请求参数是指向所有接口发起请求时都必须传入的参数。</p>
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">公共请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -22,16 +10,10 @@ return "<h3>加密</h3>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class=\"text-nowrap\">act_post</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>接口调用动作，值只能为 encode。</td>
-                    </tr>
                     <tr>
                         <td class=\"text-nowrap\">app_id</td>
                         <td class=\"text-nowrap\">int</td>
@@ -43,6 +25,66 @@ return "<h3>加密</h3>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">time</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>Unix 时间戳，baigo SSO 允许 +-30 分钟以内的时差，为了防止时区设置不同导致的时差，请开发者将应用的时区设置为为与 baigo SSO 一致，关于时区设置，请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#base\">系统设置</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">signature</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>签名，将请求参数中的所有参数（包括公共请求参数，但不含签名）按照一定规律组合以后生成的，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <p>&nbsp;</p>
+
+    <h3>加密</h3>
+
+    <p class=\"text-success\">接口说明</p>
+    <p>本接口用于将数据进行加密。</p>
+
+    <p class=\"text-success\">URL</p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=code</p>
+
+    <p class=\"text-success\">HTTP 请求方式</p>
+    <p>POST</p>
+
+    <p class=\"text-success\">返回格式</p>
+    <p>JSON</p>
+
+    <div class=\"panel panel-default\">
+        <div class=\"panel-heading\">请求参数</div>
+        <div class=\"table-responsive\">
+            <table class=\"table table-bordered\">
+                <thead>
+                    <tr>
+                        <th class=\"text-nowrap\">名称</th>
+                        <th class=\"text-nowrap\">类型</th>
+                        <th class=\"text-nowrap\">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=\"text-nowrap\">act_post</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>接口调用动作，值只能为 encode。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">data</td>
@@ -65,7 +107,7 @@ return "<h3>加密</h3>
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +165,7 @@ return "<h3>加密</h3>
     <p>本接口用于将其他接口返回的加密字符串进行解密。解密后返回真正的结果。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=code</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=code</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -132,7 +174,7 @@ return "<h3>加密</h3>
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -140,7 +182,7 @@ return "<h3>加密</h3>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -149,18 +191,6 @@ return "<h3>加密</h3>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>接口调用动作，值只能为 decode。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">code</td>
@@ -183,7 +213,7 @@ return "<h3>加密</h3>
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>

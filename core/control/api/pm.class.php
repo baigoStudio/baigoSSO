@@ -11,6 +11,7 @@ if (!defined("IN_BAIGO")) {
 
 include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
 include_once(BG_PATH_CLASS . "crypt.class.php"); //载入模板类
+include_once(BG_PATH_CLASS . "sign.class.php"); //载入模板类
 include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "pm.class.php"); //载入后台用户类
 include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
@@ -30,6 +31,7 @@ class API_PM {
         $this->obj_api->chk_install();
         $this->log          = $this->obj_api->log;
         $this->obj_crypt    = new CLASS_CRYPT();
+        $this->obj_sign     = new CLASS_SIGN();
         $this->mdl_pm       = new MODEL_PM();
         $this->mdl_app      = new MODEL_APP();
         $this->mdl_log      = new MODEL_LOG();
@@ -59,9 +61,25 @@ class API_PM {
 
         $_arr_userRow   = $this->user_check("post");
         $_arr_pmSend    = $this->mdl_pm->input_send();
-
         if ($_arr_pmSend["alert"] != "ok") {
             $this->obj_ajax->halt_alert($_arr_pmSend["alert"]);
+        }
+
+        $_arr_sign = array(
+            "act_post"                      => $GLOBALS["act_post"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+        );
+
+        if (fn_isEmpty(fn_get("pm_title"))) {
+            unset($_arr_pmSend["pm_title"]); //如果标题为自动生成, 则忽略
+        }
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_pmSend, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
         }
 
         if (stristr($_arr_pmSend["pm_to"], "|")) {
@@ -83,7 +101,7 @@ class API_PM {
         }
 
         $_str_src   = fn_jsonEncode($_arr_pmRows, "encode");
-        $_str_code  = $this->obj_crypt->encrypt($_str_src);
+        $_str_code  = $this->obj_crypt->encrypt($_str_src, $this->appRow["app_key"]);
 
         $_arr_return = array(
             "code"   => $_str_code,
@@ -95,26 +113,37 @@ class API_PM {
     }
 
 
-    function api_rev() {
+    function api_revoke() {
         $this->app_check("post");
 
-        if (!isset($this->appAllow["pm"]["rev"])) {
+        if (!isset($this->appAllow["pm"]["revoke"])) {
             $_arr_return = array(
-                "alert" => "x050321",
+                "alert" => "x050322",
             );
             $_arr_logTarget[] = array(
                 "app_id" => $this->appRequest["app_id"],
             );
-            $_arr_logType = array("pm", "rev");
+            $_arr_logType = array("pm", "revoke");
             $this->log_do($_arr_logTarget, "app", $_arr_return, $_arr_logType);
             $this->obj_api->halt_re($_arr_return);
         }
 
         $_arr_userRow = $this->user_check("post");
 
-        $_arr_pmIds = $this->mdl_pm->input_ids();
-        if ($_arr_pmIds["alert"] != "ok") {
-            $this->obj_api->halt_re($_arr_pmIds);
+        $_arr_pmIds   = $this->mdl_pm->input_ids_api();
+
+        $_arr_sign = array(
+            "act_post"                      => $GLOBALS["act_post"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+            "pm_ids"                        => $_arr_pmIds["str_pmIds"],
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
         }
 
         $_arr_pmDel = $this->mdl_pm->mdl_del($_arr_userRow["user_id"], true);
@@ -140,10 +169,7 @@ class API_PM {
 
         $_arr_userRow = $this->user_check("post");
 
-        $_arr_pmIds = $this->mdl_pm->input_ids();
-        if ($_arr_pmIds["alert"] != "ok") {
-            $this->obj_api->halt_re($_arr_pmIds);
-        }
+        $_arr_pmIds   = $this->mdl_pm->input_ids_api();
 
         $_str_status = fn_getSafe(fn_post("pm_status"), "txt", "");
         if (!$_str_status) {
@@ -152,6 +178,22 @@ class API_PM {
             );
             $this->obj_api->halt_re($_arr_return);
         }
+
+        $_arr_sign = array(
+            "act_post"                      => $GLOBALS["act_post"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+            "pm_status"                     => $_str_status,
+            "pm_ids"                        => $_arr_pmIds["str_pmIds"],
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
+        }
+
         $_arr_pmStatus = $this->mdl_pm->mdl_status($_str_status, $_arr_userRow["user_id"]);
 
         $this->obj_api->halt_re($_arr_pmStatus);
@@ -180,9 +222,20 @@ class API_PM {
 
         $_arr_userRow = $this->user_check("post");
 
-        $_arr_pmIds = $this->mdl_pm->input_ids();
-        if ($_arr_pmIds["alert"] != "ok") {
-            $this->obj_api->halt_re($_arr_pmIds);
+        $_arr_pmIds   = $this->mdl_pm->input_ids_api();
+
+        $_arr_sign = array(
+            "act_post"                      => $GLOBALS["act_post"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+            "pm_ids"                        => $_arr_pmIds["str_pmIds"],
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
         }
 
         $_arr_pmDel = $this->mdl_pm->mdl_del($_arr_userRow["user_id"]);
@@ -222,6 +275,20 @@ class API_PM {
             $this->obj_api->halt_re($_arr_return);
         }
 
+        $_arr_sign = array(
+            "act_get"                       => $GLOBALS["act_get"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+            "pm_id"                         => $_num_pmId,
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
+        }
+
         $_arr_pmRow = $this->mdl_pm->mdl_read($_num_pmId);
         if ($_arr_pmRow["alert"] != "y110102") {
             $this->obj_api->halt_re($_arr_pmRow);
@@ -237,9 +304,18 @@ class API_PM {
         $_arr_pmRow["fromUser"] = $this->mdl_user->mdl_read_api($_arr_pmRow["pm_from"]);
         $_arr_pmRow["toUser"]   = $this->mdl_user->mdl_read_api($_arr_pmRow["pm_to"]);
 
+        if ($_arr_pmRow["pm_type"] == "out") {
+            $_arr_sendRow = $this->mdl_pm->mdl_read($_arr_pmRow["pm_send_id"]);
+            if ($_arr_sendRow["alert"] != "y110102") {
+                $_arr_pmRow["pm_send_status"] = "revoke";
+            } else {
+                $_arr_pmRow["pm_send_status"] = $_arr_sendRow["pm_status"];
+            }
+        }
+
         //unset($_arr_pmRow["alert"]);
         $_str_src   = fn_jsonEncode($_arr_pmRow, "encode");
-        $_str_code  = $this->obj_crypt->encrypt($_str_src);
+        $_str_code  = $this->obj_crypt->encrypt($_str_src, $this->appRow["app_key"]);
 
         $_arr_return = array(
             "code"   => $_str_code,
@@ -266,6 +342,19 @@ class API_PM {
         }
 
         $_arr_userRow = $this->user_check("get");
+
+        $_arr_sign = array(
+            "act_get"                       => $GLOBALS["act_get"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+        );
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
+        }
 
         $_arr_search = array(
             "type"      => "in",
@@ -305,11 +394,36 @@ class API_PM {
             $this->obj_api->halt_re($_arr_return);
         }
 
-        $_arr_userRow = $this->user_check("get");
+        $_arr_userRow   = $this->user_check("get");
 
         $_num_perPage   = fn_getSafe(fn_get("per_page"), "int", BG_SITE_PERPAGE);
-        $_str_type      = fn_getSafe(fn_get("pm_type"), "txt", "");
         $_str_pmIds     = fn_getSafe(fn_get("pm_ids"), "txt", "");
+        $_str_type      = fn_getSafe(fn_get("pm_type"), "txt", "");
+        $_str_status    = fn_getSafe(fn_get("pm_status"), "txt", "");
+        $_str_key       = fn_getSafe(fn_get("key"), "txt", "");
+
+        $_arr_sign = array(
+            "act_get"                       => $GLOBALS["act_get"],
+            $this->userRequest["user_by"]   => $this->userRequest["user_str"],
+            "user_access_token"             => $this->userRequest["user_access_token"],
+            "pm_ids"                        => $_str_pmIds,
+            "pm_type"                       => $_str_type,
+            "pm_status"                     => $_str_status,
+            "key"                           => $_str_key,
+        );
+
+        if (!fn_isEmpty(fn_get("per_page"))) {
+            $_arr_sign["per_page"] = $_num_perPage;
+        }
+
+    	//file_put_contents(BG_PATH_ROOT . "debug.txt", json_encode($_arr_sign), FILE_APPEND);
+
+        if (!$this->obj_sign->sign_check(array_merge($this->appRequest, $_arr_sign), $this->appRequest["signature"])) {
+            $_arr_return = array(
+                "alert" => "x050403",
+            );
+            $this->obj_api->halt_re($_arr_return);
+        }
 
         $_arr_pmIds = array();
 
@@ -330,14 +444,14 @@ class API_PM {
 
         $_arr_search = array(
             "type"      => $_str_type,
-            "status"    => fn_getSafe(fn_get("pm_status"), "txt", ""),
-            "key"       => fn_getSafe(fn_get("key"), "txt", ""),
+            "status"    => $_str_status,
+            "key"       => $_str_key,
             "pm_ids"    => $_arr_pmIds,
         );
 
         switch ($_str_type) {
             case "in":
-                $_arr_search["pm_to"] = $_arr_userRow["user_id"];
+                $_arr_search["pm_to"]   = $_arr_userRow["user_id"];
             break;
 
             case "out":
@@ -352,7 +466,18 @@ class API_PM {
         foreach ($_arr_pmRows as $_key=>$_value) {
             $_arr_pmRows[$_key]["fromUser"] = $this->mdl_user->mdl_read_api($_value["pm_from"]);
             $_arr_pmRows[$_key]["toUser"]   = $this->mdl_user->mdl_read_api($_value["pm_to"]);
+
+            if ($_str_type == "out") {
+                $_arr_sendRow = $this->mdl_pm->mdl_read($_value["pm_send_id"]);
+                if ($_arr_sendRow["alert"] != "y110102") {
+                    $_arr_pmRows[$_key]["pm_send_status"] = "revoke";
+                } else {
+                    $_arr_pmRows[$_key]["pm_send_status"] = $_arr_sendRow["pm_status"];
+                }
+            }
         }
+
+        //print_r($_arr_pmRows);
 
         $_arr_return = array(
             "pmRows"    => $_arr_pmRows,
@@ -360,7 +485,7 @@ class API_PM {
         );
 
         $_str_src   = fn_jsonEncode($_arr_return, "encode");
-        $_str_code  = $this->obj_crypt->encrypt($_str_src);
+        $_str_code  = $this->obj_crypt->encrypt($_str_src, $this->appRow["app_key"]);
 
         $_arr_return = array(
             "code"   => $_str_code,
@@ -372,12 +497,13 @@ class API_PM {
 
 
     private function user_check($str_method = "get") {
-        $_arr_userRequest = $this->mdl_user->input_token_api($str_method);
-        if ($_arr_userRequest["alert"] != "ok") {
-            $this->obj_api->halt_re($_arr_userRequest);
+        $this->userRequest = $this->mdl_user->input_token_api($str_method);
+
+        if ($this->userRequest["alert"] != "ok") {
+            $this->obj_api->halt_re($this->userRequest);
         }
 
-        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userRequest["user_str"], $_arr_userRequest["user_by"]);
+        $_arr_userRow = $this->mdl_user->mdl_read($this->userRequest["user_str"], $this->userRequest["user_by"]);
         if ($_arr_userRow["alert"] != "y010102") {
             $this->obj_api->halt_re($_arr_userRow);
         }
@@ -396,7 +522,7 @@ class API_PM {
             $this->obj_api->halt_re($_arr_return);
         }
 
-        if ($_arr_userRequest["user_access_token"] != $_arr_userRow["user_access_token"]) {
+        if ($this->userRequest["user_access_token"] != $_arr_userRow["user_access_token"]) {
             $_arr_return = array(
                 "alert" => "x010230",
             );
@@ -415,7 +541,7 @@ class API_PM {
      * @return void
      */
     private function app_check($str_method = "get") {
-        $this->appRequest = $this->obj_api->app_request($str_method);
+        $this->appRequest = $this->obj_api->app_request($str_method, true);
 
         if ($this->appRequest["alert"] != "ok") {
             $this->obj_api->halt_re($this->appRequest);
@@ -425,15 +551,15 @@ class API_PM {
             "app_id" => $this->appRequest["app_id"]
         );
 
-        $_arr_appRow = $this->mdl_app->mdl_read($this->appRequest["app_id"]);
-        if ($_arr_appRow["alert"] != "y050102") {
+        $this->appRow = $this->mdl_app->mdl_read($this->appRequest["app_id"]);
+        if ($this->appRow["alert"] != "y050102") {
             $_arr_logType = array("app", "read");
-            $this->log_do($_arr_logTarget, "app", $_arr_appRow, $_arr_logType);
-            $this->obj_api->halt_re($_arr_appRow);
+            $this->log_do($_arr_logTarget, "app", $this->appRow, $_arr_logType);
+            $this->obj_api->halt_re($this->appRow);
         }
-        $this->appAllow = $_arr_appRow["app_allow"];
+        $this->appAllow = $this->appRow["app_allow"];
 
-        $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $_arr_appRow);
+        $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $this->appRow);
         if ($_arr_appChk["alert"] != "ok") {
             $_arr_logType = array("app", "check");
             $this->log_do($_arr_logTarget, "app", $_arr_appChk, $_arr_logType);

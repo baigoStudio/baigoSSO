@@ -12,22 +12,35 @@ if (!defined("IN_BAIGO")) {
 
 class CLASS_SIGN {
     //生成签名
-    function sign_make($tm_time, $str_rand, $num_appId, $str_appKey) {
-        $_num_time  = intval($tm_time);
-        $_num_appId = intval($num_appId);
-        $_arr_temp  = array($_num_time, $str_rand, $num_appId, $str_appKey, BG_SITE_SSIN);
-        sort($_arr_temp);
-        $_str_temp  = implode($_arr_temp);
-        $_str_temp  = sha1($_str_temp);
+    function sign_make($arr_params) {
+        unset($arr_params["signature"], $arr_params["alert"]);
 
-        return $_str_temp;
+        $_arr_params = array();
+
+    	foreach ($arr_params as $_key=>$_value) {
+        	if (!fn_isEmpty($_value)) {
+            	$_arr_params[$_key] = $_value;
+        	}
+    	}
+
+        ksort($_arr_params);
+        reset($_arr_params);
+
+    	$_str_signSrc = http_build_query($_arr_params);
+
+    	//如果存在转义字符，那么去掉转义
+    	if (get_magic_quotes_gpc()){
+        	$_str_signSrc = stripslashes($_str_signSrc);
+    	}
+
+    	return md5($_str_signSrc);
     }
 
     //验证签名
-    function sign_check($tm_time, $str_rand, $num_appId, $str_appKey, $str_sign) {
-        $_str_temp = $this->sign_make($tm_time, $str_rand, $num_appId, $str_appKey);
+    function sign_check($arr_params, $str_sign) {
+        $_str_signChk = $this->sign_make($arr_params);
 
-        if ($_str_temp == $str_sign) {
+        if ($_str_signChk == $str_sign) {
             return true;
         } else {
             return false;

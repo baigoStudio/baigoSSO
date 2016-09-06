@@ -4,10 +4,10 @@
 
             <div class="panel-footer">
                 <div class="pull-left">
-                    {if $config.ui == "default"}
+                    {if $smarty.const.BG_DEFAULT_UI == "default"}
                         <a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME}</a>
                     {else}
-                        {$config.ui} SSO
+                        {$smarty.const.BG_DEFAULT_UI} SSO
                     {/if}
                 </div>
                 <div class="pull-right">

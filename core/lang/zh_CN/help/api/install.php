@@ -16,7 +16,7 @@ return "<div class=\"alert alert-warning\">
     <p>本接口用于设置数据库，本接口必须在第一步调用。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -25,7 +25,7 @@ return "<div class=\"alert alert-warning\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -33,7 +33,7 @@ return "<div class=\"alert alert-warning\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,43 +45,43 @@ return "<div class=\"alert alert-warning\">
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_host</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>数据库服务器</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_port</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>服务器端口</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_name</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>数据库名称</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_user</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>数据库用户名</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_pass</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>数据库密码</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_charset</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>数据库字符编码</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">db_table</td>
-                        <td class=\"text-nowrap\">str</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>数据表前缀</td>
                     </tr>
@@ -100,7 +100,7 @@ return "<div class=\"alert alert-warning\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -151,7 +151,7 @@ return "<div class=\"alert alert-warning\">
     <p>本接口用于基本设置。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -160,7 +160,7 @@ return "<div class=\"alert alert-warning\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -168,7 +168,7 @@ return "<div class=\"alert alert-warning\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -224,7 +224,7 @@ return "<div class=\"alert alert-warning\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -275,7 +275,7 @@ return "<div class=\"alert alert-warning\">
     <p>本接口用于创建数据表。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -284,7 +284,7 @@ return "<div class=\"alert alert-warning\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -292,7 +292,7 @@ return "<div class=\"alert alert-warning\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -317,7 +317,7 @@ return "<div class=\"alert alert-warning\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -368,7 +368,7 @@ return "<div class=\"alert alert-warning\">
     <p>本接口用于创建管理员。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -377,7 +377,7 @@ return "<div class=\"alert alert-warning\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -385,7 +385,7 @@ return "<div class=\"alert alert-warning\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -422,7 +422,7 @@ return "<div class=\"alert alert-warning\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -479,7 +479,7 @@ return "<div class=\"alert alert-warning\">
     <p>本接口用于通知系统安装已完成，本接口必须在最后一步调用，本接口调用成功后，安装接口将全部失效。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=install</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -488,7 +488,7 @@ return "<div class=\"alert alert-warning\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -496,7 +496,7 @@ return "<div class=\"alert alert-warning\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -513,7 +513,7 @@ return "<div class=\"alert alert-warning\">
                         <td>应用名称。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_url_notice</td>
+                        <td class=\"text-nowrap\">app_url_notify</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>通知 URL。</td>
@@ -539,7 +539,7 @@ return "<div class=\"alert alert-warning\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>

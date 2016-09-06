@@ -37,18 +37,18 @@
 
     <footer class="bg-success page_foot">
         <div class="pull-left foot_logo">
-            {if $config.ui == "default"}
+            {if $smarty.const.BG_DEFAULT_UI == "default"}
                 <a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_POWERED} {$smarty.const.PRD_SSO_NAME} {$smarty.const.PRD_SSO_VER}</a>
             {else}
-                <a href="#">{$config.ui} SSO</a>
+                <a href="javascript:void(0);">{$smarty.const.BG_DEFAULT_UI} SSO</a>
             {/if}
         </div>
         <div class="pull-right foot_power">
             {$smarty.const.PRD_SSO_POWERED}
-            {if $config.ui == "default"}
+            {if $smarty.const.BG_DEFAULT_UI == "default"}
                 <a href="{$smarty.const.PRD_SSO_URL}" target="_blank">{$smarty.const.PRD_SSO_NAME}</a>
             {else}
-                {$config.ui} SSO
+                {$smarty.const.BG_DEFAULT_UI} SSO
             {/if}
             {$smarty.const.PRD_SSO_VER}
         </div>

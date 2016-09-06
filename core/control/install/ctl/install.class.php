@@ -19,7 +19,7 @@ class CONTROL_INSTALL {
         $this->obj_base     = $GLOBALS["obj_base"];
         $this->config       = $this->obj_base->config;
         $_arr_cfg["admin"]  = true;
-        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "install/" . $this->config["ui"], $_arr_cfg);
+        $this->obj_tpl      = new CLASS_TPL(BG_PATH_TPLSYS . "install/" . BG_DEFAULT_UI, $_arr_cfg);
         $this->obj_dir      = new CLASS_DIR();
         $this->obj_dir->mk_dir(BG_PATH_CACHE . "ssin");
         $this->install_init();

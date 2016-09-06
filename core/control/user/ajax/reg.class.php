@@ -61,15 +61,10 @@ class AJAX_REG {
         }
 
         $_arr_returnRow = $this->mdl_user->mdl_mail($_arr_userRow["user_id"], $_arr_verifyRow["verify_mail"]);
-        if ($_arr_returnRow["alert"] == "y010103") {
-            $_str_alert = "y010405";
-        } else {
-            $_str_alert = "x010405";
-        }
 
         $this->mdl_verify->mdl_disable();
 
-        $this->obj_ajax->halt_alert($_str_alert);
+        $this->obj_ajax->halt_alert($_arr_returnRow["alert"]);
     }
 
 

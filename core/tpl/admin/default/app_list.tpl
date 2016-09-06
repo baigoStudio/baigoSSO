@@ -104,7 +104,7 @@
                                                     <a href="{$smarty.const.BG_URL_ADMIN}ctl.php?mod=app&act_get=belong&app_id={$value.app_id}">{$lang.href.belong}</a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:void(0);" class="go_notice" id="{$value.app_id}">{$lang.href.noticeTest}</a>
+                                                    <a href="javascript:void(0);" class="go_notify" id="{$value.app_id}">{$lang.href.notifyTest}</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -155,9 +155,9 @@
         {include "{$smarty.const.BG_PATH_TPLSYS}admin/default/include/page.tpl" cfg=$cfg}
     </div>
 
-    <form id="app_notice">
-        <input type="hidden" name="act_post" value="notice">
-        <input type="hidden" name="app_id_notice" id="app_id_notice" value="">
+    <form id="app_notify">
+        <input type="hidden" name="act_post" value="notify">
+        <input type="hidden" name="app_id_notify" id="app_id_notify" value="">
     </form>
 
 {include "{$smarty.const.BG_PATH_TPLSYS}admin/default/include/admin_foot.tpl" cfg=$cfg}
@@ -187,7 +187,7 @@
         btn_url: "{$cfg.str_url}"
     };
 
-    var opts_submit_notice = {
+    var opts_submit_notify = {
         ajax_url: "{$smarty.const.BG_URL_ADMIN}ajax.php?mod=app",
         text_submitting: "{$lang.label.submitting}",
         btn_text: "{$lang.btn.ok}",
@@ -204,11 +204,11 @@
             }
         });
 
-        var obj_notice = $("#app_notice").baigoSubmit(opts_submit_notice);
-        $(".go_notice").click(function(){
+        var obj_notify = $("#app_notify").baigoSubmit(opts_submit_notify);
+        $(".go_notify").click(function(){
             var __id = $(this).attr("id");
-            $("#app_id_notice").val(__id);
-            obj_notice.formSubmit();
+            $("#app_id_notify").val(__id);
+            obj_notify.formSubmit();
         });
         $("#app_list").baigoCheckall();
     });

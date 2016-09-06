@@ -30,13 +30,13 @@ return array(
         "list"      => "无列出短信权限",
         "read"      => "无读取短信权限",
         "status"    => "无更改状态权限",
-        "rev"       => "无撤回权限",
+        "revoke"    => "无撤回权限",
         "check"     => "无检查新消息权限",
     ),
 
     "app" => array(
-        "notice"      => "通知",
-        "noticeTest"  => "通知测试失败",
+        "notify"      => "通知",
+        "notifyTest"  => "通知测试失败",
         "read"        => "应用不存在",
         "check"       => "验证应用失败",
         "add"         => "创建应用",

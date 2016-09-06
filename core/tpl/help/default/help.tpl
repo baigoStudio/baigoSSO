@@ -12,7 +12,7 @@
     <!--bootstrap-->
     <link href="{$smarty.const.BG_URL_STATIC}js/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="{$smarty.const.BG_URL_STATIC}js/prism/prism.css" type="text/css" rel="stylesheet">
-    <link href="{$smarty.const.BG_URL_STATIC}help/{$config.ui}/css/help.css" type="text/css" rel="stylesheet">
+    <link href="{$smarty.const.BG_URL_STATIC}help/{$smarty.const.BG_DEFAULT_UI}/css/help.css" type="text/css" rel="stylesheet">
 </head>
 
 <body>
@@ -27,7 +27,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="./">
-                    <img alt="baigo SSO" src="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/image/admin_logo.png">
+                    <img alt="baigo SSO" src="{$smarty.const.BG_URL_STATIC}admin/{$smarty.const.BG_DEFAULT_UI}/image/admin_logo.png">
                 </a>
             </div>
             <nav class="collapse navbar-collapse bs-navbar-collapse">
@@ -69,8 +69,8 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="text-nowrap">代码</th>
-                                        <th>具体描述</th>
+                                        <th class="text-nowrap">{$lang.label.alert}</th>
+                                        <th>{$lang.label.description}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,23 +105,31 @@
 
     <footer class="container">
         <hr>
-        <ul class="list-inline">
-            {if $config.ui == "default"}
-                <li><a href="http://www.baigo.net/" target="_blank">baigo Studio</a></li>
-                <li><a href="http://www.baigo.net/cms/" target="_blank">baigo CMS</a></li>
-                <li><a href="http://www.baigo.net/sso/" target="_blank">baigo SSO</a></li>
-                <li><a href="http://www.baigo.net/ads/" target="_blank">baigo ADS</a></li>
-            {else}
-                <li>{$config.ui} SSO</li>
-            {/if}
-        </ul>
+
+        <div class="pull-left">
+            <ul class="list-inline">
+                {if $smarty.const.BG_DEFAULT_UI == "default"}
+                    <li><a href="http://www.baigo.net/" target="_blank">baigo Studio</a></li>
+                    <li><a href="http://www.baigo.net/cms/" target="_blank">baigo CMS</a></li>
+                    <li><a href="http://www.baigo.net/sso/" target="_blank">baigo SSO</a></li>
+                    <li><a href="http://www.baigo.net/ads/" target="_blank">baigo ADS</a></li>
+                {else}
+                    <li>{$smarty.const.BG_DEFAULT_UI} SSO</li>
+                {/if}
+            </ul>
+        </div>
+        <div class="pull-right">
+            {$smarty.const.PRD_SSO_POWERED} {if $smarty.const.BG_DEFAULT_UI == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$smarty.const.BG_DEFAULT_UI} SSO{/if} {$smarty.const.PRD_SSO_VER}
+        </div>
+        <div class="clearfix"></div>
+        <p>&nbsp;</p>
     </footer>
 
     <!--bootstrap-->
     <script src="{$smarty.const.BG_URL_STATIC}js/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="{$smarty.const.BG_URL_STATIC}js/prism/prism.min.js" type="text/javascript"></script>
 
-    <!-- {$smarty.const.PRD_SSO_POWERED} {if $config.ui == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$config.ui} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
+    <!-- {$smarty.const.PRD_SSO_POWERED} {if $smarty.const.BG_DEFAULT_UI == "default"}{$smarty.const.PRD_SSO_NAME}{else}{$smarty.const.BG_DEFAULT_UI} SSO{/if} {$smarty.const.PRD_SSO_VER} -->
 
 </body>
 </html>

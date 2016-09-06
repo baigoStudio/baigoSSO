@@ -31,7 +31,7 @@ switch ($GLOBALS["act_post"]) {
         if ($arr_logonRow["alert"] != "y020201") {
             header("Location: " . BG_URL_ADMIN . "ctl.php?mod=logon&act_get=logon&forward=" . $arr_logonRow["forward"] . "&alert=" . $arr_logonRow["alert"]);
         } else {
-            $_str_forward = fn_htmlcode(base64_decode($arr_logonRow["forward"]), "decode");
+            $_str_forward = $arr_logonRow["forward"];
             if (stristr($_str_forward, "logon")) {
                 $_str_forward = BG_URL_ADMIN . "ctl.php";
             }
@@ -44,7 +44,7 @@ switch ($GLOBALS["act_post"]) {
         switch ($GLOBALS["act_get"]) {
             case "logout":
                 $arr_logonRow = $ctl_logon->ctl_logout(); //登出
-                header("Location: " . base64_decode($arr_logonRow["forward"]));
+                header("Location: " . $arr_logonRow["forward"]);
                 exit;
             break;
 

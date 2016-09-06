@@ -37,6 +37,60 @@ return "<ul class=\"list-inline\">
 
     <p>&nbsp;</p>
 
+    <h3>公共请求参数</h3>
+    <p>公共请求参数是指向所有接口发起请求时都必须传入的参数。</p>
+    <div class=\"panel panel-default\">
+        <div class=\"panel-heading\">公共请求参数</div>
+        <div class=\"table-responsive\">
+            <table class=\"table table-bordered\">
+                <thead>
+                    <tr>
+                        <th class=\"text-nowrap\">名称</th>
+                        <th class=\"text-nowrap\">类型</th>
+                        <th class=\"text-nowrap\">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=\"text-nowrap\">app_id</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">app_key</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">time</td>
+                        <td class=\"text-nowrap\">int</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>Unix 时间戳，baigo SSO 允许 +-30 分钟以内的时差，为了防止时区设置不同导致的时差，请开发者将应用的时区设置为为与 baigo SSO 一致，关于时区设置，请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#base\">系统设置</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">signature</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>签名，将请求参数中的所有参数（包括公共请求参数，但不含签名）按照一定规律组合以后生成的，详情请查看 <a href=\"{BG_URL_HELP}ctl.php?mod=api&act_get=signature#verify\">签名接口</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <p>&nbsp;</p>
+
     <a name=\"reg\"></a>
     <h3>用户注册</h3>
 
@@ -44,7 +98,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于新用户的注册。用户名、密码、邮箱、昵称为一个用户在 baigo SSO 的基本数据，提交后 baigo SSO 会按照 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a> 检测用户名和邮箱的格式是否正确合法。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -53,7 +107,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -61,7 +115,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,18 +124,6 @@ return "<ul class=\"list-inline\">
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>接口调用动作，值只能为 reg。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
@@ -109,15 +151,15 @@ return "<ul class=\"list-inline\">
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_contact</td>
-                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">false</td>
-                        <td>联系方式，详情查看 <a href=\"#contact\">联系方式格式</a>。</td>
+                        <td>联系方式，详情查看 <a href=\"#contact_request\">联系方式请求格式</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_extend</td>
-                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">false</td>
-                        <td>扩展字段，详情查看 <a href=\"#extend\">扩展字段格式</a>。</td>
+                        <td>扩展字段，详情查看 <a href=\"#extend_request\">扩展字段请求格式</a>。</td>
                     </tr>
                 </tbody>
             </table>
@@ -138,7 +180,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,7 +220,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -243,7 +285,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于用户注册时重发激活邮件</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -252,7 +294,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -260,7 +302,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -271,35 +313,21 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 mailbox。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                 </tbody>
             </table>
@@ -320,7 +348,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -360,7 +388,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -422,7 +450,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于用户的登录验证。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -431,7 +459,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -439,7 +467,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -450,35 +478,21 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 login。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_pass</td>
@@ -505,7 +519,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -545,7 +559,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -658,7 +672,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于读取已注册用户的信息。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>GET</p>
@@ -667,7 +681,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -675,7 +689,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -686,35 +700,21 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 read。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                 </tbody>
             </table>
@@ -735,7 +735,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -775,7 +775,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -801,13 +801,13 @@ return "<ul class=\"list-inline\">
                         <td class=\"text-nowrap\">user_contact</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">array</td>
-                        <td>联系方式，详情查看 <a href=\"#contact\">联系方式格式</a>。</td>
+                        <td>联系方式，详情查看 <a href=\"#contact_return\">联系方式返回格式</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_extend</td>
                         <td class=\"text-nowrap\">true</td>
                         <td class=\"text-nowrap\">array</td>
-                        <td>扩展字段，详情查看 <a href=\"#extend\">扩展字段格式</a>。</td>
+                        <td>扩展字段，详情查看 <a href=\"#extend_return\">扩展字段返回格式</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_nick</td>
@@ -900,7 +900,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于编辑已注册用户的信息。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -909,7 +909,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -917,7 +917,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -928,47 +928,33 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 edit。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_contact</td>
-                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">false</td>
-                        <td>联系方式，仅在需要修改时传递该参数，详情查看 <a href=\"#contact\">联系方式格式</a>。</td>
+                        <td>联系方式，仅在需要修改时传递该参数，详情查看 <a href=\"#contact_request\">联系方式请求格式</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_extend</td>
-                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">false</td>
-                        <td>扩展字段，仅在需要修改时传递该参数，详情查看 <a href=\"#extend\">扩展字段格式</a>。</td>
+                        <td>扩展字段，仅在需要修改时传递该参数，详情查看 <a href=\"#extend_request\">扩展字段请求格式</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_check_pass</td>
@@ -1022,7 +1008,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1062,7 +1048,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1141,7 +1127,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于修改已注册用户的邮箱，根据系统的设置，可能需要通过邮件进行验证，详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -1150,7 +1136,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -1158,7 +1144,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1169,35 +1155,21 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 mailbox。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_check_pass</td>
@@ -1239,7 +1211,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1279,7 +1251,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1335,7 +1307,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1390,7 +1362,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于已注册用户找回密码，需要通过邮件进行验证。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -1399,7 +1371,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -1407,7 +1379,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1418,35 +1390,21 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 forgot。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                 </tbody>
             </table>
@@ -1467,7 +1425,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1507,7 +1465,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1569,7 +1527,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于刷新用户的访问口令。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -1578,7 +1536,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -1586,7 +1544,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1597,35 +1555,27 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 refresh。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">user_id</td>
                         <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\"> </td>
+                        <td rowspan=\"3\">true</td>
                         <td rowspan=\"3\">
-                            <p>user_id、user_name、user_mail 三选一，优先级按顺序排列</p>
+                            <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
                             <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=opt#reg\">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_name</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
                         <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\"> </td>
+                    </tr>
+                    <tr>
+                        <td class=\"text-nowrap\">user_refresh_token</td>
+                        <td class=\"text-nowrap\">string</td>
+                        <td class=\"text-nowrap\">true</td>
+                        <td>刷新口令。</td>
                     </tr>
                 </tbody>
             </table>
@@ -1646,7 +1596,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1686,7 +1636,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1742,7 +1692,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于删除已注册用户。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>POST</p>
@@ -1751,7 +1701,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -1759,7 +1709,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1770,12 +1720,6 @@ return "<ul class=\"list-inline\">
                         <td>接口调用动作，值只能为 del。</td>
                     </tr>
                     <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
                         <td class=\"text-nowrap\">app_key</td>
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
@@ -1783,9 +1727,9 @@ return "<ul class=\"list-inline\">
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_ids</td>
-                        <td class=\"text-nowrap\">array</td>
+                        <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
-                        <td>准备删除的用户 ID 数组</td>
+                        <td>准备删除的用户 ID，多个 ID 请用 <kbd>|</kbd> 分隔。</td>
                     </tr>
                 </tbody>
             </table>
@@ -1806,7 +1750,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1846,7 +1790,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">Base64</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1887,7 +1831,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于检查用户名是否可以注册。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>GET</p>
@@ -1896,7 +1840,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -1904,7 +1848,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1913,12 +1857,6 @@ return "<ul class=\"list-inline\">
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>接口调用动作，值只能为 chkname。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">app_key</td>
@@ -1947,7 +1885,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1997,7 +1935,7 @@ return "<ul class=\"list-inline\">
     <p>本接口用于检查邮箱是否可以注册。</p>
 
     <p class=\"text-success\">URL</p>
-    <p><span class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</span></p>
+    <p class=\"text-primary\">http://www.domain.com/api/api.php?mod=user</p>
 
     <p class=\"text-success\">HTTP 请求方式</p>
     <p>GET</p>
@@ -2006,7 +1944,7 @@ return "<ul class=\"list-inline\">
     <p>JSON</p>
 
     <div class=\"panel panel-default\">
-        <div class=\"panel-heading\">接口参数</div>
+        <div class=\"panel-heading\">请求参数</div>
         <div class=\"table-responsive\">
             <table class=\"table table-bordered\">
                 <thead>
@@ -2014,7 +1952,7 @@ return "<ul class=\"list-inline\">
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
                         <th class=\"text-nowrap\">必须</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2023,18 +1961,6 @@ return "<ul class=\"list-inline\">
                         <td class=\"text-nowrap\">string</td>
                         <td class=\"text-nowrap\">true</td>
                         <td>接口调用动作，值只能为 chkmail。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_id</td>
-                        <td class=\"text-nowrap\">int</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class=\"text-nowrap\">app_key</td>
-                        <td class=\"text-nowrap\">string</td>
-                        <td class=\"text-nowrap\">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href=\"{BG_URL_HELP}ctl.php?mod=admin&act_get=app#show\">查看应用</a>。</td>
                     </tr>
                     <tr>
                         <td class=\"text-nowrap\">user_mail</td>
@@ -2063,7 +1989,7 @@ return "<ul class=\"list-inline\">
                     <tr>
                         <th class=\"text-nowrap\">名称</th>
                         <th class=\"text-nowrap\">类型</th>
-                        <th>具体描述</th>
+                        <th>描述</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -2107,8 +2033,59 @@ return "<ul class=\"list-inline\">
 
     <p>&nbsp;</p>
 
-    <a name=\"contact\"></a>
-    <h3>联系方式格式</h3>
+    <a name=\"contact_request\"></a>
+    <h3>联系方式请求格式</h3>
+    <p>联系方式请求格式必须为 json 对象，格式如下，此处只是参数展示，未进行字符串转义，实际情况下请转义。</p>
+<pre><code class=\"language-javascript\">{
+    &quot;tel&quot; : { //可自定义
+        &quot;key&quot; : &quot;电话&quot;,
+        &quot;value&quot; : &quot;0574-88888888&quot;
+    },
+    &quot;addr&quot; : {
+        &quot;key&quot; : &quot;地址&quot;,
+        &quot;value&quot; : &quot;浙江省宁波市&quot;
+    }
+}</code></pre>
+    </p><p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+
+    <p>&nbsp;</p>
+
+    <a name=\"extend_request\"></a>
+    <h3>扩展字段请求格式</h3>
+    <p>扩展字段请求格式必须为 json 对象，格式如下，此处只是参数展示，未进行字符串转义，实际情况下请转义。</p>
+<pre><code class=\"language-javascript\">{
+    &quot;sex&quot; : { //可自定义
+        &quot;key&quot; : &quot;性别&quot;,
+        &quot;value&quot; : &quot;女&quot;
+    ),
+    &quot;age&quot; : {
+        &quot;key&quot; : &quot;年龄&quot;,
+        &quot;value&quot; : &quot;28&quot;
+    }
+}</code></pre>
+    </p>
+
+
+    <p>&nbsp;</p>
+    <div class=\"text-right\">
+        <a href=\"#top\">
+            <span class=\"glyphicon glyphicon-chevron-up\"></span>
+            top
+        </a>
+    </div>
+    <hr>
+
+    <p>&nbsp;</p>
+
+    <a name=\"contact_return\"></a>
+    <h3>联系方式返回格式</h3>
 <pre><code class=\"language-php\">array(
     &quot;tel&quot; =&gt; array( //可自定义
         &quot;key&quot;     =&gt; &quot;电话&quot;,
@@ -2131,8 +2108,8 @@ return "<ul class=\"list-inline\">
 
     <p>&nbsp;</p>
 
-    <a name=\"extend\"></a>
-    <h3>扩展字段格式</h3>
+    <a name=\"extend_return\"></a>
+    <h3>扩展字段返回格式</h3>
 <pre><code class=\"language-php\">array(
     &quot;sex&quot; =&gt; array( //可自定义
         &quot;key&quot;     =&gt; &quot;性别&quot;,

@@ -29,7 +29,7 @@
         <link href="{$smarty.const.BG_URL_STATIC}js/datetimepicker/jquery.datetimepicker.css" type="text/css" rel="stylesheet">
     {/if}
 
-    <link href="{$smarty.const.BG_URL_STATIC}admin/{$config.ui}/css/admin_common.css" type="text/css" rel="stylesheet">
+    <link href="{$smarty.const.BG_URL_STATIC}admin/{$smarty.const.BG_DEFAULT_UI}/css/admin_common.css" type="text/css" rel="stylesheet">
 
 </head>
 <body>

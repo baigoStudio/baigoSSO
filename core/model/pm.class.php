@@ -256,26 +256,35 @@ class MODEL_PM {
      * @access public
      * @return void
      */
-    function mdl_del($num_userId = 0, $is_rev = false) {
-        $_str_pmIds      = implode(",", $this->pmIds["pm_ids"]);
+    function mdl_del($num_userId = 0, $is_revoke = false) {
+        $_str_pmIds     = implode(",", $this->pmIds["pm_ids"]);
         $_str_sqlWhere  = "pm_id IN (" . $_str_pmIds . ")";
 
         if ($num_userId > 0) {
-            if ($is_rev) {
+            if ($is_revoke) {
                 $_str_sqlWhere .= " AND pm_from=" . $num_userId . " AND pm_type='in'";
             } else {
                 $_str_sqlWhere .= " AND ((pm_from=" . $num_userId . " AND pm_type='out') OR (pm_to=" . $num_userId . " AND pm_type='in'))";
             }
         }
 
+        //print_r($_str_sqlWhere);
 
         $_num_mysql = $this->obj_db->delete(BG_DB_TABLE . "pm", $_str_sqlWhere); //删除数据
 
         //如车影响行数小于0则返回错误
         if ($_num_mysql > 0) {
-            $_str_alert = "y110104"; //成功
+            if ($is_revoke) {
+                $_str_alert = "y110109"; //撤回
+            } else {
+                $_str_alert = "y110104"; //成功
+            }
         } else {
-            $_str_alert = "x110104"; //失败
+            if ($is_revoke) {
+                $_str_alert = "x110109"; //撤回
+            } else {
+                $_str_alert = "x110104"; //失败
+            }
         }
 
         return array(
@@ -442,7 +451,7 @@ class MODEL_PM {
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_begin_time"] = strtotime($_arr_pmBeginTime["str"]);
+                        $this->pmSubmit["pm_to_begin_time"] = fn_strtotime($_arr_pmBeginTime["str"]);
                     break;
                 }
 
@@ -461,7 +470,7 @@ class MODEL_PM {
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_end_time"] = strtotime($_arr_pmEndTime["str"]);
+                        $this->pmSubmit["pm_to_end_time"] = fn_strtotime($_arr_pmEndTime["str"]);
                     break;
                 }
             break;
@@ -482,7 +491,7 @@ class MODEL_PM {
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_begin_login"] = strtotime($_arr_pmBeginLogin["str"]);
+                        $this->pmSubmit["pm_to_begin_login"] = fn_strtotime($_arr_pmBeginLogin["str"]);
                     break;
                 }
 
@@ -501,7 +510,7 @@ class MODEL_PM {
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_end_login"] = strtotime($_arr_pmEndLogin["str"]);
+                        $this->pmSubmit["pm_to_end_login"] = fn_strtotime($_arr_pmEndLogin["str"]);
                     break;
                 }
             break;
@@ -607,12 +616,49 @@ class MODEL_PM {
 
         $this->pmIds = array(
             "alert"     => $_str_alert,
-            "pm_ids"    => $_arr_pmIds
+            "pm_ids"    => array_unique($_arr_pmIds),
         );
 
         return $this->pmIds;
     }
 
+
+    function input_ids_api() {
+        $_str_pmIds = fn_getSafe(fn_post("pm_ids"), "txt", "");
+
+        if (!$_str_pmIds) {
+            return array(
+                "alert" => "x110211",
+            );
+        }
+
+        $_arr_pmIds = array();
+
+        if ($_str_pmIds) {
+            if (stristr($_str_pmIds, "|")) {
+                $_arr_pmIds = explode("|", $_str_pmIds);
+            } else {
+                $_arr_pmIds = array($_str_pmIds);
+            }
+        }
+
+        if ($_arr_pmIds) {
+            foreach ($_arr_pmIds as $_key=>$_value) {
+                $_arr_pmIds[$_key] = fn_getSafe($_value, "int", 0);
+            }
+            $_str_alert = "ok";
+        } else {
+            $_str_alert = "x110211";
+        }
+
+        $this->pmIds = array(
+            "alert"     => "ok",
+            "str_pmIds" => $_str_pmIds,
+            "pm_ids"    => array_unique($_arr_pmIds),
+        );
+
+        return $this->pmIds;
+    }
 
     /** 列出及统计 SQL 处理
      * sql_process function.

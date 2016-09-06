@@ -60,8 +60,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label static_label">{$lang.label.appUrlNotice}</label>
-                            <p class="form-control-static">{$tplData.appRow.app_url_notice}</p>
+                            <label class="control-label static_label">{$lang.label.appUrlNotify}</label>
+                            <p class="form-control-static">{$tplData.appRow.app_url_notify}</p>
                         </div>
 
                         <div class="form-group">

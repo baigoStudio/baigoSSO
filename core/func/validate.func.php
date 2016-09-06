@@ -26,7 +26,6 @@ function validateStr($str, $min, $max, $type = "str", $format = "text") {
     switch ($type) {
         case "str":
             $_status = $_obj_v->is_text($str, $min, $max, $format); //验证字符串
-            $str     = fn_safe($str);
         break;
         case "digit":
             $_status = $_obj_v->is_digit($str, $min, $max, $format); //验证字符串
@@ -37,7 +36,7 @@ function validateStr($str, $min, $max, $type = "str", $format = "text") {
     }
 
     return array(
-        "str"     => $str,
+        "str"     => fn_safe($str),
         "status"  => $_status
     );
 }

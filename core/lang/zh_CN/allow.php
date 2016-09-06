@@ -32,7 +32,7 @@ return array(
             "list"   => "列出",
             "read"   => "读取",
             "status" => "更改状态",
-            "rev"    => "撤回",
+            "revoke" => "撤回",
             "del"    => "删除",
             "check"  => "检查新消息",
         ),

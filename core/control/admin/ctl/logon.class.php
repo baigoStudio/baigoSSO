@@ -67,24 +67,8 @@ class CONTROL_LOGON {
 
         return array(
             "admin_id"  => $_arr_adminLogin["admin_id"],
-            "forward"   => $_arr_adminLogin["forward"],
+            "forward"   => fn_forward($_arr_adminLogin["forward"], "decode"),
             "alert"     => "y020201",
-        );
-    }
-
-    /*============登出============
-    无返回
-    */
-    function ctl_logout() {
-        $_str_forward  = fn_getSafe(fn_get("forward"), "txt", "");
-        if (!$_str_forward) {
-            $_str_forward = base64_encode(BG_URL_ADMIN . "ctl.php");
-        }
-
-        fn_ssin_end();
-
-        return array(
-            "forward" => $_str_forward,
         );
     }
 
@@ -92,7 +76,7 @@ class CONTROL_LOGON {
     无返回
     */
     function ctl_logon() {
-        $this->obj_tpl    = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . $this->config["ui"]);
+        $this->obj_tpl    = new CLASS_TPL(BG_PATH_TPLSYS . "admin/" . BG_DEFAULT_UI);
         $_str_forward     = fn_getSafe(fn_get("forward"), "txt", "");
         $_str_alert       = fn_getSafe(fn_get("alert"), "txt", "");
 
@@ -102,5 +86,22 @@ class CONTROL_LOGON {
         );
 
         $this->obj_tpl->tplDisplay("logon.tpl", $_arr_tplData);
+    }
+
+
+    /*============登出============
+    无返回
+    */
+    function ctl_logout() {
+        $_str_forward  = fn_getSafe(fn_get("forward"), "txt", "");
+        if (!$_str_forward) {
+            $_str_forward = fn_forward(BG_URL_ADMIN . "ctl.php");
+        }
+
+        fn_ssin_end();
+
+        return array(
+            "forward" => fn_forward($_str_forward),
+        );
     }
 }

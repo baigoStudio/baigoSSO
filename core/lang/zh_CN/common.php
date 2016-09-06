@@ -49,7 +49,6 @@ return array(
         "back"            => "返回",
         "add"             => "创建",
         "edit"            => "编辑",
-        "order"           => "优先级",
         "help"            => "帮助",
         "opt"             => "系统设置",
         "import"          => "批量导入",
@@ -61,7 +60,7 @@ return array(
         "infoModi"        => "个人信息",
         "passModi"        => "修改密码",
         "show"            => "查看",
-        "noticeTest"      => "通知接口测试",
+        "notifyTest"      => "通知接口测试",
 
         "pageFirst"       => "首页",
         "pagePrevList"    => "上十页",
@@ -114,7 +113,7 @@ return array(
         "latestVer"         => "最新版本",
         "announcement"      => "公告",
         "downloadUrl"       => "下载地址",
-        "downloadUrl"       => "下载地址",
+        "description"       => "描述",
 
         "dbHost"            => "数据库服务器",
         "dbPort"            => "服务器端口",
@@ -154,7 +153,7 @@ return array(
         "appId"             => "APP ID",
         "appKey"            => "APP KEY",
         "appKeyNote"        => "如果 APP KEY 泄露，可以通过重置更换，原 APP KEY 将作废。",
-        "appUrlNotice"      => "通知接口 URL",
+        "appUrlNotify"      => "通知接口 URL",
         "appUrlSync"        => "同步接口 URL",
         "apiUrl"            => "API 接口 URL",
 

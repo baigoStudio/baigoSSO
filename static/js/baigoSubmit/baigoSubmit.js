@@ -1,5 +1,5 @@
 /*
-v1.1.4 jQuery baigoSubmit plugin 表单全选插件
+v1.1.5 jQuery baigoSubmit plugin 表单全选插件
 (c) 2013 baigo studio - http://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -108,7 +108,7 @@ License: http://www.opensource.org/licenses/mit-license.php
             var _alert_pre  = _alert.substr(0, 1);
             var _btn_href   = opts.btn_url;
             var _class      = opts.class_submitting;
-            var _icon       = "option-horizontal";
+            var _icon       = "refresh";
 
             switch (_alert_pre) {
                 case "x":
