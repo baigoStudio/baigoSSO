@@ -3,10 +3,10 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-$base = str_ireplace("\\", "/", str_ireplace("//", "/", $_SERVER["DOCUMENT_ROOT"] . "/" . basename(dirname($_SERVER["PHP_SELF"])) . "/"));
+$base = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 
-include_once($base . "config/init.class.php");
+require($base . "config/config.class.php");
 
-$obj_init = new CLASS_INIT();
+$obj_config = new CLASS_CONFIG();
 
-$obj_init->config_gen();
+$obj_config->config_gen();

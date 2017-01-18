@@ -11,8 +11,9 @@ if (!defined("IN_BAIGO")) {
 
 /*-------------验证模型-------------*/
 class MODEL_VERIFY {
-    private $obj_db;
-    public $verifyStatus = array();
+
+    public $verifyStatus    = array();
+    public $verifyTypes     = array();
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -31,6 +32,11 @@ class MODEL_VERIFY {
         }
         $_str_status = implode("','", $_arr_status);
 
+        foreach ($this->verifyTypes as $_key=>$_value) {
+            $_arr_types[] = $_key;
+        }
+        $_str_types = implode("','", $_arr_types);
+
         $_arr_verifyCreate = array(
             "verify_id"             => "int NOT NULL AUTO_INCREMENT COMMENT 'ID'",
             "verify_user_id"        => "int NOT NULL COMMENT '用户 ID'",
@@ -39,6 +45,7 @@ class MODEL_VERIFY {
             "verify_rand"           => "char(6) NOT NULL COMMENT '随机串'",
             "verify_mail"           => "varchar(300) NOT NULL COMMENT '待验证邮箱'",
             "verify_status"         => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
+            "verify_type"           => "enum('" . $_str_types . "') NOT NULL COMMENT '类型'",
             "verify_time"           => "int NOT NULL COMMENT '发起时间'",
             "verify_time_refresh"   => "int NOT NULL COMMENT '更新时间'",
             "verify_time_disable"   => "int NOT NULL COMMENT '使用时间'",
@@ -47,13 +54,13 @@ class MODEL_VERIFY {
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "verify", $_arr_verifyCreate, "verify_id", "验证");
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y120105"; //更新成功
+            $_str_rcode = "y120105"; //更新成功
         } else {
-            $_str_alert = "x120105"; //更新成功
+            $_str_rcode = "x120105"; //更新成功
         }
 
         return array(
-            "alert" => $_str_alert, //更新成功
+            "rcode" => $_str_rcode, //更新成功
         );
     }
 
@@ -67,11 +74,42 @@ class MODEL_VERIFY {
     function mdl_column() {
         $_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "verify");
 
-        foreach ($_arr_colRows as $_key=>$_value) {
-            $_arr_col[] = $_value["Field"];
+        $_arr_col = array();
+
+        if (!fn_isEmpty($_arr_colRows)) {
+            foreach ($_arr_colRows as $_key=>$_value) {
+                $_arr_col[] = $_value["Field"];
+            }
         }
 
         return $_arr_col;
+    }
+
+
+    function mdl_alter_table() {
+        foreach ($this->verifyTypes as $_key=>$_value) {
+            $_arr_types[] = $_key;
+        }
+        $_str_types = implode("','", $_arr_types);
+
+        $_arr_col     = $this->mdl_column();
+        $_arr_alter   = array();
+
+        if (in_array("verify_type", $_arr_col)) {
+            $_arr_alter["verify_type"] = array("CHANGE", "enum('" . $_str_types . "') NOT NULL COMMENT '状态'", "verify_type");
+        } else {
+            $_arr_alter["verify_type"] = array("ADD", "enum('" . $_str_types . "') NOT NULL COMMENT '状态'");
+        }
+
+        $_str_rcode = "y120111";
+
+        if (!fn_isEmpty($_arr_alter)) {
+            $_reselt = $this->obj_db->alter_table(BG_DB_TABLE . "verify", $_arr_alter);
+        }
+
+        return array(
+            "rcode" => $_str_rcode,
+        );
     }
 
 
@@ -81,16 +119,17 @@ class MODEL_VERIFY {
      * @access public
      * @return void
      */
-    function mdl_submit($num_userId, $str_mail) {
+    function mdl_submit($num_userId, $str_mail, $str_type) {
         $_arr_verifyRow = $this->mdl_read($num_userId, "verify_user_id");
 
         $_str_rand      = fn_rand(6);
         $_str_token     = fn_rand(32);
-        $_str_tokenDo   = fn_baigoEncrypt($_str_token, $_str_rand);
+        $_str_tokenDo   = fn_baigoCrypt($_str_token, $_str_rand);
 
         $_arr_verifyData = array(
             "verify_user_id"        => $num_userId,
             "verify_mail"           => $str_mail,
+            "verify_type"           => $str_type,
             "verify_token"          => $_str_token,
             "verify_rand"           => $_str_rand,
             "verify_token_expire"   => time() + BG_VERIFY_EXPIRE * 60,
@@ -98,24 +137,24 @@ class MODEL_VERIFY {
             "verify_time_refresh"   => time(),
         );
 
-        if ($_arr_verifyRow["alert"] == "x120102") {
+        if ($_arr_verifyRow["rcode"] == "x120102") {
             $_arr_verifyData["verify_time"] = time();
             $_num_verifyId = $this->obj_db->insert(BG_DB_TABLE . "verify", $_arr_verifyData); //更新数据
             if ($_num_verifyId > 0) {
-                $_str_alert = "y120101"; //更新成功
+                $_str_rcode = "y120101"; //更新成功
             } else {
                 return array(
-                    "alert" => "x120101", //更新失败
+                    "rcode" => "x120101", //更新失败
                 );
             }
         } else {
             $_num_verifyId  = $_arr_verifyRow["verify_id"];
-            $_num_mysql     = $this->obj_db->update(BG_DB_TABLE . "verify", $_arr_verifyData, "verify_id=" . $_num_verifyId); //更新数据
+            $_num_mysql     = $this->obj_db->update(BG_DB_TABLE . "verify", $_arr_verifyData, "`verify_id`=" . $_num_verifyId); //更新数据
             if ($_num_mysql > 0) {
-                $_str_alert = "y120103"; //更新成功
+                $_str_rcode = "y120103"; //更新成功
             } else {
                 return array(
-                    "alert" => "x120103", //更新失败
+                    "rcode" => "x120103", //更新失败
                 );
 
             }
@@ -124,7 +163,7 @@ class MODEL_VERIFY {
         return array(
             "verify_id"     => $_num_verifyId,
             "verify_token"  => $_str_tokenDo,
-            "alert"         => $_str_alert, //成功
+            "rcode"         => $_str_rcode, //成功
         );
     }
 
@@ -141,17 +180,17 @@ class MODEL_VERIFY {
             "verify_time_disable"   => time(),
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "verify", $_arr_verifyUpdate, "verify_id=" . $this->verifySubmit["verify_id"]);
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "verify", $_arr_verifyUpdate, "`verify_id`=" . $this->verifyInput["verify_id"]);
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
-            $_str_alert = "y120103"; //成功
+            $_str_rcode = "y120103"; //成功
         } else {
-            $_str_alert = "x120103"; //失败
+            $_str_rcode = "x120103"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -170,17 +209,17 @@ class MODEL_VERIFY {
             "verify_status" => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "verify", $_arr_verifyUpdate, "verify_id IN (" . $_str_verifyId . ")"); //删除数据
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "verify", $_arr_verifyUpdate, "`verify_id` IN (" . $_str_verifyId . ")"); //删除数据
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
-            $_str_alert = "y120103"; //成功
+            $_str_rcode = "y120103"; //成功
         } else {
-            $_str_alert = "x120103"; //失败
+            $_str_rcode = "x120103"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -202,6 +241,7 @@ class MODEL_VERIFY {
             "verify_token_expire",
             "verify_mail",
             "verify_status",
+            "verify_type",
             "verify_rand",
             "verify_time",
             "verify_time_refresh",
@@ -220,7 +260,7 @@ class MODEL_VERIFY {
             $_arr_verifyRow = $_arr_verifyRows[0];
         } else {
             return array(
-                "alert" => "x120102", //不存在记录
+                "rcode" => "x120102", //不存在记录
             );
         }
 
@@ -228,7 +268,7 @@ class MODEL_VERIFY {
             $_arr_verifyRow["verify_status"] = "expired";
         }
 
-        $_arr_verifyRow["alert"] = "y120102";
+        $_arr_verifyRow["rcode"] = "y120102";
 
         return $_arr_verifyRow;
     }
@@ -255,7 +295,11 @@ class MODEL_VERIFY {
             "verify_time_disable",
         );
 
-        $_arr_verifyRows = $this->obj_db->select(BG_DB_TABLE . "verify", $_arr_verifySelect, "", "", "verify_id DESC", $num_no, $num_except); //查询数据
+        $_arr_order = array(
+            array("verify_id", "DESC"),
+        );
+
+        $_arr_verifyRows = $this->obj_db->select(BG_DB_TABLE . "verify", $_arr_verifySelect, "", "", $_arr_order, $num_no, $num_except); //查询数据
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
             if ($_value["verify_token_expire"] < time()) {
@@ -293,13 +337,13 @@ class MODEL_VERIFY {
 
         //如车影响行数小于0则返回错误
         if ($_num_mysql > 0) {
-            $_str_alert = "y120104"; //成功
+            $_str_rcode = "y120104"; //成功
         } else {
-            $_str_alert = "x120104"; //失败
+            $_str_rcode = "x120104"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -313,7 +357,7 @@ class MODEL_VERIFY {
     function input_verify() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
@@ -321,12 +365,12 @@ class MODEL_VERIFY {
         switch ($_arr_verifyId["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x120201",
+                    "rcode" => "x120201",
                 );
             break;
 
             case "ok":
-                $this->verifySubmit["verify_id"] = $_arr_verifyId["str"];
+                $this->verifyInput["verify_id"] = $_arr_verifyId["str"];
             break;
 
         }
@@ -335,18 +379,18 @@ class MODEL_VERIFY {
         switch ($_arr_verifyToken["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x120202",
+                    "rcode" => "x120202",
                 );
             break;
 
             case "ok":
-                $this->verifySubmit["verify_token"] = $_arr_verifyToken["str"];
+                $this->verifyInput["verify_token"] = $_arr_verifyToken["str"];
             break;
         }
 
-        $this->verifySubmit["alert"] = "ok";
+        $this->verifyInput["rcode"] = "ok";
 
-        return $this->verifySubmit;
+        return $this->verifyInput;
     }
 
 
@@ -360,23 +404,23 @@ class MODEL_VERIFY {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
         $_arr_verifyIds = fn_post("verify_ids");
 
-        if ($_arr_verifyIds) {
+        if (fn_isEmpty($_arr_verifyIds)) {
+            $_str_rcode = "x030202";
+        } else {
             foreach ($_arr_verifyIds as $_key=>$_value) {
                 $_arr_verifyIds[$_key] = fn_getSafe($_value, "int", 0);
             }
-            $_str_alert = "ok";
-        } else {
-            $_str_alert = "x030202";
+            $_str_rcode = "ok";
         }
 
         $this->verifyIds = array(
-            "alert"         => $_str_alert,
+            "rcode"         => $_str_rcode,
             "verify_ids"    => array_unique($_arr_verifyIds),
         );
 

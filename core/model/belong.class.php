@@ -11,7 +11,6 @@ if (!defined("IN_BAIGO")) {
 
 /*-------------应用归属-------------*/
 class MODEL_BELONG {
-    private $obj_db;
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -34,13 +33,13 @@ class MODEL_BELONG {
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "belong", $_arr_belongCreat, "belong_id", "应用从属");
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y070105"; //更新成功
+            $_str_rcode = "y070105"; //更新成功
         } else {
-            $_str_alert = "x070105"; //更新成功
+            $_str_rcode = "x070105"; //更新成功
         }
 
         return array(
-            "alert" => $_str_alert, //更新成功
+            "rcode" => $_str_rcode, //更新成功
         );
     }
 
@@ -53,8 +52,12 @@ class MODEL_BELONG {
     function mdl_column() {
         $_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "belong");
 
-        foreach ($_arr_colRows as $_key=>$_value) {
-            $_arr_col[] = $_value["Field"];
+        $_arr_col = array();
+
+        if (!fn_isEmpty($_arr_colRows)) {
+            foreach ($_arr_colRows as $_key=>$_value) {
+                $_arr_col[] = $_value["Field"];
+            }
         }
 
         return $_arr_col;
@@ -62,31 +65,31 @@ class MODEL_BELONG {
 
 
     /** 修改表
-     * mdl_alert_table function.
+     * mdl_alter_table function.
      *
      * @access public
      * @return void
      */
-    function mdl_alert_table() {
+    function mdl_alter_table() {
         $_arr_col     = $this->mdl_column();
-        $_arr_alert   = array();
+        $_arr_alter   = array();
 
         if (in_array("belong_app_id", $_arr_col)) {
-            $_arr_alert["belong_app_id"] = array("CHANGE", "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
+            $_arr_alter["belong_app_id"] = array("CHANGE", "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
         }
 
-        $_str_alert = "y070111";
+        $_str_rcode = "y070111";
 
-        if ($_arr_alert) {
-            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "belong", $_arr_alert);
+        if (!fn_isEmpty($_arr_alter)) {
+            $_reselt = $this->obj_db->alter_table(BG_DB_TABLE . "belong", $_arr_alter);
 
-            if ($_reselt) {
-                $_str_alert = "y070106";
+            if (!fn_isEmpty($_reselt)) {
+                $_str_rcode = "y070106";
             }
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -108,24 +111,24 @@ class MODEL_BELONG {
 
         $_arr_belongRow = $this->mdl_read($num_userId, $num_appId);
 
-        if ($_arr_belongRow["alert"] == "x070102" && $num_userId > 0 && $num_appId > 0) { //插入
+        if ($_arr_belongRow["rcode"] == "x070102" && $num_userId > 0 && $num_appId > 0) { //插入
             $_num_belongId = $this->obj_db->insert(BG_DB_TABLE . "belong", $_arr_belongData);
 
             if ($_num_belongId > 0) { //数据库插入是否成功
-                $_str_alert = "y070101";
+                $_str_rcode = "y070101";
             } else {
                 return array(
-                    "alert" => "x070101",
+                    "rcode" => "x070101",
                 );
             }
         } else {
             return array(
-                "alert" => "x070101",
+                "rcode" => "x070101",
             );
         }
 
         return array(
-            "alert"  => $_str_alert,
+            "rcode"  => $_str_rcode,
         );
     }
 
@@ -160,11 +163,11 @@ class MODEL_BELONG {
             $_arr_belongRow   = $_arr_belongRows[0];
         } else {
             return array(
-                "alert" => "x070102", //不存在记录
+                "rcode" => "x070102", //不存在记录
             );
         }
 
-        $_arr_belongRow["alert"] = "y070102";
+        $_arr_belongRow["rcode"] = "y070102";
 
         return $_arr_belongRow;
     }
@@ -187,7 +190,11 @@ class MODEL_BELONG {
 
         $_str_sqlWhere = $this->sql_process($arr_search);
 
-        $_arr_belongRows = $this->obj_db->select(BG_DB_TABLE . "belong", $_arr_belongSelect, $_str_sqlWhere, "", "belong_id DESC", $num_no, $num_except);
+        $_arr_order = array(
+            array("belong_id", "DESC"),
+        );
+
+        $_arr_belongRows = $this->obj_db->select(BG_DB_TABLE . "belong", $_arr_belongSelect, $_str_sqlWhere, "", $_arr_order, $num_no, $num_except);
 
         return $_arr_belongRows;
     }
@@ -263,13 +270,13 @@ class MODEL_BELONG {
 
         //如车影响行数小于0则返回错误
         if ($_num_mysql > 0) {
-            $_str_alert = "y070104";
+            $_str_rcode = "y070104";
         } else {
-            $_str_alert = "x070104";
+            $_str_rcode = "x070104";
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         ); //成功
     }
 
@@ -285,16 +292,16 @@ class MODEL_BELONG {
         $_str_sqlWhere = "1=1";
 
         if (isset($arr_search["app_id"]) && $arr_search["app_id"] > 0) {
-            $_str_sqlWhere .= " AND belong_app_id=" . $arr_search["app_id"];
+            $_str_sqlWhere .= " AND `belong_app_id`=" . $arr_search["app_id"];
         }
 
         if (isset($arr_search["user_id"]) && $arr_search["user_id"] > 0) {
-            $_str_sqlWhere .= " AND belong_user_id=" . $arr_search["user_id"];
+            $_str_sqlWhere .= " AND `belong_user_id`=" . $arr_search["user_id"];
         }
 
-        if (isset($arr_search["user_ids"]) && $arr_search["user_ids"]) {
+        if (isset($arr_search["user_ids"]) && !fn_isEmpty($arr_search["user_ids"])) {
             $_str_userIds = implode(",", $arr_search["user_ids"]);
-            $_str_sqlWhere  .= " AND belong_user_id IN (" . $_str_userIds . ")";
+            $_str_sqlWhere  .= " AND `belong_user_id` IN (" . $_str_userIds . ")";
         }
 
         return $_str_sqlWhere;

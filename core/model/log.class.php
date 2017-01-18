@@ -11,7 +11,6 @@ if (!defined("IN_BAIGO")) {
 
 /*-------------日志模型-------------*/
 class MODEL_LOG {
-    private $obj_db;
     public $logStatus   = array(); //状态
     public $logTypes    = array(); //类型
     public $logTargets  = array(); //目标
@@ -59,13 +58,13 @@ class MODEL_LOG {
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "log", $_arr_logCreate, "log_id", "应用");
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y060105"; //更新成功
+            $_str_rcode = "y060105"; //更新成功
         } else {
-            $_str_alert = "x060105"; //更新成功
+            $_str_rcode = "x060105"; //更新成功
         }
 
         return array(
-            "alert" => $_str_alert, //更新成功
+            "rcode" => $_str_rcode, //更新成功
         );
     }
 
@@ -79,8 +78,12 @@ class MODEL_LOG {
     function mdl_column() {
         $_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "log");
 
-        foreach ($_arr_colRows as $_key=>$_value) {
-            $_arr_col[] = $_value["Field"];
+        $_arr_col = array();
+
+        if (!fn_isEmpty($_arr_colRows)) {
+            foreach ($_arr_colRows as $_key=>$_value) {
+                $_arr_col[] = $_value["Field"];
+            }
         }
 
         return $_arr_col;
@@ -88,12 +91,12 @@ class MODEL_LOG {
 
 
     /** 修改表
-     * mdl_alert_table function.
+     * mdl_alter_table function.
      *
      * @access public
      * @return void
      */
-    function mdl_alert_table() {
+    function mdl_alter_table() {
         foreach ($this->logStatus as $_key=>$_value) {
             $_arr_status[] = $_key;
         }
@@ -110,51 +113,51 @@ class MODEL_LOG {
         $_str_targets = implode("','", $_arr_targets);
 
         $_arr_col     = $this->mdl_column();
-        $_arr_alert   = array();
+        $_arr_alter   = array();
 
         if (in_array("log_operator_id", $_arr_col)) {
-            $_arr_alert["log_operator_id"] = array("CHANGE", "smallint NOT NULL COMMENT '操作者 ID'", "log_operator_id");
+            $_arr_alter["log_operator_id"] = array("CHANGE", "smallint NOT NULL COMMENT '操作者 ID'", "log_operator_id");
         }
 
         if (in_array("log_target_type", $_arr_col)) {
-            $_arr_alert["log_target_type"] = array("CHANGE", "enum('" . $_str_targets . "') NOT NULL COMMENT '目标类型'", "log_target_type");
+            $_arr_alter["log_target_type"] = array("CHANGE", "enum('" . $_str_targets . "') NOT NULL COMMENT '目标类型'", "log_target_type");
         }
 
         if (in_array("log_type", $_arr_col)) {
-            $_arr_alert["log_type"] = array("CHANGE", "enum('" . $_str_types . "') NOT NULL COMMENT '目标类型'", "log_type");
+            $_arr_alter["log_type"] = array("CHANGE", "enum('" . $_str_types . "') NOT NULL COMMENT '目标类型'", "log_type");
         }
 
         if (in_array("log_status", $_arr_col)) {
-            $_arr_alert["log_status"] = array("CHANGE", "enum('" . $_str_status . "')", "log_status");
+            $_arr_alter["log_status"] = array("CHANGE", "enum('" . $_str_status . "')", "log_status");
         }
 
-        $_str_alert = "y060111";
+        $_str_rcode = "y060111";
 
-        if ($_arr_alert) {
-            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "log", $_arr_alert);
+        if (!fn_isEmpty($_arr_alter)) {
+            $_reselt = $this->obj_db->alter_table(BG_DB_TABLE . "log", $_arr_alter);
 
-            if ($_reselt) {
-                $_str_alert = "y060106";
+            if (!fn_isEmpty($_reselt)) {
+                $_str_rcode = "y060106";
 
                 $_arr_logData = array(
                     "log_target_type" => $_arr_targets[0],
                 );
-                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_target_type) < 1"); //更新数据
+                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(`log_target_type`) < 1"); //更新数据
 
                 $_arr_logData = array(
                     "log_type" => $_arr_types[0],
                 );
-                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_type) < 1"); //更新数据
+                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(`log_type`) < 1"); //更新数据
 
                 $_arr_logData = array(
                     "log_status" => $_arr_status[0],
                 );
-                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(log_status) < 1"); //更新数据
+                $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logData, "LENGTH(`log_status`) < 1"); //更新数据
             }
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -191,16 +194,16 @@ class MODEL_LOG {
 
         $_num_logId = $this->obj_db->insert(BG_DB_TABLE . "log", $_arr_logData); //更新数据
         if ($_num_logId > 0) {
-            $_str_alert = "y060101"; //更新成功
+            $_str_rcode = "y060101"; //更新成功
         } else {
             return array(
-                "alert" => "x060101", //更新失败
+                "rcode" => "x060101", //更新失败
             );
         }
 
         return array(
             "log_id"    => $_num_logId,
-            "alert"     => $_str_alert, //成功
+            "rcode"     => $_str_rcode, //成功
         );
     }
 
@@ -219,17 +222,17 @@ class MODEL_LOG {
             "log_status" => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logUpdate, "log_id IN (" . $_str_logId . ")"); //删除数据
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logUpdate, "`log_id` IN (" . $_str_logId . ")"); //删除数据
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
-            $_str_alert = "y060103"; //成功
+            $_str_rcode = "y060103"; //成功
         } else {
-            $_str_alert = "x060103"; //失败
+            $_str_rcode = "x060103"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -239,17 +242,17 @@ class MODEL_LOG {
             "log_status" => "read",
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logUpdate, "log_id=" . $num_logId); //删除数据
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "log", $_arr_logUpdate, "`log_id`=" . $num_logId); //删除数据
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
-            $_str_alert = "y060103"; //成功
+            $_str_rcode = "y060103"; //成功
         } else {
-            $_str_alert = "x060103"; //失败
+            $_str_rcode = "x060103"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -283,7 +286,7 @@ class MODEL_LOG {
             $_arr_logRow = $_arr_logRows[0];
         } else {
             return array(
-                "alert" => "x060102", //不存在记录
+                "rcode" => "x060102", //不存在记录
             );
         }
 
@@ -299,7 +302,7 @@ class MODEL_LOG {
 
         //$_arr_logRow["log_result"] = fn_htmlcode($_arr_logRow["log_result"], "encode");
 
-        $_arr_logRow["alert"]     = "y060102";
+        $_arr_logRow["rcode"]     = "y060102";
 
         return $_arr_logRow;
     }
@@ -328,7 +331,11 @@ class MODEL_LOG {
 
         $_str_sqlWhere = $this->sql_process($arr_search);
 
-        $_arr_logRows = $this->obj_db->select(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere, "", "log_id DESC", $num_no, $num_except); //查询数据
+        $_arr_order = array(
+            array("log_id", "DESC"),
+        );
+
+        $_arr_logRows = $this->obj_db->select(BG_DB_TABLE . "log", $_arr_logSelect, $_str_sqlWhere, "", $_arr_order, $num_no, $num_except); //查询数据
 
         return $_arr_logRows;
     }
@@ -363,13 +370,13 @@ class MODEL_LOG {
 
         //如车影响行数小于0则返回错误
         if ($_num_mysql > 0) {
-            $_str_alert = "y060104"; //成功
+            $_str_rcode = "y060104"; //成功
         } else {
-            $_str_alert = "x060104"; //失败
+            $_str_rcode = "x060104"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -383,23 +390,23 @@ class MODEL_LOG {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
         $_arr_logIds = fn_post("log_ids");
 
-        if ($_arr_logIds) {
+        if (fn_isEmpty($_arr_logIds)) {
+            $_str_rcode = "x030202";
+        } else {
             foreach ($_arr_logIds as $_key=>$_value) {
                 $_arr_logIds[$_key] = fn_getSafe($_value, "int", 0);
             }
-            $_str_alert = "ok";
-        } else {
-            $_str_alert = "x030202";
+            $_str_rcode = "ok";
         }
 
         $this->logIds = array(
-            "alert"     => $_str_alert,
+            "rcode"     => $_str_rcode,
             "log_ids"   => array_unique($_arr_logIds),
         );
 
@@ -417,24 +424,24 @@ class MODEL_LOG {
     private function sql_process($arr_search = array()) {
         $_str_sqlWhere = "1=1";
 
-        if (isset($arr_search["key"]) && $arr_search["key"]) {
-            $_str_sqlWhere .= " AND (log_target_type LIKE '%" . $arr_search["key"] . "%' OR log_result LIKE '%" . $arr_search["key"] . "%')";
+        if (isset($arr_search["key"]) && !fn_isEmpty($arr_search["key"])) {
+            $_str_sqlWhere .= " AND (`log_target_type` LIKE '%" . $arr_search["key"] . "%' OR `log_result` LIKE '%" . $arr_search["key"] . "%')";
         }
 
-        if (isset($arr_search["type"]) && $arr_search["type"]) {
-            $_str_sqlWhere .= " AND log_type='" . $arr_search["type"] . "'";
+        if (isset($arr_search["type"]) && !fn_isEmpty($arr_search["type"])) {
+            $_str_sqlWhere .= " AND `log_type`='" . $arr_search["type"] . "'";
         }
 
-        if (isset($arr_search["status"]) && $arr_search["status"]) {
-            $_str_sqlWhere .= " AND log_status='" . $arr_search["status"] . "'";
+        if (isset($arr_search["status"]) && !fn_isEmpty($arr_search["status"])) {
+            $_str_sqlWhere .= " AND `log_status`='" . $arr_search["status"] . "'";
         }
 
-        if (isset($arr_search["level"]) && $arr_search["level"]) {
-            $_str_sqlWhere .= " AND log_level='" . $arr_search["level"] . "'";
+        if (isset($arr_search["level"]) && !fn_isEmpty($arr_search["level"])) {
+            $_str_sqlWhere .= " AND `log_level`='" . $arr_search["level"] . "'";
         }
 
         if (isset($arr_search["operator_id"]) && $arr_search["operator_id"] > 0) {
-            $_str_sqlWhere .= " AND log_operator_id=" . $arr_search["operator_id"];
+            $_str_sqlWhere .= " AND `log_operator_id`=" . $arr_search["operator_id"];
         }
 
         return $_str_sqlWhere;

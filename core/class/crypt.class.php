@@ -14,11 +14,21 @@ class CLASS_CRYPT {
 
     function __construct() { //构造函数
         $this->obj_dir = new CLASS_DIR();
-        if (!file_exists(BG_PATH_CACHE . "sys/crypt_key_pub.txt")) {
-            $this->obj_dir->put_file(BG_PATH_CACHE . "sys/crypt_key_pub.txt", fn_rand());
+
+        if (file_exists(BG_PATH_CACHE . "sys/crypt_key_pub.txt")) {
+            $_str_rand = file_get_contents(BG_PATH_CACHE . "sys/crypt_key_pub.txt");
+            $_obj_dir->del_file(BG_PATH_CACHE . "sys/crypt_key_pub.txt");
+        } else {
+            $_str_rand = fn_rand();
         }
 
-        $this->key_pub = file_get_contents(BG_PATH_CACHE . "sys/crypt_key_pub.txt");
+
+        if (!file_exists(BG_PATH_CACHE . "sys/crypt_key_pub.php")) {
+        $_str_key = "<?php return \"" . $_str_rand . "\"; ?>";
+            $this->obj_dir->put_file(BG_PATH_CACHE . "sys/crypt_key_pub.php", $_str_key);
+        }
+
+        $this->key_pub = require(BG_PATH_CACHE . "sys/crypt_key_pub.php");
     }
 
 
@@ -36,16 +46,20 @@ class CLASS_CRYPT {
 
         $_str_return = $this->get_key($_str_tmp, $key_priv);
         $_str_return = base64_encode($_str_return);
-        $_str_return = urlencode($_str_return);
+
+        $_str_return = str_ireplace("=", "|", $_str_return);
+        $_str_return = str_ireplace("/", "@", $_str_return);
+        $_str_return = str_ireplace("+", "_", $_str_return);
 
         return $_str_return;
     }
 
     //解密
     function decrypt($string, $key_priv) {
-        //$string        = preg_replace("/\s+/i", "", $string);
-        $string        = fn_htmlcode($string, "decode", "crypt");
-        $string        = urldecode($string);
+        $string = str_ireplace("|", "=", $string);
+        $string = str_ireplace("@", "/", $string);
+        $string = str_ireplace("_", "+", $string);
+
         $string        = base64_decode($string);
         $string        = $this->get_key($string, $key_priv);
         $_str_return   = "";

@@ -24,9 +24,9 @@ class CLASS_DIR {
             $_arr_dir = $this->list_dir($str_path); //逐级列出
 
             foreach ($_arr_dir as $_key=>$_value) {
-                if ($_value["type"] == "file") {
-                    unlink($str_path . "/" . $_value["name"]);  //删除
-                } else {
+                if ($_value["type"] == "file" && file_exists($str_path . "/" . $_value["name"])) {
+                    $this->del_file($str_path . "/" . $_value["name"]);  //删除
+                } else if (is_dir($str_path . "/" . $_value["name"])) {
                     $this->del_dir($str_path . "/" . $_value["name"]); //递归
                 }
             }
@@ -35,6 +35,17 @@ class CLASS_DIR {
         }
 
     }
+
+
+    function del_file($str_path) {
+        $bool_return = false;
+        if (file_exists($str_path)) {
+            unlink($str_path);  //删除
+            $bool_return = true;
+        }
+        return $bool_return;
+    }
+
 
     /*============生成目录============
     @str_path 路径
@@ -46,25 +57,23 @@ class CLASS_DIR {
             $str_path = dirname($str_path);
         }
         if (is_dir($str_path) || stristr($str_path, ".")) { //已存在
-            $_str_alert = "y030201";
+            $this->dir_status = true;
         } else {
-            $_arr_dir = $this->mk_dir(dirname($str_path));
             //创建目录
-            if ($_arr_dir["alert"] == "y030201") {
+            if ($this->mk_dir(dirname($str_path))) { //递归
                 if (mkdir($str_path)) { //创建成功
-                    $_str_alert = "y030201";
+                    $this->dir_status = true;
                 } else {
-                    $_str_alert = "x030201"; //失败
+                    $this->dir_status = false; //失败
                 }
             } else {
-                $_str_alert = "x030201";
+                $this->dir_status = false;
             }
         }
 
-        return array(
-            "alert" => $_str_alert,
-        );
+        return $this->dir_status;
     }
+
 
     /*============逐级列出目录============
     @str_path 路径
@@ -75,10 +84,12 @@ class CLASS_DIR {
     */
     function list_dir($str_path) {
 
+        $this->mk_dir($str_path);
+
         $_arr_return  = array();
         $_arr_dir     = scandir($str_path);
 
-        if ($_arr_dir) {
+        if (!fn_isEmpty($_arr_dir)) {
             foreach ($_arr_dir as $_key=>$_value) {
                 if ($_value != "." && $_value != "..") {
                     if (is_dir($str_path . $_value)) {
@@ -99,6 +110,16 @@ class CLASS_DIR {
     function put_file($str_path, $str_content) {
         $this->mk_dir($str_path);
         $_num_size = file_put_contents($str_path, $str_content);
+        return $_num_size;
+    }
+
+
+    function copy_file($str_pathSrc, $str_pathDst) {
+        if (file_exists($str_pathSrc)) {
+            $this->mk_dir($str_pathDst);
+            $_num_size = copy($str_pathSrc, $str_pathDst);
+        }
+
         return $_num_size;
     }
 }

@@ -21,6 +21,11 @@ return array(
         "super"     => "超级管理员",
     ),
 
+    "forgot" => array(
+        "bymail"    => "通过邮件找回",
+        "byqa"      => "回答密保问题找回",
+    ),
+
     "lang" => array(
         "zh_CN"   => "简体中文", //简体中文
         "en"      => "English", //English
@@ -43,6 +48,47 @@ return array(
     "pm" => array(
         "out"   => "已发送",
         "in"    => "收件箱",
+    ),
+
+    "verify" => array(
+        "mailbox"   => "更换邮箱",
+        "confirm"   => "用户激活",
+        "forgot"    => "找回密码",
+    ),
+
+    "profile" => array(
+        "info"      => array(
+            "icon"  => "user",
+            "title" => "个人信息",
+        ),
+        "pass"      => array(
+            "icon"  => "lock",
+            "title" => "密码",
+        ),
+        "qa"        => array(
+            "icon"  => "question-sign",
+            "title" => "密保问题",
+        ),
+        "mailbox"   => array(
+            "icon"  => "inbox",
+            "title" => "更换邮箱",
+        ),
+    ),
+
+    "quesOften" => array(
+        "您祖母叫什么名字",
+        "您祖父叫什么名字",
+        "您的生日是什么时候",
+        "您母亲的名字",
+        "您父亲的名字",
+        "您宠物的名字叫什么",
+        "您的车号是什么",
+        "您的家乡是哪里",
+        "您小学叫什么名字",
+        "您最喜欢的颜色",
+        "您女儿/儿子的小名叫什么",
+        "谁是您儿时最好的伙伴",
+        "您最尊敬的老师的名字",
     ),
 
     "ext" => array(

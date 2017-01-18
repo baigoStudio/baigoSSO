@@ -12,8 +12,6 @@ if (!defined("IN_BAIGO")) {
 /*-------------设置项模型-------------*/
 class MODEL_OPT {
 
-    public $arr_const;
-
     function __construct() { //构造函数
         $this->obj_dir = new CLASS_DIR();
     }
@@ -28,7 +26,7 @@ class MODEL_OPT {
     function mdl_const($str_type) {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
@@ -43,7 +41,7 @@ class MODEL_OPT {
 
         if ($str_type == "base") {
             $_str_content .= "define(\"BG_SITE_SSIN\", \"" . fn_rand(6) . "\");" . PHP_EOL;
-            $_str_content .= "define(\"BG_SITE_TPL\", \"default\");" . PHP_EOL;
+            //$_str_content .= "define(\"BG_SITE_TPL\", \"default\");" . PHP_EOL;
         }
 
         $_str_content = str_ireplace("||", "", $_str_content);
@@ -51,13 +49,13 @@ class MODEL_OPT {
         $_num_size    = $this->obj_dir->put_file(BG_PATH_CONFIG . "opt_" . $str_type . ".inc.php", $_str_content);
 
         if ($_num_size > 0) {
-            $_str_alert = "y030405";
+            $_str_rcode = "y030405";
         } else {
-            $_str_alert = "x030405";
+            $_str_rcode = "x030405";
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -71,7 +69,7 @@ class MODEL_OPT {
     function mdl_over() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
@@ -80,15 +78,15 @@ class MODEL_OPT {
         $_str_content .= "define(\"BG_INSTALL_PUB\", " . PRD_SSO_PUB . ");" . PHP_EOL;
         $_str_content .= "define(\"BG_INSTALL_TIME\", " . time() . ");" . PHP_EOL;
 
-        $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . "is_install.php", $_str_content);
+        $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . "installed.php", $_str_content);
         if ($_num_size > 0) {
-            $_str_alert = "y030405";
+            $_str_rcode = "y030405";
         } else {
-            $_str_alert = "x030405";
+            $_str_rcode = "x030405";
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -101,23 +99,23 @@ class MODEL_OPT {
      */
     function mdl_dbconfig() {
         $_str_content = "<?php" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_HOST\", \"" . $this->dbconfigSubmit["db_host"] . "\");" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_NAME\", \"" . $this->dbconfigSubmit["db_name"] . "\");" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_PORT\", \"" . $this->dbconfigSubmit["db_port"] . "\");" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_USER\", \"" . $this->dbconfigSubmit["db_user"] . "\");" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_PASS\", \"" . $this->dbconfigSubmit["db_pass"] . "\");" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_CHARSET\", \"" . $this->dbconfigSubmit["db_charset"] . "\");" . PHP_EOL;
-        $_str_content .= "define(\"BG_DB_TABLE\", \"" . $this->dbconfigSubmit["db_table"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_HOST\", \"" . $this->dbconfigInput["db_host"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_NAME\", \"" . $this->dbconfigInput["db_name"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_PORT\", \"" . $this->dbconfigInput["db_port"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_USER\", \"" . $this->dbconfigInput["db_user"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_PASS\", \"" . $this->dbconfigInput["db_pass"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_CHARSET\", \"" . $this->dbconfigInput["db_charset"] . "\");" . PHP_EOL;
+        $_str_content .= "define(\"BG_DB_TABLE\", \"" . $this->dbconfigInput["db_table"] . "\");" . PHP_EOL;
 
         $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . "opt_dbconfig.inc.php", $_str_content);
         if ($_num_size > 0) {
-            $_str_alert = "y030404";
+            $_str_rcode = "y030404";
         } else {
-            $_str_alert = "x030404";
+            $_str_rcode = "x030404";
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -133,7 +131,7 @@ class MODEL_OPT {
         if ($is_token) {
             if (!fn_token("chk")) { //令牌
                 return array(
-                    "alert" => "x030206",
+                    "rcode" => "x030206",
                 );
             }
         }
@@ -142,18 +140,18 @@ class MODEL_OPT {
         switch ($_arr_dbHost["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040204",
+                    "rcode" => "x040204",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040205",
+                    "rcode" => "x040205",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_host"] = $_arr_dbHost["str"];
+                $this->dbconfigInput["db_host"] = $_arr_dbHost["str"];
             break;
         }
 
@@ -161,18 +159,18 @@ class MODEL_OPT {
         switch ($_arr_dbName["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040206",
+                    "rcode" => "x040206",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040207",
+                    "rcode" => "x040207",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_name"] = $_arr_dbName["str"];
+                $this->dbconfigInput["db_name"] = $_arr_dbName["str"];
             break;
         }
 
@@ -180,18 +178,18 @@ class MODEL_OPT {
         switch ($_arr_dbPort["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040208",
+                    "rcode" => "x040208",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040209",
+                    "rcode" => "x040209",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_port"] = $_arr_dbPort["str"];
+                $this->dbconfigInput["db_port"] = $_arr_dbPort["str"];
             break;
         }
 
@@ -199,18 +197,18 @@ class MODEL_OPT {
         switch ($_arr_dbUser["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040210",
+                    "rcode" => "x040210",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040211",
+                    "rcode" => "x040211",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_user"] = $_arr_dbUser["str"];
+                $this->dbconfigInput["db_user"] = $_arr_dbUser["str"];
             break;
         }
 
@@ -218,18 +216,18 @@ class MODEL_OPT {
         switch ($_arr_dbPass["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040212",
+                    "rcode" => "x040212",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040213",
+                    "rcode" => "x040213",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_pass"] = $_arr_dbPass["str"];
+                $this->dbconfigInput["db_pass"] = $_arr_dbPass["str"];
             break;
         }
 
@@ -237,18 +235,18 @@ class MODEL_OPT {
         switch ($_arr_dbCharset["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040214",
+                    "rcode" => "x040214",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040215",
+                    "rcode" => "x040215",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_charset"] = $_arr_dbCharset["str"];
+                $this->dbconfigInput["db_charset"] = $_arr_dbCharset["str"];
             break;
         }
 
@@ -256,24 +254,24 @@ class MODEL_OPT {
         switch ($_arr_dbTable["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x040216",
+                    "rcode" => "x040216",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x040217",
+                    "rcode" => "x040217",
                 );
             break;
 
             case "ok":
-                $this->dbconfigSubmit["db_table"] = $_arr_dbTable["str"];
+                $this->dbconfigInput["db_table"] = $_arr_dbTable["str"];
             break;
         }
 
-        $this->dbconfigSubmit["alert"] = "ok";
+        $this->dbconfigInput["rcode"] = "ok";
 
-        return $this->dbconfigSubmit;
+        return $this->dbconfigInput;
     }
 
 
@@ -284,7 +282,15 @@ class MODEL_OPT {
      * @param mixed $str_type
      * @return void
      */
-    function input_const($str_type) {
+    function input_const($str_type, $is_token = true) {
+        if ($is_token) {
+            if (!fn_token("chk")) { //令牌
+                return array(
+                    "rcode" => "x030206",
+                );
+            }
+        }
+
         $this->arr_const = fn_post("opt");
 
         return $this->arr_const[$str_type];
@@ -299,7 +305,7 @@ class MODEL_OPT {
         $_str_ver = file_get_contents(BG_PATH_CACHE . "sys/latest_ver.json");
         $_arr_ver = json_decode($_str_ver, true);
 
-        if ($is_check || !$_arr_ver || !isset($_arr_ver["time"]) || $_arr_ver["time"] - time() > 30 * 86400 || isset($_arr_ver["err"])) {
+        if ($is_check || !$_arr_ver || !isset($_arr_ver["time"]) || $_arr_ver["time"] - time() > 30 * 86400 || isset($_arr_ver["error"])) {
             $this->ver_process($method);
             $_str_ver = file_get_contents(BG_PATH_CACHE . "sys/latest_ver.json");
             $_arr_ver = json_decode($_str_ver, true);

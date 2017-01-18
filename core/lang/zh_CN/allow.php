@@ -18,23 +18,7 @@ return array(
             "reg"       => "注册",
             "edit"      => "编辑",
             "del"       => "删除",
-            "mailbox"   => "更换邮箱",
-            "forgot"    => "找回密码",
             "global"    => "操作所有用户",
-        ),
-    ),
-
-    /*------短消息------*/
-    "pm" => array(
-        "title" => "短消息",
-        "allow" => array(
-            "send"   => "发送",
-            "list"   => "列出",
-            "read"   => "读取",
-            "status" => "更改状态",
-            "revoke" => "撤回",
-            "del"    => "删除",
-            "check"  => "检查新消息",
         ),
     ),
 );

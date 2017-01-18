@@ -11,7 +11,6 @@ if (!defined("IN_BAIGO")) {
 
 /*-------------短消息模型-------------*/
 class MODEL_PM {
-    private $obj_db;
     public $pmStatus    = array(); //状态
     public $pmTypes     = array(); //类型
 
@@ -52,13 +51,13 @@ class MODEL_PM {
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "pm", $_arr_pmCreate, "pm_id", "短消息");
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y110105"; //更新成功
+            $_str_rcode = "y110105"; //更新成功
         } else {
-            $_str_alert = "x110105"; //更新成功
+            $_str_rcode = "x110105"; //更新成功
         }
 
         return array(
-            "alert" => $_str_alert, //更新成功
+            "rcode" => $_str_rcode, //更新成功
         );
     }
 
@@ -72,8 +71,12 @@ class MODEL_PM {
     function mdl_column() {
         $_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "pm");
 
-        foreach ($_arr_colRows as $_key=>$_value) {
-            $_arr_col[] = $_value["Field"];
+        $_arr_col = array();
+
+        if (!fn_isEmpty($_arr_colRows)) {
+            foreach ($_arr_colRows as $_key=>$_value) {
+                $_arr_col[] = $_value["Field"];
+            }
         }
 
         return $_arr_col;
@@ -92,8 +95,8 @@ class MODEL_PM {
         $_arr_pmData = array(
             "pm_to"        => $num_pmTo,
             "pm_from"      => $num_pmFrom,
-            "pm_title"     => $this->pmSubmit["pm_title"],
-            "pm_content"   => $this->pmSubmit["pm_content"],
+            "pm_title"     => $this->pmInput["pm_title"],
+            "pm_content"   => $this->pmInput["pm_content"],
             "pm_type"      => "in",
             "pm_status"    => "wait",
             "pm_time"      => time(),
@@ -101,10 +104,10 @@ class MODEL_PM {
 
         $_num_pmId = $this->obj_db->insert(BG_DB_TABLE . "pm", $_arr_pmData); //更新数据
         if ($_num_pmId > 0) {
-            $_str_alert = "y110101"; //更新成功
+            $_str_rcode = "y110101"; //更新成功
         } else {
             return array(
-                "alert" => "x110101", //更新失败
+                "rcode" => "x110101", //更新失败
             );
         }
 
@@ -117,7 +120,7 @@ class MODEL_PM {
 
         return array(
             "pm_id" => $_num_pmId,
-            "alert" => $_str_alert, //成功
+            "rcode" => $_str_rcode, //成功
         );
     }
 
@@ -138,20 +141,20 @@ class MODEL_PM {
         );
 
         if ($num_userId > 0) {
-            $_str_sqlWhere .= " AND pm_to=" . $num_userId . " AND pm_type='in'";
+            $_str_sqlWhere .= " AND `pm_to`=" . $num_userId . " AND `pm_type`='in'";
         }
 
         $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "pm", $_arr_pmUpdate, $_str_sqlWhere); //删除数据
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
-            $_str_alert = "y110103"; //成功
+            $_str_rcode = "y110103"; //成功
         } else {
-            $_str_alert = "x110103"; //失败
+            $_str_rcode = "x110103"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -194,11 +197,11 @@ class MODEL_PM {
             $_arr_pmRow = $_arr_pmRows[0];
         } else {
             return array(
-                "alert" => "x110102", //不存在记录
+                "rcode" => "x110102", //不存在记录
             );
         }
 
-        $_arr_pmRow["alert"]   = "y110102";
+        $_arr_pmRow["rcode"]   = "y110102";
 
         return $_arr_pmRow;
 
@@ -228,7 +231,11 @@ class MODEL_PM {
 
         $_str_sqlWhere = $this->sql_process($arr_search);
 
-        $_arr_pmRows = $this->obj_db->select(BG_DB_TABLE . "pm", $_arr_pmSelect, $_str_sqlWhere, "", "pm_id DESC", $num_no, $num_except); //查询数据
+        $_arr_order = array(
+            array("pm_id", "DESC"),
+        );
+
+        $_arr_pmRows = $this->obj_db->select(BG_DB_TABLE . "pm", $_arr_pmSelect, $_str_sqlWhere, "", $_arr_order, $num_no, $num_except); //查询数据
 
         return $_arr_pmRows;
     }
@@ -275,20 +282,20 @@ class MODEL_PM {
         //如车影响行数小于0则返回错误
         if ($_num_mysql > 0) {
             if ($is_revoke) {
-                $_str_alert = "y110109"; //撤回
+                $_str_rcode = "y110109"; //撤回
             } else {
-                $_str_alert = "y110104"; //成功
+                $_str_rcode = "y110104"; //成功
             }
         } else {
             if ($is_revoke) {
-                $_str_alert = "x110109"; //撤回
+                $_str_rcode = "x110109"; //撤回
             } else {
-                $_str_alert = "x110104"; //失败
+                $_str_rcode = "x110104"; //失败
             }
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -302,7 +309,7 @@ class MODEL_PM {
     function input_bulk() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
@@ -310,12 +317,12 @@ class MODEL_PM {
         switch ($_arr_pmTitle["status"]) {
             case "too_long":
                 return array(
-                    "alert" => "x110202",
+                    "rcode" => "x110202",
                 );
             break;
 
             case "ok":
-                $this->pmSubmit["pm_title"] = $_arr_pmTitle["str"];
+                $this->pmInput["pm_title"] = $_arr_pmTitle["str"];
             break;
         }
 
@@ -323,44 +330,44 @@ class MODEL_PM {
         switch ($_arr_pmContent["status"]) {
             case "too_long":
                 return array(
-                    "alert" => "x110203",
+                    "rcode" => "x110203",
                 );
             break;
 
             case "ok":
-                $this->pmSubmit["pm_content"] = $_arr_pmContent["str"];
+                $this->pmInput["pm_content"] = $_arr_pmContent["str"];
             break;
         }
 
-        if (!$this->pmSubmit["pm_title"]) {
-            $this->pmSubmit["pm_title"] = fn_substr_utf8($this->pmSubmit["pm_content"], 0, 30);
+        if (fn_isEmpty($this->pmInput["pm_title"])) {
+            $this->pmInput["pm_title"] = fn_substr_utf8($this->pmInput["pm_content"], 0, 30);
         }
 
         $_arr_pmBulkType = validateStr(fn_post("pm_bulk_type"), 1, 0);
         switch ($_arr_pmBulkType["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x110204",
+                    "rcode" => "x110204",
                 );
             break;
 
             case "ok":
-                $this->pmSubmit["pm_bulk_type"] = $_arr_pmBulkType["str"];
+                $this->pmInput["pm_bulk_type"] = $_arr_pmBulkType["str"];
             break;
         }
 
-        switch ($this->pmSubmit["pm_bulk_type"]) {
+        switch ($this->pmInput["pm_bulk_type"]) {
             case "bulkUsers":
                 $_arr_pmToUsers = validateStr(fn_post("pm_to_users"), 1, 0);
                 switch ($_arr_pmToUsers["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110205",
+                            "rcode" => "x110205",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_users"] = $_arr_pmToUsers["str"];
+                        $this->pmInput["pm_to_users"] = $_arr_pmToUsers["str"];
                     break;
                 }
             break;
@@ -370,12 +377,12 @@ class MODEL_PM {
                 switch ($_arr_pmKeyName["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110206",
+                            "rcode" => "x110206",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_key_name"] = $_arr_pmKeyName["str"];
+                        $this->pmInput["pm_to_key_name"] = $_arr_pmKeyName["str"];
                     break;
                 }
             break;
@@ -385,12 +392,12 @@ class MODEL_PM {
                 switch ($_arr_pmKeyMail["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110207",
+                            "rcode" => "x110207",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_key_mail"] = $_arr_pmKeyMail["str"];
+                        $this->pmInput["pm_to_key_mail"] = $_arr_pmKeyMail["str"];
                     break;
                 }
             break;
@@ -400,18 +407,18 @@ class MODEL_PM {
                 switch ($_arr_pmBeginId["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110208",
+                            "rcode" => "x110208",
                         );
                     break;
 
                     case "format_err":
                         return array(
-                            "alert" => "x110209",
+                            "rcode" => "x110209",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_min_id"] = $_arr_pmBeginId["str"];
+                        $this->pmInput["pm_to_min_id"] = $_arr_pmBeginId["str"];
                     break;
                 }
 
@@ -419,18 +426,18 @@ class MODEL_PM {
                 switch ($_arr_pmEndId["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110210",
+                            "rcode" => "x110210",
                         );
                     break;
 
                     case "format_err":
                         return array(
-                            "alert" => "x110209",
+                            "rcode" => "x110209",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_max_id"] = $_arr_pmEndId["str"];
+                        $this->pmInput["pm_to_max_id"] = $_arr_pmEndId["str"];
                     break;
                 }
             break;
@@ -440,18 +447,18 @@ class MODEL_PM {
                 switch ($_arr_pmBeginTime["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110212",
+                            "rcode" => "x110212",
                         );
                     break;
 
                     case "format_err":
                         return array(
-                            "alert" => "x110213",
+                            "rcode" => "x110213",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_begin_time"] = fn_strtotime($_arr_pmBeginTime["str"]);
+                        $this->pmInput["pm_to_begin_time"] = fn_strtotime($_arr_pmBeginTime["str"]);
                     break;
                 }
 
@@ -459,18 +466,18 @@ class MODEL_PM {
                 switch ($_arr_pmEndTime["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110214",
+                            "rcode" => "x110214",
                         );
                     break;
 
                     case "format_err":
                         return array(
-                            "alert" => "x110213",
+                            "rcode" => "x110213",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_end_time"] = fn_strtotime($_arr_pmEndTime["str"]);
+                        $this->pmInput["pm_to_end_time"] = fn_strtotime($_arr_pmEndTime["str"]);
                     break;
                 }
             break;
@@ -480,18 +487,18 @@ class MODEL_PM {
                 switch ($_arr_pmBeginLogin["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110215",
+                            "rcode" => "x110215",
                         );
                     break;
 
                     case "format_err":
                         return array(
-                            "alert" => "x110216",
+                            "rcode" => "x110216",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_begin_login"] = fn_strtotime($_arr_pmBeginLogin["str"]);
+                        $this->pmInput["pm_to_begin_login"] = fn_strtotime($_arr_pmBeginLogin["str"]);
                     break;
                 }
 
@@ -499,26 +506,26 @@ class MODEL_PM {
                 switch ($_arr_pmEndLogin["status"]) {
                     case "too_short":
                         return array(
-                            "alert" => "x110217",
+                            "rcode" => "x110217",
                         );
                     break;
 
                     case "format_err":
                         return array(
-                            "alert" => "x110216",
+                            "rcode" => "x110216",
                         );
                     break;
 
                     case "ok":
-                        $this->pmSubmit["pm_to_end_login"] = fn_strtotime($_arr_pmEndLogin["str"]);
+                        $this->pmInput["pm_to_end_login"] = fn_strtotime($_arr_pmEndLogin["str"]);
                     break;
                 }
             break;
         }
 
-        $this->pmSubmit["alert"] = "ok";
+        $this->pmInput["rcode"] = "ok";
 
-        return $this->pmSubmit;
+        return $this->pmInput;
     }
 
 
@@ -531,7 +538,7 @@ class MODEL_PM {
     function input_send() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
@@ -539,12 +546,12 @@ class MODEL_PM {
         switch ($_arr_pmTitle["status"]) {
             case "too_long":
                 return array(
-                    "alert" => "x110202",
+                    "rcode" => "x110202",
                 );
             break;
 
             case "ok":
-                $this->pmSubmit["pm_title"] = $_arr_pmTitle["str"];
+                $this->pmInput["pm_title"] = $_arr_pmTitle["str"];
             break;
         }
 
@@ -552,41 +559,41 @@ class MODEL_PM {
         switch ($_arr_pmContent["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x110201",
+                    "rcode" => "x110201",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x110203",
+                    "rcode" => "x110203",
                 );
             break;
 
             case "ok":
-                $this->pmSubmit["pm_content"] = $_arr_pmContent["str"];
+                $this->pmInput["pm_content"] = $_arr_pmContent["str"];
             break;
         }
 
-        if (!$this->pmSubmit["pm_title"]) {
-            $this->pmSubmit["pm_title"] = fn_substr_utf8($this->pmSubmit["pm_content"], 0, 30);
+        if (fn_isEmpty($this->pmInput["pm_title"])) {
+            $this->pmInput["pm_title"] = fn_substr_utf8($this->pmInput["pm_content"], 0, 30);
         }
 
         $_arr_pmTo = validateStr(fn_post("pm_to"), 1, 0);
         switch ($_arr_pmTo["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x110205",
+                    "rcode" => "x110205",
                 );
             break;
 
             case "ok":
-                $this->pmSubmit["pm_to"] = $_arr_pmTo["str"];
+                $this->pmInput["pm_to"] = $_arr_pmTo["str"];
             break;
         }
 
-        $this->pmSubmit["alert"]    = "ok";
+        $this->pmInput["rcode"]    = "ok";
 
-        return $this->pmSubmit;
+        return $this->pmInput;
     }
 
 
@@ -599,23 +606,23 @@ class MODEL_PM {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
         $_arr_pmIds = fn_post("pm_ids");
 
-        if ($_arr_pmIds) {
+        if (fn_isEmpty($_arr_pmIds)) {
+            $_str_rcode = "x030202";
+        } else {
             foreach ($_arr_pmIds as $_key=>$_value) {
                 $_arr_pmIds[$_key] = fn_getSafe($_value, "int", 0);
             }
-            $_str_alert = "ok";
-        } else {
-            $_str_alert = "x030202";
+            $_str_rcode = "ok";
         }
 
         $this->pmIds = array(
-            "alert"     => $_str_alert,
+            "rcode"     => $_str_rcode,
             "pm_ids"    => array_unique($_arr_pmIds),
         );
 
@@ -625,16 +632,13 @@ class MODEL_PM {
 
     function input_ids_api() {
         $_str_pmIds = fn_getSafe(fn_post("pm_ids"), "txt", "");
-
-        if (!$_str_pmIds) {
-            return array(
-                "alert" => "x110211",
-            );
-        }
-
         $_arr_pmIds = array();
 
-        if ($_str_pmIds) {
+        if (fn_isEmpty($_str_pmIds)) {
+            return array(
+                "rcode" => "x110211",
+            );
+        } else {
             if (stristr($_str_pmIds, "|")) {
                 $_arr_pmIds = explode("|", $_str_pmIds);
             } else {
@@ -642,17 +646,17 @@ class MODEL_PM {
             }
         }
 
-        if ($_arr_pmIds) {
+        if (fn_isEmpty($_arr_pmIds)) {
+            $_str_rcode = "x110211";
+        } else {
             foreach ($_arr_pmIds as $_key=>$_value) {
                 $_arr_pmIds[$_key] = fn_getSafe($_value, "int", 0);
             }
-            $_str_alert = "ok";
-        } else {
-            $_str_alert = "x110211";
+            $_str_rcode = "ok";
         }
 
         $this->pmIds = array(
-            "alert"     => "ok",
+            "rcode"     => "ok",
             "str_pmIds" => $_str_pmIds,
             "pm_ids"    => array_unique($_arr_pmIds),
         );
@@ -670,29 +674,29 @@ class MODEL_PM {
     private function sql_process($arr_search = array()) {
         $_str_sqlWhere = "1=1";
 
-        if (isset($arr_search["key"]) && $arr_search["key"]) {
-            $_str_sqlWhere .= " AND (pm_title LIKE '%" . $arr_search["key"] . "%' OR pm_content LIKE '%" . $arr_search["key"] . "%')";
+        if (isset($arr_search["key"]) && !fn_isEmpty($arr_search["key"])) {
+            $_str_sqlWhere .= " AND (`pm_title` LIKE '%" . $arr_search["key"] . "%' OR `pm_content` LIKE '%" . $arr_search["key"] . "%')";
         }
 
-        if (isset($arr_search["status"]) && $arr_search["status"]) {
-            $_str_sqlWhere .= " AND pm_status='" . $arr_search["status"] . "'";
+        if (isset($arr_search["status"]) && !fn_isEmpty($arr_search["status"])) {
+            $_str_sqlWhere .= " AND `pm_status`='" . $arr_search["status"] . "'";
         }
 
-        if (isset($arr_search["type"]) && $arr_search["type"]) {
-            $_str_sqlWhere .= " AND pm_type='" . $arr_search["type"] . "'";
+        if (isset($arr_search["type"]) && !fn_isEmpty($arr_search["type"])) {
+            $_str_sqlWhere .= " AND `pm_type`='" . $arr_search["type"] . "'";
         }
 
         if (isset($arr_search["pm_from"]) && $arr_search["pm_from"] > 0) {
-            $_str_sqlWhere .= " AND pm_from=" . $arr_search["pm_from"];
+            $_str_sqlWhere .= " AND `pm_from`=" . $arr_search["pm_from"];
         }
 
         if (isset($arr_search["pm_to"]) && $arr_search["pm_to"] > 0) {
-            $_str_sqlWhere .= " AND pm_to=" . $arr_search["pm_to"];
+            $_str_sqlWhere .= " AND `pm_to`=" . $arr_search["pm_to"];
         }
 
-        if (isset($arr_search["pm_ids"]) && $arr_search["pm_ids"]) {
+        if (isset($arr_search["pm_ids"]) && !fn_isEmpty($arr_search["pm_ids"])) {
             $_str_pmIds      = implode(",", $arr_search["pm_ids"]);
-            $_str_sqlWhere .= " AND pm_in (" . $_str_pmIds . ")";
+            $_str_sqlWhere .= " AND `pm_in` (" . $_str_pmIds . ")";
         }
 
         return $_str_sqlWhere;

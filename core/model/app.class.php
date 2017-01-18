@@ -11,7 +11,6 @@ if (!defined("IN_BAIGO")) {
 
 /*-------------应用模型-------------*/
 class MODEL_APP {
-    private $obj_db;
     public $appStatus   = array(); //状态
     public $appSyncs    = array(); //是否同步
 
@@ -40,7 +39,7 @@ class MODEL_APP {
         $_arr_appCreate = array(
             "app_id"            => "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'",
             "app_name"          => "varchar(30) NOT NULL COMMENT '应用名'",
-            "app_key"           => "char(64) NOT NULL COMMENT '校验码'",
+            "app_key"           => "char(64) NOT NULL COMMENT '通信密钥'",
             "app_url_notify"    => "varchar(3000) NOT NULL COMMENT '通知接口 URL'",
             "app_url_sync"      => "varchar(3000) NOT NULL COMMENT '同步接口 URL'",
             "app_status"        => "enum('" . $_str_status . "') NOT NULL COMMENT '状态'",
@@ -55,13 +54,13 @@ class MODEL_APP {
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "app", $_arr_appCreate, "app_id", "应用");
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y050105"; //更新成功
+            $_str_rcode = "y050105"; //更新成功
         } else {
-            $_str_alert = "x050105"; //更新成功
+            $_str_rcode = "x050105"; //更新成功
         }
 
         return array(
-            "alert" => $_str_alert, //更新成功
+            "rcode" => $_str_rcode, //更新成功
         );
     }
 
@@ -75,8 +74,12 @@ class MODEL_APP {
     function mdl_column() {
         $_arr_colRows = $this->obj_db->show_columns(BG_DB_TABLE . "app");
 
-        foreach ($_arr_colRows as $_key=>$_value) {
-            $_arr_col[] = $_value["Field"];
+        $_arr_col = array();
+
+        if (!fn_isEmpty($_arr_colRows)) {
+            foreach ($_arr_colRows as $_key=>$_value) {
+                $_arr_col[] = $_value["Field"];
+            }
         }
 
         return $_arr_col;
@@ -84,12 +87,12 @@ class MODEL_APP {
 
 
     /** 修改表
-     * mdl_alert_table function.
+     * mdl_alter_table function.
      *
      * @access public
      * @return void
      */
-    function mdl_alert_table() {
+    function mdl_alter_table() {
         foreach ($this->appStatus as $_key=>$_value) {
             $_arr_status[] = $_key;
         }
@@ -101,63 +104,63 @@ class MODEL_APP {
         $_str_syncs = implode("','", $_arr_syncs);
 
         $_arr_col     = $this->mdl_column();
-        $_arr_alert   = array();
+        $_arr_alter   = array();
 
         if (in_array("app_id", $_arr_col)) {
-            $_arr_alert["app_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "app_id");
+            $_arr_alter["app_id"] = array("CHANGE", "smallint NOT NULL AUTO_INCREMENT COMMENT 'ID'", "app_id");
         }
 
         if (in_array("app_status", $_arr_col)) {
-            $_arr_alert["app_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "app_status");
+            $_arr_alter["app_status"] = array("CHANGE", "enum('" . $_str_status . "') NOT NULL COMMENT '状态'", "app_status");
         }
 
         if (in_array("app_sync", $_arr_col)) {
-            $_arr_alert["app_sync"] = array("CHANGE", "enum('" . $_str_syncs . "') NOT NULL COMMENT '状态'", "app_sync");
+            $_arr_alter["app_sync"] = array("CHANGE", "enum('" . $_str_syncs . "') NOT NULL COMMENT '状态'", "app_sync");
         }
 
         if (in_array("app_key", $_arr_col)) {
-            $_arr_alert["app_key"] = array("CHANGE", "char(64) NOT NULL COMMENT '校验码'", "app_key");
+            $_arr_alter["app_key"] = array("CHANGE", "char(64) NOT NULL COMMENT '校验码'", "app_key");
         }
 
         if (in_array("app_notice", $_arr_col)) {
-            $_arr_alert["app_notice"] = array("CHANGE", "varchar(3000) NOT NULL COMMENT '通知接口 URL'", "app_url_notify");
+            $_arr_alter["app_notice"] = array("CHANGE", "varchar(3000) NOT NULL COMMENT '通知接口 URL'", "app_url_notify");
         } else if (in_array("app_url_notice", $_arr_col)) {
-            $_arr_alert["app_url_notice"] = array("CHANGE", "varchar(3000) NOT NULL COMMENT '通知接口 URL'", "app_url_notify");
+            $_arr_alter["app_url_notice"] = array("CHANGE", "varchar(3000) NOT NULL COMMENT '通知接口 URL'", "app_url_notify");
         } else {
-            $_arr_alert["app_url_notify"] = array("ADD", "varchar(3000) NOT NULL COMMENT '通知接口 URL'");
+            $_arr_alter["app_url_notify"] = array("ADD", "varchar(3000) NOT NULL COMMENT '通知接口 URL'");
         }
 
         if (!in_array("app_url_sync", $_arr_col)) {
-            $_arr_alert["app_url_sync"] = array("ADD", "varchar(3000) NOT NULL COMMENT '同步接口 URL'", "app_url_sync");
+            $_arr_alter["app_url_sync"] = array("ADD", "varchar(3000) NOT NULL COMMENT '同步接口 URL'", "app_url_sync");
         }
 
         $_arr_appData = array(
             "app_url_sync" => "app_url_notify",
         );
-        $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_url_sync) < 1", true); //更新数据
+        $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(`app_url_sync`) < 1", true); //更新数据
 
-        $_str_alert = "y050111";
+        $_str_rcode = "y050111";
 
-        if ($_arr_alert) {
-            $_reselt = $this->obj_db->alert_table(BG_DB_TABLE . "app", $_arr_alert);
+        if (!fn_isEmpty($_arr_alter)) {
+            $_reselt = $this->obj_db->alter_table(BG_DB_TABLE . "app", $_arr_alter);
 
-            if ($_reselt) {
-                $_str_alert = "y050106";
+            if (!fn_isEmpty($_reselt)) {
+                $_str_rcode = "y050106";
 
                 $_arr_appData = array(
                     "app_status" => $_arr_status[0],
                 );
-                $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_status) < 1"); //更新数据
+                $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(`app_status`) < 1"); //更新数据
 
                 $_arr_appData = array(
                     "app_sync" => $_arr_syncs[0],
                 );
-                $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(app_sync) < 1"); //更新数据
+                $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "LENGTH(`app_sync`) < 1"); //更新数据
             }
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -174,19 +177,19 @@ class MODEL_APP {
             "app_key" => fn_rand(64),
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "app_id=" . $num_appId); //更新数据
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "`app_id`=" . $num_appId); //更新数据
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y050103"; //更新成功
+            $_str_rcode = "y050103"; //更新成功
         } else {
             return array(
-                "alert" => "x050103", //更新失败
+                "rcode" => "x050103", //更新失败
             );
         }
 
         return array(
             "app_id"    => $num_appId,
-            "alert"     => $_str_alert, //成功
+            "rcode"     => $_str_rcode, //成功
         );
     }
 
@@ -197,20 +200,25 @@ class MODEL_APP {
      * @access public
      * @return void
      */
-    function mdl_submit() {
+    function mdl_submit($_arr_appAllow = array()) {
         $_arr_appData = array(
-            "app_name"          => $this->appSubmit["app_name"],
-            "app_url_notify"    => $this->appSubmit["app_url_notify"],
-            "app_url_sync"      => $this->appSubmit["app_url_sync"],
-            "app_note"          => $this->appSubmit["app_note"],
-            "app_status"        => $this->appSubmit["app_status"],
-            "app_ip_allow"      => $this->appSubmit["app_ip_allow"],
-            "app_ip_bad"        => $this->appSubmit["app_ip_bad"],
-            "app_sync"          => $this->appSubmit["app_sync"],
-            "app_allow"         => $this->appSubmit["app_allow"],
+            "app_name"          => $this->appInput["app_name"],
+            "app_url_notify"    => $this->appInput["app_url_notify"],
+            "app_url_sync"      => $this->appInput["app_url_sync"],
+            "app_note"          => $this->appInput["app_note"],
+            "app_status"        => $this->appInput["app_status"],
+            "app_ip_allow"      => $this->appInput["app_ip_allow"],
+            "app_ip_bad"        => $this->appInput["app_ip_bad"],
+            "app_sync"          => $this->appInput["app_sync"],
         );
 
-        if ($this->appSubmit["app_id"] < 1) {
+        if (!fn_isEmpty($_arr_appAllow)) {
+            $_arr_appData["app_allow"] = fn_jsonEncode($_arr_appAllow, "no");
+        } else if (isset($this->appInput["app_allow"]) && !fn_isEmpty($this->appInput["app_allow"])) {
+            $_arr_appData["app_allow"] = fn_jsonEncode($this->appInput["app_allow"], "no");
+        }
+
+        if ($this->appInput["app_id"] < 1) {
             $_str_appKey = fn_rand(64);
             $_arr_insert = array(
                 "app_key"   => $_str_appKey,
@@ -220,21 +228,21 @@ class MODEL_APP {
 
             $_num_appId = $this->obj_db->insert(BG_DB_TABLE . "app", $_arr_data); //更新数据
             if ($_num_appId > 0) {
-                $_str_alert = "y050101"; //更新成功
+                $_str_rcode = "y050101"; //更新成功
             } else {
                 return array(
-                    "alert" => "x050101", //更新失败
+                    "rcode" => "x050101", //更新失败
                 );
             }
         } else {
             $_str_appKey = "";
-            $_num_appId  = $this->appSubmit["app_id"];
-            $_num_mysql  = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "app_id=" . $_num_appId); //更新数据
+            $_num_appId  = $this->appInput["app_id"];
+            $_num_mysql  = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appData, "`app_id`=" . $_num_appId); //更新数据
             if ($_num_mysql > 0) {
-                $_str_alert = "y050103"; //更新成功
+                $_str_rcode = "y050103"; //更新成功
             } else {
                 return array(
-                    "alert" => "x050103", //更新失败
+                    "rcode" => "x050103", //更新失败
                 );
 
             }
@@ -242,8 +250,8 @@ class MODEL_APP {
 
         return array(
             "app_id"    => $_num_appId,
-            "app_key"   => $_str_appKey,
-            "alert"     => $_str_alert, //成功
+            "app_key"   => fn_baigoCrypt($_str_appKey, $this->appInput["app_name"]),
+            "rcode"     => $_str_rcode, //成功
         );
     }
 
@@ -262,17 +270,17 @@ class MODEL_APP {
             "app_status" => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appUpdate, "app_id IN (" . $_str_appId . ")"); //删除数据
+        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . "app", $_arr_appUpdate, "`app_id` IN (" . $_str_appId . ")"); //删除数据
 
         //如影响行数大于0则返回成功
         if ($_num_mysql > 0) {
-            $_str_alert = "y050103"; //成功
+            $_str_rcode = "y050103"; //成功
         } else {
-            $_str_alert = "x050103"; //失败
+            $_str_rcode = "x050103"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
     }
 
@@ -318,7 +326,7 @@ class MODEL_APP {
             $_arr_appRow = $_arr_appRows[0];
         } else {
             return array(
-                "alert" => "x050102", //不存在记录
+                "rcode" => "x050102", //不存在记录
             );
         }
 
@@ -328,14 +336,14 @@ class MODEL_APP {
             $_arr_appRow["app_allow"] = array();
         }
 
-        if (!$_arr_appRow["app_url_sync"]) {
+        if (fn_isEmpty($_arr_appRow["app_url_sync"])) {
             $_arr_appRow["app_url_sync"] = $_arr_appRow["app_url_notify"];
         }
 
         $_arr_appRow["app_url_notify"]  = fn_htmlcode($_arr_appRow["app_url_notify"], "decode", "url");
         $_arr_appRow["app_url_sync"]    = fn_htmlcode($_arr_appRow["app_url_sync"], "decode", "url");
 
-        $_arr_appRow["alert"] = "y050102";
+        $_arr_appRow["rcode"] = "y050102";
 
         return $_arr_appRow;
     }
@@ -364,7 +372,11 @@ class MODEL_APP {
 
         $_str_sqlWhere = $this->sql_process($arr_search);
 
-        $_arr_appRows = $this->obj_db->select(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere, "", "app_id DESC", $num_no, $num_except); //查询数据
+        $_arr_order = array(
+            array("app_id", "DESC"),
+        );
+
+        $_arr_appRows = $this->obj_db->select(BG_DB_TABLE . "app", $_arr_appSelect, $_str_sqlWhere, "", $_arr_order, $num_no, $num_except); //查询数据
 
         return $_arr_appRows;
     }
@@ -399,14 +411,123 @@ class MODEL_APP {
 
         //如车影响行数小于0则返回错误
         if ($_num_mysql > 0) {
-            $_str_alert = "y050104"; //成功
+            $_str_rcode = "y050104"; //成功
         } else {
-            $_str_alert = "x050104"; //失败
+            $_str_rcode = "x050104"; //失败
         }
 
         return array(
-            "alert" => $_str_alert,
+            "rcode" => $_str_rcode,
         );
+    }
+
+
+    /** 读取 app 信息
+     * input_api function.
+     *
+     * @access public
+     * @return void
+     */
+    function input_api($str_method = "get") {
+        if ($str_method == "post") {
+            $_num_appId     = fn_post("app_id");
+            $_str_appKey    = fn_post("app_key");
+            $_tm_time       = fn_post("time");
+            $_str_sign      = fn_post("signature");
+        } else {
+            $_num_appId     = fn_get("app_id");
+            $_str_appKey    = fn_get("app_key");
+            $_tm_time       = fn_get("time");
+            $_str_sign      = fn_get("signature");
+        }
+
+        $_arr_appId = validateStr($_num_appId, 1, 0, "str", "int");
+        switch ($_arr_appId["status"]) {
+            case "too_short":
+                return array(
+                    "rcode" => "x050203",
+                );
+            break;
+
+            case "format_err":
+                return array(
+                    "rcode" => "x050204",
+                );
+            break;
+
+            case "ok":
+                $_arr_inputApi["app_id"] = $_arr_appId["str"];
+            break;
+        }
+
+        $_arr_appKey = validateStr($_str_appKey, 1, 32, "str", "alphabetDigit");
+        switch ($_arr_appKey["status"]) {
+            case "too_short":
+                return array(
+                    "rcode" => "x050214",
+                );
+            break;
+
+            case "too_long":
+                return array(
+                    "rcode" => "x050215",
+                );
+            break;
+
+            case "format_err":
+                return array(
+                    "rcode" => "x050216",
+                );
+            break;
+
+            case "ok":
+                $_arr_inputApi["app_key"] = $_arr_appKey["str"];
+            break;
+        }
+
+        $_arr_time = validateStr($_tm_time, 1, 0, "str", "int");
+        switch ($_arr_time["status"]) {
+            case "too_short":
+                return array(
+                    "rcode" => "x050224",
+                );
+            break;
+
+            case "format_err":
+                return array(
+                    "rcode" => "x050225",
+                );
+            break;
+
+            case "ok":
+                $_arr_inputApi["time"] = $_arr_time["str"];
+            break;
+        }
+
+        $_tm_diff = $_arr_inputApi["time"] - time();
+
+        if ($_tm_diff > 1800 || $_tm_diff < -1800) {
+            return array(
+                "rcode" => "x050227",
+            );
+        }
+
+        $_arr_sign = validateStr($_str_sign, 1, 0);
+        switch ($_arr_appId["status"]) {
+            case "too_short":
+                return array(
+                    "rcode" => "x050226",
+                );
+            break;
+
+            case "ok":
+                $_arr_inputApi["signature"] = $_arr_sign["str"];
+            break;
+        }
+
+        $_arr_inputApi["rcode"] = "ok";
+
+        return $_arr_inputApi;
     }
 
 
@@ -419,16 +540,16 @@ class MODEL_APP {
     function input_submit() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
-        $this->appSubmit["app_id"] = fn_getSafe(fn_post("app_id"), "int", 0);
+        $this->appInput["app_id"] = fn_getSafe(fn_post("app_id"), "int", 0);
 
-        if ($this->appSubmit["app_id"] > 0) {
+        if ($this->appInput["app_id"] > 0) {
             //检查用户是否存在
-            $_arr_appRow = $this->mdl_read($this->appSubmit["app_id"]);
-            if ($_arr_appRow["alert"] != "y050102") {
+            $_arr_appRow = $this->mdl_read($this->appInput["app_id"]);
+            if ($_arr_appRow["rcode"] != "y050102") {
                 return $_arr_appRow;
             }
         }
@@ -437,18 +558,18 @@ class MODEL_APP {
         switch ($_arr_appName["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050201",
+                    "rcode" => "x050201",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x050202",
+                    "rcode" => "x050202",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_name"] = $_arr_appName["str"];
+                $this->appInput["app_name"] = $_arr_appName["str"];
             break;
 
         }
@@ -458,24 +579,24 @@ class MODEL_APP {
         switch ($_arr_appUrlNotify["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050207",
+                    "rcode" => "x050207",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x050208",
+                    "rcode" => "x050208",
                 );
             break;
 
             case "format_err":
                 return array(
-                    "alert" => "x050209",
+                    "rcode" => "x050209",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_url_notify"] = $_arr_appUrlNotify["str"];
+                $this->appInput["app_url_notify"] = $_arr_appUrlNotify["str"];
             break;
         }
 
@@ -484,24 +605,24 @@ class MODEL_APP {
         switch ($_arr_appUrlSync["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050219",
+                    "rcode" => "x050219",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x050220",
+                    "rcode" => "x050220",
                 );
             break;
 
             case "format_err":
                 return array(
-                    "alert" => "x050221",
+                    "rcode" => "x050221",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_url_sync"] = $_arr_appUrlSync["str"];
+                $this->appInput["app_url_sync"] = $_arr_appUrlSync["str"];
             break;
         }
 
@@ -510,12 +631,12 @@ class MODEL_APP {
         switch ($_arr_appNote["status"]) {
             case "too_long":
                 return array(
-                    "alert" => "x050205",
+                    "rcode" => "x050205",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_note"] = $_arr_appNote["str"];
+                $this->appInput["app_note"] = $_arr_appNote["str"];
             break;
 
         }
@@ -524,12 +645,12 @@ class MODEL_APP {
         switch ($_arr_appStatus["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050206",
+                    "rcode" => "x050206",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_status"] = $_arr_appStatus["str"];
+                $this->appInput["app_status"] = $_arr_appStatus["str"];
             break;
         }
 
@@ -537,12 +658,12 @@ class MODEL_APP {
         switch ($_arr_appIpAllow["status"]) {
             case "too_long":
                 return array(
-                    "alert" => "x050210",
+                    "rcode" => "x050210",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_ip_allow"] = $_arr_appIpAllow["str"];
+                $this->appInput["app_ip_allow"] = $_arr_appIpAllow["str"];
             break;
         }
 
@@ -550,12 +671,12 @@ class MODEL_APP {
         switch ($_arr_appIpBad["status"]) {
             case "too_long":
                 return array(
-                    "alert" => "x050211",
+                    "rcode" => "x050211",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_ip_bad"] = $_arr_appIpBad["str"];
+                $this->appInput["app_ip_bad"] = $_arr_appIpBad["str"];
             break;
         }
 
@@ -563,39 +684,39 @@ class MODEL_APP {
         switch ($_arr_appSync["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050218",
+                    "rcode" => "x050218",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_sync"] = $_arr_appSync["str"];
+                $this->appInput["app_sync"] = $_arr_appSync["str"];
             break;
         }
 
-        $this->appSubmit["app_allow"] = fn_jsonEncode(fn_post("app_allow"), "no");
-        $this->appSubmit["alert"]     = "ok";
+        $this->appInput["app_allow"] = fn_jsonEncode(fn_post("app_allow"), "no");
+        $this->appInput["rcode"]     = "ok";
 
-        return $this->appSubmit;
+        return $this->appInput;
     }
 
 
-    function api_add() {
+    function input_setup() {
         $_arr_appName = validateStr(fn_post("app_name"), 1, 30);
         switch ($_arr_appName["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050201",
+                    "rcode" => "x050201",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x050202",
+                    "rcode" => "x050202",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_name"] = $_arr_appName["str"];
+                $this->appInput["app_name"] = $_arr_appName["str"];
             break;
 
         }
@@ -604,24 +725,24 @@ class MODEL_APP {
         switch ($_arr_appUrlNotify["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050207",
+                    "rcode" => "x050207",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x050208",
+                    "rcode" => "x050208",
                 );
             break;
 
             case "format_err":
                 return array(
-                    "alert" => "x050209",
+                    "rcode" => "x050209",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_url_notify"] = $_arr_appUrlNotify["str"];
+                $this->appInput["app_url_notify"] = fn_htmlcode($_arr_appUrlNotify["str"], "decode", "url");
             break;
         }
 
@@ -629,50 +750,39 @@ class MODEL_APP {
         switch ($_arr_appUrlSync["status"]) {
             case "too_short":
                 return array(
-                    "alert" => "x050219",
+                    "rcode" => "x050219",
                 );
             break;
 
             case "too_long":
                 return array(
-                    "alert" => "x050220",
+                    "rcode" => "x050220",
                 );
             break;
 
             case "format_err":
                 return array(
-                    "alert" => "x050221",
+                    "rcode" => "x050221",
                 );
             break;
 
             case "ok":
-                $this->appSubmit["app_url_sync"] = $_arr_appUrlSync["str"];
+                $this->appInput["app_url_sync"] = fn_htmlcode($_arr_appUrlSync["str"], "decode", "url");
             break;
         }
 
+        $this->appInput["app_allow"]    = fn_post("app_allow");
 
-        $_arr_appAllow = array(
-            "user" => array(
-                "reg"       => 1,
-                "edit"      => 1,
-                "del"       => 1,
-                "mailbox"   => 1,
-                "forgot"    => 1,
-                "global"    => 1,
-            ),
-        );
+        $this->appInput["app_note"]     = $this->appInput["app_name"];
+        $this->appInput["app_status"]   = "enable";
+        $this->appInput["app_ip_allow"] = "";
+        $this->appInput["app_ip_bad"]   = "";
+        $this->appInput["app_sync"]     = "on";
+        $this->appInput["app_id"]       = 0;
 
-        $this->appSubmit["app_note"]        = $this->appSubmit["app_name"];
-        $this->appSubmit["app_status"]      = "enable";
-        $this->appSubmit["app_ip_allow"]    = "";
-        $this->appSubmit["app_ip_bad"]      = "";
-        $this->appSubmit["app_sync"]        = "on";
-        $this->appSubmit["app_allow"]       = json_encode($_arr_appAllow);
-        $this->appSubmit["app_id"]          = 0;
+        $this->appInput["rcode"]        = "ok";
 
-        $this->appSubmit["alert"]         = "ok";
-
-        return $this->appSubmit;
+        return $this->appInput;
     }
 
 
@@ -685,23 +795,23 @@ class MODEL_APP {
     function input_ids() {
         if (!fn_token("chk")) { //令牌
             return array(
-                "alert" => "x030206",
+                "rcode" => "x030206",
             );
         }
 
         $_arr_appIds = fn_post("app_ids");
 
-        if ($_arr_appIds) {
+        if (fn_isEmpty($_arr_appIds)) {
+            $_str_rcode = "x030202";
+        } else {
             foreach ($_arr_appIds as $_key=>$_value) {
                 $_arr_appIds[$_key] = fn_getSafe($_value, "int", 0);
             }
-            $_str_alert = "ok";
-        } else {
-            $_str_alert = "x030202";
+            $_str_rcode = "ok";
         }
 
         $this->appIds = array(
-            "alert"     => $_str_alert,
+            "rcode"     => $_str_rcode,
             "app_ids"   => array_unique($_arr_appIds),
         );
 
@@ -719,29 +829,29 @@ class MODEL_APP {
     private function sql_process($arr_search = array()) {
         $_str_sqlWhere = "1=1";
 
-        if (isset($arr_search["key"]) && $arr_search["key"]) {
-            $_str_sqlWhere .= " AND (app_name LIKE '%" . $arr_search["key"] . "%' OR app_note LIKE '%" . $arr_search["key"] . "%')";
+        if (isset($arr_search["key"]) && !fn_isEmpty($arr_search["key"])) {
+            $_str_sqlWhere .= " AND (`app_name` LIKE '%" . $arr_search["key"] . "%' OR `app_note` LIKE '%" . $arr_search["key"] . "%')";
         }
 
-        if (isset($arr_search["status"]) && $arr_search["status"]) {
-            $_str_sqlWhere .= " AND app_status='" . $arr_search["status"] . "'";
+        if (isset($arr_search["status"]) && !fn_isEmpty($arr_search["status"])) {
+            $_str_sqlWhere .= " AND `app_status`='" . $arr_search["status"] . "'";
         }
 
-        if (isset($arr_search["sync"]) && $arr_search["sync"]) {
-            $_str_sqlWhere .= " AND app_sync='" . $arr_search["sync"] . "'";
+        if (isset($arr_search["sync"]) && !fn_isEmpty($arr_search["sync"])) {
+            $_str_sqlWhere .= " AND `app_sync`='" . $arr_search["sync"] . "'";
         }
 
         if (isset($arr_search["has_notify"])) {
-            $_str_sqlWhere .= " AND LENGTH(app_url_notify)>0";
+            $_str_sqlWhere .= " AND LENGTH(`app_url_notify`)>0";
         }
 
         if (isset($arr_search["has_sync"])) {
-            $_str_sqlWhere .= " AND LENGTH(app_url_sync)>0";
+            $_str_sqlWhere .= " AND LENGTH(`app_url_sync`)>0";
         }
 
-        if (isset($arr_search["not_ids"]) && $arr_search["not_ids"]) {
+        if (isset($arr_search["not_ids"]) && !fn_isEmpty($arr_search["not_ids"])) {
             $_str_appIds     = implode(",", $arr_search["not_ids"]);
-            $_str_sqlWhere  .= " AND app_id NOT IN (" . $_str_appIds . ")";
+            $_str_sqlWhere  .= " AND `app_id` NOT IN (" . $_str_appIds . ")";
         }
 
         return $_str_sqlWhere;

@@ -1,0 +1,87 @@
+<h3>手动安装 / 升级概述</h3>
+<p>
+    当用户利用本系统提供的安装、升级程序遇到困难或者希望自己手动安装 / 升级时，请参照本文档。
+</p>
+<p>
+    本系统的所有配置文件保存于 ./config 文件夹，每个文件均配备一个例子，文件名以 _sample 为后缀，所有配置均定义为常量，以下是详细说明。
+</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">目录结构说明</div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-nowrap">文件名</th>
+                    <th class="text-nowrap">说明</th>
+                    <th>备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-nowrap">opt_dbconfig.inc.php</td>
+                    <td class="text-nowrap">数据库配置</td>
+                    <td>系统与数据库通讯的配置文件。</td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">opt_base.inc.php</td>
+                    <td class="text-nowrap">基本配置</td>
+                    <td>定义系统的基本信息，例如站点名称、时区、显示格式等。</td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">opt_reg.inc.php</td>
+                    <td class="text-nowrap">注册配置</td>
+                    <td>定义注册相关的配置。</td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">opt_smtp.inc.php</td>
+                    <td class="text-nowrap">邮件发送配置</td>
+                    <td>实际上是配置发件服务器（SMTP）以及认证信息。</td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">opt_config.inc.php</td>
+                    <td class="text-nowrap">全局配置</td>
+                    <td>大部分的系统常量均保存于此，除非您非常了解 PHP，否则不建议修改此文件。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>&nbsp;</div>
+
+<p>
+    所有配置结束后，应执数据表创建 / 升级程序和完毕程序，详情如下表：
+</p>
+
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>路径</th>
+                    <th class="text-nowrap">说明</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="text-primary">./install/index.php?mod=setup&act=dbtable</td>
+                    <td class="text-nowrap">创建数据表</td>
+                </tr>
+                <tr>
+                    <td class="text-primary">./install/index.php?mod=upgrade&act=dbtable</td>
+                    <td class="text-nowrap">升级数据表</td>
+                </tr>
+                <tr>
+                    <td class="text-primary">./install/index.php?mod=setup&act=over</td>
+                    <td class="text-nowrap">安装完毕</td>
+                </tr>
+                <tr>
+                    <td class="text-primary">./install/index.php?mod=upgrade&act=over</td>
+                    <td class="text-nowrap">升级完毕</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

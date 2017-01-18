@@ -9,7 +9,10 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_LIB . "PHPMailer/PHPMailerAutoload.php"); //载入 PHPMailer 类
+if (!defined("BG_PATH_LIB")) {
+    define("BG_PATH_LIB", BG_PATH_CORE . "/lib/");
+}
+require(BG_PATH_LIB . "PHPMailer/PHPMailerAutoload.php"); //载入 PHPMailer 类
 
 function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = "") {
 

@@ -1,0 +1,108 @@
+.bg-panel { max-width: 450px; margin: 0 auto; }
+
+@media (min-width:768px) {
+    .bg-panel { margin: 40px auto; }
+}
+
+.bg-panel-heading { background: url(../image/heading_bg.png) center center !important; background-size: cover; }
+.bg-panel-heading img { margin: 20px auto; }
+
+.bg-nav-pills a { padding: 4px 8px !important; }
+.bg-dl dd { margin-bottom: 10px; }
+
+.bg-nav-line {
+    padding-left: 0;
+    margin: 3px 0 0 -3px;
+    list-style: none;
+}
+
+.bg-nav-line > li {
+    display: inline-block;
+    padding: 0 3px;
+}
+
+.bg-nav-line > li + li:before {
+    padding-right: 4px;
+    color: #999;
+    content: "|";
+}
+
+.bg-label { margin-bottom: 5px; font-size: 12px; display: inline-block; }
+.bg-tooltip .tooltip-inner { max-width: 500px; }
+
+.panel-default .bg-panel-hr { border-color: #ddd; margin: 20px -15px; }
+
+.bg-well-hr { border-color: #e3e3e3; margin: 25px -19px; }
+.bg-alert-hr { margin: 20px -15px; }
+
+.bg-radio,
+.bg-checkbox {
+    display: block;
+    min-height: 20px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+}
+
+.bg-radio input[type="radio"],
+.bg-checkbox input[type="checkbox"] {
+    display: inline;
+    font-weight: normal;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.bg-radio label,
+.bg-checkbox label {
+    display: inline;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.bg-td-xs { width: 80px; text-align: center !important; }
+.bg-td-sm { width: 120px; }
+.bg-td-md { width: 160px; }
+.bg-td-lg { width: 220px; }
+.bg-td-xl { width: 300px; }
+
+.bg-spin {
+    -webkit-transform-origin: 50% 50%;
+    transform-origin:50% 50%;
+    -ms-transform-origin:50% 50%; /* IE 9 */
+    -webkit-animation: bg-spin .8s infinite linear;
+    -moz-animation: bg-spin .8s infinite linear;
+    -o-animation: bg-spin .8s infinite linear;
+    animation: bg-spin .8s infinite linear;
+}
+@-webkit-keyframes bg-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+@keyframes bg-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+.bg-textarea-md { height: 200px !important; }
+.bg-textarea-lg { height: 400px auto !important; }
+
+.control-label > span { color: #c30; margin-left: 10px; }
+
+.bg-input-range {
+    border-width: 1px 0;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.bg-footer { padding: 15px; margin-top: 15px; }

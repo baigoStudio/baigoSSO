@@ -11,8 +11,6 @@ if (!defined("IN_BAIGO")) {
 
 /*-------------session 模型-------------*/
 class MODEL_SESSION {
-    // session-lifetime
-    private $lifeTime;
 
     function __construct() { //构造函数
         $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
@@ -34,13 +32,13 @@ class MODEL_SESSION {
         $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . "session", $_arr_ssinCreat, "session_id", "SESSION", "InnoDB");
 
         if ($_num_mysql > 0) {
-            $_str_alert = "y030105"; //更新成功
+            $_str_rcode = "y030105"; //更新成功
         } else {
-            $_str_alert = "x030105"; //更新失败
+            $_str_rcode = "x030105"; //更新失败
         }
 
         return array(
-            "alert" => $_str_alert, //更新成功
+            "rcode" => $_str_rcode, //更新成功
         );
     }
 
@@ -91,7 +89,7 @@ class MODEL_SESSION {
     function mdl_read($str_ssinId) {
         $_arr_ssinRow = $this->mdl_readDb($str_ssinId, time());
 
-        if ($_arr_ssinRow["alert"] != "y030102") {
+        if ($_arr_ssinRow["rcode"] != "y030102") {
             return "";
         }
 
@@ -120,8 +118,8 @@ class MODEL_SESSION {
 
         //print_r(strlen($str_ssinData));
 
-        if ($_arr_ssinRow["alert"] == "y030102") {
-            $_num_mysql  = $this->obj_db->update(BG_DB_TABLE . "session", $_arr_ssinData, "session_id='" . $str_ssinId . "'");
+        if ($_arr_ssinRow["rcode"] == "y030102") {
+            $_num_mysql  = $this->obj_db->update(BG_DB_TABLE . "session", $_arr_ssinData, "`session_id`='" . $str_ssinId . "'");
 
             if ($_num_mysql > 0) { //数据库更新是否成功
                 return true;
@@ -201,11 +199,11 @@ class MODEL_SESSION {
             $_arr_ssinRow    = $_arr_ssinRows[0];
         } else {
             return array(
-                "alert" => "x030102", //不存在记录
+                "rcode" => "x030102", //不存在记录
             );
         }
 
-        $_arr_ssinRow["alert"] = "y030102";
+        $_arr_ssinRow["rcode"] = "y030102";
 
         return $_arr_ssinRow;
     }

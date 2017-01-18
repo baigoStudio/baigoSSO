@@ -9,71 +9,62 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_CLASS . "api.class.php"); //载入模板类
-include_once(BG_PATH_CLASS . "crypt.class.php"); //载入模板类
-include_once(BG_PATH_CLASS . "sign.class.php"); //载入模板类
-include_once(BG_PATH_MODEL . "app.class.php"); //载入后台用户类
-include_once(BG_PATH_MODEL . "belong.class.php");
-include_once(BG_PATH_MODEL . "user.class.php"); //载入后台用户类
-include_once(BG_PATH_MODEL . "log.class.php"); //载入管理帐号模型
-
 /*-------------用户类-------------*/
-class API_SYNC {
-
-    private $obj_api;
-    private $log;
-    private $mdl_user;
-    private $appAllow;
-    private $appRows;
-    private $appRequest;
+class CONTROL_API_SYNC {
 
     function __construct() { //构造函数
         $this->obj_api      = new CLASS_API();
         $this->obj_api->chk_install();
-        $this->log          = $this->obj_api->log; //初始化 AJAX 基对象
-        $this->obj_crypt    = new CLASS_CRYPT();
-        $this->obj_sign     = new CLASS_SIGN();
+
+        $this->log          = $this->obj_api->log;
+
+        $this->obj_crypt    = $this->obj_api->obj_crypt;
+        $this->obj_sign     = $this->obj_api->obj_sign;
+
         $this->mdl_user     = new MODEL_USER(); //设置管理组模型
+        $this->mdl_user_api = new MODEL_USER_API(); //设置管理组模型
         $this->mdl_app      = new MODEL_APP(); //设置管理组模型
         $this->mdl_belong   = new MODEL_BELONG();
         $this->mdl_log      = new MODEL_LOG(); //设置管理员模型
     }
 
 
-    function api_login() {
-        $this->app_check();
-
-        $_arr_userSubmit = $this->mdl_user->input_get_by("post");
-        if ($_arr_userSubmit["alert"] != "ok") {
-            $this->obj_api->halt_re($_arr_userSubmit);
+    function ctrl_login() {
+        $_arr_apiChks = $this->obj_api->app_chk("post");
+        if ($_arr_apiChks["rcode"] != "ok") {
+            $this->obj_api->show_result($_arr_apiChks);
         }
 
-        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userSubmit["user_str"], $_arr_userSubmit["user_by"]);
+        $this->user_check();
 
-        if ($_arr_userRow["alert"] != "y010102") {
-            $this->obj_api->halt_re($_arr_userRow);
-        }
+        $_arr_sign = array(
+            "act"                       => $GLOBALS["act"],
+            $this->userInput["user_by"] => $this->userInput["user_str"],
+            "user_access_token"         => $this->userInput["user_access_token"],
+        );
 
-        if ($_arr_userRow["user_status"] == "disable") {
+        if (!$this->obj_sign->sign_check(array_merge($_arr_apiChks["appInput"], $_arr_sign), $_arr_apiChks["appInput"]["signature"])) {
             $_arr_return = array(
-                "alert" => "x010401",
+                "rcode" => "x050403",
             );
-            $this->obj_api->halt_re($_arr_return);
+            $this->obj_api->show_result($_arr_return);
         }
 
-        unset($_arr_userRow["user_pass"], $_arr_userRow["user_nick"], $_arr_userRow["user_note"], $_arr_userRow["user_rand"], $_arr_userRow["user_status"], $_arr_userRow["user_time"], $_arr_userRow["user_time_login"], $_arr_userRow["user_ip"]);
+        $this->app_list($_arr_apiChks["appInput"]["app_id"]);
 
+        $_arr_code    = $this->userRow;
         $_arr_urlRows = array();
 
         foreach ($this->appRows as $_key=>$_value) {
-            $_arr_userRow["app_id"]   = $_value["app_id"];
-            $_arr_userRow["app_key"]  = $_value["app_key"];
+            $_str_appKey            = fn_baigoCrypt($_value["app_key"], $_value["app_name"]);
+            $_arr_code["app_id"]    = $_value["app_id"];
+            $_arr_code["app_key"]   = $_str_appKey;
 
-            //unset($_arr_userRow["alert"]);
-            $_str_src     = fn_jsonEncode($_arr_userRow, "encode");
-            $_str_code    = $this->obj_crypt->encrypt($_str_src, $_value["app_key"]);
+            //unset($_arr_code["rcode"]);
+            $_str_src               = $this->obj_api->encode_result($_arr_code);
+            $_str_code              = $this->obj_crypt->encrypt($_str_src, $_str_appKey);
 
-            $_tm_time     = time();
+            $_tm_time               = time();
 
             if (stristr($_value["app_url_sync"], "?")) {
                 $_str_conn = "&";
@@ -83,61 +74,61 @@ class API_SYNC {
             $_str_url = $_value["app_url_sync"] . $_str_conn . "mod=sync";
 
             $_arr_data = array(
-                "act_get"   => "login",
-                "app_id"    => $_value["app_id"],
-                "app_key"   => $_value["app_key"],
-                "time"      => $_tm_time,
-                "code"      => $_str_code,
+                "act"   => "login",
+                "time"  => $_tm_time,
+                "code"  => $_str_code,
             );
 
             $_arr_data["signature"] = $this->obj_sign->sign_make($_arr_data);
 
-            $_arr_urlRows[] = urlencode($_str_url . "&" . http_build_query($_arr_data));
+            $_arr_urlRows[] = $_str_url . "&" . http_build_query($_arr_data);
         }
 
-        $_arr_return = array(
-            "alert"      => "y100401",
+        $_arr_tplData = array(
+            "rcode"      => "y100401",
             "urlRows"    => $_arr_urlRows,
         );
-
-        $this->obj_api->halt_re($_arr_return);
+        $this->obj_api->show_result($_arr_tplData);
     }
 
 
-    function api_logout() {
-        $this->app_check();
-
-        $_arr_userSubmit = $this->mdl_user->input_get_by("post");
-        if ($_arr_userSubmit["alert"] != "ok") {
-            $this->obj_api->halt_re($_arr_userSubmit);
+    function ctrl_logout() {
+        $_arr_apiChks = $this->obj_api->app_chk("post");
+        if ($_arr_apiChks["rcode"] != "ok") {
+            $this->obj_api->show_result($_arr_apiChks);
         }
 
-        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userSubmit["user_str"], $_arr_userSubmit["user_by"]);
+        $this->user_check();
 
-        if ($_arr_userRow["alert"] != "y010102") {
-            $this->obj_api->halt_re($_arr_userRow);
-        }
+        $_arr_sign = array(
+            "act"                       => $GLOBALS["act"],
+            $this->userInput["user_by"] => $this->userInput["user_str"],
+            "user_access_token"         => $this->userInput["user_access_token"],
+        );
 
-        if ($_arr_userRow["user_status"] == "disable") {
+        if (!$this->obj_sign->sign_check($_arr_sign, $_arr_apiChks["appInput"]["signature"])) {
             $_arr_return = array(
-                "alert" => "x010401",
+                "rcode" => "x050403",
             );
-            $this->obj_api->halt_re($_arr_return);
+            $this->obj_api->show_result($_arr_return);
         }
 
-        unset($_arr_userRow["user_pass"], $_arr_userRow["user_mail"], $_arr_userRow["user_nick"], $_arr_userRow["user_note"], $_arr_userRow["user_rand"], $_arr_userRow["user_status"], $_arr_userRow["user_time"], $_arr_userRow["user_time_login"], $_arr_userRow["user_ip"]);
+        $this->app_list($_arr_apiChks["appInput"]["app_id"]);
 
-        $_arr_code    = $_arr_userRow;
+        $_arr_code    = $this->userRow;
         $_arr_urlRows = array();
 
         foreach ($this->appRows as $_key=>$_value) {
-            $_tm_time                = time();
-            $_arr_code["app_id"]     = $_value["app_id"];
-            $_arr_code["app_key"]    = $_value["app_key"];
+            $_str_appKey            = fn_baigoCrypt($_value["app_key"], $_value["app_name"]);
 
-            //unset($_arr_code["alert"]);
-            $_str_src     = fn_jsonEncode($_arr_code, "encode");
-            $_str_code    = $this->obj_crypt->encrypt($_str_src, $_value["app_key"]);
+            $_arr_code["app_id"]    = $_value["app_id"];
+            $_arr_code["app_key"]   = $_str_appKey;
+
+            //unset($_arr_code["rcode"]);
+            $_str_src               = $this->obj_api->encode_result($_arr_code);
+            $_str_code              = $this->obj_crypt->encrypt($_str_src, $_str_appKey);
+
+            $_tm_time               = time();
 
             if (stristr($_value["app_url_sync"], "?")) {
                 $_str_conn = "&";
@@ -147,91 +138,72 @@ class API_SYNC {
             $_str_url = $_value["app_url_sync"] . $_str_conn . "mod=sync";
 
             $_arr_data = array(
-                "act_get"   => "logout",
-                "app_id"    => $_value["app_id"],
-                "app_key"   => $_value["app_key"],
-                "time"      => $_tm_time,
-                "code"      => $_str_code,
+                "act"   => "logout",
+                "time"  => $_tm_time,
+                "code"  => $_str_code,
             );
 
             $_arr_data["signature"] = $this->obj_sign->sign_make($_arr_data);
 
-            $_arr_urlRows[] = urlencode($_str_url . "&" . http_build_query($_arr_data));
+            $_arr_urlRows[] = $_str_url . "&" . http_build_query($_arr_data);
         }
 
-        $_arr_return = array(
-            "alert"      => "y100402",
+        $_arr_tplData = array(
+            "rcode"      => "y100402",
             "urlRows"    => $_arr_urlRows,
         );
-
-        $this->obj_api->halt_re($_arr_return);
+        $this->obj_api->show_result($_arr_tplData);
     }
 
 
-    /**
-     * app_check function.
-     *
-     * @access private
-     * @param mixed $num_appId
-     * @param string $str_method (default: "get")
-     * @return void
-     */
-    private function app_check() {
-        $this->appRequest = $this->obj_api->app_request("post", true);
-
-        if ($this->appRequest["alert"] != "ok") {
-            $this->obj_api->halt_re($this->appRequest);
-        }
-
-        $_arr_logTarget[] = array(
-            "app_id" => $this->appRequest["app_id"]
-        );
-
-        $this->appRow = $this->mdl_app->mdl_read($this->appRequest["app_id"]);
-        if ($this->appRow["alert"] != "y050102") {
-            $_arr_logType = array("app", "read");
-            $this->log_do($_arr_logTarget, "app", $this->appRow, $_arr_logType);
-            $this->obj_api->halt_re($this->appRow);
-        }
-
-        $_arr_appChk = $this->obj_api->app_chk($this->appRequest, $this->appRow);
-        if ($_arr_appChk["alert"] != "ok") {
-            $_arr_logType = array("app", "check");
-            $this->log_do($_arr_logTarget, "app", $_arr_appChk, $_arr_logType);
-            $this->obj_api->halt_re($_arr_appChk);
-        }
-
+    private function app_list($num_appId) {
         $_arr_search = array(
             "status"        => "enable",
             "sync"          => "on",
-            "has_notify"    => true,
-            "not_ids"       => array($this->appRequest["app_id"]),
+            "has_sync"      => true,
+            "not_ids"       => array($num_appId),
         );
         $this->appRows = $this->mdl_app->mdl_list(100, 0, $_arr_search);
     }
 
 
-    /**
-     * log_do function.
-     *
-     * @access private
-     * @param mixed $arr_logResult
-     * @param mixed $str_logType
-     * @return void
-     */
-    private function log_do($arr_logTarget, $str_targetType, $arr_logResult, $arr_logType) {
-        $_str_targets = json_encode($arr_logTarget);
-        $_str_result  = json_encode($arr_logResult);
+    private function user_check() {
+        $this->userInput = $this->mdl_user_api->input_token("post");
 
-        $_arr_logData = array(
-            "log_targets"        => $_str_targets,
-            "log_target_type"    => $str_targetType,
-            "log_title"          => $this->log[$arr_logType[0]][$arr_logType[1]],
-            "log_result"         => $_str_result,
-            "log_type"           => "app",
-        );
+        if ($this->userInput["rcode"] != "ok") {
+            $this->obj_api->show_result($this->userInput);
+        }
 
-        $this->mdl_log->mdl_submit($_arr_logData, $this->appRequest["app_id"]);
+        $this->userRow = $this->mdl_user->mdl_read($this->userInput["user_str"], $this->userInput["user_by"]);
+        if ($this->userRow["rcode"] != "y010102") {
+            $this->obj_api->show_result($this->userRow);
+        }
+
+        if ($this->userRow["user_status"] == "disable") {
+            $_arr_return = array(
+                "rcode" => "x010401",
+            );
+            $this->obj_api->show_result($_arr_return);
+        }
+
+        if ($this->userRow["user_access_expire"] < time()) {
+            $_arr_return = array(
+                "rcode" => "x010231",
+            );
+            $this->obj_api->show_result($_arr_return);
+        }
+
+        /*print_r($this->userInput);
+        print_r("<br>");
+        print_r($this->userRow);*/
+
+        if ($this->userInput["user_access_token"] != md5(fn_baigoCrypt($this->userRow["user_access_token"], $this->userRow["user_name"]))) {
+            $_arr_return = array(
+                "rcode" => "x010230",
+            );
+            $this->obj_api->show_result($_arr_return);
+        }
+
+        unset($this->userRow["user_pass"], $this->userRow["user_nick"], $this->userRow["user_note"], $this->userRow["user_status"], $this->userRow["user_time"], $this->userRow["user_time_login"], $this->userRow["user_ip"]);
     }
-
 }

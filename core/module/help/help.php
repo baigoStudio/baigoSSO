@@ -9,15 +9,14 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
-include_once(BG_PATH_FUNC . "init.func.php"); //初始化
+require(BG_PATH_INC . "common.inc.php"); //通用
+
+require(BG_PATH_FUNC . "init.func.php"); //初始化
 $arr_set = array(
-    "base"          => true, //基本设置
-    "header"        => "Content-Type: text/html; charset=utf-8", //header
+    "base" => true, //基本设置
 );
 fn_init($arr_set);
 
-include_once(BG_PATH_CONTROL . "help/help.class.php"); //载入帮助类
+$ctrl_help = new CONTROL_HELP_HELP();
 
-$ctl_help = new CONTROL_HELP();
-
-$ctl_help->ctl_show(); //显示帮助
+$ctrl_help->ctrl_show(); //显示帮助

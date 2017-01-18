@@ -13,7 +13,7 @@ if (!defined("IN_BAIGO")) {
 return array(
     "user" => array(
         "enable"  => "激活", //生效
-        "wait"    => "待审", //待审
+        "wait"    => "待激活", //待审
         "disable" => "禁用", //禁用
     ),
 

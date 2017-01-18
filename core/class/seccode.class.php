@@ -13,23 +13,8 @@ if (!defined("IN_BAIGO")) {
 class CLASS_SECCODE {
     private $chars = "abdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789";
 
-    private $code; //验证码
-    private $len; //长度
-
-    private $fontFile; //字体
-    private $fontSize; //字号
-    private $width; //图片宽度
-    private $height; //图片高度
-
-    private $colorPix; //干扰颜色
-    private $colorFont; //字体颜色
-    private $colorShadow; //字体阴影
-
-    private $image; //图形资源
-    private $back; //背景资源
-
     //设置验证码
-    public function secSet($sec_size = 20, $sec_len = 4, $sec_font = "FetteSteinschrift.ttf") {
+    function secSet($sec_size = 20, $sec_len = 4, $sec_font = "FetteSteinschrift.ttf") {
         $this->len        = $sec_len;
         $this->fontSize   = $sec_size;
         $this->fontFile   = BG_PATH_FONT . $sec_font;
@@ -88,7 +73,7 @@ class CLASS_SECCODE {
     }
 
     //对外生成
-    public function secDo() {
+    function secDo() {
         $this->createCode();
         $this->createBg();
         $this->createLine();
