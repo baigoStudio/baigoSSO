@@ -9,6 +9,8 @@ if (!defined("IN_BAIGO")) {
     exit("Access Denied");
 }
 
+require(BG_PATH_FUNC . "http.func.php"); //载入模板类
+
 /*-------------管理员控制器-------------*/
 class CONTROL_CONSOLE_UI_OPT {
 
