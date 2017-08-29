@@ -5,28 +5,28 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
-if (!defined("BG_PATH_LIB")) {
-    define("BG_PATH_LIB", BG_PATH_CORE . "/lib/");
+if (!defined('BG_PATH_LIB')) {
+    define('BG_PATH_LIB', BG_PATH_CORE . DS . 'lib' . DS);
 }
-require(BG_PATH_LIB . "PHPMailer/PHPMailerAutoload.php"); //载入 PHPMailer 类
+fn_include(BG_PATH_LIB . 'PHPMailer' . DS . 'PHPMailerAutoload.php'); //载入 PHPMailer 类
 
-function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = "") {
+function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = '') {
 
     $_obj_mail              = new PHPMailer; //初始化
     $_obj_mail->isSMTP(); //使用 SMTP
     $_obj_mail->isHTML(); //发送 HTML
 
     $_obj_mail->SMTPDebug   = 0; //SMTP 调试开关 0 关闭，1 客户端消息, 2 客户端与服务端消息
-    $_obj_mail->Debugoutput = "html"; //SMTP 调试信息类型
-    $_obj_mail->CharSet     = "UTF-8"; //邮件编码
+    $_obj_mail->Debugoutput = 'html'; //SMTP 调试信息类型
+    $_obj_mail->CharSet     = 'UTF-8'; //邮件编码
     $_obj_mail->Host        = BG_SMTP_HOST; //主机
     $_obj_mail->Port        = BG_SMTP_PORT; //端口
 
-    if (BG_SMTP_AUTH == "true") {
+    if (BG_SMTP_AUTH == 'true') {
         $_is_auth = true;
     } else {
         $_is_auth = false;
@@ -46,7 +46,7 @@ function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = "") {
     $_obj_mail->msgHTML($str_content); //内容
 
     $_obj_mail->AltBody     = $str_text; //HTML 无法显示时的替代内容
-    //$_obj_mail->addAttachment("images/phpmailer_mini.png"); //附件
+    //$_obj_mail->addAttachment('images/phpmailer_mini.png'); //附件
 
     return $_obj_mail->send();
 }

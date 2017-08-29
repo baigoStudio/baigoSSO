@@ -5,11 +5,11 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
-require(BG_PATH_FUNC . "http.func.php"); //载入模板类
+fn_include(BG_PATH_FUNC . 'http.func.php'); //载入模板类
 
 /*-------------管理员控制器-------------*/
 class CONTROL_CONSOLE_REQUEST_APP {
@@ -17,8 +17,10 @@ class CONTROL_CONSOLE_REQUEST_APP {
     private $is_super = false;
 
     function __construct() { //构造函数
+        $this->config   = $GLOBALS['obj_base']->config;
+
         $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->dspType = "result";
+        $this->obj_console->dspType = 'result';
         $this->obj_console->chk_install();
 
         $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
@@ -26,13 +28,11 @@ class CONTROL_CONSOLE_REQUEST_APP {
 
         $this->obj_tpl          = $this->obj_console->obj_tpl;
 
-        $this->log              = $this->obj_tpl->log;
-
         $this->tplData = array(
-            "adminLogged" => $this->adminLogged
+            'adminLogged' => $this->adminLogged
         );
 
-        if ($this->adminLogged["admin_type"] == "super") {
+        if ($this->adminLogged['admin_type'] == 'super') {
             $this->is_super = true;
         }
 
@@ -40,100 +40,99 @@ class CONTROL_CONSOLE_REQUEST_APP {
         $this->mdl_app          = new MODEL_APP(); //设置管理员模型
         $this->mdl_belong       = new MODEL_BELONG();
         $this->mdl_user         = new MODEL_USER(); //设置管理员模型
-        $this->mdl_log          = new MODEL_LOG(); //设置管理员模型
     }
 
 
     function ctrl_reset() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->is_super) {
             $_arr_tplData = array(
-                "rcode" => "x050303",
+                'rcode' => 'x050303',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_num_appId   = fn_getSafe(fn_post("app_id"), "int", 0);
+        $_num_appId   = fn_getSafe(fn_post('app_id'), 'int', 0);
 
         if ($_num_appId < 1) {
             $_arr_tplData = array(
-                "rcode" => "x050203",
+                'rcode' => 'x050203',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_appRow = $this->mdl_app->mdl_read($_num_appId);
-        if ($_arr_appRow["rcode"] != "y050102") {
-            $this->obj_tpl->tplDisplay("result", $_arr_appRow);
+        if ($_arr_appRow['rcode'] != 'y050102') {
+            $this->obj_tpl->tplDisplay('result', $_arr_appRow);
         }
 
         $_arr_appRow  = $this->mdl_app->mdl_reset($_num_appId);
 
-        $this->obj_tpl->tplDisplay("result", $_arr_appRow);
+        $this->obj_tpl->tplDisplay('result', $_arr_appRow);
     }
 
 
     function ctrl_deauth() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->is_super) {
             $_arr_tplData = array(
-                "rcode" => "x050303",
+                'rcode' => 'x050303',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_userIds = $this->mdl_user->input_ids();
 
         //print_r($_arr_userIds);
 
-        if ($_arr_userIds["rcode"] != "ok") {
-            $this->obj_tpl->tplDisplay("result", $_arr_userIds);
+        if ($_arr_userIds['rcode'] != 'ok') {
+            $this->obj_tpl->tplDisplay('result', $_arr_userIds);
         }
 
-        $_num_appId = fn_getSafe(fn_post("app_id"), "int", 0);
+        $_num_appId = fn_getSafe(fn_post('app_id'), 'int', 0);
 
         if ($_num_appId < 1) {
             $_arr_tplData = array(
-                "rcode" => "x050203",
+                'rcode' => 'x050203',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $this->mdl_belong->mdl_del($_num_appId, 0, false, $_arr_userIds["user_ids"]);
+        $this->mdl_belong->mdl_del($_num_appId, 0, false, $_arr_userIds['user_ids']);
 
         //$_arr_appRow     = $this->mdl_app->mdl_order();
 
         $_arr_tplData = array(
-            "rcode" => "y070402",
+            'rcode' => 'y070402',
         );
-        $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
 
 
     function ctrl_auth() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->is_super) {
             $_arr_tplData = array(
-                "rcode" => "x050303",
+                'rcode' => 'x050303',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_userIds = $this->mdl_user->input_ids();
 
-        if ($_arr_userIds["rcode"] != "ok") {
-            $this->obj_tpl->tplDisplay("result", $_arr_userIds);
+        if ($_arr_userIds['rcode'] != 'ok') {
+            $this->obj_tpl->tplDisplay('result', $_arr_userIds);
         }
 
-        $_num_appId = fn_getSafe(fn_post("app_id"), "int", 0);
+        $_num_appId = fn_getSafe(fn_post('app_id'), 'int', 0);
 
         if ($_num_appId < 1) {
             $_arr_tplData = array(
-                "rcode" => "x050203",
+                'rcode' => 'x050203',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        foreach ($_arr_userIds["user_ids"] as $_key=>$_value) {
+        foreach ($_arr_userIds['user_ids'] as $_key=>$_value) {
             $_arr_userRow = $this->mdl_user->mdl_read($_value);
-            if ($_arr_userRow["rcode"] == "y010102") {
+            if ($_arr_userRow['rcode'] == 'y010102') {
                 $this->mdl_belong->mdl_submit($_value, $_num_appId);
             }
         }
@@ -141,9 +140,9 @@ class CONTROL_CONSOLE_REQUEST_APP {
         //$_arr_appRow     = $this->mdl_app->mdl_order();
 
         $_arr_tplData = array(
-            "rcode" => "y070401",
+            'rcode' => 'y070401',
         );
-        $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
 
 
@@ -153,76 +152,59 @@ class CONTROL_CONSOLE_REQUEST_APP {
      * @access public
      */
     function ctrl_notify() {
-        $_num_appId = fn_getSafe(fn_post("app_id_notify"), "int", 0);
+        $_num_appId = fn_getSafe(fn_post('app_id_notify'), 'int', 0);
         if ($_num_appId < 1) {
             $_arr_tplData = array(
-                "rcode" => "x050203",
+                'rcode' => 'x050203',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        if (!isset($this->adminLogged["admin_allow"]["app"]["browse"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['app']['browse']) && !$this->is_super) {
             $_arr_tplData = array(
-                "rcode" => "x050301",
+                'rcode' => 'x050301',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_appRow = $this->mdl_app->mdl_read($_num_appId);
-        if ($_arr_appRow["rcode"] != "y050102") {
-            $this->obj_tpl->tplDisplay("result", $_arr_appRow);
+        if ($_arr_appRow['rcode'] != 'y050102') {
+            $this->obj_tpl->tplDisplay('result', $_arr_appRow);
         }
 
         $_tm_time   = time();
         $_str_echo  = fn_rand();
 
         $_arr_data = array(
-            "act"       => "test",
-            "time"      => $_tm_time,
-            "echostr"   => $_str_echo,
-            "app_id"    => $_arr_appRow["app_id"],
-            "app_key"   => fn_baigoCrypt($_arr_appRow["app_key"], $_arr_appRow["app_name"]),
+            'act'       => 'test',
+            'time'      => $_tm_time,
+            'echostr'   => $_str_echo,
+            'app_id'    => $_arr_appRow['app_id'],
+            'app_key'   => fn_baigoCrypt($_arr_appRow['app_key'], $_arr_appRow['app_name']),
         );
 
-        $_arr_data["signature"] = $this->obj_sign->sign_make($_arr_data);
+        $_arr_data['signature'] = $this->obj_sign->sign_make($_arr_data);
 
-        if (stristr($_arr_appRow["app_url_notify"], "?")) {
-            $_str_conn = "&";
+        if (stristr($_arr_appRow['app_url_notify'], '?')) {
+            $_str_conn = '&';
         } else {
-            $_str_conn = "?";
+            $_str_conn = '?';
         }
 
-        $_arr_notify = fn_http($_arr_appRow["app_url_notify"] . $_str_conn . "mod=notify", $_arr_data, "get");
+        $_arr_notify = fn_http($_arr_appRow['app_url_notify'] . $_str_conn . 'mod=notify', $_arr_data, 'get');
         //print_r($_arr_notify);
 
-        if ($_arr_notify["ret"] == $_str_echo) {
-            $_str_rcode = "y050401";
+        if ($_arr_notify['ret'] == $_str_echo) {
+            $_str_rcode = 'y050401';
         } else {
-            $_str_rcode = "x050401";
-
-            $_arr_targets[] = array(
-                "app_id" => $_num_appId,
-            );
-            $_str_targets    = json_encode($_arr_targets);
-            $_str_notify     = fn_htmlcode($_arr_notify["ret"]);
-            //exit($_str_notify);
-
-            $_arr_logData = array(
-                "log_targets"        => $_str_targets,
-                "log_target_type"    => "app",
-                "log_title"          => $this->log["app"]["notifyTest"],
-                "log_result"         => $_str_notify,
-                "log_type"           => "admin",
-            );
-
-            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
-            //exit("test");
+            $_str_rcode = 'x050401';
+            //exit('test');
         }
 
         $_arr_tplData = array(
-            "rcode" => $_str_rcode,
+            'rcode' => $_str_rcode,
         );
-        $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
 
 
@@ -234,52 +216,29 @@ class CONTROL_CONSOLE_REQUEST_APP {
     function ctrl_submit() {
         $_arr_appInput = $this->mdl_app->input_submit();
 
-        if ($_arr_appInput["rcode"] != "ok") {
-            $this->obj_tpl->tplDisplay("result", $_arr_appInput);
+        if ($_arr_appInput['rcode'] != 'ok') {
+            $this->obj_tpl->tplDisplay('result', $_arr_appInput);
         }
 
-        if ($_arr_appInput["app_id"] > 0) {
-            if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
+        if ($_arr_appInput['app_id'] > 0) {
+            if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->is_super) {
                 $_arr_tplData = array(
-                    "rcode" => "x050303",
+                    'rcode' => 'x050303',
                 );
-                $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+                $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
         } else {
-            if (!isset($this->adminLogged["admin_allow"]["app"]["add"]) && !$this->is_super) {
+            if (!isset($this->adminLogged['admin_allow']['app']['add']) && !$this->is_super) {
                 $_arr_tplData = array(
-                    "rcode" => "x050302",
+                    'rcode' => 'x050302',
                 );
-                $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+                $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
         }
 
         $_arr_appRow = $this->mdl_app->mdl_submit();
 
-        if ($_arr_appRow["rcode"] == "y050101" || $_arr_appRow["rcode"] == "y050103") {
-            $_arr_targets[] = array(
-                "app_id" => $_arr_appRow["app_id"],
-            );
-            $_str_targets = json_encode($_arr_targets);
-            if ($_arr_appRow["rcode"] == "y050101") {
-                $_type = "add";
-            } else {
-                $_type = "edit";
-            }
-            $_str_appRow = json_encode($_arr_appRow);
-
-            $_arr_logData = array(
-                "log_targets"        => $_str_targets,
-                "log_target_type"    => "app",
-                "log_title"          => $this->log["app"][$_type],
-                "log_result"         => $_str_appRow,
-                "log_type"           => "admin",
-            );
-
-            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
-        }
-
-        $this->obj_tpl->tplDisplay("result", $_arr_appRow);
+        $this->obj_tpl->tplDisplay('result', $_arr_appRow);
     }
 
 
@@ -289,49 +248,29 @@ class CONTROL_CONSOLE_REQUEST_APP {
      * @access public
      */
     function ctrl_status() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["edit"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->is_super) {
             $_arr_tplData = array(
-                "rcode" => "x050303",
+                'rcode' => 'x050303',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_str_status = fn_getSafe($GLOBALS["act"], "txt", "");
+        $_str_status = fn_getSafe($GLOBALS['act'], 'txt', '');
         if (fn_isEmpty($_str_status)) {
             $_arr_tplData = array(
-                "rcode" => "x050206",
+                'rcode' => 'x050206',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_appIds = $this->mdl_app->input_ids();
-        if ($_arr_appIds["rcode"] != "ok") {
-            $this->obj_tpl->tplDisplay("result", $_arr_appIds);
+        if ($_arr_appIds['rcode'] != 'ok') {
+            $this->obj_tpl->tplDisplay('result', $_arr_appIds);
         }
 
         $_arr_appRow = $this->mdl_app->mdl_status($_str_status);
 
-        if ($_arr_appRow["rcode"] == "y050103") {
-            foreach ($_arr_appIds["app_ids"] as $_key=>$_value) {
-                $_arr_targets[] = array(
-                    "app_id" => $_value,
-                );
-                $_str_targets = json_encode($_arr_targets);
-            }
-            $_str_appRow = json_encode($_arr_appRow);
-
-            $_arr_logData = array(
-                "log_targets"        => $_str_targets,
-                "log_target_type"    => "app",
-                "log_title"          => $this->log["app"]["edit"],
-                "log_result"         => $_str_appRow,
-                "log_type"           => "admin",
-            );
-
-            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
-        }
-
-        $this->obj_tpl->tplDisplay("result", $_arr_appRow);
+        $this->obj_tpl->tplDisplay('result', $_arr_appRow);
     }
 
 
@@ -341,40 +280,20 @@ class CONTROL_CONSOLE_REQUEST_APP {
      * @access public
      */
     function ctrl_del() {
-        if (!isset($this->adminLogged["admin_allow"]["app"]["del"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['app']['del']) && !$this->is_super) {
             $_arr_tplData = array(
-                "rcode" => "x050304",
+                'rcode' => 'x050304',
             );
-            $this->obj_tpl->tplDisplay("result", $_arr_tplData);
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_appIds = $this->mdl_app->input_ids();
-        if ($_arr_appIds["rcode"] != "ok") {
-            $this->obj_tpl->tplDisplay("result", $_arr_appIds);
+        if ($_arr_appIds['rcode'] != 'ok') {
+            $this->obj_tpl->tplDisplay('result', $_arr_appIds);
         }
 
         $_arr_appRow = $this->mdl_app->mdl_del();
 
-        if ($_arr_appRow["rcode"] == "y050104") {
-            foreach ($_arr_appIds["app_ids"] as $_key=>$_value) {
-                $_arr_targets[] = array(
-                    "app_id" => $_value,
-                );
-                $_str_targets = json_encode($_arr_targets);
-            }
-            $_str_appRow = json_encode($_arr_appRow);
-
-            $_arr_logData = array(
-                "log_targets"        => $_str_targets,
-                "log_target_type"    => "app",
-                "log_title"          => $this->log["app"]["del"],
-                "log_result"         => $_str_appRow,
-                "log_type"           => "admin",
-            );
-
-            $this->mdl_log->mdl_submit($_arr_logData, $this->adminLogged["admin_id"]);
-        }
-
-        $this->obj_tpl->tplDisplay("result", $_arr_appRow);
+        $this->obj_tpl->tplDisplay('result', $_arr_appRow);
     }
 }

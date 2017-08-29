@@ -5,12 +5,14 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 /*-------------基类-------------*/
 class CLASS_BASE {
+
+    public $config;
 
     function __construct() { //构造函数
         //$this->getUi(); //获取界面类型
@@ -18,7 +20,7 @@ class CLASS_BASE {
         $this->getLang(); //获取当前语言
         $this->setTimezone(); //设置时区
 
-        setlocale(LC_ALL, $this->config["lang"] . ".UTF-8"); //设置区域格式,主要针对 csv 处理
+        setlocale(LC_ALL, $this->config['lang'] . ".UTF-8"); //设置区域格式,主要针对 csv 处理
     }
 
 
@@ -28,7 +30,7 @@ class CLASS_BASE {
     function getLang() {
         //print_r("test");
         if (BG_SWITCH_LANG == 1) { //语言开关为开
-            $str_lang = fn_getSafe(fn_get("lang"), "txt", "");
+            $str_lang = fn_getSafe(fn_get("lang"), 'txt', '');
 
             if (fn_isEmpty($str_lang)) { //查询串指定
                 /*if (fn_cookie("cookie_lang")) { //cookie 指定
@@ -53,7 +55,7 @@ class CLASS_BASE {
             $_str_return = BG_DEFAULT_LANG; //默认语言
         }
 
-        $this->config["lang"] = $_str_return;
+        $this->config['lang'] = $_str_return;
 
     }
 
@@ -62,7 +64,7 @@ class CLASS_BASE {
     */
     function getUi() {
         if (BG_SWITCH_UI == 1) { //界面开关为开
-            $str_ui = fn_getSafe(fn_get("ui"), "txt", "");
+            $str_ui = fn_getSafe(fn_get("ui"), 'txt', '');
 
             if (fn_isEmpty($str_ui)) { //查询串指定
                 /*if (fn_cookie("cookie_ui")) { //cookie 指定

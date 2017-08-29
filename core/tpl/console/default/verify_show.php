@@ -1,71 +1,73 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <?php echo $this->consoleMod["log"]["main"]["title"] . " &raquo; " . $this->lang["page"]["detail"]; ?>
+    <?php echo $this->lang['consoleMod']['verify']['main']['title'] . ' &raquo; ' . $this->lang['mod']['page']['show']; ?>
 </div>
 <div class="modal-body">
 
     <div class="form-group">
-        <label class="control-label"><?php echo $this->lang["label"]["id"]; ?></label>
-        <div class="form-control-static"><?php echo $this->tplData["verifyRow"]["verify_id"]; ?></div>
+        <label class="control-label"><?php echo $this->lang['mod']['label']['id']; ?></label>
+        <div class="form-control-static"><?php echo $this->tplData['verifyRow']['verify_id']; ?></div>
     </div>
 
-    <?php switch($this->tplData["verifyRow"]["verify_status"]) {
-        case "enable":
-            $css_status = "sucess";
-            $str_status = $this->status["verify"][$this->tplData["verifyRow"]["verify_status"]];
+    <?php switch ($this->tplData['verifyRow']['verify_status']) {
+        case 'enable':
+            $css_status = 'success';
+            $str_status = $this->lang['mod']['status'][$this->tplData['verifyRow']['verify_status']];
         break;
 
-        case "expired":
-            $css_status = "sucess";
-            $str_status = $this->lang["label"]["expired"];
+        case 'expired':
+            $css_status = 'default';
+            $str_status = $this->lang['mod']['label']['expired'];
         break;
 
         default:
-            $css_status = "default";
-            $str_status = $this->status["verify"][$this->tplData["verifyRow"]["verify_status"]];
+            $css_status = 'default';
+            $str_status = $this->lang['mod']['status'][$this->tplData['verifyRow']['verify_status']];
         break;
     } ?>
 
     <div class="form-group">
-        <label class="control-label"><?php echo $this->lang["label"]["status"]; ?></label>
+        <label class="control-label"><?php echo $this->lang['mod']['label']['status']; ?></label>
         <div class="form-control-static">
             <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $str_status; ?></span>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="control-label"><?php echo $this->lang["label"]["operator"]; ?></label>
+        <label class="control-label"><?php echo $this->lang['mod']['label']['operator']; ?></label>
         <div class="form-control-static">
-            <?php if (isset($this->tplData["verifyRow"]["userRow"]["user_name"])) {
-                echo $this->tplData["verifyRow"]["userRow"]["user_name"];
+            <?php if (isset($this->tplData['verifyRow']['userRow']['user_name'])) {
+                echo $this->tplData['verifyRow']['userRow']['user_name'];
             } else {
-                echo $this->lang["label"]["unknow"];
+                echo $this->lang['mod']['label']['unknow'];
             } ?>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="control-label"><?php echo $this->lang["label"]["timeExpired"]; ?></label>
+        <label class="control-label"><?php echo $this->lang['mod']['label']['timeExpired']; ?></label>
         <div class="form-control-static">
-            <?php echo date(BG_SITE_DATE . " " . BG_SITE_TIMESHORT, $this->tplData["verifyRow"]["verify_token_expire"]); ?>
+            <?php echo date(BG_SITE_DATE . ' ' . BG_SITE_TIMESHORT, $this->tplData['verifyRow']['verify_token_expire']); ?>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="control-label"><?php echo $this->lang["label"]["timeInit"]; ?></label>
+        <label class="control-label"><?php echo $this->lang['mod']['label']['timeInit']; ?></label>
         <div class="form-control-static">
-            <?php echo date(BG_SITE_DATE . " " . BG_SITE_TIMESHORT, $this->tplData["verifyRow"]["verify_time_refresh"]); ?>
+            <?php echo date(BG_SITE_DATE . ' ' . BG_SITE_TIMESHORT, $this->tplData['verifyRow']['verify_time_refresh']); ?>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="control-label"><?php echo $this->lang["label"]["timeDisable"]; ?></label>
+        <label class="control-label"><?php echo $this->lang['mod']['label']['timeDisable']; ?></label>
         <div class="form-control-static">
-            <?php echo date(BG_SITE_DATE . " " . BG_SITE_TIMESHORT, $this->tplData["verifyRow"]["verify_time_disable"]); ?>
+            <?php if ($this->tplData['verifyRow']['verify_time_disable'] > 0) {
+                echo date(BG_SITE_DATE . ' ' . BG_SITE_TIMESHORT, $this->tplData['verifyRow']['verify_time_disable']);
+            } ?>
         </div>
     </div>
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><?php echo $this->lang["btn"]["close"]; ?></button>
+    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang['common']['btn']['close']; ?></button>
 </div>

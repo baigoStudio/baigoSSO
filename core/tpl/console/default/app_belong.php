@@ -1,32 +1,32 @@
 <?php $cfg = array(
-    "title"          => $this->consoleMod["app"]["main"]["title"] . " &raquo; " . $this->lang["page"]["belong"],
-    "menu_active"    => "app",
-    "sub_active"     => "list",
-    "baigoCheckall"  => "true",
-    "baigoValidator" => "true",
-    "baigoSubmit"    => "true",
-    "pathInclude"    => BG_PATH_TPLSYS . "console/default/include/",
-    "str_url"        => BG_URL_CONSOLE . "index.php?mod=app&act=belong&" . $this->tplData["query"],
-); ?>
+    'title'          => $this->lang['consoleMod']['app']['main']['title'] . ' &raquo; ' . $this->lang['mod']['page']['belong'],
+    'menu_active'    => 'app',
+    'sub_active'     => 'list',
+    'baigoCheckall'  => 'true',
+    'baigoValidator' => 'true',
+    'baigoSubmit'    => 'true',
+    'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=app&act=belong&' . $this->tplData['query'],
+);
 
-<?php include($cfg["pathInclude"] . "console_head.php"); ?>
+include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group">
         <ul class="nav nav-pills bg-nav-pills">
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=app&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang["href"]["back"]; ?>
+                    <?php echo $this->lang['mod']['href']['back']; ?>
                 </a>
             </li>
             <li>
                 <a href="<?php echo BG_URL_HELP; ?>index.php?mod=console&act=app" target="_blank">
                     <span class="glyphicon glyphicon-question-sign"></span>
-                    <?php echo $this->lang["href"]["help"]; ?>
+                    <?php echo $this->lang['mod']['href']['help']; ?>
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0);"><?php echo $this->lang["label"]["appName"]; ?>: <?php echo $this->tplData["appRow"]["app_name"]; ?></a>
+                <a href="javascript:void(0);"><?php echo $this->lang['mod']['label']['appName']; ?> <?php echo $this->tplData['appRow']['app_name']; ?></a>
             </li>
         </ul>
     </div>
@@ -34,14 +34,14 @@
     <div class="row">
         <div class="col-md-6">
             <div class="well">
-                <label class="control-label"><?php echo $this->lang["label"]["belongUser"]; ?></label>
+                <label class="control-label"><?php echo $this->lang['mod']['label']['belongUser']; ?></label>
                 <form name="belong_search" id="belong_search" class="form-inline" action="<?php echo BG_URL_CONSOLE; ?>index.php" method="get">
                     <input type="hidden" name="mod" value="app">
                     <input type="hidden" name="act" value="belong">
-                    <input type="hidden" name="app_id" value="<?php echo $this->tplData["appRow"]["app_id"]; ?>">
+                    <input type="hidden" name="app_id" value="<?php echo $this->tplData['appRow']['app_id']; ?>">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" name="key_belong" class="form-control input-sm" value="<?php echo $this->tplData["search"]["key_belong"]; ?>" placeholder="<?php echo $this->lang["label"]["key"]; ?>">
+                            <input type="text" name="key_belong" class="form-control input-sm" value="<?php echo $this->tplData['search']['key_belong']; ?>" placeholder="<?php echo $this->lang['mod']['label']['key']; ?>">
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-sm" type="submit">
                                     <span class="glyphicon glyphicon-search"></span>
@@ -53,8 +53,8 @@
             </div>
 
             <form name="belong_list" id="belong_list">
-                <input type="hidden" name="<?php echo $this->common["tokenRow"]["name_session"]; ?>" value="<?php echo $this->common["tokenRow"]["token"]; ?>">
-                <input type="hidden" name="app_id" value="<?php echo $this->tplData["appRow"]["app_id"]; ?>">
+                <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
+                <input type="hidden" name="app_id" value="<?php echo $this->tplData['appRow']['app_id']; ?>">
 
                 <div class="panel panel-default">
                     <div class="table-responsive">
@@ -64,42 +64,44 @@
                                     <th class="text-nowrap bg-td-xs">
                                         <label for="belong_all" class="checkbox-inline">
                                             <input type="checkbox" name="belong_all" id="belong_all" data-parent="first">
-                                            <?php echo $this->lang["label"]["all"]; ?>
+                                            <?php echo $this->lang['mod']['label']['all']; ?>
                                         </label>
                                     </th>
-                                    <th class="text-nowrap bg-td-xs"><?php echo $this->lang["label"]["id"]; ?></th>
-                                    <th><?php echo $this->lang["label"]["user"]; ?></th>
-                                    <th class="text-nowrap bg-td-md"><?php echo $this->lang["label"]["status"]; ?> / <?php echo $this->lang["label"]["note"]; ?></th>
+                                    <th class="text-nowrap bg-td-xs"><?php echo $this->lang['mod']['label']['id']; ?></th>
+                                    <th><?php echo $this->lang['mod']['label']['user']; ?></th>
+                                    <th class="text-nowrap bg-td-md"><?php echo $this->lang['mod']['label']['status']; ?> / <?php echo $this->lang['mod']['label']['note']; ?></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($this->tplData["userViews"] as $key=>$value) {
-                                    switch($value["user_status"]) {
-                                        case "enable":
-                                            $css_status = "success";
+                                    switch ($value['user_status']) {
+                                        case 'enable':
+                                            $css_status = 'success';
                                         break;
 
                                         case "wait":
-                                            $css_status = "warning";
+                                            $css_status = 'warning';
                                         break;
 
                                         default:
-                                            $css_status = "default";
+                                            $css_status = 'default';
                                         break;
                                     } ?>
                                     <tr>
-                                        <td class="text-nowrap bg-td-xs"><input type="checkbox" name="user_ids[]" value="<?php echo $value["user_id"]; ?>" id="user_belong_<?php echo $value["user_id"]; ?>" data-validate="user_belong_id" data-parent="belong_all"></td>
-                                        <td class="text-nowrap bg-td-xs"><?php echo $value["user_id"]; ?></td>
+                                        <td class="text-nowrap bg-td-xs"><input type="checkbox" name="user_ids[]" value="<?php echo $value['user_id']; ?>" id="user_belong_<?php echo $value['user_id']; ?>" data-validate="user_belong_id" data-parent="belong_all"></td>
+                                        <td class="text-nowrap bg-td-xs"><?php echo $value['user_id']; ?></td>
                                         <td>
-                                            <?php echo $value["user_name"]; ?>
-                                            <?php if ($value["user_nick"]) { echo $value["user_nick"]; } ?>
+                                            <?php echo $value['user_name'];
+                                            if (!fn_isEmpty($value['user_nick'])) {
+                                                echo ' [ ', $value['user_nick'], ' ]';
+                                            } ?>
                                         </td>
                                         <td class="text-nowrap bg-td-md">
                                             <ul class="list-unstyled">
                                                 <li>
-                                                    <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->status["user"][$value["user_status"]]; ?></span>
+                                                    <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['user'][$value['user_status']]; ?></span>
                                                 </li>
-                                                <li><?php echo $value["user_note"]; ?></li>
+                                                <li><?php echo $value['user_note']; ?></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -112,7 +114,7 @@
                                         <div class="bg-submit-box bg-submit-box-belong"></div>
                                         <input type="hidden" name="act" id="act" value="deauth">
                                         <button type="button" class="btn btn-primary btn-sm bg-submit-belong">
-                                            <?php echo $this->lang["btn"]["deauth"]; ?>
+                                            <?php echo $this->lang['mod']['btn']['deauth']; ?>
                                         </button>
                                     </td>
                                 </tr>
@@ -126,14 +128,14 @@
 
         <div class="col-md-6">
             <div class="well">
-                <label class="control-label"><?php echo $this->lang["label"]["selectUser"]; ?></label>
+                <label class="control-label"><?php echo $this->lang['mod']['label']["selectUser"]; ?></label>
                 <form name="user_search" id="user_search" class="form-inline" action="<?php echo BG_URL_CONSOLE; ?>index.php" method="get">
                     <input type="hidden" name="mod" value="app">
                     <input type="hidden" name="act" value="belong">
-                    <input type="hidden" name="app_id" value="<?php echo $this->tplData["appRow"]["app_id"]; ?>">
+                    <input type="hidden" name="app_id" value="<?php echo $this->tplData['appRow']['app_id']; ?>">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" name="key" class="form-control input-sm" value="<?php echo $this->tplData["search"]["key"]; ?>" placeholder="<?php echo $this->lang["label"]["key"]; ?>">
+                            <input type="text" name="key" class="form-control input-sm" value="<?php echo $this->tplData['search']['key']; ?>" placeholder="<?php echo $this->lang['mod']['label']['key']; ?>">
                             <span class="input-group-btn">
                                 <button class="btn btn-default btn-sm" type="submit">
                                     <span class="glyphicon glyphicon-search"></span>
@@ -145,8 +147,8 @@
             </div>
 
             <form name="user_list" id="user_list">
-                <input type="hidden" name="<?php echo $this->common["tokenRow"]["name_session"]; ?>" value="<?php echo $this->common["tokenRow"]["token"]; ?>">
-                <input type="hidden" name="app_id" value="<?php echo $this->tplData["appRow"]["app_id"]; ?>">
+                <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
+                <input type="hidden" name="app_id" value="<?php echo $this->tplData['appRow']['app_id']; ?>">
 
                 <div class="panel panel-default">
                     <div class="table-responsive">
@@ -156,42 +158,44 @@
                                     <th class="text-nowrap bg-td-xs">
                                         <label for="user_all" class="checkbox-inline">
                                             <input type="checkbox" name="user_all" id="user_all" data-parent="first">
-                                            <?php echo $this->lang["label"]["all"]; ?>
+                                            <?php echo $this->lang['mod']['label']['all']; ?>
                                         </label>
                                     </th>
-                                    <th class="text-nowrap bg-td-xs"><?php echo $this->lang["label"]["id"]; ?></th>
-                                    <th><?php echo $this->lang["label"]["user"]; ?></th>
-                                    <th class="text-nowrap bg-td-md"><?php echo $this->lang["label"]["status"]; ?> / <?php echo $this->lang["label"]["note"]; ?></th>
+                                    <th class="text-nowrap bg-td-xs"><?php echo $this->lang['mod']['label']['id']; ?></th>
+                                    <th><?php echo $this->lang['mod']['label']['user']; ?></th>
+                                    <th class="text-nowrap bg-td-md"><?php echo $this->lang['mod']['label']['status']; ?> / <?php echo $this->lang['mod']['label']['note']; ?></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($this->tplData["userRows"] as $key=>$value) {
-                                    switch($value["user_status"]) {
-                                        case "enable":
-                                            $css_status = "success";
+                                <?php foreach ($this->tplData['userRows'] as $key=>$value) {
+                                    switch ($value['user_status']) {
+                                        case 'enable':
+                                            $css_status = 'success';
                                         break;
 
                                         case "wait":
-                                            $css_status = "warning";
+                                            $css_status = 'warning';
                                         break;
 
                                         default:
-                                            $css_status = "default";
+                                            $css_status = 'default';
                                         break;
                                     } ?>
                                     <tr>
-                                        <td class="text-nowrap bg-td-xs"><input type="checkbox" name="user_ids[]" value="<?php echo $value["user_id"]; ?>" id="user_id_<?php echo $value["user_id"]; ?>" data-validate="user_id" data-parent="user_all"></td>
-                                        <td class="text-nowrap bg-td-xs"><?php echo $value["user_id"]; ?></td>
+                                        <td class="text-nowrap bg-td-xs"><input type="checkbox" name="user_ids[]" value="<?php echo $value['user_id']; ?>" id="user_id_<?php echo $value['user_id']; ?>" data-validate="user_id" data-parent="user_all"></td>
+                                        <td class="text-nowrap bg-td-xs"><?php echo $value['user_id']; ?></td>
                                         <td>
-                                            <?php echo $value["user_name"]; ?>
-                                            <?php if ($value["user_nick"]) { ?>[ <?php echo $value["user_nick"]; ?> ]<?php } ?>
+                                            <?php echo $value['user_name'];
+                                            if (!fn_isEmpty($value['user_nick'])) {
+                                                echo ' [ ', $value['user_nick'], ' ]';
+                                            } ?>
                                         </td>
                                         <td class="text-nowrap bg-td-md">
                                             <ul class="list-unstyled">
                                                 <li>
-                                                    <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->status["user"][$value["user_status"]]; ?></span>
+                                                    <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['user'][$value['user_status']]; ?></span>
                                                 </li>
-                                                <li><?php echo $value["user_note"]; ?></li>
+                                                <li><?php echo $value['user_note']; ?></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -204,7 +208,7 @@
                                         <div class="bg-submit-box bg-submit-box-list"></div>
                                         <input type="hidden" name="act" value="auth">
                                         <button type="button" class="btn btn-primary btn-sm bg-submit">
-                                            <?php echo $this->lang["btn"]["auth"]; ?>
+                                            <?php echo $this->lang['mod']['btn']['auth']; ?>
                                         </button>
                                     </td>
                                 </tr>
@@ -216,19 +220,19 @@
             </form>
 
             <div class="text-right">
-                <?php include($cfg["pathInclude"] . "page.php"); ?>
+                <?php include($cfg['pathInclude'] . 'page.php'); ?>
             </div>
         </div>
     </div>
 
-<?php include($cfg["pathInclude"] . "console_foot.php"); ?>
+<?php include($cfg['pathInclude'] . 'console_foot.php'); ?>
 
     <script type="text/javascript">
     var opts_validator_belong = {
         user_belong_id: {
             len: { min: 1, max: 0 },
             validate: { selector: "[data-validate='user_belong_id']", type: "checkbox" },
-            msg: { selector: "#msg_user_belong", too_few: "<?php echo $this->rcode["x030202"]; ?>" }
+            msg: { selector: "#msg_user_belong", too_few: "<?php echo $this->lang['rcode']['x030202']; ?>" }
         }
     };
 
@@ -237,7 +241,7 @@
         confirm: {
             selector: "#act",
             val: "deauth",
-            msg: "<?php echo $this->lang["confirm"]["deauth"]; ?>",
+            msg: "<?php echo $this->lang['mod']['confirm']['deauth']; ?>"
         },
         box: {
             selector: ".bg-submit-box-belong"
@@ -246,7 +250,7 @@
             submit_btn: ".bg-submit-belong"
         },
         msg_text: {
-            submitting: "<?php echo $this->lang["label"]["submitting"]; ?>"
+            submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         }
     };
 
@@ -254,18 +258,18 @@
         user_id: {
             len: { min: 1, max: 0 },
             validate: { selector: "[data-validate='user_id']", type: "checkbox" },
-            msg: { selector: "#msg_user_id", too_few: "<?php echo $this->rcode["x030202"]; ?>" }
+            msg: { selector: "#msg_user_id", too_few: "<?php echo $this->lang['rcode']['x030202']; ?>" }
         }
     };
 
     var opts_submit_list = {
         ajax_url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=app",
         msg_text: {
-            submitting: "<?php echo $this->lang["label"]["submitting"]; ?>"
+            submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         },
         box: {
             selector: ".bg-submit-box-list"
-        },
+        }
     };
 
     $(document).ready(function(){
@@ -288,4 +292,4 @@
     });
     </script>
 
-<?php include($cfg["pathInclude"] . "html_foot.php"); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>

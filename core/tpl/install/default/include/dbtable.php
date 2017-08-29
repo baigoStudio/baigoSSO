@@ -1,6 +1,6 @@
     <div class="form-group">
         <?php foreach ($this->tplData["db_rcode"] as $key=>$value) {
-            if ($value["status"] == "y") {
+            if ($value['status'] == "y") {
                 $str_css   = "text-success";
                 $str_icon  = "ok-sign";
             } else {
@@ -9,9 +9,9 @@
             } ?>
             <p class="<?php echo $str_css; ?>">
                 <span class="glyphicon glyphicon-<?php echo $str_icon; ?>"></span>
-                <?php echo $this->rcode[$value["rcode"]]; ?>
+                <?php echo $this->lang['rcode'][$value['rcode']]; ?>
                 &nbsp;&nbsp;
-                [ <?php echo $value["rcode"]; ?> ]
+                [ <?php echo $value['rcode']; ?> ]
             </p>
         <?php } ?>
     </div>

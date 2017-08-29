@@ -5,8 +5,8 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 /*-------------管理员控制器-------------*/
@@ -21,12 +21,14 @@ class CONTROL_CONSOLE_UI_PROFILE {
 
         $this->obj_tpl          = $this->obj_console->obj_tpl;
 
-        $this->tplData = array(
-            "adminLogged" => $this->adminLogged
-        );
-
         $this->mdl_admin        = new MODEL_ADMIN(); //设置管理组模型
         $this->mdl_user         = new MODEL_USER(); //设置管理组模型
+
+        $this->tplData = array(
+            'adminLogged'   => $this->adminLogged,
+            'status'        => $this->mdl_admin->arr_status,
+            'type'          => $this->mdl_admin->arr_type,
+        );
     }
 
 

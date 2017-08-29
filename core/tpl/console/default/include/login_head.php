@@ -1,4 +1,4 @@
-<?php include($cfg["pathInclude"] . "html_head.php"); ?>
+<?php include($cfg['pathInclude'] . 'html_head.php'); ?>
 
     <div class="container">
         <div class="bg-panel">
@@ -11,6 +11,6 @@
 
                 <div class="panel-body">
                     <h4>
-                        <?php echo $cfg["title"]; ?>
+                        <?php echo $cfg['title']; ?>
                     </h4>
                     <hr>

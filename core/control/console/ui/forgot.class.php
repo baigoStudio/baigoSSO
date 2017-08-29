@@ -5,16 +5,15 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 /*-------------登录控制器-------------*/
 class CONTROL_CONSOLE_UI_FORGOT {
 
     function __construct() { //构造函数
-        $this->obj_base         = $GLOBALS["obj_base"]; //获取界面类型
-        $this->config           = $this->obj_base->config;
+        $this->config   = $GLOBALS['obj_base']->config;
 
         $this->obj_console      = new CLASS_CONSOLE();
         $this->obj_console->chk_install();
@@ -27,48 +26,49 @@ class CONTROL_CONSOLE_UI_FORGOT {
 
 
     function ctrl_step_2() {
-        $_str_adminName = fn_getSafe(fn_get("admin_name"), "txt", "");
+        $_str_adminName = fn_getSafe(fn_get("admin_name"), 'txt', '');
 
         if (fn_isEmpty($_str_adminName)) {
             $_arr_tplData = array(
-                "rcode"     => "x010201",
+                'rcode'     => "x010201",
             );
             $this->obj_tpl->tplDisplay("forgot_1", $_arr_tplData);
         }
 
         $_arr_userRow = $this->mdl_user->mdl_read($_str_adminName, "user_name");
-        if ($_arr_userRow["rcode"] != "y010102") {
+        if ($_arr_userRow['rcode'] != 'y010102') {
             $this->obj_tpl->tplDisplay("forgot_1", $_arr_userRow);
         }
 
-        if ($_arr_userRow["user_status"] == "disable") {
+        if ($_arr_userRow['user_status'] == 'disable') {
             $_arr_tplData = array(
-                "rcode"     => "x010401",
+                'rcode'     => 'x010401',
             );
             $this->obj_tpl->tplDisplay("forgot_1", $_arr_tplData);
         }
 
-        $_arr_adminRow = $this->mdl_admin->mdl_read($_arr_userRow["user_id"]);
-        if ($_arr_adminRow["rcode"] != "y020102") {
+        $_arr_adminRow = $this->mdl_admin->mdl_read($_arr_userRow['user_id']);
+        if ($_arr_adminRow['rcode'] != 'y020102') {
             $this->obj_tpl->tplDisplay("forgot_1", $_arr_adminRow);
         }
 
-        if ($_arr_adminRow["admin_status"] == "disable") {
+        if ($_arr_adminRow['admin_status'] == 'disable') {
             $_arr_tplData = array(
-                "rcode"     => "x020402",
+                'rcode'     => "x020402",
             );
             $this->obj_tpl->tplDisplay("forgot_1", $_arr_tplData);
         }
 
-        if (fn_isEmpty($_arr_userRow["user_mail"]) && fn_isEmpty($_arr_userRow["user_sec_ques_1"])) {
+        if (fn_isEmpty($_arr_userRow['user_mail']) && fn_isEmpty($_arr_userRow["user_sec_ques_1"])) {
             $_arr_tplData = array(
-                "rcode"     => "x010240",
+                'rcode'     => "x010240",
             );
             $this->obj_tpl->tplDisplay("forgot_1", $_arr_tplData);
         }
 
         $_arr_tplData = array(
             "userRow"  => $_arr_userRow,
+            "forgot"   => fn_include(BG_PATH_INC . 'forgot.inc.php'),
         );
 
         $this->obj_tpl->tplDisplay("forgot_2", $_arr_tplData);

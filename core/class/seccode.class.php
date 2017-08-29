@@ -5,19 +5,36 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 /*-------------验证码类-------------*/
 class CLASS_SECCODE {
-    private $chars = "abdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789";
+
+    private $chars = 'abdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';
+    private $len;
+    private $fontSize;
+    private $fontFile;
+    private $width;
+    private $height;
+    private $code;
+    private $image;
+    private $back;
+    private $colorFont;
+    private $colorShadow;
+    private $colorPix;
 
     //设置验证码
-    function secSet($sec_size = 20, $sec_len = 4, $sec_font = "FetteSteinschrift.ttf") {
+    function secSet($sec_size = 20, $sec_len = 4, $sec_font = 'FetteSteinschrift.ttf') {
         $this->len        = $sec_len;
         $this->fontSize   = $sec_size;
-        $this->fontFile   = BG_PATH_FONT . $sec_font;
+        if ($sec_font != 'FetteSteinschrift.ttf' && !file_exists(BG_PATH_FONT . $sec_font)) {
+            $_str_secFont = BG_PATH_FONT . 'FetteSteinschrift.ttf';
+        } else {
+            $_str_secFont = BG_PATH_FONT . $sec_font;
+        }
+        $this->fontFile   = $_str_secFont;
         $this->width      = $this->fontSize * ($this->len + 2);
         $this->height     = $this->fontSize * 2;
     }
@@ -79,6 +96,6 @@ class CLASS_SECCODE {
         $this->createLine();
         $this->createFont();
         $this->secOutput();
-        fn_session("seccode", "mk", strtolower($this->code));
+        fn_session('seccode', 'mk', strtolower($this->code));
     }
 }

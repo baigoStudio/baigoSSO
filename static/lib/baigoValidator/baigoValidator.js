@@ -1,6 +1,6 @@
 /*
-v2.2 jQuery baigoValidator plugin 表单验证插件
-(c) 2016 baigo studio - http://www.baigo.net/jquery/baigovalidator.html
+v2.2.3 jQuery baigoValidator plugin 表单验证插件
+(c) 2017 baigo studio - http://www.baigo.net/jquery/baigovalidator.html
 License: http://www.opensource.org/licenses/mit-license.php
 */
 (function($) {
@@ -18,10 +18,28 @@ License: http://www.opensource.org/licenses/mit-license.php
             return this;
         }
 
-        var _err       = 0; //定义错误数
         var thisForm   = $(this); //定义表单对象
         var el         = this;
         var _status; //定义状态
+        var _err_count; //定义错误数
+        var _numLenth;
+        var _iii;
+        var _chkCode;
+        var _reg;
+        var _status_leng;
+        var _ajax;
+        var _ajaxData;
+        var _str_attachs;
+        var _set_data;
+        var _len;
+        var _validate;
+        var _validate_selector;
+        var _validate_obj;
+        var _msg;
+        var _result;
+        var _num;
+        var _str;
+        var _str_target;
 
         var defaults = {
             class_name: {
@@ -59,10 +77,10 @@ License: http://www.opensource.org/licenses/mit-license.php
         返回字节数
         */
         var getLength = function(_str) {
-            var _numLenth = 0;
+            _numLenth = 0;
             if (_str) {
-                for (var i = 0; i < _str.length; i++) {
-                    var _chkCode = _str.charCodeAt(i);
+                for (_iii = 0; _iii < _str.length; _iii++) {
+                    _chkCode = _str.charCodeAt(_iii);
                     if (_chkCode < 0x007f) {
                         _numLenth++;
                     } else if (_chkCode <= 0x07ff) {
@@ -102,7 +120,6 @@ License: http://www.opensource.org/licenses/mit-license.php
         @_format 格式，text 为任意
         */
         var verifyReg = function(_str, _format) {
-            var _reg;
             switch(_format) {
                 case "date":
                     _reg = /^[0-9]{4}-(((0?[13578]|(10|12))-(0?[1-9]|[1-2][0-9]|3[0-1]))|(0?2-(0[1-9]|[1-2][0-9]))|((0?[469]|11)-(0[1-9]|[1-2][0-9]|30)))$/; //日期
@@ -120,10 +137,10 @@ License: http://www.opensource.org/licenses/mit-license.php
                     _reg = /^(\+|-)?\d*(\.\d+)*$/; //数值，可以包含小数点
                 break;
                 case "email":
-                    _reg = /^\w+(-\w+)*(\.\w+(-\w+)*)*@\w+(\.\w+)+$/; //Email
+                    _reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //Email
                 break;
                 case "url":
-                    _reg = /^(http|ftp)s?:\/\/\w+(-\w+)*(\.\w+(-\w+)*)+(\/\w+(-\w+)*)*(\.\w+)*\??(&?\w+=\w+)*(\/\w+(-\w+)*)*\/?$/; //URL地址
+                    _reg = /^((http|ftp|https):\/\/)(([a-zA-Z0-9\._-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,4})*(\/[a-zA-Z0-9\&%_\.\/-~-]*)?$/; //URL地址
                 break;
                 case "alphabetDigit":
                     _reg = /^[a-zA-Z\d-_]*$/; //数字英文字母
@@ -155,7 +172,7 @@ License: http://www.opensource.org/licenses/mit-license.php
         @_format 格式
         */
         var isText = function(_str, _len, _format) {
-            var _status_leng = verifyLeng(_str, _len);
+            _status_leng = verifyLeng(_str, _len);
             if (_status_leng != "ok") {
                 _status = _status_leng; //如验证长度出错，直接返回错误
             } else {
@@ -174,7 +191,7 @@ License: http://www.opensource.org/licenses/mit-license.php
         @_len(min, max) 数组，(最小长度, 最大长度) 0 为不限制
         */
         var isConfirm = function(_str, _str_target, _len) {
-            var _status_leng = verifyLeng(_str, _len);
+            _status_leng = verifyLeng(_str, _len);
             if (_status_leng != "ok") {
                 _status = _status_leng; //如验证长度出错，直接返回错误
             } else {
@@ -191,8 +208,10 @@ License: http://www.opensource.org/licenses/mit-license.php
         @_num 需验证的个数
         @_len(min, max) 数组，(最小个数, 最大个数) 0 为不限制
         */
-        var isDigit = function(_num, _len, _format) {
-            if (verifyReg(_num, _format)) {
+        var isDigit = function(_num, _len) {
+            if (isNaN(_num)) {
+                _status = "format_err"; //格式验证失败，返回错误
+            } else {
                 if (_len.min > 0 && _num < _len.min) {
                     _status = "too_small"; //如果定义最小数，且小于，则返回太小
                 } else if (_len.max > 0 && _num > _len.max) {
@@ -200,8 +219,6 @@ License: http://www.opensource.org/licenses/mit-license.php
                 } else {
                     _status = "ok"; //返回正确
                 }
-            } else {
-                _status = "format_err"; //格式验证失败，返回错误
             }
             return _status;
         };
@@ -230,7 +247,7 @@ License: http://www.opensource.org/licenses/mit-license.php
         var isAjax = function(_str, _len, _validate, _ajax, _msg, _validate_selector) {
             switch (_ajax.type) {
                 case "digit":
-                    _status = isDigit(_str, _len, _validate.format); //验证字符串
+                    _status = isDigit(_str, _len); //验证字符串
                 break;
                 default:
                     _status = isText(_str, _len, _validate.format); //验证字符串
@@ -243,13 +260,13 @@ License: http://www.opensource.org/licenses/mit-license.php
 
             } else {
 
-                var _ajaxData = _ajax.key + "=" + _str + "&a=" + Math.random();
+                _ajaxData = _ajax.key + "=" + _str + "&a=" + Math.random();
                 if (_ajax.attach) {
                     _ajaxData = _ajaxData + "&" + _ajax.attach;
                 }
                 if (_ajax.attach_selectors && _ajax.attach_keys) {
                     $.each(_ajax.attach_selectors, function(_index, _selector) {
-                        var _str_attachs    = $(_selector).val();
+                        _str_attachs    = $(_selector).val();
                         _ajaxData = _ajaxData + "&" + _ajax.attach_keys[_index] + "=" + _str_attachs;
                     });
                 }
@@ -267,7 +284,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                     },
                     success: function(_result) { //读取返回结果
                         switch (_result.msg) {
-                            case "ok": //匹配验证错误
+                            case 'ok': //匹配验证错误
                                 outPut(_msg.selector,  _validate.group, "&nbsp;", opts.class_name.success, opts.class_attach.success); //输出消息
                             break;
 
@@ -285,24 +302,21 @@ License: http://www.opensource.org/licenses/mit-license.php
         };
 
         var verifyStr = function(_validate_obj) {
-            var _set_data   = fileds[_validate_obj]; //获取验证设置
-            var _len        = _set_data.len; //长度
-            var _validate   = _set_data.validate; //格式
-            var _msg        = _set_data.msg; //消息
-            var _validate_selector;
+            _set_data   = fileds[_validate_obj]; //获取验证设置
+            _len        = _set_data.len; //长度
+            _validate   = _set_data.validate; //格式
+            _msg        = _set_data.msg; //消息
+            _validate_selector;
             if (typeof _validate.selector == "undefined" || _validate.selector == null) { //如果 validate 对象没有定义选择器，则默认将一级对象名作为 id 选择器
                 _validate_selector = "#" + _validate_obj;
             } else {
                 _validate_selector = _validate.selector; //待验证选择器
             }
-            var _result;
-            var _num;
-            var _str;
-            //alert(_validate.type);
+            //alert(_validate_selector);
             switch (_validate.type) {
                 case "digit":
                     _str    = $(_validate_selector).val(); //获取表单值
-                    _status = isDigit(_str, _len, _validate.format); //验证字符串
+                    _status = isDigit(_str, _len); //验证字符串
                 break;
                 case "radio":
                 case "checkbox":
@@ -322,12 +336,12 @@ License: http://www.opensource.org/licenses/mit-license.php
                     }
                 break;
                 case "ajax":
-                    var _ajax   = _set_data.ajax; //ajax
-                    _str        = $(_validate_selector).val(); //获取表单值
-                    _status     = isAjax(_str, _len, _validate, _ajax, _msg, _validate_selector); //ajax验证
+                    _ajax   = _set_data.ajax; //ajax
+                    _str    = $(_validate_selector).val(); //获取表单值
+                    _status = isAjax(_str, _len, _validate, _ajax, _msg, _validate_selector); //ajax验证
                 break;
                 case "confirm":
-                    var _str_target = $(_validate.target).val(); //获取表单值
+                    _str_target = $(_validate.target).val(); //获取表单值
                     _str        = $(_validate_selector).val(); //获取表单值
                     _status     = isConfirm(_str, _str_target, _len); //验证字符串
                 break;
@@ -336,8 +350,9 @@ License: http://www.opensource.org/licenses/mit-license.php
                     _status = isText(_str, _len, _validate.format); //验证字符串
                 break;
             }
+
             switch (_status) {
-                case "ok":
+                case 'ok':
                     outPut(_msg.selector, _validate.group, "&nbsp;", opts.class_name.success, opts.class_attach.success); //输出消息
                     _result = true;
                 break;
@@ -351,20 +366,20 @@ License: http://www.opensource.org/licenses/mit-license.php
         };
 
         el.verify = function(){
-            _err = 0;
+            _err_count = 0;
             $(thisForm).find("[data-validate]:visible").each(function(){
-                var _validate_obj = $(this).data("validate");
+                _validate_obj = $(this).data("validate");
                 if (_validate_obj.length < 1) {
                     _validate_obj = $(this).attr("id");
                 }
-                //alert(_validate_obj);
-                verifyStr(_validate_obj);
                 if (!verifyStr(_validate_obj)) {
-                    _err++;
+                    _err_count++;
                 }
             });
 
-            if (_err > 0) {
+            //alert(_err_count);
+
+            if (_err_count > 0) {
                 return false;
             } else {
                 return true;
@@ -372,7 +387,7 @@ License: http://www.opensource.org/licenses/mit-license.php
         };
 
         $(thisForm).find("[data-validate]:visible").change(function(){
-            var _validate_obj = $(this).data("validate");
+            _validate_obj = $(this).data("validate");
             if (_validate_obj.length < 1) {
                 _validate_obj = $(this).attr("id");
             }

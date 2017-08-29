@@ -6,8 +6,8 @@
 
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 
@@ -20,7 +20,7 @@ if (!defined("IN_BAIGO")) {
  * @param string $str_method (default: "get")
  * @return void
  */
-function fn_http($str_url, $arr_data, $str_method = "get") {
+function fn_http($str_url, $arr_data, $str_method = 'get') {
 
     $_obj_http = curl_init();
     $_str_data = http_build_query($arr_data);
@@ -32,7 +32,7 @@ function fn_http($str_url, $arr_data, $str_method = "get") {
 
     curl_setopt($_obj_http, CURLOPT_HTTPHEADER, $_arr_headers);
 
-    if ($str_method == "post") {
+    if ($str_method == 'post') {
         curl_setopt($_obj_http, CURLOPT_POST, true);
         curl_setopt($_obj_http, CURLOPT_POSTFIELDS, $_str_data);
         curl_setopt($_obj_http, CURLOPT_URL, $str_url);

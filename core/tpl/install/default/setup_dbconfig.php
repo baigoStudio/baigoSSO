@@ -1,13 +1,14 @@
 <?php $cfg = array(
-    "sub_title"     => $this->lang["page"]["setupDbConfig"],
+    "sub_title"     => $this->lang['common']['page']['dbConfig'],
     "mod_help"      => "setup",
     "act_help"      => "dbconfig",
-    "pathInclude"   => BG_PATH_TPLSYS . "install/default/include/",
-); ?>
-<?php include($cfg["pathInclude"] . "setup_head.php"); ?>
+    "pathInclude"   => BG_PATH_TPLSYS . 'install' . DS . 'default' . DS . 'include' . DS,
+);
+
+include($cfg['pathInclude'] . 'setup_head.php'); ?>
 
     <form name="setup_dbconfig" id="setup_dbconfig">
-        <input type="hidden" name="<?php echo $this->common["tokenRow"]["name_session"]; ?>" value="<?php echo $this->common["tokenRow"]["token"]; ?>">
+        <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
         <input type="hidden" name="act" value="dbconfig">
 
         <?php include(BG_PATH_TPLSYS . "console/default/include/dbconfig.php"); ?>
@@ -19,31 +20,31 @@
         <div class="form-group clearfix">
             <div class="pull-left">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=ext" class="btn btn-default"><?php echo $this->lang["btn"]["stepPrev"]; ?></a>
-                    <?php include($cfg["pathInclude"] . "setup_drop.php"); ?>
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=dbtable" class="btn btn-default"><?php echo $this->lang["btn"]["skip"]; ?></a>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=ext" class="btn btn-default"><?php echo $this->lang['mod']['btn']['stepPrev']; ?></a>
+                    <?php include($cfg['pathInclude'] . "setup_drop.php"); ?>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=dbtable" class="btn btn-default"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
                 </div>
             </div>
 
             <div class="pull-right">
                 <button type="button" class="btn btn-primary bg-submit">
-                    <?php echo $this->lang["btn"]["save"]; ?>
+                    <?php echo $this->lang['mod']['btn']['save']; ?>
                 </button>
             </div>
         </div>
     </form>
 
-<?php include($cfg["pathInclude"] . "install_foot.php"); ?>
+<?php include($cfg['pathInclude'] . 'install_foot.php'); ?>
 
     <script type="text/javascript">
     var opts_submit_form = {
         ajax_url: "<?php echo BG_URL_INSTALL; ?>request.php?mod=setup",
         msg_text: {
-            submitting: "<?php echo $this->lang["label"]["submitting"]; ?>"
+            submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         },
         jump: {
             url: "<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=dbtable",
-            text: "<?php echo $this->lang["href"]["jumping"]; ?>"
+            text: "<?php echo $this->lang['mod']['href']['jumping']; ?>"
         }
     };
 
@@ -58,4 +59,4 @@
     });
     </script>
 
-<?php include($cfg["pathInclude"] . "html_foot.php"); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>

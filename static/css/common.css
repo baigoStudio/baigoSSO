@@ -1,13 +1,15 @@
+.table-responsive { overflow-x: visible !important; }
+
 .bg-panel { max-width: 450px; margin: 0 auto; }
 
 @media (min-width:768px) {
     .bg-panel { margin: 40px auto; }
 }
 
-.bg-panel-heading { background: url(../image/heading_bg.png) center center !important; background-size: cover; }
+.bg-panel-heading { background: url(../image/heading_bg.png); background-size: cover; }
 .bg-panel-heading img { margin: 20px auto; }
 
-.bg-nav-pills a { padding: 4px 8px !important; }
+.bg-nav-pills > li > a { padding: 4px 8px !important; }
 .bg-dl dd { margin-bottom: 10px; }
 
 .bg-nav-line {
@@ -27,7 +29,7 @@
     content: "|";
 }
 
-.bg-label { margin-bottom: 5px; font-size: 12px; display: inline-block; }
+.bg-label { margin-bottom: 5px; font-size: 90%; display: inline-block; padding: 0.4em 0.6em; }
 .bg-tooltip .tooltip-inner { max-width: 500px; }
 
 .panel-default .bg-panel-hr { border-color: #ddd; margin: 20px -15px; }
@@ -106,3 +108,4 @@
 }
 
 .bg-footer { padding: 15px; margin-top: 15px; }
+.seccodeImg { max-height: 32px; }

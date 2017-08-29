@@ -5,20 +5,20 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 /*-------------------------权限-------------------------*/
 return array(
     /*------用户------*/
-    "user" => array(
-        "title" => "用户",
-        "allow" => array(
-            "reg"       => "注册",
-            "edit"      => "编辑",
-            "del"       => "删除",
-            "global"    => "操作所有用户",
+    'user' => array(
+        'title' => '用户',
+        'allow' => array(
+            'reg'       => '注册',
+            'edit'      => '编辑',
+            'del'       => '删除',
+            'global'    => '操作所有用户',
         ),
     ),
 );

@@ -3,10 +3,25 @@
 ！！！！警告！！！！
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
-$base = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 
-require($base . "config/config.class.php");
+define('BG_PATH_CONFIG', $_SERVER['DOCUMENT_ROOT'] . dirname($_SERVER['PHP_SELF']) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR);
+define('BG_APP', 'my');
+define('BG_TYPE', 'ui');
 
-$obj_config = new CLASS_CONFIG();
+if (file_exists(BG_PATH_CONFIG . 'config.class.php')) {
+    require(BG_PATH_CONFIG . 'config.class.php'); //配置生成类
+} else {
+    exit('Fatal Error: Config class not exists!');
+}
 
-$obj_config->config_gen();
+if (file_exists(BG_PATH_CONFIG . 'config.inc.php')) {
+    require(BG_PATH_CONFIG . 'config.inc.php'); //载入配置
+} else {
+    exit('Fatal Error: Config file not exists!');
+}
+
+if (file_exists(BG_PATH_CORE . 'runtime.php')) {
+    require(BG_PATH_CORE . 'runtime.php');
+} else {
+    exit('Fatal Error: Runtime not exists!');
+}

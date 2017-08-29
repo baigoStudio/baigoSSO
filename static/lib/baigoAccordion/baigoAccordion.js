@@ -1,11 +1,13 @@
 $(function(){
+	var menus;
+	var _el;
 	var baigoAccordion = function(el, multiple) {
         "use strict";
 		this.el = el || {};
 		this.multiple = multiple || false;
 
 		// Variables privadas
-		var menus = this.el.find(".menu");
+		menus = this.el.find(".menu");
 		// Evento
 		menus.on("click", {
         		el: this.el,
@@ -16,7 +18,7 @@ $(function(){
 	};
 
 	baigoAccordion.prototype.dropdown = function(e) {
-		var _el = e.data.el,
+		_el = e.data.el,
 			_this = $(this),
 			_next = _this.next();
 

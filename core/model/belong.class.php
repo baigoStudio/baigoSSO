@@ -5,15 +5,17 @@
 -----------------------------------------------------------------*/
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 /*-------------应用归属-------------*/
 class MODEL_BELONG {
 
+    public $obj_db;
+
     function __construct() { //构造函数
-        $this->obj_db = $GLOBALS["obj_db"]; //设置数据库对象
+        $this->obj_db = $GLOBALS['obj_db']; //设置数据库对象
     }
 
 
@@ -39,7 +41,7 @@ class MODEL_BELONG {
         }
 
         return array(
-            "rcode" => $_str_rcode, //更新成功
+            'rcode' => $_str_rcode, //更新成功
         );
     }
 
@@ -56,7 +58,7 @@ class MODEL_BELONG {
 
         if (!fn_isEmpty($_arr_colRows)) {
             foreach ($_arr_colRows as $_key=>$_value) {
-                $_arr_col[] = $_value["Field"];
+                $_arr_col[] = $_value['Field'];
             }
         }
 
@@ -75,7 +77,7 @@ class MODEL_BELONG {
         $_arr_alter   = array();
 
         if (in_array("belong_app_id", $_arr_col)) {
-            $_arr_alter["belong_app_id"] = array("CHANGE", "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
+            $_arr_alter["belong_app_id"] = array('CHANGE', "smallint NOT NULL COMMENT '应用 ID'", "belong_app_id");
         }
 
         $_str_rcode = "y070111";
@@ -89,7 +91,7 @@ class MODEL_BELONG {
         }
 
         return array(
-            "rcode" => $_str_rcode,
+            'rcode' => $_str_rcode,
         );
     }
 
@@ -111,24 +113,24 @@ class MODEL_BELONG {
 
         $_arr_belongRow = $this->mdl_read($num_userId, $num_appId);
 
-        if ($_arr_belongRow["rcode"] == "x070102" && $num_userId > 0 && $num_appId > 0) { //插入
+        if ($_arr_belongRow['rcode'] == "x070102" && $num_userId > 0 && $num_appId > 0) { //插入
             $_num_belongId = $this->obj_db->insert(BG_DB_TABLE . "belong", $_arr_belongData);
 
             if ($_num_belongId > 0) { //数据库插入是否成功
                 $_str_rcode = "y070101";
             } else {
                 return array(
-                    "rcode" => "x070101",
+                    'rcode' => "x070101",
                 );
             }
         } else {
             return array(
-                "rcode" => "x070101",
+                'rcode' => "x070101",
             );
         }
 
         return array(
-            "rcode"  => $_str_rcode,
+            'rcode'  => $_str_rcode,
         );
     }
 
@@ -150,11 +152,11 @@ class MODEL_BELONG {
         $_str_sqlWhere = "1=1";
 
         if ($num_userId > 0) {
-            $_str_sqlWhere .= " AND belong_user_id=" . $num_userId;
+            $_str_sqlWhere .= " AND `belong_user_id`=" . $num_userId;
         }
 
         if ($num_appId > 0) {
-            $_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
+            $_str_sqlWhere .= " AND `belong_app_id`=" . $num_appId;
         }
 
         $_arr_belongRows  = $this->obj_db->select(BG_DB_TABLE . "belong",  $_arr_belongSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
@@ -163,11 +165,11 @@ class MODEL_BELONG {
             $_arr_belongRow   = $_arr_belongRows[0];
         } else {
             return array(
-                "rcode" => "x070102", //不存在记录
+                'rcode' => "x070102", //不存在记录
             );
         }
 
-        $_arr_belongRow["rcode"] = "y070102";
+        $_arr_belongRow['rcode'] = "y070102";
 
         return $_arr_belongRow;
     }
@@ -237,31 +239,31 @@ class MODEL_BELONG {
         $_str_sqlWhere = "1=1";
 
         if ($num_appId > 0) {
-            $_str_sqlWhere .= " AND belong_app_id=" . $num_appId;
+            $_str_sqlWhere .= " AND `belong_app_id`=" . $num_appId;
         }
 
         if ($num_userId > 0) {
-            $_str_sqlWhere .= " AND belong_user_id=" . $num_userId;
+            $_str_sqlWhere .= " AND `belong_user_id`=" . $num_userId;
         }
 
-        if ($arr_appIds) {
-            $_str_appIds    = implode(",", $arr_appIds);
-            $_str_sqlWhere  .= " AND belong_app_id IN (" . $_str_appIds . ")";
+        if (!fn_isEmpty($arr_appIds)) {
+            $_str_appIds    = implode(',', $arr_appIds);
+            $_str_sqlWhere  .= " AND `belong_app_id` IN (" . $_str_appIds . ")";
         }
 
-        if ($arr_userIds) {
-            $_str_userIds = implode(",", $arr_userIds);
-            $_str_sqlWhere  .= " AND belong_user_id IN (" . $_str_userIds . ")";
+        if (!fn_isEmpty($arr_userIds)) {
+            $_str_userIds = implode(',', $arr_userIds);
+            $_str_sqlWhere  .= " AND `belong_user_id` IN (" . $_str_userIds . ")";
         }
 
-        if ($arr_notAppIds) {
-            $_str_notAppIds    = implode(",", $arr_notAppIds);
-            $_str_sqlWhere  .= " AND belong_app_id NOT IN (" . $_str_notAppIds . ")";
+        if (!fn_isEmpty($arr_notAppIds)) {
+            $_str_notAppIds    = implode(',', $arr_notAppIds);
+            $_str_sqlWhere  .= " AND `belong_app_id` NOT IN (" . $_str_notAppIds . ")";
         }
 
-        if ($arr_notUserIds) {
-            $_str_notUserIds = implode(",", $arr_notUserIds);
-            $_str_sqlWhere  .= " AND belong_user_id NOT IN (" . $_str_notUserIds . ")";
+        if (!fn_isEmpty($arr_notUserIds)) {
+            $_str_notUserIds = implode(',', $arr_notUserIds);
+            $_str_sqlWhere  .= " AND `belong_user_id` NOT IN (" . $_str_notUserIds . ")";
         }
 
         //print_r($_str_sqlWhere);
@@ -276,7 +278,7 @@ class MODEL_BELONG {
         }
 
         return array(
-            "rcode" => $_str_rcode,
+            'rcode' => $_str_rcode,
         ); //成功
     }
 
@@ -291,16 +293,16 @@ class MODEL_BELONG {
     private function sql_process($arr_search = array()) {
         $_str_sqlWhere = "1=1";
 
-        if (isset($arr_search["app_id"]) && $arr_search["app_id"] > 0) {
-            $_str_sqlWhere .= " AND `belong_app_id`=" . $arr_search["app_id"];
+        if (isset($arr_search['app_id']) && $arr_search['app_id'] > 0) {
+            $_str_sqlWhere .= " AND `belong_app_id`=" . $arr_search['app_id'];
         }
 
-        if (isset($arr_search["user_id"]) && $arr_search["user_id"] > 0) {
-            $_str_sqlWhere .= " AND `belong_user_id`=" . $arr_search["user_id"];
+        if (isset($arr_search['user_id']) && $arr_search['user_id'] > 0) {
+            $_str_sqlWhere .= " AND `belong_user_id`=" . $arr_search['user_id'];
         }
 
         if (isset($arr_search["user_ids"]) && !fn_isEmpty($arr_search["user_ids"])) {
-            $_str_userIds = implode(",", $arr_search["user_ids"]);
+            $_str_userIds = implode(',', $arr_search["user_ids"]);
             $_str_sqlWhere  .= " AND `belong_user_id` IN (" . $_str_userIds . ")";
         }
 

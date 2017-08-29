@@ -12,63 +12,63 @@ class CLASS_NOTIFY {
      */
     function app_chk($num_appId, $str_appKey) {
 
-        $_arr_appId = validateStr($num_appId, 1, 0, "str", "int");
-        switch ($_arr_appId["status"]) {
-            case "too_short":
+        $_arr_appId = fn_validate($num_appId, 1, 0, 'str', 'int');
+        switch ($_arr_appId['status']) {
+            case 'too_short':
                 return array(
-                    "rcode" => "x220206",
+                    'rcode' => "x220206",
                 );
             break;
 
-            case "format_err":
+            case 'format_err':
                 return array(
-                    "rcode" => "x220207",
+                    'rcode' => "x220207",
                 );
             break;
 
-            case "ok":
-                $_arr_appChk["app_id"] = $_arr_appId["str"];
+            case 'ok':
+                $_arr_appChk['app_id'] = $_arr_appId['str'];
             break;
         }
 
-        if ($_arr_appChk["app_id"] != BG_SSO_APPID) {
+        if ($_arr_appChk['app_id'] != BG_SSO_APPID) {
             return array(
-                "rcode" => "x220208",
+                'rcode' => "x220208",
             );
         }
 
-        $_arr_appKey = validateStr($str_appKey, 1, 32, "str", "alphabetDigit");
-        switch ($_arr_appKey["status"]) {
-            case "too_short":
+        $_arr_appKey = fn_validate($str_appKey, 1, 32, 'str', 'alphabetDigit');
+        switch ($_arr_appKey['status']) {
+            case 'too_short':
                 return array(
-                    "rcode" => "x220209",
+                    'rcode' => "x220209",
                 );
             break;
 
-            case "too_long":
+            case 'too_long':
                 return array(
-                    "rcode" => "x220210",
+                    'rcode' => "x220210",
                 );
             break;
 
-            case "format_err":
+            case 'format_err':
                 return array(
-                    "rcode" => "x220211",
+                    'rcode' => "x220211",
                 );
             break;
 
-            case "ok":
-                $_arr_appChk["app_key"] = $_arr_appKey["str"];
+            case 'ok':
+                $_arr_appChk['app_key'] = $_arr_appKey['str'];
             break;
         }
 
-        if ($_arr_appChk["app_key"] != BG_SSO_APPKEY) {
+        if ($_arr_appChk['app_key'] != BG_SSO_APPKEY) {
             return array(
-                "rcode" => "x220212",
+                'rcode' => "x220212",
             );
         }
 
-        $_arr_appChk["rcode"] = "ok";
+        $_arr_appChk['rcode'] = 'ok';
 
         return $_arr_appChk;
     }
@@ -81,9 +81,9 @@ class CLASS_NOTIFY {
      * @param bool $chk_token (default: false)
      * @return void
      */
-    function notify_input($str_method = "get", $chk_token = false) {
+    function notify_input($str_method = 'get', $chk_token = false) {
 
-        $_arr_notifyInput["act"]    = $GLOBALS["act"];
+        $_arr_notifyInput['act']    = $GLOBALS['act'];
 
         switch ($str_method) {
             case "post":
@@ -101,46 +101,46 @@ class CLASS_NOTIFY {
             break;
         }
 
-        $_arr_time = validateStr($_str_time, 1, 0);
-        switch ($_arr_time["status"]) {
-            case "too_short":
+        $_arr_time = fn_validate($_str_time, 1, 0);
+        switch ($_arr_time['status']) {
+            case 'too_short':
                 return array(
-                    "rcode" => "x220201",
+                    'rcode' => "x220201",
                 );
             break;
 
-            case "ok":
-                $_arr_notifyInput["time"] = $_arr_time["str"];
+            case 'ok':
+                $_arr_notifyInput['time'] = $_arr_time['str'];
             break;
         }
 
-        $_arr_signature = validateStr($_str_signature, 1, 0);
-        switch ($_arr_signature["status"]) {
-            case "too_short":
+        $_arr_signature = fn_validate($_str_signature, 1, 0);
+        switch ($_arr_signature['status']) {
+            case 'too_short':
                 return array(
-                    "rcode" => "x220203",
+                    'rcode' => "x220203",
                 );
             break;
 
-            case "ok":
-                $_arr_notifyInput["signature"] = $_arr_signature["str"];
+            case 'ok':
+                $_arr_notifyInput['signature'] = $_arr_signature['str'];
             break;
         }
 
-        $_arr_code = validateStr($_str_code, 1, 0);
-        switch ($_arr_code["status"]) {
-            case "too_short":
+        $_arr_code = fn_validate($_str_code, 1, 0);
+        switch ($_arr_code['status']) {
+            case 'too_short':
                 return array(
-                    "rcode" => "x220204",
+                    'rcode' => "x220204",
                 );
             break;
 
-            case "ok":
-                $_arr_notifyInput["code"] = $_arr_code["str"];
+            case 'ok':
+                $_arr_notifyInput["code"] = $_arr_code['str'];
             break;
         }
 
-        $_arr_notifyInput["rcode"] = "ok";
+        $_arr_notifyInput['rcode'] = 'ok';
 
         return $_arr_notifyInput;
     }

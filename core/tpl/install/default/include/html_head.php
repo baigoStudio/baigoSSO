@@ -1,11 +1,15 @@
 <?php header("Content-Type: text/html; charset=utf-8"); ?>
 <!DOCTYPE html>
-<html lang="<?php echo substr($this->config["lang"], 0, 2); ?>">
+<html lang="<?php echo substr($this->config['lang'], 0, 2); ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title><?php echo $cfg["sub_title"]; ?> - <?php echo $cfg["title"]; ?></title>
+    <title>
+        <?php if (isset($cfg['title']) && !fn_isEmpty($cfg['title'])) {
+            echo $cfg['title'];
+        } ?>
+    </title>
 
     <!--jQuery 库-->
     <script src="<?php echo BG_URL_STATIC; ?>lib/jquery.min.js" type="text/javascript"></script>

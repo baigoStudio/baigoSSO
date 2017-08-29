@@ -164,10 +164,10 @@ class ntlm_sasl_client_class
                 $this->state = SASL_NTLM_STATE_RESPOND_CHALLENGE;
                 break;
             case SASL_NTLM_STATE_RESPOND_CHALLENGE:
-                $ntlm_response = $this->NTLMResponse(substr($response, 24, 8), $this->credentials["password"]);
+                $ntlm_response = $this->NTLMResponse(substr($response, 24, 8), $this->credentials['password']);
                 $message = $this->TypeMsg3(
                     $ntlm_response,
-                    $this->credentials["user"],
+                    $this->credentials['user'],
                     $this->credentials["realm"],
                     $this->credentials["workstation"]
                 );

@@ -1,30 +1,30 @@
 <?php $cfg = array(
-    "title"          => $this->consoleMod["user"]["main"]["title"] . " &raquo; " . $this->consoleMod["user"]["sub"]["import"]["title"],
-    "menu_active"    => "user",
-    "sub_active"     => "import",
-    "baigoCheckall"  => "true",
-    "baigoValidator" => "true",
-    "baigoSubmit"    => "true",
-    "upload"         => "true",
-    "md5"            => "true",
-    "pathInclude"    => BG_PATH_TPLSYS . "console/default/include/",
-    "str_url"        => BG_URL_CONSOLE . "index.php?mod=user",
-); ?>
+    'title'          => $this->lang['consoleMod']['user']['main']['title'] . ' &raquo; ' . $this->lang['consoleMod']['user']['sub']['import'],
+    'menu_active'    => "user",
+    'sub_active'     => "import",
+    'baigoCheckall'  => 'true',
+    'baigoValidator' => 'true',
+    'baigoSubmit'    => 'true',
+    "upload"         => 'true',
+    "md5"            => 'true',
+    'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
+    'str_url'        => BG_URL_CONSOLE . "index.php?mod=user",
+);
 
-<?php include($cfg["pathInclude"] . "console_head.php"); ?>
+include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group">
         <ul class="nav nav-pills bg-nav-pills">
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang["href"]["back"]; ?>
+                    <?php echo $this->lang['mod']['href']['back']; ?>
                 </a>
             </li>
             <li>
                 <a href="<?php echo BG_URL_HELP; ?>index.php?mod=console&act=user" target="_blank">
                     <span class="glyphicon glyphicon-question-sign"></span>
-                    <?php echo $this->lang["href"]["help"]; ?>
+                    <?php echo $this->lang['mod']['href']['help']; ?>
                 </a>
             </li>
         </ul>
@@ -34,23 +34,23 @@
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <?php if ($this->tplData["csvRows"]) { ?>
+                    <?php if (!fn_isEmpty($this->tplData['csvRows'])) { ?>
                         <form name="csv_convert" id="csv_convert">
-                            <input type="hidden" name="<?php echo $this->common["tokenRow"]["name_session"]; ?>" value="<?php echo $this->common["tokenRow"]["token"]; ?>">
+                            <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
                             <input type="hidden" name="act" value="convert">
-                            <input type="hidden" name="charset" value="<?php echo $this->tplData["charset"]; ?>">
+                            <input type="hidden" name="charset" value="<?php echo $this->tplData['charset']; ?>">
 
                             <table class="bg-table-convert">
                                 <thead>
                                     <tr>
-                                        <th><?php echo $this->lang["label"]["source"]; ?></th>
+                                        <th><?php echo $this->lang['mod']['label']['source']; ?></th>
                                         <th> </th>
-                                        <th><?php echo $this->lang["label"]["convert"]; ?></th>
+                                        <th><?php echo $this->lang['mod']['label']['convert']; ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (isset($this->tplData["csvRows"][0]) && !fn_isEmpty($this->tplData["csvRows"][0])) {
-                                        foreach ($this->tplData["csvRows"][0] as $key=>$value) {
+                                    <?php if (isset($this->tplData['csvRows'][0]) && !fn_isEmpty($this->tplData['csvRows'][0])) {
+                                        foreach ($this->tplData['csvRows'][0] as $key=>$value) {
                                             if (!fn_isEmpty($value)) { ?>
                                                 <tr>
                                                     <td><?php echo $value; ?></td>
@@ -59,10 +59,10 @@
                                                     </td>
                                                     <td>
                                                         <select name="user_convert[<?php echo $key; ?>]" class="form-control">
-                                                            <option <?php if ($key < 1) { ?>selected<?php } ?> value="user_name"><?php echo $this->lang["label"]["username"]; ?></option>
-                                                            <option <?php if ($key == 1) { ?>selected<?php } ?> value="user_pass"><?php echo $this->lang["label"]["password"]; ?></option>
-                                                            <option <?php if ($key == 2) { ?>selected<?php } ?> value="user_nick"><?php echo $this->lang["label"]["nick"]; ?></option>
-                                                            <option value="abort"><?php echo $this->lang["option"]["abort"]; ?></option>
+                                                            <option <?php if ($key < 1) { ?>selected<?php } ?> value="user_name"><?php echo $this->lang['mod']['label']['username']; ?></option>
+                                                            <option <?php if ($key == 1) { ?>selected<?php } ?> value="user_pass"><?php echo $this->lang['mod']['label']['password']; ?></option>
+                                                            <option <?php if ($key == 2) { ?>selected<?php } ?> value="user_nick"><?php echo $this->lang['mod']['label']["nick"]; ?></option>
+                                                            <option value="abort"><?php echo $this->lang['mod']['option']["abort"]; ?></option>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -74,7 +74,7 @@
                                     <tr>
                                         <td colspan="3">
                                             <div class="bg-submit-box bg-submit-box-convert"></div>
-                                            <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang["btn"]["convert"]; ?></button>
+                                            <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['convert']; ?></button>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -87,14 +87,14 @@
         <div class="col-md-6">
             <div class="alert alert-warning">
                 <span class="glyphicon glyphicon-warning-sign"></span>
-                <?php echo $this->lang["text"]["refreshImport"]; ?>
+                <?php echo $this->lang['mod']['text']['refreshImport']; ?>
             </div>
             <div class="well">
                 <form name="csv_import" id="csv_import">
                     <div class="form-group">
                         <a id="upload_select" class="btn btn-success fileinput-button">
                             <span class="glyphicon glyphicon-upload"></span>
-                            <?php echo $this->lang["btn"]["uploadCsv"]; ?>
+                            <?php echo $this->lang['mod']['btn']['uploadCsv']; ?>
                         </a>
                     </div>
 
@@ -104,13 +104,13 @@
                 <hr class="bg-well-hr">
 
                 <form name="csv_del" id="csv_del">
-                    <input type="hidden" name="<?php echo $this->common["tokenRow"]["name_session"]; ?>" value="<?php echo $this->common["tokenRow"]["token"]; ?>">
+                    <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
                     <input type="hidden" name="act" value="csvDel">
                     <div class="bg-submit-box bg-submit-box-del"></div>
                     <div class="form-group">
                         <button class="btn btn-primary bg-submit-del" type="button">
                             <span class="glyphicon glyphicon-trash"></span>
-                            <?php echo $this->lang["btn"]["delCsv"]; ?>
+                            <?php echo $this->lang['mod']['btn']['delCsv']; ?>
                         </button>
                     </div>
                 </form>
@@ -118,17 +118,17 @@
                 <hr class="bg-well-hr">
 
                 <div class="form-group">
-                    <label class="control-label"><?php echo $this->lang["label"]["md5tool"]; ?></label>
-                    <input type="text" id="pass_src" class="form-control" placeholder="<?php echo $this->lang["label"]["password"]; ?>">
+                    <label class="control-label"><?php echo $this->lang['mod']['label']['md5tool']; ?></label>
+                    <input type="text" id="pass_src" class="form-control" placeholder="<?php echo $this->lang['mod']['label']['password']; ?>">
                 </div>
                 <div class="form-group">
-                    <label class="control-label"><?php echo $this->lang["label"]["md5result"]; ?></label>
+                    <label class="control-label"><?php echo $this->lang['mod']['label']['md5result']; ?></label>
                     <input type="text" id="pass_result" class="form-control">
                 </div>
                 <div class="form-group">
                     <button type="button" id="md5_do" class="btn btn-primary">
                         <span class="glyphicon glyphicon-lock"></span>
-                        <?php echo $this->lang["btn"]["md5gen"]; ?>
+                        <?php echo $this->lang['mod']['btn']['md5gen']; ?>
                     </button>
                 </div>
 
@@ -139,13 +139,13 @@
                     <input type="hidden" name="act" value="import">
 
                     <div class="form-group">
-                        <label class="control-label"><?php echo $this->lang["label"]["charsetSrc"]; ?></label>
+                        <label class="control-label"><?php echo $this->lang['mod']['label']['charsetSrc']; ?></label>
                         <select name="charset" id="charset" class="form-control">
-                            <?php foreach ($this->tplData["charsetRows"] as $key=>$value) { ?>
-                                <optgroup label="<?php echo $value["title"]; ?>">
-                                    <?php foreach ($value["list"] as $key_sub=>$value_sub) { ?>
-                                        <option <?php if ($this->tplData["charset"] == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
-                                            <?php echo $value_sub["title"]; ?>
+                            <?php foreach ($this->tplData['charsetRows'] as $key=>$value) { ?>
+                                <optgroup label="<?php echo $value['title']; ?>">
+                                    <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
+                                        <option <?php if ($this->tplData['charset'] == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
+                                            <?php echo $value_sub['title']; ?>
                                             <?php echo $key_sub; ?>
                                         </option>
                                     <?php } ?>
@@ -155,10 +155,10 @@
                     </div>
                     <div class="form-group">
                         <div class="btn-group">
-                            <button type="submit" class="btn btn-primary"><?php echo $this->lang["btn"]["submit"]; ?></button>
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#charset_list_modal">
-                                <?php echo $this->lang["btn"]["charset"]; ?>
-                            </button>
+                            <button type="submit" class="btn btn-primary"><?php echo $this->lang['mod']['btn']['submit']; ?></button>
+                            <a class="btn btn-default" href="#charset_list_modal" data-toggle="modal">
+                                <?php echo $this->lang['mod']['btn']['charset']; ?>
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -168,21 +168,21 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <h3><?php echo $this->lang["label"]["preview"]; ?></h3>
+            <h3><?php echo $this->lang['mod']['label']['preview']; ?></h3>
         </div>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <?php if (isset($this->tplData["csvRows"][0]) && !fn_isEmpty($this->tplData["csvRows"][0])) {
-                        foreach ($this->tplData["csvRows"][0] as $key=>$value) { ?>
+                    <?php if (isset($this->tplData['csvRows'][0]) && !fn_isEmpty($this->tplData['csvRows'][0])) {
+                        foreach ($this->tplData['csvRows'][0] as $key=>$value) { ?>
                             <th><?php echo $value; ?></th>
                         <?php }
                     } ?>
                 </tr>
             </thead>
             <tbody>
-                <?php if (isset($this->tplData["csvRows"]) && !fn_isEmpty($this->tplData["csvRows"])) {
-                    foreach ($this->tplData["csvRows"] as $key=>$value) {
+                <?php if (isset($this->tplData['csvRows']) && !fn_isEmpty($this->tplData['csvRows'])) {
+                    foreach ($this->tplData['csvRows'] as $key=>$value) {
                         if ($key > 0) { ?>
                             <tr>
                                 <?php foreach ($value as $key_s=>$value_s) { ?>
@@ -201,27 +201,27 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title"><?php echo $this->lang["label"]["charset"]; ?></h4>
+                    <h4 class="modal-title"><?php echo $this->lang['mod']['label']['charset']; ?></h4>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
-                        <?php foreach ($this->tplData["charsetRows"] as $key=>$value) { ?>
+                        <?php foreach ($this->tplData['charsetRows'] as $key=>$value) { ?>
                             <thead>
                                 <tr>
-                                    <th class="text-nowrap"><?php echo $value["title"]; ?></th>
-                                    <th class="text-nowrap"><?php echo $this->lang["label"]["name"]; ?></th>
-                                    <th><?php echo $this->lang["label"]["national"]; ?></th>
+                                    <th class="text-nowrap"><?php echo $value['title']; ?></th>
+                                    <th class="text-nowrap"><?php echo $this->lang['mod']['label']['name']; ?></th>
+                                    <th><?php echo $this->lang['mod']['label']['note']; ?></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($value["list"] as $key_sub=>$value_sub) { ?>
+                                <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
                                     <tr>
                                         <td class="text-nowrap"><?php echo $key_sub; ?></td>
                                         <td class="text-nowrap">
-                                            <?php echo $value_sub["title"];
-                                            if (isset($value_sub["often"])) { ?><code>*</code><?php } ?>
+                                            <?php echo $value_sub['title'];
+                                            if (isset($value_sub['often'])) { ?><code>*</code><?php } ?>
                                         </td>
-                                        <td><?php echo $value_sub["note"]; ?></td>
+                                        <td><?php echo $value_sub['note']; ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -229,13 +229,13 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"><?php echo $this->lang["btn"]["close"]; ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang['common']['btn']['close']; ?></button>
                 </div>
             </div>
         </div>
     </div>
 
-<?php include($cfg["pathInclude"] . "console_foot.php"); ?>
+<?php include($cfg['pathInclude'] . 'console_foot.php'); ?>
 
     <script type="text/javascript">
     var opts_submit_convert = {
@@ -244,7 +244,7 @@
             selector: ".bg-submit-box-convert"
         },
         msg_text: {
-            submitting: "<?php echo $this->lang["label"]["submitting"]; ?>"
+            submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         }
     };
 
@@ -257,7 +257,7 @@
             submit_btn: ".bg-submit-del"
         },
         msg_text: {
-            submitting: "<?php echo $this->lang["label"]["submitting"]; ?>"
+            submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         }
     };
 
@@ -271,13 +271,13 @@
 
     $(document).ready(function(){
         if (!WebUploader.Uploader.support()) {
-            alert("<?php echo $this->lang["label"]["needH5"]; ?>");
+            alert("<?php echo $this->lang['mod']['label']['needH5']; ?>");
         }
 
         var obj_wu = new WebUploader.Uploader({
             //附加表单数据
             formData: {
-                <?php echo $this->common["tokenRow"]["name_session"]; ?>: "<?php echo $this->common["tokenRow"]["token"]; ?>",
+                <?php echo $this->common['tokenRow']['name_session']; ?>: "<?php echo $this->common['tokenRow']['token']; ?>",
                 act: "import"
             },
             server: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user", //文件接收服务端
@@ -313,13 +313,13 @@
         obj_wu.on("error", function(error, file){
             switch(error) {
                 case "Q_TYPE_DENIED":
-                    alert(file.name + " <?php echo $this->rcode["x010219"]; ?>");
+                    alert(file.name + " <?php echo $this->lang['rcode']['x010219']; ?>");
                 break;
             }
         });
 
         obj_wu.on("uploadProgress", function(file, percentage){
-            alert_process("alert-danger", "glyphicon-remove-sign", "<?php echo $this->lang["label"]["uploading"]; ?>");
+            alert_process("alert-danger", "glyphicon-remove-sign", "<?php echo $this->lang['mod']['label']['uploading']; ?>");
 
             $("#csv_upload .bg-progress").show();
             $("#csv_upload .bg-progress .progress-bar").text(percentage * 100 + "%");
@@ -329,10 +329,10 @@
         obj_wu.on("uploadSuccess", function(file, result){
             var _str_msg;
             if (result.rcode == "y010403") {
-                alert_process("alert-success", "glyphicon-ok-sign", "<?php echo $this->lang["label"]["uploadSucc"]; ?>");
+                alert_process("alert-success", "glyphicon-ok-sign", "<?php echo $this->lang['mod']['label']['uploadSucc']; ?>");
             } else {
                 if (typeof result.msg == "undefined") {
-                    _str_msg = "<?php echo $this->lang["label"]["returnErr"]; ?>";
+                    _str_msg = "<?php echo $this->lang['mod']['label']['returnErr']; ?>";
                 } else {
                     _str_msg = result.msg;
                 }
@@ -347,7 +347,9 @@
         obj_wu.on("uploadComplete", function(file){
             $("#csv_upload .bg-progress").slideUp("slow");
 
-            setTimeout("$('#csv_upload .bg-alert').slideUp('slow');", 5000);
+            setTimeout(function(){
+                $("#csv_upload .bg-alert").slideUp("slow");
+            }, 5000);
         });
 
         var obj_submit_convert = $("#csv_convert").baigoSubmit(opts_submit_convert);
@@ -362,8 +364,11 @@
             var _src = $("#pass_src").val();
             $("#pass_result").val($.md5(_src));
         });
-
+        $("#pass_src").bind("change keyup",function(){
+            var _src = $(this).val();
+            $("#pass_result").val($.md5(_src));
+        });
     });
     </script>
 
-<?php include($cfg["pathInclude"] . "html_foot.php"); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>

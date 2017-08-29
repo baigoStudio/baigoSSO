@@ -95,10 +95,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 strDigit：中文字母数字下划线连字符
                 alias: 别名（字母数字下划线连字符）
                 ip：IP 地址
-            validator.type 为 digit 时：
-                int：整数
-                digit：数字（可带小数点）
-            validator.type 为 checkbox radio 和 select 时可忽略
+            validator.type 为 digit checkbox radio 和 select 时可忽略
 
         3.2.4 group：表单组选择器名，建议使用 id。此参数主要为配合 Bootstrap 的验证样式，如使用此参数，将为相对应的表单组附加样式类。页面中必须使用 Bootstrap，详细请参考 Bootstrap 中文网站关于表单验证样式的信息 http://v3.bootcss.com/css/#forms-control-validation。
 
@@ -141,6 +138,6 @@ License: http://www.opensource.org/licenses/mit-license.php
         attach_keys: 附加查询关键词（多个），暨传给 AJAX 程序的内容，其值为 attach_selectors 表单值，顺序必须与 attach_selectors 对应，插件会将两个参数转换为 attach_keys[0]=attach_selectors[0]值&attach_keys[1]=attach_selectors[1]值 的形式附加至 AJAX 查询串。
 
 4 ajax 返回内容必须为 json，如：
-    { "re": "ok" } 成功
-    { "re": "验证失败" } 具体提示信息
+    { "msg": "ok" } 成功
+    { "msg": "验证失败" } 具体提示信息
 

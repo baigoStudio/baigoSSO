@@ -1,5 +1,5 @@
 /*
-v2.0 jQuery baigoSubmit plugin 表单提交插件
+v2.0.3 jQuery baigoSubmit plugin 表单提交插件
 (c) 2013 baigo studio - http://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
@@ -20,6 +20,9 @@ License: http://www.opensource.org/licenses/mit-license.php
         var thisForm    = $(this); //定义表单对象
         var el          = this;
         var _str_conn   = "?";
+        var _form_action;
+        var _jump_url;
+        var _result_attach_value;
 
         var defaults = {
             class_content: {
@@ -74,7 +77,7 @@ License: http://www.opensource.org/licenses/mit-license.php
         $(_obj_selector + " " + opts.selector.msg).html(opts.msg_text.submitting);
 
         //调用弹出框
-        var callBox = function(_action, _rcode, _msg) {
+        var callBox = function(_action, _rcode, _msg, _attach_value) {
             switch(_action) {
                 case "pre":
                     $(_obj_selector + " " + opts.selector.content).removeClass(opts.class_content.submitting + " " + opts.class_content.err + " " + opts.class_content.success);
@@ -102,7 +105,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 break;
 
                 case "success":
-                    if (typeof _rcode == "undefined" || _rcode == null) {
+                    if (typeof _rcode == "undefined" || _rcode === null) {
                         _rcode = "x";
                     }
 
@@ -124,12 +127,24 @@ License: http://www.opensource.org/licenses/mit-license.php
 
                     _msg_html = _str_rcode;
 
-                    if (typeof _msg != "undefined" && _msg.length > 0) {
+                    if (typeof _msg != "undefined") {
                         _msg_html = _msg + "&nbsp;" + _str_rcode;
                     }
 
-                    if (_rcode_status == "y" && typeof opts.jump.url != "undefined" && opts.jump.url.length > 0 && typeof opts.jump.text != "undefined" && opts.jump.text.length > 0) {
-                        _msg_html = _msg_html + "&nbsp;<a class=\"alert-link\" href=\"" + opts.jump.url + "\">" + opts.jump.text + "</a>";
+                    if (_rcode_status == "y" && typeof opts.jump.url != "undefined" && opts.jump.url.length > 0 && typeof opts.jump.text != "undefined") {
+                        _jump_url = opts.jump.url;
+
+                        if (typeof opts.jump.attach_key != "undefined" && typeof _attach_value != "undefined") {
+                            if (_jump_url.indexOf("?")) {
+                                _str_conn = "&";
+                            } else {
+                                _str_conn = "?";
+                            }
+
+                            _jump_url = _jump_url + _str_conn + opts.jump.attach_key + "=" + _attach_value;
+                        }
+
+                        _msg_html = _msg_html + "&nbsp;<a class=\"alert-link\" href=\"" + _jump_url + "\">" + opts.jump.text + "</a>";
                         _icon = opts.jump.icon;
                     }
 
@@ -146,7 +161,9 @@ License: http://www.opensource.org/licenses/mit-license.php
                         $(opts.selector.empty_input).val("");
 
                         if (typeof opts.jump.url != "undefined" && opts.jump.url.length > 0) {
-                            setTimeout(jumpGo, opts.jump.delay);
+                            setTimeout(function(){
+                                window.location.href = _jump_url;
+                            }, opts.jump.delay);
                         }
                     }
                 break;
@@ -159,16 +176,12 @@ License: http://www.opensource.org/licenses/mit-license.php
             }
         };
 
-        var jumpGo = function() {
-            window.location.href = opts.jump.url;
-        }
-
         //确认消息
         var formConfirm = function() {
-            if (typeof opts.confirm.selector == "undefined" || opts.confirm.selector == null) {
+            if (typeof opts.confirm.selector == "undefined" || opts.confirm.selector === null) {
                 return true;
             } else {
-                var _form_action = $(opts.confirm.selector).val();
+                _form_action = $(opts.confirm.selector).val();
                 if (_form_action == opts.confirm.val) {
                     if (confirm(opts.confirm.msg)) {
                         return true;
@@ -200,11 +213,19 @@ License: http://www.opensource.org/licenses/mit-license.php
                     }, //输出消息
                     error: function(_result){
                         callBox("err", "", _result.status); //输出消息
-                        setTimeout(callBox, opts.box.delay);
+                        setTimeout(function(){
+                            callBox();
+                        }, opts.box.delay);
                     },
                     success: function(_result){ //读取返回结果
-                        callBox("success", _result.rcode, _result.msg); //输出消息
-                        setTimeout(callBox, opts.box.delay);
+                        if (typeof opts.jump.attach_key != "undefined" && typeof _result[opts.jump.attach_key] != "undefined") {
+                            _result_attach_value = _result[opts.jump.attach_key];
+                        }
+
+                        callBox("success", _result.rcode, _result.msg, _result_attach_value); //输出消息
+                        setTimeout(function(){
+                            callBox();
+                        }, opts.box.delay);
                     }
                 });
             }

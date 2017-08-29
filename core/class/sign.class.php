@@ -6,14 +6,15 @@
 
 
 //不能非法包含或直接执行
-if (!defined("IN_BAIGO")) {
-    exit("Access Denied");
+if (!defined('IN_BAIGO')) {
+    exit('Access Denied');
 }
 
 class CLASS_SIGN {
+
     //生成签名
     function sign_make($arr_params) {
-        unset($arr_params["signature"], $arr_params["rcode"]);
+        unset($arr_params['signature'], $arr_params['rcode']);
 
         $_arr_params = array();
 
