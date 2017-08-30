@@ -246,7 +246,7 @@ class CONTROL_API_API_PROFILE {
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
             $_arr_userSubmit['user_sec_ques_' . $_iii] = $_arr_qaInput['user_sec_ques_' . $_iii];
-            $_arr_userSubmit['user_sec_answ_' . $_iii] = fn_baigoCrypt($_arr_qaInput['user_sec_answ_' . $_iii], $_arr_userRow['user_name']);
+            $_arr_userSubmit['user_sec_answ_' . $_iii] = fn_baigoCrypt($_arr_qaInput['user_sec_answ_' . $_iii], $_arr_userRow['user_name'], true);
         }
 
         $_arr_returnRow = $this->mdl_user_profile->mdl_qa($_arr_userSubmit);
@@ -279,7 +279,7 @@ class CONTROL_API_API_PROFILE {
             "act"                           => $GLOBALS['act'],
             $_arr_mailboxInput['user_by']   => $_arr_mailboxInput['user_str'],
             "user_pass"                     => $_arr_mailboxInput['user_pass'],
-            "user_mail_new"                 => $_arr_mailboxInput["user_mail_new"],
+            "user_mail_new"                 => $_arr_mailboxInput['user_mail_new'],
         );
 
         if (!$this->obj_sign->sign_check(array_merge($_arr_apiChks['appInput'], $_arr_sign), $_arr_apiChks['appInput']['signature'])) {
@@ -301,7 +301,7 @@ class CONTROL_API_API_PROFILE {
             $this->obj_api->show_result($_arr_tplData);
         }
 
-        if ($_arr_mailboxInput["user_mail_new"] == $_arr_userRow['user_mail']) {
+        if ($_arr_mailboxInput['user_mail_new'] == $_arr_userRow['user_mail']) {
             $_arr_tplData = array(
                 'rcode' => "x010223",
             );
@@ -326,8 +326,8 @@ class CONTROL_API_API_PROFILE {
             $this->obj_api->show_result($_arr_tplData);
         }
 
-        if ((BG_REG_ONEMAIL == "false" || BG_LOGIN_MAIL == 'on') && isset($_arr_mailboxInput["user_mail_new"]) && $_arr_mailboxInput["user_mail_new"]) {
-            $_arr_userRowChk = $this->mdl_user_profile->mdl_read($_arr_mailboxInput["user_mail_new"], "user_mail", $_arr_userRow['user_id']); //检查邮箱
+        if ((BG_REG_ONEMAIL == "false" || BG_LOGIN_MAIL == 'on') && isset($_arr_mailboxInput['user_mail_new']) && $_arr_mailboxInput['user_mail_new']) {
+            $_arr_userRowChk = $this->mdl_user_profile->mdl_read($_arr_mailboxInput['user_mail_new'], "user_mail", $_arr_userRow['user_id']); //检查邮箱
             if ($_arr_userRowChk['rcode'] == 'y010102') {
                 $_arr_tplData = array(
                     'rcode' => "x010211",
@@ -339,7 +339,7 @@ class CONTROL_API_API_PROFILE {
         //file_put_contents(BG_PATH_ROOT . "test.txt", $_str_userPass . "||" . $_str_rand);
 
         if (BG_REG_CONFIRM == 'on') {
-            $_arr_returnRow    = $this->mdl_verify->mdl_submit($_arr_userRow['user_id'], $_arr_mailboxInput["user_mail_new"], "mailbox");
+            $_arr_returnRow    = $this->mdl_verify->mdl_submit($_arr_userRow['user_id'], $_arr_mailboxInput['user_mail_new'], "mailbox");
             if ($_arr_returnRow['rcode'] != 'y120101' && $_arr_returnRow['rcode'] != "y120103") {
                 $_arr_tplData = array(
                     'rcode' => "x010405",
@@ -352,9 +352,9 @@ class CONTROL_API_API_PROFILE {
             $_str_html      = str_ireplace('{verify_url}', $_str_url, $this->mail["mailbox"]['content']);
             $_str_html      = str_ireplace('{user_name}', $_arr_userRow['user_name'], $_str_html);
             $_str_html      = str_ireplace('{user_mail}', $_arr_userRow['user_mail'], $_str_html);
-            $_str_html      = str_ireplace("{user_mail_new}", $_arr_mailboxInput["user_mail_new"], $_str_html);
+            $_str_html      = str_ireplace("{user_mail_new}", $_arr_mailboxInput['user_mail_new'], $_str_html);
 
-            if (fn_mailSend($_arr_mailboxInput["user_mail_new"], $this->mail["mailbox"]['subject'], $_str_html)) {
+            if (fn_mailSend($_arr_mailboxInput['user_mail_new'], $this->mail["mailbox"]['subject'], $_str_html)) {
                 $_arr_returnRow['rcode'] = "y010406";
             } else {
                 $_arr_returnRow['rcode'] = "x010406";
@@ -362,7 +362,7 @@ class CONTROL_API_API_PROFILE {
 
             unset($_arr_returnRow['verify_id'], $_arr_returnRow['verify_token']);
         } else {
-            $_arr_returnRow = $this->mdl_user_profile->mdl_mailbox($_arr_userRow['user_id'], $_arr_mailboxInput["user_mail_new"]);
+            $_arr_returnRow = $this->mdl_user_profile->mdl_mailbox($_arr_userRow['user_id'], $_arr_mailboxInput['user_mail_new']);
 
             $this->obj_api->notify_result($_arr_returnRow, "mailbox");
         }

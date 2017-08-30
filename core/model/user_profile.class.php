@@ -292,7 +292,7 @@ class MODEL_USER_PROFILE extends MODEL_USER {
         if ($_arr_userMailNew['rcode'] != 'ok') {
             return $_arr_userMailNew;
         }
-        $this->mailboxInput["user_mail_new"] = $_arr_userMailNew['user_mail'];
+        $this->mailboxInput['user_mail_new'] = $_arr_userMailNew['user_mail'];
 
         $this->mailboxInput['rcode'] = 'ok';
 

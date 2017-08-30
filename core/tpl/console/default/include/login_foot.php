@@ -7,7 +7,7 @@
                             </li>
                         <?php } else { ?>
                             <li>
-                                <a href="<?php echo BG_URL_CONSOLE; ?>index.php"><?php echo $this->lang['mod']['href']["login"]; ?></a>
+                                <a href="<?php echo BG_URL_CONSOLE; ?>index.php"><?php echo $this->lang['mod']['href']['login']; ?></a>
                             </li>
                         <?php } ?>
                     </ul>

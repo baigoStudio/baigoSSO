@@ -12,23 +12,23 @@ if (!defined('IN_BAIGO')) {
 /*-------------------------通用-------------------------*/
 return array(
     /*------页面标题------*/
-    'page'             => array(
-        'forgot'            => '找回密码',
+    'page' => array(
+        'forgot' => '找回密码',
     ),
 
     /*------链接文字------*/
-    'href'             => array(
-        'login'           => '直接登录',
+    'href' => array(
+        'login' => '直接登录',
     ),
 
     /*------说明文字------*/
-    'label'            => array(
-        'username'          => '用户名',
-        'password'          => '密码',
-        'answer'            => '回答',
-        'passNew'           => '新密码',
-        'passConfirm'       => '确认密码',
-        'seccode'           => '验证码',
+    'label' => array(
+        'username'      => '用户名',
+        'password'      => '密码',
+        'answer'        => '回答',
+        'passNew'       => '新密码',
+        'passConfirm'   => '确认密码',
+        'seccode'       => '验证码',
     ),
 
     'type' => array(
@@ -40,6 +40,7 @@ return array(
     'btn' => array(
         'stepNext'  => '下一步',
         'submit'    => '提交',
+        'seccode'   => '看不清',
     ),
 
     'text' => array(

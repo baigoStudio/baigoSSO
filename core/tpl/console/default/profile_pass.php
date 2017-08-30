@@ -87,7 +87,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         admin_pass_confirm: {
             len: { min: 1, max: 0 },
             validate: { type: "confirm", target: "#admin_pass_new", group: "#group_admin_pass_confirm" },
-            msg: { selector: "#msg_admin_pass_confirm", too_short: "<?php echo $this->lang['rcode']['x010224']; ?>", not_match: "<?php echo $this->lang['rcode']["x010225"]; ?>" }
+            msg: { selector: "#msg_admin_pass_confirm", too_short: "<?php echo $this->lang['rcode']['x010224']; ?>", not_match: "<?php echo $this->lang['rcode']['x010225']; ?>" }
         }
     };
     var opts_submit_form = {

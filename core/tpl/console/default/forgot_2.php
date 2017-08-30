@@ -32,7 +32,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                 <input type="hidden" name="act" value="bymail">
                 <div class="form-group">
                     <label class="control-label"><?php echo $this->lang['mod']['label']['username']; ?></label>
-                    <input type="text" name="admin_name" value="<?php echo $this->tplData['userRow']['user_name']; ?>" readonly class="form-control">
+                    <input type="text" name="admin_name" value="<?php echo $this->tplData['userRow']['user_name']; ?>" readonly class="form-control input-lg">
                 </div>
 
                 <?php if (fn_isEmpty($this->tplData['userRow']['user_mail'])) { ?>
@@ -51,14 +51,20 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                     <div class="form-group">
                         <div id="group_seccode_mail">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['seccode']; ?><span id="msg_seccode_mail">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="seccode" id="seccode_mail" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
-                                <span class="input-group-addon">
+                            <ul class="list-inline">
+                                <li>
                                     <a href="javascript:void(0);" class="seccodeBtn">
-                                        <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['alt']['seccode']; ?>">
+                                        <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['href']['seccode']; ?>">
                                     </a>
-                                </span>
-                            </div>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="seccodeBtn">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                        <?php echo $this->lang['mod']['btn']['seccode']; ?>
+                                    </a>
+                                </li>
+                            </ul>
+                            <input type="text" name="seccode" id="seccode_mail" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
                         </div>
                     </div>
 
@@ -77,7 +83,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
 
                 <div class="form-group">
                     <label class="control-label"><?php echo $this->lang['mod']['label']['username']; ?></label>
-                    <input type="text" name="admin_name" value="<?php echo $this->tplData['userRow']['user_name']; ?>" readonly class="form-control">
+                    <input type="text" name="admin_name" value="<?php echo $this->tplData['userRow']['user_name']; ?>" readonly class="form-control input-lg">
                 </div>
 
                 <?php if (fn_isEmpty($this->tplData['userRow']["user_sec_ques_1"])) { ?>
@@ -91,7 +97,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                         <div class="form-group">
                             <div id="group_admin_sec_answ_<?php echo $_iii; ?>">
                                 <label class="control-label"><?php echo $this->tplData['userRow']['user_sec_ques_' . $_iii]; ?><span id="msg_admin_sec_answ_<?php echo $_iii; ?>">*</span></label>
-                                <input type="text" name="admin_sec_answ_<?php echo $_iii; ?>" id="admin_sec_answ_<?php echo $_iii; ?>" data-validate placeholder="<?php echo $this->lang['mod']['label']['answer']; ?>" class="form-control">
+                                <input type="text" name="admin_sec_answ_<?php echo $_iii; ?>" id="admin_sec_answ_<?php echo $_iii; ?>" data-validate placeholder="<?php echo $this->lang['mod']['label']['answer']; ?>" class="form-control input-lg">
                             </div>
                         </div>
                     <?php } ?>
@@ -99,28 +105,34 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                     <div class="form-group">
                         <div id="group_admin_pass_new">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['passNew']; ?><span id="msg_admin_pass_new">*</span></label>
-                            <input type="password" name="admin_pass_new" id="admin_pass_new" data-validate placeholder="<?php echo $this->lang['rcode']['x010222']; ?>" class="form-control">
+                            <input type="password" name="admin_pass_new" id="admin_pass_new" data-validate placeholder="<?php echo $this->lang['rcode']['x010222']; ?>" class="form-control input-lg">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div id="group_admin_pass_confirm">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['passConfirm']; ?><span id="msg_admin_pass_confirm">*</span></label>
-                            <input type="password" name="admin_pass_confirm" id="admin_pass_confirm" data-validate placeholder="<?php echo $this->lang['rcode']['x010224']; ?>" class="form-control">
+                            <input type="password" name="admin_pass_confirm" id="admin_pass_confirm" data-validate placeholder="<?php echo $this->lang['rcode']['x010224']; ?>" class="form-control input-lg">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div id="group_seccode_qa">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['seccode']; ?><span id="msg_seccode_qa">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="seccode" id="seccode_qa" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
-                                <span class="input-group-addon">
+                            <ul class="list-inline">
+                                <li>
                                     <a href="javascript:void(0);" class="seccodeBtn">
-                                        <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['alt']['seccode']; ?>">
+                                        <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['btn']['seccode']; ?>">
                                     </a>
-                                </span>
-                            </div>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="seccodeBtn">
+                                        <span class="glyphicon glyphicon-repeat"></span>
+                                        <?php echo $this->lang['mod']['btn']['seccode']; ?>
+                                    </a>
+                                </li>
+                            </ul>
+                            <input type="text" name="seccode" id="seccode_qa" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
                         </div>
                     </div>
 
@@ -162,7 +174,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
         admin_pass_confirm: {
             len: { min: 1, max: 0 },
             validate: { type: "confirm", target: "#admin_pass_new", group: "#group_admin_pass_confirm" },
-            msg: { selector: "#msg_admin_pass_confirm", too_short: "<?php echo $this->lang['rcode']['x010224']; ?>", not_match: "<?php echo $this->lang['rcode']["x010225"]; ?>" }
+            msg: { selector: "#msg_admin_pass_confirm", too_short: "<?php echo $this->lang['rcode']['x010224']; ?>", not_match: "<?php echo $this->lang['rcode']['x010225']; ?>" }
         },
         seccode_qa: {
             len: { min: 4, max: 4 },

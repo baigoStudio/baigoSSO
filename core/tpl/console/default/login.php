@@ -31,21 +31,27 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
         <div class="form-group">
             <div id="group_seccode">
                 <label class="control-label"><?php echo $this->lang['mod']['label']['seccode']; ?><span id="msg_seccode">*</span></label>
-                <div class="input-group">
-                    <input type="text" name="seccode" id="seccode" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
-                    <span class="input-group-addon">
+                <ul class="list-inline">
+                    <li>
                         <a href="javascript:void(0);" class="seccodeBtn">
-                            <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['alt']['seccode']; ?>">
+                            <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['btn']['seccode']; ?>">
                         </a>
-                    </span>
-                </div>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="seccodeBtn">
+                            <span class="glyphicon glyphicon-repeat"></span>
+                            <?php echo $this->lang['mod']['btn']['seccode']; ?>
+                        </a>
+                    </li>
+                </ul>
+                <input type="text" name="seccode" id="seccode" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
             </div>
         </div>
 
         <div class="bg-submit-box"></div>
 
         <div class="form-group">
-            <button type="button" class="btn btn-primary btn-block btn-lg bg-submit"><?php echo $this->lang['mod']['btn']["login"]; ?></button>
+            <button type="button" class="btn btn-primary btn-block btn-lg bg-submit"><?php echo $this->lang['mod']['btn']['login']; ?></button>
         </div>
     </form>
 
@@ -77,7 +83,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
             submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         },
         jump: {
-            url: "<?php echo $this->tplData["forward"]; ?>",
+            url: "<?php echo $this->tplData['forward']; ?>",
             text: "<?php echo $this->lang['mod']['href']['jumping']; ?>"
         }
     };

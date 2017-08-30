@@ -23,14 +23,20 @@ include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
         <div class="form-group">
             <div id="group_seccode">
                 <label class="control-label"><?php echo $this->lang['mod']['label']['seccode']; ?><span id="msg_seccode">*</span></label>
-                <div class="input-group">
-                    <input type="text" name="seccode" id="seccode" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control input-lg">
-                    <span class="input-group-addon">
+                <ul class="list-inline">
+                    <li>
                         <a href="javascript:void(0);" class="seccodeBtn">
-                            <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['alt']['seccode']; ?>">
+                            <img src="<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make" class="seccodeImg" alt="<?php echo $this->lang['mod']['btn']['seccode']; ?>">
                         </a>
-                    </span>
-                </div>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="seccodeBtn">
+                            <span class="glyphicon glyphicon-repeat"></span>
+                            <?php echo $this->lang['mod']['btn']['seccode']; ?>
+                        </a>
+                    </li>
+                </ul>
+                <input type="text" name="seccode" id="seccode" placeholder="<?php echo $this->lang['rcode']['x030201']; ?>" data-validate class="form-control">
             </div>
         </div>
 

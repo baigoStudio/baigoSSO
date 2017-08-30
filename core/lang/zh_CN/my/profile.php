@@ -31,10 +31,6 @@ return array(
     /*------按钮------*/
     'btn' => array(
         'submit'    => '提交',
-    ),
-
-    /*------图片说明------*/
-    'alt'              => array(
-        'seccode'         => '看不清',
+        'seccode'   => '看不清',
     ),
 );

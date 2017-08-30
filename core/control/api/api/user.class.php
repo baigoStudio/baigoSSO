@@ -258,13 +258,10 @@ class CONTROL_API_API_USER {
             $this->obj_api->show_result($_arr_tplData);
         }
 
-        $_need_update = false; //是否更新密码标识
-
         switch ($_arr_userRow['user_crypt_type']) {
             case 0:
             case 1:
-                $_str_crypt     = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow["user_rand"], true, $_arr_userRow['user_crypt_type']);
-                $_need_update   = true;
+                $_str_crypt = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow["user_rand"], true, $_arr_userRow['user_crypt_type']);
             break;
 
             default:
@@ -274,8 +271,7 @@ class CONTROL_API_API_USER {
 
         //特殊处理，针对上一版本加密错误
         if ($_str_crypt != $_arr_userRow["user_pass"]) {
-            $_str_crypt     = fn_baigoCrypt($_arr_loginInput["user_pass"], $_arr_userRow["user_name"], true, 0);
-            $_need_update   = true;
+            $_str_crypt = fn_baigoCrypt($_arr_loginInput["user_pass"], $_arr_userRow["user_name"], true, 0);
         }
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
@@ -293,8 +289,10 @@ class CONTROL_API_API_USER {
         );
         $_arr_loginRow = $this->mdl_user_api->mdl_login($_arr_userSubmit);
 
-        if ($_need_update) {
-            $_str_userPass = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow['user_name'], true);
+        //如新加密规则与数据库不一致，则对密码重新加密
+        $_str_userPass = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow['user_name'], true);
+
+        if ($_str_userPass != $_arr_userRow["user_pass"]) {
             $this->mdl_user_profile->mdl_pass($_arr_userRow['user_id'], $_str_userPass);
         }
 

@@ -13,29 +13,25 @@ if (!defined('IN_BAIGO')) {
 return array(
     /*------页面标题------*/
     'page'             => array(
-        'forgot'            => '找回密码',
-        'verify'            => '验证',
+        'forgot'    => '找回密码',
+        'verify'    => '验证',
     ),
 
     'href'             => array(
-        'back'            => '返回',
+        'back'      => '返回',
     ),
 
     /*------说明文字------*/
     'label'            => array(
-        'username'          => '用户名',
-        'passNew'           => '新密码',
-        'passConfirm'       => '确认密码',
-        'seccode'           => '验证码',
+        'username'      => '用户名',
+        'passNew'       => '新密码',
+        'passConfirm'   => '确认密码',
+        'seccode'       => '验证码',
     ),
 
     /*------按钮------*/
     'btn' => array(
         'submit'    => '提交',
-    ),
-
-    /*------图片说明------*/
-    'alt'              => array(
-        'seccode'         => '看不清',
+        'seccode'   => '看不清',
     ),
 );

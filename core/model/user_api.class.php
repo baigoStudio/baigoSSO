@@ -229,8 +229,8 @@ class MODEL_USER_API extends MODEL_USER {
             $_arr_userData['user_crypt_type']   = 2;
         }
 
-        if (isset($this->editInput["user_mail_new"]) && $this->editInput["user_mail_new"]) { //如果 新邮箱 为空，则不修改
-            $_arr_userData['user_mail'] = $this->editInput["user_mail_new"];
+        if (isset($this->editInput['user_mail_new']) && $this->editInput['user_mail_new']) { //如果 新邮箱 为空，则不修改
+            $_arr_userData['user_mail'] = $this->editInput['user_mail_new'];
         }
 
         if (isset($this->editInput['user_nick']) && $this->editInput['user_nick']) { //如果 昵称 为空，则不修改
@@ -393,7 +393,7 @@ class MODEL_USER_API extends MODEL_USER {
             if ($_arr_userMailNew['rcode'] != 'ok') {
                 return $_arr_userMailNew;
             }
-            $this->editInput["user_mail_new"] = $_arr_userMailNew['user_mail'];
+            $this->editInput['user_mail_new'] = $_arr_userMailNew['user_mail'];
         }
 
         $_arr_userNick = $this->chk_user_nick(fn_post("user_nick"));

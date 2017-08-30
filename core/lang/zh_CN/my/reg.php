@@ -12,28 +12,25 @@ if (!defined('IN_BAIGO')) {
 /*-------------------------通用-------------------------*/
 return array(
     /*------页面标题------*/
-    'page'             => array(
-        'confirm'           => '激活用户',
-        'verify'            => '验证',
+    'page' => array(
+        'confirm'   => '激活用户',
+        'verify'    => '验证',
     ),
 
-    'href'             => array(
-        'back'            => '返回',
+    'href' => array(
+        'back'      => '返回',
     ),
 
     /*------说明文字------*/
-    'label'            => array(
-        'username'          => '用户名',
-        'seccode'           => '验证码',
+    'label' => array(
+        'username'  => '用户名',
+        'seccode'   => '验证码',
     ),
 
     /*------按钮------*/
     'btn' => array(
         'submit'    => '提交',
+        'seccode'   => '看不清',
     ),
 
-    /*------图片说明------*/
-    'alt'              => array(
-        'seccode'         => '看不清',
-    ),
 );
