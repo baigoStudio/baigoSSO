@@ -57,15 +57,24 @@ class CONTROL_CONSOLE_REQUEST_LOGIN {
             $this->obj_tpl->tplDisplay('result', $_arr_adminRow);
         }
 
+        $_need_update = false; //是否更新密码标识
+
         switch ($_arr_userRow['user_crypt_type']) {
             case 0:
             case 1:
-                $_str_crypt = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow["user_rand"], false, $_arr_userRow['user_crypt_type']);
+                $_str_crypt     = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow["user_rand"], false, $_arr_userRow['user_crypt_type']);
+                $_need_update   = true;
             break;
 
             default:
                 $_str_crypt = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow['user_name']);
             break;
+        }
+
+        //特殊处理，针对上一版本加密错误
+        if ($_str_crypt != $_arr_userRow["user_pass"]) {
+            $_str_crypt     = fn_baigoCrypt($_arr_adminInput["admin_pass"], $_arr_userRow["user_name"], false, 0);
+            $_need_update   = true;
         }
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
@@ -80,7 +89,7 @@ class CONTROL_CONSOLE_REQUEST_LOGIN {
         );
         $_arr_loginRow = $this->mdl_user_api->mdl_login($_arr_userSubmit);
 
-        if ($_arr_userRow['user_crypt_type'] < 2) {
+        if ($_need_update) {
             $_str_userPass  = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow['user_name']);
             $this->mdl_user_profile->mdl_pass($_arr_userRow['user_id'], $_str_userPass);
         }

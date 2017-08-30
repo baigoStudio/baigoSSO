@@ -258,15 +258,24 @@ class CONTROL_API_API_USER {
             $this->obj_api->show_result($_arr_tplData);
         }
 
+        $_need_update = false; //是否更新密码标识
+
         switch ($_arr_userRow['user_crypt_type']) {
             case 0:
             case 1:
-                $_str_crypt = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow["user_rand"], true, $_arr_userRow['user_crypt_type']);
+                $_str_crypt     = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow["user_rand"], true, $_arr_userRow['user_crypt_type']);
+                $_need_update   = true;
             break;
 
             default:
                 $_str_crypt = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow['user_name'], true);
             break;
+        }
+
+        //特殊处理，针对上一版本加密错误
+        if ($_str_crypt != $_arr_userRow["user_pass"]) {
+            $_str_crypt     = fn_baigoCrypt($_arr_loginInput["user_pass"], $_arr_userRow["user_name"], true, 0);
+            $_need_update   = true;
         }
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
@@ -284,7 +293,7 @@ class CONTROL_API_API_USER {
         );
         $_arr_loginRow = $this->mdl_user_api->mdl_login($_arr_userSubmit);
 
-        if ($_arr_userRow['user_crypt_type'] < 2) {
+        if ($_need_update) {
             $_str_userPass = fn_baigoCrypt($_arr_loginInput['user_pass'], $_arr_userRow['user_name'], true);
             $this->mdl_user_profile->mdl_pass($_arr_userRow['user_id'], $_str_userPass);
         }
@@ -416,8 +425,8 @@ class CONTROL_API_API_USER {
             $_arr_userSubmit['user_pass'] = fn_baigoCrypt($_arr_userInput['user_pass'], $_arr_userRow['user_name'], true);
         }
 
-        if (isset($_arr_userInput["user_mail_new"]) && !fn_isEmpty($_arr_userInput["user_mail_new"])) {
-            $_arr_sign["user_mail_new"] = $_arr_userInput["user_mail_new"];
+        if (isset($_arr_userInput['user_mail_new']) && !fn_isEmpty($_arr_userInput['user_mail_new'])) {
+            $_arr_sign['user_mail_new'] = $_arr_userInput['user_mail_new'];
         }
 
         if (isset($_arr_userInput['user_nick']) && !fn_isEmpty($_arr_userInput['user_nick'])) {
@@ -452,8 +461,8 @@ class CONTROL_API_API_USER {
             }
         }
 
-        if ((BG_REG_ONEMAIL == "false" || BG_LOGIN_MAIL == 'on') && isset($_arr_userInput["user_mail_new"]) && !fn_isEmpty($_arr_userInput["user_mail_new"])) {
-            $_arr_userCheck = $this->mdl_user_api->mdl_read($_arr_userInput["user_mail_new"], "user_mail", $_arr_userRow['user_id']); //检查邮箱
+        if ((BG_REG_ONEMAIL == "false" || BG_LOGIN_MAIL == 'on') && isset($_arr_userInput['user_mail_new']) && !fn_isEmpty($_arr_userInput['user_mail_new'])) {
+            $_arr_userCheck = $this->mdl_user_api->mdl_read($_arr_userInput['user_mail_new'], "user_mail", $_arr_userRow['user_id']); //检查邮箱
             if ($_arr_userCheck['rcode'] == 'y010102') {
                 return array(
                     'rcode' => "x010211",
