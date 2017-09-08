@@ -1,8 +1,9 @@
 <?php $cfg = array(
-    'title'  => $this->lang['mod']['page']['forgot'] . ' &raquo; ' . $this->lang['mod']['page']['verify'],
+    'title'         => $this->lang['mod']['page']['forgot'] . ' &raquo; ' . $this->lang['mod']['page']['verify'],
+    'pathInclude'   => BG_PATH_TPL . 'my' . DS . 'default' . DS . 'include' . DS,
 );
 
-include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
+include($cfg['pathInclude'] . 'my_head.php'); ?>
 
     <form name="forgot_form" id="forgot_form">
         <input type="hidden" name="act" value="bymail">
@@ -56,7 +57,7 @@ include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
         </div>
     </form>
 
-<?php include(BG_PATH_TPL . 'my/default/include/my_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'my_foot.php'); ?>
 
     <script type="text/javascript">
     var opts_validator_form = {

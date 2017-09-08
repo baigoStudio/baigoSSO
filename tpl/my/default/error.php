@@ -1,10 +1,11 @@
 <?php $cfg = array(
-    'title'  => $this->lang['common']['page']['rcode'],
+    'title'         => $this->lang['common']['page']['rcode'],
+    'pathInclude'   => BG_PATH_TPL . 'my' . DS . 'default' . DS . 'include' . DS,
 );
 
 $_str_status = substr($this->tplData['rcode'], 0, 1);
 
-include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
+include($cfg['pathInclude'] . 'my_head.php'); ?>
 
     <div class="form-group">
         <a href="javascript:history.go(-1);">
@@ -32,7 +33,7 @@ include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
         </div>
     </div>
 
-<?php include(BG_PATH_TPL . 'my/default/include/my_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'my_foot.php'); ?>
 
 </body>
 </html>

@@ -1,8 +1,9 @@
 <?php $cfg = array(
-    'title'  => $this->lang['mod']['page']["mailbox"] . ' &raquo; ' . $this->lang['mod']['page']['verify'],
+    'title'         => $this->lang['mod']['page']["mailbox"] . ' &raquo; ' . $this->lang['mod']['page']['verify'],
+    'pathInclude'   => BG_PATH_TPL . 'my' . DS . 'default' . DS . 'include' . DS,
 );
 
-include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
+include($cfg['pathInclude'] . 'my_head.php'); ?>
 
     <form name="mailbox_form" id="mailbox_form">
         <input type="hidden" name="act" value="mailbox">
@@ -48,7 +49,7 @@ include(BG_PATH_TPL . 'my/default/include/my_head.php'); ?>
 
     </form>
 
-<?php include(BG_PATH_TPL . 'my/default/include/my_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'my_foot.php'); ?>
 
     <script type="text/javascript">
     var opts_validator_form = {

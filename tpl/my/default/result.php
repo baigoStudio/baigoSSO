@@ -26,4 +26,3 @@ include($cfg['pathInclude'] . 'result_head.php');
     $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
     exit(json_encode($_arr_tplData)); //输出错误信息
- ?>
