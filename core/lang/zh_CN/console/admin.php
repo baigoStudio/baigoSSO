@@ -21,7 +21,6 @@ return array(
     /*------链接文字------*/
     'href'             => array(
         'all'             => '全部',
-        'back'            => '返回',
         'add'             => '创建',
         'edit'            => '编辑',
         'help'            => '帮助',
@@ -53,7 +52,6 @@ return array(
         'admin'             => '管理员',
         'nick'              => '昵称',
         'note'              => '备注',
-        'opt'               => '系统设置',
         'onlyModi'          => '需要修改时输入', //需要修改时输入
 
         'username'          => '用户名',

@@ -13,14 +13,14 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_MISC_REQUEST_SECCODE {
 
     function __construct() { //构造函数
-        $this->obj_misc  = new CLASS_MISC();
+        $this->general_misc  = new GENERAL_MISC();
 
-        $this->obj_tpl      = $this->obj_misc->obj_tpl;
+        $this->obj_tpl      = $this->general_misc->obj_tpl;
     }
 
     function ctrl_chk() {
-        $_str_seccode = strtolower(fn_get("seccode"));
-        if ($_str_seccode != fn_session("seccode")) {
+        $_str_seccode = strtolower(fn_get('seccode'));
+        if ($_str_seccode != fn_session('seccode')) {
             $_arr_tplData = array(
                 'rcode' => 'x030205',
             );

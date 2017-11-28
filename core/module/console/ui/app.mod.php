@@ -19,7 +19,7 @@ $obj_runtime->run($arr_set);
 
 $ctrl_app = new CONTROL_CONSOLE_UI_APP(); //初始化应用
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'show':
         $ctrl_app->ctrl_show(); //显示
     break;

@@ -1,4 +1,5 @@
 <?php $cfg = array(
+    'title'         => $this->lang['mod']['page']['upgrade'] . ' &raquo; ' . $this->lang['mod']['page']['admin'],
     "sub_title"     => $this->lang['mod']['page']['admin'],
     "mod_help"      => "upgrade",
     "act_help"      => 'admin',
@@ -13,7 +14,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
     </div>
 
     <div class="form-group">
-        <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=auth" class="btn btn-info"><?php echo $this->lang['mod']['href']["adminAuth"]; ?></a>
+        <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=auth" class="btn btn-info"><?php echo $this->lang['mod']['href']['adminAuth']; ?></a>
     </div>
 
     <form name="upgrade_form_admin" id="upgrade_form_admin">
@@ -43,7 +44,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
 
         <div class="form-group">
             <div id="group_admin_nick">
-                <label class="control-label"><?php echo $this->lang['mod']['label']["nick"]; ?><span id="msg_admin_nick"></span></label>
+                <label class="control-label"><?php echo $this->lang['mod']['label']['nick']; ?><span id="msg_admin_nick"></span></label>
                 <input type="text" name="admin_nick" id="admin_nick" data-validate class="form-control">
             </div>
         </div>
@@ -55,8 +56,8 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         <div class="clearfix">
             <div class="pull-left">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=smtp" class="btn btn-default"><?php echo $this->lang['mod']['btn']['stepPrev']; ?></a>
-                    <?php include($cfg['pathInclude'] . "upgrade_drop.php"); ?>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=smtp" class="btn btn-default"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <?php include($cfg['pathInclude'] . 'upgrade_drop.php'); ?>
                     <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=over" class="btn btn-default"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
                 </div>
             </div>
@@ -74,7 +75,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         admin_name: {
             len: { min: 1, max: 30 },
             validate: { type: "ajax", format: "strDigit", group: "#group_admin_name" },
-            msg: { selector: "#msg_admin_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']["x010202"]; ?>", format_err: "<?php echo $this->lang['rcode']['x010203']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
+            msg: { selector: "#msg_admin_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']['x010202']; ?>", format_err: "<?php echo $this->lang['rcode']['x010203']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
             ajax: { url: "<?php echo BG_URL_INSTALL; ?>request.php?mod=upgrade&act=chkname", key: "admin_name", type: "str" }
         },
         admin_pass: {
@@ -90,7 +91,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         admin_nick: {
             len: { min: 0, max: 30 },
             validate: { type: "str", format: "text", group: "#group_admin_nick" },
-            msg: { selector: "#msg_admin_nick", too_short: "<?php echo $this->lang['rcode']["x020204"]; ?>" }
+            msg: { selector: "#msg_admin_nick", too_short: "<?php echo $this->lang['rcode']['x020204']; ?>" }
         }
     };
     var opts_submit_form = {

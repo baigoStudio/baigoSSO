@@ -14,13 +14,14 @@ return array(
     'page' => array(
         'add'   => '创建',
         'edit'  => '编辑',
+        'show'  => '查看',
     ),
 
     /*------链接文字------*/
     'href' => array(
-        'back'      => '返回',
         'add'       => '创建',
         'edit'      => '编辑',
+        'show'      => '查看',
         'help'      => '帮助',
         'import'    => '批量导入',
     ),
@@ -42,7 +43,11 @@ return array(
         'preview'       => '预览',
         'name'          => '名称',
         'needH5'        => '上传插件需要 HTML5，请升级您的浏览器！',
-        'onlyModi'          => '需要修改时输入', //需要修改时输入
+        'onlyModi'      => '需要修改时输入',
+        'app'           => '应用',
+        'belongApp'     => '获授权应用',
+        'fromApp'       => '注册自应用',
+        'unknown'       => '未知',
 
         'uploading'     => '正在上传',
         'uploadSucc'    => '上传成功',
@@ -51,6 +56,11 @@ return array(
         'md5result'     => '加密结果',
         'charset'       => '字符编码',
         'charsetSrc'    => '原始字符编码',
+    ),
+
+    'appStatus' => array(
+        'enable'  => '启用', //生效
+        'disable' => '禁用', //禁用
     ),
 
     'status' => array(
@@ -77,7 +87,7 @@ return array(
     ),
 
     'text' => array(
-        'refreshImport' => 'CSV 文件第一行必须为字段名，建议使用三列，其中密码列必须使用 MD5 加密，加密工具请看下方表单。上传 CSV 文件后，请刷新本页查看预览，点此 <a href=\'javascript:location.reload();\' class=\'alert-link\'>刷新</a>。导入成功以后，强烈建议删除 CSV 文件。',
+        'refreshImport' => 'CSV 文件第一行必须为字段名，建议使用三列，其中密码列必须使用 MD5 加密，加密工具请看下方表单。上传 CSV 文件后，请刷新本页查看预览，点此 <a href="javascript:location.reload();" class="alert-link">刷新</a>。导入成功以后，强烈建议删除 CSV 文件。',
     ),
 
     'confirm' => array(

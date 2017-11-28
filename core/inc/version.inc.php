@@ -16,6 +16,6 @@ if (!defined('IN_BAIGO')) {
 define('PRD_SSO_POWERED', 'Powered by');
 define('PRD_SSO_NAME', 'baigo SSO');
 define('PRD_SSO_URL', 'http://www.baigo.net/sso/');
-define('PRD_SSO_VER', '2.1');
-define('PRD_SSO_PUB', 20170829);
+define('PRD_SSO_VER', '2.2');
+define('PRD_SSO_PUB', 20171128);
 define('PRD_VER_CHECK', 'http://www.baigo.net/ver_check/check.php');

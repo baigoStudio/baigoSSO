@@ -1,5 +1,6 @@
 <?php $cfg = array(
-    "sub_title"     => $this->lang['common']['page']['dbConfig'],
+    'title'         => $this->lang['mod']['page']['upgrade'] . ' &raquo; ' . $this->lang['common']['page']['dbconfig'],
+    "sub_title"     => $this->lang['common']['page']['dbconfig'],
     "mod_help"      => "upgrade",
     "act_help"      => "dbconfig",
     "pathInclude"   => BG_PATH_TPLSYS . 'install' . DS . 'default' . DS . 'include' . DS,
@@ -11,7 +12,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
         <input type="hidden" name="act" value="dbconfig">
 
-        <?php include(BG_PATH_TPLSYS . "console/default/include/dbconfig.php"); ?>
+        <?php include(BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS . 'dbconfig.php'); ?>
 
         <hr class="bg-panel-hr">
 
@@ -20,8 +21,8 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         <div class="form-group clearfix">
             <div class="pull-left">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=ext" class="btn btn-default"><?php echo $this->lang['mod']['btn']['stepPrev']; ?></a>
-                    <?php include($cfg['pathInclude'] . "upgrade_drop.php"); ?>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=ext" class="btn btn-default"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <?php include($cfg['pathInclude'] . 'upgrade_drop.php'); ?>
                     <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=dbtable" class="btn btn-default"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
                 </div>
             </div>

@@ -10,52 +10,52 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"          => true, //基本设置
-    "db"            => true, //连接数据库
+    'base'          => true, //基本设置
+    'db'            => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
 
 $ctrl_user = new CONTROL_API_API_USER(); //初始化用户
-switch ($GLOBALS["method"]) {
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "reg":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'reg':
                 $ctrl_user->ctrl_reg(); //注册
             break;
 
-            case "nomail":
+            case 'nomail':
                 $ctrl_user->ctrl_nomail(); //没有收到激活邮件
             break;
 
-            case "login":
+            case 'login':
                 $ctrl_user->ctrl_login(); //登录
             break;
 
-            case "edit":
+            case 'edit':
                 $ctrl_user->ctrl_edit(); //编辑
             break;
 
-            case "del":
+            case 'del':
                 $ctrl_user->ctrl_del(); //删除
             break;
         }
     break;
 
     default:
-        switch ($GLOBALS['act']) {
-            case "get":
-            case "read":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'get':
+            case 'read':
                 $ctrl_user->ctrl_read(); //读取
             break;
 
-            case "chkname":
-            case "check_name":
+            case 'chkname':
+            case 'check_name':
                 $ctrl_user->ctrl_chkname(); //验证用户名是否可以注册
             break;
 
-            case "chkmail":
-            case "check_mail":
+            case 'chkmail':
+            case 'check_mail':
                 $ctrl_user->ctrl_chkmail(); //验证邮箱是否可以注册
             break;
         }

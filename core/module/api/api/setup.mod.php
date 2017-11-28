@@ -9,32 +9,32 @@ if (!defined('IN_BAIGO')) {
     exit('Access Denied');
 }
 
-'Access Denied'switch ($GLOBALS['act']) {
-    case "dbconfig":
+switch ($GLOBALS['route']['bg_act']) {
+    case 'dbconfig':
         $arr_set = array(
-            "base"          => true, //基本设置
-                );
+            'base'          => true, //基本设置
+        );
     break;
 
     default:
         $arr_set = array(
-            "base"          => true, //基本设置
-            "db"            => true, //连接数据库
-                );
+            'base'          => true, //基本设置
+            'db'            => true, //连接数据库
+        );
     break;
 }
 $obj_runtime->run($arr_set);
 
 
 $ctrl_setup = new CONTROL_API_API_SETUP(); //初始化安装
-switch ($GLOBALS["method"]) {
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "dbconfig":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'dbconfig':
                 $ctrl_setup->ctrl_dbconfig(); //数据库配置
             break;
 
-            case "dbtable":
+            case 'dbtable':
                 $ctrl_setup->ctrl_dbtable(); //创建数据表
             break;
 
@@ -42,11 +42,11 @@ switch ($GLOBALS["method"]) {
                 $ctrl_setup->ctrl_admin(); //创建管理员
             break;
 
-            case "over":
+            case 'over':
                 $ctrl_setup->ctrl_over(); //结束安装
             break;
 
-            case "base":
+            case 'base':
                 $ctrl_setup->ctrl_submit(); //基本配置
             break;
         }

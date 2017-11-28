@@ -21,7 +21,6 @@ return array(
 
     /*------链接文字------*/
     'href'             => array(
-        'back'            => '返回',
         'add'             => '创建',
         'edit'            => '编辑',
         'belong'          => '授权用户',

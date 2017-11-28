@@ -5,7 +5,7 @@
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=opt&act=chkver",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=opt&act=chkver',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -34,62 +34,62 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         </div>
     </form>
 
-    <?php if ($this->tplData["installed_pub"] < $this->tplData["latest_ver"]["prd_pub"]) { ?>
+    <?php if (isset($this->tplData['latest_ver']['prd_pub']) && $this->tplData['installed_pub'] < $this->tplData['latest_ver']['prd_pub']) { ?>
         <div class="alert alert-warning">
             <span class="glyphicon glyphicon-warning-sign"></span>
-            <?php echo $this->lang['mod']['text']["haveNewVer"]; ?>
+            <?php echo $this->lang['mod']['text']['haveNewVer']; ?>
         </div>
     <?php } else { ?>
         <div class="alert alert-success">
             <span class="glyphicon glyphicon-heart"></span>
-            <?php echo $this->lang['mod']['text']["isNewVer"]; ?>
+            <?php echo $this->lang['mod']['text']['isNewVer']; ?>
         </div>
     <?php } ?>
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <?php echo $this->lang['mod']['label']["installVer"]; ?>
+            <?php echo $this->lang['mod']['label']['installVer']; ?>
         </div>
         <table class="table">
             <tbody>
                 <tr>
-                    <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["installVer"]; ?></td>
+                    <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['installVer']; ?></td>
                     <td><?php echo BG_INSTALL_VER; ?></td>
                 </tr>
                 <tr>
-                    <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["pubTime"]; ?></td>
-                    <td><?php echo date(BG_SITE_DATE, $this->tplData["installed_pub"]); ?></td>
+                    <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['pubTime']; ?></td>
+                    <td><?php echo date(BG_SITE_DATE, $this->tplData['installed_pub']); ?></td>
                 </tr>
                 <tr>
-                    <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["installTime"]; ?></td>
+                    <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['installTime']; ?></td>
                     <td><?php echo date(BG_SITE_DATE . ' ' . BG_SITE_TIMESHORT, BG_INSTALL_TIME); ?></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <?php if ($this->tplData["installed_pub"] < $this->tplData["latest_ver"]["prd_pub"]) { ?>
+    <?php if (isset($this->tplData['latest_ver']['prd_pub']) && $this->tplData['installed_pub'] < $this->tplData['latest_ver']['prd_pub']) { ?>
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <?php echo $this->lang['mod']['label']["latestVer"]; ?>
+                <?php echo $this->lang['mod']['label']['latestVer']; ?>
             </div>
             <table class="table">
                 <tbody>
                     <tr>
-                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["latestVer"]; ?></td>
-                        <td><?php echo $this->tplData["latest_ver"]["prd_ver"]; ?></td>
+                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['latestVer']; ?></td>
+                        <td><?php echo $this->tplData['latest_ver']['prd_ver']; ?></td>
                     </tr>
                     <tr>
-                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["pubTime"]; ?></td>
-                        <td><?php echo date(BG_SITE_DATE, $this->tplData["latest_ver"]["prd_pub"]); ?></td>
+                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['pubTime']; ?></td>
+                        <td><?php echo date(BG_SITE_DATE, $this->tplData['latest_ver']['prd_pub']); ?></td>
                     </tr>
                     <tr>
-                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["announcement"]; ?></td>
-                        <td><a href="<?php echo $this->tplData["latest_ver"]["prd_announcement"]; ?>" target="_blank"><?php echo $this->tplData["latest_ver"]["prd_announcement"]; ?></a></td>
+                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['announcement']; ?></td>
+                        <td><a href="<?php echo $this->tplData['latest_ver']['prd_announcement']; ?>" target="_blank"><?php echo $this->tplData['latest_ver']['prd_announcement']; ?></a></td>
                     </tr>
                     <tr>
-                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']["downloadUrl"]; ?></td>
-                        <td><a href="<?php echo $this->tplData["latest_ver"]["prd_download"]; ?>" target="_blank"><?php echo $this->tplData["latest_ver"]["prd_download"]; ?></a></td>
+                        <td class="nowrap bg-td-lg"><?php echo $this->lang['mod']['label']['downloadUrl']; ?></td>
+                        <td><a href="<?php echo $this->tplData['latest_ver']['prd_download']; ?>" target="_blank"><?php echo $this->tplData['latest_ver']['prd_download']; ?></a></td>
                     </tr>
                 </tbody>
             </table>

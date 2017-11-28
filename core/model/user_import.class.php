@@ -79,11 +79,11 @@ class MODEL_USER_IMPORT extends MODEL_USER {
 
         $_num_userId = 0;
 
-        if (in_array('user_name', $this->userConvert['user_convert']) && in_array("user_pass", $this->userConvert['user_convert'])) {
+        if (in_array('user_name', $this->userConvert['user_convert']) && in_array('user_pass', $this->userConvert['user_convert'])) {
             foreach ($this->csvRows as $_key_row=>$_value_row) {
                 foreach ($this->userConvert['user_convert'] as $_key_cel=>$_value_cel) {
                     switch ($_value_cel) {
-                        case "abort":
+                        case 'abort':
 
                         break;
 
@@ -94,9 +94,9 @@ class MODEL_USER_IMPORT extends MODEL_USER {
 
                 }
 
-                $_arr_userRow = $this->mdl_read($_arr_userData['user_name'], "user_name");
+                $_arr_userRow = $this->mdl_read($_arr_userData['user_name'], 'user_name');
 
-                if ($_arr_userRow['rcode'] == "x010102") {
+                if ($_arr_userRow['rcode'] == 'x010102') {
                     $_arr_userData['user_pass'] = fn_baigoCrypt($_arr_userData['user_pass'], $_arr_userData['user_name'], true);
 
                     $_num_userId = $this->obj_db->insert(BG_DB_TABLE . 'user', $_arr_userData);
@@ -109,14 +109,14 @@ class MODEL_USER_IMPORT extends MODEL_USER {
         }
 
         if ($_num_errChk > 0) {
-            $_str_rcode = "y010402";
+            $_str_rcode = 'y010402';
         } else {
-            $_str_rcode = "x010402";
+            $_str_rcode = 'x010402';
         }
 
         return array(
-            "user_id"    => $_num_userId,
-            "rcode"      => $_str_rcode,
+            'user_id'    => $_num_userId,
+            'rcode'      => $_str_rcode,
         );
     }
 
@@ -134,23 +134,23 @@ class MODEL_USER_IMPORT extends MODEL_USER {
             );
         }
 
-        $this->userConvert['user_convert'] = fn_post("user_convert");
+        $this->userConvert['user_convert'] = fn_post('user_convert');
 
-        if (!in_array("user_name", $this->userConvert['user_convert'])) {
+        if (!in_array('user_name', $this->userConvert['user_convert'])) {
             return array(
-                'rcode' => "x010220",
+                'rcode' => 'x010220',
             );
         }
 
-        if (!in_array("user_pass", $this->userConvert['user_convert'])) {
+        if (!in_array('user_pass', $this->userConvert['user_convert'])) {
             return array(
-                'rcode' => "x010221",
+                'rcode' => 'x010221',
             );
         }
 
-        $_str_charset = fn_getSafe(fn_post("charset"), 'txt', '');
+        $_str_charset = fn_getSafe(fn_post('charset'), 'txt', '');
 
-        $this->userConvert['charset']   = fn_htmlcode($_str_charset, "decode", "url");
+        $this->userConvert['charset']   = fn_htmlcode($_str_charset, 'decode', 'url');
 
         $this->userConvert['rcode']     = 'ok';
 

@@ -17,12 +17,12 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
 
         $this->mdl_opt          = new MODEL_OPT();
 
-        $this->obj_install      = new CLASS_INSTALL();
+        $this->general_install      = new GENERAL_INSTALL();
 
-        $this->obj_tpl          = $this->obj_install->obj_tpl;
+        $this->obj_tpl          = $this->general_install->obj_tpl;
 
         $this->obj_dir          = new CLASS_DIR();
-        $this->obj_dir->mk_dir(BG_PATH_CACHE . "ssin");
+        $this->obj_dir->mk_dir(BG_PATH_CACHE . 'ssin');
 
         $this->upgrade_init();
     }
@@ -57,14 +57,14 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
 
         if ($_num_countInput < $_num_countSrc) {
             $_arr_tplData = array(
-                'rcode'     => "x030204",
+                'rcode'     => 'x030204',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_return = $this->mdl_opt->mdl_const($this->act);
 
-        if ($_arr_return['rcode'] != "y040101") {
+        if ($_arr_return['rcode'] != 'y040101') {
             $this->obj_tpl->tplDisplay('result', $_arr_return);
         }
 
@@ -88,11 +88,11 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
         }
 
         //检验用户名是否重复
-        $_arr_userRow = $_mdl_user->mdl_read($_arr_adminInput['admin_name'], "user_name");
+        $_arr_userRow = $_mdl_user->mdl_read($_arr_adminInput['admin_name'], 'user_name');
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             $_arr_tplData = array(
-                'rcode'     => "x020207",
+                'rcode'     => 'x020207',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -126,7 +126,7 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
         }
 
         //检验用户名是否重复
-        $_arr_userRow = $_mdl_user_api->mdl_read($_arr_adminInput['admin_name'], "user_name");
+        $_arr_userRow = $_mdl_user_api->mdl_read($_arr_adminInput['admin_name'], 'user_name');
 
         if ($_arr_userRow['rcode'] == 'y010102') {
             $_arr_adminRow = $_mdl_admin_install->mdl_read($_arr_userRow['user_id']);
@@ -170,12 +170,12 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
 
         $_arr_return = $this->mdl_opt->mdl_over();
 
-        if ($_arr_return['rcode'] != "y040101") {
+        if ($_arr_return['rcode'] != 'y040101') {
             $this->obj_tpl->tplDisplay('result', $_arr_return);
         }
 
         $_arr_tplData = array(
-            'rcode'     => "y030409",
+            'rcode'     => 'y030409',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_return);
     }
@@ -184,11 +184,11 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
     function ctrl_chkname() {
         $this->check_db();
 
-        $_str_adminName = fn_getSafe(fn_get("admin_name"), 'txt', '');
+        $_str_adminName = fn_getSafe(fn_get('admin_name'), 'txt', '');
 
         if (fn_isEmpty($_str_adminName)) {
             $_arr_tplData = array(
-                'rcode'     => "x010201",
+                'rcode'     => 'x010201',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -196,7 +196,7 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
         $_mdl_user  = new MODEL_USER();
         $_mdl_admin = new MODEL_ADMIN();
 
-        $_arr_userRow = $_mdl_user->mdl_read($_str_adminName, "user_name");
+        $_arr_userRow = $_mdl_user->mdl_read($_str_adminName, 'user_name');
         if ($_arr_userRow['rcode'] == 'y010102') {
             $_arr_adminRow = $_mdl_admin->mdl_read($_arr_userRow['user_id']);
             if ($_arr_adminRow['rcode'] == 'y020102') {
@@ -213,7 +213,7 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
         }
 
         $_arr_tplData = array(
-            "msg"     => 'ok',
+            'msg'     => 'ok',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
@@ -222,11 +222,11 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
     function ctrl_chkauth() {
         $this->check_db();
 
-        $_str_adminName = fn_getSafe(fn_get("admin_name"), 'txt', '');
+        $_str_adminName = fn_getSafe(fn_get('admin_name'), 'txt', '');
 
         if (fn_isEmpty($_str_adminName)) {
             $_arr_tplData = array(
-                'rcode'     => "x010201",
+                'rcode'     => 'x010201',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -235,11 +235,11 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
         $_mdl_admin = new MODEL_ADMIN();
 
         //检验用户名是否重复
-        $_arr_userRow = $_mdl_user->mdl_read($_str_adminName, "user_name");
+        $_arr_userRow = $_mdl_user->mdl_read($_str_adminName, 'user_name');
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             $_arr_tplData = array(
-                'rcode'     => "x020207",
+                'rcode'     => 'x020207',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -254,16 +254,16 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
 
 
         $_arr_tplData = array(
-            "msg"     => 'ok',
+            'msg'     => 'ok',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
 
 
     private function check_db() {
-        if (!defined("BG_DB_HOST") || fn_isEmpty(BG_DB_HOST) || !defined("BG_DB_NAME") || fn_isEmpty(BG_DB_NAME) || !defined("BG_DB_PASS") || fn_isEmpty(BG_DB_PASS) || !defined("BG_DB_CHARSET") || fn_isEmpty(BG_DB_CHARSET)) {
+        if (!defined('BG_DB_HOST') || fn_isEmpty(BG_DB_HOST) || !defined('BG_DB_NAME') || fn_isEmpty(BG_DB_NAME) || !defined('BG_DB_PASS') || fn_isEmpty(BG_DB_PASS) || !defined('BG_DB_CHARSET') || fn_isEmpty(BG_DB_CHARSET)) {
             $_arr_tplData = array(
-                'rcode' => "x030412",
+                'rcode' => 'x030412',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -279,11 +279,11 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
             $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
         } else {
-            $_str_rcode = "x030415";
+            $_str_rcode = 'x030415';
         }
 
-        if (defined("BG_INSTALL_PUB") && PRD_SSO_PUB <= BG_INSTALL_PUB) {
-            $_str_rcode = "x030403";
+        if (defined('BG_INSTALL_PUB') && PRD_SSO_PUB <= BG_INSTALL_PUB) {
+            $_str_rcode = 'x030403';
         }
 
         if (!fn_isEmpty($_str_rcode)) {
@@ -293,22 +293,22 @@ class CONTROL_INSTALL_REQUEST_UPGRADE {
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_arr_extRow    = get_loaded_extensions();
+        $_arr_phplibRow    = get_loaded_extensions();
         $_num_errCount  = 0;
 
-        foreach ($this->obj_tpl->ext as $_key=>$_value) {
-            if (!in_array($_key, $_arr_extRow)) {
+        foreach ($this->obj_tpl->phplib as $_key=>$_value) {
+            if (!in_array($_key, $_arr_phplibRow)) {
                 $_num_errCount++;
             }
         }
 
         if ($_num_errCount > 0) {
             $_arr_tplData = array(
-                'rcode' => "x030414",
+                'rcode' => 'x030414',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $this->act = fn_getSafe($GLOBALS['act'], 'txt', "ext");
+        $this->act = fn_getSafe($GLOBALS['route']['bg_act'], 'txt', 'phplib');
     }
 }

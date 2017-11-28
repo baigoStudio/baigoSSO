@@ -45,9 +45,9 @@ class MODEL_PM {
             'pm_time'       => 'int NOT NULL COMMENT \'创建时间\'',
         );
 
-        $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . 'pm', $_arr_pmCreate, 'pm_id', '短消息');
+        $_num_db = $this->obj_db->create_table(BG_DB_TABLE . 'pm', $_arr_pmCreate, 'pm_id', '短消息');
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y110105'; //更新成功
         } else {
             $_str_rcode = 'x110105'; //更新成功
@@ -141,10 +141,10 @@ class MODEL_PM {
             $_str_sqlWhere .= ' AND `pm_to`=' . $num_userId . ' AND `pm_type`=\'in\'';
         }
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'pm', $_arr_pmUpdate, $_str_sqlWhere); //删除数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'pm', $_arr_pmUpdate, $_str_sqlWhere); //删除数据
 
         //如影响行数大于0则返回成功
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y110103'; //成功
         } else {
             $_str_rcode = 'x110103'; //失败
@@ -266,7 +266,7 @@ class MODEL_PM {
 
         if ($num_userId > 0) {
             if ($is_revoke) {
-                $_str_sqlWhere .= ' AND `pm_from`=' . $num_userId . ' AND `pm_type`=\'in\'';
+                $_str_sqlWhere .= ' AND `pm_from`=' . $num_userId . ' AND `pm_type`=\'in\' AND `pm_status`=\'wait\'';
             } else {
                 $_str_sqlWhere .= ' AND ((`pm_from`=' . $num_userId . ' AND `pm_type`=\'out\') OR (`pm_to`=' . $num_userId . ' AND `pm_type`=\'in\'))';
             }
@@ -274,10 +274,10 @@ class MODEL_PM {
 
         //print_r($_str_sqlWhere);
 
-        $_num_mysql = $this->obj_db->delete(BG_DB_TABLE . 'pm', $_str_sqlWhere); //删除数据
+        $_num_db = $this->obj_db->delete(BG_DB_TABLE . 'pm', $_str_sqlWhere); //删除数据
 
         //如车影响行数小于0则返回错误
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             if ($is_revoke) {
                 $_str_rcode = 'y110109'; //撤回
             } else {
@@ -620,7 +620,7 @@ class MODEL_PM {
 
         $this->pmIds = array(
             'rcode'     => $_str_rcode,
-            'pm_ids'    => array_unique($_arr_pmIds),
+            'pm_ids'    => array_filter(array_unique($_arr_pmIds)),
         );
 
         return $this->pmIds;
@@ -655,7 +655,7 @@ class MODEL_PM {
         $this->pmIds = array(
             'rcode'     => 'ok',
             'str_pmIds' => $_str_pmIds,
-            'pm_ids'    => array_unique($_arr_pmIds),
+            'pm_ids'    => array_filter(array_unique($_arr_pmIds)),
         );
 
         return $this->pmIds;
@@ -669,7 +669,7 @@ class MODEL_PM {
      * @return void
      */
     private function sql_process($arr_search = array()) {
-        $_str_sqlWhere = '1=1';
+        $_str_sqlWhere = '1';
 
         if (isset($arr_search['key']) && !fn_isEmpty($arr_search['key'])) {
             $_str_sqlWhere .= ' AND (`pm_title` LIKE \'%' . $arr_search['key'] . '%\' OR `pm_content` LIKE \'%' . $arr_search['key'] . '%\')';

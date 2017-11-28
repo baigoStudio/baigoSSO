@@ -10,21 +10,21 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"          => true, //基本设置
-    "db"            => true, //连接数据库
+    'base'          => true, //基本设置
+    'db'            => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
 
 $ctrl_forgot = new CONTROL_API_API_FORGOT(); //初始化用户
-switch ($GLOBALS["method"]) {
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "bymail":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'bymail':
                 $ctrl_forgot->ctrl_bymail(); //忘记密码
             break;
 
-            case "byqa":
+            case 'byqa':
                 $ctrl_forgot->ctrl_byqa(); //删除
             break;
         }

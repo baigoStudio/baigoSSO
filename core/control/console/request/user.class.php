@@ -14,19 +14,32 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_CONSOLE_REQUEST_USER {
 
     private $is_super = false;
+    public $csvMimes = array(
+        'text/x-comma-separated-values',
+        'text/comma-separated-values',
+        'application/octet-stream',
+        'application/vnd.ms-excel',
+        'application/x-csv',
+        'text/x-csv',
+        'text/csv',
+        'application/csv',
+        'application/excel',
+        'application/vnd.msexcel',
+        'text/plain',
+    );
 
     function __construct() { //构造函数
-        $this->config   = $GLOBALS['obj_base']->config;
+        $this->config                   = $GLOBALS['obj_base']->config;
 
-        $this->obj_dir          = new CLASS_DIR();
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->dspType = 'result';
-        $this->obj_console->chk_install();
+        $this->obj_dir                  = new CLASS_DIR();
+        $this->general_console          = new GENERAL_CONSOLE();
+        $this->general_console->dspType = 'result';
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->tplData = array(
             'adminLogged' => $this->adminLogged
@@ -40,10 +53,9 @@ class CONTROL_CONSOLE_REQUEST_USER {
         $this->mdl_user_import  = new MODEL_USER_IMPORT(); //设置管理员模型
 
         $this->charsetRows              = fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'charset.php');
-        $this->charsetOften             = array_keys($this->charsetRows['often']['list']);
-        $this->charsetList              = array_keys($this->charsetRows['list']['list']);
-        $this->charsetKeys              = array_unique(array_merge($this->charsetOften, $this->charsetList));
-        $this->mdl_user->charsetKeys    = $this->charsetKeys;
+        $_arr_charsetOften              = array_keys($this->charsetRows['often']['list']);
+        $_arr_charsetList               = array_keys($this->charsetRows['list']['list']);
+        $this->mdl_user->charsetKeys    = array_filter(array_unique(array_merge($_arr_charsetOften, $_arr_charsetList)));
     }
 
 
@@ -115,8 +127,8 @@ class CONTROL_CONSOLE_REQUEST_USER {
         move_uploaded_file($this->userImport['file_temp'], BG_PATH_CACHE . 'sys' . DS . 'user_import.csv');
 
         $_arr_tplData = array(
-            'rcode'     => "y010403",
-            "file_name" => $this->csvFiles['name'],
+            'rcode'     => 'y010403',
+            'file_name' => $this->csvFiles['name'],
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
@@ -139,28 +151,28 @@ class CONTROL_CONSOLE_REQUEST_USER {
         if ($_arr_userInput['user_id'] > 0) {
             if (!isset($this->adminLogged['admin_allow']['user']['edit']) && !$this->is_super) {
                 $_arr_tplData = array(
-                    'rcode' => "x010303",
+                    'rcode' => 'x010303',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
-            $_str_userPass = fn_getSafe(fn_post("user_pass"), 'txt', '');
+            $_str_userPass = fn_getSafe(fn_post('user_pass'), 'txt', '');
             if (!fn_isEmpty($_str_userPass)) {
                 $_arr_userSubmit = array(
-                    "user_pass" => fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']),
+                    'user_pass' => fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']),
                 );
             }
         } else {
             if (!isset($this->adminLogged['admin_allow']['user']['add']) && !$this->is_super) {
                 $_arr_tplData = array(
-                    'rcode' => "x010302",
+                    'rcode' => 'x010302',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
-            $_arr_userPass = fn_validate(fn_post("user_pass"), 1, 0);
+            $_arr_userPass = fn_validate(fn_post('user_pass'), 1, 0);
             switch ($_arr_userPass['status']) {
                 case 'too_short':
                     $_arr_tplData = array(
-                        'rcode' => "x010212",
+                        'rcode' => 'x010212',
                     );
                     $this->obj_tpl->tplDisplay('result', $_arr_tplData);
                 break;
@@ -171,7 +183,7 @@ class CONTROL_CONSOLE_REQUEST_USER {
             }
 
             $_arr_userSubmit = array(
-                "user_pass" => fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']),
+                'user_pass' => fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']),
             );
         }
 
@@ -189,15 +201,15 @@ class CONTROL_CONSOLE_REQUEST_USER {
     function ctrl_status() {
         if (!isset($this->adminLogged['admin_allow']['user']['edit']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode' => "x010303",
+                'rcode' => 'x010303',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_str_status = fn_getSafe($GLOBALS['act'], 'txt', '');
+        $_str_status = fn_getSafe($GLOBALS['route']['bg_act'], 'txt', '');
         if (fn_isEmpty($_str_status)) {
             $_arr_tplData = array(
-                'rcode' => "x010216",
+                'rcode' => 'x010216',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -220,7 +232,7 @@ class CONTROL_CONSOLE_REQUEST_USER {
     function ctrl_del() {
         if (!isset($this->adminLogged['admin_allow']['user']['del']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode' => "x010304",
+                'rcode' => 'x010304',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -230,7 +242,7 @@ class CONTROL_CONSOLE_REQUEST_USER {
             $this->obj_tpl->tplDisplay('result', $_arr_userIds);
         }
 
-        $_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds["user_ids"]);
+        $_arr_userRow = $this->mdl_user->mdl_del($_arr_userIds['user_ids']);
 
         $this->obj_tpl->tplDisplay('result', $_arr_userRow);
     }
@@ -243,14 +255,14 @@ class CONTROL_CONSOLE_REQUEST_USER {
             $this->obj_tpl->tplDisplay('result', $_arr_userName);
         }
 
-        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userName['user_name'], "user_name");
+        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userName['user_name'], 'user_name');
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             $this->obj_tpl->tplDisplay('result', $_arr_userRow);
         }
 
         $_arr_tplData = array(
-            "msg" => 'ok',
+            'msg' => 'ok',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
@@ -267,19 +279,19 @@ class CONTROL_CONSOLE_REQUEST_USER {
             $this->obj_tpl->tplDisplay('result', $_arr_userName);
         }
 
-        $_num_notId = fn_getSafe(fn_get("user_id"), 'int', 0);
+        $_num_notId = fn_getSafe(fn_get('user_id'), 'int', 0);
 
-        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userName['user_name'], "user_name", $_num_notId);
+        $_arr_userRow = $this->mdl_user->mdl_read($_arr_userName['user_name'], 'user_name', $_num_notId);
 
         if ($_arr_userRow['rcode'] == 'y010102') {
             $_arr_tplData = array(
-                'rcode' => "x010205",
+                'rcode' => 'x010205',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_tplData = array(
-            "msg" => 'ok',
+            'msg' => 'ok',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
@@ -298,17 +310,17 @@ class CONTROL_CONSOLE_REQUEST_USER {
         }
 
         if (!fn_isEmpty($_arr_userMail['user_mail'])) {
-            $_arr_userRow = $this->mdl_user->mdl_read($_arr_userMail['user_mail'], "user_mail", $_arr_userMail["not_id"]);
+            $_arr_userRow = $this->mdl_user->mdl_read($_arr_userMail['user_mail'], 'user_mail', $_arr_userMail['not_id']);
             if ($_arr_userRow['rcode'] == 'y010102') {
                 $_arr_tplData = array(
-                    'rcode' => "x010211",
+                    'rcode' => 'x010211',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
         }
 
         $_arr_tplData = array(
-            "msg" => 'ok',
+            'msg' => 'ok',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
@@ -321,25 +333,36 @@ class CONTROL_CONSOLE_REQUEST_USER {
             );
         }
 
-        $this->csvFiles = $_FILES["csv_files"];
+        $this->csvFiles = $_FILES['csv_files'];
 
-        $_str_rcode = $this->upload_init($this->csvFiles["error"]);
+        $_str_rcode = $this->upload_init($this->csvFiles['error']);
         if ($_str_rcode != 'ok') {
             return array(
                 'rcode' => $_str_rcode,
             );
         }
 
-        $this->userImport["file_ext"] = pathinfo($this->csvFiles['name'], PATHINFO_EXTENSION); //取得扩展名
-        $this->userImport["file_ext"] = strtolower($this->userImport["file_ext"]);
-
-        if ($this->userImport["file_ext"] != "csv") {
+        //是否上传文件校验
+        if (!is_uploaded_file($this->csvFiles['tmp_name'])) {
             return array(
-                'rcode' => "x010219",
+                'rcode' => 'x010413',
             );
         }
 
-        $this->userImport['file_temp']    = $this->csvFiles["tmp_name"];
+        $_obj_finfo             = new finfo();
+        $this->csvFiles['mime'] = $_obj_finfo->file($this->csvFiles['tmp_name'], FILEINFO_MIME_TYPE);
+
+        if ($this->csvFiles['mime'] == 'CDF V2 Document, corrupt: Can\'t expand summary_info') {
+            $this->csvFiles['mime'] = $this->csvFiles['type'];
+        }
+
+        if (!in_array($this->csvFiles['mime'], $this->csvMimes)) {
+            return array(
+                'rcode' => 'x010219',
+            );
+        }
+
+        $this->userImport['file_temp']    = $this->csvFiles['tmp_name'];
         $this->userImport['rcode']        = 'ok';
 
         return $this->userImport;
@@ -349,22 +372,22 @@ class CONTROL_CONSOLE_REQUEST_USER {
     private function upload_init($num_error) {
         switch ($num_error) { //返回错误
             case 1:
-                $_str_rcode = "x030301";
+                $_str_rcode = 'x030301';
             break;
             case 2:
-                $_str_rcode = "x030302";
+                $_str_rcode = 'x030302';
             break;
             case 3:
-                $_str_rcode = "x030303";
+                $_str_rcode = 'x030303';
             break;
             case 4:
-                $_str_rcode = "x030304";
+                $_str_rcode = 'x030304';
             break;
             case 6:
-                $_str_rcode = "x030306";
+                $_str_rcode = 'x030306';
             break;
             case 7:
-                $_str_rcode = "x030307";
+                $_str_rcode = 'x030307';
             break;
             default:
                 $_str_rcode = 'ok';

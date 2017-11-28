@@ -10,47 +10,47 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"          => true, //基本设置
-    "db"            => true, //连接数据库
+    'base'          => true, //基本设置
+    'db'            => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
 
 $ctrl_pm = new CONTROL_API_API_PM(); //初始化短信
 
-switch ($GLOBALS["method"]) {
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "send":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'send':
                 $ctrl_pm->ctrl_send(); //发送
             break;
 
-            case "del":
+            case 'del':
                 $ctrl_pm->ctrl_del(); //删除
             break;
 
-            case "status":
+            case 'status':
                 $ctrl_pm->ctrl_status(); //状态
             break;
 
-            case "rev":
-            case "revoke":
+            case 'rev':
+            case 'revoke':
                 $ctrl_pm->ctrl_revoke(); //撤回
             break;
         }
     break;
 
     default:
-        switch ($GLOBALS['act']) {
-            case "check":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'check':
                 $ctrl_pm->ctrl_check(); //验证是否有新短信
             break;
 
-            case "read":
+            case 'read':
                 $ctrl_pm->ctrl_read(); //读取
             break;
 
-            case "list":
+            case 'list':
                 $ctrl_pm->ctrl_list(); //列出
             break;
         }

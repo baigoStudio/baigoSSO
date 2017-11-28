@@ -7,7 +7,7 @@
     'baigoSubmit'    => 'true',
     //'datetimepicker' => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=pm",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=pm',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -17,7 +17,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=pm&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
             <li>
@@ -71,17 +71,17 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         pm_title: {
             len: { min: 0, max: 90 },
             validate: { type: "str", format: "text", group: "#group_pm_title" },
-            msg: { selector: "#msg_pm_title", too_long: "<?php echo $this->lang['rcode']["x110202"]; ?>" }
+            msg: { selector: "#msg_pm_title", too_long: "<?php echo $this->lang['rcode']['x110202']; ?>" }
         },
         pm_content: {
             len: { min: 1, max: 900 },
             validate: { type: "str", format: "text", group: "#group_pm_content" },
-            msg: { selector: "#msg_pm_content", too_short: "<?php echo $this->lang['rcode']["x110201"]; ?>", too_long: "<?php echo $this->lang['rcode']["x110203"]; ?>" }
+            msg: { selector: "#msg_pm_content", too_short: "<?php echo $this->lang['rcode']['x110201']; ?>", too_long: "<?php echo $this->lang['rcode']['x110203']; ?>" }
         },
         pm_to: {
             len: { min: 1, max: 0 },
             validate: { type: "ajax", format: "text", group: "#group_pm_to" },
-            msg: { selector: "#msg_pm_to", too_short: "<?php echo $this->lang['rcode']["x110205"]; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
+            msg: { selector: "#msg_pm_to", too_short: "<?php echo $this->lang['rcode']['x110205']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
             ajax: { url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user&act=readname", key: "user_name", type: "str" }
         }
     };

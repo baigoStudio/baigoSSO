@@ -16,10 +16,9 @@ $arr_set = array(
 );
 $obj_runtime->run($arr_set);
 
-
 $ctrl_verify = new CONTROL_CONSOLE_UI_VERIFY(); //初始化验证
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'show':
         $ctrl_verify->ctrl_show(); //显示
     break;

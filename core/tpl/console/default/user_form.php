@@ -16,12 +16,12 @@ if ($this->tplData['userRow']['user_id'] < 1) {
 
 $cfg = array(
     'title'          => $this->lang['consoleMod']['user']['main']['title'] . ' &raquo; ' . $title_sub,
-    'menu_active'    => "user",
+    'menu_active'    => 'user',
     'sub_active'     => $str_sub,
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=user",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=user',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -31,7 +31,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
             <li>
@@ -60,7 +60,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
                             <div class="form-group">
                                 <label class="control-label"><?php echo $this->lang['mod']['label']['password']; ?></label>
-                                <input type="text" name="user_pass" id="user_pass" class="form-control" placeholder="<?php echo $this->lang['mod']['label']["onlyModi"]; ?>">
+                                <input type="text" name="user_pass" id="user_pass" class="form-control" placeholder="<?php echo $this->lang['mod']['label']['onlyModi']; ?>">
                             </div>
                         <?php } else { ?>
                             <div class="form-group">
@@ -80,14 +80,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
                         <div class="form-group">
                             <div id="group_user_mail">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']["mail"]; ?><span id="msg_user_mail"><?php echo $str_mailNeed; ?></span></label>
+                                <label class="control-label"><?php echo $this->lang['mod']['label']['mail']; ?><span id="msg_user_mail"><?php echo $str_mailNeed; ?></span></label>
                                 <input type="text" name="user_mail" id="user_mail" value="<?php echo $this->tplData['userRow']['user_mail']; ?>" data-validate class="form-control">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div id="group_user_nick">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']["nick"]; ?><span id="msg_user_nick"></span></label>
+                                <label class="control-label"><?php echo $this->lang['mod']['label']['nick']; ?><span id="msg_user_nick"></span></label>
                                 <input type="text" name="user_nick" id="user_nick" value="<?php echo $this->tplData['userRow']['user_nick']; ?>" data-validate class="form-control">
                             </div>
                         </div>
@@ -143,7 +143,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                         <?php if (isset($value['key'])) { echo $value['key']; } ?>
                                     </label>
                                     <input type="hidden" name="user_contact[<?php echo $key; ?>][key]" value="<?php if (isset($value['key'])) { echo $value['key']; } ?>">
-                                    <input type="text" name="user_contact[<?php echo $key; ?>][value]" value="<?php if (isset($value["value"])) { echo $value["value"]; } ?>" class="form-control">
+                                    <input type="text" name="user_contact[<?php echo $key; ?>][value]" value="<?php if (isset($value['value'])) { echo $value['value']; } ?>" class="form-control">
                                 </div>
                             </div>
                         <?php }
@@ -157,7 +157,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                         <?php if (isset($value['key'])) { echo $value['key']; } ?>
                                     </label>
                                     <input type="hidden" name="user_extend[<?php echo $key; ?>][key]" value="<?php if (isset($value['key'])) { echo $value['key']; } ?>">
-                                    <input type="text" name="user_extend[<?php echo $key; ?>][value]" value="<?php if (isset($value["value"])) { echo $value["value"]; } ?>" class="form-control">
+                                    <input type="text" name="user_extend[<?php echo $key; ?>][value]" value="<?php if (isset($value['value'])) { echo $value['value']; } ?>" class="form-control">
                                 </div>
                             </div>
                         <?php }
@@ -174,14 +174,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         user_name: {
             len: { min: 1, max: 30 },
             validate: { type: "ajax", format: "strDigit", group: "#group_user_name" },
-            msg: { selector: "#msg_user_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']["x010202"]; ?>", format_err: "<?php echo $this->lang['rcode']['x010203']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
-            ajax: { url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user&act=chkname", key: "user_name", type: "str", attach_selectors: ["#user_id"], attach_keys: ['user_id'] }
+            msg: { selector: "#msg_user_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']['x010202']; ?>", format_err: "<?php echo $this->lang['rcode']['x010203']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
+            ajax: { url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user&act=chkname", key: "user_name", type: "str", attach_selectors: ["#user_id"], attach_keys: ["user_id"] }
         },
         user_mail: {
             len: { min: <?php echo $num_mailMin; ?>, max: 300 },
             validate: { type: "ajax", format: "email", group: "#group_user_mail" },
             msg: { selector: "#msg_user_mail", too_short: "<?php echo $this->lang['rcode']['x010206']; ?>", too_long: "<?php echo $this->lang['rcode']['x010207']; ?>", format_err: "<?php echo $this->lang['rcode']['x010208']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
-            ajax: { url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user&act=chkmail", key: "user_mail", type: "str", attach_selectors: ["#user_id"], attach_keys: ['user_id'] }
+            ajax: { url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user&act=chkmail", key: "user_mail", type: "str", attach_selectors: ["#user_id"], attach_keys: ["user_id"] }
         },
         user_pass: {
             len: { min: 1, max: 0 },

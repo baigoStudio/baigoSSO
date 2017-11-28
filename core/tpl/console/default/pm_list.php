@@ -10,6 +10,7 @@
     'str_url'        => BG_URL_CONSOLE . 'index.php?mod=pm&act=list&' . $this->tplData['query'],
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group clearfix">
@@ -104,12 +105,6 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     </thead>
                     <tbody>
                         <?php foreach ($this->tplData['pmRows'] as $key=>$value) {
-                            if ($value['pm_status'] == 'read') {
-                                $css_status = 'success';
-                            } else {
-                                $css_status = 'warning';
-                            }
-
                             if ($value['pm_type'] == 'in') {
                                 $icon_type = 'inbox';
                             } else {
@@ -158,7 +153,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 <td class="text-nowrap bg-td-sm">
                                     <ul class="list-unstyled">
                                         <li>
-                                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$value['pm_status']]; ?></span>
+                                            <?php pm_status_process($value['pm_status'], $this->lang['mod']['status']); ?>
                                         </li>
                                         <li>
                                             <span class="glyphicon glyphicon-<?php echo $icon_type; ?>"></span>

@@ -16,7 +16,15 @@ return array(
         'list' => array(
             'EUC-CN' => array(
                 'title' => '中文-简体',
-                'note'  => '中国大陆（GB2312）',
+                'note'  => '中国大陆',
+            ),
+            'GB2312' => array(
+                'title' => '中文-简体',
+                'note'  => '中国大陆',
+            ),
+            'GBK' => array(
+                'title' => '中文-简体',
+                'note'  => '中国大陆',
             ),
             'BIG-5' => array(
                 'title' => '中文-繁体',

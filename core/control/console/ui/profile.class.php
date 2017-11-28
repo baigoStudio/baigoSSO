@@ -13,13 +13,13 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_CONSOLE_UI_PROFILE {
 
     function __construct() { //构造函数
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->mdl_admin        = new MODEL_ADMIN(); //设置管理组模型
         $this->mdl_user         = new MODEL_USER(); //设置管理组模型
@@ -33,25 +33,25 @@ class CONTROL_CONSOLE_UI_PROFILE {
 
 
     function ctrl_mailbox() {
-        $this->obj_tpl->tplDisplay("profile_mailbox", $this->tplData);
+        $this->obj_tpl->tplDisplay('profile_mailbox', $this->tplData);
     }
 
 
     function ctrl_qa() {
-        $this->obj_tpl->tplDisplay("profile_qa", $this->tplData);
+        $this->obj_tpl->tplDisplay('profile_qa', $this->tplData);
     }
 
 
     function ctrl_pass() {
-        $this->obj_tpl->tplDisplay("profile_pass", $this->tplData);
+        $this->obj_tpl->tplDisplay('profile_pass', $this->tplData);
     }
 
     /**
-     * ctrl_my function.
+     * ctrl_personal function.
      *
      * @access public
      */
     function ctrl_info() {
-        $this->obj_tpl->tplDisplay("profile_info", $this->tplData);
+        $this->obj_tpl->tplDisplay('profile_info', $this->tplData);
     }
 }

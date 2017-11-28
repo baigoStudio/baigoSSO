@@ -1,16 +1,11 @@
-<?php
-if (fn_isEmpty($GLOBALS['act'])) {
-    $GLOBALS['act'] = "base";
-}
-
-$cfg = array(
-    'title'          => $this->lang['common']['page']['opt'] . ' &raquo; ' . $this->lang['opt'][$GLOBALS['act']]['title'],
+<?php $cfg = array(
+    'title'          => $this->lang['common']['page']['opt'] . ' &raquo; ' . $this->lang['opt'][$this->tplData['act']]['title'],
     'menu_active'    => "opt",
-    'sub_active'     => $GLOBALS['act'],
+    'sub_active'     => $this->tplData['act'],
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=opt&act=" . $GLOBALS['act'],
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=opt&act=' . $this->tplData['act'],
 );
 
 include($cfg['pathInclude'] . 'function.php');
@@ -19,7 +14,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     <div class="form-group">
         <ul class="nav nav-pills bg-nav-pills">
             <li>
-                <a href="<?php echo BG_URL_HELP; ?>index.php?mod=console&act=opt#<?php echo $GLOBALS['act']; ?>" target="_blank">
+                <a href="<?php echo BG_URL_HELP; ?>index.php?mod=console&act=opt#<?php echo $this->tplData['act']; ?>" target="_blank">
                     <span class="glyphicon glyphicon-question-sign"></span>
                     <?php echo $this->lang['mod']['href']['help']; ?>
                 </a>
@@ -30,7 +25,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     <form name="opt_form" id="opt_form">
 
         <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
-        <input type="hidden" name="act" value="<?php echo $GLOBALS['act']; ?>">
+        <input type="hidden" name="act" value="<?php echo $this->tplData['act']; ?>">
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -40,14 +35,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                 $_timezoneRows  = array();
                 $_timezoneType  = '';
 
-                if ($GLOBALS['act'] == "base") {
+                if ($this->tplData['act'] == 'base') {
                     $_tplRows       = $this->tplData['tplRows'];
                     $_timezoneLang  = $this->lang['timezone'];
                     $_timezoneRows  = $this->tplData['timezoneRows'];
                     $_timezoneType  = $this->tplData['timezoneType'];
                 }
 
-                $arr_form = opt_form_process($this->opt[$GLOBALS['act']]['list'], $this->lang['opt'][$GLOBALS['act']]['list'], $_tplRows, $_timezoneRows, $_timezoneLang, $_timezoneType, $this->lang['mod'], $this->lang['rcode']); ?>
+                $arr_form = opt_form_process($this->opt[$this->tplData['act']]['list'], $this->lang['opt'][$this->tplData['act']]['list'], $_tplRows, $_timezoneRows, $_timezoneLang, $_timezoneType, $this->lang['mod']['label'], $this->lang['rcode']); ?>
 
                 <div class="bg-submit-box"></div>
             </div>
@@ -79,7 +74,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                 obj_submit_form.formSubmit();
             }
         });
-        <?php if ($GLOBALS['act'] == "base") { ?>
+        <?php if ($this->tplData['act'] == 'base') { ?>
             var _timezoneRowsJson = <?php echo $this->tplData['timezoneRowsJson']; ?>;
             var _timezoneLangJson = <?php echo $this->lang['timezoneJson']; ?>;
 
@@ -99,8 +94,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     }
                     _str_appent += "</option>";
                 });
-                $("#opt_base_BG_SITE_TIMEZONE").empty();
-                $("#opt_base_BG_SITE_TIMEZONE").append(_str_appent);
+                $("#opt_base_BG_SITE_TIMEZONE").html(_str_appent);
             });
         <?php } ?>
     });

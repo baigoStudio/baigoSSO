@@ -33,11 +33,11 @@ class MODEL_USER_FORGOT extends MODEL_USER {
             );
         }
 
-        $_arr_userPassNew = fn_validate(fn_post("user_pass_new"), 1, 0);
+        $_arr_userPassNew = fn_validate(fn_post('user_pass_new'), 1, 0);
         switch ($_arr_userPassNew['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010222",
+                    'rcode' => 'x010222',
                 );
             break;
 
@@ -46,11 +46,11 @@ class MODEL_USER_FORGOT extends MODEL_USER {
             break;
         }
 
-        $_arr_userPassConfirm = fn_validate(fn_post("user_pass_confirm"), 1, 0);
+        $_arr_userPassConfirm = fn_validate(fn_post('user_pass_confirm'), 1, 0);
         switch ($_arr_userPassConfirm['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010224",
+                    'rcode' => 'x010224',
                 );
             break;
 
@@ -61,7 +61,7 @@ class MODEL_USER_FORGOT extends MODEL_USER {
 
         if ($this->forgotInputReset['user_pass_new'] != $this->forgotInputReset['user_pass_confirm']) {
             return array(
-                'rcode' => "x010225",
+                'rcode' => 'x010225',
             );
         }
 
@@ -81,11 +81,11 @@ class MODEL_USER_FORGOT extends MODEL_USER {
         $this->inputByqa   = $_arr_userInput;
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            $_arr_userSecAnsw = fn_validate(fn_post("user_sec_answ_" . $_iii), 1, 0);
+            $_arr_userSecAnsw = fn_validate(fn_post('user_sec_answ_' . $_iii), 1, 0);
             switch ($_arr_userSecAnsw['status']) {
                 case 'too_short':
                     return array(
-                        'rcode' => "x010237",
+                        'rcode' => 'x010237',
                     );
                 break;
 
@@ -95,11 +95,11 @@ class MODEL_USER_FORGOT extends MODEL_USER {
             }
         }
 
-        $_arr_userPassNew = fn_validate(fn_post("user_pass_new"), 1, 0);
+        $_arr_userPassNew = fn_validate(fn_post('user_pass_new'), 1, 0);
         switch ($_arr_userPassNew['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010222",
+                    'rcode' => 'x010222',
                 );
             break;
 
@@ -108,11 +108,11 @@ class MODEL_USER_FORGOT extends MODEL_USER {
             break;
         }
 
-        $_arr_userPassConfirm = fn_validate(fn_post("user_pass_confirm"), 1, 0);
+        $_arr_userPassConfirm = fn_validate(fn_post('user_pass_confirm'), 1, 0);
         switch ($_arr_userPassConfirm['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010224",
+                    'rcode' => 'x010224',
                 );
             break;
 
@@ -123,7 +123,7 @@ class MODEL_USER_FORGOT extends MODEL_USER {
 
         if ($this->inputByqa['user_pass_new'] != $this->inputByqa['user_pass_confirm']) {
             return array(
-                'rcode' => "x010225",
+                'rcode' => 'x010225',
             );
         }
 

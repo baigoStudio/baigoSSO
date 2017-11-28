@@ -21,22 +21,22 @@
     <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo BG_URL_STATIC; ?>lib/baigoAccordion/baigoAccordion.min.css" type="text/css" rel="stylesheet">
 
-    <?php if (isset($cfg["baigoValidator"])) { ?>
+    <?php if (isset($cfg['baigoValidator'])) { ?>
         <!--表单验证 js-->
         <link href="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
     <?php }
 
-    if (isset($cfg["baigoSubmit"])) { ?>
+    if (isset($cfg['baigoSubmit'])) { ?>
         <!--表单 ajax 提交 js-->
         <link href="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
     <?php }
 
-    if (isset($cfg["upload"])) { ?>
+    if (isset($cfg['upload'])) { ?>
         <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
         <link href="<?php echo BG_URL_STATIC; ?>lib/webuploader/webuploader.css" type="text/css" rel="stylesheet">
     <?php }
 
-    if (isset($cfg["datetimepicker"])) { ?>
+    if (isset($cfg['datetimepicker'])) { ?>
         <link href="<?php echo BG_URL_STATIC; ?>lib/datetimepicker/jquery.datetimepicker.css" type="text/css" rel="stylesheet">
     <?php } ?>
 

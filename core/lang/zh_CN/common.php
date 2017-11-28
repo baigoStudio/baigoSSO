@@ -18,7 +18,7 @@ return array(
         'rcode'     => '提示信息',
 
         'opt'       => '系统设置', //系统设置
-        'dbConfig'  => '数据库设置',
+        'dbconfig'  => '数据库设置',
         'chkver'    => '检查更新',
     ),
 
@@ -38,7 +38,7 @@ return array(
     'profile' => array(
         'info'      => array(
             'icon'  => 'user',
-            'title' => '个人信息',
+            'title' => '个人资料',
         ),
         /*'prefer'    => array(
             'icon'  => 'wrench',
@@ -61,6 +61,7 @@ return array(
     /*------链接------*/
     'href' => array(
         'logout'        => '退出', //退出
+        'back'          => '返回',
 
         'pm'            => '消息',
         'pmNew'         => '新消息',
@@ -80,5 +81,35 @@ return array(
         'ok'            => '确定', //确定
         'close'         => '关闭',
         'genOverall'    => '生成静态页面',
+    ),
+
+    'text' => array(
+        'x030403' => '<h4>如需重新安装，请执行如下步骤：</h4>
+            <ol>
+                <li>删除 ./config/installed.php 文件</li>
+                <li>重新运行 <a href="' . BG_URL_INSTALL . 'index.php">' . BG_URL_INSTALL . 'index.php</a></li>
+            </ol>',
+
+        'x030404' => '<h4>数据库未正确设置：</h4>
+            <ol>
+                <li><a href="' . BG_URL_INSTALL . 'index.php?mod=setup&act=dbconfig">返回重新设置</a></li>
+            </ol>',
+
+        'x030412' => '<h4>数据库未正确设置：</h4>
+            <ol>
+                <li><a href="' . BG_URL_INSTALL . 'index.php?mod=upgrade&act=dbconfig">返回重新设置</a></li>
+            </ol>',
+
+        'x030413' => '<h4>未通过服务器环境检查，安装无法继续：</h4>
+            <ol>
+                <li>重新检查环境 <a href="' . BG_URL_INSTALL . 'index.php">' . BG_URL_INSTALL . 'index.php</a></li>
+                <li>根据检查结果，正确安装所必需的 PHP 扩展库。</li>
+            </ol>',
+
+        'x030414' => '<h4>未通过服务器环境检查，升级无法继续：</h4>
+            <ol>
+                <li>重新检查环境 <a href="' . BG_URL_INSTALL . 'index.php?mod=upgrade">' . BG_URL_INSTALL . 'index.php?mod=upgrade</a></li>
+                <li>根据检查结果，正确安装所必需的 PHP 扩展库。</li>
+            </ol>',
     ),
 );

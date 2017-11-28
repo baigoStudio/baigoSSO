@@ -652,7 +652,7 @@ function fn_safe($str_string) {
     $_str_return = str_ireplace('!', '&#33;', $_str_return);
     $_str_return = str_ireplace('$', '&#36;', $_str_return);
     $_str_return = str_ireplace('%', '&#37;', $_str_return);
-    $_str_return = str_ireplace('‘', '&#39;', $_str_return);
+    $_str_return = str_ireplace('\'', '&#39;', $_str_return);
     $_str_return = str_ireplace('(', '&#40;', $_str_return);
     $_str_return = str_ireplace(')', '&#41;', $_str_return);
     $_str_return = str_ireplace('+', '&#43;', $_str_return);

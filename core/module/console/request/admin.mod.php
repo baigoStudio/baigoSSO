@@ -21,7 +21,7 @@ $ctrl_admin = new CONTROL_CONSOLE_REQUEST_ADMIN(); //初始化管理员对象
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'submit':
                 $ctrl_admin->ctrl_submit(); //创建、编辑
             break;
@@ -42,7 +42,7 @@ switch ($GLOBALS['method']) {
     break;
 
     default:
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'chkauth':
                 $ctrl_admin->ctrl_chkauth(); //验证授权
             break;

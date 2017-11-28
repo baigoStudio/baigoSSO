@@ -10,13 +10,13 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"      => true,
-    "ssin"      => true, //启用会话
-    "db"        => true, //连接数据库
+    'base'      => true,
+    'ssin'      => true, //启用会话
+    'db'        => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
 
-$ctrl_seccode = new CONTROL_MISC_REQUEST_SECCODE("result"); //初始化验证对象
+$ctrl_seccode = new CONTROL_MISC_REQUEST_SECCODE('result'); //初始化验证对象
 
 $ctrl_seccode->ctrl_chk(); //验证

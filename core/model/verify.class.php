@@ -47,9 +47,9 @@ class MODEL_VERIFY {
             'verify_time_disable'   => 'int NOT NULL COMMENT \'使用时间\'',
         );
 
-        $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . 'verify', $_arr_verifyCreate, 'verify_id', '验证');
+        $_num_db = $this->obj_db->create_table(BG_DB_TABLE . 'verify', $_arr_verifyCreate, 'verify_id', '验证');
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y120105'; //更新成功
         } else {
             $_str_rcode = 'x120105'; //更新成功
@@ -142,8 +142,8 @@ class MODEL_VERIFY {
             }
         } else {
             $_num_verifyId  = $_arr_verifyRow['verify_id'];
-            $_num_mysql     = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyData, '`verify_id`=' . $_num_verifyId); //更新数据
-            if ($_num_mysql > 0) {
+            $_num_db     = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyData, '`verify_id`=' . $_num_verifyId); //更新数据
+            if ($_num_db > 0) {
                 $_str_rcode = 'y120103'; //更新成功
             } else {
                 return array(
@@ -173,10 +173,10 @@ class MODEL_VERIFY {
             'verify_time_disable'   => time(),
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyUpdate, '`verify_id`=' . $this->verifyInput['verify_id']);
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyUpdate, '`verify_id`=' . $this->verifyInput['verify_id']);
 
         //如影响行数大于0则返回成功
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y120103'; //成功
         } else {
             $_str_rcode = 'x120103'; //失败
@@ -202,10 +202,10 @@ class MODEL_VERIFY {
             'verify_status' => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyUpdate, '`verify_id` IN (' . $_str_verifyId . ')'); //删除数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyUpdate, '`verify_id` IN (' . $_str_verifyId . ')'); //删除数据
 
         //如影响行数大于0则返回成功
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y120103'; //成功
         } else {
             $_str_rcode = 'x120103'; //失败
@@ -326,10 +326,10 @@ class MODEL_VERIFY {
     function mdl_del() {
         $_str_verifyId = implode(',', $this->verifyIds['verify_ids']);
 
-        $_num_mysql = $this->obj_db->delete(BG_DB_TABLE . 'verify', '`verify_id` IN (' . $_str_verifyId . ')'); //删除数据
+        $_num_db = $this->obj_db->delete(BG_DB_TABLE . 'verify', '`verify_id` IN (' . $_str_verifyId . ')'); //删除数据
 
         //如车影响行数小于0则返回错误
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y120104'; //成功
         } else {
             $_str_rcode = 'x120104'; //失败
@@ -414,7 +414,7 @@ class MODEL_VERIFY {
 
         $this->verifyIds = array(
             'rcode'         => $_str_rcode,
-            'verify_ids'    => array_unique($_arr_verifyIds),
+            'verify_ids'    => array_filter(array_unique($_arr_verifyIds)),
         );
 
         return $this->verifyIds;

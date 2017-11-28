@@ -59,12 +59,12 @@ class CLASS_DATABASE {
         $this->obj_mysqli = new mysqli($this->db_host, $this->db_user, $this->db_pass, $this->db_name, $this->db_port);
         if ($this->obj_mysqli->connect_errno > 0) {
             if ($this->db_debug) {
-                $_str_msg   = 'Error: ' . $this->obj_mysqli->connect_error;
-                $_str_msg  += 'Error No: ' . $this->obj_mysqli->connect_errno;
+                $_str_msg   = $this->obj_mysqli->connect_error;
+                $_str_msg  += ', Error No: ' . $this->obj_mysqli->connect_errno;
             } else {
-                $_str_msg   = 'Error: Can not connect to database!';
+                $_str_msg   = 'Can not connect to database';
             }
-            exit($_str_msg);
+            exit('{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}');
         } else {
             $this->obj_mysqli->query('SET NAMES ' . $this->db_charset);
         }
@@ -73,12 +73,12 @@ class CLASS_DATABASE {
     function select_db() {
         if (!$this->obj_mysqli->select_db($this->db_name)) {
             if ($this->db_debug) {
-                $_str_msg   = 'Error: ' . $this->obj_mysqli->error;
-                $_str_msg  += 'Error No: ' . $this->obj_mysqli->errno;
+                $_str_msg   = $this->obj_mysqli->error;
+                $_str_msg  += ', Error No: ' . $this->obj_mysqli->errno;
             } else {
-                $_str_msg   = 'Error: Can not select database!';
+                $_str_msg   = 'Can not select database';
             }
-            exit($_str_msg);
+            exit('{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}');
         }
     }
 
@@ -146,7 +146,7 @@ class CLASS_DATABASE {
     }
 
     function create_view($view, $data, $table, $join) {
-        $sql      = 'CREATE OR REPLACE VIEW `' . $view . '` AS SELECT ';
+        $sql      = 'CREATE OR REPLACE SQL SECURITY INVOKER VIEW `' . $view . '` AS SELECT ';
         $values   = array();
         foreach ($data as $key=>$value) {
             $_str_view = '`' . $value[1] . '`.`' . $value[0] . '`';
@@ -182,7 +182,7 @@ class CLASS_DATABASE {
         }
         $sql .= implode(',', $values);
 
-        $sql .= ' FROM `' . $table_src . '` WHERE 1=1';
+        $sql .= ' FROM `' . $table_src . '` WHERE 1';
 
         $this->db_rs  = $this->query($sql);
         return $this->db_rs;

@@ -19,7 +19,7 @@ $obj_runtime->run($arr_set);
 
 $ctrl_login = new CONTROL_CONSOLE_UI_LOGIN(); //初始化登录
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'logout':
         $ctrl_login->ctrl_logout(); //登出
     break;

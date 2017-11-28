@@ -19,9 +19,13 @@ $obj_runtime->run($arr_set);
 
 $ctrl_user = new CONTROL_CONSOLE_UI_USER(); //初始化用户
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'import':
         $ctrl_user->ctrl_import(); //导入
+    break;
+
+    case 'show':
+        $ctrl_user->ctrl_show();
     break;
 
     case 'form':

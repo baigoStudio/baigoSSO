@@ -13,10 +13,10 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_CONSOLE_UI_LOGIN {
 
     function __construct() { //构造函数
-        $this->obj_console  = new CLASS_CONSOLE();
-        $this->obj_console->chk_install();
+        $this->general_console  = new GENERAL_CONSOLE();
+        $this->general_console->chk_install();
 
-        $this->obj_tpl      = $this->obj_console->obj_tpl;
+        $this->obj_tpl      = $this->general_console->obj_tpl;
 
         $this->mdl_admin    = new MODEL_ADMIN(); //设置管理员模型
         $this->mdl_user     = new MODEL_USER(); //设置管理员模型
@@ -27,21 +27,21 @@ class CONTROL_CONSOLE_UI_LOGIN {
     无返回
     */
     function ctrl_login() {
-        $_str_forward     = fn_getSafe(fn_get("forward"), 'txt', '');
-        $_str_rcode       = fn_getSafe(fn_get("rcode"), 'txt', '');
+        $_str_forward     = fn_getSafe(fn_get('forward'), 'txt', '');
+        $_str_rcode       = fn_getSafe(fn_get('rcode'), 'txt', '');
 
-        $_str_forward = fn_forward($_str_forward, "decode");
+        $_str_forward = fn_forward($_str_forward, 'decode');
 
         if (fn_isEmpty($_str_forward)) {
-            $_str_forward = BG_URL_CONSOLE . "index.php";
+            $_str_forward = BG_URL_CONSOLE . 'index.php';
         }
 
         $_arr_tplData = array(
-            "forward"    => $_str_forward,
-            "rcode"      => $_str_rcode,
+            'forward'    => $_str_forward,
+            'rcode'      => $_str_rcode,
         );
 
-        $this->obj_tpl->tplDisplay("login", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('login', $_arr_tplData);
     }
 
 
@@ -49,8 +49,8 @@ class CONTROL_CONSOLE_UI_LOGIN {
     无返回
     */
     function ctrl_logout() {
-        $this->obj_console->ssin_end();
+        $this->general_console->ssin_end();
 
-        header("Location: " . BG_URL_CONSOLE . "index.php");
+        header('Location: ' . BG_URL_CONSOLE . 'index.php');
     }
 }

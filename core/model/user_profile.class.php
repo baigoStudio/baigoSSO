@@ -27,45 +27,45 @@ class MODEL_USER_PROFILE extends MODEL_USER {
         $_tm_accessExpire   = time() + BG_ACCESS_EXPIRE * 60;
 
         $_arr_userData = array(
-            "user_access_token"     => $_str_accessToken,
-            "user_access_expire"    => $_tm_accessExpire,
+            'user_access_token'     => $_str_accessToken,
+            'user_access_expire'    => $_tm_accessExpire,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $num_userId); //更新数据
-        if ($_num_mysql > 0) {
-            $_str_rcode = "y010103"; //更新成功
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $num_userId); //更新数据
+        if ($_num_db > 0) {
+            $_str_rcode = 'y010103'; //更新成功
         } else {
             return array(
-                'rcode' => "x010103", //更新失败
+                'rcode' => 'x010103', //更新失败
             );
         }
 
         return array(
-            "user_id"               => $num_userId,
-            "user_access_token"     => fn_baigoCrypt($_str_accessToken, $str_userName),
-            "user_access_expire"    => $_tm_accessExpire,
-            "rcode"                 => $_str_rcode, //成功
+            'user_id'               => $num_userId,
+            'user_access_token'     => fn_baigoCrypt($_str_accessToken, $str_userName),
+            'user_access_expire'    => $_tm_accessExpire,
+            'rcode'                 => $_str_rcode, //成功
         );
     }
 
 
     function mdl_mailbox($num_userId, $str_mailbox) {
         $_arr_userData = array(
-            "user_mail" => $str_mailbox,
+            'user_mail' => $str_mailbox,
         );
 
-        $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $num_userId); //更新数据
+        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $num_userId); //更新数据
 
-        if ($_num_mysql >= 0) {
-            $_str_rcode = "y010405"; //更新成功
+        if ($_num_db >= 0) {
+            $_str_rcode = 'y010405'; //更新成功
         } else {
             return array(
-                'rcode' => "x010405", //更新失败
+                'rcode' => 'x010405', //更新失败
             );
         }
 
         return array(
-            "user_mail" => $str_mailbox, //成功
+            'user_mail' => $str_mailbox, //成功
             'rcode'     => $_str_rcode, //成功
         );
     }
@@ -87,13 +87,13 @@ class MODEL_USER_PROFILE extends MODEL_USER {
 
         //print_r($arr_userSubmit);
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $arr_userSubmit['user_id']); //更新数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
 
-        if ($_num_mysql > 0) {
-            $_str_rcode = "y010412"; //更新成功
+        if ($_num_db > 0) {
+            $_str_rcode = 'y010412'; //更新成功
         } else {
             return array(
-                'rcode' => "x010412", //更新失败
+                'rcode' => 'x010412', //更新失败
             );
         }
 
@@ -112,24 +112,24 @@ class MODEL_USER_PROFILE extends MODEL_USER {
      */
     function mdl_pass($num_userId, $str_userPass) {
         $_arr_userData = array(
-            "user_pass"         => $str_userPass,
-            "user_crypt_type"   => 2,
+            'user_pass'         => $str_userPass,
+            'user_crypt_type'   => 2,
         );
 
         if (!fn_isEmpty($_arr_userData)) {
-            $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $num_userId); //更新数据
+            $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $num_userId); //更新数据
         }
 
-        if ($_num_mysql >= 0) {
-            $_str_rcode = "y010407"; //更新成功
+        if ($_num_db >= 0) {
+            $_str_rcode = 'y010407'; //更新成功
         } else {
             return array(
-                'rcode' => "x010407", //更新失败
+                'rcode' => 'x010407', //更新失败
             );
         }
 
         return array(
-            "rcode"      => $_str_rcode, //成功
+            'rcode'      => $_str_rcode, //成功
         );
     }
 
@@ -155,21 +155,21 @@ class MODEL_USER_PROFILE extends MODEL_USER {
             $_arr_userData['user_extend'] = $this->infoInput['user_extend'];
         }
 
-        $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $arr_userSubmit['user_id']); //更新数据
+        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
 
-        if ($_num_mysql > 0) {
-            $_str_rcode = "y010103"; //更新成功
+        if ($_num_db > 0) {
+            $_str_rcode = 'y010103'; //更新成功
         } else {
             return array(
-                'rcode' => "x010103", //更新失败
+                'rcode' => 'x010103', //更新失败
             );
         }
 
         if (isset($_arr_userData['user_contact'])) {
-            $_arr_userData['user_contact']   = fn_jsonEncode($_arr_userData['user_contact'], "encode");
+            $_arr_userData['user_contact']   = fn_jsonEncode($_arr_userData['user_contact'], 'encode');
         }
         if (isset($_arr_userData['user_extend'])) {
-            $_arr_userData['user_extend']    = fn_jsonEncode($_arr_userData['user_extend'], "encode");
+            $_arr_userData['user_extend']    = fn_jsonEncode($_arr_userData['user_extend'], 'encode');
         }
 
         $_arr_userReturn            = $_arr_userData;
@@ -189,18 +189,18 @@ class MODEL_USER_PROFILE extends MODEL_USER {
 
         $this->qaInput   = $_arr_userInput;
 
-        $_arr_userPass    = $this->chk_user_pass(fn_post("user_pass"));
+        $_arr_userPass    = $this->chk_user_pass(fn_post('user_pass'));
         if ($_arr_userPass['rcode'] != 'ok') {
             return $_arr_userPass;
         }
         $this->qaInput['user_pass']   = $_arr_userPass['user_pass'];
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            $_arr_userSecQues = fn_validate(fn_post("user_sec_ques_" . $_iii), 1, 0);
+            $_arr_userSecQues = fn_validate(fn_post('user_sec_ques_' . $_iii), 1, 0);
             switch ($_arr_userSecQues['status']) {
                 case 'too_short':
                     return array(
-                        'rcode' => "x010238",
+                        'rcode' => 'x010238',
                     );
                 break;
 
@@ -209,11 +209,11 @@ class MODEL_USER_PROFILE extends MODEL_USER {
                 break;
             }
 
-            $_arr_userSecAnsw = fn_validate(fn_post("user_sec_answ_" . $_iii), 1, 0);
+            $_arr_userSecAnsw = fn_validate(fn_post('user_sec_answ_' . $_iii), 1, 0);
             switch ($_arr_userSecAnsw['status']) {
                 case 'too_short':
                     return array(
-                        'rcode' => "x010237",
+                        'rcode' => 'x010237',
                     );
                 break;
 
@@ -238,34 +238,34 @@ class MODEL_USER_PROFILE extends MODEL_USER {
 
         $this->infoInput   = $_arr_userInput;
 
-        $_arr_userPass    = $this->chk_user_pass(fn_post("user_pass"));
+        $_arr_userPass    = $this->chk_user_pass(fn_post('user_pass'));
         if ($_arr_userPass['rcode'] != 'ok') {
             return $_arr_userPass;
         }
         $this->infoInput['user_pass']   = $_arr_userPass['user_pass'];
 
-        $_arr_userNick = $this->chk_user_nick(fn_post("user_nick"));
+        $_arr_userNick = $this->chk_user_nick(fn_post('user_nick'));
         if ($_arr_userNick['rcode'] != 'ok') {
             return $_arr_userNick;
         }
         $this->infoInput['user_nick'] = $_arr_userNick['user_nick'];
 
-        $_str_userContact                   = fn_getSafe(fn_post("user_contact"), 'txt', '');
+        $_str_userContact                   = fn_getSafe(fn_post('user_contact'), 'txt', '');
         $this->infoInput['user_contactStr'] = $_str_userContact;
 
-        $_str_userContact                   = fn_htmlcode($_str_userContact, "decode", "json");
+        $_str_userContact                   = fn_htmlcode($_str_userContact, 'decode', 'json');
         $_arr_userContact                   = json_decode($_str_userContact, true);
 
-        $this->infoInput['user_contact']    = fn_jsonEncode($_arr_userContact, "encode");
+        $this->infoInput['user_contact']    = fn_jsonEncode($_arr_userContact, 'encode');
 
 
-        $_str_userExtend                    = fn_getSafe(fn_post("user_extend"), 'txt', '');
+        $_str_userExtend                    = fn_getSafe(fn_post('user_extend'), 'txt', '');
         $this->infoInput['user_extendStr']  = $_str_userExtend;
 
-        $_str_userExtend                    = fn_htmlcode($_str_userExtend, "decode", "json");
+        $_str_userExtend                    = fn_htmlcode($_str_userExtend, 'decode', 'json');
         $_arr_userExtend                    = json_decode($_str_userExtend, true);
 
-        $this->infoInput['user_extend']     = fn_jsonEncode($_arr_userExtend, "encode");
+        $this->infoInput['user_extend']     = fn_jsonEncode($_arr_userExtend, 'encode');
 
         $this->infoInput['rcode'] = 'ok';
 
@@ -282,13 +282,13 @@ class MODEL_USER_PROFILE extends MODEL_USER {
 
         $this->mailboxInput = $_arr_userInput;
 
-        $_arr_userPass = $this->chk_user_pass(fn_post("user_pass"));
+        $_arr_userPass = $this->chk_user_pass(fn_post('user_pass'));
         if ($_arr_userPass['rcode'] != 'ok') {
             return $_arr_userPass;
         }
         $this->mailboxInput['user_pass'] = $_arr_userPass['user_pass'];
 
-        $_arr_userMailNew = $this->chk_user_mail(fn_post("user_mail_new"), 1);
+        $_arr_userMailNew = $this->chk_user_mail(fn_post('user_mail_new'), 1);
         if ($_arr_userMailNew['rcode'] != 'ok') {
             return $_arr_userMailNew;
         }
@@ -308,17 +308,17 @@ class MODEL_USER_PROFILE extends MODEL_USER {
         }
         $this->passInput   = $_arr_userInput;
 
-        $_arr_userPass    = $this->chk_user_pass(fn_post("user_pass"));
+        $_arr_userPass    = $this->chk_user_pass(fn_post('user_pass'));
         if ($_arr_userPass['rcode'] != 'ok') {
             return $_arr_userPass;
         }
         $this->passInput['user_pass']   = $_arr_userPass['user_pass'];
 
-        $_arr_userPassNew = fn_validate(fn_post("user_pass_new"), 1, 0);
+        $_arr_userPassNew = fn_validate(fn_post('user_pass_new'), 1, 0);
         switch ($_arr_userPassNew['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010222",
+                    'rcode' => 'x010222',
                 );
             break;
 
@@ -341,23 +341,23 @@ class MODEL_USER_PROFILE extends MODEL_USER {
 
         $this->tokenInput = $_arr_userInput;
 
-        if ($str_method == "get") {
-            $_str_refreshToken = fn_get("user_refresh_token");
+        if ($str_method == 'get') {
+            $_str_refreshToken = fn_get('user_refresh_token');
         } else {
-            $_str_refreshToken = fn_post("user_refresh_token");
+            $_str_refreshToken = fn_post('user_refresh_token');
         }
 
         $_arr_refreshToken = fn_validate($_str_refreshToken, 1, 32);
         switch ($_arr_refreshToken['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010232",
+                    'rcode' => 'x010232',
                 );
             break;
 
             case 'too_long':
                 return array(
-                    'rcode' => "x010233",
+                    'rcode' => 'x010233',
                 );
             break;
 

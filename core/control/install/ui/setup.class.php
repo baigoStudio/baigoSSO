@@ -15,9 +15,9 @@ class CONTROL_INSTALL_UI_SETUP {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        $this->obj_install      = new CLASS_INSTALL();
+        $this->general_install      = new GENERAL_INSTALL();
 
-        $this->obj_tpl          = $this->obj_install->obj_tpl;
+        $this->obj_tpl          = $this->general_install->obj_tpl;
 
         $this->obj_dir          = new CLASS_DIR();
         $this->obj_dir->mk_dir(BG_PATH_CACHE . 'ssin');
@@ -25,8 +25,8 @@ class CONTROL_INSTALL_UI_SETUP {
         $this->setup_init();
     }
 
-    function ctrl_ext() {
-        $this->obj_tpl->tplDisplay('setup_ext', $this->tplData);
+    function ctrl_phplib() {
+        $this->obj_tpl->tplDisplay('setup_phplib', $this->tplData);
     }
 
 
@@ -39,7 +39,7 @@ class CONTROL_INSTALL_UI_SETUP {
         $this->check_db();
 
         if ($this->act == 'base') {
-            $this->tplData['tplRows']     = $this->obj_dir->list_dir(BG_PATH_TPL . 'my' . DS);
+            $this->tplData['tplRows']     = $this->obj_dir->list_dir(BG_PATH_TPL . 'personal' . DS);
 
             $_arr_timezoneRows  = fn_include(BG_PATH_INC . 'timezone.inc.php');
 
@@ -150,11 +150,11 @@ class CONTROL_INSTALL_UI_SETUP {
             $this->obj_tpl->tplDisplay('error', $_arr_tplData);
         }
 
-        $_arr_extRow      = get_loaded_extensions();
+        $_arr_phplibRow      = get_loaded_extensions();
         $this->errCount   = 0;
 
-        foreach ($this->obj_tpl->ext as $_key=>$_value) {
-            if (!in_array($_key, $_arr_extRow)) {
+        foreach ($this->obj_tpl->phplib as $_key=>$_value) {
+            if (!in_array($_key, $_arr_phplibRow)) {
                 $this->errCount++;
             }
         }
@@ -166,11 +166,11 @@ class CONTROL_INSTALL_UI_SETUP {
             $this->obj_tpl->tplDisplay('error', $_arr_tplData);
         }
 
-        $this->act = fn_getSafe($GLOBALS['act'], 'txt', 'ext');
+        $this->act = fn_getSafe($GLOBALS['route']['bg_act'], 'txt', 'phplib');
 
         $this->tplData = array(
             'errCount'      => $this->errCount,
-            'extRow'        => $_arr_extRow,
+            'phplibRow'        => $_arr_phplibRow,
             'act'           => $this->act,
             'setup_step'    => $this->setup_step($this->act),
         );

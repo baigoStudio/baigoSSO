@@ -35,7 +35,7 @@ return array(
 
     'setup'     => array(
         'outline'     => '安装概述',
-        'ext'         => '服务器环境检查',
+        'phplib'      => '服务器环境检查',
         'dbconfig'    => '数据库设置',
         'dbtable'     => '创建数据表',
         'base'        => '基本设置',
@@ -47,12 +47,13 @@ return array(
 
     'upgrade'     => array(
         'outline'     => '升级概述',
-        'ext'         => '服务器环境检查',
+        'phplib'      => '服务器环境检查',
         'dbconfig'    => '数据库设置',
         'dbtable'     => '升级数据库',
         'base'        => '基本设置',
         'reg'         => '注册设置',
         'smtp'        => '邮件发送设置',
+        'admin'       => '创建管理员',
         'over'        => '完成安装',
     ),
 
@@ -83,12 +84,12 @@ return array(
         'error'     => '提示信息',
         'reg'       => '注册',
         'forgot'    => '忘记密码',
-        'profile'   => '个人信息',
+        'profile'   => '个人资料',
     ),
 
     'api'     => array(
         'outline'       => 'API 接口概述',
-        'page'          => '分页参数',
+        'page'          => '分页',
         'code'          => '密文',
         'signature'     => '签名',
         'user'          => '用户接口',

@@ -21,7 +21,7 @@ $ctrl_pm = new CONTROL_CONSOLE_REQUEST_PM(); //初始化短信
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'send':
                 $ctrl_pm->ctrl_send(); //发送
             break;

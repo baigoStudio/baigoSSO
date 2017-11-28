@@ -1,7 +1,7 @@
                 </div>
                 <div class="panel-footer">
                     <ul class="bg-nav-line">
-                        <?php if (isset($cfg["active"]) && $cfg["active"] == "login") { ?>
+                        <?php if (isset($cfg['active']) && $cfg['active'] == 'login') { ?>
                             <li>
                                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=forgot"><?php echo $this->lang['mod']['href']['forgot']; ?></a>
                             </li>

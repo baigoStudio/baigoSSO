@@ -1,14 +1,15 @@
 <?php $cfg = array(
     'title'          => $this->lang['consoleMod']['user']['main']['title'],
-    'menu_active'    => "user",
+    'menu_active'    => 'user',
     'sub_active'     => 'list',
     'baigoCheckall'  => 'true',
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=user&act=list&" . $this->tplData['query']
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=user&act=list&' . $this->tplData['query']
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group clearfix">
@@ -86,20 +87,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->tplData['userRows'] as $key=>$value) {
-                            switch ($value['user_status']) {
-                                case 'enable':
-                                    $css_status = 'success';
-                                break;
-
-                                case "wait":
-                                    $css_status = 'warning';
-                                break;
-
-                                default:
-                                    $css_status = 'default';
-                                break;
-                            } ?>
+                        <?php foreach ($this->tplData['userRows'] as $key=>$value) { ?>
                             <tr>
                                 <td class="text-nowrap bg-td-xs"><input type="checkbox" name="user_ids[]" value="<?php echo $value['user_id']; ?>" id="user_id_<?php echo $value['user_id']; ?>" data-validate="user_id" data-parent="chk_all"></td>
                                 <td class="text-nowrap bg-td-xs"><?php echo $value['user_id']; ?></td>
@@ -112,14 +100,21 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                             } ?>
                                         </li>
                                         <li>
-                                            <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=form&user_id=<?php echo $value['user_id']; ?>"><?php echo $this->lang['mod']['href']['edit']; ?></a>
+                                            <ul class="bg-nav-line">
+                                                <li>
+                                                    <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=show&user_id=<?php echo $value['user_id']; ?>"><?php echo $this->lang['mod']['href']['show']; ?></a>
+                                                </li>
+                                                <li>
+                                                    <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=form&user_id=<?php echo $value['user_id']; ?>"><?php echo $this->lang['mod']['href']['edit']; ?></a>
+                                                </li>
+                                            </ul>
                                         </li>
                                     </ul>
                                 </td>
                                 <td class="text-nowrap bg-td-sm">
                                     <ul class="list-unstyled">
                                         <li>
-                                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$value['user_status']]; ?></span>
+                                            <?php user_status_process($value['user_status'], $this->lang['mod']['status']); ?>
                                         </li>
                                         <li><?php echo $value['user_note']; ?></li>
                                     </ul>

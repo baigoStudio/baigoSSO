@@ -17,10 +17,10 @@ $arr_set = array(
 $obj_runtime->run($arr_set);
 
 
-$ctrl_profile = new CONTROL_CONSOLE_REQUEST_PROFILE(); //初始化个人信息
+$ctrl_profile = new CONTROL_CONSOLE_REQUEST_PROFILE(); //初始化个人资料
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'mailbox':
                 $ctrl_profile->ctrl_mailbox(); //修改密保
             break;
@@ -34,7 +34,7 @@ switch ($GLOBALS['method']) {
             break;
 
             case 'info':
-                $ctrl_profile->ctrl_info(); //修改个人信息
+                $ctrl_profile->ctrl_info(); //修改个人资料
             break;
         }
     break;

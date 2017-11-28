@@ -3,8 +3,6 @@ define('IN_BAIGO', true);
 define('DS', DIRECTORY_SEPARATOR);
 
 class CLASS_CONFIG {
-    public $nameConfig  = 'config';
-
     function __construct() {
         $this->arr_config = array(
             'BG_DEBUG_SYS'           => array(
@@ -45,10 +43,6 @@ class CLASS_CONFIG {
             ),
             'BG_DEFAULT_UI'          => array(
                 'default'   => 'default',
-                'kind'      => 'str',
-            ),
-            'BG_NAME_CONFIG'         => array(
-                'default'   => $this->nameConfig,
                 'kind'      => 'str',
             ),
             'BG_NAME_TPL'            => array(
@@ -107,8 +101,8 @@ class CLASS_CONFIG {
                 'default'   => 'console',
                 'kind'      => 'str',
             ),
-            'BG_NAME_MY'             => array(
-                'default'   => 'my',
+            'BG_NAME_PERSONAL'             => array(
+                'default'   => 'personal',
                 'kind'      => 'str',
             ),
             'BG_NAME_MISC'           => array(
@@ -203,8 +197,8 @@ class CLASS_CONFIG {
                 'default'   => 'BG_URL_ROOT . BG_NAME_CONSOLE . \'/\'',
                 'kind'      => 'const',
             ),
-            'BG_URL_MY'              => array(
-                'default'   => 'BG_URL_ROOT . BG_NAME_MY . \'/\'',
+            'BG_URL_PERSONAL'              => array(
+                'default'   => 'BG_URL_ROOT . BG_NAME_PERSONAL . \'/\'',
                 'kind'      => 'const',
             ),
             'BG_URL_MISC'            => array(
@@ -251,7 +245,7 @@ class CLASS_CONFIG {
                 'kind'      => 'str',
             ),
             'BG_DB_TABLE' => array(
-                'default'   => 'cms_',
+                'default'   => 'sso_',
                 'kind'      => 'str',
             ),
         );
@@ -381,8 +375,8 @@ class CLASS_CONFIG {
                         'type'      => 'str',
                         'format'    => 'text',
                         'min'       => 1,
-                        'default'   => $this->rand(),
-                        'kind'      => 'const',
+                        'default'   => $this->rand(6),
+                        'kind'      => 'str',
                     ),
                 ),
             ),
@@ -491,7 +485,38 @@ class CLASS_CONFIG {
                         'type'       => 'str',
                         'format'     => 'text',
                         'min'        => 1,
-                        'default'    => 'smtp.\' . $_SERVER[\'SERVER_NAME\']',
+                        'default'    => 'smtp.' . $_SERVER['SERVER_NAME'],
+                        'kind'       => 'str',
+                    ),
+                    'BG_SMTP_TYPE' => array(
+                        'type'       => 'select',
+                        'format'     => 'text',
+                        'min'        => 1,
+                        'option' => array(
+                            'smtp'      => 'SMTP',
+                            'phpmail'   => 'Mail',
+                            'sendmail'  => 'Sendmail',
+                            'qmail'     => 'Qmail',
+                        ),
+                        'default'    => 'smtp',
+                        'kind'       => 'str',
+                    ),
+                    'BG_SMTP_SEC' => array(
+                        'type'       => 'radio',
+                        'format'     => 'text',
+                        'min'        => 1,
+                        'option' => array(
+                            'off'   => array(
+                                'value' => 'OFF',
+                            ),
+                            'tls'   => array(
+                                'value' => 'TLS',
+                            ),
+                            'ssl'   => array(
+                                'value' => 'SSL',
+                            ),
+                        ),
+                        'default'    => 'off',
                         'kind'       => 'str',
                     ),
                     'BG_SMTP_PORT' => array(
@@ -515,11 +540,33 @@ class CLASS_CONFIG {
                         'default' => 'true',
                         'kind'       => 'str',
                     ),
+
+                    'BG_SMTP_AUTHTYPE' => array(
+                        'type'   => 'radio',
+                        'min'    => 1,
+                        'option' => array(
+                            'login'   => array(
+                                'value'    => 'LOGIN'
+                            ),
+                            'plain'   => array(
+                                'value'    => 'PLAIN'
+                            ),
+                            'cram-md5'    => array(
+                                'value'    => 'CRAM-MD5'
+                            ),
+                            'xoauth2'   => array(
+                                'value'    => 'XOAUTH2'
+                            ),
+                        ),
+                        'default' => 'login',
+                        'kind'    => 'str',
+                    ),
+
                     'BG_SMTP_USER' => array(
                         'type'       => 'str',
                         'format'     => 'text',
                         'min'        => 1,
-                        'default'    => 'user@\' . $_SERVER[\'SERVER_NAME\']',
+                        'default'    => 'user@' . $_SERVER['SERVER_NAME'],
                         'kind'       => 'str',
                     ),
                     'BG_SMTP_PASS' => array(
@@ -533,14 +580,14 @@ class CLASS_CONFIG {
                         'type'       => 'str',
                         'format'     => 'text',
                         'min'        => 1,
-                        'default'    => 'noreply@\' . $_SERVER[\'SERVER_NAME\']',
+                        'default'    => 'noreply@' . $_SERVER['SERVER_NAME'],
                         'kind'       => 'str',
                     ),
                     'BG_SMTP_REPLY' => array(
                         'type'       => 'str',
                         'format'     => 'text',
                         'min'        => 1,
-                        'default'    => 'reply@\' . $_SERVER[\'SERVER_NAME\']',
+                        'default'    => 'reply@' . $_SERVER['SERVER_NAME'],
                         'kind'       => 'str',
                     ),
                 ),
@@ -579,7 +626,7 @@ class CLASS_CONFIG {
             if (defined('IS_INSTALL')) { //如果是安装状态，一一对比
                 $_str_configChk = file_get_contents(BG_PATH_CONFIG . $str_file . '.inc.php'); //将配置文件转换为变量
                 $_arr_config    = file(BG_PATH_CONFIG . $str_file . '.inc.php'); //将配置文件转换为数组
-                $_arr_config    = array_unique($_arr_config);
+                $_arr_config    = array_filter(array_unique($_arr_config));
 
                 foreach ($arr_configSrc as $_key_src=>$_value_src) {
                     if (!stristr($_str_configChk, $_key_src)) { //如不存在则加上
@@ -597,7 +644,7 @@ class CLASS_CONFIG {
                     $_str_config .= $_value_m;
                 }
 
-                $_str_config = preg_replace('/require\(\S+\s\.\s\"\S+\"\);\s*/i', '', $_str_config);
+                $_str_config = preg_replace('/(require_once|include_once|require|include)\(.*\);/i', '', $_str_config);
 
                 $_str_config = str_ireplace('?>', '', $_str_config); //去除旧版本配置文件的 php 结尾
 

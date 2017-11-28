@@ -26,7 +26,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn btn-primary"><?php echo $this->lang['mod']['btn']['stepNext']; ?></button>
+            <button type="submit" class="btn btn-primary"><?php echo $this->lang['mod']['btn']['next']; ?></button>
         </div>
     </form>
 

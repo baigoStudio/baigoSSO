@@ -5,16 +5,10 @@
                 <div class="form-control-static"><?php echo $this->tplData['adminLogged']['admin_id']; ?></div>
             </div>
 
-            <?php if ($this->tplData['adminLogged']['admin_status'] == 'enable') {
-                $css_status = 'success';
-            } else {
-                $css_status = 'default';
-            } ?>
-
             <div class="form-group">
                 <label class="control-label"><?php echo $this->lang['mod']['label']['status']; ?></label>
                 <div class="form-control-static">
-                    <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$this->tplData['adminLogged']['admin_status']]; ?></span>
+                    <?php admin_status_process($this->tplData['adminLogged']['admin_status'], $this->lang['mod']['status']); ?>
                 </div>
             </div>
 

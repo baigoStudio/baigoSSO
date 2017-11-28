@@ -1,11 +1,11 @@
 <?php $cfg = array(
-    'title'          => $this->lang['common']['page']['opt'] . ' &raquo; ' . $this->lang['common']['page']['dbConfig'],
+    'title'          => $this->lang['common']['page']['opt'] . ' &raquo; ' . $this->lang['common']['page']['dbconfig'],
     'menu_active'    => "opt",
     'sub_active'     => "dbconfig",
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=opt&act=dbconfig",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=opt&act=dbconfig',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -27,7 +27,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <?php include($cfg['pathInclude'] . "dbconfig.php"); ?>
+                <?php include($cfg['pathInclude'] . 'dbconfig.php'); ?>
                 <div class="bg-submit-box"></div>
             </div>
             <div class="panel-footer">

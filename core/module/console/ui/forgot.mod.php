@@ -19,7 +19,7 @@ $obj_runtime->run($arr_set);
 
 $ctrl_forgot = new CONTROL_CONSOLE_UI_FORGOT(); //初始化登录
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'step_2':
         $ctrl_forgot->ctrl_step_2(); //登出
     break;

@@ -7,6 +7,7 @@
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group">
@@ -14,7 +15,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=app&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
         </ul>
@@ -124,6 +125,36 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         </div>
                     </div>
                 </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <?php echo $this->lang['mod']['label']['belongUser']; ?>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-nowrap bg-td-xs"><?php echo $this->lang['mod']['label']['id']; ?></th>
+                                    <th><?php echo $this->lang['mod']['label']['user']; ?></th>
+                                    <th class="text-nowrap bg-td-md"><?php echo $this->lang['mod']['label']['status']; ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($this->tplData['userViews'] as $key=>$value) { ?>
+                                    <tr>
+                                        <td class="text-nowrap bg-td-xs"><?php echo $value['user_id']; ?></td>
+                                        <td>
+                                            <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=show&user_id=<?php echo $value['user_id']; ?>"><?php echo $value['user_name']; ?></a>
+                                        </td>
+                                        <td class="text-nowrap bg-td-md">
+                                            <?php user_status_process($value['user_status'], $this->lang['mod']['user']); ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-3">
@@ -133,29 +164,17 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         <div class="form-control-static"><?php echo $this->tplData['appRow']['app_id']; ?></div>
                     </div>
 
-                    <?php if ($this->tplData['appRow']['app_status'] == 'enable') {
-                        $css_status = 'success';
-                    } else {
-                        $css_status = 'default';
-                    } ?>
-
                     <div class="form-group">
                         <label class="control-label"><?php echo $this->lang['mod']['label']['status']; ?></label>
                         <div class="form-control-static">
-                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$this->tplData['appRow']['app_status']]; ?></span>
+                            <?php app_status_process($this->tplData['appRow']['app_status'], $this->lang['mod']['status']); ?>
                         </div>
                     </div>
-
-                    <?php if ($this->tplData['appRow']['app_sync'] == 'on') {
-                        $css_status = 'success';
-                    } else {
-                        $css_status = 'default';
-                    } ?>
 
                     <div class="form-group">
                         <label class="control-label"><?php echo $this->lang['mod']['label']['sync']; ?></label>
                         <div class="form-control-static">
-                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['sync'][$this->tplData['appRow']['app_sync']]; ?></span>
+                            <?php app_sync_process($this->tplData['appRow']['app_sync'], $this->lang['mod']['sync']); ?>
                         </div>
                     </div>
 

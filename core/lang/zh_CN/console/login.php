@@ -33,7 +33,6 @@ return array(
 
     'btn' => array(
         'login'     => '登录', //登录
-        'reload'    => '刷新',
         'seccode'   => '看不清',
     ),
 

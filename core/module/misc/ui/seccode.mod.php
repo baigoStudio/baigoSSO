@@ -10,9 +10,9 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"      => true,
-    "ssin"      => true, //启用会话
-    "db"        => true, //连接数据库
+    'base'      => true,
+    'ssin'      => true, //启用会话
+    'db'        => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 

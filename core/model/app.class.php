@@ -48,9 +48,9 @@ class MODEL_APP {
             'app_allow'         => 'varchar(3000) NOT NULL COMMENT \'权限\'',
         );
 
-        $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . 'app', $_arr_appCreate, 'app_id', '应用');
+        $_num_db = $this->obj_db->create_table(BG_DB_TABLE . 'app', $_arr_appCreate, 'app_id', '应用');
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y050105'; //更新成功
         } else {
             $_str_rcode = 'x050105'; //更新成功
@@ -167,9 +167,9 @@ class MODEL_APP {
             'app_key' => fn_rand(64),
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'app', $_arr_appData, '`app_id`=' . $num_appId); //更新数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'app', $_arr_appData, '`app_id`=' . $num_appId); //更新数据
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y050103'; //更新成功
         } else {
             return array(
@@ -227,8 +227,8 @@ class MODEL_APP {
         } else {
             $_str_appKey = '';
             $_num_appId  = $this->appInput['app_id'];
-            $_num_mysql  = $this->obj_db->update(BG_DB_TABLE . 'app', $_arr_appData, '`app_id`=' . $_num_appId); //更新数据
-            if ($_num_mysql > 0) {
+            $_num_db  = $this->obj_db->update(BG_DB_TABLE . 'app', $_arr_appData, '`app_id`=' . $_num_appId); //更新数据
+            if ($_num_db > 0) {
                 $_str_rcode = 'y050103'; //更新成功
             } else {
                 return array(
@@ -260,10 +260,10 @@ class MODEL_APP {
             'app_status' => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'app', $_arr_appUpdate, '`app_id` IN (' . $_str_appId . ')'); //删除数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'app', $_arr_appUpdate, '`app_id` IN (' . $_str_appId . ')'); //删除数据
 
         //如影响行数大于0则返回成功
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y050103'; //成功
         } else {
             $_str_rcode = 'x050103'; //失败
@@ -397,10 +397,10 @@ class MODEL_APP {
     function mdl_del() {
         $_str_appId = implode(',', $this->appIds['app_ids']);
 
-        $_num_mysql = $this->obj_db->delete(BG_DB_TABLE . 'app', '`app_id` IN (' . $_str_appId . ')'); //删除数据
+        $_num_db = $this->obj_db->delete(BG_DB_TABLE . 'app', '`app_id` IN (' . $_str_appId . ')'); //删除数据
 
         //如车影响行数小于0则返回错误
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y050104'; //成功
         } else {
             $_str_rcode = 'x050104'; //失败
@@ -808,7 +808,7 @@ class MODEL_APP {
 
         $this->appIds = array(
             'rcode'     => $_str_rcode,
-            'app_ids'   => array_unique($_arr_appIds),
+            'app_ids'   => array_filter(array_unique($_arr_appIds)),
         );
 
         return $this->appIds;
@@ -823,7 +823,7 @@ class MODEL_APP {
      * @return void
      */
     private function sql_process($arr_search = array()) {
-        $_str_sqlWhere = '1=1';
+        $_str_sqlWhere = '1';
 
         if (isset($arr_search['key']) && !fn_isEmpty($arr_search['key'])) {
             $_str_sqlWhere .= ' AND (`app_name` LIKE \'%' . $arr_search['key'] . '%\' OR `app_note` LIKE \'%' . $arr_search['key'] . '%\')';

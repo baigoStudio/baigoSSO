@@ -19,14 +19,14 @@ class CONTROL_CONSOLE_REQUEST_OPT {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->dspType = 'result';
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->dspType = 'result';
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->tplData = array(
             'adminLogged' => $this->adminLogged
@@ -36,7 +36,7 @@ class CONTROL_CONSOLE_REQUEST_OPT {
             $this->is_super = true;
         }
 
-        $this->act = fn_getSafe($GLOBALS['act'], "text", "base");
+        $this->act = fn_getSafe($GLOBALS['route']['bg_act'], 'text', 'base');
 
         $this->mdl_opt          = new MODEL_OPT(); //设置管理组模型
     }
@@ -45,24 +45,24 @@ class CONTROL_CONSOLE_REQUEST_OPT {
     function ctrl_chkver() {
         if (!isset($this->adminLogged['admin_allow']['opt']['chkver']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode' => "x040301",
+                'rcode' => 'x040301',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $this->mdl_opt->chk_ver(true, "manual");
+        $this->mdl_opt->chk_ver(true, 'manual');
 
         $_arr_tplData = array(
-            'rcode' => "y040402",
+            'rcode' => 'y040402',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }
 
 
     function ctrl_dbconfig() {
-        if (!isset($this->adminLogged['admin_allow']['opt']["dbconfig"]) && !$this->is_super) {
+        if (!isset($this->adminLogged['admin_allow']['opt']['dbconfig']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode' => "x040301",
+                'rcode' => 'x040301',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -82,7 +82,7 @@ class CONTROL_CONSOLE_REQUEST_OPT {
     function ctrl_submit() {
         if (!isset($this->adminLogged['admin_allow']['opt'][$this->act]) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode' => "x040301",
+                'rcode' => 'x040301',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -101,19 +101,19 @@ class CONTROL_CONSOLE_REQUEST_OPT {
 
         if ($_num_countInput < $_num_countSrc) {
             $_arr_tplData = array(
-                'rcode' => "x030204",
+                'rcode' => 'x030204',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_return = $this->mdl_opt->mdl_const($this->act);
 
-        if ($_arr_return['rcode'] != "y040101") {
+        if ($_arr_return['rcode'] != 'y040101') {
             $this->obj_tpl->tplDisplay('result', $_arr_return);
         }
 
         $_arr_tplData = array(
-            'rcode' => "y040401",
+            'rcode' => 'y040401',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }

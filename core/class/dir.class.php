@@ -36,7 +36,9 @@ class CLASS_DIR {
                 }
             }
 
-            rmdir($str_path);
+            if (is_dir($str_path)) {
+                rmdir($str_path);
+            }
         }
     }
 

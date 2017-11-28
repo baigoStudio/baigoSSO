@@ -21,7 +21,7 @@ $ctrl_app = new CONTROL_CONSOLE_REQUEST_APP(); //初始化应用
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'auth':
                 $ctrl_app->ctrl_auth(); //授权用户
             break;

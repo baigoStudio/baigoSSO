@@ -7,7 +7,7 @@
     'baigoSubmit'    => 'true',
     'datetimepicker' => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=pm",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=pm',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -17,7 +17,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=pm&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
             <li>
@@ -37,7 +37,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <div class="panel-body">
                 <div class="form-group">
                     <div id="group_pm_bulk_type">
-                        <label class="control-label"><?php echo $this->lang['mod']['label']["pmBulkType"]; ?><span id="msg_pm_bulk_type">*</span></label>
+                        <label class="control-label"><?php echo $this->lang['mod']['label']['pmBulkType']; ?><span id="msg_pm_bulk_type">*</span></label>
                         <select name="pm_bulk_type" id="pm_bulk_type" data-validate class="form-control">
                             <option value="bulkUsers"><?php echo $this->lang['mod']['option']['bulkUsers']; ?></option>
                             <option value="bulkKeyName"><?php echo $this->lang['mod']['option']['bulkKeyName']; ?></option>
@@ -54,7 +54,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         <div id="group_pm_to_users">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['pmTo']; ?><span id="msg_pm_to_users">*</span></label>
                             <input type="text" name="pm_to_users" id="pm_to_users" data-validate class="form-control">
-                            <span class="help-block"><?php echo $this->lang['mod']['label']["toNote"]; ?></span>
+                            <span class="help-block"><?php echo $this->lang['mod']['label']['toNote']; ?></span>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         <div id="group_pm_to_key_mail">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['key']; ?><span id="msg_pm_to_key_mail">*</span></label>
                             <input type="text" name="pm_to_key_mail" id="pm_to_key_mail" data-validate class="form-control">
-                            <span class="help-block"><?php echo $this->lang['mod']['label']["keyMailNote"]; ?></span>
+                            <span class="help-block"><?php echo $this->lang['mod']['label']['keyMailNote']; ?></span>
                         </div>
                     </div>
 
@@ -106,7 +106,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 <span class="input-group-addon bg-input-range"><?php echo $this->lang['mod']['label']['to']; ?></span>
                                 <input type="text" name="pm_to_end_login" id="pm_to_end_login" data-validate class="form-control input_date" value="<?php echo date(BG_SITE_DATE . ' ' . BG_SITE_TIME, $this->tplData['end_time']); ?>">
                             </div>
-                            <span class="help-block"><?php echo $this->lang['mod']['label']["rangeLoginNote"]; ?></span>
+                            <span class="help-block"><?php echo $this->lang['mod']['label']['rangeLoginNote']; ?></span>
                         </div>
                     </div>
                 </div>
@@ -142,62 +142,62 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         pm_title: {
             len: { min: 0, max: 90 },
             validate: { type: "str", format: "text", group: "#group_pm_title" },
-            msg: { selector: "#msg_pm_title", too_long: "<?php echo $this->lang['rcode']["x110202"]; ?>" }
+            msg: { selector: "#msg_pm_title", too_long: "<?php echo $this->lang['rcode']['x110202']; ?>" }
         },
         pm_content: {
             len: { min: 1, max: 900 },
             validate: { type: "str", format: "text", group: "#group_pm_content" },
-            msg: { selector: "#msg_pm_content", too_short: "<?php echo $this->lang['rcode']["x110201"]; ?>", too_long: "<?php echo $this->lang['rcode']["x110203"]; ?>" }
+            msg: { selector: "#msg_pm_content", too_short: "<?php echo $this->lang['rcode']['x110201']; ?>", too_long: "<?php echo $this->lang['rcode']['x110203']; ?>" }
         },
         pm_bulk_type: {
             len: { min: 1, max: 0 },
             validate: { type: "select", group: "#group_pm_bulk_type" },
-            msg: { selector: "#msg_pm_bulk_type", too_short: "<?php echo $this->lang['rcode']["x110204"]; ?>" }
+            msg: { selector: "#msg_pm_bulk_type", too_short: "<?php echo $this->lang['rcode']['x110204']; ?>" }
         },
         pm_to_users: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_pm_to_users" },
-            msg: { selector: "#msg_pm_to_users", too_short: "<?php echo $this->lang['rcode']["x110205"]; ?>" }
+            msg: { selector: "#msg_pm_to_users", too_short: "<?php echo $this->lang['rcode']['x110205']; ?>" }
         },
         pm_to_key_name: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_pm_to_key_name" },
-            msg: { selector: "#msg_pm_to_key_name", too_short: "<?php echo $this->lang['rcode']["x110206"]; ?>" }
+            msg: { selector: "#msg_pm_to_key_name", too_short: "<?php echo $this->lang['rcode']['x110206']; ?>" }
         },
         pm_to_key_mail: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_pm_to_key_mail" },
-            msg: { selector: "#msg_pm_to_key_mail", too_short: "<?php echo $this->lang['rcode']["x110207"]; ?>" }
+            msg: { selector: "#msg_pm_to_key_mail", too_short: "<?php echo $this->lang['rcode']['x110207']; ?>" }
         },
         pm_to_min_id: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "int", group: "#pm_to_min_id" },
-            msg: { selector: "#msg_pm_to_min_id", too_short: "<?php echo $this->lang['rcode']["x110208"]; ?>", format_err: "<?php echo $this->lang['rcode']["x110209"]; ?>" }
+            msg: { selector: "#msg_pm_to_min_id", too_short: "<?php echo $this->lang['rcode']['x110208']; ?>", format_err: "<?php echo $this->lang['rcode']['x110209']; ?>" }
         },
         pm_to_max_id: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "int", group: "#pm_to_max_id" },
-            msg: { selector: "#msg_pm_to_max_id", too_short: "<?php echo $this->lang['rcode']["x110210"]; ?>", format_err: "<?php echo $this->lang['rcode']["x110209"]; ?>" }
+            msg: { selector: "#msg_pm_to_max_id", too_short: "<?php echo $this->lang['rcode']['x110210']; ?>", format_err: "<?php echo $this->lang['rcode']['x110209']; ?>" }
         },
         pm_to_begin_time: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "datetime", group: "#pm_to_begin_time" },
-            msg: { selector: "#msg_pm_to_begin_time", too_short: "<?php echo $this->lang['rcode']["x110212"]; ?>", format_err: "<?php echo $this->lang['rcode']["x110213"]; ?>" }
+            msg: { selector: "#msg_pm_to_begin_time", too_short: "<?php echo $this->lang['rcode']['x110212']; ?>", format_err: "<?php echo $this->lang['rcode']['x110213']; ?>" }
         },
         pm_to_end_time: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "datetime", group: "#pm_to_end_time" },
-            msg: { selector: "#msg_pm_to_end_time", too_short: "<?php echo $this->lang['rcode']["x110214"]; ?>", format_err: "<?php echo $this->lang['rcode']["x110213"]; ?>" }
+            msg: { selector: "#msg_pm_to_end_time", too_short: "<?php echo $this->lang['rcode']['x110214']; ?>", format_err: "<?php echo $this->lang['rcode']['x110213']; ?>" }
         },
         pm_to_begin_login: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "datetime", group: "#pm_to_begin_login" },
-            msg: { selector: "#msg_pm_to_begin_login", too_short: "<?php echo $this->lang['rcode']["x110215"]; ?>", format_err: "<?php echo $this->lang['rcode']["x110216"]; ?>" }
+            msg: { selector: "#msg_pm_to_begin_login", too_short: "<?php echo $this->lang['rcode']['x110215']; ?>", format_err: "<?php echo $this->lang['rcode']['x110216']; ?>" }
         },
         pm_to_end_login: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "datetime", group: "#pm_to_end_login" },
-            msg: { selector: "#msg_pm_to_end_login", too_short: "<?php echo $this->lang['rcode']["x110217"]; ?>", format_err: "<?php echo $this->lang['rcode']["x110216"]; ?>" }
+            msg: { selector: "#msg_pm_to_end_login", too_short: "<?php echo $this->lang['rcode']['x110217']; ?>", format_err: "<?php echo $this->lang['rcode']['x110216']; ?>" }
         }
     };
 

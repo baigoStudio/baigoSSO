@@ -10,33 +10,33 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"          => true, //基本设置
-    "db"            => true, //连接数据库
+    'base'          => true, //基本设置
+    'db'            => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
-
 $ctrl_profile = new CONTROL_API_API_PROFILE(); //初始化用户
-switch ($GLOBALS["method"]) {
+
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "qa":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'qa':
                 $ctrl_profile->ctrl_qa();
             break;
 
-            case "info":
+            case 'info':
                 $ctrl_profile->ctrl_info(); //编辑
             break;
 
-            case "pass":
+            case 'pass':
                 $ctrl_profile->ctrl_pass(); //忘记密码
             break;
 
-            case "token":
+            case 'token':
                 $ctrl_profile->ctrl_token(); //删除
             break;
 
-            case "mailbox":
+            case 'mailbox':
                 $ctrl_profile->ctrl_mailbox(); //删除
             break;
         }

@@ -30,7 +30,6 @@ return array(
         'key'               => '关键词',
         'unknow'            => '未知',
         'status'            => '状态',
-        'expired'           => '过期',
         'operator'          => '操作者',
         'timeInit'          => '发起时间',
         'timeExpired'       => '过期时间',
@@ -38,8 +37,9 @@ return array(
     ),
 
     'status' => array(
-        'enable'  => '有效', //生效
-        'disable' => '失效', //禁用
+        'enable'    => '有效', //生效
+        'disable'   => '失效', //禁用
+        'expired'   => '过期',
     ),
 
     'type' => array(

@@ -19,7 +19,6 @@ return array(
     /*------链接文字------*/
     'href'             => array(
         'all'             => '全部',
-        'back'            => '返回',
         'help'            => '帮助',
         'pmSend'          => '发短信',
         'pmBulk'          => '群发',

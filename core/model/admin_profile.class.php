@@ -22,7 +22,7 @@ class MODEL_ADMIN_PROFILE extends MODEL_ADMIN {
         $this->obj_db = $GLOBALS['obj_db']; //设置数据库对象
     }
 
-    /** 修改个人信息
+    /** 修改个人资料
      * mdl_info function.
      *
      * @access public
@@ -35,8 +35,8 @@ class MODEL_ADMIN_PROFILE extends MODEL_ADMIN {
         );
 
         $_num_adminId = $num_adminId;
-        $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . 'admin', $_arr_adminData, '`admin_id`=' . $_num_adminId); //更新数据
-        if ($_num_mysql > 0) {
+        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'admin', $_arr_adminData, '`admin_id`=' . $_num_adminId); //更新数据
+        if ($_num_db > 0) {
             $_str_rcode = 'y020108'; //更新成功
         } else {
             return array(
@@ -51,7 +51,7 @@ class MODEL_ADMIN_PROFILE extends MODEL_ADMIN {
     }
 
 
-    /** 修改个人信息表单验证
+    /** 修改个人资料表单验证
      * input_info function.
      *
      * @access public

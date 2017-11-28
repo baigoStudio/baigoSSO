@@ -1,3 +1,5 @@
+<?php include($cfg['pathInclude'] . 'function.php'); ?>
+
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <?php echo $this->lang['consoleMod']['verify']['main']['title'] . ' &raquo; ' . $this->lang['mod']['page']['show']; ?>
@@ -9,27 +11,11 @@
         <div class="form-control-static"><?php echo $this->tplData['verifyRow']['verify_id']; ?></div>
     </div>
 
-    <?php switch ($this->tplData['verifyRow']['verify_status']) {
-        case 'enable':
-            $css_status = 'success';
-            $str_status = $this->lang['mod']['status'][$this->tplData['verifyRow']['verify_status']];
-        break;
-
-        case 'expired':
-            $css_status = 'default';
-            $str_status = $this->lang['mod']['label']['expired'];
-        break;
-
-        default:
-            $css_status = 'default';
-            $str_status = $this->lang['mod']['status'][$this->tplData['verifyRow']['verify_status']];
-        break;
-    } ?>
-
     <div class="form-group">
         <label class="control-label"><?php echo $this->lang['mod']['label']['status']; ?></label>
         <div class="form-control-static">
             <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $str_status; ?></span>
+            <?php verify_status_process($this->tplData['verifyRow']['verify_status'], $this->lang['mod']['status']); ?>
         </div>
     </div>
 

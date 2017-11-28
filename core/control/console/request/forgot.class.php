@@ -17,11 +17,11 @@ class CONTROL_CONSOLE_REQUEST_FORGOT {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->dspType = 'result';
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->dspType = 'result';
+        $this->general_console->chk_install();
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->mdl_admin_forgot = new MODEL_ADMIN_FORGOT(); //设置管理员模型
         $this->mdl_user_profile = new MODEL_USER_PROFILE(); //设置管理员模型
@@ -37,7 +37,7 @@ class CONTROL_CONSOLE_REQUEST_FORGOT {
             $this->obj_tpl->tplDisplay('result', $_arr_bymailInput);
         }
 
-        $_arr_userRow = $this->mdl_user_profile->mdl_read($_arr_bymailInput['admin_name'], "user_name");
+        $_arr_userRow = $this->mdl_user_profile->mdl_read($_arr_bymailInput['admin_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
             $this->obj_tpl->tplDisplay('result', $_arr_userRow);
         }
@@ -56,20 +56,20 @@ class CONTROL_CONSOLE_REQUEST_FORGOT {
 
         if ($_arr_adminRow['admin_status'] == 'disable') {
             $_arr_tplData = array(
-                'rcode'     => "x020402",
+                'rcode'     => 'x020402',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_returnRow    = $this->mdl_verify->mdl_submit($_arr_userRow['user_id'], $_arr_userRow['user_mail'], 'forgot');
-        if ($_arr_returnRow['rcode'] != 'y120101' && $_arr_returnRow['rcode'] != "y120103") {
+        if ($_arr_returnRow['rcode'] != 'y120101' && $_arr_returnRow['rcode'] != 'y120103') {
             $_arr_tplData = array(
                 'rcode'     => 'x010408',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_str_verifyUrl = BG_SITE_URL . BG_URL_MY . "index.php?mod=forgot&act=bymail&verify_id=" . $_arr_returnRow['verify_id'] . "&verify_token=" . $_arr_returnRow['verify_token'];
+        $_str_verifyUrl = BG_SITE_URL . BG_URL_PERSONAL . 'index.php?mod=forgot&act=bymail&verify_id=' . $_arr_returnRow['verify_id'] . '&verify_token=' . $_arr_returnRow['verify_token'];
         $_str_url       = '<a href="' . $_str_verifyUrl . '">' . $_str_verifyUrl . '</a>';
         $_str_html      = str_ireplace('{verify_url}', $_str_url, $_arr_mailContent['forgot']['content']);
         $_str_html      = str_ireplace('{user_name}', $_arr_userRow['user_name'], $_str_html);
@@ -98,7 +98,7 @@ class CONTROL_CONSOLE_REQUEST_FORGOT {
             $this->obj_tpl->tplDisplay('result', $_arr_byqaInput);
         }
 
-        $_arr_userRow = $this->mdl_user_profile->mdl_read($_arr_byqaInput['admin_name'], "user_name");
+        $_arr_userRow = $this->mdl_user_profile->mdl_read($_arr_byqaInput['admin_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
             $this->obj_tpl->tplDisplay('result', $_arr_userRow);
         }
@@ -117,13 +117,13 @@ class CONTROL_CONSOLE_REQUEST_FORGOT {
 
         if ($_arr_adminRow['admin_status'] == 'disable') {
             $_arr_tplData = array(
-                'rcode'     => "x020402",
+                'rcode'     => 'x020402',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            $_str_sec_answ = fn_baigoCrypt($_arr_byqaInput["admin_sec_answ_" . $_iii], $_arr_userRow['user_name']);
+            $_str_sec_answ = fn_baigoCrypt($_arr_byqaInput['admin_sec_answ_' . $_iii], $_arr_userRow['user_name']);
             if ($_str_sec_answ != $_arr_userRow['user_sec_answ_' . $_iii]) {
                 $_arr_tplData = array(
                     'rcode'     => 'x010245',
@@ -132,7 +132,7 @@ class CONTROL_CONSOLE_REQUEST_FORGOT {
             }
         }
 
-        $_str_userPass  = fn_baigoCrypt($_arr_byqaInput["admin_pass_new"], $_arr_userRow['user_name']);
+        $_str_userPass  = fn_baigoCrypt($_arr_byqaInput['admin_pass_new'], $_arr_userRow['user_name']);
         $_arr_userRow   = $this->mdl_user_profile->mdl_pass($_arr_userRow['user_id'], $_str_userPass);
 
         $this->obj_tpl->tplDisplay('result', $_arr_userRow);

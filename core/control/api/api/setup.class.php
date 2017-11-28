@@ -13,54 +13,48 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_API_API_SETUP {
 
     function __construct() { //构造函数
-        $this->config   = $GLOBALS['obj_base']->config;
-
-        $this->obj_api      = new CLASS_API(true);
+        $this->general_api      = new GENERAL_API(true);
 
         //本接口只在安装状态下起作用
         if (file_exists(BG_PATH_CONFIG . 'installed.php')) { //如果新文件存在
             $_arr_return = array(
-                'rcode' => "x030403"
+                'rcode' => 'x030403'
             );
-            $this->obj_api->show_result($_arr_return);
+            $this->general_api->show_result($_arr_return);
         } else if (file_exists(BG_PATH_CONFIG . 'is_install.php')) { //如果旧文件存在
             $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             $_arr_return = array(
-                'rcode' => "x030403"
+                'rcode' => 'x030403'
             );
-            $this->obj_api->show_result($_arr_return);
+            $this->general_api->show_result($_arr_return);
         }
 
         $this->mdl_opt      = new MODEL_OPT();
 
         $this->setup_init();
-
-        $this->allow    = fn_include(BG_PATH_INC . DS . 'allow.inc.php'); //载入权限文件
-        $this->ext      = fn_include(BG_PATH_INC . DS . 'php_lib.inc.php');
-        $this->opt      = fn_include(BG_PATH_INC . DS . 'opt.inc.php');
     }
 
 
     function ctrl_dbconfig() {
         $_arr_dbconfigInput = $this->mdl_opt->input_dbconfig(false);
         if ($_arr_dbconfigInput['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_dbconfigInput);
+            $this->general_api->show_result($_arr_dbconfigInput);
         }
 
         $_arr_return = $this->mdl_opt->mdl_dbconfig();
 
-        $this->obj_api->show_result($_arr_return);
+        $this->general_api->show_result($_arr_return);
     }
 
 
     function ctrl_submit() {
-        $_act = fn_getSafe($GLOBALS['act'], 'txt', 'base');
+        $_act = fn_getSafe($GLOBALS['route']['bg_act'], 'txt', 'base');
 
         $this->check_db();
 
         $_num_countSrc = 0;
 
-        foreach ($this->obj_api->opt[$_act]['list'] as $_key=>$_value) {
+        foreach ($this->general_api->opt[$_act]['list'] as $_key=>$_value) {
             if ($_value['min'] > 0) {
                 $_num_countSrc++;
             }
@@ -72,14 +66,14 @@ class CONTROL_API_API_SETUP {
 
         if ($_num_countInput < $_num_countSrc) {
             $_arr_return = array(
-                'rcode' => "x030204"
+                'rcode' => 'x030204'
             );
-            $this->obj_api->show_result($_arr_return);
+            $this->general_api->show_result($_arr_return);
         }
 
         $_arr_return = $this->mdl_opt->mdl_const($_act);
 
-        $this->obj_api->show_result($_arr_return);
+        $this->general_api->show_result($_arr_return);
     }
 
 
@@ -98,7 +92,7 @@ class CONTROL_API_API_SETUP {
         $_arr_return = array(
             'rcode' => 'y030108'
         );
-        $this->obj_api->show_result($_arr_return);
+        $this->general_api->show_result($_arr_return);
     }
 
 
@@ -110,11 +104,11 @@ class CONTROL_API_API_SETUP {
 
         $_arr_adminInput  = $_mdl_admin_install->input_install_api();
         if ($_arr_adminInput['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_adminInput);
+            $this->general_api->show_result($_arr_adminInput);
         }
 
         //检验用户名是否重复
-        $_arr_userRow = $_mdl_user_api->mdl_read($_arr_adminInput['admin_name'], "user_name");
+        $_arr_userRow = $_mdl_user_api->mdl_read($_arr_adminInput['admin_name'], 'user_name');
 
         if ($_arr_userRow['rcode'] == 'y010102') {
             $_arr_adminRow = $_mdl_admin_install->mdl_read($_arr_userRow['user_id']);
@@ -122,12 +116,12 @@ class CONTROL_API_API_SETUP {
                 $_arr_tplData = array(
                     'rcode' => 'x020205',
                 );
-                $this->obj_api->show_result($_arr_tplData);
+                $this->general_api->show_result($_arr_tplData);
             } else {
                 $_arr_tplData = array(
                     'rcode' => 'x020206',
                 );
-                $this->obj_api->show_result($_arr_tplData);
+                $this->general_api->show_result($_arr_tplData);
             }
         }
 
@@ -142,7 +136,7 @@ class CONTROL_API_API_SETUP {
         $_arr_userRow     = $_mdl_user_api->mdl_reg($_arr_userSubmit);
 
         if ($_arr_userRow['rcode'] != 'y010101') {
-            $this->obj_api->show_result($_arr_userRow);
+            $this->general_api->show_result($_arr_userRow);
         }
 
         $_arr_adminInput['admin_id']    = $_arr_userRow['user_id'];
@@ -152,7 +146,7 @@ class CONTROL_API_API_SETUP {
         $_arr_adminReturn['user_id']    = $_arr_userRow['user_id'];
         $_arr_adminReturn['rcode']      = $_arr_userRow['rcode'];
 
-        $this->obj_api->show_result($_arr_adminReturn);
+        $this->general_api->show_result($_arr_adminReturn);
     }
 
 
@@ -164,12 +158,12 @@ class CONTROL_API_API_SETUP {
         $_arr_return = $this->mdl_opt->mdl_over();
 
         if ($_arr_return['rcode'] != 'y030405') {
-            $this->obj_api->show_result($_arr_return);
+            $this->general_api->show_result($_arr_return);
         }
 
-        $this->appRecord['sso_url']   = BG_SITE_URL . BG_URL_API . "api.php";
+        $this->appRecord['sso_url']   = BG_SITE_URL . BG_URL_API . 'api.php';
         $this->appRecord['rcode']     = 'y030408';
-        $this->obj_api->show_result($this->appRecord);
+        $this->general_api->show_result($this->appRecord);
     }
 
 
@@ -178,7 +172,7 @@ class CONTROL_API_API_SETUP {
         $_arr_adminTable            = $_mdl_admin->mdl_create_table();
 
         if ($_arr_adminTable['rcode'] != 'y020105') {
-            $this->obj_api->show_result($_arr_adminTable);
+            $this->general_api->show_result($_arr_adminTable);
         }
     }
 
@@ -187,8 +181,8 @@ class CONTROL_API_API_SETUP {
         $_mdl_user              = new MODEL_USER();
         $_arr_userTable         = $_mdl_user->mdl_create_table();
 
-        if ($_arr_userTable['rcode'] != "y010105") {
-            $this->obj_api->show_result($_arr_userTable);
+        if ($_arr_userTable['rcode'] != 'y010105') {
+            $this->general_api->show_result($_arr_userTable);
         }
     }
 
@@ -197,8 +191,8 @@ class CONTROL_API_API_SETUP {
         $_mdl_app               = new MODEL_APP();
         $_arr_appTable          = $_mdl_app->mdl_create_table();
 
-        if ($_arr_appTable['rcode'] != "y050105") {
-            $this->obj_api->show_result($_arr_appTable);
+        if ($_arr_appTable['rcode'] != 'y050105') {
+            $this->general_api->show_result($_arr_appTable);
         }
     }
 
@@ -207,8 +201,8 @@ class CONTROL_API_API_SETUP {
         $_mdl_belong       = new MODEL_BELONG();
         $_arr_belongTable  = $_mdl_belong->mdl_create_table();
 
-        if ($_arr_belongTable['rcode'] != "y070105") {
-            $this->obj_api->show_result($_arr_belongTable);
+        if ($_arr_belongTable['rcode'] != 'y070105') {
+            $this->general_api->show_result($_arr_belongTable);
         }
     }
 
@@ -217,9 +211,9 @@ class CONTROL_API_API_SETUP {
         $_mdl_session         = new MODEL_SESSION();
         $_arr_sessionTable    = $_mdl_session->mdl_create_table();
 
-        $this->tplData["db_rcode"]["session_table"] = array(
-            "rcode"   => $_arr_sessionTable['rcode'],
-            "status"  => substr($_arr_sessionTable['rcode'], 0, 1),
+        $this->tplData['db_rcode']['session_table'] = array(
+            'rcode'   => $_arr_sessionTable['rcode'],
+            'status'  => substr($_arr_sessionTable['rcode'], 0, 1),
         );
     }
 
@@ -228,9 +222,9 @@ class CONTROL_API_API_SETUP {
         $_mdl_verify                = new MODEL_VERIFY();
         $_arr_verifyTable           = $_mdl_verify->mdl_create_table();
 
-        $this->tplData["db_rcode"]["verify_table"] = array(
-            "rcode"   => $_arr_verifyTable['rcode'],
-            "status"  => substr($_arr_verifyTable['rcode'], 0, 1),
+        $this->tplData['db_rcode']['verify_table'] = array(
+            'rcode'   => $_arr_verifyTable['rcode'],
+            'status'  => substr($_arr_verifyTable['rcode'], 0, 1),
         );
     }
 
@@ -239,9 +233,9 @@ class CONTROL_API_API_SETUP {
         $_mdl_pm            = new MODEL_PM();
         $_arr_pmTable       = $_mdl_pm->mdl_create_table();
 
-        $this->tplData["db_rcode"]["pm_table"] = array(
-            "rcode"   => $_arr_pmTable['rcode'],
-            "status"  => substr($_arr_pmTable['rcode'], 0, 1),
+        $this->tplData['db_rcode']['pm_table'] = array(
+            'rcode'   => $_arr_pmTable['rcode'],
+            'status'  => substr($_arr_pmTable['rcode'], 0, 1),
         );
     }
 
@@ -250,8 +244,8 @@ class CONTROL_API_API_SETUP {
         $_mdl_user        = new MODEL_USER();
         $_arr_userView    = $_mdl_user->mdl_create_view();
 
-        if ($_arr_userView['rcode'] != "y010108") {
-            $this->obj_api->show_result($_arr_userView);
+        if ($_arr_userView['rcode'] != 'y010108') {
+            $this->general_api->show_result($_arr_userView);
         }
     }
 
@@ -260,10 +254,10 @@ class CONTROL_API_API_SETUP {
         $_arr_appInputApi   = $_mdl_app->input_setup();
 
         if ($_arr_appInputApi['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_appInputApi);
+            $this->general_api->show_result($_arr_appInputApi);
         }
 
-        foreach ($this->obj_api->allow as $_key=>$_value) {
+        foreach ($this->general_api->allow as $_key=>$_value) {
             foreach ($_value as $_key_sub=>$_value_sub) {
                 $_arr_appAllow[$_key][$_key_sub] = 1;
             }
@@ -273,8 +267,8 @@ class CONTROL_API_API_SETUP {
 
         $this->appRecord    = $_mdl_app->mdl_submit($_str_appAllow);
 
-        if ($this->appRecord['rcode'] != "y050101") {
-            $this->obj_api->show_result($this->appRecord);
+        if ($this->appRecord['rcode'] != 'y050101') {
+            $this->general_api->show_result($this->appRecord);
         }
     }
 
@@ -282,9 +276,9 @@ class CONTROL_API_API_SETUP {
     private function check_db() {
         if (fn_isEmpty(BG_DB_HOST) || fn_isEmpty(BG_DB_NAME) || fn_isEmpty(BG_DB_USER) || fn_isEmpty(BG_DB_PASS) || fn_isEmpty(BG_DB_CHARSET)) {
             $_arr_return = array(
-                'rcode' => "x030404"
+                'rcode' => 'x030404'
             );
-            $this->obj_api->show_result($_arr_return);
+            $this->general_api->show_result($_arr_return);
         }
     }
 
@@ -294,38 +288,38 @@ class CONTROL_API_API_SETUP {
 
         if (file_exists(BG_PATH_CONFIG . 'installed.php')) { //如果新文件存在
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
-            $_str_rcode = "x030403";
+            $_str_rcode = 'x030403';
         } else if (file_exists(BG_PATH_CONFIG . 'is_install.php')) { //如果旧文件存在
             $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
-            $_str_rcode = "x030403";
+            $_str_rcode = 'x030403';
         }
 
-        if (defined("BG_INSTALL_PUB") && PRD_SSO_PUB > BG_INSTALL_PUB) {
-            $_str_rcode = "x030411";
+        if (defined('BG_INSTALL_PUB') && PRD_SSO_PUB > BG_INSTALL_PUB) {
+            $_str_rcode = 'x030411';
         }
 
         if (!fn_isEmpty($_str_rcode)) {
             $_arr_tplData = array(
                 'rcode' => $_str_rcode,
             );
-            $this->obj_api->show_result($_arr_tplData);
+            $this->general_api->show_result($_arr_tplData);
         }
 
-        $_arr_extRow     = get_loaded_extensions();
+        $_arr_phplibRow     = get_loaded_extensions();
         $_num_errCount   = 0;
 
-        foreach ($this->obj_api->ext as $_key=>$_value) {
-            if (!in_array($_key, $_arr_extRow)) {
+        foreach ($this->general_api->phplib as $_key=>$_value) {
+            if (!in_array($_key, $_arr_phplibRow)) {
                 $_num_errCount++;
             }
         }
 
         if ($_num_errCount > 0) {
             $_arr_return = array(
-                'rcode' => "x030417"
+                'rcode' => 'x030417'
             );
-            $this->obj_api->show_result($_arr_return);
+            $this->general_api->show_result($_arr_return);
         }
     }
 }

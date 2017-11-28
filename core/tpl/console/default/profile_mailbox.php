@@ -11,7 +11,7 @@ $cfg = array(
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=profile&act=mailbox",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=profile&act=mailbox',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -43,13 +43,13 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label"><?php echo $this->lang['mod']['label']["mailOld"]; ?></label>
+                            <label class="control-label"><?php echo $this->lang['mod']['label']['mailOld']; ?></label>
                             <input type="text" value="<?php echo $this->tplData['adminLogged']['userRow']['user_mail']; ?>" readonly class="form-control">
                         </div>
 
                         <div class="form-group">
                             <div id="group_admin_mail_new">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']["mailNew"]; ?><span id="msg_admin_mail_new">*</span></label>
+                                <label class="control-label"><?php echo $this->lang['mod']['label']['mailNew']; ?><span id="msg_admin_mail_new">*</span></label>
                                 <input type="text" name="admin_mail_new" id="admin_mail_new" data-validate class="form-control">
                             </div>
                         </div>
@@ -74,7 +74,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         admin_pass: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_admin_pass" },
-            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']["x010243"]; ?>" }
+            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']['x010243']; ?>" }
         },
         admin_mail_new: {
             len: { min: 1, max: 300 },

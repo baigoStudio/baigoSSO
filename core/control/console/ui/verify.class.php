@@ -15,13 +15,13 @@ class CONTROL_CONSOLE_UI_VERIFY {
     private $is_super = false;
 
     function __construct() { //构造函数
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         if ($this->adminLogged['admin_type'] == 'super') {
             $this->is_super = true;
@@ -40,20 +40,20 @@ class CONTROL_CONSOLE_UI_VERIFY {
 
     function ctrl_show() {
         if (!isset($this->adminLogged['admin_allow']['verify']) && !$this->is_super) {
-            $this->tplData['rcode'] = "x120301";
+            $this->tplData['rcode'] = 'x120301';
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
 
-        $_num_verifyId = fn_getSafe(fn_get("verify_id"), 'int', 0);
+        $_num_verifyId = fn_getSafe(fn_get('verify_id'), 'int', 0);
 
         if ($_num_verifyId < 1) {
-            $this->tplData['rcode'] = "x120201";
+            $this->tplData['rcode'] = 'x120201';
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
 
         $_arr_verifyRow = $this->mdl_verify->mdl_read($_num_verifyId);
 
-        if ($_arr_verifyRow['rcode'] != "y120102") {
+        if ($_arr_verifyRow['rcode'] != 'y120102') {
             $this->tplData['rcode'] = $_arr_verifyRow['rcode'];
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
@@ -61,12 +61,12 @@ class CONTROL_CONSOLE_UI_VERIFY {
         $_arr_verifyRow['userRow'] = $this->mdl_user->mdl_read($_arr_verifyRow['verify_user_id']);
 
         $_arr_tpl = array(
-            "verifyRow"    => $_arr_verifyRow,
+            'verifyRow'    => $_arr_verifyRow,
         );
 
         $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
-        $this->obj_tpl->tplDisplay("verify_show", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('verify_show', $_arr_tplData);
     }
 
     /**
@@ -76,7 +76,7 @@ class CONTROL_CONSOLE_UI_VERIFY {
      */
     function ctrl_list() {
         if (!isset($this->adminLogged['admin_allow']['verify']) && !$this->is_super) {
-            $this->tplData['rcode'] = "x120301";
+            $this->tplData['rcode'] = 'x120301';
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
 
@@ -89,12 +89,12 @@ class CONTROL_CONSOLE_UI_VERIFY {
         }
 
         $_arr_tpl = array(
-            "pageRow"       => $_arr_page,
-            "verifyRows"    => $_arr_verifyRows,
+            'pageRow'       => $_arr_page,
+            'verifyRows'    => $_arr_verifyRows,
         );
 
         $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
-        $this->obj_tpl->tplDisplay("verify_list", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('verify_list', $_arr_tplData);
     }
 }

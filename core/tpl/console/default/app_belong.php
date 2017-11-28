@@ -16,7 +16,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=app&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
             <li>
@@ -73,7 +73,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($this->tplData["userViews"] as $key=>$value) {
+                                <?php foreach ($this->tplData['userViews'] as $key=>$value) {
                                     switch ($value['user_status']) {
                                         case 'enable':
                                             $css_status = 'success';
@@ -128,7 +128,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
         <div class="col-md-6">
             <div class="well">
-                <label class="control-label"><?php echo $this->lang['mod']['label']["selectUser"]; ?></label>
+                <label class="control-label"><?php echo $this->lang['mod']['label']['selectUser']; ?></label>
                 <form name="user_search" id="user_search" class="form-inline" action="<?php echo BG_URL_CONSOLE; ?>index.php" method="get">
                     <input type="hidden" name="mod" value="app">
                     <input type="hidden" name="act" value="belong">

@@ -13,11 +13,11 @@ if (!defined('IN_BAIGO')) {
 /*-------------模板类-------------*/
 class CLASS_TPL {
 
-    public $common      = array();
-    public $lang        = array();
-    public $opt         = array();
-    public $ext         = array();
-    public $help        = array();
+    public $common  = array();
+    public $lang    = array();
+    public $opt     = array();
+    public $phplib  = array();
+    public $help    = array();
 
     function __construct($str_pathTpl = '') { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
@@ -38,7 +38,7 @@ class CLASS_TPL {
      *
      * @access public
      * @param mixed $str_tpl
-     * @param string $arr_tplData (default: "")
+     * @param string $arr_tplData (default: '')
      * @return void
      */
     function tplDisplay($str_tpl, $arr_tplData = array()) {
@@ -49,12 +49,12 @@ class CLASS_TPL {
             exit;
         } else {
             if (defined('BG_DEBUG_SYS') && BG_DEBUG_SYS > 0) {
-                $_str_msg = 'Template &quot;' . $this->pathTpl . DS . $str_tpl . '.php&quot; not exists!';
+                $_str_msg = 'Template &quot;' . $this->pathTpl . DS . $str_tpl . '.php&quot; not exists';
             } else {
-                $_str_msg = 'Template not exists!';
+                $_str_msg = 'Template not exists';
             }
 
-            exit('Fatal Error: ' . $_str_msg);
+            exit('{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}');
         }
     }
 }

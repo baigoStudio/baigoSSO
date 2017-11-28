@@ -11,7 +11,7 @@ $cfg = array(
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=profile&act=info",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=profile&act=info',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -37,7 +37,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
                         <div class="form-group">
                             <div id="group_admin_pass">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']["passOld"]; ?><span id="msg_admin_pass">*</span></label>
+                                <label class="control-label"><?php echo $this->lang['mod']['label']['passOld']; ?><span id="msg_admin_pass">*</span></label>
                                 <input type="password" name="admin_pass" id="admin_pass" data-validate class="form-control">
                             </div>
                         </div>
@@ -77,7 +77,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         admin_pass: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_admin_pass" },
-            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']["x010243"]; ?>" }
+            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']['x010243']; ?>" }
         },
         admin_pass_new: {
             len: { min: 1, max: 0 },

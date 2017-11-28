@@ -17,24 +17,15 @@ class CONTROL_HELP_UI_HELP {
 
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
-        $this->obj_tpl  = new CLASS_TPL(BG_PATH_TPLSYS . 'help' . DS . BG_DEFAULT_UI); //初始化视图对象
 
-        $this->obj_tpl->help = fn_include(BG_PATH_INC . 'help.inc.php');
+        $this->general_help      = new GENERAL_HELP();
 
-        $this->obj_tpl->lang = array(
-            'rcode'     => fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'rcode.php'), //返回代码
-            'common'    => fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'common.php'),
-            'mod'       => fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'help' . DS . 'help.php'),
-        );
+        $this->obj_tpl          = $this->general_help->obj_tpl;
     }
 
     function ctrl_show() {
-        $this->mod      = fn_getSafe($GLOBALS['mod'], 'txt', 'intro');
-        $this->act      = fn_getSafe($GLOBALS['act'], 'txt', 'outline');
-
-        if (BG_DEFAULT_UI != 'default') {
-            $_arr_config = str_ireplace('baigo', BG_DEFAULT_UI, $_arr_config);
-        }
+        $this->mod      = fn_getSafe(fn_get('mod'), 'txt', 'intro');
+        $this->act      = fn_getSafe(fn_get('act'), 'txt', 'outline');
 
         $this->tplData = array(
             'mod'       => $this->mod,

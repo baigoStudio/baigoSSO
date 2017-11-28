@@ -24,10 +24,10 @@ class MODEL_USER_API extends MODEL_USER {
 
     function mdl_reg($arr_userSubmit = array()) {
         $_arr_userData = array(
-            "user_pass"             => $arr_userSubmit['user_pass'],
-            "user_time"             => time(),
-            "user_time_login"       => time(),
-            "user_crypt_type"       => 2,
+            'user_pass'             => $arr_userSubmit['user_pass'],
+            'user_time'             => time(),
+            'user_time_login'       => time(),
+            'user_crypt_type'       => 2,
         );
 
         if (isset($arr_userSubmit['user_name'])) {
@@ -89,7 +89,7 @@ class MODEL_USER_API extends MODEL_USER {
             $_str_rcode  = 'y010101'; //更新成功
         } else {
             return array(
-                'rcode' => "x010101", //更新失败
+                'rcode' => 'x010101', //更新失败
             );
         }
 
@@ -97,10 +97,10 @@ class MODEL_USER_API extends MODEL_USER {
         unset($_arr_userData['user_pass'], $_arr_userData['user_crypt_type']);
 
         if (isset($_arr_userData['user_contact'])) {
-            $_arr_userData['user_contact']   = fn_jsonEncode($_arr_userData['user_contact'], "encode");
+            $_arr_userData['user_contact']   = fn_jsonEncode($_arr_userData['user_contact'], 'encode');
         }
         if (isset($_arr_userData['user_extend'])) {
-            $_arr_userData['user_extend']    = fn_jsonEncode($_arr_userData['user_extend'], "encode");
+            $_arr_userData['user_extend']    = fn_jsonEncode($_arr_userData['user_extend'], 'encode');
         }
 
         $_arr_userReturn            = $_arr_userData;
@@ -115,7 +115,7 @@ class MODEL_USER_API extends MODEL_USER {
         $_tm_timeLogin  = time();
 
         $_arr_userData = array(
-            "user_time_login"   => $_tm_timeLogin,
+            'user_time_login'   => $_tm_timeLogin,
         );
 
         if (isset($arr_userSubmit['user_ip']) && !fn_isEmpty($arr_userSubmit['user_ip'])) {
@@ -149,71 +149,71 @@ class MODEL_USER_API extends MODEL_USER {
             $_tm_refreshExpire  = $_arr_userRow['user_refresh_expire'];
         }
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $arr_userSubmit['user_id']); //更新数据
-        if ($_num_mysql > 0) {
-            $_str_rcode = "y010103"; //更新成功
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
+        if ($_num_db > 0) {
+            $_str_rcode = 'y010103'; //更新成功
         } else {
             return array(
-                'rcode' => "x010103", //更新失败
+                'rcode' => 'x010103', //更新失败
             );
         }
 
         return array(
-            "user_id"               => $arr_userSubmit['user_id'],
-            "user_ip"               => $_str_userIp,
-            "user_time_login"       => $_tm_timeLogin,
-            "user_access_token"     => fn_baigoCrypt($_str_accessToken, $_arr_userRow['user_name']),
-            "user_access_expire"    => $_tm_accessExpire,
-            "user_refresh_token"    => fn_baigoCrypt($_str_refreshToken, $_arr_userRow['user_name']),
-            "user_refresh_expire"   => $_tm_refreshExpire,
-            "rcode"                 => $_str_rcode, //成功
+            'user_id'               => $arr_userSubmit['user_id'],
+            'user_ip'               => $_str_userIp,
+            'user_time_login'       => $_tm_timeLogin,
+            'user_access_token'     => fn_baigoCrypt($_str_accessToken, $_arr_userRow['user_name']),
+            'user_access_expire'    => $_tm_accessExpire,
+            'user_refresh_token'    => fn_baigoCrypt($_str_refreshToken, $_arr_userRow['user_name']),
+            'user_refresh_expire'   => $_tm_refreshExpire,
+            'rcode'                 => $_str_rcode, //成功
         );
     }
 
 
-    function mdl_read($str_user, $str_by = "user_id", $num_notId = 0) {
+    function mdl_read($str_user, $str_by = 'user_id', $num_notId = 0) {
         $_arr_userSelect = array(
-            "user_id",
-            "user_name",
-            "user_mail",
-            "user_contact",
-            "user_extend",
-            "user_nick",
-            "user_status",
-            "user_time",
-            "user_time_login",
-            "user_ip",
+            'user_id',
+            'user_name',
+            'user_mail',
+            'user_contact',
+            'user_extend',
+            'user_nick',
+            'user_status',
+            'user_time',
+            'user_time_login',
+            'user_ip',
         );
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            $_arr_userSelect[] = "user_sec_ques_" . $_iii;
+            $_arr_userSelect[] = 'user_sec_ques_' . $_iii;
         }
 
         switch ($str_by) {
-            case "user_id":
-                $_str_sqlWhere = "`user_id`=" . $str_user;
+            case 'user_id':
+                $_str_sqlWhere = '`user_id`=' . $str_user;
             break;
             default:
-                $_str_sqlWhere = $str_by . "='" . $str_user . "'";
+                $_str_sqlWhere = $str_by . '=\'' . $str_user . '\'';
             break;
         }
 
         if ($num_notId > 0) {
-            $_str_sqlWhere .= " AND `user_id`<>" . $num_notId;
+            $_str_sqlWhere .= ' AND `user_id`<>' . $num_notId;
         }
 
-        $_arr_userRows    = $this->obj_db->select(BG_DB_TABLE . 'user', $_arr_userSelect, $_str_sqlWhere, "", "", 1, 0); //检查本地表是否存在记录
+        $_arr_userRows    = $this->obj_db->select(BG_DB_TABLE . 'user', $_arr_userSelect, $_str_sqlWhere, '', '', 1, 0); //检查本地表是否存在记录
 
         if (isset($_arr_userRows[0])) { //用户名不存在则返回错误
             $_arr_userRow = $_arr_userRows[0];
         } else {
             return array(
-                'rcode' => "x010102", //不存在记录
+                'rcode' => 'x010102', //不存在记录
             );
         }
 
-        $_arr_userRow['user_contact']   = fn_jsonDecode($_arr_userRow['user_contact'], "decode");
-        $_arr_userRow['user_extend']    = fn_jsonDecode($_arr_userRow['user_extend'], "decode");
+        $_arr_userRow['user_contact']   = fn_jsonDecode($_arr_userRow['user_contact'], 'decode');
+        $_arr_userRow['user_extend']    = fn_jsonDecode($_arr_userRow['user_extend'], 'decode');
 
         $_arr_userRow['rcode']          = 'y010102';
 
@@ -248,23 +248,23 @@ class MODEL_USER_API extends MODEL_USER {
         //print_r($_arr_userData);
         //exit;
 
-        $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, "`user_id`=" . $arr_userSubmit['user_id']); //更新数据
+        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
 
-        if ($_num_mysql > 0) {
-            $_str_rcode = "y010103"; //更新成功
+        if ($_num_db > 0) {
+            $_str_rcode = 'y010103'; //更新成功
         } else {
             return array(
-                'rcode' => "x010103", //更新失败
+                'rcode' => 'x010103', //更新失败
             );
         }
 
         unset($_arr_userData['user_pass'], $_arr_userData['user_crypt_type']);
 
         if (isset($_arr_userData['user_contact'])) {
-            $_arr_userData['user_contact']   = fn_jsonEncode($_arr_userData['user_contact'], "encode");
+            $_arr_userData['user_contact']   = fn_jsonEncode($_arr_userData['user_contact'], 'encode');
         }
         if (isset($_arr_userData['user_extend'])) {
-            $_arr_userData['user_extend']    = fn_jsonEncode($_arr_userData['user_extend'], "encode");
+            $_arr_userData['user_extend']    = fn_jsonEncode($_arr_userData['user_extend'], 'encode');
         }
 
         $_arr_userReturn            = $_arr_userData;
@@ -282,64 +282,64 @@ class MODEL_USER_API extends MODEL_USER {
      * @return void
      */
     function input_reg() {
-        $_arr_userName = $this->chk_user_name(fn_post("user_name"));
+        $_arr_userName = $this->chk_user_name(fn_post('user_name'));
         if ($_arr_userName['rcode'] != 'ok') {
             return $_arr_userName;
         }
         $this->regInput['user_name'] = $_arr_userName['user_name'];
 
-        $_arr_userRow = $this->mdl_read($this->regInput['user_name'], "user_name");
+        $_arr_userRow = $this->mdl_read($this->regInput['user_name'], 'user_name');
         if ($_arr_userRow['rcode'] == 'y010102') {
             return array(
-                'rcode' => "x010205",
+                'rcode' => 'x010205',
             );
         }
 
-        $_arr_userMail = $this->chk_user_mail(fn_post("user_mail"));
+        $_arr_userMail = $this->chk_user_mail(fn_post('user_mail'));
         if ($_arr_userMail['rcode'] != 'ok') {
             return $_arr_userMail;
         }
         $this->regInput['user_mail'] = $_arr_userMail['user_mail'];
 
-        if ((BG_REG_ONEMAIL == "false" || BG_LOGIN_MAIL == 'on') && !fn_isEmpty($_arr_userMail['user_mail'])) {
-            $_arr_userRow = $this->mdl_read($_arr_userMail['user_mail'], "user_mail"); //检查邮箱
+        if ((BG_REG_ONEMAIL == 'false' || BG_LOGIN_MAIL == 'on') && !fn_isEmpty($_arr_userMail['user_mail'])) {
+            $_arr_userRow = $this->mdl_read($_arr_userMail['user_mail'], 'user_mail'); //检查邮箱
             if ($_arr_userRow['rcode'] == 'y010102') {
                 return array(
-                    'rcode' => "x010211",
+                    'rcode' => 'x010211',
                 );
             }
         }
 
-        $_arr_userPass = $this->chk_user_pass(fn_post("user_pass"));
+        $_arr_userPass = $this->chk_user_pass(fn_post('user_pass'));
         if ($_arr_userPass['rcode'] != 'ok') {
             return $_arr_userPass;
         }
         $this->regInput['user_pass'] = $_arr_userPass['user_pass'];
 
-        $_arr_userNick = $this->chk_user_nick(fn_post("user_nick"));
+        $_arr_userNick = $this->chk_user_nick(fn_post('user_nick'));
         if ($_arr_userNick['rcode'] != 'ok') {
             return $_arr_userNick;
         }
         $this->regInput['user_nick'] = $_arr_userNick['user_nick'];
 
-        $this->regInput['user_ip']   = fn_getSafe(fn_post("user_ip"), 'txt', '');
+        $this->regInput['user_ip']   = fn_getSafe(fn_post('user_ip'), 'txt', '');
 
-        $_str_userContact                   = fn_getSafe(fn_post("user_contact"), 'txt', '');
+        $_str_userContact                   = fn_getSafe(fn_post('user_contact'), 'txt', '');
         $this->regInput['user_contactStr']  = $_str_userContact;
 
-        $_str_userContact                   = fn_htmlcode($_str_userContact, "decode", "json");
+        $_str_userContact                   = fn_htmlcode($_str_userContact, 'decode', 'json');
         $_arr_userContact                   = json_decode($_str_userContact, true);
 
-        $this->regInput['user_contact']     = fn_jsonEncode($_arr_userContact, "encode");
+        $this->regInput['user_contact']     = fn_jsonEncode($_arr_userContact, 'encode');
 
 
-        $_str_userExtend                    = fn_getSafe(fn_post("user_extend"), 'txt', '');
+        $_str_userExtend                    = fn_getSafe(fn_post('user_extend'), 'txt', '');
         $this->regInput['user_extendStr']   = $_str_userExtend;
 
-        $_str_userExtend                    = fn_htmlcode($_str_userExtend, "decode", "json");
+        $_str_userExtend                    = fn_htmlcode($_str_userExtend, 'decode', 'json');
         $_arr_userExtend                    = json_decode($_str_userExtend, true);
 
-        $this->regInput['user_extend']      = fn_jsonEncode($_arr_userExtend, "encode");
+        $this->regInput['user_extend']      = fn_jsonEncode($_arr_userExtend, 'encode');
 
         $this->regInput['rcode']            = 'ok';
 
@@ -362,13 +362,13 @@ class MODEL_USER_API extends MODEL_USER {
 
         $this->loginInput   = $_arr_userInput;
 
-        $_arr_userPass    = $this->chk_user_pass(fn_post("user_pass"));
+        $_arr_userPass    = $this->chk_user_pass(fn_post('user_pass'));
         if ($_arr_userPass['rcode'] != 'ok') {
             return $_arr_userPass;
         }
         $this->loginInput['user_pass']   = $_arr_userPass['user_pass'];
 
-        $this->loginInput['user_ip']     = fn_getSafe(fn_post("user_ip"), 'txt', '');
+        $this->loginInput['user_ip']     = fn_getSafe(fn_post('user_ip'), 'txt', '');
 
         $this->loginInput['rcode']       = 'ok';
 
@@ -384,35 +384,35 @@ class MODEL_USER_API extends MODEL_USER {
 
         $this->editInput = $_arr_userInput;
 
-        if (!fn_isEmpty(fn_post("user_pass"))) {
-            $this->editInput['user_pass']  = fn_post("user_pass");
+        if (!fn_isEmpty(fn_post('user_pass'))) {
+            $this->editInput['user_pass']  = fn_post('user_pass');
         }
 
-        if (!fn_isEmpty(fn_post("user_mail_new"))) {
-            $_arr_userMailNew = $this->chk_user_mail(fn_post("user_mail_new"));
+        if (!fn_isEmpty(fn_post('user_mail_new'))) {
+            $_arr_userMailNew = $this->chk_user_mail(fn_post('user_mail_new'));
             if ($_arr_userMailNew['rcode'] != 'ok') {
                 return $_arr_userMailNew;
             }
             $this->editInput['user_mail_new'] = $_arr_userMailNew['user_mail'];
         }
 
-        $_arr_userNick = $this->chk_user_nick(fn_post("user_nick"));
+        $_arr_userNick = $this->chk_user_nick(fn_post('user_nick'));
         if ($_arr_userNick['rcode'] != 'ok') {
             return $_arr_userNick;
         }
         $this->editInput['user_nick']   = $_arr_userNick['user_nick'];
 
-        $_str_userContact = fn_getSafe(fn_post("user_contact"), 'txt', '');
+        $_str_userContact = fn_getSafe(fn_post('user_contact'), 'txt', '');
         $this->editInput['user_contactStr'] = $_str_userContact;
-        $_str_userContact = fn_htmlcode($_str_userContact, "decode", "json");
+        $_str_userContact = fn_htmlcode($_str_userContact, 'decode', 'json');
         $_arr_userContact = json_decode($_str_userContact, true);
-        $this->editInput['user_contact'] = fn_jsonEncode($_arr_userContact, "encode");
+        $this->editInput['user_contact'] = fn_jsonEncode($_arr_userContact, 'encode');
 
-        $_str_userExtend = fn_getSafe(fn_post("user_extend"), 'txt', '');
+        $_str_userExtend = fn_getSafe(fn_post('user_extend'), 'txt', '');
         $this->editInput['user_extendStr'] = $_str_userExtend;
-        $_str_userExtend = fn_htmlcode($_str_userExtend, "decode", "json");
+        $_str_userExtend = fn_htmlcode($_str_userExtend, 'decode', 'json');
         $_arr_userExtend = json_decode($_str_userExtend, true);
-        $this->editInput['user_extend'] = fn_jsonEncode($_arr_userExtend, "encode");
+        $this->editInput['user_extend'] = fn_jsonEncode($_arr_userExtend, 'encode');
 
         $this->editInput['rcode']       = 'ok';
 
@@ -428,23 +428,23 @@ class MODEL_USER_API extends MODEL_USER {
 
         $this->tokenInput = $_arr_userInput;
 
-        if ($str_method == "get") {
-            $_str_accessToken = fn_get("user_access_token");
+        if ($str_method == 'get') {
+            $_str_accessToken = fn_get('user_access_token');
         } else {
-            $_str_accessToken = fn_post("user_access_token");
+            $_str_accessToken = fn_post('user_access_token');
         }
 
         $_arr_accessToken = fn_validate($_str_accessToken, 1, 32);
         switch ($_arr_accessToken['status']) {
             case 'too_short':
                 return array(
-                    'rcode' => "x010228",
+                    'rcode' => 'x010228',
                 );
             break;
 
             case 'too_long':
                 return array(
-                    'rcode' => "x010229",
+                    'rcode' => 'x010229',
                 );
             break;
 

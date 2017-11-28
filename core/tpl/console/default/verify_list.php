@@ -9,6 +9,7 @@
     'str_url'        => BG_URL_CONSOLE . 'index.php?mod=verify&act=list',
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group">
@@ -42,23 +43,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->tplData['verifyRows'] as $key=>$value) {
-                            switch ($value['verify_status']) {
-                                case 'enable':
-                                    $css_status = 'success';
-                                    $str_status = $this->lang['mod']['status'][$value['verify_status']];
-                                break;
-
-                                case 'expired':
-                                    $css_status = 'default';
-                                    $str_status = $this->lang['mod']['label']['expired'];
-                                break;
-
-                                default:
-                                    $css_status = 'default';
-                                    $str_status = $this->lang['mod']['status'][$value['verify_status']];
-                                break;
-                            } ?>
+                        <?php foreach ($this->tplData['verifyRows'] as $key=>$value) { ?>
                             <tr>
                                 <td class="text-nowrap bg-td-xs"><input type="checkbox" name="verify_ids[]" value="<?php echo $value['verify_id']; ?>" id="verify_id_<?php echo $value['verify_id']; ?>" data-validate="verify_id" data-parent="chk_all"></td>
                                 <td class="text-nowrap bg-td-xs"><?php echo $value['verify_id']; ?></td>
@@ -83,7 +68,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 <td class="text-nowrap bg-td-lg">
                                     <ul class="list-unstyled">
                                         <li>
-                                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $str_status; ?></span>
+                                            <?php verify_status_process($value['verify_status'], $this->lang['mod']['status']); ?>
                                         </li>
                                         <li><?php echo date(BG_SITE_DATE . ' ' . BG_SITE_TIMESHORT, $value['verify_time_refresh']); ?></li>
                                     </ul>

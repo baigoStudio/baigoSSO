@@ -9,15 +9,66 @@ if (!defined('IN_BAIGO')) {
     exit('Access Denied');
 }
 
-if (!defined('BG_PATH_LIB')) {
-    define('BG_PATH_LIB', BG_PATH_CORE . DS . 'lib' . DS);
-}
 fn_include(BG_PATH_LIB . 'PHPMailer' . DS . 'PHPMailerAutoload.php'); //载入 PHPMailer 类
 
-function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = '') {
+function fn_mailSend($str_mailTo, $str_subject, $str_content) {
 
-    $_obj_mail              = new PHPMailer; //初始化
-    $_obj_mail->isSMTP(); //使用 SMTP
+    $_obj_mail = new PHPMailer(true); //初始化
+
+    switch (BG_SMTP_TYPE) {
+        case 'phpmail':
+            $_obj_mail->isMail(); //使用 phpmail 函数
+        break;
+
+        case 'sendmail':
+            $_obj_mail->isSendmail();
+        break;
+
+        case 'qmail':
+            $_obj_mail->isQmail();
+        break;
+
+        default:
+            $_obj_mail->isSMTP(); //使用 SMTP
+        break;
+    }
+
+    switch (BG_SMTP_SEC) {
+        case 'tls':
+            $_str_sectype = 'tls';
+        break;
+
+        case 'ssl':
+            $_str_sectype = 'ssl';
+        break;
+
+        default:
+            $_str_sectype = '';
+        break;
+    }
+
+    $_obj_mail->SMTPSecure = $_str_sectype;
+
+    switch (BG_SMTP_AUTHTYPE) {
+        case 'plain':
+            $_str_authtype = 'PLAIN';
+        break;
+
+        case 'cram-md5':
+            $_str_authtype = 'CRAM-MD5';
+        break;
+
+        case 'xoauth2':
+            $_str_authtype = 'XOAUTH2';
+        break;
+
+        default:
+            $_str_authtype = 'LOGIN';
+        break;
+    }
+
+    $_obj_mail->AuthType = $_str_authtype;
+
     $_obj_mail->isHTML(); //发送 HTML
 
     $_obj_mail->SMTPDebug   = 0; //SMTP 调试开关 0 关闭，1 客户端消息, 2 客户端与服务端消息
@@ -25,6 +76,7 @@ function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = '') {
     $_obj_mail->CharSet     = 'UTF-8'; //邮件编码
     $_obj_mail->Host        = BG_SMTP_HOST; //主机
     $_obj_mail->Port        = BG_SMTP_PORT; //端口
+    $_obj_mail->Timeout     = 60;
 
     if (BG_SMTP_AUTH == 'true') {
         $_is_auth = true;
@@ -45,8 +97,14 @@ function fn_mailSend($str_mailTo, $str_subject, $str_content, $str_text = '') {
     //convert HTML into a basic plain-text alternative body
     $_obj_mail->msgHTML($str_content); //内容
 
-    $_obj_mail->AltBody     = $str_text; //HTML 无法显示时的替代内容
+    $_obj_mail->AltBody     = strip_tags($str_content); //HTML 无法显示时的替代内容
     //$_obj_mail->addAttachment('images/phpmailer_mini.png'); //附件
 
-    return $_obj_mail->send();
+    $_is_succ = $_obj_mail->send();
+
+    //print_r($_obj_mail->ErrorInfo);
+
+    $_obj_mail->smtpClose();
+
+    return $_is_succ;
 }

@@ -13,11 +13,11 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_API_API_CODE {
 
     function __construct() { //构造函数
-        $this->obj_api      = new CLASS_API();
-        //$this->obj_api->chk_install();
+        $this->general_api      = new GENERAL_API();
+        //$this->general_api->chk_install();
 
-        $this->obj_crypt    = $this->obj_api->obj_crypt;
-        $this->obj_sign     = $this->obj_api->obj_sign;
+        $this->obj_crypt    = $this->general_api->obj_crypt;
+        $this->obj_sign     = $this->general_api->obj_sign;
     }
 
 
@@ -28,45 +28,45 @@ class CONTROL_API_API_CODE {
      * @return void
      */
     function ctrl_encode() {
-        $_arr_apiChks = $this->obj_api->app_chk('post');
+        $_arr_apiChks = $this->general_api->app_chk('post');
         if ($_arr_apiChks['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_apiChks);
+            $this->general_api->show_result($_arr_apiChks);
         }
 
-        $_arr_data = fn_validate(fn_post("data"), 1, 0);
+        $_arr_data = fn_validate(fn_post('data'), 1, 0);
         switch ($_arr_data['status']) {
             case 'too_short':
                 $_arr_tplData = array(
-                    'rcode' => "x050222",
+                    'rcode' => 'x050222',
                 );
-                $this->obj_api->show_result($_arr_tplData);
+                $this->general_api->show_result($_arr_tplData);
             break;
 
             case 'ok':
-                $_str_data = fn_htmlcode($_arr_data['str'], "decode");
+                $_str_data = fn_htmlcode($_arr_data['str'], 'decode');
             break;
         }
 
         $_arr_sign = array(
-            'act'   => $GLOBALS['act'],
-            "data"  => $_str_data,
+            'act'   => $GLOBALS['route']['bg_act'],
+            'data'  => $_str_data,
         );
 
         if (!$this->obj_sign->sign_check(array_merge($_arr_apiChks['appInput'], $_arr_sign), $_arr_apiChks['appInput']['signature'])) {
             $_arr_tplData = array(
                 'rcode' => 'x050403',
             );
-            $this->obj_api->show_result($_arr_tplData);
+            $this->general_api->show_result($_arr_tplData);
         }
 
         $_str_code = $this->obj_crypt->encrypt($_str_data, fn_baigoCrypt($_arr_apiChks['appRow']['app_key'], $_arr_apiChks['appRow']['app_name']));
 
         $_arr_tplData = array(
-            "code"   => $_str_code,
-            'rcode'  => "y050405",
+            'code'   => $_str_code,
+            'rcode'  => 'y050405',
         );
 
-        $this->obj_api->show_result($_arr_tplData);
+        $this->general_api->show_result($_arr_tplData);
     }
 
 
@@ -77,18 +77,18 @@ class CONTROL_API_API_CODE {
      * @return void
      */
     function ctrl_decode() {
-        $_arr_apiChks = $this->obj_api->app_chk('post');
+        $_arr_apiChks = $this->general_api->app_chk('post');
         if ($_arr_apiChks['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_apiChks);
+            $this->general_api->show_result($_arr_apiChks);
         }
 
-        $_arr_code = fn_validate(fn_post("code"), 1, 0);
+        $_arr_code = fn_validate(fn_post('code'), 1, 0);
         switch ($_arr_code['status']) {
             case 'too_short':
                 $_arr_tplData = array(
-                    'rcode' => "x050223",
+                    'rcode' => 'x050223',
                 );
-                $this->obj_api->show_result($_arr_tplData);
+                $this->general_api->show_result($_arr_tplData);
             break;
 
             case 'ok':
@@ -97,15 +97,15 @@ class CONTROL_API_API_CODE {
         }
 
         $_arr_sign = array(
-            'act'   => $GLOBALS['act'],
-            "code"  => $_str_code,
+            'act'   => $GLOBALS['route']['bg_act'],
+            'code'  => $_str_code,
         );
 
         if (!$this->obj_sign->sign_check(array_merge($_arr_apiChks['appInput'], $_arr_sign), $_arr_apiChks['appInput']['signature'])) {
             $_arr_tplData = array(
                 'rcode' => 'x050403',
             );
-            $this->obj_api->show_result($_arr_tplData);
+            $this->general_api->show_result($_arr_tplData);
         }
 
         $_str_result = $this->obj_crypt->decrypt($_str_code, fn_baigoCrypt($_arr_apiChks['appRow']['app_key'], $_arr_apiChks['appRow']['app_name']));

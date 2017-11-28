@@ -19,7 +19,7 @@ $obj_runtime->run($arr_set);
 
 $ctrl_pm = new CONTROL_CONSOLE_UI_PM(); //初始化短信
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'send':
         $ctrl_pm->ctrl_send(); //发送
     break;

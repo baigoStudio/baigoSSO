@@ -5,6 +5,7 @@
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group">
@@ -12,7 +13,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=admin&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
         </ul>
@@ -28,62 +29,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label"><?php echo $this->lang['mod']['label']["nick"]; ?></label>
+                        <label class="control-label"><?php echo $this->lang['mod']['label']['nick']; ?></label>
                         <div class="form-control-static"><?php echo $this->tplData['adminRow']['admin_nick']; ?></div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label"><?php echo $this->lang['mod']['label']['allow']; ?></label>
-                        <dl class="bg-dl">
-                            <?php foreach ($this->consoleMod as $key_m=>$value_m) {
-                                if (isset($value_m['allow']) && $value_m['allow']) { ?>
-                                    <dt>
-                                        <?php if (isset($this->lang['consoleMod'][$key_m]['main']['title'])) {
-                                            echo $this->lang['consoleMod'][$key_m]['main']['title'];
-                                        } else {
-                                            echo $value_m['main']['title'];
-                                        } ?>
-                                    </dt>
-                                    <dd>
-                                        <ul class="list-inline">
-                                            <?php foreach ($value_m['allow'] as $key_s=>$value_s) { ?>
-                                                <li>
-                                                    <span class="glyphicon glyphicon-<?php if (isset($this->tplData['adminRow']['admin_allow'][$key_m][$key_s])) { ?>ok-sign text-success<?php } else { ?>remove-sign text-danger<?php } ?>"></span>
-                                                    <?php if (isset($this->lang['consoleMod'][$key_m]['allow'][$key_s])) {
-                                                        echo $this->lang['consoleMod'][$key_m]['allow'][$key_s];
-                                                    } else {
-                                                        echo $value_s;
-                                                    } ?>
-                                                </li>
-                                            <?php } ?>
-                                        </ul>
-                                    </dd>
-                                <?php }
-                            } ?>
-                            <dt><?php echo $this->lang['mod']['label']['opt']; ?></dt>
-                            <dd>
-                                <ul class="list-inline">
-                                    <?php foreach ($this->opt as $key_s=>$value_s) { ?>
-                                        <li>
-                                            <span class="glyphicon glyphicon-<?php if (isset($this->tplData['adminRow']['admin_allow']['opt'][$key_s])) { ?>ok-sign text-success<?php } else { ?>remove-sign text-danger<?php } ?>"></span>
-                                            <?php if (isset($this->lang['opt'][$key_s]['title'])) {
-                                                echo $this->lang['opt'][$key_s]['title'];
-                                            } else {
-                                                echo $value_s['title'];
-                                            } ?>
-                                        </li>
-                                    <?php } ?>
-                                    <li>
-                                        <span class="glyphicon glyphicon-<?php if (isset($this->tplData['adminRow']['admin_allow']['opt']["dbconfig"])) { ?>ok-sign text-success<?php } else { ?>remove-sign text-danger<?php } ?>"></span>
-                                        <?php echo $this->lang['common']['page']['dbConfig']; ?>
-                                    </li>
-                                    <li>
-                                        <span class="glyphicon glyphicon-<?php if (isset($this->tplData['adminRow']['admin_allow']['opt']["chkver"])) { ?>ok-sign text-success<?php } else { ?>remove-sign text-danger<?php } ?>"></span>
-                                        <?php echo $this->lang['common']['page']['chkver']; ?>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
+
+                        <?php allow_list($this->consoleMod, $this->lang['consoleMod'], $this->opt, $this->lang['opt'], $this->lang['mod']['label'], $this->lang['common']['page'], $this->tplData['adminRow']['admin_allow'], $this->tplData['adminRow']['admin_type'], false); ?>
                     </div>
 
                     <div class="form-group">
@@ -113,16 +66,10 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     <div class="form-control-static"><?php echo $this->lang['mod']['type'][$this->tplData['adminRow']['admin_type']]; ?></div>
                 </div>
 
-                <?php if ($this->tplData['adminRow']['admin_status'] == 'enable') {
-                    $css_status = 'success';
-                } else {
-                    $css_status = 'default';
-                } ?>
-
                 <div class="form-group">
                     <label class="control-label"><?php echo $this->lang['mod']['label']['status']; ?></label>
                     <div class="form-control-static">
-                        <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$this->tplData['adminRow']['admin_status']]; ?></span>
+                        <?php admin_status_process($this->tplData['adminRow']['admin_status'], $this->lang['mod']['status']); ?>
                     </div>
                 </div>
 

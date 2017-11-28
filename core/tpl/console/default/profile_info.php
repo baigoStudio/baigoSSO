@@ -5,9 +5,10 @@
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=profile&act=info",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=profile&act=info',
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group">
@@ -38,7 +39,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
                         <div class="form-group">
                             <div id="group_admin_nick">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']["nick"]; ?></label>
+                                <label class="control-label"><?php echo $this->lang['mod']['label']['nick']; ?></label>
                                 <input type="text" name="admin_nick" id="admin_nick" value="<?php echo $this->tplData['adminLogged']['admin_nick']; ?>" class="form-control">
                             </div>
                         </div>
@@ -56,21 +57,8 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     <div class="panel-body">
                         <div class="form-group">
                             <label class="control-label"><?php echo $this->lang['mod']['label']['allow']; ?></label>
-                            <dl class="bg-dl">
-                                <?php foreach ($this->lang['consoleMod'] as $key_m=>$value_m) { ?>
-                                    <dt><?php echo $value_m['main']['title']; ?></dt>
-                                    <dd>
-                                        <ul class="list-inline">
-                                            <?php foreach ($value_m['allow'] as $key_s=>$value_s) { ?>
-                                                <li>
-                                                    <span class="glyphicon glyphicon-<?php if (isset($this->tplData['adminLogged']['admin_allow'][$key_m][$key_s])) { ?>ok-sign text-success<?php } else { ?>remove-sign text-danger<?php } ?>"></span>
-                                                    <?php echo $value_s; ?>
-                                                </li>
-                                            <?php } ?>
-                                        </ul>
-                                    </dd>
-                                <?php } ?>
-                            </dl>
+
+                            <?php allow_list($this->consoleMod, $this->lang['consoleMod'], $this->opt, $this->lang['opt'], $this->lang['mod']['label'], $this->lang['common']['page'], $this->tplData['adminLogged']['admin_allow'], $this->tplData['adminLogged']['admin_type'], false); ?>
                         </div>
                     </div>
                 </div>
@@ -88,12 +76,12 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         admin_pass: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_admin_pass" },
-            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']["x010243"]; ?>" }
+            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']['x010243']; ?>" }
         },
         admin_nick: {
             len: { min: 0, max: 30 },
             validate: { type: "str", format: "text", group: "#group_admin_nick" },
-            msg: { selector: "#msg_admin_nick", too_long: "<?php echo $this->lang['rcode']["x020204"]; ?>" }
+            msg: { selector: "#msg_admin_nick", too_long: "<?php echo $this->lang['rcode']['x020204']; ?>" }
         }
     };
 

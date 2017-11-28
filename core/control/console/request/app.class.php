@@ -19,14 +19,14 @@ class CONTROL_CONSOLE_REQUEST_APP {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->dspType = 'result';
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->dspType = 'result';
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->tplData = array(
             'adminLogged' => $this->adminLogged
@@ -255,7 +255,7 @@ class CONTROL_CONSOLE_REQUEST_APP {
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_str_status = fn_getSafe($GLOBALS['act'], 'txt', '');
+        $_str_status = fn_getSafe($GLOBALS['route']['bg_act'], 'txt', '');
         if (fn_isEmpty($_str_status)) {
             $_arr_tplData = array(
                 'rcode' => 'x050206',

@@ -19,15 +19,15 @@ class CLASS_SSO {
      */
     function sso_encode($arr_data) {
         $_arr_json    = array_merge($this->arr_data, $arr_data); //合并数组
-        $_str_json    = fn_jsonEncode($_arr_json, "encode");
+        $_str_json    = fn_jsonEncode($_arr_json, 'encode');
 
         $_arr_sso = array(
             'act'   => 'encode', //方法
-            "data"  => $_str_json,
+            'data'  => $_str_json,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=code", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=code', $_arr_ssoData, 'post'); //提交
 
         return fn_jsonDecode($_arr_get['ret'], 'no');
     }
@@ -41,19 +41,19 @@ class CLASS_SSO {
      */
     function sso_decode($str_code) {
         $_arr_sso = array(
-            'act'   => "decode", //方法
-            "code"  => $str_code, //加密串
+            'act'   => 'decode', //方法
+            'code'  => $str_code, //加密串
         );
 
         if (isset($this->appInstall)) { //仅在安装时使用
             $_arr_ssoData     = array_merge($this->appInstall, $_arr_sso); //合并数组
-            $_arr_get         = fn_http($this->appInstall['sso_url'] . "?mod=code", $_arr_ssoData, 'post'); //提交
+            $_arr_get         = fn_http($this->appInstall['sso_url'] . '?mod=code', $_arr_ssoData, 'post'); //提交
         } else {
             $_arr_ssoData     = array_merge($this->arr_data, $_arr_sso); //合并数组
-            $_arr_get         = fn_http(BG_SSO_URL . "?mod=code", $_arr_ssoData, 'post'); //提交
+            $_arr_get         = fn_http(BG_SSO_URL . '?mod=code', $_arr_ssoData, 'post'); //提交
         }
 
-        return fn_jsonDecode($_arr_get['ret'], "decode");
+        return fn_jsonDecode($_arr_get['ret'], 'decode');
     }
 
 
@@ -67,12 +67,12 @@ class CLASS_SSO {
      */
     function sso_signature($arr_params) {
         $_arr_sso = array(
-            "act"       => "signature", //方法
-            "params"    => $arr_params,
+            'act'       => 'signature', //方法
+            'params'    => $arr_params,
         );
 
         $_arr_ssoData     = array_merge($this->arr_data, $_arr_sso); //合并数组
-        $_arr_get         = fn_http(BG_SSO_URL . "?mod=signature", $_arr_ssoData, 'post'); //提交
+        $_arr_get         = fn_http(BG_SSO_URL . '?mod=signature', $_arr_ssoData, 'post'); //提交
 
         return fn_jsonDecode($_arr_get['ret'], 'no');
     }
@@ -89,13 +89,13 @@ class CLASS_SSO {
      */
     function sso_verify($arr_params, $str_sign) {
         $_arr_sso = array(
-            "act"       => 'verify', //方法
-            "params"    => $arr_params,
-            "signature" => $str_sign,
+            'act'       => 'verify', //方法
+            'params'    => $arr_params,
+            'signature' => $str_sign,
         );
 
         $_arr_ssoData     = array_merge($this->arr_data, $_arr_sso); //合并数组
-        $_arr_get         = fn_http(BG_SSO_URL . "?mod=signature", $_arr_ssoData, 'post'); //提交
+        $_arr_get         = fn_http(BG_SSO_URL . '?mod=signature', $_arr_ssoData, 'post'); //提交
 
         return fn_jsonDecode($_arr_get['ret'], 'no');
     }
@@ -113,29 +113,29 @@ class CLASS_SSO {
      */
     function sso_reg($str_userName, $str_userPass, $str_userMail = '', $str_userNick = '') {
         $_arr_sso = array(
-            "act"       => "reg",
-            "user_name" => $str_userName,
-            "user_pass" => md5($str_userPass),
-            "user_mail" => $str_userMail,
-            "user_nick" => $str_userNick,
+            'act'       => 'reg',
+            'user_name' => $str_userName,
+            'user_pass' => md5($str_userPass),
+            'user_mail' => $str_userMail,
+            'user_nick' => $str_userNick,
         );
 
         if (isset($this->appInstall)) { //仅在安装时使用
             $_arr_ssoData = array_merge($this->appInstall, $_arr_sso); //合并数组
             $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-            $_arr_get     = fn_http($this->appInstall['sso_url'] . "?mod=user", $_arr_ssoData, 'post'); //提交
+            $_arr_get     = fn_http($this->appInstall['sso_url'] . '?mod=user', $_arr_ssoData, 'post'); //提交
         } else {
             $_arr_ssoData = array_merge($this->arr_data, $_arr_sso); //合并数组
             $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-            $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, 'post'); //提交
+            $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'post'); //提交
         }
         $_arr_result  = $this->result_process($_arr_get);
 
-        if ($_arr_result['rcode'] != 'y010101' && $_arr_result['rcode'] != "y010410") {
+        if ($_arr_result['rcode'] != 'y010101' && $_arr_result['rcode'] != 'y010410') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -150,23 +150,23 @@ class CLASS_SSO {
      * @param mixed $str_userPass 密码
      * @return 解码后数组 登录结果
      */
-    function sso_login($str_user, $str_userPass, $str_userBy = "user_name") {
+    function sso_login($str_user, $str_userPass, $str_userBy = 'user_name') {
         $_arr_sso = array(
-            "act"       => "login",
+            'act'       => 'login',
             $str_userBy => $str_user,
-            "user_pass" => md5($str_userPass),
+            'user_pass' => md5($str_userPass),
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
-        if ($_arr_result['rcode'] != "y010401") {
+        if ($_arr_result['rcode'] != 'y010401') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -182,18 +182,18 @@ class CLASS_SSO {
      */
     function sso_sync_login($num_userId) {
         $_arr_sso = array(
-            "act"       => "login",
-            "user_id"   => $num_userId,
+            'act'       => 'login',
+            'user_id'   => $num_userId,
         );
 
         $_arr_ssoData   = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get       = fn_http(BG_SSO_URL . "?mod=sync", $_arr_ssoData, 'post'); //提交
+        $_arr_get       = fn_http(BG_SSO_URL . '?mod=sync', $_arr_ssoData, 'post'); //提交
         $_arr_result    = $this->result_process($_arr_get);
 
-        if (isset($_arr_result["urlRows"]) && !fn_isEmpty($_arr_result["urlRows"])) {
-            foreach ($_arr_result["urlRows"] as $_key=>$_value) {
-                $_arr_result["urlRows"][$_key] = fn_htmlcode(urldecode($_value), "decode", "url");
+        if (isset($_arr_result['urlRows']) && !fn_isEmpty($_arr_result['urlRows'])) {
+            foreach ($_arr_result['urlRows'] as $_key=>$_value) {
+                $_arr_result['urlRows'][$_key] = fn_htmlcode(urldecode($_value), 'decode', 'url');
             }
         }
 
@@ -206,25 +206,25 @@ class CLASS_SSO {
      *
      * @access public
      * @param mixed $str_user ID（或用户名）
-     * @param string $str_userBy (default: "user_id") 用何种方式读取（默认用ID）
+     * @param string $str_userBy (default: 'user_id') 用何种方式读取（默认用ID）
      * @return 解码后数组 用户信息
      */
-    function sso_read($str_user, $str_userBy = "user_id") {
+    function sso_read($str_user, $str_userBy = 'user_id') {
         $_arr_sso = array(
-            "act"       => "read",
+            'act'       => 'read',
             $str_userBy => $str_user,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, "get"); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'get'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
         if ($_arr_result['rcode'] != 'y010102') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -240,11 +240,11 @@ class CLASS_SSO {
      * @param string $str_userPassNew (default: '') 新密码
      * @param string $str_userMailNew (default: '') 新邮箱
      * @param string $str_userNick (default: '') 昵称
-     * @param string $str_userBy (default: "user_name") 用何种方式编辑（默认用用户名）
-     * @param string $str_checkPass (default: "off") 是否验证密码（默认不验证）
+     * @param string $str_userBy (default: 'user_name') 用何种方式编辑（默认用用户名）
+     * @param string $str_checkPass (default: 'off') 是否验证密码（默认不验证）
      * @return 解码后数组 编辑结果
      */
-    function sso_edit($str_userName, $str_userPass = '', $str_userPassNew = '', $str_userMailNew = '', $str_userNick = '', $str_userBy = "user_name", $str_checkPass = false) {
+    function sso_edit($str_userName, $str_userPass = '', $str_userPassNew = '', $str_userMailNew = '', $str_userNick = '', $str_userBy = 'user_name', $str_checkPass = false) {
         if (fn_isEmpty($str_userPassNew)) {
             $_str_userPassNew = '';
         } else {
@@ -252,25 +252,25 @@ class CLASS_SSO {
         }
 
         $_arr_sso = array(
-            'act'               => "edit",
+            'act'               => 'edit',
             $str_userBy         => $str_userName,
-            "user_check_pass"   => $str_checkPass,
-            "user_pass"         => md5($str_userPass),
-            "user_pass_new"     => $_str_userPassNew,
-            "user_mail_new"     => $str_userMailNew,
-            "user_nick"         => $str_userNick,
+            'user_check_pass'   => $str_checkPass,
+            'user_pass'         => md5($str_userPass),
+            'user_pass_new'     => $_str_userPassNew,
+            'user_mail_new'     => $str_userMailNew,
+            'user_nick'         => $str_userNick,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
-        if ($_arr_result['rcode'] != "y010103") {
+        if ($_arr_result['rcode'] != 'y010103') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -284,29 +284,29 @@ class CLASS_SSO {
      * @param mixed $str_userName
      * @param string $str_userPass (default: '')
      * @param string $str_userMailNew (default: '')
-     * @param string $str_userBy (default: "user_name")
+     * @param string $str_userBy (default: 'user_name')
      * @param bool $str_checkPass (default: false)
      * @return void
      */
-    function sso_mailbox($str_userName, $str_userPass = '', $str_userMailNew = '', $str_userBy = "user_name", $str_checkPass = false) {
+    function sso_mailbox($str_userName, $str_userPass = '', $str_userMailNew = '', $str_userBy = 'user_name', $str_checkPass = false) {
         $_arr_sso = array(
-            'act'               => "mailbox",
+            'act'               => 'mailbox',
             $str_userBy         => $str_userName,
-            "user_check_pass"   => $str_checkPass,
-            "user_pass"         => md5($str_userPass),
-            "user_mail_new"     => $str_userMailNew,
+            'user_check_pass'   => $str_checkPass,
+            'user_pass'         => md5($str_userPass),
+            'user_mail_new'     => $str_userMailNew,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
-        if ($_arr_result['rcode'] != "y010406") {
+        if ($_arr_result['rcode'] != 'y010406') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -318,25 +318,25 @@ class CLASS_SSO {
      *
      * @access public
      * @param mixed $str_user
-     * @param string $str_userBy (default: "user_id")
+     * @param string $str_userBy (default: 'user_id')
      * @return void
      */
-    function sso_forgot($str_user, $str_userBy = "user_id") {
+    function sso_forgot($str_user, $str_userBy = 'user_id') {
         $_arr_sso = array(
-            "act"       => "forgot",
+            'act'       => 'forgot',
             $str_userBy => $str_user,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
         if ($_arr_result['rcode'] != 'y010408') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -348,25 +348,25 @@ class CLASS_SSO {
      *
      * @access public
      * @param mixed $str_user
-     * @param string $str_userBy (default: "user_id")
+     * @param string $str_userBy (default: 'user_id')
      * @return void
      */
-    function sso_nomail($str_user, $str_userBy = "user_id") {
+    function sso_nomail($str_user, $str_userBy = 'user_id') {
         $_arr_sso = array(
-            "act"       => "nomail",
+            'act'       => 'nomail',
             $str_userBy => $str_user,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
         if ($_arr_result['rcode'] != 'y010408') {
             return $_arr_result; //返回错误信息
         }
 
-        $_arr_decode          = $this->sso_decode($_arr_result["code"]); //解码
+        $_arr_decode          = $this->sso_decode($_arr_result['code']); //解码
         $_arr_decode['rcode'] = $_arr_result['rcode'];
 
         return $_arr_decode;
@@ -382,16 +382,16 @@ class CLASS_SSO {
      */
     function sso_chkname($str_userName) {
         $_arr_sso = array(
-            "act"       => "chkname",
-            "user_name" => $str_userName,
+            'act'       => 'chkname',
+            'user_name' => $str_userName,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, "get"); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'get'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
-        if ($_arr_result['rcode'] != "y010205") {
+        if ($_arr_result['rcode'] != 'y010205') {
             return $_arr_result; //返回错误信息
         }
 
@@ -412,17 +412,17 @@ class CLASS_SSO {
      */
     function sso_chkmail($str_userMail, $num_userId = 0) {
         $_arr_sso = array(
-            "act"    => "chkmail",
-            "user_mail"  => $str_userMail,
-            "user_id"    => $num_userId,
+            'act'    => 'chkmail',
+            'user_mail'  => $str_userMail,
+            'user_id'    => $num_userId,
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso);
         $_arr_ssoData['signature'] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = fn_http(BG_SSO_URL . "?mod=user", $_arr_ssoData, "get"); //提交
+        $_arr_get     = fn_http(BG_SSO_URL . '?mod=user', $_arr_ssoData, 'get'); //提交
         $_arr_result  = $this->result_process($_arr_get);
 
-        if ($_arr_result['rcode'] != "y010211") {
+        if ($_arr_result['rcode'] != 'y010211') {
             return $_arr_result; //返回错误信息
         }
 
@@ -441,26 +441,26 @@ class CLASS_SSO {
      */
     function sso_setup() {
         $_arr_ssoData = array(
-            'act'           => "dbconfig",
-            "db_host"       => BG_DB_HOST,
-            "db_port"       => BG_DB_PORT,
-            "db_name"       => BG_DB_NAME,
-            "db_user"       => BG_DB_USER,
-            "db_pass"       => BG_DB_PASS,
-            "db_charset"    => BG_DB_CHARSET,
-            "db_table"      => "sso_",
+            'act'           => 'dbconfig',
+            'db_host'       => BG_DB_HOST,
+            'db_port'       => BG_DB_PORT,
+            'db_name'       => BG_DB_NAME,
+            'db_user'       => BG_DB_USER,
+            'db_pass'       => BG_DB_PASS,
+            'db_charset'    => BG_DB_CHARSET,
+            'db_table'      => 'sso_',
         );
-        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . "api/api.php?mod=setup", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . 'api/api.php?mod=setup', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
-        if ($_arr_result['rcode'] != "y030404") {
+        if ($_arr_result['rcode'] != 'y030404') {
             return $_arr_result;
         }
 
 
         $_arr_ssoData = array(
-            'act' => "dbtable",
+            'act' => 'dbtable',
         );
-        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . "api/api.php?mod=setup", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . 'api/api.php?mod=setup', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
         if ($_arr_result['rcode'] != 'y030108') {
             return $_arr_result;
@@ -486,7 +486,7 @@ class CLASS_SSO {
         );
 
         $_arr_ssoData = array_merge($this->arr_data, $_arr_sso); //合并数组
-        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . "api/api.php?mod=setup", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . 'api/api.php?mod=setup', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
         if ($_arr_result['rcode'] != 'y020101') {
             return $_arr_result;
@@ -495,10 +495,10 @@ class CLASS_SSO {
         $_arr_ssoData = array(
             'act'               => 'over',
             'app_name'          => 'baigo CMS',
-            'app_url_notify'    => BG_SITE_URL . BG_URL_API . "api.php?mod=notify",
-            'app_url_sync'      => BG_SITE_URL . BG_URL_API . "api.php?mod=sync",
+            'app_url_notify'    => BG_SITE_URL . BG_URL_API . 'api.php?mod=notify',
+            'app_url_sync'      => BG_SITE_URL . BG_URL_API . 'api.php?mod=sync',
         );
-        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . "api/api.php?mod=setup", $_arr_ssoData, 'post'); //提交
+        $_arr_get     = fn_http(BG_SITE_URL . BG_URL_SSO . 'api/api.php?mod=setup', $_arr_ssoData, 'post'); //提交
         $_arr_result  = $this->result_process($_arr_get);
         if ($_arr_result['rcode'] != 'y030408') {
             return $_arr_result;
@@ -511,12 +511,12 @@ class CLASS_SSO {
         );
 
         $_str_content = '<?php' . PHP_EOL;
-        $_str_content .= "define(\'BG_SSO_URL\', \'" . $_arr_result['sso_url'] . "\');" . PHP_EOL;
-        $_str_content .= "define(\'BG_SSO_APPID\', " . $_arr_result['app_id'] . ");" . PHP_EOL;
-        $_str_content .= "define(\'BG_SSO_APPKEY\', \'" . $_arr_result['app_key'] . "\');" . PHP_EOL;
-        $_str_content .= "define(\'BG_SSO_SYNC\', \'on\');" . PHP_EOL;
+        $_str_content .= 'define(\'BG_SSO_URL\', \'' . $_arr_result['sso_url'] . '\');' . PHP_EOL;
+        $_str_content .= 'define(\'BG_SSO_APPID\', ' . $_arr_result['app_id'] . ');' . PHP_EOL;
+        $_str_content .= 'define(\'BG_SSO_APPKEY\', \'' . $_arr_result['app_key'] . '\');' . PHP_EOL;
+        $_str_content .= 'define(\'BG_SSO_SYNC\', \'on\');' . PHP_EOL;
 
-        $_num_size = file_put_contents(BG_PATH_CONFIG . "opt_sso.inc.php", $_str_content);
+        $_num_size = file_put_contents(BG_PATH_CONFIG . 'opt_sso.inc.php', $_str_content);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y060101';

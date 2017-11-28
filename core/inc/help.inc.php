@@ -46,7 +46,7 @@ return array(
             'active'   => 'install',
             'menu'     => array(
                 'outline'   => 'Setup Outline',
-                'ext'       => 'Extension Check',
+                'phplib'    => 'PHP Extension Check',
                 'dbconfig'  => 'Database Settings',
                 'dbtable'   => 'Create Database',
                 'base'      => 'Base Settings',
@@ -60,7 +60,7 @@ return array(
             'active'   => 'install',
             'menu'     => array(
                 'outline'   => 'Upgrade Outline',
-                'ext'       => 'Extension Check',
+                'phplib'    => 'PHP Extension Check',
                 'dbconfig'  => 'Database Settings',
                 'dbtable'   => 'Upgrade Database',
                 'base'      => 'Base Settings',

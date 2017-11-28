@@ -14,10 +14,10 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_API_API_SIGNATURE {
 
     function __construct() { //构造函数
-        $this->obj_api  = new CLASS_API();
-        //$this->obj_api->chk_install();
+        $this->general_api  = new GENERAL_API();
+        //$this->general_api->chk_install();
 
-        $this->obj_sign = $this->obj_api->obj_sign;
+        $this->obj_sign = $this->general_api->obj_sign;
     }
 
 
@@ -28,12 +28,12 @@ class CONTROL_API_API_SIGNATURE {
      * @return void
      */
     function ctrl_signature() {
-        $_arr_apiChks = $this->obj_api->app_chk('post');
+        $_arr_apiChks = $this->general_api->app_chk('post');
         if ($_arr_apiChks['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_apiChks);
+            $this->general_api->show_result($_arr_apiChks);
         }
 
-        $_arr_params    = fn_post("params");
+        $_arr_params    = fn_post('params');
 
         $_arr_paramsSrc = array();
 
@@ -50,11 +50,11 @@ class CONTROL_API_API_SIGNATURE {
         $_str_sign = $this->obj_sign->sign_make($_arr_paramsSrc);
 
         $_arr_tplData = array(
-            "signature"  => $_str_sign,
-            "rcode"      => "y050404",
+            'signature'  => $_str_sign,
+            'rcode'      => 'y050404',
         );
 
-        $this->obj_api->show_result($_arr_tplData);
+        $this->general_api->show_result($_arr_tplData);
     }
 
 
@@ -65,20 +65,20 @@ class CONTROL_API_API_SIGNATURE {
      * @return void
      */
     function ctrl_verify() {
-        $_arr_apiChks = $this->obj_api->app_chk('post');
+        $_arr_apiChks = $this->general_api->app_chk('post');
         if ($_arr_apiChks['rcode'] != 'ok') {
-            $this->obj_api->show_result($_arr_apiChks);
+            $this->general_api->show_result($_arr_apiChks);
         }
 
-        $_arr_params = fn_post("params");
+        $_arr_params = fn_post('params');
 
-        $_arr_signature = fn_validate(fn_post("signature"), 1, 0);
+        $_arr_signature = fn_validate(fn_post('signature'), 1, 0);
         switch ($_arr_signature['status']) {
             case 'too_short':
                 $_arr_tplData = array(
-                    'rcode' => "x050226",
+                    'rcode' => 'x050226',
                 );
-                $this->obj_api->show_result($_arr_tplData);
+                $this->general_api->show_result($_arr_tplData);
             break;
 
             case 'ok':
@@ -87,15 +87,15 @@ class CONTROL_API_API_SIGNATURE {
         }
 
         if ($this->obj_sign->sign_check($_arr_params, $_str_sign)) {
-            $_str_rcode = "y050403";
+            $_str_rcode = 'y050403';
         } else {
-            $_str_rcode = "x050403";
+            $_str_rcode = 'x050403';
         }
 
         $_arr_tplData = array(
             'rcode' => $_str_rcode,
         );
 
-        $this->obj_api->show_result($_arr_tplData);
+        $this->general_api->show_result($_arr_tplData);
     }
 }

@@ -21,7 +21,7 @@ $ctrl_login = new CONTROL_CONSOLE_REQUEST_LOGIN(); //初始化登录
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'login':
                 $ctrl_login->ctrl_login(); //登录
             break;

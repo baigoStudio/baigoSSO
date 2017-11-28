@@ -10,22 +10,22 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"          => true, //基本设置
-    "db"            => true, //连接数据库
+    'base'          => true, //基本设置
+    'db'            => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
 
 $ctrl_sync = new CONTROL_API_API_SYNC(); //初始化同步
 
-switch ($GLOBALS["method"]) {
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "login":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'login':
                 $ctrl_sync->ctrl_login(); //同步登录
             break;
 
-            case "logout":
+            case 'logout':
                 $ctrl_sync->ctrl_logout(); //同步登出
             break;
         }

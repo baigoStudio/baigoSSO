@@ -105,7 +105,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             admin_sec_ques_<?php echo $_iii; ?>: {
                 len: { min: 1, max: 0 },
                 validate: { type: "str", format: "text", group: "#group_admin_sec_ques_<?php echo $_iii; ?>" },
-                msg: { selector: "#msg_admin_sec_ques_<?php echo $_iii; ?>", too_short: "<?php echo $this->lang['rcode']["x010238"]; ?> <?php echo $_iii; ?>", too_long: "<?php echo $this->lang['rcode']["x010236"]; ?>" }
+                msg: { selector: "#msg_admin_sec_ques_<?php echo $_iii; ?>", too_short: "<?php echo $this->lang['rcode']['x010238']; ?> <?php echo $_iii; ?>", too_long: "<?php echo $this->lang['rcode']['x010236']; ?>" }
             },
             admin_sec_answ_<?php echo $_iii; ?>: {
                 len: { min: 1, max: 0 },
@@ -116,7 +116,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         admin_pass: {
             len: { min: 1, max: 0 },
             validate: { type: "str", format: "text", group: "#group_admin_pass" },
-            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']["x010243"]; ?>" }
+            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']['x010243']; ?>" }
         }
     };
     var opts_submit_form = {

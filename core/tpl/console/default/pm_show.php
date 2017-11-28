@@ -1,8 +1,4 @@
-<?php if ($this->tplData['pmRow']['pm_status'] == 'read') {
-    $css_status = 'success';
-} else {
-    $css_status = 'warning';
-} ?>
+<?php include($cfg['pathInclude'] . 'function.php'); ?>
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <?php echo $this->lang['consoleMod']['pm']['main']['title'] . ' &raquo; ' . $this->lang['mod']['page']['show']; ?>
@@ -35,17 +31,17 @@
 
     <div class="form-group">
         <label class="control-label"><?php echo $this->lang['mod']['label']['title']; ?></label>
-        <div class="form-control-static"><?php echo fn_htmlcode($this->tplData['pmRow']['pm_title'], "decode", "json"); ?></div>
+        <div class="form-control-static"><?php echo fn_htmlcode($this->tplData['pmRow']['pm_title'], 'decode', 'json'); ?></div>
     </div>
 
     <div class="form-group">
         <label class="control-label"><?php echo $this->lang['mod']['label']['content']; ?></label>
-        <div><?php echo fn_htmlcode($this->tplData['pmRow']["pm_content"], "decode", "json"); ?></div>
+        <div><?php echo fn_htmlcode($this->tplData['pmRow']['pm_content'], 'decode', 'json'); ?></div>
     </div>
 
     <div class="form-group">
         <div class="form-control-static">
-            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$this->tplData['pmRow']['pm_status']]; ?></span>
+            <?php pm_status_process($this->tplData['pmRow']['pm_status'], $this->lang['mod']['status']); ?>
         </div>
     </div>
 

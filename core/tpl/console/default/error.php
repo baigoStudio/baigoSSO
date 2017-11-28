@@ -17,7 +17,7 @@ if ($GLOBALS['view'] == 'iframe') { ?>
     <div class="form-group">
         <a href="javascript:history.go(-1);">
             <span class="glyphicon glyphicon-chevron-left"></span>
-            <?php echo $this->lang['mod']['href']['back']; ?>
+            <?php echo $this->lang['common']['href']['back']; ?>
         </a>
     </div>
 <?php } ?>
@@ -30,8 +30,8 @@ if ($GLOBALS['view'] == 'iframe') { ?>
                 } ?>
             </h3>
             <div>
-                <?php if (isset($this->tplData['rcode']) && !fn_isEmpty($this->tplData['rcode']) && isset($this->lang['mod']['text'][$this->tplData['rcode']])) {
-                    echo $this->lang['mod']['text'][$this->tplData['rcode']];
+                <?php if (isset($this->tplData['rcode']) && !fn_isEmpty($this->tplData['rcode']) && isset($this->lang['common']['text'][$this->tplData['rcode']])) {
+                    echo $this->lang['common']['text'][$this->tplData['rcode']];
                 } ?>
             </div>
             <div>

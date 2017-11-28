@@ -21,7 +21,7 @@ $ctrl_forgot = new CONTROL_CONSOLE_REQUEST_FORGOT(); //初始化登录
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'bymail':
                 $ctrl_forgot->ctrl_bymail(); //回答密保问题
             break;

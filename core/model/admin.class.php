@@ -45,9 +45,9 @@ class MODEL_ADMIN {
             'admin_time'        => 'int NOT NULL COMMENT \'注册时间\'',
         );
 
-        $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . 'admin', $_arr_adminCreate, 'admin_id', '管理员');
+        $_num_db = $this->obj_db->create_table(BG_DB_TABLE . 'admin', $_arr_adminCreate, 'admin_id', '管理员');
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y020105'; //更新成功
         } else {
             $_str_rcode = 'x020105'; //更新成功
@@ -197,8 +197,8 @@ class MODEL_ADMIN {
             }
         } else {
             $_num_adminId    = $arr_adminSubmit['admin_id'];
-            $_num_mysql      = $this->obj_db->update(BG_DB_TABLE . 'admin', $_arr_adminData, '`admin_id`=' . $_num_adminId); //更新数据
-            if ($_num_mysql > 0) {
+            $_num_db      = $this->obj_db->update(BG_DB_TABLE . 'admin', $_arr_adminData, '`admin_id`=' . $_num_adminId); //更新数据
+            if ($_num_db > 0) {
                 $_str_rcode = 'y020103'; //更新成功
             } else {
                 return array(
@@ -229,10 +229,10 @@ class MODEL_ADMIN {
             'admin_status' => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'admin', $_arr_adminUpdate, '`admin_id` IN (' . $_str_adminId . ')'); //删除数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'admin', $_arr_adminUpdate, '`admin_id` IN (' . $_str_adminId . ')'); //删除数据
 
         //如影响行数大于0则返回成功
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y020103'; //成功
         } else {
             $_str_rcode = 'x020103'; //失败
@@ -356,10 +356,10 @@ class MODEL_ADMIN {
     function mdl_del() {
         $_str_adminId = implode(',', $this->adminIds['admin_ids']);
 
-        $_num_mysql = $this->obj_db->delete(BG_DB_TABLE . 'admin', '`admin_id` IN (' . $_str_adminId . ')'); //删除数据
+        $_num_db = $this->obj_db->delete(BG_DB_TABLE . 'admin', '`admin_id` IN (' . $_str_adminId . ')'); //删除数据
 
         //如车影响行数小于0则返回错误
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y020104'; //成功
         } else {
             $_str_rcode = 'x020104'; //失败
@@ -566,7 +566,7 @@ class MODEL_ADMIN {
 
         $this->adminIds = array(
             'rcode'      => $_str_rcode,
-            'admin_ids'  => array_unique($_arr_adminIds),
+            'admin_ids'  => array_filter(array_unique($_arr_adminIds)),
         );
 
         return $this->adminIds;
@@ -581,7 +581,7 @@ class MODEL_ADMIN {
      * @return void
      */
     private function sql_process($arr_search = array()) {
-        $_str_sqlWhere = '1=1';
+        $_str_sqlWhere = '1';
 
         if (isset($arr_search['key']) && !fn_isEmpty($arr_search['key'])) {
             $_str_sqlWhere .= ' AND (`admin_name` LIKE \'%' . $arr_search['key'] . '%\' OR `admin_note` LIKE \'%' . $arr_search['key'] . '%\' OR `admin_nick` LIKE \'%' . $arr_search['key'] . '%\')';

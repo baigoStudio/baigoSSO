@@ -14,11 +14,11 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_CONSOLE_REQUEST_LOGIN {
 
     function __construct() { //构造函数
-        $this->obj_console  = new CLASS_CONSOLE();
-        $this->obj_console->dspType = 'result';
-        $this->obj_console->chk_install();
+        $this->general_console  = new GENERAL_CONSOLE();
+        $this->general_console->dspType = 'result';
+        $this->general_console->chk_install();
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->mdl_admin        = new MODEL_ADMIN(); //设置管理员模型
         $this->mdl_user_profile = new MODEL_USER_PROFILE(); //设置管理员模型
@@ -36,7 +36,7 @@ class CONTROL_CONSOLE_REQUEST_LOGIN {
             $this->obj_tpl->tplDisplay('result', $_arr_adminInput);
         }
 
-        $_arr_userRow = $this->mdl_user_profile->mdl_read($_arr_adminInput['admin_name'], "user_name");
+        $_arr_userRow = $this->mdl_user_profile->mdl_read($_arr_adminInput['admin_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
             $this->obj_tpl->tplDisplay('result', $_arr_userRow);
         }
@@ -60,7 +60,7 @@ class CONTROL_CONSOLE_REQUEST_LOGIN {
         switch ($_arr_userRow['user_crypt_type']) {
             case 0:
             case 1:
-                $_str_crypt = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow["user_rand"], false, $_arr_userRow['user_crypt_type']);
+                $_str_crypt = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow['user_rand'], false, $_arr_userRow['user_crypt_type']);
             break;
 
             default:
@@ -69,40 +69,40 @@ class CONTROL_CONSOLE_REQUEST_LOGIN {
         }
 
         //特殊处理，针对上一版本加密错误
-        if ($_str_crypt != $_arr_userRow["user_pass"]) {
-            $_str_crypt = fn_baigoCrypt($_arr_adminInput["admin_pass"], $_arr_userRow["user_name"], false, 0);
+        if ($_str_crypt != $_arr_userRow['user_pass']) {
+            $_str_crypt = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow['user_name'], false, 0);
         }
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
             $_arr_tplData = array(
-                'rcode'     => "x010213",
+                'rcode'     => 'x010213',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
         $_arr_userSubmit = array(
-            "user_id" => $_arr_userRow['user_id'],
+            'user_id' => $_arr_userRow['user_id'],
         );
         $_arr_loginRow = $this->mdl_user_api->mdl_login($_arr_userSubmit);
 
         //如新加密规则与数据库不一致，则对密码重新加密
         $_str_userPass  = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_userRow['user_name']);
 
-        if ($_str_userPass != $_arr_userRow["user_pass"]) {
+        if ($_str_userPass != $_arr_userRow['user_pass']) {
             $this->mdl_user_profile->mdl_pass($_arr_userRow['user_id'], $_str_userPass);
         }
 
-        /*print_r($_str_crypt . "<br>");
+        /*print_r($_str_crypt . '<br>');
         print_r($_arr_userRow['user_pass']);
         exit;*/
 
-        $_arr_ssin = $this->obj_console->ssin_login($_arr_loginRow);
+        $_arr_ssin = $this->general_console->ssin_login($_arr_loginRow);
         if ($_arr_ssin['rcode'] != 'ok') {
             $this->obj_tpl->tplDisplay('result', $_arr_ssin);
         }
 
         $_arr_tplData = array(
-            'rcode'     => "y020401",
+            'rcode'     => 'y020401',
         );
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
     }

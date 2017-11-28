@@ -4,13 +4,14 @@ if (fn_isEmpty($this->tplData['act'])) {
 }
 
 $cfg = array(
+    'title'         => $this->lang['mod']['page']['upgrade'] . ' &raquo; ' . $this->opt[$this->tplData['act']]['title'],
     'sub_title'     => $this->opt[$this->tplData['act']]['title'],
     'mod_help'      => 'upgrade',
     'act_help'      => $this->tplData['act'],
     'pathInclude'   => BG_PATH_TPLSYS . 'install' . DS . 'default' . DS . 'include' . DS,
 );
 
-include(BG_PATH_TPLSYS . 'console/default/include/function.php');
+include(BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include/function.php');
 include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
 
     <form name="upgrade_form" id="upgrade_form">
@@ -23,14 +24,14 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         $_timezoneRows  = array();
         $_timezoneType  = '';
 
-        if ($GLOBALS['act'] == "base") {
+        if ($GLOBALS['route']['bg_act'] == 'base') {
             $_tplRows       = $this->tplData['tplRows'];
             $_timezoneLang  = $this->lang['timezone'];
             $_timezoneRows  = $this->tplData['timezoneRows'];
             $_timezoneType  = $this->tplData['timezoneType'];
         }
 
-        $arr_form = opt_form_process($this->opt[$GLOBALS['act']]['list'], $this->lang['opt'][$GLOBALS['act']]['list'], $_tplRows, $_timezoneRows, $_timezoneLang, $_timezoneType, $this->lang['mod'], $this->lang['rcode']); ?>
+        $arr_form = opt_form_process($this->opt[$GLOBALS['route']['bg_act']]['list'], $this->lang['opt'][$GLOBALS['route']['bg_act']]['list'], $_tplRows, $_timezoneRows, $_timezoneLang, $_timezoneType, $this->lang['mod']['label'], $this->lang['rcode']); ?>
 
         <hr class="bg-panel-hr">
 
@@ -39,8 +40,8 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         <div class="form-group clearfix">
             <div class="pull-left">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=<?php echo $this->tplData['upgrade_step']['prev']; ?>" class="btn btn-default"><?php echo $this->lang['mod']['btn']['stepPrev']; ?></a>
-                    <?php include($cfg['pathInclude'] . "upgrade_drop.php"); ?>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=<?php echo $this->tplData['upgrade_step']['prev']; ?>" class="btn btn-default"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <?php include($cfg['pathInclude'] . 'upgrade_drop.php'); ?>
                     <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=<?php echo $this->tplData['upgrade_step']['next']; ?>" class="btn btn-default"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
                 </div>
             </div>
@@ -77,7 +78,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
                 obj_submit_form.formSubmit();
             }
         });
-        <?php if ($GLOBALS['act'] == "base") { ?>
+        <?php if ($GLOBALS['route']['bg_act'] == 'base') { ?>
             var _timezoneRowsJson = <?php echo $this->tplData['timezoneRowsJson']; ?>;
             var _timezoneLangJson = <?php echo $this->lang['timezoneJson']; ?>;
 
@@ -97,8 +98,7 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
                     }
                     _str_appent += "</option>";
                 });
-                $("#opt_base_BG_SITE_TIMEZONE").empty();
-                $("#opt_base_BG_SITE_TIMEZONE").append(_str_appent);
+                $("#opt_base_BG_SITE_TIMEZONE").html(_str_appent);
             });
         <?php } ?>
     });

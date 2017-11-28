@@ -10,7 +10,7 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base" => true, //基本设置
+    'base' => true, //基本设置
 );
 $obj_runtime->run($arr_set);
 

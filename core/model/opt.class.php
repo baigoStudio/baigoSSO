@@ -254,8 +254,8 @@ class MODEL_OPT {
             break;
         }
 
-        $_arr_dbTable = fn_validate(fn_post('db_table'), 1, 900);
-        switch ($_arr_dbTable['status']) {
+        $_arr_dbtable = fn_validate(fn_post('db_table'), 1, 900);
+        switch ($_arr_dbtable['status']) {
             case 'too_short':
                 return array(
                     'rcode' => 'x040216',
@@ -269,7 +269,7 @@ class MODEL_OPT {
             break;
 
             case 'ok':
-                $this->dbconfigInput['db_table'] = $_arr_dbTable['str'];
+                $this->dbconfigInput['db_table'] = $_arr_dbtable['str'];
             break;
         }
 
@@ -302,16 +302,16 @@ class MODEL_OPT {
 
 
     function chk_ver($is_check = false, $method = 'auto') {
-        if (!file_exists(BG_PATH_CACHE . 'sys/latest_ver.json')) {
+        if (!file_exists(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json')) {
             $this->ver_process($method);
         }
 
-        $_str_ver = file_get_contents(BG_PATH_CACHE . 'sys/latest_ver.json');
+        $_str_ver = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json');
         $_arr_ver = json_decode($_str_ver, true);
 
         if ($is_check || !$_arr_ver || !isset($_arr_ver['time']) || $_arr_ver['time'] - time() > 30 * 86400 || isset($_arr_ver['error'])) {
             $this->ver_process($method);
-            $_str_ver = file_get_contents(BG_PATH_CACHE . 'sys/latest_ver.json');
+            $_str_ver = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json');
             $_arr_ver = json_decode($_str_ver, true);
         }
 
@@ -333,6 +333,6 @@ class MODEL_OPT {
 
         $_str_ver = fn_http(PRD_VER_CHECK, $_arr_data, 'get');
 
-        $this->obj_dir->put_file(BG_PATH_CACHE . 'sys/latest_ver.json', $_str_ver['ret']);
+        $this->obj_dir->put_file(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json', $_str_ver['ret']);
     }
 }

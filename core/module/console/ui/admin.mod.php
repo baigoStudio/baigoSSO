@@ -19,7 +19,7 @@ $obj_runtime->run($arr_set);
 
 $ctrl_admin = new CONTROL_CONSOLE_UI_ADMIN(); //初始化管理员对象
 
-switch ($GLOBALS['act']) {
+switch ($GLOBALS['route']['bg_act']) {
     case 'show':
         $ctrl_admin->ctrl_show(); //显示
     break;

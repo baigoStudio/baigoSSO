@@ -24,6 +24,18 @@
                     <td>SMTP 认证信息详情请咨询服务器提供商</td>
                 </tr>
                 <tr>
+                    <td class="text-nowrap">BG_SMTP_TYPE</td>
+                    <td class="text-nowrap">邮件发送方式</td>
+                    <td>smtp</td>
+                    <td>可选：smtp、phpmail、sendmail、qmail</td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">BG_SMTP_SEC</td>
+                    <td class="text-nowrap">启用加密</td>
+                    <td>ssl</td>
+                    <td>可选：off、tls、ssl</td>
+                </tr>
+                <tr>
                     <td class="text-nowrap">BG_SMTP_PORT</td>
                     <td class="text-nowrap">服务器端口号</td>
                     <td>25</td>
@@ -34,6 +46,12 @@
                     <td class="text-nowrap">服务器是否需要验证</td>
                     <td>true</td>
                     <td>true 为必须验证用户名密码，false 为不需要</td>
+                </tr>
+                <tr>
+                    <td class="text-nowrap">BG_SMTP_AUTHTYPE</td>
+                    <td class="text-nowrap">验证方式</td>
+                    <td>login</td>
+                    <td>可选：login、plain、cram-md5、xoauth2</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">BG_SMTP_USER</td>

@@ -1,5 +1,6 @@
 <?php $cfg = array(
-    "sub_title"     => $this->lang['mod']['page']['admin'],
+    'title'         => $this->lang['mod']['page']['setup'] . ' &raquo; ' . $this->lang['mod']['page']['auth'],
+    "sub_title"     => $this->lang['mod']['page']['auth'],
     "mod_help"      => "setup",
     "act_help"      => 'admin',
     "pathInclude"   => BG_PATH_TPLSYS . 'install' . DS . 'default' . DS . 'include' . DS,
@@ -13,7 +14,7 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
     </div>
 
     <div class="form-group">
-        <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=admin" class="btn btn-info"><?php echo $this->lang['mod']['href']["adminAdd"]; ?></a>
+        <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=admin" class="btn btn-info"><?php echo $this->lang['mod']['href']['adminAdd']; ?></a>
     </div>
 
     <form name="setup_form_auth" id="setup_form_auth">
@@ -29,7 +30,7 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
 
         <div class="form-group">
             <div id="group_admin_nick">
-                <label class="control-label"><?php echo $this->lang['mod']['label']["nick"]; ?><span id="msg_admin_nick"></span></label>
+                <label class="control-label"><?php echo $this->lang['mod']['label']['nick']; ?><span id="msg_admin_nick"></span></label>
                 <input type="text" name="admin_nick" id="admin_nick" data-validate class="form-control">
             </div>
         </div>
@@ -41,8 +42,8 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
         <div class="form-group clearfix">
             <div class="pull-left">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=smtp" class="btn btn-default"><?php echo $this->lang['mod']['btn']['stepPrev']; ?></a>
-                    <?php include($cfg['pathInclude'] . "setup_drop.php"); ?>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=smtp" class="btn btn-default"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <?php include($cfg['pathInclude'] . 'setup_drop.php'); ?>
                     <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=over" class="btn btn-default"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
                 </div>
             </div>
@@ -60,7 +61,7 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
         admin_name: {
             len: { min: 1, max: 30 },
             validate: { type: "ajax", format: "strDigit", group: "#group_admin_name" },
-            msg: { selector: "#msg_admin_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']["x020202"]; ?>", format_err: "<?php echo $this->lang['rcode']['x020203']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
+            msg: { selector: "#msg_admin_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']['x020202']; ?>", format_err: "<?php echo $this->lang['rcode']['x020203']; ?>", ajaxIng: "<?php echo $this->lang['rcode']['x030401']; ?>", ajax_err: "<?php echo $this->lang['rcode']['x030402']; ?>" },
             ajax: { url: "<?php echo BG_URL_INSTALL; ?>request.php?mod=setup&act=chkauth", key: "admin_name", type: "str" }
         },
         admin_pass: {
@@ -76,7 +77,7 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
         admin_nick: {
             len: { min: 0, max: 30 },
             validate: { type: "str", format: "text", group: "#group_admin_nick" },
-            msg: { selector: "#msg_admin_nick", too_short: "<?php echo $this->lang['rcode']["x020204"]; ?>" }
+            msg: { selector: "#msg_admin_nick", too_short: "<?php echo $this->lang['rcode']['x020204']; ?>" }
         }
     };
     var opts_submit_form = {

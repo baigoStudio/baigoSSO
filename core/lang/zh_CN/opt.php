@@ -160,6 +160,31 @@ return array(
             'BG_SMTP_HOST' => array(
                 'label'      => 'SMTP 服务器',
             ),
+            'BG_SMTP_TYPE' => array(
+                'label'      => '邮件发送方式',
+                'option' => array(
+                    'smtp'      => '使用 SMTP 发送（推荐）',
+                    'phpmail'   => '使用 PHP 的 Mail 函数发送',
+                    'sendmail'  => '使用 Sendmail 发送',
+                    'qmail'     => '使用 Qmail 发送',
+                ),
+            ),
+            'BG_SMTP_SEC' => array(
+                'label'      => '启用加密',
+                'option' => array(
+                    'off'   => array(
+                        'value' => '不启用',
+                    ),
+                    'tls'   => array(
+                        'value' => 'TLS 协议',
+                        'note' => '需启用相关 TLS 协议。'
+                    ),
+                    'ssl'   => array(
+                        'value' => 'SSL 协议',
+                        'note' => '需启用相关 SSL 协议，如：OpenSSL 等。'
+                    ),
+                ),
+            ),
             'BG_SMTP_PORT' => array(
                 'label'      => '服务器端口',
             ),
@@ -174,6 +199,25 @@ return array(
                     ),
                 ),
             ),
+
+            'BG_SMTP_AUTHTYPE' => array(
+                'label'  => '验证方式',
+                'option' => array(
+                    'login'   => array(
+                        'value'    => 'LOGIN'
+                    ),
+                    'plain'   => array(
+                        'value'    => 'PLAIN'
+                    ),
+                    'cram-md5'    => array(
+                        'value'    => 'CRAM-MD5'
+                    ),
+                    'xoauth2'   => array(
+                        'value'    => 'XOAUTH2'
+                    ),
+                ),
+            ),
+
             'BG_SMTP_USER' => array(
                 'label'      => '用户名',
             ),

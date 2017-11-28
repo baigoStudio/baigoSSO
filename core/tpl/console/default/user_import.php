@@ -1,6 +1,6 @@
 <?php $cfg = array(
     'title'          => $this->lang['consoleMod']['user']['main']['title'] . ' &raquo; ' . $this->lang['consoleMod']['user']['sub']['import'],
-    'menu_active'    => "user",
+    'menu_active'    => 'user',
     'sub_active'     => "import",
     'baigoCheckall'  => 'true',
     'baigoValidator' => 'true',
@@ -8,7 +8,7 @@
     "upload"         => 'true',
     "md5"            => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=user",
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=user',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
@@ -18,7 +18,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             <li>
                 <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=list">
                     <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['mod']['href']['back']; ?>
+                    <?php echo $this->lang['common']['href']['back']; ?>
                 </a>
             </li>
             <li>
@@ -61,8 +61,8 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                                         <select name="user_convert[<?php echo $key; ?>]" class="form-control">
                                                             <option <?php if ($key < 1) { ?>selected<?php } ?> value="user_name"><?php echo $this->lang['mod']['label']['username']; ?></option>
                                                             <option <?php if ($key == 1) { ?>selected<?php } ?> value="user_pass"><?php echo $this->lang['mod']['label']['password']; ?></option>
-                                                            <option <?php if ($key == 2) { ?>selected<?php } ?> value="user_nick"><?php echo $this->lang['mod']['label']["nick"]; ?></option>
-                                                            <option value="abort"><?php echo $this->lang['mod']['option']["abort"]; ?></option>
+                                                            <option <?php if ($key == 2) { ?>selected<?php } ?> value="user_nick"><?php echo $this->lang['mod']['label']['nick']; ?></option>
+                                                            <option value="abort"><?php echo $this->lang['mod']['option']['abort']; ?></option>
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -145,8 +145,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 <optgroup label="<?php echo $value['title']; ?>">
                                     <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
                                         <option <?php if ($this->tplData['charset'] == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
-                                            <?php echo $value_sub['title']; ?>
-                                            <?php echo $key_sub; ?>
+                                            <?php echo $value_sub['title'], ' ', $key_sub; ?>
                                         </option>
                                     <?php } ?>
                                 </optgroup>
@@ -264,7 +263,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     function alert_process(_class, _icon, _msg) {
         $("#csv_upload .bg-alert").removeClass("alert-info alert-danger alert-success");
         $("#csv_upload .bg-alert").addClass(_class);
-        $("#csv_upload .bg-alert i").removeClass("glyphicon-refresh glyphicon-remove-sign glyphicon-ok-sign bg-spin");
+        $("#csv_upload .bg-alert i").removeClass("glyphicon-refresh glyphicon-remove-sign glyphicon-ok-sign glyphicon-upload bg-spin");
         $("#csv_upload .bg-alert i").addClass(_icon);
         $("#csv_upload .bg-alert span").html(_msg);
     }

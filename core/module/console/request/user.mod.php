@@ -21,7 +21,7 @@ $ctrl_user = new CONTROL_CONSOLE_REQUEST_USER(); //初始化用户
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'convert':
                 $ctrl_user->ctrl_convert(); //导入
             break;
@@ -51,7 +51,7 @@ switch ($GLOBALS['method']) {
     break;
 
     default:
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'readname':
                 $ctrl_user->ctrl_readname(); //验证用户名
             break;

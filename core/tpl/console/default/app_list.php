@@ -6,9 +6,10 @@
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=app&act=list&" . $this->tplData['query'],
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=app&act=list&' . $this->tplData['query'],
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group clearfix">
@@ -80,12 +81,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->tplData["appRows"] as $key=>$value) {
-                            if ($value['app_status'] == 'enable') {
-                                $css_status = 'success';
-                            } else {
-                                $css_status = 'default';
-                            } ?>
+                        <?php foreach ($this->tplData['appRows'] as $key=>$value) { ?>
                             <tr>
                                 <td class="text-nowrap bg-td-xs"><input type="checkbox" name="app_ids[]" value="<?php echo $value['app_id']; ?>" id="app_id_<?php echo $value['app_id']; ?>" data-validate="app_id" data-parent="chk_all"></td>
                                 <td class="text-nowrap bg-td-xs"><?php echo $value['app_id']; ?></td>
@@ -113,7 +109,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 <td class="text-nowrap bg-td-md">
                                     <ul class="list-unstyled">
                                         <li>
-                                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$value['app_status']]; ?></span>
+                                            <?php app_status_process($value['app_status'], $this->lang['mod']['status']); ?>
                                         </li>
                                         <li><?php echo $value['app_note']; ?></li>
                                     </ul>

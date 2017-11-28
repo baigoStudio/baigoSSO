@@ -49,6 +49,7 @@ class MODEL_USER {
             'user_refresh_token'    => 'char(32) NOT NULL COMMENT \'刷新口令\'',
             'user_refresh_expire'   => 'int NOT NULL COMMENT \'刷新过期时间\'',
             'user_crypt_type'       => 'tinyint(1) NOT NULL COMMENT \'加密类型\'',
+            'user_app_id'           => 'smallint NOT NULL COMMENT \'来源 APP ID\'',
         );
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
@@ -56,9 +57,9 @@ class MODEL_USER {
             $_arr_userCreate['user_sec_answ_' . $_iii] = 'varchar(32) NOT NULL COMMENT \'密保答案 ' . $_iii . '\'';
         }
 
-        $_num_mysql = $this->obj_db->create_table(BG_DB_TABLE . 'user', $_arr_userCreate, 'user_id', '用户');
+        $_num_db = $this->obj_db->create_table(BG_DB_TABLE . 'user', $_arr_userCreate, 'user_id', '用户');
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y010105'; //更新成功
         } else {
             $_str_rcode = 'x010105'; //更新成功
@@ -137,6 +138,10 @@ class MODEL_USER {
             }
         }
 
+        if (!in_array('user_app_id', $_arr_col)) {
+            $_arr_alter['user_app_id'] = array('ADD', 'smallint NOT NULL COMMENT \'来源 APP ID\'');
+        }
+
         $_str_rcode = 'y010111';
 
         if (!fn_isEmpty($_arr_alter)) {
@@ -179,9 +184,9 @@ class MODEL_USER {
 
         $_str_sqlJoin = 'LEFT JOIN `' . BG_DB_TABLE . 'belong` ON (`' . BG_DB_TABLE . 'user`.`user_id`=`' . BG_DB_TABLE . 'belong`.`belong_user_id`)';
 
-        $_num_mysql = $this->obj_db->create_view(BG_DB_TABLE . 'user_view', $_arr_userCreat, BG_DB_TABLE . 'user', $_str_sqlJoin);
+        $_num_db = $this->obj_db->create_view(BG_DB_TABLE . 'user_view', $_arr_userCreat, BG_DB_TABLE . 'user', $_str_sqlJoin);
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y010108'; //更新成功
         } else {
             $_str_rcode = 'x010108'; //更新成功
@@ -256,6 +261,7 @@ class MODEL_USER {
                 'user_time'         => time(),
                 'user_time_login'   => time(),
                 'user_ip'           => fn_getIp(),
+                'user_app_id'       => $arr_userSubmit['user_app_id'],
             );
             $_arr_data   = array_merge($_arr_userData, $_arr_insert);
             $_num_userId = $this->obj_db->insert(BG_DB_TABLE . 'user', $_arr_data); //更新数据
@@ -271,8 +277,8 @@ class MODEL_USER {
                 $_arr_userData['user_pass'] = $arr_userSubmit['user_pass']; //如果密码为空，则不修改
             }
             $_num_userId = $this->userInput['user_id'];
-            $_num_mysql  = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $_num_userId); //更新数据
-            if ($_num_mysql > 0) {
+            $_num_db  = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $_num_userId); //更新数据
+            if ($_num_db > 0) {
                 $_str_rcode = 'y010103'; //更新成功
             } else {
                 return array(
@@ -302,10 +308,10 @@ class MODEL_USER {
             'user_status' => $str_status,
         );
 
-        $_num_mysql = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userUpdate, '`user_id` IN (' . $_str_userId . ')'); //删除数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userUpdate, '`user_id` IN (' . $_str_userId . ')'); //删除数据
 
         //如影响行数大于0则返回成功
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y010103'; //成功
         } else {
             $_str_rcode = 'x010103'; //失败
@@ -347,6 +353,7 @@ class MODEL_USER {
             'user_refresh_token',
             'user_refresh_expire',
             'user_crypt_type',
+            'user_app_id',
         );
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
@@ -407,7 +414,7 @@ class MODEL_USER {
             'user_ip',
         );
 
-        $_str_sqlWhere = '1=1';
+        $_str_sqlWhere = '1';
 
         if (isset($arr_search['key']) && !fn_isEmpty($arr_search['key'])) {
             $_str_sqlWhere .= ' AND (`user_name` LIKE \'%' . $arr_search['key'] . '%\' OR `user_nick` LIKE \'%' . $arr_search['key'] . '%\' OR `user_note` LIKE \'%' . $arr_search['key'] . '%\')';
@@ -469,7 +476,7 @@ class MODEL_USER {
      * @return void
      */
     function mdl_count($arr_search = array()) {
-        $_str_sqlWhere = '1=1';
+        $_str_sqlWhere = '1';
 
         $_str_sqlWhere = $this->sql_process($arr_search);
 
@@ -488,10 +495,10 @@ class MODEL_USER {
      */
     function mdl_del($_arr_userIds) {
         $_str_userId  = implode(',', $_arr_userIds);
-        $_num_mysql   = $this->obj_db->delete(BG_DB_TABLE . 'user', '`user_id` IN (' . $_str_userId . ')'); //删除数据
+        $_num_db   = $this->obj_db->delete(BG_DB_TABLE . 'user', '`user_id` IN (' . $_str_userId . ')'); //删除数据
 
         //如车影响行数小于0则返回错误
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y010104'; //成功
             $this->obj_db->delete(BG_DB_TABLE . 'belong', '`belong_user_id` IN (' . $_str_userId . ')'); //删除数据
         } else {
@@ -517,10 +524,10 @@ class MODEL_USER {
         $_arr_userData['user_status'] = 'enable';
 
         if (!fn_isEmpty($_arr_userData)) {
-            $_num_mysql   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $num_userId); //更新数据
+            $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $num_userId); //更新数据
         }
 
-        if ($_num_mysql > 0) {
+        if ($_num_db > 0) {
             $_str_rcode = 'y010409'; //更新成功
         } else {
             return array(
@@ -752,7 +759,7 @@ class MODEL_USER {
 
         $this->userIds = array(
             'rcode'      => $_str_rcode,
-            'user_ids'   => array_unique($_arr_userIds),
+            'user_ids'   => array_filter(array_unique($_arr_userIds)),
         );
 
         return $this->userIds;
@@ -997,7 +1004,7 @@ class MODEL_USER {
      * @return void
      */
     function sql_process($arr_search = array()) {
-        $_str_sqlWhere = '1=1';
+        $_str_sqlWhere = '1';
 
         if (isset($arr_search['key']) && !fn_isEmpty($arr_search['key'])) {
             $_str_sqlWhere .= ' AND (`user_name` LIKE \'%' . $arr_search['key'] . '%\' OR `user_name` LIKE \'%' . $arr_search['key'] . '%\' OR `user_mail` LIKE \'%' . $arr_search['key'] . '%\' OR `user_note` LIKE \'%' . $arr_search['key'] . '%\')';

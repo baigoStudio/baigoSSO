@@ -62,7 +62,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
         admin_name: {
             len: { min: 1, max: 30 },
             validate: { type: "str", format: "strDigit", group: "#group_admin_name" },
-            msg: { selector: "#msg_admin_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']["x010202"]; ?>", format_err: "<?php echo $this->lang['rcode']['x010203']; ?>" }
+            msg: { selector: "#msg_admin_name", too_short: "<?php echo $this->lang['rcode']['x010201']; ?>", too_long: "<?php echo $this->lang['rcode']['x010202']; ?>", format_err: "<?php echo $this->lang['rcode']['x010203']; ?>" }
         },
         admin_pass: {
             len: { min: 1, max: 0 },

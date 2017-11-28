@@ -25,7 +25,7 @@ return array(
         'dbUser'            => '用户名',
         'dbPass'            => '密码',
         'dbCharset'         => '字符编码',
-        'dbTable'           => '数据表前缀',
+        'dbtable'           => '数据表前缀',
         'installVer'        => '当前安装版本',
         'installTime'       => '安装（升级）时间',
         'pubTime'           => '发布时间',

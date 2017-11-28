@@ -15,13 +15,13 @@ class CONTROL_CONSOLE_UI_ADMIN {
     private $is_super = false;
 
     function __construct() { //构造函数
-        $this->obj_console  = new CLASS_CONSOLE();
-        $this->obj_console->chk_install();
+        $this->general_console  = new GENERAL_CONSOLE();
+        $this->general_console->chk_install();
 
-        $this->adminLogged  = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged  = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl      = $this->obj_console->obj_tpl;
+        $this->obj_tpl      = $this->general_console->obj_tpl;
 
         if ($this->adminLogged['admin_type'] == 'super') {
             $this->is_super = true;
@@ -39,10 +39,10 @@ class CONTROL_CONSOLE_UI_ADMIN {
 
 
     function ctrl_show() {
-        $_num_adminId = fn_getSafe(fn_get("admin_id"), 'int', 0); //get 获取 admin_id
+        $_num_adminId = fn_getSafe(fn_get('admin_id'), 'int', 0); //get 获取 admin_id
 
         if (!isset($this->adminLogged['admin_allow']['admin']['browse']) && !$this->is_super) { //判断权限
-            $this->tplData['rcode'] = "x020303";
+            $this->tplData['rcode'] = 'x020303';
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
         $_arr_adminRow = $this->mdl_admin->mdl_read($_num_adminId); //读取
@@ -53,26 +53,27 @@ class CONTROL_CONSOLE_UI_ADMIN {
 
         $this->tplData['adminRow'] = $_arr_adminRow; //管理员信息
 
-        $this->obj_tpl->tplDisplay("admin_show", $this->tplData); //显示
+        $this->obj_tpl->tplDisplay('admin_show', $this->tplData); //显示
     }
 
 
     function ctrl_auth() {
         if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->is_super) { //判断权限
-            $this->tplData['rcode'] = "x020302";
+            $this->tplData['rcode'] = 'x020302';
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
         $_arr_adminRow = array(
-            "admin_id"      => 0,
-            "admin_nick"    => "",
-            "admin_note"    => "",
-            "admin_status"  => $this->mdl_admin->arr_status[0],
-            "admin_type"    => $this->mdl_admin->arr_type[0],
+            'admin_id'      => 0,
+            'admin_nick'    => '',
+            'admin_note'    => '',
+            'admin_status'  => $this->mdl_admin->arr_status[0],
+            'admin_type'    => $this->mdl_admin->arr_type[0],
+            'admin_allow'   => array(),
         );
 
         $this->tplData['adminRow'] = $_arr_adminRow; //管理员信息
 
-        $this->obj_tpl->tplDisplay("admin_auth", $this->tplData);
+        $this->obj_tpl->tplDisplay('admin_auth', $this->tplData);
     }
 
 
@@ -82,15 +83,15 @@ class CONTROL_CONSOLE_UI_ADMIN {
      * @access public
      */
     function ctrl_form() {
-        $_num_adminId = fn_getSafe(fn_get("admin_id"), 'int', 0); //get 获取 admin_id
+        $_num_adminId = fn_getSafe(fn_get('admin_id'), 'int', 0); //get 获取 admin_id
 
         if ($_num_adminId > 0) {
             if (!isset($this->adminLogged['admin_allow']['admin']['edit']) && !$this->is_super) { //判断权限
-                $this->tplData['rcode'] = "x020303";
+                $this->tplData['rcode'] = 'x020303';
                 $this->obj_tpl->tplDisplay('error', $this->tplData);
             }
             if ($_num_adminId == $this->adminLogged['admin_id'] && !$this->is_super) {
-                $this->tplData['rcode'] = "x020306";
+                $this->tplData['rcode'] = 'x020306';
                 $this->obj_tpl->tplDisplay('error', $this->tplData);
             }
             $_arr_adminRow = $this->mdl_admin->mdl_read($_num_adminId);
@@ -100,21 +101,22 @@ class CONTROL_CONSOLE_UI_ADMIN {
             }
         } else {
             if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->is_super) { //判断权限
-                $this->tplData['rcode'] = "x020302";
+                $this->tplData['rcode'] = 'x020302';
                 $this->obj_tpl->tplDisplay('error', $this->tplData);
             }
             $_arr_adminRow = array(
-                "admin_id"      => 0,
-                "admin_nick"    => "",
-                "admin_note"    => "",
-                "admin_status"  => $this->mdl_admin->arr_status[0],
-                "admin_type"    => $this->mdl_admin->arr_type[0],
+                'admin_id'      => 0,
+                'admin_nick'    => '',
+                'admin_note'    => '',
+                'admin_status'  => $this->mdl_admin->arr_status[0],
+                'admin_type'    => $this->mdl_admin->arr_type[0],
+                'admin_allow'   => array(),
             );
         }
 
         $this->tplData['adminRow'] = $_arr_adminRow; //管理员信息
 
-        $this->obj_tpl->tplDisplay("admin_form", $this->tplData);
+        $this->obj_tpl->tplDisplay('admin_form', $this->tplData);
     }
 
 
@@ -125,7 +127,7 @@ class CONTROL_CONSOLE_UI_ADMIN {
      */
     function ctrl_list() {
         if (!isset($this->adminLogged['admin_allow']['admin']['browse']) && !$this->is_super) { //判断权限
-            $this->tplData['rcode'] = "x020301";
+            $this->tplData['rcode'] = 'x020301';
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
 
@@ -141,14 +143,14 @@ class CONTROL_CONSOLE_UI_ADMIN {
         $_arr_adminRows   = $this->mdl_admin->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page['except'], $_arr_search); //列出
 
         $_arr_tpl = array(
-            "query"      => $_str_query,
-            "pageRow"    => $_arr_page,
-            "search"     => $_arr_search,
-            "adminRows"  => $_arr_adminRows,
+            'query'      => $_str_query,
+            'pageRow'    => $_arr_page,
+            'search'     => $_arr_search,
+            'adminRows'  => $_arr_adminRows,
         );
 
         $_arr_tplData = array_merge($this->tplData, $_arr_tpl);
 
-        $this->obj_tpl->tplDisplay("admin_list", $_arr_tplData);
+        $this->obj_tpl->tplDisplay('admin_list', $_arr_tplData);
     }
 }

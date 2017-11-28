@@ -17,7 +17,7 @@ if (!defined('IN_BAIGO')) {
  * @access public
  * @param mixed $str_url
  * @param mixed $arr_data
- * @param string $str_method (default: "get")
+ * @param string $str_method (default: 'get')
  * @return void
  */
 function fn_http($str_url, $arr_data, $str_method = 'get') {
@@ -26,8 +26,8 @@ function fn_http($str_url, $arr_data, $str_method = 'get') {
     $_str_data = http_build_query($arr_data);
 
     $_arr_headers = array(
-        "Content-Type: application/x-www-form-urlencoded; charset=utf-8",
-        //"Content-length: " . strlen($_str_data),
+        'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+        //'Content-length: ' . strlen($_str_data),
     );
 
     curl_setopt($_obj_http, CURLOPT_HTTPHEADER, $_arr_headers);
@@ -37,10 +37,10 @@ function fn_http($str_url, $arr_data, $str_method = 'get') {
         curl_setopt($_obj_http, CURLOPT_POSTFIELDS, $_str_data);
         curl_setopt($_obj_http, CURLOPT_URL, $str_url);
     } else {
-        if (stristr($str_url, "?")) {
-            $_str_conn = "&";
+        if (stristr($str_url, '?')) {
+            $_str_conn = '&';
         } else {
-            $_str_conn = "?";
+            $_str_conn = '?';
         }
         curl_setopt($_obj_http, CURLOPT_URL, $str_url . $_str_conn . $_str_data);
     }
@@ -50,9 +50,9 @@ function fn_http($str_url, $arr_data, $str_method = 'get') {
     $_obj_ret = curl_exec($_obj_http);
 
     $_arr_return = array(
-        "ret"   => $_obj_ret,
-        "error" => curl_error($_obj_http),
-        "errno" => curl_errno($_obj_http),
+        'ret'   => $_obj_ret,
+        'error' => curl_error($_obj_http),
+        'errno' => curl_errno($_obj_http),
     );
 
     //print_r(curl_error($_obj_http));

@@ -13,8 +13,8 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
         <?php foreach ($this->tplData['forgot'] as $_key=>$_value) { ?>
             <li<?php if ($_key == 'mail') { ?> class="active"<?php } ?>>
                 <a href="#<?php echo $_key; ?>" data-toggle="tab">
-                    <?php if (isset($this->lang['mod']['type'][$_key])) {
-                        echo $this->lang['mod']['type'][$_key];
+                    <?php if (isset($this->lang['forgot'][$_key])) {
+                        echo $this->lang['forgot'][$_key];
                     } else {
                         echo $_value;
                     } ?>
@@ -86,7 +86,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                     <input type="text" name="admin_name" value="<?php echo $this->tplData['userRow']['user_name']; ?>" readonly class="form-control input-lg">
                 </div>
 
-                <?php if (fn_isEmpty($this->tplData['userRow']["user_sec_ques_1"])) { ?>
+                <?php if (fn_isEmpty($this->tplData['userRow']['user_sec_ques_1'])) { ?>
                     <div class="alert alert-danger alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <span class="glyphicon glyphicon-remove-sign"></span>

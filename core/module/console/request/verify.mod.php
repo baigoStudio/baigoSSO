@@ -21,7 +21,7 @@ $ctrl_verify = new CONTROL_CONSOLE_REQUEST_VERIFY(); //初始化验证
 
 switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
+        switch ($GLOBALS['route']['bg_act']) {
             case 'enable':
             case 'disable':
                 $ctrl_verify->ctrl_status(); //状态

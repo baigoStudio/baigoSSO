@@ -10,7 +10,7 @@ if (!defined('IN_BAIGO')) {
 }
 
 return array(
-    'my' => array(
+    'personal' => array(
         'ui' => array(
             'reg',
             'profile',

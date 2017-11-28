@@ -116,7 +116,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <ul class="nav nav-pills nav-stacked">
+                <ul class="nav nav-pills nav-stacked bg-nav-sso">
                     <?php if (isset($this->help['mod'][$this->tplData['mod']]['menu'])) {
                         foreach ($this->help['mod'][$this->tplData['mod']]['menu'] as $key=>$value) { ?>
                             <li<?php if ($this->tplData['act'] == $key) { ?> class="active"<?php } ?>>

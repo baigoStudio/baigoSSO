@@ -17,14 +17,14 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->dspType = 'result';
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->dspType = 'result';
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         $this->tplData = array(
             'adminLogged' => $this->adminLogged
@@ -43,7 +43,7 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
     function ctrl_auth() {
         if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode'     => "x020302",
+                'rcode'     => 'x020302',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -53,10 +53,10 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
             $this->obj_tpl->tplDisplay('result', $_arr_adminInput);
         }
 
-        $_arr_userRow = $this->mdl_user_api->mdl_read($_arr_adminInput['admin_name'], "user_name");
+        $_arr_userRow = $this->mdl_user_api->mdl_read($_arr_adminInput['admin_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
             $_arr_tplData = array(
-                'rcode'     => "x020207",
+                'rcode'     => 'x020207',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -90,14 +90,14 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
         if ($_arr_adminInput['admin_id'] > 0) {
             if (!isset($this->adminLogged['admin_allow']['admin']['edit']) && !$this->is_super) {
                 $_arr_tplData = array(
-                    'rcode'     => "x020303",
+                    'rcode'     => 'x020303',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
 
             if ($_arr_adminInput['admin_id'] == $this->adminLogged['admin_id'] && !$this->is_super) {
                 $_arr_tplData = array(
-                    'rcode'     => "x020306",
+                    'rcode'     => 'x020306',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
@@ -105,12 +105,12 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
             $_arr_userRow = $this->mdl_user_api->mdl_read($_arr_adminInput['admin_id']);
             if ($_arr_userRow['rcode'] != 'y010102') {
                 $_arr_tplData = array(
-                    'rcode'     => "x020207",
+                    'rcode'     => 'x020207',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
 
-            $_str_adminPass = fn_getSafe(fn_post("admin_pass"), 'txt', '');
+            $_str_adminPass = fn_getSafe(fn_post('admin_pass'), 'txt', '');
 
             if (!fn_isEmpty($_str_adminPass)) {
                 $_str_adminPassDo   = fn_baigoCrypt($_str_adminPass, $_arr_adminInput['admin_name']);
@@ -119,16 +119,16 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
         } else {
             if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->is_super) {
                 $_arr_tplData = array(
-                    'rcode'     => "x020302",
+                    'rcode'     => 'x020302',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
 
-            $_arr_adminPass = fn_validate(fn_post("admin_pass"), 1, 0);
+            $_arr_adminPass = fn_validate(fn_post('admin_pass'), 1, 0);
             switch ($_arr_adminPass['status']) {
                 case 'too_short':
                     $_arr_tplData = array(
-                        'rcode'     => "x010212",
+                        'rcode'     => 'x010212',
                     );
                     $this->obj_tpl->tplDisplay('result', $_arr_tplData);
                 break;
@@ -139,7 +139,7 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
             }
 
             //检验用户名是否重复
-            $_arr_userRow = $this->mdl_user_api->mdl_read($_arr_adminInput['admin_name'], "user_name");
+            $_arr_userRow = $this->mdl_user_api->mdl_read($_arr_adminInput['admin_name'], 'user_name');
 
             if ($_arr_userRow['rcode'] == 'y010102') {
                 $_arr_adminRow = $this->mdl_admin->mdl_read($_arr_userRow['user_id']);
@@ -181,15 +181,15 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
     function ctrl_status() {
         if (!isset($this->adminLogged['admin_allow']['admin']['edit']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode'     => "x020303",
+                'rcode'     => 'x020303',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_str_status = fn_getSafe($GLOBALS['act'], 'txt', '');
+        $_str_status = fn_getSafe($GLOBALS['route']['bg_act'], 'txt', '');
         if (fn_isEmpty($_str_status)) {
             $_arr_tplData = array(
-                'rcode' => "x020202",
+                'rcode' => 'x020202',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -213,7 +213,7 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
     function ctrl_del() {
         if (!isset($this->adminLogged['admin_allow']['admin']['del']) && !$this->is_super) {
             $_arr_tplData = array(
-                'rcode'     => "x020304",
+                'rcode'     => 'x020304',
             );
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
@@ -230,10 +230,10 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
 
 
     function ctrl_chkauth() {
-        $_str_adminName   = fn_getSafe(fn_get("admin_name"), 'txt', '');
+        $_str_adminName   = fn_getSafe(fn_get('admin_name'), 'txt', '');
 
         if (!fn_isEmpty($_str_adminName)) {
-            $_arr_userRow = $this->mdl_user_api->mdl_read($_str_adminName, "user_name");
+            $_arr_userRow = $this->mdl_user_api->mdl_read($_str_adminName, 'user_name');
             if ($_arr_userRow['rcode'] == 'y010102') {
                 $_arr_adminRow = $this->mdl_admin->mdl_read($_arr_userRow['user_id']);
                 if ($_arr_adminRow['rcode'] == 'y020102') {
@@ -244,14 +244,14 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
                 }
             } else {
                 $_arr_tplData = array(
-                    'rcode'     => "x020207",
+                    'rcode'     => 'x020207',
                 );
                 $this->obj_tpl->tplDisplay('result', $_arr_tplData);
             }
         }
 
         $_arr_tplData = array(
-            "msg" => 'ok'
+            'msg' => 'ok'
         );
 
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);
@@ -264,10 +264,10 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
      * @access public
      */
     function ctrl_chkname() {
-        $_str_adminName   = fn_getSafe(fn_get("admin_name"), 'txt', '');
+        $_str_adminName   = fn_getSafe(fn_get('admin_name'), 'txt', '');
 
         if (!fn_isEmpty($_str_adminName)) {
-            $_arr_userRow = $this->mdl_user_api->mdl_read($_str_adminName, "user_name");
+            $_arr_userRow = $this->mdl_user_api->mdl_read($_str_adminName, 'user_name');
 
             if ($_arr_userRow['rcode'] == 'y010102') {
                 $_arr_adminRow = $this->mdl_admin->mdl_read($_arr_userRow['user_id']);
@@ -286,7 +286,7 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
         }
 
         $_arr_tplData = array(
-            "msg" => 'ok'
+            'msg' => 'ok'
         );
 
         $this->obj_tpl->tplDisplay('result', $_arr_tplData);

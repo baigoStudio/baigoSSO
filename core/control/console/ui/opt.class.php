@@ -19,19 +19,23 @@ class CONTROL_CONSOLE_UI_OPT {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        $this->obj_console      = new CLASS_CONSOLE();
-        $this->obj_console->chk_install();
+        $this->general_console      = new GENERAL_CONSOLE();
+        $this->general_console->chk_install();
 
-        $this->adminLogged      = $this->obj_console->ssin_begin(); //获取已登录信息
-        $this->obj_console->is_admin($this->adminLogged);
+        $this->adminLogged      = $this->general_console->ssin_begin(); //获取已登录信息
+        $this->general_console->is_admin($this->adminLogged);
 
-        $this->obj_tpl          = $this->obj_console->obj_tpl;
+        $this->obj_tpl          = $this->general_console->obj_tpl;
 
         if ($this->adminLogged['admin_type'] == 'super') {
             $this->is_super = true;
         }
 
-        $this->act = fn_getSafe($GLOBALS['act'], 'text', 'base');
+        $this->act = fn_getSafe($GLOBALS['route']['bg_act'], 'text', 'base');
+
+        if (!array_key_exists($this->act, $this->obj_tpl->opt)) {
+            $this->act = 'base';
+        }
 
         $this->obj_dir          = new CLASS_DIR();
         $this->mdl_opt          = new MODEL_OPT(); //设置管理组模型
@@ -74,11 +78,11 @@ class CONTROL_CONSOLE_UI_OPT {
         }
 
         if ($this->act == 'base') {
-            $this->tplData['tplRows']     = $this->obj_dir->list_dir(BG_PATH_TPL . 'my' . DS);
+            $this->tplData['tplRows']     = $this->obj_dir->list_dir(BG_PATH_TPL . 'personal' . DS);
 
-            $_arr_timezoneRows  = fn_include(BG_PATH_INC . "timezone.inc.php");
+            $_arr_timezoneRows  = fn_include(BG_PATH_INC . 'timezone.inc.php');
 
-            $this->obj_tpl->lang['timezone']        = fn_include(BG_PATH_LANG . $this->config['lang'] . DS . "timezone.php");
+            $this->obj_tpl->lang['timezone']        = fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'timezone.php');
             $this->obj_tpl->lang['timezoneJson']    = json_encode($this->obj_tpl->lang['timezone']);
 
             $_arr_timezone[] = '';

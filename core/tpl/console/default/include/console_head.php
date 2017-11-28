@@ -101,9 +101,9 @@
                                         </a>
                                     </li>
                                 <?php } ?>
-                                <li<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt' && isset($cfg['sub_active']) && $cfg['sub_active'] == "dbconfig") { ?> class="active"<?php } ?>>
+                                <li<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt' && isset($cfg['sub_active']) && $cfg['sub_active'] == 'dbconfig') { ?> class="active"<?php } ?>>
                                     <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=opt&act=dbconfig">
-                                        <?php echo $this->lang['common']['page']['dbConfig']; ?>
+                                        <?php echo $this->lang['common']['page']['dbconfig']; ?>
                                     </a>
                                 </li>
                                 <li<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt' && isset($cfg['sub_active']) && $cfg['sub_active'] == "chkver") { ?> class="active"<?php } ?>>

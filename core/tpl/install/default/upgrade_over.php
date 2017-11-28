@@ -1,4 +1,5 @@
 <?php $cfg = array(
+    'title'         => $this->lang['mod']['page']['upgrade'] . ' &raquo; ' . $this->lang['mod']['page']['over'],
     "sub_title"     => $this->lang['mod']['page']['over'],
     "mod_help"      => "upgrade",
     "act_help"      => 'over',
@@ -23,8 +24,8 @@ include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
         <div class="form-group clearfix">
             <div class="pull-left">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=smtp" class="btn btn-default"><?php echo $this->lang['mod']['btn']['stepPrev']; ?></a>
-                    <?php include($cfg['pathInclude'] . "upgrade_drop.php"); ?>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=smtp" class="btn btn-default"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <?php include($cfg['pathInclude'] . 'upgrade_drop.php'); ?>
                 </div>
             </div>
 

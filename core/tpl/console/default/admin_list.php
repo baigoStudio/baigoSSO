@@ -6,9 +6,10 @@
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . "index.php?mod=admin&act=list&" . $this->tplData['query'],
+    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=admin&act=list&' . $this->tplData['query'],
 );
 
+include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="form-group clearfix">
@@ -89,17 +90,12 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                             </th>
                             <th class="text-nowrap bg-td-xs"><?php echo $this->lang['mod']['label']['id']; ?></th>
                             <th><?php echo $this->lang['mod']['label']['admin']; ?></th>
-                            <th class="text-nowrap"><?php echo $this->lang['mod']['label']["nick"]; ?> / <?php echo $this->lang['mod']['label']['note']; ?></th>
+                            <th class="text-nowrap"><?php echo $this->lang['mod']['label']['nick']; ?> / <?php echo $this->lang['mod']['label']['note']; ?></th>
                             <th class="text-nowrap bg-td-md"><?php echo $this->lang['mod']['label']['status']; ?> / <?php echo $this->lang['mod']['label']['type']; ?></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($this->tplData["adminRows"] as $key=>$value) {
-                            if ($value['admin_status'] == 'enable') {
-                                $css_status = 'success';
-                            } else {
-                                $css_status = 'default';
-                            } ?>
+                        <?php foreach ($this->tplData['adminRows'] as $key=>$value) { ?>
                             <tr>
                                 <td class="text-nowrap bg-td-xs"><input type="checkbox" name="admin_ids[]" value="<?php echo $value['admin_id']; ?>" id="admin_id_<?php echo $value['admin_id']; ?>" data-validate="admin_id" data-parent="chk_all"></td>
                                 <td class="text-nowrap bg-td-xs"><?php echo $value['admin_id']; ?></td>
@@ -127,7 +123,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                 <td class="text-nowrap bg-td-md">
                                     <ul class="list-unstyled">
                                         <li>
-                                            <span class="label label-<?php echo $css_status; ?> bg-label"><?php echo $this->lang['mod']['status'][$value['admin_status']]; ?></span>
+                                            <?php admin_status_process($value['admin_status'], $this->lang['mod']['status']); ?>
                                         </li>
                                         <li><?php echo $this->lang['mod']['type'][$value['admin_type']]; ?></li>
                                     </ul>

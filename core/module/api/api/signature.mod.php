@@ -10,18 +10,18 @@ if (!defined('IN_BAIGO')) {
 }
 
 $arr_set = array(
-    "base"          => true, //基本设置
-    "db"            => true, //连接数据库
+    'base'          => true, //基本设置
+    'db'            => true, //连接数据库
 );
 $obj_runtime->run($arr_set);
 
 
 $ctrl_signature = new CONTROL_API_API_SIGNATURE(); //初始化签名
 
-switch ($GLOBALS["method"]) {
+switch ($GLOBALS['method']) {
     case 'post':
-        switch ($GLOBALS['act']) {
-            case "signature":
+        switch ($GLOBALS['route']['bg_act']) {
+            case 'signature':
                 $ctrl_signature->ctrl_signature(); //生成签名
             break;
 

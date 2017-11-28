@@ -31,14 +31,9 @@ return array(
         'seccode'       => '验证码',
     ),
 
-    'type' => array(
-        'mail'    => '通过邮件找回',
-        'qa'      => '回答密保问题找回',
-    ),
-
     /*------按钮------*/
     'btn' => array(
-        'stepNext'  => '下一步',
+        'next'  => '下一步',
         'submit'    => '提交',
         'seccode'   => '看不清',
     ),
