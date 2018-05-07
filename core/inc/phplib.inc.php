@@ -14,4 +14,5 @@ return array(
     'gd'          => 'Image Processing and GD (GD)',
     'mbstring'    => 'Multibyte String (MBString)',
     'curl'        => 'Client URL Library (cURL)',
+    'openssl'     => 'OpenSSL',
 );

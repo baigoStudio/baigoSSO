@@ -1,0 +1,93 @@
+    <p class="alert alert-danger">自 v3.0 开始取消签名接口，请开发者自行按照加解密规则编写加解密程序；./_example/sign.class.php 文件为签名示例，开发者可以此为例自行编写程序。</p>
+
+    <p>baigo SSO 所有 API 接口的请求参数和所有应用的验证中都包含有签名机制，签名机制可有效防止数据被篡改，详情请查看具体的接口。</p>
+
+    <ul>
+        <li>
+            <a href="#sign">生成签名</a>
+        </li>
+        <li>
+            <a href="#verify">验证签名</a>
+        </li>
+    </ul>
+
+    <div>&nbsp;</div>
+    <div class="text-right">
+        <a href="#top">
+            <span class="oi oi-chevron-top"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <div>&nbsp;</div>
+
+    <a name="sign"></a>
+    <h3>生成签名</h3>
+
+    <p class="alert alert-danger">自 v3.0 开始取消签名接口，请开发者自行按照加解密规则编写加解密程序；./_example/sign.class.php 文件为签名示例，开发者可以此为例自行编写程序。</p>
+
+    <div>&nbsp;</div>
+
+    <h5>生成签名函数示例</h5>
+    <p>
+<pre class="border rounded"><code class="language-php">function sign_make($string, $app_key, $app_secret) {
+	if (get_magic_quotes_gpc()){
+    	$string = stripslashes($string);
+	}
+
+	return strtoupper(md5($app_key . $string . $app_secret));
+}</code></pre>
+    </p>
+
+    <div>&nbsp;</div>
+    <h4>参数说明</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>待签名字符串</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_key</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>APP KEY 通信密钥，可从后台应用管理界面获得。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_secret</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>APP KEY 密文密钥，长度必须为 16 位, 可从后台应用管理界面获得，此参数为加解密使用，请注意保密，切勿在网络中传输。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <div class="text-right">
+        <a href="#top">
+            <span class="oi oi-chevron-top"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <div>&nbsp;</div>
+
+    <a name="verify"></a>
+    <h3>验证签名</h3>
+
+    <div>&nbsp;</div>
+
+    <p class="alert alert-danger">自 v3.0 开始取消签名接口，请开发者自行按照加解密规则编写加解密程序；./_example/sign.class.php 文件为签名示例，开发者可以此为例自行编写程序。</p>

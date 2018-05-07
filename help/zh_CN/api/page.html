@@ -1,7 +1,7 @@
     <p>
         在所有需要用到分页的地方，都有该参数，如：短信列表，对象名一般为 <code>pageRow</code>。
     </p>
-    <div class="panel panel-default">
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -15,7 +15,7 @@
                     <tr>
                         <td class="text-nowrap">page</td>
                         <td>当前页码</td>
-                        <td> </td>
+                        <td>&nbsp;</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">p</td>
@@ -35,18 +35,17 @@
                     <tr>
                         <td class="text-nowrap">total</td>
                         <td>总页数</td>
-                        <td> </td>
+                        <td>&nbsp;</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;page&quot;: &quot;MTA=&quot;, //当前页码
     &quot;p&quot;: &quot;Zm9uZQ==&quot;, //分组数
     &quot;begin&quot;: &quot;Zm9uZUBiYWlnby5uZXQ=&quot;, //分组起始页码
@@ -57,10 +56,10 @@
 
     <div>&nbsp;</div>
 
-    <h4>分页处理 PHP 示例代码</h4>
+    <h5>分页处理 PHP 示例代码</h5>
     <p>如使用 PHP 来处理分页参数，可以使用 PHP 的 <code>json_decode()</code> 函数将分页参数转换为数组，关于此函数，详情请查看 <a href="http://www.php.net/manual/zh/function.json-decode.php">PHP 文档</a>。</p>
     <p>
-<pre><code class="language-php">echo(&quot;&lt;ul&gt;&quot;);
+<pre class="border rounded"><code class="language-php">echo(&quot;&lt;ul&gt;&quot;);
     if ($pageRow[&quot;page&quot;] &gt; 1) { //如果当前页码大于 1，则显示首页链接
         echo(&quot;&lt;li&gt;&quot;);
             echo(&quot;&lt;a href='page=1'&gt;首页&lt;/a&gt;&quot;);

@@ -16,7 +16,6 @@ class CLASS_TPL {
     public $common  = array();
     public $lang    = array();
     public $opt     = array();
-    public $phplib  = array();
     public $help    = array();
 
     function __construct($str_pathTpl = '') { //构造函数
@@ -49,9 +48,9 @@ class CLASS_TPL {
             exit;
         } else {
             if (defined('BG_DEBUG_SYS') && BG_DEBUG_SYS > 0) {
-                $_str_msg = 'Template &quot;' . $this->pathTpl . DS . $str_tpl . '.php&quot; not exists';
+                $_str_msg = 'Template &quot;' . $this->pathTpl . DS . $str_tpl . '.php&quot; does not exist';
             } else {
-                $_str_msg = 'Template not exists';
+                $_str_msg = 'Template does not exist';
             }
 
             exit('{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}');

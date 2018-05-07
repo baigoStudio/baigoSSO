@@ -22,6 +22,7 @@ return array(
         'doc'       => '开发文档',
         'tpl'       => '模板文档',
         'api'       => 'API 接口文档',
+        'notify'    => '通知文档',
     ),
 
     'label' => array(
@@ -91,15 +92,19 @@ return array(
         'outline'       => 'API 接口概述',
         'page'          => '分页',
         'code'          => '密文',
-        'signature'     => '签名',
+        'sign'          => '签名',
         'user'          => '用户接口',
         'profile'       => '个人接口',
         'forgot'        => '找回密码',
         'pm'            => '站内短信',
-        'notify'        => '通知接口',
-        'sync'          => '同步接口',
-        'sync_notify'   => '同步通知',
+        'sync'          => '同步登录接口',
         'setup'         => '安装接口',
         'rcode'         => '返回代码',
+    ),
+
+    'notify'     => array(
+        'outline'   => '通知概述',
+        'notify'    => '系统通知',
+        'sync'      => '同步登录通知',
     ),
 );

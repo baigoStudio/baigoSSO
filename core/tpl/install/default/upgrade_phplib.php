@@ -6,43 +6,41 @@
     'pathInclude'   => BG_PATH_TPLSYS . 'install' . DS . 'default' . DS . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'upgrade_head.php');
-include($cfg['pathInclude'] . 'phplib.php'); ?>
+include($cfg['pathInclude'] . 'upgrade_head.php'); ?>
+    <div class="card-body">
+        <?php include($cfg['pathInclude'] . 'phplib.php');
 
-    <hr class="bg-panel-hr">
-
-    <?php if (isset($this->tplData['errCount']) && $this->tplData['errCount'] > 0) { ?>
-        <div class="alert alert-danger">
-            <span class="glyphicon glyphicon-remove-sign"></span>
-            <?php echo $this->lang['mod']['text']['phplibErr']; ?>
-        </div>
-
-        <div class="form-group clearfix">
-            <div class="pull-right">
-                <div class="form-group">
-                    <button class="btn btn-primary" disabled><?php echo $this->lang['mod']['btn']['next']; ?></button>
-                </div>
+        if (isset($this->tplData['errCount']) && $this->tplData['errCount'] > 0) { ?>
+            <div class="alert alert-danger">
+                <span class="oi oi-circle-x"></span>
+                <?php echo $this->lang['mod']['text']['phplibErr']; ?>
             </div>
-        </div>
-    <?php } else { ?>
-        <div class="alert alert-success">
-            <span class="glyphicon glyphicon-ok-sign"></span>
-            <?php echo $this->lang['mod']['text']['phplibOk']; ?>
-        </div>
+        <?php } else { ?>
+            <div class="alert alert-success">
+                <span class="oi oi-circle-check"></span>
+                <?php echo $this->lang['mod']['text']['phplibOk']; ?>
+            </div>
+        <?php } ?>
+    </div>
 
-        <div class="form-group clearfix">
-            <div class="pull-left">
+    <div class="card-footer">
+        <?php if (isset($this->tplData['errCount']) && $this->tplData['errCount'] > 0) { ?>
+            <div class="text-right">
+                <button class="btn btn-primary" disabled><?php echo $this->lang['mod']['btn']['next']; ?></button>
+            </div>
+        <?php } else { ?>
+            <div class="btn-toolbar justify-content-between">
                 <div class="btn-group">
                     <?php include($cfg['pathInclude'] . 'upgrade_drop.php'); ?>
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=dbconfig" class="btn btn-default"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?m=upgrade&a=dbconfig" class="btn btn-secondary"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
+                </div>
+
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="<?php echo BG_URL_INSTALL; ?>index.php?m=upgrade&a=dbconfig"><?php echo $this->lang['mod']['btn']['next']; ?></a>
                 </div>
             </div>
+        <?php } ?>
+    </div>
 
-            <div class="pull-right">
-                <a class="btn btn-primary" href="<?php echo BG_URL_INSTALL; ?>index.php?mod=upgrade&act=dbconfig"><?php echo $this->lang['mod']['btn']['next']; ?></a>
-            </div>
-        </div>
-    <?php }
-
-include($cfg['pathInclude'] . 'install_foot.php');
-include($cfg['pathInclude'] . 'html_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'install_foot.php');
+include($cfg['pathInclude'] . 'html_foot.php');

@@ -13,16 +13,35 @@ if (!defined('IN_BAIGO')) {
 class CLASS_BASE {
 
     public $config;
+    public $key_pub;
 
     function __construct() { //构造函数
-        //$this->getUi(); //获取界面类型
+        $this->obj_dir = new CLASS_DIR();
 
+        $this->getKeyPub(); //获取公钥
         $this->getLang(); //获取当前语言
         $this->setTimezone(); //设置时区
 
         setlocale(LC_ALL, $this->config['lang'] . '.UTF-8'); //设置区域格式,主要针对 csv 处理
     }
 
+
+    function getKeyPub() {
+        if (file_exists(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt')) {
+            $_str_rand = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
+            $_obj_dir->del_file(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
+        } else {
+            $_str_rand = fn_rand();
+        }
+
+
+        if (!file_exists(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php')) {
+            $_str_key = '<?php return \'' . $_str_rand . '\';';
+            $this->obj_dir->put_file(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php', $_str_key);
+        }
+
+        $this->key_pub = fn_include(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php');
+    }
 
     /*============设置语言============
     返回字符串 语言

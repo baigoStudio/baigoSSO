@@ -9,7 +9,6 @@ if (!defined('IN_BAIGO')) {
     exit('Access Denied');
 }
 
-
 /*-------------控制中心通用类-------------*/
 class GENERAL_CONSOLE {
 
@@ -38,6 +37,9 @@ class GENERAL_CONSOLE {
         if (file_exists(BG_PATH_LANG . $this->config['lang'] . DS . 'console' . DS . $GLOBALS['route']['bg_mod'] . '.php')) {
             $this->obj_tpl->lang['mod'] = fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'console' . DS . $GLOBALS['route']['bg_mod'] . '.php');
         }
+
+        $this->mdl_admin = new MODEL_ADMIN(); //设置用户模型
+        $this->mdl_user  = new MODEL_USER(); //设置用户模型
     }
 
 
@@ -47,7 +49,7 @@ class GENERAL_CONSOLE {
         admin_open_label OPEN ID
         admin_open_site OPEN 站点
         admin_note 备注
-        group_allow 权限
+        admin_allow 权限
         str_rcode 提示信息
     */
     function ssin_begin() {
@@ -56,26 +58,49 @@ class GENERAL_CONSOLE {
 
         if (fn_isEmpty(fn_session('admin_id')) || fn_isEmpty(fn_session('admin_ssin_time')) || fn_isEmpty(fn_session('admin_hash')) || $_num_ssinTimeDiff < time() || fn_isEmpty(fn_cookie('admin_id')) || fn_isEmpty(fn_cookie('admin_ssin_time')) || fn_isEmpty(fn_cookie('admin_hash')) || $_num_cookieTimeDiff < time()) {
             $this->ssin_end();
-            $_arr_adminRow['rcode'] = 'x020401';
+            return array(
+                'rcode'     => 'x020401',
+            );
+        }
+
+        $_arr_adminRow  = $this->mdl_admin->mdl_read(fn_session('admin_id'));
+        if ($_arr_adminRow['rcode'] != 'y020102') {
+            $this->ssin_end();
             return $_arr_adminRow;
         }
 
-        $_mdl_admin = new MODEL_ADMIN(); //设置用户模型
-        $_mdl_user  = new MODEL_USER(); //设置用户模型
-
-        $_arr_adminRow  = $_mdl_admin->mdl_read(fn_session('admin_id'));
-        $_arr_userRow   = $_mdl_user->mdl_read(fn_session('admin_id'));
-
-        if ($this->hash_process($_arr_userRow) != fn_session('admin_hash') || $this->hash_process($_arr_userRow) != fn_cookie('admin_hash')){
+        if ($_arr_adminRow['admin_status'] == 'disable') {
             $this->ssin_end();
-            $_arr_adminRow['rcode'] = 'x020403';
-            return $_arr_adminRow;
+            return array(
+                'rcode' => 'x020402',
+            );
+        }
+
+        $_arr_userRow   = $this->mdl_user->mdl_read(fn_session('admin_id'));
+
+        if ($_arr_userRow['rcode'] != 'y010102') {
+            $this->ssin_end();
+            return $_arr_userRow;
+        }
+
+        if ($_arr_userRow['user_status'] == 'disable') {
+            $this->ssin_end();
+            return array(
+                'rcode'     => 'x010401',
+            );
+        }
+
+        if ($this->hash_process($_arr_adminRow) != fn_session('admin_hash') || $this->hash_process($_arr_adminRow) != fn_cookie('admin_hash')){
+            $this->ssin_end();
+            return array(
+                'rcode'     => 'x020403',
+            );
         }
 
         fn_session('admin_ssin_time', 'mk', time());
-        fn_cookie('admin_id', 'mk', fn_session('admin_id'), 3600 * 24 * 30);
-        fn_cookie('admin_ssin_time', 'mk', time(), 3600 * 24 * 30);
-        fn_cookie('admin_hash', 'mk', fn_session('admin_hash'), 3600 * 24 * 30);
+        fn_cookie('admin_id', 'mk', fn_session('admin_id'), 3600 * 24 * 30, BG_URL_CONSOLE);
+        fn_cookie('admin_ssin_time', 'mk', time(), 3600 * 24 * 30, BG_URL_CONSOLE);
+        fn_cookie('admin_hash', 'mk', fn_session('admin_hash'), 3600 * 24 * 30, BG_URL_CONSOLE);
 
         $_arr_adminRow['userRow'] = $_arr_userRow;
 
@@ -84,12 +109,12 @@ class GENERAL_CONSOLE {
 
 
     function ssin_login($arr_loginRow) {
-        fn_session('admin_id', 'mk', $arr_loginRow['user_id']);
+        fn_session('admin_id', 'mk', $arr_loginRow['admin_id']);
         fn_session('admin_ssin_time', 'mk', time());
         fn_session('admin_hash', 'mk', $this->hash_process($arr_loginRow));
-        fn_cookie('admin_id', 'mk', $arr_loginRow['user_id'], 3600 * 24 * 30);
-        fn_cookie('admin_ssin_time', 'mk', time(), 3600 * 24 * 30);
-        fn_cookie('admin_hash', 'mk', $this->hash_process($arr_loginRow), 3600 * 24 * 30);
+        fn_cookie('admin_id', 'mk', $arr_loginRow['admin_id'], 3600 * 24 * 30, BG_URL_CONSOLE);
+        fn_cookie('admin_ssin_time', 'mk', time(), 3600 * 24 * 30, BG_URL_CONSOLE);
+        fn_cookie('admin_hash', 'mk', $this->hash_process($arr_loginRow), 3600 * 24 * 30, BG_URL_CONSOLE);
 
         return array(
             'rcode' => 'ok',
@@ -107,9 +132,9 @@ class GENERAL_CONSOLE {
         fn_session('admin_id', 'unset');
         fn_session('admin_ssin_time', 'unset');
         fn_session('admin_hash', 'unset');
-        fn_cookie('admin_id', 'unset');
-        fn_cookie('admin_ssin_time', 'unset');
-        fn_cookie('admin_hash', 'unset');
+        fn_cookie('admin_id', 'unset', '', '', BG_URL_CONSOLE);
+        fn_cookie('admin_ssin_time', 'unset', '', '', BG_URL_CONSOLE);
+        fn_cookie('admin_hash', 'unset', '', '', BG_URL_CONSOLE);
     }
 
 
@@ -129,7 +154,7 @@ class GENERAL_CONSOLE {
 
         if (defined('BG_INSTALL_PUB') && PRD_SSO_PUB > BG_INSTALL_PUB) { //如果小于当前版本
             $_str_rcode = 'x030411';
-            $_str_jump  = BG_URL_INSTALL . 'index.php?mod=upgrade';
+            $_str_jump  = BG_URL_INSTALL . 'index.php?m=upgrade';
         }
 
         if (!fn_isEmpty($_str_rcode)) {
@@ -155,11 +180,12 @@ class GENERAL_CONSOLE {
         $_str_jump  = '';
 
         if ($arr_adminRow['rcode'] != 'y020102') {
+            $this->ssin_end();
             $_str_rcode = $arr_adminRow['rcode'];
 
             if ($GLOBALS['view'] != 'iframe') {
                 $_str_forwart   = fn_forward(fn_server('REQUEST_URI'));
-                $_str_jump      = BG_URL_CONSOLE . 'index.php?mod=login&forward=' . $_str_forwart;
+                $_str_jump      = BG_URL_CONSOLE . 'index.php?m=login&forward=' . $_str_forwart;
             }
         }
 
@@ -187,7 +213,7 @@ class GENERAL_CONSOLE {
         }
     }
 
-    private function hash_process($arr_userRow) {
-        return fn_baigoCrypt($arr_userRow['user_time_login'] . fn_server('HTTP_USER_AGENT'), $arr_userRow['user_ip']);
+    private function hash_process($arr_adminRow) {
+        return fn_baigoCrypt($arr_adminRow['admin_id'] . $arr_adminRow['admin_name'] . $arr_adminRow['admin_time_login'], $arr_adminRow['admin_ip']);
     }
 }

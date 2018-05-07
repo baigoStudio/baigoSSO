@@ -26,6 +26,7 @@ return array(
         'belong'          => '授权用户',
         'help'            => '帮助',
         'show'            => '查看',
+        'secret'          => '获取 APP KEY 与 APP SECRET',
         'notifyTest'      => '通知接口测试',
     ),
 
@@ -38,16 +39,17 @@ return array(
         'status'            => '状态',
         'note'              => '备注',
         'allow'             => '权限',
-        'sync'              => '同步通知',
+        'sync'              => '同步登录',
         'user'              => '用户',
         'notifyTest'        => '通知接口测试',
 
         'appName'           => '应用名称',
         'appId'             => 'APP ID',
         'appKey'            => 'APP KEY 通信密钥',
-        'appKeyNote'        => '如果 APP KEY 泄露，可以通过重置更换，原 APP KEY 将作废。',
+        'appSecret'         => 'APP SECRET 密文密钥',
+        'appKeyNote'        => '如果您认为 APP KEY 或 APP SECRET 泄露，可以通过重置更换，原 APP KEY 和 APP SECRET 将作废。',
         'appUrlNotify'      => '通知接口 URL',
-        'appUrlSync'        => '同步接口 URL',
+        'appUrlSync'        => '同步登录通知 URL',
         'apiUrl'            => 'API 接口 URL',
 
         'belongUser'        => '已授权用户',
@@ -89,6 +91,7 @@ return array(
         'resetKey'  => '重置 APP KEY',
         'auth'      => '授权',
         'deauth'    => '取消授权',
+        'more'      => '更多操作',
     ),
 
     /*------确认框------*/

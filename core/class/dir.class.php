@@ -12,7 +12,7 @@ if (!defined('IN_BAIGO')) {
 /*-------------文件夹操作类类-------------*/
 class CLASS_DIR {
 
-    public $dir_status; //返回操作状态(成功/失败)
+    public $status; //返回操作状态(成功/失败)
 
 
     /**
@@ -55,21 +55,21 @@ class CLASS_DIR {
             $str_path = dirname($str_path);
         }
         if (is_dir($str_path) || stristr($str_path, '.')) { //已存在
-            $this->dir_status = true;
+            $this->status = true;
         } else {
             //创建目录
             if ($this->mk_dir(dirname($str_path))) { //递归
                 if (mkdir($str_path, 0771)) { //创建成功
-                    $this->dir_status = true;
+                    $this->status = true;
                 } else {
-                    $this->dir_status = false; //失败
+                    $this->status = false; //失败
                 }
             } else {
-                $this->dir_status = false;
+                $this->status = false;
             }
         }
 
-        return $this->dir_status;
+        return $this->status;
     }
 
 

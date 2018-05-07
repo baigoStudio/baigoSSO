@@ -9,7 +9,9 @@ if (!defined('IN_BAIGO')) {
     exit('Access Denied');
 }
 
-fn_include(BG_PATH_FUNC . 'http.func.php'); //载入模板类
+if (!function_exists('fn_http')) {
+    fn_include(BG_PATH_FUNC . 'http.func.php'); //载入模板类
+}
 
 /*-------------API 接口类-------------*/
 class GENERAL_API {
@@ -101,6 +103,7 @@ class GENERAL_API {
 
         return array(
             'rcode'     => 'ok',
+            'appKey'    => fn_baigoCrypt($this->appRow['app_key'], $this->appRow['app_name']),
             'appInput'  => $this->appInput,
             'appRow'    => $this->appRow,
         );
@@ -113,31 +116,37 @@ class GENERAL_API {
 
         //通知
         foreach ($this->appRows as $_key=>$_value) {
-            $_arr_data = array(
-                'act'       => $str_act,
-                'code'      => $this->obj_crypt->encrypt($_str_src, fn_baigoCrypt($_value['app_key'], $_value['app_name'])),
-                'time'      => $_tm_time,
-                'app_id'    => $_value['app_id'],
-                'app_key'   => fn_baigoCrypt($_value['app_key'], $_value['app_name']),
-            );
+            $_str_appKey    = fn_baigoCrypt($_value['app_key'], $_value['app_name']);
+            $_arr_encrypt   = $this->obj_crypt->encrypt($_str_src, $_str_appKey, $_value['app_secret']);
 
-            $_arr_data['signature'] = $this->obj_sign->sign_make($_arr_data);
+            //加密成功
+            if ($_arr_encrypt['rcode'] == 'ok') {
+                $_arr_data = array(
+                    'app_id'    => $_value['app_id'],
+                    'app_key'   => $_str_appKey,
+                    'time'      => $_tm_time,
+                    'a'         => $str_act,
+                    'code'      => $_arr_encrypt['encrypt'],
+                );
 
-            if (stristr($_value['app_url_notify'], '?')) {
-                $_str_conn = '&';
-            } else {
-                $_str_conn = '?';
+                $_arr_data['sign'] = $this->obj_sign->sign_make($_str_src, $_str_appKey, $_value['app_secret']);
+
+                if (stristr($_value['app_url_notify'], '?')) {
+                    $_str_conn = '&';
+                } else {
+                    $_str_conn = '?';
+                }
+
+                if (stristr($_value['app_url_notify'], '?')) {
+                    $_str_conn = '&';
+                } else {
+                    $_str_conn = '?';
+                }
+
+                $_arr_get = fn_http($_value['app_url_notify'] . $_str_conn . 'm=notify', $_arr_data, 'post');
             }
 
-            if (stristr($_value['app_url_notify'], '?')) {
-                $_str_conn = '&';
-            } else {
-                $_str_conn = '?';
-            }
-
-            $_arr_get = fn_http($_value['app_url_notify'] . $_str_conn . 'mod=notify', $_arr_data, 'post');
-
-            /*print_r($_value['app_url_notify'] . $_str_conn . 'mod=notify');
+            /*print_r($_value['app_url_notify'] . $_str_conn . 'm=notify');
             print_r('-');
             print_r($_arr_get);
             print_r('|');*/
@@ -146,7 +155,7 @@ class GENERAL_API {
 
 
     function encode_result($arr_data, $type = 'json') {
-        return fn_jsonEncode($arr_data, 'encode');
+        return fn_jsonEncode($arr_data, true);
     }
 
 

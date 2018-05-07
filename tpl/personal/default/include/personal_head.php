@@ -9,10 +9,11 @@
     <title><?php echo $cfg['title']; ?> - <?php echo BG_SITE_NAME; ?></title>
 
     <!--jQuery 库-->
-    <script src="<?php echo BG_URL_STATIC; ?>lib/jquery.min.js" type="text/javascript"></script>
-    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link href="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
-    <link href="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
+    <script src="<?php echo BG_URL_STATIC; ?>lib/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo BG_URL_STATIC; ?>lib/iconic/1.1.0/css/open-iconic-bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/2.2.5/baigoValidator.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/2.0.5/baigoSubmit.css" type="text/css" rel="stylesheet">
 
     <link href="<?php echo BG_URL_STATIC; ?>css/common.css" type="text/css" rel="stylesheet">
     <link href="<?php echo BG_URL_STATIC; ?>personal/<?php echo BG_SITE_TPL; ?>/css/personal.css" type="text/css" rel="stylesheet">
@@ -21,14 +22,14 @@
 <body>
 
     <div class="container">
-        <div class="bg-panel">
+        <div class="bg-card-md">
         <h3><?php echo BG_SITE_NAME; ?></h3>
-            <div class="panel panel-success">
-                <div class="panel-heading bg-panel-heading">
-                    <img class="img-responsive center-block" src="<?php echo BG_URL_STATIC; ?>personal/<?php echo BG_SITE_TPL; ?>/image/logo.png">
+            <div class="card">
+                <div class="card-header bg-card-header">
+                    <img class="img-fluid mx-auto d-block" src="<?php echo BG_URL_STATIC; ?>personal/<?php echo BG_SITE_TPL; ?>/image/logo.png">
                 </div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     <h4>
                         <?php echo $cfg['title']; ?>
                     </h4>

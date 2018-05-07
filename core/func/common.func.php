@@ -53,14 +53,14 @@ function fn_getIp() {
 
 
 /** 验证码校对
- * fn_seccode function.
+ * fn_captcha function.
  *
  * @access public
  * @return void
  */
-function fn_seccode() {
-    $_str_seccode = strtolower(fn_getSafe(fn_post('seccode'), 'txt', ''));
-    if ($_str_seccode != fn_session('seccode')) {
+function fn_captcha() {
+    $_str_captcha = strtolower(fn_getSafe(fn_post('captcha'), 'txt', ''));
+    if ($_str_captcha != fn_session('captcha')) {
         return false;
     } else {
         return true;
@@ -274,11 +274,17 @@ function fn_page($num_count, $num_per = BG_DEFAULT_PERPAGE) {
  * @param string $method (default: '')
  * @return void
  */
-function fn_jsonEncode($arr_json = '', $method = '') {
+function fn_jsonEncode($arr_json = '', $encode = false) {
+    if ($encode) {
+        $_str_encode = 'encode';
+    } else {
+        $_str_encode = '';
+    }
+
     if (fn_isEmpty($arr_json)) {
         $str_json = '';
     } else {
-        $arr_json = fn_eachArray($arr_json, $method);
+        $arr_json = fn_eachArray($arr_json, $_str_encode);
         //print_r($method);
         $str_json = json_encode($arr_json); //json编码
     }
@@ -295,12 +301,18 @@ function fn_jsonEncode($arr_json = '', $method = '') {
  * @param string $method (default: '')
  * @return void
  */
-function fn_jsonDecode($str_json = '', $method = '') {
+function fn_jsonDecode($str_json = '', $decode = false) {
+    if ($decode) {
+        $_str_decode = 'decode';
+    } else {
+        $_str_decode = '';
+    }
+
     if (fn_isEmpty($str_json)) {
         $arr_json = array();
     } else {
         $arr_json = json_decode($str_json, true); //json解码
-        $arr_json = fn_eachArray($arr_json, $method);
+        $arr_json = fn_eachArray($arr_json, $_str_decode);
     }
 
     return $arr_json;
@@ -375,21 +387,7 @@ function fn_eachArray($arr, $method = 'encode') {
  * @return void
  */
 function fn_baigoCrypt($str, $salt, $is_md5 = false, $crypt_type = 2) {
-    $_obj_dir = new CLASS_DIR();
-
-    if (file_exists(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt')) {
-        $_str_rand = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
-        $_obj_dir->del_file(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
-    } else {
-        $_str_rand = fn_rand();
-    }
-
-    if (!file_exists(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php')) {
-        $_str_key = '<?php return \'' . $_str_rand . '\';';
-        $_obj_dir->put_file(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php', $_str_key);
-    }
-
-    $key_pub = fn_include(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php');
+    $key_pub = $GLOBALS['obj_base']->key_pub;
 
     if ($is_md5) {
         $_str = $str;
@@ -459,12 +457,25 @@ function fn_regChk($str_chk, $str_reg, $str_wild = false) {
  * @param mixed $key
  * @return void
  */
-function fn_get($key) {
-    if (isset($_GET[$key])) {
-        return $_GET[$key];
+function fn_get($key = false, $arr_param = array()) {
+    $_return    = null;
+    $_arr_param = array_filter(array_unique($arr_param));
+
+    if ($key) {
+        if (isset($_GET[$key])) {
+            $_return = $_GET[$key];
+        }
     } else {
-        return null;
+        if (isset($_GET) && !fn_isEmpty($_GET)) {
+            if (fn_isEmpty($_arr_param)) {
+                $_return = $_GET;
+            } else {
+                $_return = fn_paramChk($_GET, $_arr_param);
+            }
+        }
     }
+
+    return $_return;
 }
 
 
@@ -475,12 +486,70 @@ function fn_get($key) {
  * @param mixed $key
  * @return void
  */
-function fn_post($key) {
-    if (isset($_POST[$key])) {
-        return $_POST[$key];
+function fn_post($key = false, $arr_param = array()) {
+    $_return    = null;
+    $_arr_param = array_filter(array_unique($arr_param));
+
+    if ($key) {
+        if (isset($_POST[$key])) {
+            $_return = $_POST[$key];
+        }
     } else {
-        return null;
+        if (isset($_POST) && !fn_isEmpty($_POST)) {
+            if (fn_isEmpty($_arr_param)) {
+                $_return = $_POST;
+            } else {
+                $_return = fn_paramChk($_POST, $_arr_param);
+            }
+        }
     }
+
+    return $_return;
+}
+
+
+/** 封装 $_REQUEST
+ * fn_request function.
+ *
+ * @access public
+ * @param mixed $key
+ * @return void
+ */
+function fn_request($key = false, $arr_param = array()) {
+    $_return    = null;
+    $_arr_param = array_filter(array_unique($arr_param));
+
+    if ($key) {
+        if (isset($_REQUEST[$key])) {
+            $_return = $_REQUEST[$key];
+        }
+    } else {
+        if (isset($_REQUEST) && !fn_isEmpty($_REQUEST)) {
+            if (fn_isEmpty($_arr_param)) {
+                $_return = $_REQUEST;
+            } else {
+                $_return = fn_paramChk($_REQUEST, $_arr_param);
+            }
+        }
+    }
+
+    return $_return;
+}
+
+
+function fn_paramChk($arr_data, $arr_param) {
+    $_arr_return    = array();
+    $_arr_param     = array_filter(array_unique($arr_param));
+
+    foreach ($_arr_param as $_key=>$_value) {
+        if (isset($arr_data[$_value])) {
+            $_arr_return[$_value] = $arr_data[$_value];
+        } else {
+            $_arr_return[$_value] = '';
+        }
+    }
+
+    return $_arr_return;
 }
 
 
@@ -491,14 +560,14 @@ function fn_post($key) {
  * @param mixed $key
  * @return void
  */
-function fn_cookie($key, $method = 'get', $value = '', $tm = 3600) {
+function fn_cookie($key, $method = 'get', $value = '', $tm = 3600, $path = '') {
     switch ($method) {
         case 'mk':
-            setcookie($key . '_' . BG_SITE_SSIN, $value, time()+$tm);
+            setcookie($key . '_' . BG_SITE_SSIN, $value, time() + $tm, $path);
         break;
 
         case 'unset':
-            unset($_COOKIE[$key . '_' . BG_SITE_SSIN]);
+            setcookie($key . '_' . BG_SITE_SSIN, null, time() - 3600, $path);
         break;
 
         default:
@@ -529,22 +598,6 @@ function fn_session($key, $method = 'get', $value = '') {
                 return null;
             }
         break;
-    }
-}
-
-
-/** 封装 $_REQUEST
- * fn_request function.
- *
- * @access public
- * @param mixed $key
- * @return void
- */
-function fn_request($key) {
-    if (isset($_REQUEST[$key])) {
-        return $_REQUEST[$key];
-    } else {
-        return null;
     }
 }
 

@@ -3,13 +3,13 @@
         假设网站 URL 为 <span class="text-primary">http://www.domain.com</span> 上传到根目录 /，以下说明均以此为例。各种应用整合 baigo SSO 都是通过 API 接口实现的，您可以在各类应用程序中使用该接口，通过发起 HTTP 请求方式调用 baigo SSO 服务，返回 JSON 数据。
     </p>
     <p>
-        使用 API 接口，您需先在 baigo SSO 创建应用，创建成功后会给出 APP ID 和 APP KEY。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=app#show">应用</a>。
+        使用 API 接口，您需先在 baigo SSO 创建应用，创建成功后会给出 APP ID 和 APP KEY。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。
     </p>
 
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -24,7 +24,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -34,7 +34,7 @@
     <h3>API 调用示例</h3>
 
     <p>
-<pre><code class="language-php">class CLASS_SSO {
+<pre class="border rounded"><code class="language-php">class CLASS_SSO {
 
     $arr_data = array(
         &quot;app_id&quot;     =&gt; BG_SSO_APPID, //APP ID
@@ -51,18 +51,18 @@
      */
     function sso_login($str_userName, $str_userPass) {
         $_arr_sso = array(
-            &quot;act&quot;   =&gt; &quot;login&quot;, //动作
+            &quot;a&quot;          =&gt; &quot;login&quot;, //动作
             &quot;user_name&quot;  =&gt; $str_userName, //用户名
             &quot;user_pass&quot;  =&gt; md5($str_userPass), //密码，需要 md5 加密
         );
 
         $_arr_ssoData = array_merge($this-&gt;arr_data, $_arr_sso);
-        $_arr_ssoData[&quot;signature&quot;] = $this->sso_signature($_arr_ssoData);
-        $_arr_get     = $this->fn_http(BG_SSO_URL . &quot;?mod=user&quot;, $_arr_ssoData, &quot;post&quot;); //&#25552;&#20132;
+        $_arr_ssoData[&quot;sign&quot;] = $this->sso_sign($_arr_ssoData);
+        $_arr_get     = $this->fn_http(BG_SSO_URL . &quot;?m=user&quot;, $_arr_ssoData, &quot;post&quot;); //&#25552;&#20132;
         $_arr_result  = $this-&gt;result_process($_arr_get);
 
         if ($_arr_result[&quot;rcode&quot;] != &quot;y010401&quot;) {
-            return $_arr_result; //&#36820;&#22238;&#38169;&#35823;&#20449;&#24687;
+            return $_arr_result; //返回错误信息
         }
 
         $_arr_decode          = $this-&gt;sso_decode($_arr_result[&quot;code&quot;], $_arr_result[&quot;key&quot;]); //&#35299;&#30721;
@@ -99,20 +99,20 @@
 
 
     /** 签名
-     * sso_signature function.
+     * sso_sign function.
      *
      * @access public
      * @param mixed $arr_params
      * @return void
      */
-    function sso_signature($arr_params) {
+    function sso_sign($arr_params) {
         $_arr_sso = array(
-            &quot;act&quot;  => &quot;signature&quot;, //方法
+            &quot;a&quot;         => &quot;sign&quot;, //方法
             &quot;params&quot;    => $arr_params,
         );
 
         $_arr_ssoData     = array_merge($this->arr_data, $_arr_sso); //合并数组
-        $_arr_get         = fn_http(BG_SSO_URL . &quot;?mod=signature&quot;, $_arr_ssoData, &quot;post&quot;); //提交
+        $_arr_get         = fn_http(BG_SSO_URL . &quot;?m=sign&quot;, $_arr_ssoData, &quot;post&quot;); //提交
 
         return fn_jsonDecode($_arr_get[&quot;ret&quot;], &quot;no&quot;);
     }
@@ -126,13 +126,13 @@
      */
     function sso_decode($str_code, $str_key) {
         $_arr_sso = array(
-            &quot;act&quot;   =&gt; &quot;decode&quot;, //&#26041;&#27861;
-            &quot;code&quot;       =&gt; $str_code, //&#21152;&#23494;&#20018;
-            &quot;key&quot;        =&gt; $str_key, //&#35299;&#30721;&#31192;&#38053;
+            &quot;a&quot;     =&gt; &quot;decode&quot;, //方法
+            &quot;code&quot;  =&gt; $str_code, //加密串
+            &quot;key&quot;   =&gt; $str_key, //解码秘钥
         );
 
-        $_arr_ssoData     = array_merge($this-&gt;arr_data, $_arr_sso); //&#21512;&#24182;&#25968;&#32452;
-        $_arr_get         = $this->fn_http(BG_SSO_URL . &quot;?mod=code&quot;, $_arr_ssoData, &quot;get&quot;); //&#25552;&#20132;
+        $_arr_ssoData     = array_merge($this-&gt;arr_data, $_arr_sso); //合并数组
+        $_arr_get         = $this->fn_http(BG_SSO_URL . &quot;?m=code&quot;, $_arr_ssoData, &quot;get&quot;); //提交
 
         return $this->fn_jsonDecode($_arr_get[&quot;ret&quot;], &quot;decode&quot;);
     }
@@ -256,7 +256,7 @@ $arr_userRow   = $obj_sso-&gt;sso_login($user_name, $user_pass); //调用登录�
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -265,10 +265,9 @@ $arr_userRow   = $obj_sso-&gt;sso_login($user_name, $user_pass); //调用登录�
 
     <h3>返回结果</h3>
     <p>
-        baigo SSO 大部分 API 接口返回加密字符串，详情请查看具体接口，真正内容需要调用密文接口进行解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，请查看具体的接口。
+        baigo SSO 大部分 API 接口返回加密结果，详情请查看具体接口，真正内容需要解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，请查看具体的接口。
     </p>
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -282,12 +281,12 @@ $arr_userRow   = $obj_sso-&gt;sso_login($user_name, $user_pass); //调用登录�
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">code</td>
                         <td class="text-nowrap">string</td>
-                        <td>加密字符串，需要解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。</td>
+                        <td>加密结果，需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -302,16 +301,15 @@ $arr_userRow   = $obj_sso-&gt;sso_login($user_name, $user_pass); //调用登录�
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
-    &quot;code&quot;: &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
+    &quot;code&quot;: &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密结果
     &quot;rcode&quot;: &quot;y010102&quot; //返回代码
 }</code></pre>
     </p>

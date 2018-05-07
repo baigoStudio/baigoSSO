@@ -1001,7 +1001,7 @@ class SMTP
      *       or its options. Otherwise returns boolean False
      * In other words, one can use this method to detect 3 conditions:
      *  - null returned: handshake was not or we don't know about ext (refer to $this->error)
-     *  - false returned: the requested feature exactly not exists
+     *  - false returned: the requested feature exactly does not exist
      *  - positive value returned: the requested feature exists
      * @param string $name Name of SMTP extension or 'HELO'|'EHLO'
      * @return mixed

@@ -26,6 +26,7 @@ return array(
     'label' => array(
         'month'         => '月', //月
         'submitting'    => '正在提交 ...',
+        'errInput'      => '输入错误，请检查！',
     ),
 
     'pm' => array(
@@ -37,7 +38,7 @@ return array(
 
     'profile' => array(
         'info'      => array(
-            'icon'  => 'user',
+            'icon'  => 'person',
             'title' => '个人资料',
         ),
         /*'prefer'    => array(
@@ -45,11 +46,11 @@ return array(
             'title' => '偏好设置',
         ),*/
         'pass'      => array(
-            'icon'  => 'lock',
+            'icon'  => 'key',
             'title' => '密码',
         ),
         'qa'        => array(
-            'icon'  => 'question-sign',
+            'icon'  => 'lock-locked',
             'title' => '密保问题',
         ),
         'mailbox'   => array(
@@ -92,12 +93,12 @@ return array(
 
         'x030404' => '<h4>数据库未正确设置：</h4>
             <ol>
-                <li><a href="' . BG_URL_INSTALL . 'index.php?mod=setup&act=dbconfig">返回重新设置</a></li>
+                <li><a href="' . BG_URL_INSTALL . 'index.php?m=setup&a=dbconfig">返回重新设置</a></li>
             </ol>',
 
         'x030412' => '<h4>数据库未正确设置：</h4>
             <ol>
-                <li><a href="' . BG_URL_INSTALL . 'index.php?mod=upgrade&act=dbconfig">返回重新设置</a></li>
+                <li><a href="' . BG_URL_INSTALL . 'index.php?m=upgrade&a=dbconfig">返回重新设置</a></li>
             </ol>',
 
         'x030413' => '<h4>未通过服务器环境检查，安装无法继续：</h4>
@@ -108,7 +109,7 @@ return array(
 
         'x030414' => '<h4>未通过服务器环境检查，升级无法继续：</h4>
             <ol>
-                <li>重新检查环境 <a href="' . BG_URL_INSTALL . 'index.php?mod=upgrade">' . BG_URL_INSTALL . 'index.php?mod=upgrade</a></li>
+                <li>重新检查环境 <a href="' . BG_URL_INSTALL . 'index.php?m=upgrade">' . BG_URL_INSTALL . 'index.php?m=upgrade</a></li>
                 <li>根据检查结果，正确安装所必需的 PHP 扩展库。</li>
             </ol>',
     ),

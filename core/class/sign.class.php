@@ -13,33 +13,21 @@ if (!defined('IN_BAIGO')) {
 class CLASS_SIGN {
 
     //生成签名
-    function sign_make($arr_params) {
-        unset($arr_params['signature'], $arr_params['rcode']);
-
-        $_arr_params = array();
-
-    	foreach ($arr_params as $_key=>$_value) {
-        	if (!fn_isEmpty($_value)) {
-            	$_arr_params[$_key] = $_value;
-        	}
-    	}
-
-        ksort($_arr_params);
-        reset($_arr_params);
-
-    	$_str_signSrc = http_build_query($_arr_params);
-
-    	//如果存在转义字符，那么去掉转义
+    function sign_make($str_json, $key_appKey, $key_appSecret) {
     	if (get_magic_quotes_gpc()){
-        	$_str_signSrc = stripslashes($_str_signSrc);
+        	$str_json = stripslashes($str_json);
     	}
 
-    	return md5($_str_signSrc);
+    	return strtoupper(md5($key_appKey . $str_json . $key_appSecret));
     }
 
     //验证签名
-    function sign_check($arr_params, $str_sign) {
-        $_str_signChk = $this->sign_make($arr_params);
+    function sign_check($str_json, $str_sign, $key_appKey, $key_appSecret) {
+        $_str_signChk = $this->sign_make($str_json, $key_appKey, $key_appSecret);
+
+        /*print_r($_str_signChk);
+        print_r('<br>');
+        print_r($str_sign);*/
 
         if ($_str_signChk == $str_sign) {
             return true;

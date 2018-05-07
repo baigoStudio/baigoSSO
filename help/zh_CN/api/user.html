@@ -1,4 +1,4 @@
-    <ul class="bg-nav-line">
+    <ul>
         <li>
             <a href="#reg">用户注册</a>
         </li>
@@ -29,25 +29,24 @@
 
     <div class="alert alert-danger">
         <h4>已迁移接口</h4>
-        <ul class="bg-nav-line">
+        <ul>
             <li>
-                <a href="{BG_URL_HELP}index.php?mod=api&act=profile#token">刷新访问口令</a>
+                <a href="{$BG_URL_HELP}index.php?m=api&a=profile#token">刷新访问口令</a>
             </li>
             <li>
-                <a href="{BG_URL_HELP}index.php?mod=api&act=profile#mailbox">更换邮箱</a>
+                <a href="{$BG_URL_HELP}index.php?m=api&a=profile#mailbox">更换邮箱</a>
             </li>
             <li>
-                <a href="{BG_URL_HELP}index.php?mod=api&act=forgot#bymail">找回密码</a>
+                <a href="{$BG_URL_HELP}index.php?m=api&a=forgot#bymail">找回密码</a>
             </li>
         </ul>
     </div>
 
     <div>&nbsp;</div>
-
     <h3>公共请求参数</h3>
-    <p>公共请求参数是指向所有接口发起请求时都必须传入的参数。</p>
-    <div class="panel panel-default">
-        <div class="panel-heading">公共请求参数</div>
+
+        <p>公共请求参数是指向所有接口发起请求时都必须传入的参数。</p>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -63,35 +62,34 @@
                         <td class="text-nowrap">app_id</td>
                         <td class="text-nowrap">int</td>
                         <td class="text-nowrap">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=app#show">应用</a>。</td>
+                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">app_key</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=app#show">应用</a>。</td>
+                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">time</td>
                         <td class="text-nowrap">int</td>
                         <td class="text-nowrap">true</td>
-                        <td>Unix 时间戳，baigo SSO 允许 +-30 分钟以内的时差，为了防止时区设置不同导致的时差，请开发者将应用的时区设置为为与 baigo SSO 一致，关于时区设置，请查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#base">系统设置</a>。</td>
+                        <td>Unix 时间戳，baigo SSO 允许 +-30 分钟以内的时差，为了防止时区设置不同导致的时差，请开发者将应用的时区设置为为与 baigo SSO 一致，关于时区设置，请查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#base">系统设置</a>。</td>
                     </tr>
                     <tr>
-                        <td class="text-nowrap">signature</td>
+                        <td class="text-nowrap">sign</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
-                        <td>签名，将请求参数中的所有参数（包括公共请求参数，但不含签名）按照一定规律组合以后生成的，详情请查看 <a href="{BG_URL_HELP}index.php?mod=api&act=signature#verify">签名接口</a>。</td>
+                        <td>签名，将请求参数中的加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，加以签名，签名方式请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=sign#sign">签名</a>。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -102,10 +100,10 @@
     <h3>用户注册</h3>
 
     <p class="text-success">接口说明</p>
-    <p>本接口用于新用户的注册。用户名、密码、邮箱、昵称为一个用户在 baigo SSO 的基本数据，提交后 baigo SSO 会按照 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#reg">注册设置</a> 检测用户名和邮箱的格式是否正确合法。</p>
+    <p>本接口用于新用户的注册。用户名、密码、邮箱、昵称为一个用户在 baigo SSO 的基本数据，提交后 baigo SSO 会按照 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#reg">注册设置</a> 检测用户名和邮箱的格式是否正确合法。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -116,8 +114,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>是</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -130,11 +129,39 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 reg。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_name</td>
                         <td class="text-nowrap">string</td>
@@ -151,7 +178,7 @@
                         <td class="text-nowrap">user_mail</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap"> </td>
-                        <td>视注册设置情况而定。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#reg">注册设置</a>。</td>
+                        <td>视注册设置情况而定。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#reg">注册设置</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">user_nick</td>
@@ -180,16 +207,14 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <p>
-        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。
-    </p>
+        <p>
+            本接口返回加密结果，真正内容需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -203,12 +228,17 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">code</td>
                         <td class="text-nowrap">string</td>
-                        <td>加密字符串，需要解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。</td>
+                        <td>加密结果，需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">sign</td>
+                        <td class="text-nowrap">string</td>
+                        <td>签名，即本接口解密后的结果（JSON 对象，不进行 JSON 和 Base64 解码）加以签名。签名验证方式请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=sign#verify">签名</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -223,12 +253,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>解密后的结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">解密后的结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -249,13 +277,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;user_id&quot;: &quot;MTA=&quot; //用户 ID
 }</code></pre>
     </p>
@@ -263,7 +290,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -277,7 +304,7 @@
     <p>本接口用于用户注册时重发激活邮件</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -288,8 +315,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -302,18 +330,46 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 nomail。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_id</td>
                         <td class="text-nowrap">int</td>
                         <td rowspan="3">true</td>
                         <td rowspan="3">
                             <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
-                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#reg">注册设置</a>。</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#reg">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
@@ -327,12 +383,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -346,7 +400,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -361,13 +415,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;rcode&quot;: &quot;y010410&quot;
 }</code></pre>
     </p>
@@ -375,7 +428,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -389,7 +442,7 @@
     <p>本接口用于用户的登录验证。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=profile</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=profile&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -400,8 +453,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>是</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -414,18 +468,46 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 login。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_id</td>
                         <td class="text-nowrap">int</td>
                         <td rowspan="3">true</td>
                         <td rowspan="3">
                             <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
-                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#reg">注册设置</a>。</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#reg">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
@@ -451,16 +533,14 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <p>
-        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。
-    </p>
+        <p>
+            本接口返回加密结果，真正内容需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -474,12 +554,17 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">code</td>
                         <td class="text-nowrap">string</td>
-                        <td>加密字符串，需要解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。</td>
+                        <td>加密结果，需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">sign</td>
+                        <td class="text-nowrap">string</td>
+                        <td>签名，即本接口解密后的结果（JSON 对象，不进行 JSON 和 Base64 解码）加以签名。签名验证方式请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=sign#verify">签名</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -494,12 +579,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>解密后的结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">解密后的结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -580,13 +663,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;user_id&quot;: &quot;MTA=&quot;, //用户 ID
     &quot;user_name&quot;: &quot;Zm9uZQ==&quot;, //用户名
     &quot;user_mail&quot;: &quot;Zm9uZUBiYWlnby5uZXQ=&quot;, //邮箱
@@ -599,7 +681,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -613,7 +695,7 @@
     <p>本接口用于读取已注册用户的信息。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>GET</p>
@@ -624,8 +706,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>是</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -638,18 +721,46 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 read。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_id</td>
                         <td class="text-nowrap">int</td>
                         <td rowspan="3">true</td>
                         <td rowspan="3">
                             <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
-                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#reg">注册设置</a>。</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#reg">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
@@ -663,16 +774,14 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <p>
-        本接口返回加密字符串，真正内容需要调用密文接口进行解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。
-    </p>
+        <p>
+            本接口返回加密结果，真正内容需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -686,12 +795,17 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">code</td>
                         <td class="text-nowrap">string</td>
-                        <td>加密字符串，需要解密。详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=code#decode">密文接口</a>。</td>
+                        <td>加密结果，需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">sign</td>
+                        <td class="text-nowrap">string</td>
+                        <td>签名，即本接口解密后的结果（JSON 对象，不进行 JSON 和 Base64 解码）加以签名。签名验证方式请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=sign#verify">签名</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -706,12 +820,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>解密后的结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">解密后的结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -786,13 +898,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;user_id&quot;: &quot;MTA=&quot;, //用户 ID
     &quot;user_name&quot;: &quot;Zm9uZQ==&quot;, //用户名
     &quot;user_mail&quot;: &quot;Zm9uZUBiYWlnby5uZXQ=&quot;, //邮箱
@@ -806,7 +917,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -820,7 +931,7 @@
     <p>本接口用于编辑已注册用户的信息。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -831,8 +942,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -845,18 +957,46 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 edit。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_id</td>
                         <td class="text-nowrap">int</td>
                         <td rowspan="3">true</td>
                         <td rowspan="3">
                             <p>三选一，优先级为 user_id &gt; user_name &gt; user_mail</p>
-                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#reg">注册设置</a>。</p>
+                            <p>其中是否允许邮箱登录，视注册设置情况而定。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#reg">注册设置</a>。</p>
                         </td>
                     </tr>
                     <tr>
@@ -871,7 +1011,7 @@
                         <td class="text-nowrap">user_pass</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">false</td>
-                        <td>密码，仅在需要修改密码时传输该参数。</td>
+                        <td>密码，仅在需要修改密码时传输该参数，必须用 <mark>MD5</mark> 加密后传输。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">user_mail_new</td>
@@ -900,54 +1040,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-danger">
-        <div class="panel-heading">废弃参数</div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-nowrap">名称</th>
-                        <th class="text-nowrap">类型</th>
-                        <th class="text-nowrap">必须</th>
-                        <th class="text-nowrap">版本</th>
-                        <th>描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-nowrap">user_check_pass</td>
-                        <td class="text-nowrap">bool</td>
-                        <td class="text-nowrap">true</td>
-                        <td class="text-nowrap">>= v2.0</td>
-                        <td>
-                            <p>是否需要验证原密码，true 为验证原密码，false 为忽略原密码。</p>
-                            <p>如果此参数为 true，则不受应用授权的限制，详情查看 <a href="/help/ctl.php?mod=admin&amp;act_get=app#belong">授权用户</a>。</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">user_pass_new</td>
-                        <td class="text-nowrap">string</td>
-                        <td class="text-nowrap">false</td>
-                        <td class="text-nowrap">>= v2.0</td>
-                        <td>
-                            新密码，仅在需要修改密码时传输该参数。直接食用 user_pass 参数替代。
-                        </td>
-                    </tr>
-
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div>&nbsp;</div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -961,7 +1057,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -976,13 +1072,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;rcode&quot;: &quot;y010103&quot;
 }</code></pre>
     </p>
@@ -990,7 +1085,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -1004,7 +1099,7 @@
     <p>本接口用于删除已注册用户。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -1015,8 +1110,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -1029,11 +1125,39 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 del。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_ids</td>
                         <td class="text-nowrap">string</td>
@@ -1043,12 +1167,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -1062,7 +1184,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -1077,13 +1199,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;rcode&quot;: &quot;y010104&quot; //返回代码
 }</code></pre>
     </p>
@@ -1091,7 +1212,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -1105,7 +1226,7 @@
     <p>本接口用于检查用户名是否可以注册。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>GET</p>
@@ -1116,8 +1237,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -1130,11 +1252,39 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 chkname。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_name</td>
                         <td class="text-nowrap">string</td>
@@ -1144,12 +1294,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -1163,7 +1311,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -1178,13 +1326,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;rcode&quot;: &quot;y010102&quot; //返回代码
 }</code></pre>
     </p>
@@ -1192,7 +1339,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -1206,7 +1353,7 @@
     <p>本接口用于检查邮箱是否可以注册。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=user</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=user&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>GET</p>
@@ -1217,8 +1364,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -1231,11 +1379,39 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 chk。</td>
                     </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>加密参数，将加密参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <h4>加密参数</h4>
+
+        <p>
+            将下列参数的值用 Base64 编码（注：<mark>切勿将参数名进行 Base64 编码</mark>），然后拼合成 JSON 对象，最后用加密函数加密，加密方法请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th class="text-nowrap">必须</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
                         <td class="text-nowrap">user_mail</td>
                         <td class="text-nowrap">string</td>
@@ -1251,22 +1427,20 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
 
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
     <hr>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -1280,7 +1454,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -1295,21 +1469,23 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>返回结果示例</h5>
 
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;rcode&quot;: &quot;y010102&quot; //返回代码
 }</code></pre>
     </p>
 
     <a name="contact_request"></a>
+
+    <div>&nbsp;</div>
     <h3>联系方式请求格式</h3>
+
     <p>联系方式请求格式必须为 json 对象，格式如下，此处只是参数展示，未进行字符串转义，实际情况下请转义。</p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;tel&quot; : { //可自定义
         &quot;key&quot; : &quot;电话&quot;,
         &quot;value&quot; : &quot;0574-88888888&quot;
@@ -1325,18 +1501,19 @@
 
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
     <hr>
 
-    <div>&nbsp;</div>
-
     <a name="extend_request"></a>
+
+    <div>&nbsp;</div>
     <h3>扩展字段请求格式</h3>
+
     <p>扩展字段请求格式必须为 json 对象，格式如下，此处只是参数展示，未进行字符串转义，实际情况下请转义。</p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;sex&quot; : { //可自定义
         &quot;key&quot; : &quot;性别&quot;,
         &quot;value&quot; : &quot;女&quot;
@@ -1352,17 +1529,19 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
     <hr>
 
-    <div>&nbsp;</div>
 
     <a name="contact_return"></a>
+
+    <div>&nbsp;</div>
     <h3>联系方式返回格式</h3>
-<pre><code class="language-php">array(
+
+<pre class="border rounded"><code class="language-php">array(
     &quot;tel&quot; =&gt; array( //可自定义
         &quot;key&quot;     =&gt; &quot;电话&quot;,
         &quot;value&quot;   =&gt; &quot;0574-88888888&quot;
@@ -1376,17 +1555,18 @@
     </p><div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
     <hr>
 
-    <div>&nbsp;</div>
-
     <a name="extend_return"></a>
+
+    <div>&nbsp;</div>
     <h3>扩展字段返回格式</h3>
-<pre><code class="language-php">array(
+
+<pre class="border rounded"><code class="language-php">array(
     &quot;sex&quot; =&gt; array( //可自定义
         &quot;key&quot;     =&gt; &quot;性别&quot;,
         &quot;value&quot;   =&gt; &quot;女&quot;

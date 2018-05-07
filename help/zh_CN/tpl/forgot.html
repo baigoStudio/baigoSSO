@@ -3,7 +3,7 @@
 <p>
     用户通过邮件找回后将会收到确认邮件，确认邮件将用户带至本界面。
 </p>
-<div class="panel panel-default">
+
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -17,21 +17,19 @@
                 <tr>
                     <td class="text-nowrap">$this->tplData['userRow']</td>
                     <td>用户详细信息</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
             </tbody>
         </table>
     </div>
-</div>
-
-<div>&nbsp;</div>
 
 <a name="userRow"></a>
+
+<div>&nbsp;</div>
 <h4><code>$this->tplData['userRow']</code> 数组</h4>
 
 <p>当前用户详细信息</p>
 
-<div class="panel panel-default">
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
@@ -47,37 +45,37 @@
                     <td class="text-nowrap">user_id</td>
                     <td class="text-nowrap">int</td>
                     <td class="text-nowrap">用户 ID</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">user_name</td>
                     <td class="text-nowrap">string</td>
                     <td class="text-nowrap">用户名</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">user_mail</td>
                     <td class="text-nowrap">string</td>
                     <td class="text-nowrap">邮箱</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">user_contact</td>
                     <td class="text-nowrap">array</td>
                     <td class="text-nowrap">其他联系方式</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">user_extend</td>
                     <td class="text-nowrap">array</td>
                     <td class="text-nowrap">扩展信息</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">user_nick</td>
                     <td class="text-nowrap">string</td>
                     <td class="text-nowrap">昵称</td>
-                    <td> </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td class="text-nowrap">user_status</td>
@@ -89,19 +87,18 @@
                     <td class="text-nowrap">rcode</td>
                     <td class="text-nowrap">string</td>
                     <td class="text-nowrap">返回代码</td>
-                    <td>显示当前用户的状态，详情请查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode" target="_blank">返回代码</a>。</td>
+                    <td>显示当前用户的状态，详情请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode" target="_blank">返回代码</a>。</td>
                 </tr>
             </tbody>
         </table>
     </div>
-</div>
 
 <div>&nbsp;</div>
 
-<h4>用户数据示例</h4>
+<h5>用户数据示例</h5>
 <code>print_r($this->tplData['userRow'])</code>
 <p>
-<pre><code class="language-php">Array (
+<pre class="border rounded"><code class="language-php">Array (
     [user_id] =&gt; 2 //ID
     [user_name] =&gt; user //名称
     [rcode] =&gt; y010102 //返回代码

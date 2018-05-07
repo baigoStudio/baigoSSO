@@ -8,44 +8,44 @@
     "upload"         => 'true',
     "md5"            => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=user',
+    'str_url'        => BG_URL_CONSOLE . 'index.php?m=user',
 );
 
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
-    <div class="form-group">
-        <ul class="nav nav-pills bg-nav-pills">
-            <li>
-                <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=user&act=list">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    <?php echo $this->lang['common']['href']['back']; ?>
-                </a>
-            </li>
-            <li>
-                <a href="<?php echo BG_URL_HELP; ?>index.php?mod=console&act=user" target="_blank">
-                    <span class="glyphicon glyphicon-question-sign"></span>
-                    <?php echo $this->lang['mod']['href']['help']; ?>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+            <a href="<?php echo BG_URL_CONSOLE; ?>index.php?m=user&a=list" class="nav-link">
+                <span class="oi oi-chevron-left"></span>
+                <?php echo $this->lang['common']['href']['back']; ?>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?php echo BG_URL_HELP; ?>index.php?m=console&a=user" target="_blank" class="nav-link">
+                <span class="badge badge-pill badge-primary">
+                    <span class="oi oi-question-mark"></span>
+                </span>
+                <?php echo $this->lang['mod']['href']['help']; ?>
+            </a>
+        </li>
+    </ul>
 
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <?php if (!fn_isEmpty($this->tplData['csvRows'])) { ?>
-                        <form name="csv_convert" id="csv_convert">
+            <?php if (!fn_isEmpty($this->tplData['csvRows'])) { ?>
+                <form name="csv_convert" id="csv_convert">
+                    <div class="card">
+                        <div class="card-body">
                             <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
-                            <input type="hidden" name="act" value="convert">
+                            <input type="hidden" name="a" value="convert">
                             <input type="hidden" name="charset" value="<?php echo $this->tplData['charset']; ?>">
 
-                            <table class="bg-table-convert">
+                            <table>
                                 <thead>
                                     <tr>
-                                        <th><?php echo $this->lang['mod']['label']['source']; ?></th>
-                                        <th> </th>
-                                        <th><?php echo $this->lang['mod']['label']['convert']; ?></th>
+                                        <th class="p-2"><?php echo $this->lang['mod']['label']['source']; ?></th>
+                                        <th class="p-2">&nbsp;</th>
+                                        <th class="p-2"><?php echo $this->lang['mod']['label']['convert']; ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -53,11 +53,11 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                         foreach ($this->tplData['csvRows'][0] as $key=>$value) {
                                             if (!fn_isEmpty($value)) { ?>
                                                 <tr>
-                                                    <td><?php echo $value; ?></td>
-                                                    <td>
-                                                        <span class="glyphicon glyphicon-arrow-right"></span>
+                                                    <td class="p-2"><?php echo $value; ?></td>
+                                                    <td class="p-2">
+                                                        <span class="oi oi-arrow-right"></span>
                                                     </td>
-                                                    <td>
+                                                    <td class="p-2">
                                                         <select name="user_convert[<?php echo $key; ?>]" class="form-control">
                                                             <option <?php if ($key < 1) { ?>selected<?php } ?> value="user_name"><?php echo $this->lang['mod']['label']['username']; ?></option>
                                                             <option <?php if ($key == 1) { ?>selected<?php } ?> value="user_pass"><?php echo $this->lang['mod']['label']['password']; ?></option>
@@ -70,106 +70,104 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                         }
                                     } ?>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="3">
-                                            <div class="bg-submit-box bg-submit-box-convert"></div>
-                                            <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['convert']; ?></button>
-                                        </td>
-                                    </tr>
-                                </tfoot>
                             </table>
-                        </form>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="alert alert-warning">
-                <span class="glyphicon glyphicon-warning-sign"></span>
-                <?php echo $this->lang['mod']['text']['refreshImport']; ?>
-            </div>
-            <div class="well">
-                <form name="csv_import" id="csv_import">
-                    <div class="form-group">
-                        <a id="upload_select" class="btn btn-success fileinput-button">
-                            <span class="glyphicon glyphicon-upload"></span>
-                            <?php echo $this->lang['mod']['btn']['uploadCsv']; ?>
-                        </a>
-                    </div>
+                        </div>
 
-                    <div id="csv_upload"></div>
-                </form>
-
-                <hr class="bg-well-hr">
-
-                <form name="csv_del" id="csv_del">
-                    <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
-                    <input type="hidden" name="act" value="csvDel">
-                    <div class="bg-submit-box bg-submit-box-del"></div>
-                    <div class="form-group">
-                        <button class="btn btn-primary bg-submit-del" type="button">
-                            <span class="glyphicon glyphicon-trash"></span>
-                            <?php echo $this->lang['mod']['btn']['delCsv']; ?>
-                        </button>
-                    </div>
-                </form>
-
-                <hr class="bg-well-hr">
-
-                <div class="form-group">
-                    <label class="control-label"><?php echo $this->lang['mod']['label']['md5tool']; ?></label>
-                    <input type="text" id="pass_src" class="form-control" placeholder="<?php echo $this->lang['mod']['label']['password']; ?>">
-                </div>
-                <div class="form-group">
-                    <label class="control-label"><?php echo $this->lang['mod']['label']['md5result']; ?></label>
-                    <input type="text" id="pass_result" class="form-control">
-                </div>
-                <div class="form-group">
-                    <button type="button" id="md5_do" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-lock"></span>
-                        <?php echo $this->lang['mod']['btn']['md5gen']; ?>
-                    </button>
-                </div>
-
-                <hr class="bg-well-hr">
-
-                <form id="form_preview" name="form_preview" action="<?php echo BG_URL_CONSOLE; ?>index.php">
-                    <input type="hidden" name="mod" value="user">
-                    <input type="hidden" name="act" value="import">
-
-                    <div class="form-group">
-                        <label class="control-label"><?php echo $this->lang['mod']['label']['charsetSrc']; ?></label>
-                        <select name="charset" id="charset" class="form-control">
-                            <?php foreach ($this->tplData['charsetRows'] as $key=>$value) { ?>
-                                <optgroup label="<?php echo $value['title']; ?>">
-                                    <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
-                                        <option <?php if ($this->tplData['charset'] == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
-                                            <?php echo $value_sub['title'], ' ', $key_sub; ?>
-                                        </option>
-                                    <?php } ?>
-                                </optgroup>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <button type="submit" class="btn btn-primary"><?php echo $this->lang['mod']['btn']['submit']; ?></button>
-                            <a class="btn btn-default" href="#charset_list_modal" data-toggle="modal">
-                                <?php echo $this->lang['mod']['btn']['charset']; ?>
-                            </a>
+                        <div class="card-footer">
+                            <div class="bg-submit-box bg-submit-box-convert"></div>
+                            <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['convert']; ?></button>
                         </div>
                     </div>
                 </form>
+            <?php } ?>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <span class="oi oi-warning"></span>
+                        <?php echo $this->lang['mod']['text']['refreshImport']; ?>
+                    </div>
+
+                    <form name="csv_import" id="csv_import">
+                        <div class="form-group">
+                            <a id="upload_select" class="btn btn-success text-white fileinput-button">
+                                <span class="oi oi-upload"></span>
+                                <?php echo $this->lang['mod']['btn']['uploadCsv']; ?>
+                            </a>
+                        </div>
+
+                        <div id="csv_upload"></div>
+                    </form>
+
+                    <hr class="bg-card-hr">
+
+                    <form name="csv_del" id="csv_del">
+                        <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
+                        <input type="hidden" name="a" value="csvDel">
+                        <div class="bg-submit-box bg-submit-box-del"></div>
+                        <div class="form-group">
+                            <button class="btn btn-primary bg-submit-del" type="button">
+                                <span class="oi oi-trash"></span>
+                                <?php echo $this->lang['mod']['btn']['delCsv']; ?>
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="bg-card-hr">
+
+                    <div class="form-group">
+                        <label><?php echo $this->lang['mod']['label']['md5tool']; ?></label>
+                        <input type="text" id="pass_src" class="form-control" placeholder="<?php echo $this->lang['mod']['label']['password']; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label><?php echo $this->lang['mod']['label']['md5result']; ?></label>
+                        <input type="text" id="pass_result" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="md5_do" class="btn btn-primary">
+                            <span class="oi oi-lock"></span>
+                            <?php echo $this->lang['mod']['btn']['md5gen']; ?>
+                        </button>
+                    </div>
+
+                    <hr class="bg-card-hr">
+
+                    <form id="form_preview" name="form_preview" action="<?php echo BG_URL_CONSOLE; ?>index.php">
+                        <input type="hidden" name="m" value="user">
+                        <input type="hidden" name="a" value="import">
+
+                        <div class="form-group">
+                            <label><?php echo $this->lang['mod']['label']['charsetSrc']; ?></label>
+                            <select name="charset" id="charset" class="form-control">
+                                <?php foreach ($this->tplData['charsetRows'] as $key=>$value) { ?>
+                                    <optgroup label="<?php echo $value['title']; ?>">
+                                        <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
+                                            <option <?php if ($this->tplData['charset'] == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
+                                                <?php echo $value_sub['title'], ' ', $key_sub; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </optgroup>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-primary"><?php echo $this->lang['mod']['btn']['submit']; ?></button>
+                                <a class="btn btn-outline-secondary" href="#charset_list_modal" data-toggle="modal">
+                                    <?php echo $this->lang['mod']['btn']['charset']; ?>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <h3><?php echo $this->lang['mod']['label']['preview']; ?></h3>
-        </div>
-        <table class="table table-striped table-hover">
+    <div class="mt-3">
+        <h3><?php echo $this->lang['mod']['label']['preview']; ?></h3>
+        <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>
                     <?php if (isset($this->tplData['csvRows'][0]) && !fn_isEmpty($this->tplData['csvRows'][0])) {
@@ -199,8 +197,10 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title"><?php echo $this->lang['mod']['label']['charset']; ?></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
@@ -228,7 +228,9 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->lang['common']['btn']['close']; ?></button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                        <?php echo $this->lang['common']['btn']['close']; ?>
+                    </button>
                 </div>
             </div>
         </div>
@@ -238,7 +240,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <script type="text/javascript">
     var opts_submit_convert = {
-        ajax_url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user",
+        ajax_url: "<?php echo BG_URL_CONSOLE; ?>index.php?m=user&c=request",
         box: {
             selector: ".bg-submit-box-convert"
         },
@@ -248,7 +250,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     };
 
     var opts_submit_del = {
-        ajax_url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user",
+        ajax_url: "<?php echo BG_URL_CONSOLE; ?>index.php?m=user&c=request",
         box: {
             selector: ".bg-submit-box-del"
         },
@@ -263,7 +265,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     function alert_process(_class, _icon, _msg) {
         $("#csv_upload .bg-alert").removeClass("alert-info alert-danger alert-success");
         $("#csv_upload .bg-alert").addClass(_class);
-        $("#csv_upload .bg-alert i").removeClass("glyphicon-refresh glyphicon-remove-sign glyphicon-ok-sign glyphicon-upload bg-spin");
+        $("#csv_upload .bg-alert i").removeClass("glyphicon-refresh glyphicon-circle-x glyphicon-circle-check glyphicon-upload bg-spin");
         $("#csv_upload .bg-alert i").addClass(_icon);
         $("#csv_upload .bg-alert span").html(_msg);
     }
@@ -277,9 +279,9 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             //附加表单数据
             formData: {
                 <?php echo $this->common['tokenRow']['name_session']; ?>: "<?php echo $this->common['tokenRow']['token']; ?>",
-                act: "import"
+                a: "import"
             },
-            server: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=user", //文件接收服务端
+            server: "<?php echo BG_URL_CONSOLE; ?>index.php?m=user&c=request", //文件接收服务端
             pick: {
                 id: "#upload_select", //选择按钮
                 multiple: false
@@ -299,7 +301,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                 "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
                 "<h4>" + file.name + "</h4>" +
                 "<p class=\"bg-alert-text\">" +
-                    "<i class=\"glyphicon glyphicon-refresh bg-spin\"></i>" +
+                    "<i class=\"oi oi-refresh bg-spin\"></i>" +
                     " <span></span>" +
                 "</p>" +
             "</div>");
@@ -318,7 +320,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         });
 
         obj_wu.on("uploadProgress", function(file, percentage){
-            alert_process("alert-danger", "glyphicon-remove-sign", "<?php echo $this->lang['mod']['label']['uploading']; ?>");
+            alert_process("alert-danger", "glyphicon-circle-x", "<?php echo $this->lang['mod']['label']['uploading']; ?>");
 
             $("#csv_upload .bg-progress").show();
             $("#csv_upload .bg-progress .progress-bar").text(percentage * 100 + "%");
@@ -328,19 +330,19 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         obj_wu.on("uploadSuccess", function(file, result){
             var _str_msg;
             if (result.rcode == "y010403") {
-                alert_process("alert-success", "glyphicon-ok-sign", "<?php echo $this->lang['mod']['label']['uploadSucc']; ?>");
+                alert_process("alert-success", "glyphicon-circle-check", "<?php echo $this->lang['mod']['label']['uploadSucc']; ?>");
             } else {
                 if (typeof result.msg == "undefined") {
                     _str_msg = "<?php echo $this->lang['mod']['label']['returnErr']; ?>";
                 } else {
                     _str_msg = result.msg;
                 }
-                alert_process("alert-danger", "glyphicon-remove-sign", _str_msg);
+                alert_process("alert-danger", "glyphicon-circle-x", _str_msg);
             }
         });
 
         obj_wu.on("uploadError", function(file, result){
-            alert_process("alert-danger", "glyphicon-remove-sign", "Error&nbsp;status:&nbsp;" + result);
+            alert_process("alert-danger", "glyphicon-circle-x", "Error&nbsp;status:&nbsp;" + result);
         });
 
         obj_wu.on("uploadComplete", function(file){
@@ -370,4 +372,4 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     });
     </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php');

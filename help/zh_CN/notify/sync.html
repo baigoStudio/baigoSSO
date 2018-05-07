@@ -1,0 +1,285 @@
+    <ul>
+        <li>
+            <a href="#login_notify">同步登录通知</a>
+        </li>
+        <li>
+            <a href="#logout_notify">同步登出通知</a>
+        </li>
+    </ul>
+
+    <div>&nbsp;</div>
+
+    <h3>同步概述</h3>
+    <p>如果当前应用程序在 SSO 中设置允许同步登录，那么在调用同步登录接口时，系统会通知其他设置了同步登录的应用程序登录，以达到一点登录，所有网站登录的目的。下图是同步流程示意图。同步登录通知与系统通知的区别是：同步登录通知通常是根据同步登录接口返回的结果，由访问者浏览器发起，而系统通知则是由 SSO 服务器直接发起。本文档描述下图中绿线部分，即应用接收到通知。</p>
+    <p>
+        <a href="{$images}sync_process.jpg" target="_blank"><img src="{$images}sync_process.jpg" class="img-fluid img-thumbnail"></a>
+    </p>
+
+    <div>&nbsp;</div>
+
+    <h3>通知公共参数</h3>
+
+    <p>通知公共参数是指向所有接口发起通知时都传递的参数。系统会在“通知接口 URL”上附加 <code>m=sync</code> 参数，以便接收通知的系统识别。</p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-nowrap">time</td>
+                        <td class="text-nowrap">int</td>
+                        <td>Unix 时间戳，baigo SSO 允许 +-30 分钟以内的时差，为了防止时区设置不同导致的时差，请开发者将应用的时区设置为为与 baigo SSO 一致，关于时区设置，请查看 <a href="{$BG_URL_HELP}index.php?m=console&a=opt#base">系统设置</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">sign</td>
+                        <td class="text-nowrap">string</td>
+                        <td>签名，将通知参数中的加密参数解码，得到一个 JSON 对象，直接将此对象签名加以签名，签名方式请查看 <a href="{$BG_URL_HELP}index.php?m=api&a=sign#sign">签名</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+    <div class="text-right">
+        <a href="#top">
+            <span class="oi oi-chevron-top"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <div>&nbsp;</div>
+
+    <a name="login_notify"></a>
+    <h3>同步登录通知</h3>
+
+    <p class="text-success">接口说明</p>
+    <p>应用调用同步登录接口以后，接入本系统的应用会根据设置情况，由当前应用直接访问“同步登录通知 URL”，即通知接口中的 <a href="{$BG_URL_HELP}index.php?m=api&a=sync#jsonp_exp">调用 URL 示例</a>。</p>
+
+    <p class="text-success">HTTP 请求方式</p>
+    <p>GET</p>
+
+    <p class="text-success">通知参数是否加密</p>
+    <p>是</p>
+
+    <p class="text-success">通知的验证</p>
+    <p>系统在推送通知时，会附带用于验证的数据。其中 APP ID 与 APP KEY 需要解密后才能得到，得到后请与当前应用进行对比验证。</p>
+
+    <div>&nbsp;</div>
+    <h4>通知参数</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-nowrap">a</td>
+                        <td class="text-nowrap">string</td>
+                        <td>通知动作，值为 login。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td>加密参数，需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+
+    <h5>通知参数示例</h5>
+    <p>PHP 通过 <code>print_r($_GET);</code>，得到数据后，请验证签名是否正确，然后进行下一步操作。</p>
+
+    <p>
+<pre class="border rounded"><code class="language-php">array(
+    &quot;m&quot;       =&gt; &quot;sync&quot;, //组件名称
+    &quot;a&quot;       =&gt; &quot;login&quot;, //通知动作
+    &quot;time&quot;    =&gt; 1446527788, //Unix 时间戳
+    &quot;sign&quot;    =&gt; &quot;sdfdsfsdrewerwugroe7treie&quot;, //签名
+    &quot;code&quot;    =&gt; &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密参数
+);</code></pre>
+    </p>
+
+    <div>&nbsp;</div>
+
+    <p>
+        本接口推送加密参数，真正内容需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。“同步登录通知 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。最后需要输出回调函数，并将数据通过回调函数的参数传回。
+    </p>
+
+    <div>&nbsp;</div>
+    <h4>解密后的结果</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">Base64</th>
+                        <th class="text-nowrap">类型</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-nowrap">user_id</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">int</td>
+                        <td>用户 ID</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">user_name</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">string</td>
+                        <td>用户名</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">user_mail</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">string</td>
+                        <td>用户邮箱</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_id</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">int</td>
+                        <td>APP ID，后台创建应用时生成的 ID。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_key</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">string</td>
+                        <td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <div>&nbsp;</div>
+
+    <h5>返回结果示例</h5>
+    <p>得到结果后，请验证 APP ID 与 APP KEY 是否正确，然后进行下一步动作，如：生成会话，标记用户已登录等。</p>
+
+    <p>
+<pre class="border rounded"><code class="language-javascript">{
+    &quot;user_id&quot;: &quot;MTA=&quot;, //用户 ID
+    &quot;user_name&quot;: &quot;Zm9uZQ==&quot;, //用户名
+    &quot;app_id&quot;: &quot;MTA=&quot;, //APP ID
+    &quot;app_key&quot;: &quot;sdfwerwer&quot;; //APP KEY
+}</code></pre>
+    </p>
+
+    <div>&nbsp;</div>
+    <div class="text-right">
+        <a href="#top">
+            <span class="oi oi-chevron-top"></span>
+            top
+        </a>
+    </div>
+    <hr>
+    <div>&nbsp;</div>
+
+    <a name="logout_notify"></a>
+    <h3>同步登出通知</h3>
+
+    <p class="text-success">接口说明</p>
+    <p>应用调用同步登录接口以后，将会直接访问“同步登录通知 URL”。</p>
+
+    <p class="text-success">HTTP 请求方式</p>
+    <p>GET</p>
+
+    <p class="text-success">通知参数是否加密</p>
+    <p>是</p>
+
+    <p class="text-success">通知的验证</p>
+    <p>系统在推送通知时，会附带用于验证的数据。其中 APP ID 与 APP KEY 需要解密后才能得到，得到后请与当前应用进行对比验证。</p>
+
+    <div>&nbsp;</div>
+    <h4>通知参数</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">类型</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-nowrap">a</td>
+                        <td class="text-nowrap">string</td>
+                        <td>通知动作，值为 logout。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">string</td>
+                        <td>加密参数，需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <p>
+        本接口推送加密参数，真正内容需要解密。详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=code#decode">密文</a>。“同步登录通知 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。最后需要输出回调函数，并将数据通过回调函数的参数传回。
+    </p>
+
+    <div>&nbsp;</div>
+    <h4>解密后的结果</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">名称</th>
+                        <th class="text-nowrap">Base64</th>
+                        <th class="text-nowrap">类型</th>
+                        <th>描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-nowrap">user_id</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">int</td>
+                        <td>用户 ID</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">user_name</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">string</td>
+                        <td>用户名</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">user_mail</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">string</td>
+                        <td>用户邮箱</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_id</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">int</td>
+                        <td>APP ID，后台创建应用时生成的 ID。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_key</td>
+                        <td class="text-nowrap">true</td>
+                        <td class="text-nowrap">string</td>
+                        <td>APP KEY，后台创建应用时生成的 KEY。详情查看 <a href="{$BG_URL_HELP}index.php?m=console&a=app#show">应用</a>。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>

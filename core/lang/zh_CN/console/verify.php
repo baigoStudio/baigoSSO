@@ -30,6 +30,7 @@ return array(
         'key'               => '关键词',
         'unknow'            => '未知',
         'status'            => '状态',
+        'type'              => '类型',
         'operator'          => '操作者',
         'timeInit'          => '发起时间',
         'timeExpired'       => '过期时间',

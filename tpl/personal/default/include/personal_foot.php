@@ -1,6 +1,6 @@
             </div>
 
-            <div class="panel-footer">
+            <div class="card-footer">
                 <div class="text-right">
                     <?php echo PRD_SSO_POWERED, ' ';
                     if (BG_DEFAULT_UI == 'default') { ?>
@@ -15,15 +15,15 @@
 
     </div>
 
-    <script src="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/baigoSubmit.min.js" type="text/javascript"></script>
-    <script src="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/baigoValidator.min.js" type="text/javascript"></script>
+    <script src="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/2.0.5/baigoSubmit.min.js" type="text/javascript"></script>
+    <script src="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/2.2.5/baigoValidator.min.js" type="text/javascript"></script>
     <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
     $(document).ready(function(){
-        $(".seccodeBtn").click(function(){
-            var imgSrc = "<?php echo BG_URL_MISC; ?>index.php?mod=seccode&act=make&" + new Date().getTime() + "at" + Math.random();
-            $(".seccodeImg").attr('src', imgSrc);
+        $(".captchaBtn").click(function(){
+            var imgSrc = "<?php echo BG_URL_MISC; ?>index.php?m=captcha&a=make&" + new Date().getTime() + "at" + Math.random();
+            $(".captchaImg").attr('src', imgSrc);
         });
     });
     </script>

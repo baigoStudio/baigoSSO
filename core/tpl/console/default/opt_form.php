@@ -5,30 +5,30 @@
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=opt&act=' . $this->tplData['act'],
+    'str_url'        => BG_URL_CONSOLE . 'index.php?m=opt&a=' . $this->tplData['act'],
 );
 
 include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
-    <div class="form-group">
-        <ul class="nav nav-pills bg-nav-pills">
-            <li>
-                <a href="<?php echo BG_URL_HELP; ?>index.php?mod=console&act=opt#<?php echo $this->tplData['act']; ?>" target="_blank">
-                    <span class="glyphicon glyphicon-question-sign"></span>
-                    <?php echo $this->lang['mod']['href']['help']; ?>
-                </a>
-            </li>
-        </ul>
-    </div>
+    <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+            <a href="<?php echo BG_URL_HELP; ?>index.php?m=console&a=opt#<?php echo $this->tplData['act']; ?>" target="_blank" class="nav-link">
+                <span class="badge badge-pill badge-primary">
+                    <span class="oi oi-question-mark"></span>
+                </span>
+                <?php echo $this->lang['mod']['href']['help']; ?>
+            </a>
+        </li>
+    </ul>
 
     <form name="opt_form" id="opt_form">
 
         <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
-        <input type="hidden" name="act" value="<?php echo $this->tplData['act']; ?>">
+        <input type="hidden" name="a" value="<?php echo $this->tplData['act']; ?>">
 
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
                 <?php
                 $_tplRows       = array();
                 $_timezoneLang  = array();
@@ -45,8 +45,9 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                 $arr_form = opt_form_process($this->opt[$this->tplData['act']]['list'], $this->lang['opt'][$this->tplData['act']]['list'], $_tplRows, $_timezoneRows, $_timezoneLang, $_timezoneType, $this->lang['mod']['label'], $this->lang['rcode']); ?>
 
                 <div class="bg-submit-box"></div>
+                <div class="bg-validator-box"></div>
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 <button type="button" class="btn btn-primary bg-submit">
                     <?php echo $this->lang['mod']['btn']['save']; ?>
                 </button>
@@ -60,14 +61,20 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     <?php echo $arr_form['json']; ?>
 
     var opts_submit_form = {
-        ajax_url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=opt",
+        ajax_url: "<?php echo BG_URL_CONSOLE; ?>index.php?m=opt&c=request",
         msg_text: {
             submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         }
     };
 
+    var options_validator_form = {
+        msg_global:{
+            msg: "<?php echo $this->lang['common']['label']['errInput']; ?>"
+        }
+    };
+
     $(document).ready(function(){
-        var obj_validator_form    = $("#opt_form").baigoValidator(opts_validator_form);
+        var obj_validator_form    = $("#opt_form").baigoValidator(opts_validator_form, options_validator_form);
         var obj_submit_form       = $("#opt_form").baigoSubmit(opts_submit_form);
         $(".bg-submit").click(function(){
             if (obj_validator_form.verify()) {
@@ -100,4 +107,4 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     });
     </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php');

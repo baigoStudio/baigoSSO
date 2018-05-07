@@ -11,54 +11,49 @@ $cfg = array(
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
-    'str_url'        => BG_URL_CONSOLE . 'index.php?mod=profile&act=info',
+    'str_url'        => BG_URL_CONSOLE . 'index.php?m=profile&a=info',
 );
 
-include($cfg['pathInclude'] . 'console_head.php'); ?>
+include($cfg['pathInclude'] . 'function.php');
+include($cfg['pathInclude'] . 'console_head.php');
 
-    <div class="form-group">
-        <ul class="nav nav-pills bg-nav-pills">
-            <?php include($cfg['pathInclude'] . 'profile_menu.php'); ?>
-        </ul>
-    </div>
+    include($cfg['pathInclude'] . 'profile_menu.php'); ?>
 
     <form name="profile_form" id="profile_form" autocomplete="off">
         <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
-        <input type="hidden" name="act" value="pass">
+        <input type="hidden" name="a" value="pass">
 
         <div class="row">
             <div class="col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-body">
                         <div class="form-group">
-                            <label class="control-label"><?php echo $this->lang['mod']['label']['username']; ?></label>
+                            <label><?php echo $this->lang['mod']['label']['username']; ?></label>
                             <input type="text" value="<?php echo $this->tplData['adminLogged']['admin_name']; ?>" readonly class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <div id="group_admin_pass">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']['passOld']; ?><span id="msg_admin_pass">*</span></label>
-                                <input type="password" name="admin_pass" id="admin_pass" data-validate class="form-control">
-                            </div>
+                            <label><?php echo $this->lang['mod']['label']['passOld']; ?> <span class="text-danger">*</span></label>
+                            <input type="password" name="admin_pass" id="admin_pass" data-validate class="form-control">
+                            <small class="form-text" id="msg_admin_pass"></small>
                         </div>
 
                         <div class="form-group">
-                            <div id="group_admin_pass_new">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']['passNew']; ?><span id="msg_admin_pass_new">*</span></label>
-                                <input type="password" name="admin_pass_new" id="admin_pass_new" data-validate class="form-control">
-                            </div>
+                            <label><?php echo $this->lang['mod']['label']['passNew']; ?> <span class="text-danger">*</span></label>
+                            <input type="password" name="admin_pass_new" id="admin_pass_new" data-validate class="form-control">
+                            <small class="form-text" id="msg_admin_pass_new"></small>
                         </div>
 
                         <div class="form-group">
-                            <div id="group_admin_pass_confirm">
-                                <label class="control-label"><?php echo $this->lang['mod']['label']['passConfirm']; ?><span id="msg_admin_pass_confirm">*</span></label>
-                                <input type="password" name="admin_pass_confirm" id="admin_pass_confirm" data-validate class="form-control">
-                            </div>
+                            <label><?php echo $this->lang['mod']['label']['passConfirm']; ?> <span class="text-danger">*</span></label>
+                            <input type="password" name="admin_pass_confirm" id="admin_pass_confirm" data-validate class="form-control">
+                            <small class="form-text" id="msg_admin_pass_confirm"></small>
                         </div>
 
                         <div class="bg-submit-box"></div>
+                        <div class="bg-validator-box"></div>
                     </div>
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         <button type="button" class="btn btn-primary bg-submit">
                             <?php echo $this->lang['mod']['btn']['save']; ?>
                         </button>
@@ -76,29 +71,36 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     var opts_validator_form = {
         admin_pass: {
             len: { min: 1, max: 0 },
-            validate: { type: "str", format: "text", group: "#group_admin_pass" },
-            msg: { selector: "#msg_admin_pass", too_short: "<?php echo $this->lang['rcode']['x010243']; ?>" }
+            validate: { type: "str", format: "text" },
+            msg: { too_short: "<?php echo $this->lang['rcode']['x010243']; ?>" }
         },
         admin_pass_new: {
             len: { min: 1, max: 0 },
-            validate: { type: "str", format: "text", group: "#group_admin_pass_new" },
-            msg: { selector: "#msg_admin_pass_new", too_short: "<?php echo $this->lang['rcode']['x010222']; ?>" }
+            validate: { type: "str", format: "text" },
+            msg: { too_short: "<?php echo $this->lang['rcode']['x010222']; ?>" }
         },
         admin_pass_confirm: {
             len: { min: 1, max: 0 },
-            validate: { type: "confirm", target: "#admin_pass_new", group: "#group_admin_pass_confirm" },
-            msg: { selector: "#msg_admin_pass_confirm", too_short: "<?php echo $this->lang['rcode']['x010224']; ?>", not_match: "<?php echo $this->lang['rcode']['x010225']; ?>" }
+            validate: { type: "confirm", target: "#admin_pass_new" },
+            msg: { too_short: "<?php echo $this->lang['rcode']['x010224']; ?>", not_match: "<?php echo $this->lang['rcode']['x010225']; ?>" }
         }
     };
+
+    var options_validator_form = {
+        msg_global:{
+            msg: "<?php echo $this->lang['common']['label']['errInput']; ?>"
+        }
+    };
+
     var opts_submit_form = {
-        ajax_url: "<?php echo BG_URL_CONSOLE; ?>request.php?mod=profile",
+        ajax_url: "<?php echo BG_URL_CONSOLE; ?>index.php?m=profile&c=request",
         msg_text: {
             submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         }
     };
 
     $(document).ready(function(){
-        var obj_validator_form    = $("#profile_form").baigoValidator(opts_validator_form);
+        var obj_validator_form    = $("#profile_form").baigoValidator(opts_validator_form, options_validator_form);
         var obj_submit_form       = $("#profile_form").baigoSubmit(opts_submit_form);
         $(".bg-submit").click(function(){
             if (obj_validator_form.verify()) {
@@ -108,4 +110,4 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
     });
     </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php');

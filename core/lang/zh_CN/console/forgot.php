@@ -19,6 +19,7 @@ return array(
     /*------链接文字------*/
     'href' => array(
         'login' => '直接登录',
+        'help'  => '帮助',
     ),
 
     /*------说明文字------*/
@@ -28,14 +29,14 @@ return array(
         'answer'        => '回答',
         'passNew'       => '新密码',
         'passConfirm'   => '确认密码',
-        'seccode'       => '验证码',
+        'captcha'       => '验证码',
     ),
 
     /*------按钮------*/
     'btn' => array(
         'next'  => '下一步',
         'submit'    => '提交',
-        'seccode'   => '看不清',
+        'captcha'   => '看不清',
     ),
 
     'text' => array(

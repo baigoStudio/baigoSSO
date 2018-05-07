@@ -62,14 +62,19 @@ function fn_http($str_url, $arr_data, $str_method = 'get') {
  * @param string $method (default: '')
  * @return void
  */
-function fn_jsonEncode($arr_json = '', $method = '') {
+function fn_jsonEncode($arr_json = '', $encode = false) {
+    if ($encode) {
+        $_str_encode = 'encode';
+    }
+
     if (fn_isEmpty($arr_json)) {
         $str_json = '';
     } else {
-        $arr_json = fn_eachArray($arr_json, $method);
+        $arr_json = fn_eachArray($arr_json, $_str_encode);
         //print_r($method);
         $str_json = json_encode($arr_json); //json编码
     }
+
     return $str_json;
 }
 
@@ -82,13 +87,17 @@ function fn_jsonEncode($arr_json = '', $method = '') {
  * @param string $method (default: '')
  * @return void
  */
-function fn_jsonDecode($str_json = '', $method = '') {
+function fn_jsonDecode($str_json = '', $decode = false) {
+    if ($decode) {
+        $_str_decode = 'decode';
+    }
     if (fn_isEmpty($str_json)) {
         $arr_json = array();
     } else {
         $arr_json = json_decode($str_json, true); //json解码
-        $arr_json = fn_eachArray($arr_json, $method);
+        $arr_json = fn_eachArray($arr_json, $_str_decode);
     }
+
     return $arr_json;
 }
 

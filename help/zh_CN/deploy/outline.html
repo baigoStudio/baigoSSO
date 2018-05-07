@@ -7,7 +7,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -17,8 +17,9 @@
     <h3>上传文件</h3>
 
     <p>将下载到的程序包解压，假设服务器的 web 路径为 <mark>/web</mark> 可访问的 web 根目录为 <mark>/web/wwwroot</mark>，对应链接为 <mark>http://www.domain.com</mark> 以下均以此为例。建议按如下方式上传文件：
-    <div class="panel panel-default">
-        <div class="panel-heading">目录结构说明</div>
+
+        <div>&nbsp;</div>
+        <h4>目录结构说明</h4>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -77,12 +78,11 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -93,14 +93,14 @@
 
     <p>在 <mark>/web/wwwroot/config</mark> 目录下找到 <mark>config.inc.php</mark> 文件，如没有，请将 <mark>config_sample.inc.php</mark> 另存为 <mark>config.inc.php</mark>，找到以下配置项目，建议以如下方式修改：</p>
     <p>
-<pre><code class="language-php">define("BG_PATH_CORE", "/web/core/");
+<pre class="border rounded"><code class="language-php">define("BG_PATH_CORE", "/web/core/");
 define("BG_PATH_TPL", "/web/tpl/");</code></pre>
     </p>
 
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -109,4 +109,4 @@ define("BG_PATH_TPL", "/web/tpl/");</code></pre>
 
     <h3>执行安装程序</h3>
 
-    <p>打开 <mark>http://www.domain.com/install</mark> 按照安装文档的说明进行安装，升级过程类似。详情请查看 <a href="{BG_URL_HELP}index.php?mod=setup">安装文档</a>。</p>
+    <p>打开 <mark>http://www.domain.com/install</mark> 按照安装文档的说明进行安装，升级过程类似。详情请查看 <a href="{$BG_URL_HELP}index.php?m=setup">安装文档</a>。</p>

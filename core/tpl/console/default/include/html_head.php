@@ -17,27 +17,27 @@
     </title>
 
     <!--jQuery 库-->
-    <script src="<?php echo BG_URL_STATIC; ?>lib/jquery.min.js" type="text/javascript"></script>
-    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link href="<?php echo BG_URL_STATIC; ?>lib/baigoAccordion/baigoAccordion.min.css" type="text/css" rel="stylesheet">
+    <script src="<?php echo BG_URL_STATIC; ?>lib/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo BG_URL_STATIC; ?>lib/iconic/1.1.0/css/open-iconic-bootstrap.min.css" type="text/css" rel="stylesheet">
 
     <?php if (isset($cfg['baigoValidator'])) { ?>
         <!--表单验证 js-->
-        <link href="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/baigoValidator.css" type="text/css" rel="stylesheet">
+        <link href="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/2.2.5/baigoValidator.css" type="text/css" rel="stylesheet">
     <?php }
 
     if (isset($cfg['baigoSubmit'])) { ?>
         <!--表单 ajax 提交 js-->
-        <link href="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/baigoSubmit.css" type="text/css" rel="stylesheet">
+        <link href="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/2.0.5/baigoSubmit.css" type="text/css" rel="stylesheet">
     <?php }
 
     if (isset($cfg['upload'])) { ?>
         <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-        <link href="<?php echo BG_URL_STATIC; ?>lib/webuploader/webuploader.css" type="text/css" rel="stylesheet">
+        <link href="<?php echo BG_URL_STATIC; ?>lib/webuploader/0.1.5/webuploader.css" type="text/css" rel="stylesheet">
     <?php }
 
     if (isset($cfg['datetimepicker'])) { ?>
-        <link href="<?php echo BG_URL_STATIC; ?>lib/datetimepicker/jquery.datetimepicker.css" type="text/css" rel="stylesheet">
+        <link href="<?php echo BG_URL_STATIC; ?>lib/datetimepicker/2.3.0/jquery.datetimepicker.css" type="text/css" rel="stylesheet">
     <?php } ?>
 
     <link href="<?php echo BG_URL_STATIC; ?>css/common.css" type="text/css" rel="stylesheet">

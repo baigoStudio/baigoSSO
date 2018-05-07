@@ -14,7 +14,7 @@ return array(
     'user' => array(
         'main' => array(
             'title'  => '用户管理',
-            'icon'   => 'user',
+            'icon'   => 'people',
         ),
         'sub' => array(
             'list'      => '所有用户',
@@ -32,7 +32,7 @@ return array(
     'pm' => array(
         'main' => array(
             'title'  => '站内短信',
-            'icon'   => 'envelope',
+            'icon'   => 'envelope-closed',
         ),
         'sub' => array(
             'list' => '所有短信',
@@ -49,7 +49,7 @@ return array(
     'app' => array(
         'main' => array(
             'title'  => '应用管理',
-            'icon'   => 'transfer',
+            'icon'   => 'terminal',
         ),
         'sub' => array(
             'list' => '所有应用',
@@ -65,7 +65,7 @@ return array(
     'verify' => array(
         'main' => array(
             'title'  => '验证日志',
-            'icon'   => 'time',
+            'icon'   => 'timer',
         ),
         'sub' => array(
             'list'      => '所有日志',
@@ -77,7 +77,7 @@ return array(
     'admin' => array(
         'main' => array(
             'title'  => '管理员',
-            'icon'   => 'lock',
+            'icon'   => 'person',
         ),
         'sub' => array(
             'list' => '所有管理员',

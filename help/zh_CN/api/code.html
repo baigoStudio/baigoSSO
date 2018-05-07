@@ -1,6 +1,8 @@
-    <p>baigo SSO 大部分 API 接口返回加密字符串，详情请查看具体接口，真正内容需要调用密文接口进行解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，详情请查看具体的接口。</p>
+    <p class="alert alert-danger">自 v3.0 开始取消密文接口，请开发者自行按照加解密规则编写加解密程序；./_example/crypt.class.php 文件为加解密示例，开发者可以此为例自行编写程序。</p>
 
-    <ul class="bg-nav-line">
+    <p>baigo SSO 大部分 API 接口返回加密结果，加密机制可有效防止数据泄漏，详情请查看具体接口，真正内容需要解密。解密后部分结果为 <mark>Base64 编码</mark>，需要进行 <mark>Base64 解码</mark>，详情请查看具体的接口。</p>
+
+    <ul>
         <li>
             <a href="#encode">加密</a>
         </li>
@@ -10,77 +12,59 @@
     </ul>
 
     <div>&nbsp;</div>
-
-    <h3>公共请求参数</h3>
-    <p>公共请求参数是指向所有接口发起请求时都必须传入的参数。</p>
-    <div class="panel panel-default">
-        <div class="panel-heading">公共请求参数</div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-nowrap">名称</th>
-                        <th class="text-nowrap">类型</th>
-                        <th class="text-nowrap">必须</th>
-                        <th>描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-nowrap">app_id</td>
-                        <td class="text-nowrap">int</td>
-                        <td class="text-nowrap">true</td>
-                        <td>应用的 APP ID，后台创建应用时生成的 ID。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=app#show">应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">app_key</td>
-                        <td class="text-nowrap">string</td>
-                        <td class="text-nowrap">true</td>
-                        <td>应用的 APP KEY，后台创建应用时生成的 KEY。详情查看 <a href="{BG_URL_HELP}index.php?mod=console&act=app#show">应用</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">time</td>
-                        <td class="text-nowrap">int</td>
-                        <td class="text-nowrap">true</td>
-                        <td>Unix 时间戳，baigo SSO 允许 +-30 分钟以内的时差，为了防止时区设置不同导致的时差，请开发者将应用的时区设置为为与 baigo SSO 一致，关于时区设置，请查看 <a href="{BG_URL_HELP}index.php?mod=console&act=opt#base">系统设置</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">signature</td>
-                        <td class="text-nowrap">string</td>
-                        <td class="text-nowrap">true</td>
-                        <td>签名，将请求参数中的所有参数（包括公共请求参数，但不含签名）按照一定规律组合以后生成的，详情请查看 <a href="{BG_URL_HELP}index.php?mod=api&act=signature#verify">签名接口</a>。</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
     <hr>
     <div>&nbsp;</div>
 
+    <a name="encode"></a>
     <h3>加密</h3>
 
-    <p class="text-success">接口说明</p>
-    <p>本接口用于将数据进行加密。</p>
+    <p class="alert alert-danger">自 v3.0 开始取消密文接口，请开发者自行按照加解密规则编写加解密程序，以下为加密函数示例。</p>
 
-    <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=code</p>
+    <div>&nbsp;</div>
+    <h5>加密函数示例</h5>
 
-    <p class="text-success">HTTP 请求方式</p>
-    <p>POST</p>
+    <p>
+<pre class="border rounded"><code class="language-php">/** 加密
+ * encrypt function.
+ *
+ * @access public
+ * @param mixed $string 待加密对象
+ * @param mixed $app_key APP KEY (可从后台应用管理界面获得)
+ * @param mixed $app_secret APP SECRET (长度必须为 16 位, 可从后台应用管理界面获得)
+ * @return void
+ */
+function encrypt($string, $app_key, $app_secret) {
+    if (strlen($app_secret) != 16) { //验证 APP SECRET 长度
+        return array(
+            'rcode' =&gt; 'x030308',
+        );
+    }
 
-    <p class="text-success">返回格式</p>
-    <p>JSON</p>
+    $_str_encrypt   = openssl_encrypt($string, 'AES-128-CBC', $app_key, 1, $app_secret);
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    $_str_encrypt   = base64_encode($_str_encrypt);
+
+    //替换 base64 特殊字符, 防止传输过程中出现问题
+    $_str_encrypt   = str_ireplace('=', '|', $_str_encrypt);
+    $_str_encrypt   = str_ireplace('/', '@', $_str_encrypt);
+    $_str_encrypt   = str_ireplace('+', '_', $_str_encrypt);
+
+    return array(
+        'rcode'     =&gt; 'ok',
+        'decrypt'   =&gt; $_str_encrypt,
+    );
+}</code></pre>
+    </p>
+
+    <div>&nbsp;</div>
+    <h4>参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -93,77 +77,31 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">string</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
-                        <td>接口调用动作，值只能为 encode。</td>
+                        <td>待加密对象</td>
                     </tr>
                     <tr>
-                        <td class="text-nowrap">data</td>
+                        <td class="text-nowrap">app_key</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
-                        <td>待加密的 JSON 字符串。首先必须将待加密的数组键值进行 Base64 编码 <mark>（切勿将键名进行 Base64 编码）</mark>，然后将数组进行 JSON 编码。</td>
+                        <td>APP KEY 通信密钥，可从后台应用管理界面获得。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_secret</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>APP KEY 密文密钥，长度必须为 16 位, 可从后台应用管理界面获得，此参数为加解密使用，请注意保密，切勿在网络中传输。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <div>&nbsp;</div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-nowrap">名称</th>
-                        <th class="text-nowrap">类型</th>
-                        <th>描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-nowrap">rcode</td>
-                        <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">code</td>
-                        <td class="text-nowrap">string</td>
-                        <td>加密字符串。</td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">prd_sso_ver</td>
-                        <td class="text-nowrap">string</td>
-                        <td>baigo SSO 版本号。</td>
-                    </tr>
-                    <tr>
-                        <td class="text-nowrap">prd_sso_pub</td>
-                        <td class="text-nowrap">string</td>
-                        <td>baigo SSO 版本发布时间，格式为年月日。</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div>&nbsp;</div>
-
-    <h4>返回结果示例</h4>
-    <p>
-<pre><code class="language-javascript">{
-    &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
-    &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
-    &quot;code&quot;: &quot;CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARbAT5RMlprBjZdJQdvBSRQXgkPBEhYZAAnAXFSdV0mAHMBNVEhDQ4BOVliV2wDbFQhAGtUcFElBSwIdgZ2DHEEYQEiUQxaaAY6XWQHPgUkUD0JegRbWFkATwE3UnVdfwAiASVRIA00ASZZXFdxA2lUbgA0VHBRPQUiCBkGVwxTBDQBHVEpWkMGYF1KBxEFR1A1CRcEU1gzADgBf1J7XXEAdQEjUTYNIwELWXdXbANtVGYADlQ%2BUWgFZwg9Bm0MIAQ%2BAXJRHlpSBgJdNwcYBXxQQglrBE9YSgBIAWhSGV0kAD0BbVFxDX0Bdll2V3YDZVRxAA5UO1F3BSIIbgYhDE8EUAEZUStaSgY5XUIHYAVJUFQJbAR6WEMAVgFpUi9dHQBqAR1Rbg1zASk%3D&quot;, //加密字符串
-    &quot;rcode&quot;: &quot;y010102&quot; //返回代码
-}</code></pre>
-    </p>
 
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -173,20 +111,46 @@
     <a name="decode"></a>
     <h3>解密</h3>
 
-    <p class="text-success">接口说明</p>
-    <p>本接口用于将其他接口返回的加密字符串进行解密。解密后返回真正的结果。</p>
+    <p class="alert alert-danger">自 v3.0 开始取消密文接口，请开发者自行按照加解密规则编写加解密程序，以下为解密函数示例。</p>
 
-    <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=code</p>
+    <div>&nbsp;</div>
+    <h5>解密函数示例</h5>
 
-    <p class="text-success">HTTP 请求方式</p>
-    <p>POST</p>
+    <p>
+<pre class="border rounded"><code class="language-php">/** 解密
+ * encrypt function.
+ *
+ * @access public
+ * @param mixed $string 待解密字符串
+ * @param mixed $app_key APP KEY (可从后台应用管理界面获得)
+ * @param mixed $app_secret APP SECRET (长度必须为 16 位, 可从后台应用管理界面获得)
+ * @return void
+ */
+function decrypt($string, $app_key, $app_secret) {
+    if (strlen($app_secret) != 16) { //验证 APP SECRET 长度
+        return array(
+            'rcode' =&gt; 'x030308',
+        );
+    }
 
-    <p class="text-success">返回格式</p>
-    <p>JSON</p>
+    //替换 base64 特殊字符, 防止传输过程中出现问题
+    $string         = str_ireplace('|', '=', $string);
+    $string         = str_ireplace('@', '/', $string);
+    $string         = str_ireplace('_', '+', $string);
+    $string         = base64_decode($string);
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    $_str_decrypt   = openssl_decrypt($string, 'AES-128-CBC', $app_key, 1, $app_secret);
+
+    return array(
+        'rcode'     =&gt; 'ok',
+        'decrypt'   =&gt; $_str_decrypt,
+    );
+}</code></pre>
+    </p>
+
+    <div>&nbsp;</div>
+    <h4>参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -199,54 +163,32 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">string</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
-                        <td>接口调用动作，值只能为 decode。</td>
+                        <td>待加密对象</td>
                     </tr>
                     <tr>
-                        <td class="text-nowrap">code</td>
+                        <td class="text-nowrap">app_key</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
-                        <td>从其他接口得到的加密字符串。</td>
+                        <td>APP KEY 通信密钥，可从后台应用管理界面获得。</td>
+                    </tr>
+                    <tr>
+                        <td class="text-nowrap">app_secret</td>
+                        <td class="text-nowrap">string</td>
+                        <td class="text-nowrap">true</td>
+                        <td>APP KEY 密文密钥，长度必须为 16 位, 可从后台应用管理界面获得，此参数为加解密使用，请注意保密，切勿在网络中传输。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h5>解密结果示例</h5>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-nowrap">名称</th>
-                        <th class="text-nowrap">类型</th>
-                        <th>描述</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-nowrap">rcode</td>
-                        <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">返回的其他内容均为 <mark>Base64 编码</mark>，需要对此进行 <mark>Base64 解码</mark>，请查看具体的接口。</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div>&nbsp;</div>
-
-    <h4>返回结果示例</h4>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;user_id&quot;: &quot;MTA=&quot;,
     &quot;user_name&quot;: &quot;Zm9uZQ==&quot;,
     &quot;user_mail&quot;: &quot;Zm9uZUBiYWlnby5uZXQ=&quot;,

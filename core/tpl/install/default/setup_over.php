@@ -1,7 +1,7 @@
 <?php $cfg = array(
     'title'         => $this->lang['mod']['page']['setup'] . ' &raquo; ' . $this->lang['mod']['page']['over'],
     "sub_title"     => $this->lang['mod']['page']['over'],
-    "mod_help"      => "setup",
+    "mod_help"      => 'setup',
     "act_help"      => 'over',
     "pathInclude"   => BG_PATH_TPLSYS . 'install' . DS . 'default' . DS . 'include' . DS,
 );
@@ -10,27 +10,27 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
 
     <form name="setup_form_dbtable" id="setup_form_dbtable">
         <input type="hidden" name="<?php echo $this->common['tokenRow']['name_session']; ?>" value="<?php echo $this->common['tokenRow']['token']; ?>">
-        <input type="hidden" name="act" value="over">
+        <input type="hidden" name="a" value="over">
 
-        <div class="alert alert-success">
-            <span class="glyphicon glyphicon-ok-sign"></span>
-            <?php echo $this->lang['mod']['label']['over']; ?>
-        </div>
-
-        <hr class="bg-panel-hr">
-
-        <div class="bg-submit-box"></div>
-
-        <div class="form-group clearfix">
-            <div class="pull-left">
-                <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?mod=setup&act=admin" class="btn btn-default"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
-                    <?php include($cfg['pathInclude'] . 'setup_drop.php'); ?>
-                </div>
+        <div class="card-body">
+            <div class="alert alert-success">
+                <span class="oi oi-circle-check"></span>
+                <?php echo $this->lang['mod']['label']['over']; ?>
             </div>
 
-            <div class="pull-right">
-                <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['complete']; ?></button>
+            <div class="bg-submit-box"></div>
+        </div>
+
+        <div class="card-footer">
+            <div class="btn-toolbar justify-content-between">
+                <div class="btn-group">
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=admin" class="btn btn-outline-secondary"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <?php include($cfg['pathInclude'] . 'setup_drop.php'); ?>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['complete']; ?></button>
+                </div>
             </div>
         </div>
     </form>
@@ -39,7 +39,7 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
 
     <script type="text/javascript">
     var opts_submit_form = {
-        ajax_url: "<?php echo BG_URL_INSTALL; ?>request.php?mod=setup",
+        ajax_url: "<?php echo BG_URL_INSTALL; ?>index.php?m=setup&c=request",
         msg_text: {
             submitting: "<?php echo $this->lang['common']['label']['submitting']; ?>"
         },
@@ -57,4 +57,4 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
     });
     </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot.php'); ?>
+<?php include($cfg['pathInclude'] . 'html_foot.php');

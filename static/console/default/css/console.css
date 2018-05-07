@@ -1,15 +1,7 @@
-.bg-navbar { background: #444; }
-.bg-navbar .list-inline { margin: 0; }
+@media (min-width: 768px) {
+    .bg-offcanvas { display: block !important; }
+}
 
-.bg-navbar .bg-navbar-btn { color: #ccc; display: inline-block; padding: 10px; text-decoration: none; }
-.bg-navbar .bg-navbar-btn:hover { background: #555 !important; color: #fff; }
-
-.bg-navbar .active .bg-navbar-btn { background: #555 !important; color: #fff; }
-
-.bg-navbar .bg-navbar-btn .badge { color: #444; background-color: #ccc; }
-.bg-navbar .bg-navbar-btn:hover .badge { color: #000; background-color: #fff; }
-
-.bg-navbar-img { padding: 10px; }
-.bg-navbar-dropdown { margin: 0 5px 0 0; border-top-left-radius: 0; border-top-right-radius: 0; }
-
-.bg-table-convert th, .bg-table-convert td { padding: 10px; }
+@media (max-width: 767px) {
+    .bg-accordion .card { border: 0 !important; margin: 0 -15px; }
+}

@@ -83,21 +83,21 @@ class CLASS_NOTIFY {
      */
     function notify_input($str_method = 'get', $chk_token = false) {
 
-        $_arr_notifyInput['act']    = $GLOBALS['route']['bg_act'];
+        $_arr_notifyInput['a']    = $GLOBALS['route']['bg_act'];
 
         switch ($str_method) {
             case 'post':
-                $_str_time                  = fn_post('time');
-                $_str_signature             = fn_post('signature');
-                $_str_code                  = fn_post('code');
-                $this->jsonp_callback       = fn_post('c');
+                $_str_time              = fn_post('time');
+                $_str_sign              = fn_post('sign');
+                $_str_code              = fn_post('code');
+                $this->jsonp_callback   = fn_post('callback');
             break;
 
             default:
-                $_str_time                  = fn_get('time');
-                $_str_signature             = fn_get('signature');
-                $_str_code                  = fn_get('code');
-                $this->jsonp_callback       = fn_get('c');
+                $_str_time              = fn_get('time');
+                $_str_sign              = fn_get('sign');
+                $_str_code              = fn_get('code');
+                $this->jsonp_callback   = fn_get('callback');
             break;
         }
 
@@ -114,8 +114,8 @@ class CLASS_NOTIFY {
             break;
         }
 
-        $_arr_signature = fn_validate($_str_signature, 1, 0);
-        switch ($_arr_signature['status']) {
+        $_arr_sign = fn_validate($_str_sign, 1, 0);
+        switch ($_arr_sign['status']) {
             case 'too_short':
                 return array(
                     'rcode' => 'x220203',
@@ -123,7 +123,7 @@ class CLASS_NOTIFY {
             break;
 
             case 'ok':
-                $_arr_notifyInput['signature'] = $_arr_signature['str'];
+                $_arr_notifyInput['sign'] = $_arr_sign['str'];
             break;
         }
 
@@ -155,7 +155,7 @@ class CLASS_NOTIFY {
      */
     function show_result($arr_re, $is_encode = false, $is_jsonp = false) {
         if ($is_encode) {
-            $_str_return = fn_jsonEncode($arr_re, 'encode');
+            $_str_return = fn_jsonEncode($arr_re, true);
         } else {
             $_str_return = json_encode($arr_re);
         }

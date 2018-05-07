@@ -7,6 +7,8 @@ func.php         公用函数
 notify.class.php 通知类，主要配合 sync.class.php 用
 sso.class.php    单点登录类，配置好 SSO URL、APP ID 和 APP KEY，就可以直接初始化对象，然后调用类里面的方法，详情请查看程序内的注释
 sync.class.php   同步类，配置好 SSO URL、APP ID 和 APP KEY，就可以直接初始化对象，然后调用类里面的方法，详情请查看程序内的注释
+crypt.class.php  加密解密类
+sign.class.php   签名类
 
 ---------------------------------------------------------------------
 

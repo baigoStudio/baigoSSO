@@ -48,10 +48,10 @@ return array(
     ),
     'misc' => array(
         'ui' => array(
-            'seccode',
+            'captcha',
         ),
         'request' => array(
-            'seccode',
+            'captcha',
         ),
     ),
     'api' => array(
@@ -60,8 +60,8 @@ return array(
             'profile',
             'forgot',
             'pm',
-            'code',
-            'signature',
+            //'code',
+            //'signature',
             'sync',
             'setup',
         ),

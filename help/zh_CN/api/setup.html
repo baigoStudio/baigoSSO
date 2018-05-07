@@ -1,4 +1,4 @@
-    <ul class="bg-nav-line">
+    <ul>
         <li>
             <a href="#dbconfig">数据库设置</a>
         </li>
@@ -20,7 +20,7 @@
 
     <div class="alert alert-warning">
         <p>
-            <span class="glyphicon glyphicon-warning-sign"></span>
+            <span class="oi oi-warning"></span>
             注意：本接口仅在安装 SSO 时有效，安装成功后将自动失效。
         </p>
         <p>
@@ -35,7 +35,7 @@
     <p>本接口用于设置数据库，本接口必须在第一步调用。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=setup</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=setup&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -46,8 +46,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -60,7 +61,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 dbconfig。</td>
@@ -110,12 +111,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -129,7 +128,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -144,13 +143,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
 
-    <h4>返回结果示例</h4>
+    <h5>返回结果示例</h5>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
     &quot;rcode&quot;: &quot;y010102&quot; //返回代码
@@ -160,7 +158,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -174,7 +172,7 @@
     <p>本接口用于基本设置。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=setup</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=setup&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -185,8 +183,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -199,7 +198,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 base。</td>
@@ -213,13 +212,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
-
     <h4>安装参数</h4>
+
     <p>
-<pre><code class="language-php">array(
+<pre class="border rounded"><code class="language-php">array(
     &quot;opt&quot; =&gt; array(
         &quot;base&quot; =&gt; array(
             &quot;BG_SITE_NAME&quot;        =&gt; &quot;baigo SSO&quot; //站点名称
@@ -241,9 +239,8 @@
     </p>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -257,7 +254,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -272,13 +269,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
 
-    <h4>返回结果示例</h4>
+    <h5>返回结果示例</h5>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
     &quot;rcode&quot;: &quot;y010102&quot; //返回代码
@@ -288,7 +284,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -302,7 +298,7 @@
     <p>本接口用于创建数据表。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=setup</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=setup&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -313,8 +309,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -327,7 +324,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 dbtable。</td>
@@ -335,12 +332,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -354,7 +349,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
@@ -369,13 +364,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
 
-    <h4>返回结果示例</h4>
+    <h5>返回结果示例</h5>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
     &quot;rcode&quot;: &quot;y010102&quot; //返回代码
@@ -385,7 +379,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -399,7 +393,7 @@
     <p>本接口用于创建管理员。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=setup</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=setup&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -410,8 +404,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -424,7 +419,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 admin。</td>
@@ -444,12 +439,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -463,7 +456,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">admin_id</td>
@@ -483,13 +476,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
 
-    <h4>返回结果示例</h4>
+    <h5>返回结果示例</h5>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
     &quot;admin_id&quot;: &quot;MTA=&quot;, //管理员 ID
@@ -500,7 +492,7 @@
     <div>&nbsp;</div>
     <div class="text-right">
         <a href="#top">
-            <span class="glyphicon glyphicon-chevron-up"></span>
+            <span class="oi oi-chevron-top"></span>
             top
         </a>
     </div>
@@ -514,7 +506,7 @@
     <p>本接口用于通知系统安装已完成，本接口必须在最后一步调用，本接口调用成功后，安装接口将全部失效。</p>
 
     <p class="text-success">URL</p>
-    <p class="text-primary">http://www.domain.com/api/api.php?mod=setup</p>
+    <p class="text-primary">http://www.domain.com/api/api.php?m=setup&c=api</p>
 
     <p class="text-success">HTTP 请求方式</p>
     <p>POST</p>
@@ -525,8 +517,9 @@
     <p class="text-success">返回结果是否加密</p>
     <p>否</p>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">请求参数</div>
+    <div>&nbsp;</div>
+    <h4>请求参数</h4>
+
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -539,7 +532,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="text-nowrap">act</td>
+                        <td class="text-nowrap">a</td>
                         <td class="text-nowrap">string</td>
                         <td class="text-nowrap">true</td>
                         <td>接口调用动作，值只能为 over。</td>
@@ -565,12 +558,10 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
+    <h4>返回结果</h4>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">返回结果</div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
@@ -584,7 +575,7 @@
                     <tr>
                         <td class="text-nowrap">rcode</td>
                         <td class="text-nowrap">string</td>
-                        <td>返回代码，详情查看 <a href="{BG_URL_HELP}index.php?mod=api&act=rcode">返回代码</a>。</td>
+                        <td>返回代码，详情查看 <a href="{$BG_URL_HELP}index.php?m=api&a=rcode">返回代码</a>。</td>
                     </tr>
                     <tr>
                         <td class="text-nowrap">sso_url</td>
@@ -602,6 +593,11 @@
                         <td>调用 API 接口所需的 APP KEY。</td>
                     </tr>
                     <tr>
+                        <td class="text-nowrap">app_secret</td>
+                        <td class="text-nowrap">string</td>
+                        <td>解密所需的 APP SECRET。</td>
+                    </tr>
+                    <tr>
                         <td class="text-nowrap">prd_sso_ver</td>
                         <td class="text-nowrap">string</td>
                         <td>baigo SSO 版本号。</td>
@@ -614,13 +610,12 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
     <div>&nbsp;</div>
 
-    <h4>返回结果示例</h4>
+    <h5>返回结果示例</h5>
     <p>
-<pre><code class="language-javascript">{
+<pre class="border rounded"><code class="language-javascript">{
     &quot;prd_sso_ver&quot;: &quot;1.1.1&quot;, //SSO 版本号
     &quot;prd_sso_pub&quot;: 20150923, //SSO 版本发布时间
     &quot;app_id&quot;: &quot;MTA=&quot;, //应用 APP ID

@@ -7,6 +7,9 @@ require('func.php');
 require('notify.class.php');
 require('sso.class.php');
 require('sync.class.php');
+require('sso.class.php');
+require('crypt.class.php');
+require('sign.class.php');
 
 $obj_sso = new CLASS_SSO();
 

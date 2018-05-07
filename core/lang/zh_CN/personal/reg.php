@@ -20,13 +20,13 @@ return array(
     /*------说明文字------*/
     'label' => array(
         'username'  => '用户名',
-        'seccode'   => '验证码',
+        'captcha'   => '验证码',
     ),
 
     /*------按钮------*/
     'btn' => array(
         'submit'    => '提交',
-        'seccode'   => '看不清',
+        'captcha'   => '看不清',
     ),
 
 );

@@ -1,8 +1,9 @@
+                <ul class="nav nav-pills mb-3">
                     <?php foreach ($this->profile as $_key=>$_value) { ?>
-                        <li<?php if (isset($cfg['sub_active']) && $cfg['sub_active'] == $_key) { ?> class="active"<?php } ?>>
-                            <a href="<?php echo BG_URL_CONSOLE; ?>index.php?mod=profile&act=<?php echo $_key; ?>">
+                        <li class="nav-item">
+                            <a href="<?php echo BG_URL_CONSOLE; ?>index.php?m=profile&a=<?php echo $_key; ?>" class="nav-link<?php if (isset($cfg['sub_active']) && $cfg['sub_active'] == $_key) { ?> active<?php } ?>">
                                 <?php if (isset($this->lang['common']['profile'][$_key]['icon'])) { ?>
-                                    <span class="glyphicon glyphicon-<?php echo $this->lang['common']['profile'][$_key]['icon']; ?>"></span>
+                                    <span class="oi oi-<?php echo $this->lang['common']['profile'][$_key]['icon']; ?>"></span>
                                 <?php }
 
                                 if (isset($this->lang['common']['profile'][$_key]['title'])) {
@@ -13,3 +14,4 @@
                             </a>
                         </li>
                     <?php } ?>
+                </ul>

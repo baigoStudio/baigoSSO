@@ -21,9 +21,9 @@ class CONTROL_API_SYNC {
             $this->obj_notify->show_result($_arr_notifyInput);
         }
 
-        $_arr_signature = $this->obj_sso->sso_verify(array_merge($this->arr_data, $_arr_notifyInput), $_arr_notifyInput['signature']);
-        if ($_arr_signature['rcode'] != 'y050403') {
-            $this->obj_notify->show_result($_arr_signature);
+        $_arr_sign = $this->obj_sso->sso_verify(array_merge($this->arr_data, $_arr_notifyInput), $_arr_notifyInput['sign']);
+        if ($_arr_sign['rcode'] != 'y050403') {
+            $this->obj_notify->show_result($_arr_sign);
         }
 
         $_tm_diff = $_arr_notifyInput['time'] - time();
@@ -65,9 +65,9 @@ class CONTROL_API_SYNC {
             $this->obj_notify->show_result($_arr_notifyInput);
         }
 
-        $_arr_signature = $this->obj_sso->sso_verify(array_merge($this->arr_data, $_arr_notifyInput), $_arr_notifyInput['signature']);
-        if ($_arr_signature['rcode'] != 'y050403') {
-            $this->obj_notify->show_result($_arr_signature);
+        $_arr_sign = $this->obj_sso->sso_verify(array_merge($this->arr_data, $_arr_notifyInput), $_arr_notifyInput['sign']);
+        if ($_arr_sign['rcode'] != 'y050403') {
+            $this->obj_notify->show_result($_arr_sign);
         }
 
         $_tm_diff = $_arr_notifyInput['time'] - time();

@@ -22,12 +22,12 @@ return array(
         'username'      => '用户名',
         'passNew'       => '新密码',
         'passConfirm'   => '确认密码',
-        'seccode'       => '验证码',
+        'captcha'       => '验证码',
     ),
 
     /*------按钮------*/
     'btn' => array(
         'submit'    => '提交',
-        'seccode'   => '看不清',
+        'captcha'   => '看不清',
     ),
 );
