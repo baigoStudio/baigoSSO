@@ -12,7 +12,7 @@
 include($cfg['pathInclude'] . 'function.php');
 include($cfg['pathInclude'] . 'console_head.php'); ?>
 
-    <div class="mb-3 clearfix">
+    <div class="clearfix">
         <div class="float-left">
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -34,37 +34,46 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
         <div class="float-right">
             <form name="admin_search" id="admin_search" action="<?php echo BG_URL_CONSOLE; ?>index.php" method="get">
                 <input type="hidden" name="m" value="admin">
-                <div class="input-group">
-                    <select name="status" class="custom-select">
-                        <option value=""><?php echo $this->lang['mod']['option']['allStatus']; ?></option>
-                        <?php foreach ($this->tplData['status'] as $key=>$value) { ?>
-                            <option <?php if ($this->tplData['search']['status'] == $value) { ?>selected<?php } ?> value="<?php echo $value; ?>">
-                                <?php if (isset($this->lang['mod']['status'][$value])) {
-                                    echo $this->lang['mod']['status'][$value];
-                                } else {
-                                    echo $value;
-                                } ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                    <select name="type" class="custom-select d-none d-md-block">
-                        <option value=""><?php echo $this->lang['mod']['option']['allType']; ?></option>
-                        <?php foreach ($this->tplData['type'] as $key=>$value) { ?>
-                            <option <?php if ($this->tplData['search']['type'] == $value) { ?>selected<?php } ?> value="<?php echo $value; ?>">
-                                <?php if (isset($this->lang['mod']['type'][$value])) {
-                                    echo $this->lang['mod']['type'][$value];
-                                } else {
-                                    echo $value;
-                                } ?>
-                            </option>
-                        <?php } ?>
-                    </select>
+                <div class="input-group mb-3">
                     <input type="text" name="key" value="<?php echo $this->tplData['search']['key']; ?>" placeholder="<?php echo $this->lang['mod']['label']['key']; ?>" class="form-control">
                     <span class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">
+                        <button class="btn btn-outline-secondary" type="submit">
                             <span class="oi oi-magnifying-glass"></span>
                         </button>
                     </span>
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#bg-search-more" aria-controls="bg-search-more">
+                            <span class="sr-only">Dropdown</span>
+                        </button>
+                    </span>
+                </div>
+                <div class="collapse" id="bg-search-more">
+                    <div class="input-group mb-3">
+                        <select name="status" class="custom-select">
+                            <option value=""><?php echo $this->lang['mod']['option']['allStatus']; ?></option>
+                            <?php foreach ($this->tplData['status'] as $key=>$value) { ?>
+                                <option <?php if ($this->tplData['search']['status'] == $value) { ?>selected<?php } ?> value="<?php echo $value; ?>">
+                                    <?php if (isset($this->lang['mod']['status'][$value])) {
+                                        echo $this->lang['mod']['status'][$value];
+                                    } else {
+                                        echo $value;
+                                    } ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                        <select name="type" class="custom-select">
+                            <option value=""><?php echo $this->lang['mod']['option']['allType']; ?></option>
+                            <?php foreach ($this->tplData['type'] as $key=>$value) { ?>
+                                <option <?php if ($this->tplData['search']['type'] == $value) { ?>selected<?php } ?> value="<?php echo $value; ?>">
+                                    <?php if (isset($this->lang['mod']['type'][$value])) {
+                                        echo $this->lang['mod']['type'][$value];
+                                    } else {
+                                        echo $value;
+                                    } ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
                 </div>
             </form>
         </div>
@@ -120,7 +129,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                             <td class="text-nowrap bg-td-md">
                                 <ul class="list-unstyled">
                                     <li>
-                                        <?php admin_status_process($value['admin_status'], $this->lang['mod']['status']); ?>
+                                        <?php status_process($value['admin_status'], $this->lang['mod']['status']); ?>
                                     </li>
                                     <li><?php echo $this->lang['mod']['type'][$value['admin_type']]; ?></li>
                                 </ul>
@@ -131,14 +140,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             </table>
         </div>
 
-        <div class="mt-3">
+        <div class="mb-3">
             <small class="form-text" id="msg_admin_id"></small>
             <div class="bg-submit-box bg-submit-box-list"></div>
         </div>
 
-        <div class="mt-3 clearfix">
+        <div class="clearfix">
             <div class="float-left">
-                <div class="input-group">
+                <div class="input-group mb-3">
                     <select name="a" id="a" data-validate class="custom-select">
                         <option value=""><?php echo $this->lang['mod']['option']['batch']; ?></option>
                         <?php foreach ($this->tplData['status'] as $key=>$value) { ?>

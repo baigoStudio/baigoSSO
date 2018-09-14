@@ -45,7 +45,7 @@ class CONTROL_API_API_USER {
             $this->general_api->show_result($_arr_apiChks);
         }
 
-        if (defined('BG_REG_ACC') && BG_REG_ACC != 'enable') {
+        if (BG_REG_ACC != 'enable') {
             $_arr_tplData = array(
                 'rcode' => 'x050316',
             );
@@ -84,12 +84,12 @@ class CONTROL_API_API_USER {
         } else {
             $_str_status = 'enable';
         }
-        $_arr_userSubmit = array(
-            'user_pass'     => fn_baigoCrypt($_arr_regInput['user_pass'], $_arr_regInput['user_name'], true),
-            'user_status'   => $_str_status,
-            'user_app_id'   => $_arr_apiChks['appRow']['app_id'],
-        );
-        $_arr_userRow = $this->mdl_user_api->mdl_reg($_arr_userSubmit);
+
+        $this->mdl_user_api->regInput['user_pass']      = fn_baigoCrypt($_arr_regInput['user_pass'], $_arr_regInput['user_name'], true);
+        $this->mdl_user_api->regInput['user_status']    = $_str_status;
+        $this->mdl_user_api->regInput['user_app_id']    = $_arr_apiChks['appRow']['app_id'];
+
+        $_arr_userRow = $this->mdl_user_api->mdl_reg();
 
         if (BG_REG_CONFIRM == 'on') { //开启验证发送邮件
             $_arr_returnRow    = $this->mdl_verify->mdl_submit($_arr_userRow['user_id'], $_arr_regInput['user_mail'], 'confirm');
@@ -432,12 +432,6 @@ class CONTROL_API_API_USER {
             $this->general_api->show_result($_arr_tplData);
         }
 
-        $_arr_userSubmit = array();
-
-        if (isset($_arr_userInput['user_pass']) && !fn_isEmpty($_arr_userInput['user_pass'])) {
-            $_arr_userSubmit['user_pass'] = fn_baigoCrypt($_arr_userInput['user_pass'], $_arr_userRow['user_name'], true);
-        }
-
         if (!$this->obj_sign->sign_check($_arr_decrypt['decrypt'], $_arr_apiChks['appInput']['sign'], $_arr_apiChks['appKey'], $_arr_apiChks['appRow']['app_secret'])) {
             $_arr_tplData = array(
                 'rcode' => 'x050403',
@@ -466,9 +460,13 @@ class CONTROL_API_API_USER {
 
         //file_put_contents(BG_PATH_ROOT . 'test.txt', $_str_userPass . '||' . $_str_rand);
 
-        $_arr_userSubmit['user_id'] = $_arr_userRow['user_id'];
+        if (isset($_arr_userInput['user_pass']) && !fn_isEmpty($_arr_userInput['user_pass'])) {
+            $this->mdl_user_api->editInput['user_pass'] = fn_baigoCrypt($_arr_userInput['user_pass'], $_arr_userRow['user_name'], true);
+        }
+        $this->mdl_user_api->editInput['user_id'] = $_arr_userRow['user_id'];
 
-        $_arr_returnRow              = $this->mdl_user_api->mdl_edit($_arr_userSubmit);
+        $_arr_returnRow              = $this->mdl_user_api->mdl_edit();
+
         $_arr_returnRow['user_name'] = $_arr_userRow['user_name'];
 
         //unset($_arr_returnRow['rcode']);

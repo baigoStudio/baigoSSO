@@ -43,7 +43,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         <div class="input-group">
                             <input type="text" name="key_belong" class="form-control" value="<?php echo $this->tplData['search']['key_belong']; ?>" placeholder="<?php echo $this->lang['mod']['label']['key']; ?>">
                             <span class="input-group-append">
-                                <button class="btn btn-secondary" type="submit">
+                                <button class="btn btn-outline-secondary" type="submit">
                                     <span class="oi oi-magnifying-glass"></span>
                                 </button>
                             </span>
@@ -111,12 +111,12 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     </table>
                 </div>
 
-                <div class="mt-3">
+                <div class="mb-3">
                     <small id="msg_user_belong"></small>
                     <div class="bg-submit-box bg-submit-box-belong"></div>
                 </div>
 
-                <div class="mt-3">
+                <div class="mb-3">
                     <input type="hidden" name="a" id="a" value="deauth">
                     <button type="button" class="btn btn-primary bg-submit-belong">
                         <?php echo $this->lang['mod']['btn']['deauth']; ?>
@@ -136,7 +136,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         <div class="input-group">
                             <input type="text" name="key" class="form-control" value="<?php echo $this->tplData['search']['key']; ?>" placeholder="<?php echo $this->lang['mod']['label']['key']; ?>">
                             <span class="input-group-append">
-                                <button class="btn btn-secondary" type="submit">
+                                <button class="btn btn-outline-secondary" type="submit">
                                     <span class="oi oi-magnifying-glass"></span>
                                 </button>
                             </span>
@@ -204,17 +204,19 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     </table>
                 </div>
 
-                <div class="mt-3">
+                <div class="mb-3">
                     <small id="msg_user_id"></small>
                     <div class="bg-submit-box bg-submit-box-list"></div>
                 </div>
 
-                <div class="mt-3 clearfix">
+                <div class="clearfix">
                     <div class="float-left">
                         <input type="hidden" name="a" value="auth">
-                        <button type="button" class="btn btn-primary bg-submit-list">
-                            <?php echo $this->lang['mod']['btn']['auth']; ?>
-                        </button>
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-primary bg-submit-list">
+                                <?php echo $this->lang['mod']['btn']['auth']; ?>
+                            </button>
+                        </div>
                     </div>
                     <div class="float-right">
                         <?php include($cfg['pathInclude'] . 'page.php'); ?>

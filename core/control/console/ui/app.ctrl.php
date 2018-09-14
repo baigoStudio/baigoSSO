@@ -149,9 +149,9 @@ class CONTROL_CONSOLE_UI_APP {
         );
 
         $_num_userCount   = $this->mdl_user->mdl_count($_arr_search);
-        $_arr_page        = fn_page($_num_userCount); //取得分页数据
+        $_arr_pageRow     = fn_page($_num_userCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search);
-        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page['except'], $_arr_search);
+        $_arr_userRows    = $this->mdl_user->mdl_list(BG_DEFAULT_PERPAGE, $_arr_pageRow['except'], $_arr_search);
 
         $_arr_searchView = array(
             'key'        => $_str_keyBelong,
@@ -161,7 +161,7 @@ class CONTROL_CONSOLE_UI_APP {
 
         $_arr_tpl = array(
             'query'      => $_str_query,
-            'pageRow'    => $_arr_page,
+            'pageRow'    => $_arr_pageRow,
             'search'     => $_arr_search,
             'userRows'   => $_arr_userRows,
             'userViews'  => $_arr_userViews,
@@ -189,13 +189,13 @@ class CONTROL_CONSOLE_UI_APP {
         );
 
         $_num_appCount    = $this->mdl_app->mdl_count($_arr_search);
-        $_arr_page        = fn_page($_num_appCount); //取得分页数据
+        $_arr_pageRow     = fn_page($_num_appCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search);
-        $_arr_appRows     = $this->mdl_app->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page['except'], $_arr_search);
+        $_arr_appRows     = $this->mdl_app->mdl_list(BG_DEFAULT_PERPAGE, $_arr_pageRow['except'], $_arr_search);
 
         $_arr_tpl = array(
             'query'      => $_str_query,
-            'pageRow'    => $_arr_page,
+            'pageRow'    => $_arr_pageRow,
             'search'     => $_arr_search,
             'appRows'    => $_arr_appRows,
         );

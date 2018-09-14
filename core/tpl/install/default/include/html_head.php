@@ -15,7 +15,7 @@
     <script src="<?php echo BG_URL_STATIC; ?>lib/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
 
     <!--bootstrap-->
-    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo BG_URL_STATIC; ?>lib/iconic/1.1.0/css/open-iconic-bootstrap.min.css" type="text/css" rel="stylesheet">
 
     <!--表单验证 js-->

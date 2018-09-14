@@ -11,7 +11,7 @@
     <script src="<?php echo BG_URL_STATIC; ?>lib/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
 
     <!--bootstrap-->
-    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo BG_URL_STATIC; ?>lib/iconic/1.1.0/css/open-iconic-bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="<?php echo BG_URL_STATIC; ?>lib/prism/prism.css" type="text/css" rel="stylesheet">
     <link href="<?php echo BG_URL_STATIC; ?>help/<?php echo BG_DEFAULT_UI; ?>/css/help.css" type="text/css" rel="stylesheet">
@@ -19,7 +19,7 @@
 
 <body>
 
-    <header class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between mb-3">
+    <header class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
         <div class="container">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bg-collapse" aria-controls="bg-collapse">
                 <span class="navbar-toggler-icon"></span>
@@ -155,7 +155,7 @@
 
     <!--bootstrap-->
     <script src="<?php echo BG_URL_STATIC; ?>lib/popper/1.12.9/popper.min.js" type="text/javascript"></script>
-    <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.1.3/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="<?php echo BG_URL_STATIC; ?>lib/prism/prism.min.js" type="text/javascript"></script>
 
     <!--

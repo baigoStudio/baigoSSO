@@ -156,15 +156,13 @@ class CONTROL_CONSOLE_REQUEST_ADMIN {
                 }
             }
 
-            $_arr_userSubmit = array(
-                'user_name'     => $_arr_adminInput['admin_name'],
-                'user_pass'     => fn_baigoCrypt($_str_adminPass, $_arr_adminInput['admin_name']),
-                'user_status'   => $_arr_adminInput['admin_status'],
-                'user_nick'     => $_arr_adminInput['admin_nick'],
-                'user_note'     => $_arr_adminInput['admin_note'],
-            );
+            $this->mdl_user_api->regInput['user_name']   = $_arr_adminInput['admin_name'];
+            $this->mdl_user_api->regInput['user_pass']   = fn_baigoCrypt($_str_adminPass, $_arr_adminInput['admin_name']);
+            $this->mdl_user_api->regInput['user_status'] = $_arr_adminInput['admin_status'];
+            $this->mdl_user_api->regInput['user_nick']   = $_arr_adminInput['admin_nick'];
+            $this->mdl_user_api->regInput['user_note']   = $_arr_adminInput['admin_note'];
 
-            $_arr_userRow       = $this->mdl_user_api->mdl_reg($_arr_userSubmit);
+            $_arr_userRow       = $this->mdl_user_api->mdl_reg();
         }
 
         $_arr_adminRow = $this->mdl_admin->mdl_submit($_arr_adminInput);

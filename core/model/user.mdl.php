@@ -223,16 +223,14 @@ class MODEL_USER {
      * @param string $str_userPass (default: '')
      * @return void
      */
-    function mdl_submit($arr_userSubmit = array()) {
+    function mdl_submit() {
         $_arr_userData = array(
             'user_name'             => $this->userInput['user_name'],
             'user_mail'             => $this->userInput['user_mail'],
             'user_crypt_type'       => 2,
         );
 
-        if (isset($arr_userSubmit['user_status']) && fn_isEmpty($arr_userSubmit['user_status'])) {
-            $_arr_userData['user_status'] = $arr_userSubmit['user_status'];
-        } else if (isset($this->userInput['user_status'])) {
+        if (isset($this->userInput['user_status'])) {
             $_arr_userData['user_status'] = $this->userInput['user_status'];
         }
 
@@ -254,11 +252,11 @@ class MODEL_USER {
 
         if ($this->userInput['user_id'] < 1) {
             $_arr_insert = array(
-                'user_pass'         => $arr_userSubmit['user_pass'],
-                'user_time'         => time(),
-                'user_time_login'   => time(),
+                'user_pass'         => $this->userInput['user_pass'],
+                'user_time'         => BG_NOW,
+                'user_time_login'   => BG_NOW,
                 'user_ip'           => fn_getIp(),
-                'user_app_id'       => $arr_userSubmit['user_app_id'],
+                'user_app_id'       => $this->userInput['user_app_id'],
             );
             $_arr_data   = array_merge($_arr_userData, $_arr_insert);
             $_num_userId = $this->obj_db->insert(BG_DB_TABLE . 'user', $_arr_data); //更新数据
@@ -270,8 +268,8 @@ class MODEL_USER {
                 );
             }
         } else {
-            if (isset($arr_userSubmit['user_pass']) && !fn_isEmpty($arr_userSubmit['user_pass'])) {
-                $_arr_userData['user_pass'] = $arr_userSubmit['user_pass']; //如果密码为空，则不修改
+            if (isset($this->userInput['user_pass']) && !fn_isEmpty($this->userInput['user_pass'])) {
+                $_arr_userData['user_pass'] = $this->userInput['user_pass']; //如果密码为空，则不修改
             }
             $_num_userId = $this->userInput['user_id'];
             $_num_db  = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $_num_userId); //更新数据
@@ -543,7 +541,6 @@ class MODEL_USER {
      * input_user function.
      *
      * @access public
-     * @param string $str_method (default: 'get')
      * @return void
      */
     function input_user($arr_userInput) {

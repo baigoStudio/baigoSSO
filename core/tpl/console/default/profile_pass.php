@@ -6,8 +6,8 @@
 
 $cfg = array(
     'title'          => $this->lang['mod']['page']['profile'] . ' &raquo; ' . $title_sub,
-    'menu_active'    => "profile",
-    'sub_active'     => "pass",
+    'menu_active'    => 'profile',
+    'sub_active'     => 'pass',
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
@@ -25,7 +25,7 @@ include($cfg['pathInclude'] . 'console_head.php');
 
         <div class="row">
             <div class="col-md-9">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-group">
                             <label><?php echo $this->lang['mod']['label']['username']; ?></label>
@@ -51,7 +51,7 @@ include($cfg['pathInclude'] . 'console_head.php');
                         </div>
 
                         <div class="bg-submit-box"></div>
-                        <div class="bg-validator-box"></div>
+                        <div class="bg-validator-box mt-3"></div>
                     </div>
                     <div class="card-footer">
                         <button type="button" class="btn btn-primary bg-submit">

@@ -28,7 +28,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="row">
         <div class="col-md-9">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body">
                     <div class="form-group">
                         <label><?php echo $this->lang['mod']['label']['username']; ?></label>
@@ -80,7 +80,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                         <a href="<?php echo BG_URL_CONSOLE; ?>index.php?m=app&a=show&app_id=<?php echo $value['app_id']; ?>"><?php echo $value['app_name']; ?></a>
                                     </td>
                                     <td class="text-nowrap bg-td-md">
-                                        <?php app_status_process($value['app_status'], $this->lang['mod']['appStatus']); ?>
+                                        <?php status_process($value['app_status'], $this->lang['mod']['appStatus']); ?>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -100,7 +100,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     <div class="form-group">
                         <label><?php echo $this->lang['mod']['label']['status']; ?></label>
                         <div class="form-text">
-                            <?php user_status_process($this->tplData['userRow']['user_status'], $this->lang['mod']['status']); ?>
+                            <?php status_process($this->tplData['userRow']['user_status'], $this->lang['mod']['status']); ?>
                         </div>
                     </div>
 

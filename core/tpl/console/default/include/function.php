@@ -1,43 +1,18 @@
-<?php function admin_status_process($str_status, $status_admin) {
-    $_str_css = '';
+<?php function status_process($str_status, $arr_status) {
+    $_str_css       = '';
+    $_str_statusStr = '';
+
+    if (isset($arr_status[$str_status])) {
+        $_str_statusStr = $arr_status[$str_status];
+    }
 
     switch ($str_status) {
+        case 'wait':
+            $_str_css = 'warning';
+        break;
+
         case 'enable':
-            $_str_css = 'success';
-        break;
-
-        default:
-            $_str_css = 'secondary';
-        break;
-    }
-
-    if (isset($status_admin[$str_status])) {
-        ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $status_admin[$str_status]; ?></span><?php
-    }
-}
-
-function app_status_process($str_status, $status_app) {
-    $_str_css = '';
-
-    switch ($str_status) {
-        case 'enable':
-            $_str_css = 'success';
-        break;
-
-        default:
-            $_str_css = 'secondary';
-        break;
-    }
-
-    if (isset($status_app[$str_status])) {
-        ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $status_app[$str_status]; ?></span><?php
-    }
-}
-
-function app_sync_process($str_sync, $sync_app) {
-    $_str_css = '';
-
-    switch ($str_sync) {
+        case 'read':
         case 'on':
             $_str_css = 'success';
         break;
@@ -47,70 +22,7 @@ function app_sync_process($str_sync, $sync_app) {
         break;
     }
 
-    if (isset($sync_app[$str_sync])) {
-        ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $sync_app[$str_sync]; ?></span><?php
-    }
-}
-
-
-function pm_status_process($str_status, $status_pm) {
-    $_str_css = '';
-
-    switch ($str_status) {
-        case 'read':
-            $_str_css = 'success';
-        break;
-
-        default:
-            $_str_css = 'secondary';
-        break;
-    }
-
-    if (isset($status_pm[$str_status])) {
-        ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $status_pm[$str_status]; ?></span><?php
-    }
-}
-
-
-function user_status_process($str_status, $status_user) {
-    $_str_css = '';
-
-    switch ($str_status) {
-        case 'enable':
-            $_str_css = 'success';
-        break;
-
-        case 'wait':
-            $_str_css = 'warning';
-        break;
-
-        default:
-            $_str_css = 'secondary';
-        break;
-    }
-
-    if (isset($status_user[$str_status])) {
-        ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $status_user[$str_status]; ?></span><?php
-    }
-}
-
-
-function verify_status_process($str_status, $status_verify) {
-    $_str_css = '';
-
-    switch ($str_status) {
-        case 'enable':
-            $_str_css = 'success';
-        break;
-
-        default:
-            $_str_css = 'secondary';
-        break;
-    }
-
-    if (isset($status_verify[$str_status])) {
-        ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $status_verify[$str_status]; ?></span><?php
-    }
+    ?><span class="badge badge-<?php echo $_str_css; ?>"><?php echo $_str_statusStr; ?></span><?php
 }
 
 

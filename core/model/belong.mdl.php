@@ -165,6 +165,7 @@ class MODEL_BELONG {
      */
     function mdl_read($num_userId = 0, $num_appId = 0) {
         $_arr_belongSelect = array(
+            'belong_id',
             'belong_user_id',
             'belong_app_id',
         );
@@ -202,6 +203,7 @@ class MODEL_BELONG {
      */
     function mdl_list($num_no, $num_except = 0, $arr_search = array()) {
         $_arr_belongSelect = array(
+            'belong_id',
             'belong_app_id',
             'belong_user_id',
         );
@@ -238,6 +240,60 @@ class MODEL_BELONG {
     }
 
 
+    function mdl_clear($num_no, $num_except = 0, $arr_search = array()) {
+        $_arr_belongSelect = array(
+            'belong_id',
+            'belong_app_id',
+            'belong_user_id',
+        );
+
+        $_str_sqlWhere = $this->sql_process($arr_search);
+
+        $arr_order = array(
+            array('belong_id', 'DESC'),
+        );
+
+        $_arr_belongRows = $this->obj_db->select(BG_DB_TABLE . 'belong', $_arr_belongSelect, $_str_sqlWhere, '', $arr_order, $num_no, $num_except);
+
+        foreach ($_arr_belongRows as $_key=>$_value) {
+            $_arr_userSelect = array(
+                'user_id',
+            );
+
+            $_str_sqlWhere    = '`user_id`=' . $_value['belong_user_id'];
+
+            $_arr_order = array(
+                array('user_id', 'ASC'),
+            );
+
+            $_arr_userRows = $this->obj_db->select(BG_DB_TABLE . 'user', $_arr_userSelect, $_str_sqlWhere, '', $_arr_order, 1, 0);
+
+            if (!isset($_arr_userRows[0])) {
+                $this->mdl_del(0, 0, false, false, false, false, $_value['belong_id']);
+            }
+
+            $_arr_appSelect = array(
+                'app_id',
+            );
+
+            $_str_sqlWhere    = '`app_id`=' . $_value['belong_app_id'];
+
+            $_arr_order = array(
+                array('app_id', 'ASC'),
+            );
+
+            $_arr_appRows = $this->obj_db->select(BG_DB_TABLE . 'app', $_arr_appSelect, $_str_sqlWhere, '', $_arr_order, 1, 0);
+
+            if (!isset($_arr_appRows[0])) {
+                $this->mdl_del(0, 0, false, false, false, false, $_value['belong_id']);
+            }
+        }
+
+        return $_arr_belongRows;
+    }
+
+
+
     /** 删除
      * mdl_del function.
      *
@@ -250,7 +306,7 @@ class MODEL_BELONG {
      * @param bool $arr_notUserIds (default: false)
      * @return void
      */
-    function mdl_del($num_appId = 0, $num_userId = 0, $arr_appIds = false, $arr_userIds = false, $arr_notAppIds = false, $arr_notUserIds = false) {
+    function mdl_del($num_appId = 0, $num_userId = 0, $arr_appIds = false, $arr_userIds = false, $arr_notAppIds = false, $arr_notUserIds = false, $num_belongId) {
 
         $_str_sqlWhere = '1';
 
@@ -282,7 +338,9 @@ class MODEL_BELONG {
             $_str_sqlWhere  .= ' AND `belong_user_id` NOT IN (' . $_str_notUserIds . ')';
         }
 
-        //print_r($_str_sqlWhere);
+        if ($num_belongId > 0) {
+            $_str_sqlWhere .= ' AND `belong_id`=' . $num_belongId;
+        }
 
         $_arr_belongData = array(
             'belong_app_id'  => 0,
@@ -324,6 +382,14 @@ class MODEL_BELONG {
         if (isset($arr_search['user_ids']) && !fn_isEmpty($arr_search['user_ids'])) {
             $_str_userIds = implode(',', $arr_search['user_ids']);
             $_str_sqlWhere  .= ' AND `belong_user_id` IN (' . $_str_userIds . ')';
+        }
+
+        if (isset($arr_search['min_id']) && $arr_search['min_id'] > 0) {
+            $_str_sqlWhere .= ' AND `belong_id`>' . $arr_search['min_id'];
+        }
+
+        if (isset($arr_search['max_id']) && $arr_search['max_id'] > 0) {
+            $_str_sqlWhere .= ' AND `belong_id`<' . $arr_search['max_id'];
         }
 
         return $_str_sqlWhere;

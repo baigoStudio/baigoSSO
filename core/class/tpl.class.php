@@ -26,12 +26,6 @@ class CLASS_TPL {
         $this->common['tokenRow']   = fn_token(); //生成令牌
     }
 
-
-    function setModule() {
-        unset($this->opt['base']['list']['BG_SITE_SSIN']);
-    }
-
-
     /** 显示界面
      * tplDisplay function.
      *
@@ -42,18 +36,33 @@ class CLASS_TPL {
      */
     function tplDisplay($str_tpl, $arr_tplData = array()) {
         $this->tplData  = $arr_tplData;
+        $_str_return    = '';
 
         if (file_exists($this->pathTpl . DS . $str_tpl . '.php')) {
+            ob_start();
             require($this->pathTpl . DS . $str_tpl . '.php');
-            exit;
+            $_str_return = ob_get_contents();
+            ob_end_clean();
         } else {
-            if (defined('BG_DEBUG_SYS') && BG_DEBUG_SYS > 0) {
+            if (BG_DEBUG_SYS > 0) {
                 $_str_msg = 'Template &quot;' . $this->pathTpl . DS . $str_tpl . '.php&quot; does not exist';
             } else {
                 $_str_msg = 'Template does not exist';
             }
 
-            exit('{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}');
+            $_str_return = '{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}';
         }
+
+        if (isset($_SESSION)) {
+            session_write_close();
+        }
+
+        if (isset($GLOBALS['obj_db'])) {
+            $GLOBALS['obj_db']->close();
+        }
+
+        unset($GLOBALS);
+
+        exit($_str_return);
     }
 }

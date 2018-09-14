@@ -81,15 +81,15 @@ class CONTROL_CONSOLE_UI_VERIFY {
         }
 
         $_num_verifyCount   = $this->mdl_verify->mdl_count();
-        $_arr_page          = fn_page($_num_verifyCount); //取得分页数据
-        $_arr_verifyRows    = $this->mdl_verify->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page['except']);
+        $_arr_pageRow       = fn_page($_num_verifyCount); //取得分页数据
+        $_arr_verifyRows    = $this->mdl_verify->mdl_list(BG_DEFAULT_PERPAGE, $_arr_pageRow['except']);
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
             $_arr_verifyRows[$_key]['userRow'] = $this->mdl_user->mdl_read($_value['verify_user_id']);
         }
 
         $_arr_tpl = array(
-            'pageRow'       => $_arr_page,
+            'pageRow'       => $_arr_pageRow,
             'verifyRows'    => $_arr_verifyRows,
         );
 

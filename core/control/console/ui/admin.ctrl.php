@@ -138,13 +138,13 @@ class CONTROL_CONSOLE_UI_ADMIN {
         );
 
         $_num_adminCount  = $this->mdl_admin->mdl_count($_arr_search); //统计记录数
-        $_arr_page        = fn_page($_num_adminCount); //取得分页数据
+        $_arr_pageRow     = fn_page($_num_adminCount); //取得分页数据
         $_str_query       = http_build_query($_arr_search); //将搜索参数拼合成查询串
-        $_arr_adminRows   = $this->mdl_admin->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page['except'], $_arr_search); //列出
+        $_arr_adminRows   = $this->mdl_admin->mdl_list(BG_DEFAULT_PERPAGE, $_arr_pageRow['except'], $_arr_search); //列出
 
         $_arr_tpl = array(
             'query'      => $_str_query,
-            'pageRow'    => $_arr_page,
+            'pageRow'    => $_arr_pageRow,
             'search'     => $_arr_search,
             'adminRows'  => $_arr_adminRows,
         );

@@ -98,6 +98,10 @@ class MODEL_VERIFY {
 
         if (!fn_isEmpty($_arr_alter)) {
             $_reselt = $this->obj_db->alter_table(BG_DB_TABLE . 'verify', $_arr_alter);
+
+            if (!fn_isEmpty($_reselt)) {
+                $_str_rcode = 'y120106';
+            }
         }
 
         return array(
@@ -125,13 +129,13 @@ class MODEL_VERIFY {
             'verify_type'           => $str_type,
             'verify_token'          => $_str_token,
             'verify_rand'           => $_str_rand,
-            'verify_token_expire'   => time() + BG_VERIFY_EXPIRE * 60,
+            'verify_token_expire'   => BG_NOW + BG_VERIFY_EXPIRE * 60,
             'verify_status'         => 'enable',
-            'verify_time_refresh'   => time(),
+            'verify_time_refresh'   => BG_NOW,
         );
 
         if ($_arr_verifyRow['rcode'] == 'x120102') {
-            $_arr_verifyData['verify_time'] = time();
+            $_arr_verifyData['verify_time'] = BG_NOW;
             $_num_verifyId = $this->obj_db->insert(BG_DB_TABLE . 'verify', $_arr_verifyData); //更新数据
             if ($_num_verifyId > 0) {
                 $_str_rcode = 'y120101'; //更新成功
@@ -170,7 +174,7 @@ class MODEL_VERIFY {
     function mdl_disable() {
         $_arr_verifyUpdate = array(
             'verify_status'         => 'disable',
-            'verify_time_disable'   => time(),
+            'verify_time_disable'   => BG_NOW,
         );
 
         $_num_db = $this->obj_db->update(BG_DB_TABLE . 'verify', $_arr_verifyUpdate, '`verify_id`=' . $this->verifyInput['verify_id']);
@@ -257,7 +261,7 @@ class MODEL_VERIFY {
             );
         }
 
-        if ($_arr_verifyRow['verify_token_expire'] < time()) {
+        if ($_arr_verifyRow['verify_token_expire'] < BG_NOW) {
             $_arr_verifyRow['verify_status'] = 'expired';
         }
 
@@ -296,7 +300,7 @@ class MODEL_VERIFY {
         $_arr_verifyRows = $this->obj_db->select(BG_DB_TABLE . 'verify', $_arr_verifySelect, '', '', $_arr_order, $num_no, $num_except); //查询数据
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
-            if ($_value['verify_token_expire'] < time()) {
+            if ($_value['verify_token_expire'] < BG_NOW) {
                 $_arr_verifyRows[$_key]['verify_status'] = 'expired';
             }
         }

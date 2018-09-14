@@ -158,7 +158,7 @@ class MODEL_ADMIN {
         $_arr_adminRow  = $this->mdl_read($arr_adminSubmit['admin_id']);
 
         $_arr_adminData = array(
-            'admin_time_login'  => time(),
+            'admin_time_login'  => BG_NOW,
             'admin_ip'          => fn_getIp(),
         );
 
@@ -196,7 +196,7 @@ class MODEL_ADMIN {
             $_arr_insert = array(
                 'admin_id'      => $arr_adminSubmit['admin_id'],
                 'admin_name'    => $arr_adminSubmit['admin_name'],
-                'admin_time'    => time(),
+                'admin_time'    => BG_NOW,
             );
 
             $_arr_data = array_merge($_arr_adminData, $_arr_insert);
@@ -387,7 +387,7 @@ class MODEL_ADMIN {
 
 
     function mdl_login($arr_adminSubmit = array()) {
-        $_tm_timeLogin  = time();
+        $_tm_timeLogin  = BG_NOW;
         $_str_adminIp   = fn_getIp();
 
         $_arr_adminData = array(

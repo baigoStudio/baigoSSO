@@ -185,7 +185,7 @@
                         <td class="text-nowrap">urlRows</td>
                         <td class="text-nowrap">true</td>
                         <td class="text-nowrap">array</td>
-                        <td>同步登录通知 URL，遍历返回的数组并进行 Base64 解码得到调用 URL，然后用 GET 方式访问该 URL，推荐使用 AJAX 同步方式调用，待 URL 访问完毕时，进行下一步动作，如：页面跳转等。系统会在“同步登录通知 URL”上附加 <code>m=sync</code> 参数，以便接收通知的系统识别。</td>
+                        <td>同步登录通知 URL，遍历返回的数组并进行 Base64 解码得到调用 URL，然后用 GET 方式访问该 URL，推荐使用 AJAX 同步方式调用，待 URL 访问完毕时，进行下一步动作，如：页面跳转等。系统会在“同步登录通知 URL”上附加 <code>m=sync&c=sso</code> 参数，以便接收通知的系统识别。</td>
                     </tr>
                 </tbody>
             </table>

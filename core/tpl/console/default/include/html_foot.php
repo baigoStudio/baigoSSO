@@ -8,6 +8,11 @@
         <script src="<?php echo BG_URL_STATIC; ?>lib/baigoSubmit/2.0.5/baigoSubmit.min.js" type="text/javascript"></script>
     <?php }
 
+    if (isset($cfg['baigoClear'])) { ?>
+        <!--表单 ajax 提交 js-->
+        <script src="<?php echo BG_URL_STATIC; ?>lib/baigoClear/1.0.8/baigoClear.min.js" type="text/javascript"></script>
+    <?php }
+
     if (isset($cfg['md5'])) { ?>
         <!--重新载入图片 js-->
         <script src="<?php echo BG_URL_STATIC; ?>lib/md5/md5.js" type="text/javascript"></script>
@@ -92,7 +97,7 @@
     </script>
 
     <script src="<?php echo BG_URL_STATIC; ?>lib/popper/1.12.9/popper.min.js" type="text/javascript"></script>
-    <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.1.3/js/bootstrap.min.js" type="text/javascript"></script>
 
     <!--
         <?php echo PRD_SSO_POWERED, ' ';

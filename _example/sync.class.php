@@ -3,8 +3,9 @@
 class CONTROL_API_SYNC {
 
     function __construct() { //构造函数
-        $this->obj_notify = new CLASS_NOTIFY();
-        $this->obj_sso    = new CLASS_SSO();
+        $this->obj_notify   = new CLASS_NOTIFY();
+        $this->obj_crypt    = new CLASS_CRYPT();
+        $this->obj_sign     = new CLASS_SIGN();
     }
 
 
@@ -21,7 +22,7 @@ class CONTROL_API_SYNC {
             $this->obj_notify->show_result($_arr_notifyInput);
         }
 
-        $_arr_sign = $this->obj_sso->sso_verify(array_merge($this->arr_data, $_arr_notifyInput), $_arr_notifyInput['sign']);
+        $_arr_sign = $this->obj_sign->sign_check(json_encode(array_merge($this->arr_data, $_arr_notifyInput)), $_arr_notifyInput['sign'], BG_SSO_APPKEY, BG_SSO_APPSECRET);
         if ($_arr_sign['rcode'] != 'y050403') {
             $this->obj_notify->show_result($_arr_sign);
         }
@@ -35,7 +36,7 @@ class CONTROL_API_SYNC {
             $this->obj_notify->show_result($_arr_return);
         }
 
-        $_arr_decode    = $this->obj_sso->sso_decode($_arr_notifyInput['code']);
+        $_arr_decode    = $this->obj_crypt->decrypt($_arr_notifyInput['code'], BG_SSO_APPKEY, BG_SSO_APPSECRET);
 
         $_arr_appChk    = $this->obj_notify->app_chk($_arr_decode['app_id'], $_arr_decode['app_key']);
         if ($_arr_appChk['rcode'] != 'ok') {
@@ -65,7 +66,7 @@ class CONTROL_API_SYNC {
             $this->obj_notify->show_result($_arr_notifyInput);
         }
 
-        $_arr_sign = $this->obj_sso->sso_verify(array_merge($this->arr_data, $_arr_notifyInput), $_arr_notifyInput['sign']);
+        $_arr_sign = $this->obj_sign->sign_check(json_encode(array_merge($this->arr_data, $_arr_notifyInput)), $_arr_notifyInput['sign'], BG_SSO_APPKEY, BG_SSO_APPSECRET);
         if ($_arr_sign['rcode'] != 'y050403') {
             $this->obj_notify->show_result($_arr_sign);
         }
@@ -79,7 +80,7 @@ class CONTROL_API_SYNC {
             $this->obj_notify->show_result($_arr_return);
         }
 
-        $_arr_decode  = $this->obj_sso->sso_decode($_arr_notifyInput['code']);
+        $_arr_decode  = $this->obj_crypt->decrypt($_arr_notifyInput['code'], BG_SSO_APPKEY, BG_SSO_APPSECRET);
 
         $_arr_appChk    = $this->obj_notify->app_chk($_arr_decode['app_id'], $_arr_decode['app_key']);
         if ($_arr_appChk['rcode'] != 'ok') {

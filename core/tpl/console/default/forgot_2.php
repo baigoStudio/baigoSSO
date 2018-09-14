@@ -1,6 +1,6 @@
 <?php $cfg = array(
     'title'          => $this->lang['common']['page']['console'] . ' &raquo; ' . $this->lang['mod']['page']['forgot'],
-    'active'         => "forgot",
+    'active'         => 'forgot',
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'reloadImg'      => 'true',
@@ -67,7 +67,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                     </div>
 
                     <div class="bg-submit-box bg-submit-box-mail"></div>
-                    <div class="bg-validator-box bg-validator-box-mail"></div>
+                    <div class="bg-validator-box bg-validator-box-mail mt-3"></div>
 
                     <div class="form-group">
                         <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['submit']; ?></button>
@@ -133,7 +133,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
                     </div>
 
                     <div class="bg-submit-box bg-submit-box-qa"></div>
-                    <div class="bg-validator-box bg-validator-box-qa"></div>
+                    <div class="bg-validator-box bg-validator-box-qa mt-3"></div>
 
                     <div class="form-group">
                         <button type="button" class="btn btn-primary bg-submit-qa"><?php echo $this->lang['mod']['btn']['submit']; ?></button>

@@ -22,7 +22,7 @@ class CONTROL_API_API_SETUP {
             );
             $this->general_api->show_result($_arr_return);
         } else if (file_exists(BG_PATH_CONFIG . 'is_install.php')) { //如果旧文件存在
-            $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
+            $this->obj_file->file_copy(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             $_arr_return = array(
                 'rcode' => 'x030403'
             );
@@ -125,15 +125,13 @@ class CONTROL_API_API_SETUP {
             }
         }
 
-        $_arr_userSubmit = array(
-            'user_name'     => $_arr_adminInput['admin_name'],
-            'user_pass'     => fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_adminInput['admin_name'], true),
-            'user_status'   => $_arr_adminInput['admin_status'],
-            'user_nick'     => $_arr_adminInput['admin_nick'],
-            'user_note'     => $_arr_adminInput['admin_note'],
-        );
+        $_mdl_user_api->regInput['user_name']   = $_arr_adminInput['admin_name'];
+        $_mdl_user_api->regInput['user_pass']   = fn_baigoCrypt($_arr_adminInput['admin_pass'], $_arr_adminInput['admin_name'], true);
+        $_mdl_user_api->regInput['user_status'] = $_arr_adminInput['admin_status'];
+        $_mdl_user_api->regInput['user_nick']   = $_arr_adminInput['admin_nick'];
+        $_mdl_user_api->regInput['user_note']   = $_arr_adminInput['admin_note'];
 
-        $_arr_userRow     = $_mdl_user_api->mdl_reg($_arr_userSubmit);
+        $_arr_userRow     = $_mdl_user_api->mdl_reg();
 
         if ($_arr_userRow['rcode'] != 'y010101') {
             $this->general_api->show_result($_arr_userRow);
@@ -290,7 +288,7 @@ class CONTROL_API_API_SETUP {
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
             $_str_rcode = 'x030403';
         } else if (file_exists(BG_PATH_CONFIG . 'is_install.php')) { //如果旧文件存在
-            $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
+            $this->obj_file->file_copy(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
             $_str_rcode = 'x030403';
         }

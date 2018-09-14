@@ -67,14 +67,14 @@ class CONTROL_API_API_SYNC {
             $_arr_encrypt           = $this->obj_crypt->encrypt($_str_src, $_str_appKey, $_value['app_secret']);
 
             if ($_arr_encrypt['rcode'] == 'ok') {
-                $_tm_time               = time();
+                $_tm_time               = BG_NOW;
 
                 if (stristr($_value['app_url_sync'], '?')) {
                     $_str_conn = '&';
                 } else {
                     $_str_conn = '?';
                 }
-                $_str_url = $_value['app_url_sync'] . $_str_conn . 'm=sync';
+                $_str_url = $_value['app_url_sync'] . $_str_conn . 'm=sync&c=sso';
 
                 $_arr_data = array(
                     'a'     => 'login',
@@ -135,14 +135,14 @@ class CONTROL_API_API_SYNC {
             $_arr_encrypt           = $this->obj_crypt->encrypt($_str_src, $_str_appKey, $_value['app_secret']);
 
             if ($_arr_encrypt['rcode'] == 'ok') {
-                $_tm_time           = time();
+                $_tm_time           = BG_NOW;
 
                 if (stristr($_value['app_url_sync'], '?')) {
                     $_str_conn = '&';
                 } else {
                     $_str_conn = '?';
                 }
-                $_str_url = $_value['app_url_sync'] . $_str_conn . 'm=sync';
+                $_str_url = $_value['app_url_sync'] . $_str_conn . 'm=sync&c=sso';
 
                 $_arr_data = array(
                     'a'     => 'logout',
@@ -194,7 +194,7 @@ class CONTROL_API_API_SYNC {
             $this->general_api->show_result($_arr_return);
         }
 
-        if ($this->userRow['user_access_expire'] < time()) {
+        if ($this->userRow['user_access_expire'] < BG_NOW) {
             $_arr_return = array(
                 'rcode' => 'x010231',
             );
@@ -213,5 +213,9 @@ class CONTROL_API_API_SYNC {
         }
 
         unset($this->userRow['user_pass'], $this->userRow['user_nick'], $this->userRow['user_note'], $this->userRow['user_status'], $this->userRow['user_time'], $this->userRow['user_time_login'], $this->userRow['user_ip']);
+
+        for ($_iii = 1; $_iii <= 3; $_iii++) {
+            unset($this->userRow['user_sec_ques_' . $_iii], $this->userRow['user_sec_answ_' . $_iii]);
+        }
     }
 }

@@ -424,8 +424,8 @@ class CONTROL_API_API_PM {
 
         $_arr_pmRows    = array();
         $_num_pmCount   = $this->mdl_pm->mdl_count($_arr_search);
-        $_arr_page      = fn_page($_num_pmCount);
-        $_arr_pmRows    = $this->mdl_pm->mdl_list($_num_perPage, $_arr_page['except'], $_arr_search);
+        $_arr_pageRow   = fn_page($_num_pmCount);
+        $_arr_pmRows    = $this->mdl_pm->mdl_list($_num_perPage, $_arr_pageRow['except'], $_arr_search);
 
         //print_r($_arr_pmRows);
 
@@ -447,7 +447,7 @@ class CONTROL_API_API_PM {
 
         $_arr_return = array(
             'pmRows'    => $_arr_pmRows,
-            'pageRow'   => $_arr_page,
+            'pageRow'   => $_arr_pageRow,
         );
 
         $_str_src       = $this->general_api->encode_result($_arr_return);
@@ -487,7 +487,7 @@ class CONTROL_API_API_PM {
             $this->general_api->show_result($_arr_return);
         }
 
-        if ($this->userRow['user_access_expire'] < time()) {
+        if ($this->userRow['user_access_expire'] < BG_NOW) {
             $_arr_return = array(
                 'rcode' => 'x010231',
             );

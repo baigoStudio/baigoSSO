@@ -39,7 +39,7 @@ class CONTROL_CONSOLE_UI_OPT {
             $this->act = 'base';
         }
 
-        $this->obj_dir          = new CLASS_DIR();
+        $this->obj_file          = new CLASS_FILE();
         $this->mdl_opt          = new MODEL_OPT(); //设置管理组模型
 
         $this->tplData = array(
@@ -80,7 +80,7 @@ class CONTROL_CONSOLE_UI_OPT {
         }
 
         if ($this->act == 'base') {
-            $this->tplData['tplRows']     = $this->obj_dir->list_dir(BG_PATH_TPL . 'personal' . DS);
+            $this->tplData['tplRows']     = $this->obj_file->dir_list(BG_PATH_TPL . 'personal' . DS);
 
             $_arr_timezoneRows  = fn_include(BG_PATH_INC . 'timezone.inc.php');
 

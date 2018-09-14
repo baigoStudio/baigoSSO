@@ -1,6 +1,6 @@
     <!--bootstrap-->
     <script src="<?php echo BG_URL_STATIC; ?>lib/popper/1.12.9/popper.min.js" type="text/javascript"></script>
-    <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.0.0/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="<?php echo BG_URL_STATIC; ?>lib/bootstrap/4.1.3/js/bootstrap.min.js" type="text/javascript"></script>
 
     <!--表单验证 js-->
     <script src="<?php echo BG_URL_STATIC; ?>lib/baigoValidator/2.2.5/baigoValidator.min.js" type="text/javascript"></script>

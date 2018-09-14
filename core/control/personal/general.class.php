@@ -19,7 +19,7 @@ class GENERAL_PERSONAL {
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
 
-        //$this->obj_dir = new CLASS_DIR();
+        //$this->obj_file = new CLASS_FILE();
 
         $this->obj_tpl  = new CLASS_TPL(BG_PATH_TPL . 'personal' . DS . BG_SITE_TPL); //初始化视图对象
 

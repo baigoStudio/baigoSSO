@@ -13,14 +13,16 @@ if (!defined('IN_BAIGO')) {
 class CONTROL_INSTALL_UI_UPGRADE {
 
     function __construct() { //构造函数
-        $this->config   = $GLOBALS['obj_base']->config;
+        $this->config           = $GLOBALS['obj_base']->config;
 
-        $this->general_install      = new GENERAL_INSTALL();
+        $this->general_install  = new GENERAL_INSTALL();
 
         $this->obj_tpl          = $this->general_install->obj_tpl;
 
-        $this->obj_dir          = new CLASS_DIR();
-        $this->obj_dir->mk_dir(BG_PATH_CACHE . 'ssin');
+        $this->obj_file         = new CLASS_FILE();
+        $this->obj_file->dir_mk(BG_PATH_CACHE . 'ssin');
+        $this->obj_file->dir_copy(BG_PATH_ROOT . 'cache', BG_PATH_CACHE);
+        $this->obj_file->dir_copy(BG_PATH_ROOT . 'tpl', BG_PATH_TPL);
 
         $this->upgrade_init();
     }
@@ -39,7 +41,7 @@ class CONTROL_INSTALL_UI_UPGRADE {
         $this->check_db();
 
         if ($this->act == 'base') {
-            $this->tplData['tplRows']     = $this->obj_dir->list_dir(BG_PATH_TPL . 'personal' . DS);
+            $this->tplData['tplRows']     = $this->obj_file->dir_list(BG_PATH_TPL . 'personal' . DS);
 
             $_arr_timezoneRows  = fn_include(BG_PATH_INC . 'timezone.inc.php');
 
@@ -105,7 +107,7 @@ class CONTROL_INSTALL_UI_UPGRADE {
 
 
     private function check_db() {
-        if (!defined('BG_DB_HOST') || fn_isEmpty(BG_DB_HOST) || !defined('BG_DB_NAME') || fn_isEmpty(BG_DB_NAME) || !defined('BG_DB_PASS') || fn_isEmpty(BG_DB_PASS) || !defined('BG_DB_CHARSET') || fn_isEmpty(BG_DB_CHARSET)) {
+        if (fn_isEmpty(BG_DB_HOST) || fn_isEmpty(BG_DB_NAME) || fn_isEmpty(BG_DB_PASS) || fn_isEmpty(BG_DB_CHARSET)) {
             $_arr_tplData = array(
                 'rcode' => 'x030412',
             );
@@ -121,7 +123,7 @@ class CONTROL_INSTALL_UI_UPGRADE {
         if (file_exists(BG_PATH_CONFIG . 'installed.php')) { //如果新文件存在
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
         } else if (file_exists(BG_PATH_CONFIG . 'is_install.php')) { //如果旧文件存在
-            $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
+            $this->obj_file->file_copy(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             fn_include(BG_PATH_CONFIG . 'installed.php');  //载入
         } else {
             $_str_rcode = 'x030415';

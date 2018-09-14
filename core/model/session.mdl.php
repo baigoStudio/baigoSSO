@@ -91,7 +91,7 @@ class MODEL_SESSION {
      * @return void
      */
     function mdl_read($str_ssinId) {
-        $_arr_ssinRow = $this->mdl_readDb($str_ssinId, time());
+        $_arr_ssinRow = $this->mdl_readDb($str_ssinId, BG_NOW);
 
         if ($_arr_ssinRow['rcode'] != 'y030102') {
             return '';
@@ -110,7 +110,7 @@ class MODEL_SESSION {
      * @return void
      */
     function mdl_write($str_ssinId, $str_ssinData) {
-        $tm_expire = time() + $this->lifeTime;
+        $tm_expire = BG_NOW + $this->lifeTime;
         // is a session with this id in the database?
 
         $_arr_ssinData = array(
@@ -168,7 +168,7 @@ class MODEL_SESSION {
 
 
     function mdl_gc($sessMaxLifeTime) {
-        $_num_db = $this->obj_db->delete(BG_DB_TABLE . 'session',  '`session_expire`<' . time()); //删除数据
+        $_num_db = $this->obj_db->delete(BG_DB_TABLE . 'session',  '`session_expire`<' . BG_NOW); //删除数据
 
         if ($_num_db > 0) {
             return true;

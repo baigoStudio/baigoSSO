@@ -24,7 +24,7 @@ class MODEL_USER_PROFILE extends MODEL_USER {
 
     function mdl_token($num_userId, $str_userName) {
         $_str_accessToken   = fn_rand();
-        $_tm_accessExpire   = time() + BG_ACCESS_EXPIRE * 60;
+        $_tm_accessExpire   = BG_NOW + BG_ACCESS_EXPIRE * 60;
 
         $_arr_userData = array(
             'user_access_token'     => $_str_accessToken,
@@ -71,23 +71,21 @@ class MODEL_USER_PROFILE extends MODEL_USER {
     }
 
 
-    function mdl_qa($arr_userSubmit = array()) {
+    function mdl_qa() {
 
         $_arr_userData = array();
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            if (isset($arr_userSubmit['user_sec_ques_' . $_iii]) && !fn_isEmpty($arr_userSubmit['user_sec_ques_' . $_iii])) {
-                $_arr_userData['user_sec_ques_' . $_iii] = $arr_userSubmit['user_sec_ques_' . $_iii];
-            } else if (isset($this->qaInput['user_sec_ques_' . $_iii])) {
+            if (isset($this->qaInput['user_sec_ques_' . $_iii]) && !fn_isEmpty($this->qaInput['user_sec_ques_' . $_iii])) {
                 $_arr_userData['user_sec_ques_' . $_iii] = $this->qaInput['user_sec_ques_' . $_iii];
             }
 
-            $_arr_userData['user_sec_answ_' . $_iii] = $arr_userSubmit['user_sec_answ_' . $_iii];
+            $_arr_userData['user_sec_answ_' . $_iii] = $this->qaInput['user_sec_answ_' . $_iii];
         }
 
-        //print_r($arr_userSubmit);
+        //print_r($this->qaInput);
 
-        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
+        $_num_db = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $this->qaInput['user_id']); //更新数据
 
         if ($_num_db > 0) {
             $_str_rcode = 'y010412'; //更新成功
@@ -134,28 +132,22 @@ class MODEL_USER_PROFILE extends MODEL_USER {
     }
 
 
-    function mdl_info($arr_userSubmit = array()) {
+    function mdl_info() {
         $_arr_userData = array();
 
-        if (isset($arr_userSubmit['user_nick']) && !fn_isEmpty($arr_userSubmit['user_nick'])) {
-            $_arr_userData['user_nick'] = $arr_userSubmit['user_nick'];
-        } else if (isset($this->infoInput['user_nick']) && !fn_isEmpty($this->infoInput['user_nick'])) { //如果 昵称 为空，则不修改
+        if (isset($this->infoInput['user_nick']) && !fn_isEmpty($this->infoInput['user_nick'])) { //如果 昵称 为空，则不修改
             $_arr_userData['user_nick'] = $this->infoInput['user_nick'];
         }
 
-        if (isset($arr_userSubmit['user_contact']) && !fn_isEmpty($arr_userSubmit['user_contact'])) {
-            $_arr_userData['user_contact'] = $arr_userSubmit['user_contact'];
-        } else if (isset($this->infoInput['user_contact']) && !fn_isEmpty($this->infoInput['user_contact'])) { //如果 联系方式 为空，则不修改
+        if (isset($this->infoInput['user_contact']) && !fn_isEmpty($this->infoInput['user_contact'])) { //如果 联系方式 为空，则不修改
             $_arr_userData['user_contact'] = $this->infoInput['user_contact'];
         }
 
-        if (isset($arr_userSubmit['user_extend']) && !fn_isEmpty($arr_userSubmit['user_extend'])) {
-            $_arr_userData['user_extend'] = $arr_userSubmit['user_extend'];
-        } else if (isset($this->infoInput['user_extend']) && !fn_isEmpty($this->infoInput['user_extend'])) { //如果 扩展字段 为空，则不修改
+        if (isset($this->infoInput['user_extend']) && !fn_isEmpty($this->infoInput['user_extend'])) { //如果 扩展字段 为空，则不修改
             $_arr_userData['user_extend'] = $this->infoInput['user_extend'];
         }
 
-        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
+        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $this->infoInput['user_id']); //更新数据
 
         if ($_num_db > 0) {
             $_str_rcode = 'y010103'; //更新成功
@@ -173,7 +165,7 @@ class MODEL_USER_PROFILE extends MODEL_USER {
         }
 
         $_arr_userReturn            = $_arr_userData;
-        $_arr_userReturn['user_id'] = $arr_userSubmit['user_id'];
+        $_arr_userReturn['user_id'] = $this->infoInput['user_id'];
         $_arr_userReturn['rcode']   = $_str_rcode;
 
         return $_arr_userReturn;

@@ -83,14 +83,14 @@ class CONTROL_CONSOLE_REQUEST_PROFILE {
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        $_arr_userSubmit['user_id'] = $_arr_userRow['user_id'];
+        $this->mdl_user_profile->qaInput['user_id'] = $_arr_userRow['user_id'];
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            $_arr_userSubmit['user_sec_ques_' . $_iii] = $_arr_qaInput['admin_sec_ques_' . $_iii];
-            $_arr_userSubmit['user_sec_answ_' . $_iii] = fn_baigoCrypt($_arr_qaInput['admin_sec_answ_' . $_iii], $_arr_userRow['user_name']);
+            $this->mdl_user_profile->qaInput['user_sec_ques_' . $_iii] = $_arr_qaInput['admin_sec_ques_' . $_iii];
+            $this->mdl_user_profile->qaInput['user_sec_answ_' . $_iii] = fn_baigoCrypt($_arr_qaInput['admin_sec_answ_' . $_iii], $_arr_userRow['user_name']);
         }
 
-        $_arr_userRow = $this->mdl_user_profile->mdl_qa($_arr_userSubmit);
+        $_arr_userRow = $this->mdl_user_profile->mdl_qa();
 
         $this->obj_tpl->tplDisplay('result', $_arr_userRow);
     }

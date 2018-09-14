@@ -46,7 +46,7 @@ include($cfg['pathInclude'] . 'login_head.php'); ?>
         </div>
 
         <div class="bg-submit-box"></div>
-        <div class="bg-validator-box"></div>
+        <div class="bg-validator-box mt-3"></div>
 
         <div class="form-group">
             <button type="button" class="btn btn-primary btn-block btn-lg bg-submit"><?php echo $this->lang['mod']['btn']['login']; ?></button>

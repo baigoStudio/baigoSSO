@@ -1,6 +1,6 @@
 <?php $cfg = array(
     'title'          => $this->lang['common']['page']['opt'] . ' &raquo; ' . $this->lang['opt'][$this->tplData['act']]['title'],
-    'menu_active'    => "opt",
+    'menu_active'    => 'opt',
     'sub_active'     => $this->tplData['act'],
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
@@ -45,7 +45,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                 $arr_form = opt_form_process($this->opt[$this->tplData['act']]['list'], $this->lang['opt'][$this->tplData['act']]['list'], $_tplRows, $_timezoneRows, $_timezoneLang, $_timezoneType, $this->lang['mod']['label'], $this->lang['rcode']); ?>
 
                 <div class="bg-submit-box"></div>
-                <div class="bg-validator-box"></div>
+                <div class="bg-validator-box mt-3"></div>
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-primary bg-submit">

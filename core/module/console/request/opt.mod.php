@@ -22,6 +22,10 @@ $ctrl_opt = new CONTROL_CONSOLE_REQUEST_OPT(); //初始化设置对象
 switch ($GLOBALS['method']) {
     case 'post':
         switch ($GLOBALS['route']['bg_act']) {
+            case 'app_clear':
+                $ctrl_opt->ctrl_app_clear(); //数据库
+            break;
+
             case 'chkver':
                 $ctrl_opt->ctrl_chkver(); //数据库
             break;

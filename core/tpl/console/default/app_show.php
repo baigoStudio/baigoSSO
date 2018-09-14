@@ -28,7 +28,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
         <div class="row">
             <div class="col-md-9">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-group">
                             <label><?php echo $this->lang['mod']['label']['appName']; ?></label>
@@ -152,7 +152,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                                             <a href="<?php echo BG_URL_CONSOLE; ?>index.php?m=user&a=show&user_id=<?php echo $value['user_id']; ?>"><?php echo $value['user_name']; ?></a>
                                         </td>
                                         <td class="text-nowrap bg-td-md">
-                                            <?php user_status_process($value['user_status'], $this->lang['mod']['user']); ?>
+                                            <?php status_process($value['user_status'], $this->lang['mod']['user']); ?>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -173,14 +173,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         <div class="form-group">
                             <label><?php echo $this->lang['mod']['label']['status']; ?></label>
                             <div class="form-text">
-                                <?php app_status_process($this->tplData['appRow']['app_status'], $this->lang['mod']['status']); ?>
+                                <?php status_process($this->tplData['appRow']['app_status'], $this->lang['mod']['status']); ?>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label><?php echo $this->lang['mod']['label']['sync']; ?></label>
                             <div class="form-text">
-                                <?php app_sync_process($this->tplData['appRow']['app_sync'], $this->lang['mod']['sync']); ?>
+                                <?php status_process($this->tplData['appRow']['app_sync'], $this->lang['mod']['sync']); ?>
                             </div>
                         </div>
 

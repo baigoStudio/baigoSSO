@@ -225,7 +225,7 @@ class MODEL_APP {
             $_arr_insert = array(
                 'app_key'       => $_str_appKey,
                 'app_secret'    => $_str_appSecret,
-                'app_time'      => time(),
+                'app_time'      => BG_NOW,
             );
             $_arr_data = array_merge($_arr_appData, $_arr_insert);
 
@@ -433,6 +433,8 @@ class MODEL_APP {
      * @return void
      */
     function input_api($str_method = 'get') {
+        $str_method = strtolower($str_method);
+
         if ($str_method == 'post') {
             $_num_appId     = fn_post('app_id');
             $_str_appKey    = fn_post('app_key');
@@ -510,7 +512,7 @@ class MODEL_APP {
             break;
         }
 
-        $_tm_diff = $_arr_inputApi['time'] - time();
+        $_tm_diff = $_arr_inputApi['time'] - BG_NOW;
 
         if ($_tm_diff > 1800 || $_tm_diff < -1800) {
             return array(

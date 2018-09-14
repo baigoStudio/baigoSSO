@@ -82,6 +82,7 @@ class CLASS_NOTIFY {
      * @return void
      */
     function notify_input($str_method = 'get', $chk_token = false) {
+        $str_method = strtolower($str_method);
 
         $_arr_notifyInput['a']    = $GLOBALS['route']['bg_act'];
 

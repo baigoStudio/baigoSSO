@@ -70,7 +70,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                             <td class="text-nowrap bg-td-lg">
                                 <ul class="list-unstyled">
                                     <li>
-                                        <?php verify_status_process($value['verify_status'], $this->lang['mod']['status']); ?>
+                                        <?php status_process($value['verify_status'], $this->lang['mod']['status']); ?>
                                     </li>
                                     <li><?php echo $this->lang['mod']['type'][$value['verify_type']]; ?></li>
                                 </ul>
@@ -84,14 +84,14 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
             </table>
         </div>
 
-        <div class="mt-3">
+        <div class="mb-3">
             <span class="form-text" id="msg_verify_id"></span>
             <div class="bg-submit-box"></div>
         </div>
 
-        <div class="mt-3 clearfix">
+        <div class="clearfix">
             <div class="float-left">
-                <div class="input-group">
+                <div class="input-group mb-3">
                     <select name="a" id="a" data-validate class="custom-select">
                         <option value=""><?php echo $this->lang['mod']['option']['batch']; ?></option>
                         <?php foreach ($this->tplData['status'] as $key=>$value) { ?>

@@ -1,6 +1,6 @@
 <?php $cfg = array(
     'title'          => $this->lang['common']['page']['console'] . ' &raquo; ' . $this->lang['mod']['page']['forgot'],
-    'active'         => "forgot",
+    'active'         => 'forgot',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS
 );
 

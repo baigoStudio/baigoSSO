@@ -17,14 +17,12 @@ class GENERAL_CONSOLE {
 
     function __construct() { //构造函数
         $this->config   = $GLOBALS['obj_base']->config;
-        $this->obj_dir  = new CLASS_DIR();
+        $this->obj_file  = new CLASS_FILE();
         $this->obj_tpl  = new CLASS_TPL(BG_PATH_TPLSYS . 'console' . DS . BG_DEFAULT_UI); //初始化视图对象
 
-        $this->obj_tpl->opt         = $GLOBALS['obj_config']->arr_opt; //系统设置配置文件
+        $this->obj_tpl->opt         = fn_include(BG_PATH_INC . 'opt.inc.php'); //系统设置配置文件
         $this->obj_tpl->consoleMod  = fn_include(BG_PATH_INC . 'consoleMod.inc.php'); //菜单配置文件
         $this->obj_tpl->profile     = fn_include(BG_PATH_INC . 'profile.inc.php'); //菜单配置文件
-
-        $this->obj_tpl->setModule();
 
         //语言文件
         $this->obj_tpl->lang = array(
@@ -56,7 +54,7 @@ class GENERAL_CONSOLE {
         $_num_ssinTimeDiff      = fn_session('admin_ssin_time') + BG_DEFAULT_SESSION; //session 有效期
         $_num_cookieTimeDiff    = fn_cookie('admin_ssin_time') + BG_DEFAULT_SESSION; //session 有效期
 
-        if (fn_isEmpty(fn_session('admin_id')) || fn_isEmpty(fn_session('admin_ssin_time')) || fn_isEmpty(fn_session('admin_hash')) || $_num_ssinTimeDiff < time() || fn_isEmpty(fn_cookie('admin_id')) || fn_isEmpty(fn_cookie('admin_ssin_time')) || fn_isEmpty(fn_cookie('admin_hash')) || $_num_cookieTimeDiff < time()) {
+        if (fn_isEmpty(fn_session('admin_id')) || fn_isEmpty(fn_session('admin_ssin_time')) || fn_isEmpty(fn_session('admin_hash')) || $_num_ssinTimeDiff < BG_NOW || fn_isEmpty(fn_cookie('admin_id')) || fn_isEmpty(fn_cookie('admin_ssin_time')) || fn_isEmpty(fn_cookie('admin_hash')) || $_num_cookieTimeDiff < BG_NOW) {
             $this->ssin_end();
             return array(
                 'rcode'     => 'x020401',
@@ -97,9 +95,9 @@ class GENERAL_CONSOLE {
             );
         }
 
-        fn_session('admin_ssin_time', 'mk', time());
+        fn_session('admin_ssin_time', 'mk', BG_NOW);
         fn_cookie('admin_id', 'mk', fn_session('admin_id'), 3600 * 24 * 30, BG_URL_CONSOLE);
-        fn_cookie('admin_ssin_time', 'mk', time(), 3600 * 24 * 30, BG_URL_CONSOLE);
+        fn_cookie('admin_ssin_time', 'mk', BG_NOW, 3600 * 24 * 30, BG_URL_CONSOLE);
         fn_cookie('admin_hash', 'mk', fn_session('admin_hash'), 3600 * 24 * 30, BG_URL_CONSOLE);
 
         $_arr_adminRow['userRow'] = $_arr_userRow;
@@ -110,10 +108,10 @@ class GENERAL_CONSOLE {
 
     function ssin_login($arr_loginRow) {
         fn_session('admin_id', 'mk', $arr_loginRow['admin_id']);
-        fn_session('admin_ssin_time', 'mk', time());
+        fn_session('admin_ssin_time', 'mk', BG_NOW);
         fn_session('admin_hash', 'mk', $this->hash_process($arr_loginRow));
         fn_cookie('admin_id', 'mk', $arr_loginRow['admin_id'], 3600 * 24 * 30, BG_URL_CONSOLE);
-        fn_cookie('admin_ssin_time', 'mk', time(), 3600 * 24 * 30, BG_URL_CONSOLE);
+        fn_cookie('admin_ssin_time', 'mk', BG_NOW, 3600 * 24 * 30, BG_URL_CONSOLE);
         fn_cookie('admin_hash', 'mk', $this->hash_process($arr_loginRow), 3600 * 24 * 30, BG_URL_CONSOLE);
 
         return array(
@@ -145,7 +143,7 @@ class GENERAL_CONSOLE {
         if (file_exists(BG_PATH_CONFIG . 'installed.php')) { //如果新文件存在
             fn_include(BG_PATH_CONFIG . 'installed.php'); //载入
         } else if (file_exists(BG_PATH_CONFIG . 'is_install.php')) { //如果旧文件存在
-            $this->obj_dir->copy_file(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
+            $this->obj_file->file_copy(BG_PATH_CONFIG . 'is_install.php', BG_PATH_CONFIG . 'installed.php'); //拷贝
             fn_include(BG_PATH_CONFIG . 'installed.php'); //载入
         } else { //如已安装文件不存在
             $_str_rcode = 'x030410';

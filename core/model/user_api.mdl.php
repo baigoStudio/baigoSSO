@@ -22,63 +22,47 @@ class MODEL_USER_API extends MODEL_USER {
         $this->obj_db = $GLOBALS['obj_db']; //设置数据库对象
     }
 
-    function mdl_reg($arr_userSubmit = array()) {
+    function mdl_reg() {
         $_arr_userData = array(
-            'user_pass'             => $arr_userSubmit['user_pass'],
-            'user_time'             => time(),
-            'user_time_login'       => time(),
+            'user_pass'             => $this->regInput['user_pass'],
+            'user_time'             => BG_NOW,
+            'user_time_login'       => BG_NOW,
             'user_crypt_type'       => 2,
         );
 
-        if (isset($arr_userSubmit['user_name'])) {
-            $_arr_userData['user_name'] = $arr_userSubmit['user_name'];
-        } else if (isset($this->regInput['user_name'])) {
+        if (isset($this->regInput['user_name'])) {
             $_arr_userData['user_name'] = $this->regInput['user_name'];
         }
 
-        if (isset($arr_userSubmit['user_mail'])) {
-            $_arr_userData['user_mail'] = $arr_userSubmit['user_mail'];
-        } else if (isset($this->regInput['user_mail'])) {
+        if (isset($this->regInput['user_mail'])) {
             $_arr_userData['user_mail'] = $this->regInput['user_mail'];
         } else {
             $_arr_userData['user_mail'] = '';
         }
 
-        if (isset($arr_userSubmit['user_nick'])) {
-            $_arr_userData['user_nick'] = $arr_userSubmit['user_nick'];
-        } else if (isset($this->regInput['user_nick'])) {
+        if (isset($this->regInput['user_nick'])) {
             $_arr_userData['user_nick'] = $this->regInput['user_nick'];
         } else {
             $_arr_userData['user_nick'] = '';
         }
 
-        if (isset($arr_userSubmit['user_contact'])) {
-            $_arr_userData['user_contact'] = $arr_userSubmit['user_contact'];
-        } else if (isset($this->regInput['user_contact'])) {
+        if (isset($this->regInput['user_contact'])) {
             $_arr_userData['user_contact'] = $this->regInput['user_contact'];
         }
 
-        if (isset($arr_userSubmit['user_extend'])) {
-            $_arr_userData['user_extend'] = $arr_userSubmit['user_extend'];
-        } else if (isset($this->regInput['user_extend'])) {
+        if (isset($this->regInput['user_extend'])) {
             $_arr_userData['user_extend'] = $this->regInput['user_extend'];
         }
 
-        if (isset($arr_userSubmit['user_status'])) {
-            $_arr_userData['user_status'] = $arr_userSubmit['user_status'];
-        } else if (isset($this->regInput['user_status'])) {
+        if (isset($this->regInput['user_status'])) {
             $_arr_userData['user_status'] = $this->regInput['user_status'];
         }
 
-        if (isset($arr_userSubmit['user_note'])) {
-            $_arr_userData['user_note'] = $arr_userSubmit['user_note'];
-        } else if (isset($this->regInput['user_note'])) {
+        if (isset($this->regInput['user_note'])) {
             $_arr_userData['user_note'] = $this->regInput['user_note'];
         }
 
-        if (isset($arr_userSubmit['user_ip'])) {
-            $_arr_userData['user_ip'] = $arr_userSubmit['user_ip'];
-        } else if (isset($this->regInput['user_ip'])) {
+        if (isset($this->regInput['user_ip'])) {
             $_arr_userData['user_ip'] = $this->regInput['user_ip'];
         } else {
             $_arr_userData['user_ip'] = fn_getIp();
@@ -112,7 +96,7 @@ class MODEL_USER_API extends MODEL_USER {
 
 
     function mdl_login($arr_userSubmit = array()) {
-        $_tm_timeLogin  = time();
+        $_tm_timeLogin  = BG_NOW;
 
         $_arr_userData = array(
             'user_time_login'   => $_tm_timeLogin,
@@ -127,9 +111,9 @@ class MODEL_USER_API extends MODEL_USER {
 
         $_arr_userRow = parent::mdl_read($arr_userSubmit['user_id']);
 
-        if ($_arr_userRow['user_access_expire'] <= time()) { //如果访问口令过期
+        if ($_arr_userRow['user_access_expire'] <= BG_NOW) { //如果访问口令过期
             $_str_accessToken   = fn_rand();
-            $_tm_accessExpire   = time() + BG_ACCESS_EXPIRE * 60;
+            $_tm_accessExpire   = BG_NOW + BG_ACCESS_EXPIRE * 60;
 
             $_arr_userData['user_access_token']     = $_str_accessToken;
             $_arr_userData['user_access_expire']    = $_tm_accessExpire;
@@ -138,9 +122,9 @@ class MODEL_USER_API extends MODEL_USER {
             $_tm_accessExpire   = $_arr_userRow['user_access_expire'];
         }
 
-        if ($_arr_userRow['user_refresh_expire'] <= time()) { //如果刷新口令过期
+        if ($_arr_userRow['user_refresh_expire'] <= BG_NOW) { //如果刷新口令过期
             $_str_refreshToken  = fn_rand();
-            $_tm_refreshExpire  = time() + BG_REFRESH_EXPIRE * 86400;
+            $_tm_refreshExpire  = BG_NOW + BG_REFRESH_EXPIRE * 86400;
 
             $_arr_userData['user_refresh_token']    = $_str_refreshToken;
             $_arr_userData['user_refresh_expire']   = $_tm_refreshExpire;
@@ -222,11 +206,11 @@ class MODEL_USER_API extends MODEL_USER {
     }
 
 
-    function mdl_edit($arr_userSubmit = array()) {
+    function mdl_edit() {
         $_arr_userData = array();
 
-        if (isset($arr_userSubmit['user_pass']) && !fn_isEmpty($arr_userSubmit['user_pass'])) { //如果 新密码 为空，则不修改
-            $_arr_userData['user_pass']         = $arr_userSubmit['user_pass'];
+        if (isset($this->editInput['user_pass']) && !fn_isEmpty($this->editInput['user_pass'])) { //如果 新密码 为空，则不修改
+            $_arr_userData['user_pass']         = $this->editInput['user_pass'];
             $_arr_userData['user_crypt_type']   = 2;
         }
 
@@ -249,7 +233,7 @@ class MODEL_USER_API extends MODEL_USER {
         //print_r($_arr_userData);
         //exit;
 
-        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $arr_userSubmit['user_id']); //更新数据
+        $_num_db   = $this->obj_db->update(BG_DB_TABLE . 'user', $_arr_userData, '`user_id`=' . $this->editInput['user_id']); //更新数据
 
         if ($_num_db > 0) {
             $_str_rcode = 'y010103'; //更新成功
@@ -269,7 +253,7 @@ class MODEL_USER_API extends MODEL_USER {
         }
 
         $_arr_userReturn            = $_arr_userData;
-        $_arr_userReturn['user_id'] = $arr_userSubmit['user_id'];
+        $_arr_userReturn['user_id'] = $this->editInput['user_id'];
         $_arr_userReturn['rcode']   = $_str_rcode;
 
         return $_arr_userReturn;

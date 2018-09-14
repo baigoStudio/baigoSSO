@@ -3,7 +3,7 @@
         </div>
     </div>
 
-    <footer class="container-fluid text-light p-3 clearfix bg-success mt-3">
+    <footer class="container-fluid text-light p-3 clearfix bg-secondary mt-3">
         <div class="float-left">
             <img class="img-fluid" src="<?php echo BG_URL_STATIC; ?>console/<?php echo BG_DEFAULT_UI; ?>/image/logo.png">
         </div>

@@ -49,7 +49,7 @@ class CONTROL_PERSONAL_REQUEST_REG {
             $this->obj_tpl->tplDisplay('result', $_arr_tplData);
         }
 
-        if ($_arr_verifyRow['verify_token_expire'] < time()) {
+        if ($_arr_verifyRow['verify_token_expire'] < BG_NOW) {
             $_arr_tplData = array(
                 'rcode' => 'x120204',
             );

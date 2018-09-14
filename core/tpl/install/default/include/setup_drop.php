@@ -4,7 +4,7 @@
                         </button>
 
                         <div class="dropdown-menu">
-                            <a class="dropdown-item<?php if ($GLOBALS['route']['bg_act'] == 'phplib') { ?> active<?php } ?>" href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=ext"><?php echo $this->lang['mod']['page']['phplib']; ?></a>
+                            <a class="dropdown-item<?php if ($GLOBALS['route']['bg_act'] == 'phplib') { ?> active<?php } ?>" href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=phplib"><?php echo $this->lang['mod']['page']['phplib']; ?></a>
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item<?php if ($GLOBALS['route']['bg_act'] == 'dbconfig') { ?> active<?php } ?>" href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=dbconfig"><?php echo $this->lang['common']['page']['dbconfig']; ?></a>

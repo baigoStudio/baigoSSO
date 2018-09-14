@@ -22,7 +22,7 @@ include($cfg['pathInclude'] . 'setup_head.php'); ?>
         <div class="card-footer">
             <div class="btn-toolbar justify-content-between">
                 <div class="btn-group">
-                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=ext" class="btn btn-outline-secondary"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
+                    <a href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=phplib" class="btn btn-outline-secondary"><?php echo $this->lang['mod']['btn']['prev']; ?></a>
                     <?php include($cfg['pathInclude'] . 'setup_drop.php'); ?>
                     <a href="<?php echo BG_URL_INSTALL; ?>index.php?m=setup&a=dbtable" class="btn btn-secondary"><?php echo $this->lang['mod']['btn']['skip']; ?></a>
                 </div>

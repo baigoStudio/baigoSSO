@@ -178,7 +178,7 @@ class CONTROL_CONSOLE_REQUEST_APP {
             $this->obj_tpl->tplDisplay('result', $_arr_appRow);
         }
 
-        $_tm_time   = time();
+        $_tm_time   = BG_NOW;
         $_str_echo  = fn_rand();
 
         $_arr_data = array(

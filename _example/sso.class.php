@@ -1,6 +1,5 @@
 <?php
 /*-------------单点登录类-------------*/
-/*-------------单点登录类-------------*/
 class CLASS_SSO {
 
     public $obj_sign;
@@ -860,7 +859,7 @@ class CLASS_SSO {
         $_str_outPut .= 'define(\'BG_SSO_APPSECRET\', \'' . $_arr_resultApp['app_secret'] . '\');' . PHP_EOL;
         $_str_outPut .= 'define(\'BG_SSO_SYNC\', \'on\');' . PHP_EOL;
 
-        $_num_size = $this->obj_file->put_file(BG_PATH_CONFIG . 'opt_sso.inc.php', $_str_outPut);
+        $_num_size = $this->obj_file->file_put(BG_PATH_CONFIG . 'opt_sso.inc.php', $_str_outPut);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y060101';

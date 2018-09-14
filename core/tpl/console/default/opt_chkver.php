@@ -1,7 +1,7 @@
 <?php $cfg = array(
     'title'          => $this->lang['common']['page']['opt'] . ' &raquo; ' . $this->lang['common']['page']['chkver'],
-    'menu_active'    => "opt",
-    'sub_active'     => "chkver",
+    'menu_active'    => 'opt',
+    'sub_active'     => 'chkver',
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
@@ -28,7 +28,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
         <div class="form-group">
             <button type="button" class="btn btn-info bg-submit">
-                <span class="oi oi-repeat"></span>
+                <span class="oi oi-reload"></span>
                 <?php echo $this->lang['mod']['btn']['chkver']; ?>
             </button>
         </div>

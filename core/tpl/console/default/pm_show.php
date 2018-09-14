@@ -43,7 +43,7 @@
 
     <div class="form-group">
         <div class="form-text">
-            <?php pm_status_process($this->tplData['pmRow']['pm_status'], $this->lang['mod']['status']); ?>
+            <?php status_process($this->tplData['pmRow']['pm_status'], $this->lang['mod']['status']); ?>
         </div>
     </div>
 

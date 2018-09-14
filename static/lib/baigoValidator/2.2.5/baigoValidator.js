@@ -284,7 +284,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 if (_ajax.attach_selectors && _ajax.attach_keys) {
                     $.each(_ajax.attach_selectors, function(_index, _selector) {
                         _str_attachs    = $(_selector).val();
-                        _ajaxData       = _ajaxData + "&" + _ajax.attach_keys[_index] + "=" + _str_attachs;
+                        _ajaxData = _ajaxData + "&" + _ajax.attach_keys[_index] + "=" + _str_attachs;
                     });
                 }
 
@@ -343,12 +343,12 @@ License: http://www.opensource.org/licenses/mit-license.php
                 break;
                 case "radio":
                 case "checkbox":
-                    _num    = $(_validate_selector + ":checked").size(); //获取表单选中数
+                    _num    = $(_validate_selector + ":checked").length; //获取表单选中数
                     _status = isNum(_num, _len); //验证个数
                 break;
                 case "select":
                     if (_len.min > 1) { //如最少大于 1 为多选，则验证个数
-                        _num    = $(_validate_selector + " :selected").size(); //获取表单选中数
+                        _num    = $(_validate_selector + " :selected").length; //获取表单选中数
                         _status = isNum(_num, _len); //验证个数
                     } else { //单选则验证值
                         _str    = $(_validate_selector).val(); //获取表单值

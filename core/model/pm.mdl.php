@@ -96,7 +96,7 @@ class MODEL_PM {
             'pm_content'   => $this->pmInput['pm_content'],
             'pm_type'      => 'in',
             'pm_status'    => 'wait',
-            'pm_time'      => time(),
+            'pm_time'      => BG_NOW,
         );
 
         $_num_pmId = $this->obj_db->insert(BG_DB_TABLE . 'pm', $_arr_pmData); //更新数据

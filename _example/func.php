@@ -1,5 +1,4 @@
 <?php
-
 /** http 函数
  * fn_http function.
  *

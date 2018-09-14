@@ -16,7 +16,7 @@ if (!function_exists('fn_http')) {
 /*-------------API 接口类-------------*/
 class GENERAL_API {
 
-    //public $obj_dir;
+    //public $obj_file;
     public $obj_crypt;
     public $obj_sign;
     public $arr_return;
@@ -39,7 +39,7 @@ class GENERAL_API {
 
         $this->allow    = fn_include(BG_PATH_INC . 'allow.inc.php'); //载入权限文件
         $this->phplib   = fn_include(BG_PATH_INC . 'phplib.inc.php');
-        $this->opt      = $GLOBALS['obj_config']->arr_opt; //系统设置配置文件
+        $this->opt      = fn_include(BG_PATH_INC . 'opt.inc.php'); //系统设置配置文件
 
         $this->lang['rcode']    = fn_include(BG_PATH_LANG . $this->config['lang'] . DS . 'rcode.php'); //载入返回代码
 
@@ -60,6 +60,8 @@ class GENERAL_API {
      * @return void
      */
     function app_chk($str_method = 'get') {
+        $str_method = strtolower($str_method);
+
         $this->appInput = $this->mdl_app->input_api($str_method);
 
         if ($this->appInput['rcode'] != 'ok') {
@@ -112,7 +114,7 @@ class GENERAL_API {
 
     function notify_result($arr_returnRow, $str_act, $type = 'json') {
         $_str_src   = $this->encode_result($arr_returnRow, $type);
-        $_tm_time   = time();
+        $_tm_time   = BG_NOW;
 
         //通知
         foreach ($this->appRows as $_key=>$_value) {

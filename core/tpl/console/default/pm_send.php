@@ -1,7 +1,7 @@
 <?php $cfg = array(
     'title'          => $this->lang['consoleMod']['pm']['main']['title'] . ' &raquo; ' . $this->lang['consoleMod']['pm']['sub']['send'],
-    'menu_active'    => "pm",
-    'sub_active'     => "send",
+    'menu_active'    => 'pm',
+    'sub_active'     => 'send',
     'baigoCheckall'  => 'true',
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
@@ -56,7 +56,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                 </div>
 
                 <div class="bg-submit-box"></div>
-                <div class="bg-validator-box"></div>
+                <div class="bg-validator-box mt-3"></div>
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-primary bg-submit"><?php echo $this->lang['mod']['btn']['send']; ?></button>

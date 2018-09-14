@@ -16,7 +16,7 @@ class CLASS_BASE {
     public $key_pub;
 
     function __construct() { //构造函数
-        $this->obj_dir = new CLASS_DIR();
+        $this->obj_file = new CLASS_FILE();
 
         $this->getKeyPub(); //获取公钥
         $this->getLang(); //获取当前语言
@@ -28,8 +28,8 @@ class CLASS_BASE {
 
     function getKeyPub() {
         if (file_exists(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt')) {
-            $_str_rand = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
-            $_obj_dir->del_file(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
+            $_str_rand = $this->obj_file->file_read(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
+            $this->obj_file->file_del(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.txt');
         } else {
             $_str_rand = fn_rand();
         }
@@ -37,7 +37,7 @@ class CLASS_BASE {
 
         if (!file_exists(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php')) {
             $_str_key = '<?php return \'' . $_str_rand . '\';';
-            $this->obj_dir->put_file(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php', $_str_key);
+            $this->obj_file->file_put(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php', $_str_key);
         }
 
         $this->key_pub = fn_include(BG_PATH_CACHE . 'sys' . DS . 'crypt_key_pub.php');
@@ -106,5 +106,9 @@ class CLASS_BASE {
     */
     function setTimezone() {
         date_default_timezone_set(BG_SITE_TIMEZONE);
+    }
+
+    function __destruct() { //构造函数
+        unset($this);
     }
 }

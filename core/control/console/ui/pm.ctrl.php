@@ -57,8 +57,8 @@ class CONTROL_CONSOLE_UI_PM {
             $this->obj_tpl->tplDisplay('error', $this->tplData);
         }
 
-        $this->tplData['begin_time']    = time() - 86400;
-        $this->tplData['end_time']      = time();
+        $this->tplData['begin_time']    = BG_NOW - 86400;
+        $this->tplData['end_time']      = BG_NOW;
 
         $this->obj_tpl->tplDisplay('pm_bulk', $this->tplData);
     }
@@ -111,9 +111,9 @@ class CONTROL_CONSOLE_UI_PM {
         );
 
         $_num_pmCount   = $this->mdl_pm->mdl_count($_arr_search);
-        $_arr_page      = fn_page($_num_pmCount); //取得分页数据
+        $_arr_pageRow   = fn_page($_num_pmCount); //取得分页数据
         $_str_query     = http_build_query($_arr_search);
-        $_arr_pmRows    = $this->mdl_pm->mdl_list(BG_DEFAULT_PERPAGE, $_arr_page['except'], $_arr_search);
+        $_arr_pmRows    = $this->mdl_pm->mdl_list(BG_DEFAULT_PERPAGE, $_arr_pageRow['except'], $_arr_search);
 
         foreach ($_arr_pmRows as $_key=>$_value) {
             $_arr_pmRows[$_key]['toUser']   = $this->mdl_user->mdl_read($_value['pm_to']);
@@ -122,7 +122,7 @@ class CONTROL_CONSOLE_UI_PM {
 
         $_arr_tpl = array(
             'query'     => $_str_query,
-            'pageRow'   => $_arr_page,
+            'pageRow'   => $_arr_pageRow,
             'search'    => $_arr_search,
             'pmRows'    => $_arr_pmRows,
         );

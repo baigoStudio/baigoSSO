@@ -19,7 +19,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
     <div class="row">
         <div class="col-md-9">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body">
                     <div class="form-group">
                         <label><?php echo $this->lang['mod']['label']['username']; ?></label>
@@ -68,7 +68,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                     <div class="form-group">
                         <label><?php echo $this->lang['mod']['label']['status']; ?></label>
                         <div class="form-text">
-                            <?php admin_status_process($this->tplData['adminRow']['admin_status'], $this->lang['mod']['status']); ?>
+                            <?php status_process($this->tplData['adminRow']['admin_status'], $this->lang['mod']['status']); ?>
                         </div>
                     </div>
 

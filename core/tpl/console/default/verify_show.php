@@ -20,7 +20,7 @@ include($cfg['pathInclude'] . 'function.php'); ?>
     <div class="form-group">
         <label><?php echo $this->lang['mod']['label']['status']; ?></label>
         <div class="form-text">
-            <?php verify_status_process($this->tplData['verifyRow']['verify_status'], $this->lang['mod']['status']); ?>
+            <?php status_process($this->tplData['verifyRow']['verify_status'], $this->lang['mod']['status']); ?>
         </div>
     </div>
 

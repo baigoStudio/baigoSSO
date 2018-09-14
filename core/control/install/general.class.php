@@ -20,10 +20,8 @@ class GENERAL_INSTALL {
 
         $this->obj_tpl  = new CLASS_TPL(BG_PATH_TPLSYS . 'install' . DS . BG_DEFAULT_UI); //初始化视图对象
 
-        $this->obj_tpl->phplib = fn_include(BG_PATH_INC . 'phplib.inc.php');
-        $this->obj_tpl->opt = $GLOBALS['obj_config']->arr_opt; //系统设置配置文件
-
-        $this->obj_tpl->setModule();
+        $this->obj_tpl->phplib  = fn_include(BG_PATH_INC . 'phplib.inc.php');
+        $this->obj_tpl->opt     = fn_include(BG_PATH_INC . 'opt.inc.php'); //系统设置配置文件
 
         //语言文件
         $this->obj_tpl->lang = array(

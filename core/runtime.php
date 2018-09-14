@@ -68,6 +68,14 @@ if (!defined('BG_DB_PORT')) {
     define('BG_DB_PORT', '3306');
 }
 
+if (!defined('BG_PATH_CONTENT')) {
+    define('BG_PATH_CONTENT', BG_PATH_ROOT . DS . 'content' . DS);
+}
+
+if (!defined('BG_PATH_PLUGIN')) {
+    define('BG_PATH_PLUGIN', BG_PATH_CONTENT . 'plugin' . DS);
+}
+
 fn_include(BG_PATH_INC . 'version.inc.php'); //版本
 fn_include(BG_PATH_FUNC . 'common.func.php'); //载入通用函数
 fn_include(BG_PATH_FUNC . 'validate.func.php'); //载入表单验证函数
@@ -145,9 +153,6 @@ class CLASS_RUNTIME {
         }
 
         $_arr_routeAllow    = fn_include(BG_PATH_INC . 'route.inc.php'); //允许的 app、类型、模块
-        /*if (file_exists(BG_PATH_CONFIG . 'route.inc.php')) {
-            $_arr_routeExt = fn_include(BG_PATH_CONFIG . 'route.inc.php'); //扩展的 app、类型、模块
-        }*/
 
         if (!array_key_exists(BG_APP, $_arr_routeAllow)) {
             exit('{"rcode":"x","msg":"Fatal Error: Not Allowed App!"}');
@@ -244,4 +249,3 @@ if (file_exists(BG_PATH_MODULE . BG_APP . DS . $GLOBALS['route']['bg_ctrl'] . DS
 
     exit('{"rcode":"x","msg":"Fatal Error: ' . $_str_msg . '!"}');
 }
-

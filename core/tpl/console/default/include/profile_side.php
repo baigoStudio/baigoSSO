@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <label><?php echo $this->lang['mod']['label']['status']; ?></label>
                     <div class="form-text">
-                        <?php admin_status_process($this->tplData['adminLogged']['admin_status'], $this->lang['mod']['status']); ?>
+                        <?php status_process($this->tplData['adminLogged']['admin_status'], $this->lang['mod']['status']); ?>
                     </div>
                 </div>
 

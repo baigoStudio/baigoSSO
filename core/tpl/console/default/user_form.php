@@ -50,7 +50,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
 
         <div class="row">
             <div class="col-md-9">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <?php if ($this->tplData['userRow']['user_id'] > 0) { ?>
                             <div class="form-group">
@@ -96,7 +96,7 @@ include($cfg['pathInclude'] . 'console_head.php'); ?>
                         </div>
 
                         <div class="bg-submit-box"></div>
-                        <div class="bg-validator-box"></div>
+                        <div class="bg-validator-box mt-3"></div>
                     </div>
                     <div class="card-footer">
                         <button type="button" class="btn btn-primary bg-submit">

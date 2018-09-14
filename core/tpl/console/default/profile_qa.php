@@ -6,8 +6,8 @@
 
 $cfg = array(
     'title'          => $this->lang['mod']['page']['profile'] . ' &raquo; ' . $title_sub,
-    'menu_active'    => "profile",
-    'sub_active'     => "qa",
+    'menu_active'    => 'profile',
+    'sub_active'     => 'qa',
     'baigoValidator' => 'true',
     'baigoSubmit'    => 'true',
     'pathInclude'    => BG_PATH_TPLSYS . 'console' . DS . 'default' . DS . 'include' . DS,
@@ -25,7 +25,7 @@ include($cfg['pathInclude'] . 'console_head.php');
 
         <div class="row">
             <div class="col-md-9">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-group">
                             <label><?php echo $this->lang['mod']['label']['username']; ?></label>
@@ -37,48 +37,51 @@ include($cfg['pathInclude'] . 'console_head.php');
                             <input type="password" name="admin_pass" id="admin_pass" data-validate class="form-control">
                             <small class="form-text" id="msg_admin_pass"></small>
                         </div>
-
-                        <?php for ($_iii = 1; $_iii <= 3; $_iii++) { ?>
-                            <hr class="bg-card-hr">
-                            <div class="form-group">
-                                <label>
-                                    <?php echo $this->lang['mod']['label']['secQues'], ' ', $_iii; ?>
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="form-row">
-                                    <div class="col-sm-7 col-xs-6">
-                                        <input type="text" name="admin_sec_ques_<?php echo $_iii; ?>" id="admin_sec_ques_<?php echo $_iii; ?>" data-validate value="<?php echo $this->tplData['adminLogged']['userRow']['user_sec_ques_' . $_iii]; ?>" class="form-control">
-                                    </div>
-                                    <div class="col-sm-5 col-xs-6">
-                                        <select class="form-control" id="admin_ques_often_<?php echo $_iii; ?>">
-                                            <option value=""><?php echo $this->lang['mod']['option']['pleaseQuesOften']; ?></option>
-                                            <?php foreach ($this->lang['mod']['quesOften'] as $_key=>$_value) { ?>
-                                                <option value="<?php echo $_value; ?>"><?php echo $_value; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <small class="form-text" id="msg_admin_sec_ques_<?php echo $_iii; ?>"></small>
-                            </div>
-
-                            <div class="form-group">
-                                <label>
-                                    <?php echo $this->lang['mod']['label']['secAnsw'], ' ', $_iii; ?>
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="form-row">
-                                    <div class="col-sm-7 col-xs-6">
-                                        <input type="text" name="admin_sec_answ_<?php echo $_iii; ?>" id="admin_sec_answ_<?php echo $_iii; ?>" data-validate class="form-control">
-                                    </div>
-                                </div>
-                                <small class="form-text" id="msg_admin_sec_answ_<?php echo $_iii; ?>"></small>
-                            </div>
-                        <?php } ?>
-
-                        <div class="bg-submit-box"></div>
-                        <div class="bg-validator-box"></div>
                     </div>
+
+                    <ul class="list-group list-group-flush">
+                        <?php for ($_iii = 1; $_iii <= 3; $_iii++) { ?>
+                            <li class="list-group-item">
+                                <div class="form-group">
+                                    <label>
+                                        <?php echo $this->lang['mod']['label']['secQues'], ' ', $_iii; ?>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="form-row">
+                                        <div class="col-sm-7 col-6">
+                                            <input type="text" name="admin_sec_ques_<?php echo $_iii; ?>" id="admin_sec_ques_<?php echo $_iii; ?>" data-validate value="<?php echo $this->tplData['adminLogged']['userRow']['user_sec_ques_' . $_iii]; ?>" class="form-control">
+                                        </div>
+                                        <div class="col-sm-5 col-6">
+                                            <select class="form-control" id="admin_ques_often_<?php echo $_iii; ?>">
+                                                <option value=""><?php echo $this->lang['mod']['option']['pleaseQuesOften']; ?></option>
+                                                <?php foreach ($this->lang['mod']['quesOften'] as $_key=>$_value) { ?>
+                                                    <option value="<?php echo $_value; ?>"><?php echo $_value; ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <small class="form-text" id="msg_admin_sec_ques_<?php echo $_iii; ?>"></small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>
+                                        <?php echo $this->lang['mod']['label']['secAnsw'], ' ', $_iii; ?>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="form-row">
+                                        <div class="col-sm-7 col-6">
+                                            <input type="text" name="admin_sec_answ_<?php echo $_iii; ?>" id="admin_sec_answ_<?php echo $_iii; ?>" data-validate class="form-control">
+                                        </div>
+                                    </div>
+                                    <small class="form-text" id="msg_admin_sec_answ_<?php echo $_iii; ?>"></small>
+                                </div>
+                            </li>
+                        <?php } ?>
+                    </ul>
+
                     <div class="card-footer">
+                        <div class="bg-submit-box"></div>
+                        <div class="bg-validator-box mt-3"></div>
                         <button type="button" class="btn btn-primary bg-submit">
                             <?php echo $this->lang['mod']['btn']['save']; ?>
                         </button>

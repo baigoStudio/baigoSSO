@@ -2,12 +2,13 @@
 define(BG_SSO_URL, 'http://www.domain.com/api/api.php'); //SSO 地址
 define(BG_SSO_APPID, 1); //APP ID
 define(BG_SSO_APPKEY, ''); //APP KEY
+define(BG_SSO_APPKEY, ''); //APP KEY
 
 require('func.php');
 require('notify.class.php');
 require('sso.class.php');
+require('file.class.php');
 require('sync.class.php');
-require('sso.class.php');
 require('crypt.class.php');
 require('sign.class.php');
 
@@ -16,7 +17,7 @@ $obj_sso = new CLASS_SSO();
 $str_userName = fn_post('user_name');
 $str_userPass = fn_post('user_pass');
 
-$arr_userSso = $obj_sso->sso_login($str_userName, $str_userPass); //调用登录方法
+$arr_userSso = $obj_sso->sso_user_login($str_userName, $str_userPass); //调用登录方法
 
 /* 开始会话等操作  */
 

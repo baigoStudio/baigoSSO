@@ -1,6 +1,6 @@
 <?php include($cfg['pathInclude'] . 'html_head.php'); ?>
 
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between mb-3">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bg-offcanvas" aria-controls="bg-offcanvas">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -58,12 +58,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 col-lg-2">
-                <nav id="bg-offcanvas" class="bg-offcanvas collapse mb-3">
+                <nav id="bg-offcanvas" class="collapse d-md-block mb-3">
                     <div id="bg-accordion" class="bg-accordion">
                         <div class="card border-success">
                             <div class="list-group list-group-flush">
                                 <?php foreach ($this->consoleMod as $key_m=>$value_m) { ?>
-                                    <a class="list-group-item d-flex justify-content-between list-group-item-action<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?> bg-success border-success active<?php } ?>" data-toggle="collapse" href="#bg-collapse-<?php echo $key_m; ?>" aria-expanded="true" aria-controls="bg-collapse-<?php echo $key_m; ?>">
+                                    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?> bg-success border-success active<?php } ?>" data-toggle="collapse" href="#bg-collapse-<?php echo $key_m; ?>" aria-expanded="true" aria-controls="bg-collapse-<?php echo $key_m; ?>">
                                         <span>
                                             <?php if (isset($this->lang['consoleMod'][$key_m]['main']['icon'])) { ?>
                                                 <span class="oi oi-<?php echo $this->lang['consoleMod'][$key_m]['main']['icon']; ?>"></span>
@@ -91,7 +91,7 @@
                                     </div>
                                 <?php } ?>
 
-                                <a class="list-group-item list-group-item-action d-flex justify-content-between<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt') { ?> bg-success border-success active<?php } ?>" data-toggle="collapse" href="#bg-collapse-opt" aria-expanded="true" aria-controls="bg-collapse-opt">
+                                <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt') { ?> bg-success border-success active<?php } ?>" data-toggle="collapse" href="#bg-collapse-opt" aria-expanded="true" aria-controls="bg-collapse-opt">
                                     <span>
                                         <span class="oi oi-cog"></span>
                                         <?php echo $this->lang['common']['page']['opt']; ?>

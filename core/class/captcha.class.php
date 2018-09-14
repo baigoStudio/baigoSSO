@@ -12,7 +12,7 @@ if (!defined('IN_BAIGO')) {
 /*-------------验证码类-------------*/
 class CLASS_CAPTCHA {
 
-    private $chars = 'abdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789';
+    private $chars = 'abcdefhijkmnprstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ2345678';
     private $len;
     private $fontSize;
     private $fontFile;
@@ -91,11 +91,17 @@ class CLASS_CAPTCHA {
 
     //对外生成
     function secDo() {
+        header('Content-type: image/png');
         $this->createCode();
         $this->createBg();
         $this->createLine();
         $this->createFont();
         $this->secOutput();
         fn_session('captcha', 'mk', strtolower($this->code));
+    }
+
+
+    function __destruct() { //构造函数
+        unset($this);
     }
 }

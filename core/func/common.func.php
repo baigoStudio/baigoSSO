@@ -561,13 +561,15 @@ function fn_paramChk($arr_data, $arr_param) {
  * @return void
  */
 function fn_cookie($key, $method = 'get', $value = '', $tm = 3600, $path = '') {
+    $method = strtolower($method);
+
     switch ($method) {
         case 'mk':
-            setcookie($key . '_' . BG_SITE_SSIN, $value, time() + $tm, $path);
+            setcookie($key . '_' . BG_SITE_SSIN, $value, BG_NOW + $tm, $path);
         break;
 
         case 'unset':
-            setcookie($key . '_' . BG_SITE_SSIN, null, time() - 3600, $path);
+            setcookie($key . '_' . BG_SITE_SSIN, null, BG_NOW - 3600, $path);
         break;
 
         default:
@@ -582,6 +584,8 @@ function fn_cookie($key, $method = 'get', $value = '', $tm = 3600, $path = '') {
 
 
 function fn_session($key, $method = 'get', $value = '') {
+    $method = strtolower($method);
+
     switch ($method) {
         case 'mk':
             $_SESSION[$key . '_' . BG_SITE_SSIN] = $value;

@@ -12,12 +12,12 @@ if (!defined('IN_BAIGO')) {
 /*-------------设置项模型-------------*/
 class MODEL_OPT {
 
-    public $obj_dir;
+    public $obj_file;
     public $arr_const;
     public $dbconfigInput;
 
     function __construct() { //构造函数
-        $this->obj_dir = new CLASS_DIR();
+        $this->obj_file = new CLASS_FILE();
     }
 
     /** 处理常量并生成配置文件
@@ -50,7 +50,7 @@ class MODEL_OPT {
 
         $_str_content = str_ireplace('||', '', $_str_content);
 
-        $_num_size    = $this->obj_dir->put_file(BG_PATH_CONFIG . 'opt_' . $str_type . '.inc.php', $_str_content);
+        $_num_size    = $this->obj_file->file_put(BG_PATH_CONFIG . 'opt_' . $str_type . '.inc.php', $_str_content);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030405';
@@ -80,9 +80,9 @@ class MODEL_OPT {
         $_str_content = '<?php' . PHP_EOL;
         $_str_content .= 'define(\'BG_INSTALL_VER\', \'' . PRD_SSO_VER . '\');' . PHP_EOL;
         $_str_content .= 'define(\'BG_INSTALL_PUB\', ' . PRD_SSO_PUB . ');' . PHP_EOL;
-        $_str_content .= 'define(\'BG_INSTALL_TIME\', ' . time() . ');' . PHP_EOL;
+        $_str_content .= 'define(\'BG_INSTALL_TIME\', ' . BG_NOW . ');' . PHP_EOL;
 
-        $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . 'installed.php', $_str_content);
+        $_num_size = $this->obj_file->file_put(BG_PATH_CONFIG . 'installed.php', $_str_content);
         if ($_num_size > 0) {
             $_str_rcode = 'y030405';
         } else {
@@ -111,7 +111,7 @@ class MODEL_OPT {
         $_str_content .= 'define(\'BG_DB_CHARSET\', \'' . $this->dbconfigInput['db_charset'] . '\');' . PHP_EOL;
         $_str_content .= 'define(\'BG_DB_TABLE\', \'' . $this->dbconfigInput['db_table'] . '\');' . PHP_EOL;
 
-        $_num_size = $this->obj_dir->put_file(BG_PATH_CONFIG . 'opt_dbconfig.inc.php', $_str_content);
+        $_num_size = $this->obj_file->file_put(BG_PATH_CONFIG . 'opt_dbconfig.inc.php', $_str_content);
         if ($_num_size > 0) {
             $_str_rcode = 'y030404';
         } else {
@@ -306,12 +306,12 @@ class MODEL_OPT {
             $this->ver_process($method);
         }
 
-        $_str_ver = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json');
+        $_str_ver = $this->obj_file->file_read(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json');
         $_arr_ver = json_decode($_str_ver, true);
 
-        if ($is_check || !$_arr_ver || !isset($_arr_ver['time']) || $_arr_ver['time'] - time() > 30 * 86400 || isset($_arr_ver['error'])) {
+        if ($is_check || !$_arr_ver || !isset($_arr_ver['time']) || $_arr_ver['time'] - BG_NOW > 30 * 86400 || isset($_arr_ver['error'])) {
             $this->ver_process($method);
-            $_str_ver = file_get_contents(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json');
+            $_str_ver = $this->obj_file->file_read(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json');
             $_arr_ver = json_decode($_str_ver, true);
         }
 
@@ -333,6 +333,6 @@ class MODEL_OPT {
 
         $_str_ver = fn_http(PRD_VER_CHECK, $_arr_data, 'get');
 
-        $this->obj_dir->put_file(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json', $_str_ver['ret']);
+        $this->obj_file->file_put(BG_PATH_CACHE . 'sys' . DS . 'latest_ver.json', $_str_ver['ret']);
     }
 }

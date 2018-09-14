@@ -31,7 +31,7 @@ class CONTROL_CONSOLE_REQUEST_USER {
     function __construct() { //构造函数
         $this->config                   = $GLOBALS['obj_base']->config;
 
-        $this->obj_dir                  = new CLASS_DIR();
+        $this->obj_file                  = new CLASS_FILE();
         $this->general_console          = new GENERAL_CONSOLE();
         $this->general_console->dspType = 'result';
         $this->general_console->chk_install();
@@ -95,7 +95,7 @@ class CONTROL_CONSOLE_REQUEST_USER {
 
         $_bool = false;
 
-        $_bool = $this->obj_dir->del_file(BG_PATH_CACHE . 'sys' . DS . 'user_import.csv');
+        $_bool = $this->obj_file->file_del(BG_PATH_CACHE . 'sys' . DS . 'user_import.csv');
 
         if ($_bool) {
             $_str_rcode = 'y010404';
@@ -142,8 +142,6 @@ class CONTROL_CONSOLE_REQUEST_USER {
     function ctrl_submit() {
         $_arr_userInput  = $this->mdl_user->input_submit();
 
-        $_arr_userSubmit = array();
-
         if ($_arr_userInput['rcode'] != 'ok') {
             $this->obj_tpl->tplDisplay('result', $_arr_userInput);
         }
@@ -157,9 +155,7 @@ class CONTROL_CONSOLE_REQUEST_USER {
             }
             $_str_userPass = fn_getSafe(fn_post('user_pass'), 'txt', '');
             if (!fn_isEmpty($_str_userPass)) {
-                $_arr_userSubmit = array(
-                    'user_pass' => fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']),
-                );
+                $this->mdl_user->userInput['user_pass'] = fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']);
             }
         } else {
             if (!isset($this->adminLogged['admin_allow']['user']['add']) && !$this->is_super) {
@@ -182,12 +178,10 @@ class CONTROL_CONSOLE_REQUEST_USER {
                 break;
             }
 
-            $_arr_userSubmit = array(
-                'user_pass' => fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']),
-            );
+            $this->mdl_user->userInput['user_pass'] = fn_baigoCrypt($_str_userPass, $_arr_userInput['user_name']);
         }
 
-        $_arr_userRow = $this->mdl_user->mdl_submit($_arr_userSubmit);
+        $_arr_userRow = $this->mdl_user->mdl_submit();
 
         $this->obj_tpl->tplDisplay('result', $_arr_userRow);
     }

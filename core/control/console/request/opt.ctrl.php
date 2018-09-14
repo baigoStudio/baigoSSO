@@ -40,9 +40,49 @@ class CONTROL_CONSOLE_REQUEST_OPT {
 
         $this->act = fn_getSafe($GLOBALS['route']['bg_act'], 'text', 'base');
 
-        $this->mdl_opt          = new MODEL_OPT(); //设置管理组模型
+        $this->mdl_opt          = new MODEL_OPT();
+        $this->mdl_belong       = new MODEL_BELONG();
     }
 
+
+    function ctrl_app_clear() {
+        if (!isset($this->adminLogged['admin_allow']['opt']['dbconfig']) && !$this->is_super) {
+            $_arr_tplData = array(
+                'rcode' => 'x040301',
+            );
+            $this->obj_tpl->tplDisplay('result', $_arr_tplData);
+        }
+
+        $_num_maxId = fn_getSafe(fn_post('max_id'), 'int', 0);
+
+        $_arr_searchList = array(
+            'max_id'    => $_num_maxId,
+        );
+
+        $_num_perPage     = 10;
+        $_num_belongCount = $this->mdl_belong->mdl_count();
+        $_arr_pageRow     = fn_page($_num_belongCount, $_num_perPage, 'post');
+        $_arr_belongRows  = $this->mdl_belong->mdl_clear($_num_perPage, 0, $_arr_searchList);
+
+        if (fn_isEmpty($_arr_belongRows)) {
+            $_str_status    = 'complete';
+            $_str_msg       = $this->obj_tpl->lang['rcode']['y070407'];
+        } else {
+            $_arr_belongRow = end($_arr_belongRows);
+            $_str_status    = 'loading';
+            $_str_msg       = $this->obj_tpl->lang['rcode']['x070407'];
+            $_num_maxId     = $_arr_belongRow['belong_id'];
+        }
+
+        $_arr_re = array(
+            'msg'       => $_str_msg,
+            'count'     => $_arr_pageRow['total'],
+            'max_id'    => $_num_maxId,
+            'status'    => $_str_status,
+        );
+
+        $this->obj_tpl->tplDisplay('result', $_arr_re);
+    }
 
     function ctrl_chkver() {
         if (!isset($this->adminLogged['admin_allow']['opt']['chkver']) && !$this->is_super) {

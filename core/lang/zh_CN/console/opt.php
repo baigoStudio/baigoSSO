@@ -38,9 +38,15 @@ return array(
     'btn' => array(
         'save'      => '保存',
         'chkver'    => '再次检查更新',
+        'dataApp'   => '清理应用从属数据',
+    ),
+
+    'confirm' => array(
+        'clear'         => '确认清理数据吗？此操作将耗费较长时间！',
     ),
 
     'text' => array(
+        'clear'           => '警告！此操作将耗费较长时间！',
         'haveNewVer'      => '您的版本不是最新的，下面是最新版本的发布和更新帮助链接。',
         'isNewVer'        => '恭喜！您的版本是最新的！',
     ),

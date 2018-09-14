@@ -21,18 +21,19 @@ if (!defined('IN_BAIGO')) {
  * @return void
  */
 function fn_http($str_url, $arr_data, $str_method = 'get') {
-
-    $_obj_http = curl_init();
-    $_str_data = http_build_query($arr_data);
+    $str_method = strtolower($str_method);
+    $_obj_http  = curl_init();
+    $_str_data  = http_build_query($arr_data);
 
     $_arr_headers = array(
         'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
         //'Content-length: ' . strlen($_str_data),
     );
 
-    curl_setopt($_obj_http, CURLOPT_HTTPHEADER, $_arr_headers);
+    curl_setopt($_obj_http, CURLOPT_TIMEOUT, 30); //设置超时
 
     if ($str_method == 'post') {
+        curl_setopt($_obj_http, CURLOPT_HTTPHEADER, $_arr_headers);
         curl_setopt($_obj_http, CURLOPT_POST, true);
         curl_setopt($_obj_http, CURLOPT_POSTFIELDS, $_str_data);
         curl_setopt($_obj_http, CURLOPT_URL, $str_url);

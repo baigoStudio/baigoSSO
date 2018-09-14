@@ -94,9 +94,9 @@ class CONTROL_API_API_PROFILE {
             $this->general_api->show_result($_arr_tplData);
         }
 
-        $_arr_userSubmit['user_id'] = $_arr_userRow['user_id'];
+        $this->mdl_user_profile->infoInput['user_id'] = $_arr_userRow['user_id'];
 
-        $_arr_returnRow              = $this->mdl_user_profile->mdl_info($_arr_userSubmit);
+        $_arr_returnRow              = $this->mdl_user_profile->mdl_info();
 
         $this->general_api->notify_result($_arr_returnRow, 'edit');
 
@@ -229,14 +229,14 @@ class CONTROL_API_API_PROFILE {
             $this->general_api->show_result($_arr_tplData);
         }
 
-        $_arr_userSubmit['user_id'] = $_arr_userRow['user_id'];
+        $this->mdl_user_profile->qaInput['user_id'] = $_arr_userRow['user_id'];
 
         for ($_iii = 1; $_iii <= 3; $_iii++) {
-            $_arr_userSubmit['user_sec_ques_' . $_iii] = $_arr_qaInput['user_sec_ques_' . $_iii];
-            $_arr_userSubmit['user_sec_answ_' . $_iii] = fn_baigoCrypt($_arr_qaInput['user_sec_answ_' . $_iii], $_arr_userRow['user_name'], true);
+            $this->mdl_user_profile->qaInput['user_sec_ques_' . $_iii] = $_arr_qaInput['user_sec_ques_' . $_iii];
+            $this->mdl_user_profile->qaInput['user_sec_answ_' . $_iii] = fn_baigoCrypt($_arr_qaInput['user_sec_answ_' . $_iii], $_arr_userRow['user_name'], true);
         }
 
-        $_arr_returnRow = $this->mdl_user_profile->mdl_qa($_arr_userSubmit);
+        $_arr_returnRow = $this->mdl_user_profile->mdl_qa();
 
         $_arr_tplData = array(
             'rcode' => $_arr_returnRow['rcode'],
@@ -403,7 +403,7 @@ class CONTROL_API_API_PROFILE {
             $this->general_api->show_result($_arr_tplData);
         }
 
-        if ($_arr_userRow['user_refresh_expire'] < time()) {
+        if ($_arr_userRow['user_refresh_expire'] < BG_NOW) {
             $_arr_tplData = array(
                 'rcode' => 'x010235',
             );
