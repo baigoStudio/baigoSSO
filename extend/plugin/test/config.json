@@ -1,0 +1,9 @@
+{
+    "name": "Test",
+    "class": "Test",
+    "version": "1.0",
+    "author": "Baigo",
+    "plugin_url": "http://www.baigo.net/cms/plugin/test",
+    "detail": "本插件为一个开发示例",
+    "author_url": "http://www.baigo.net"
+}

@@ -1,9 +1,0 @@
-@media (max-width: 767px) {
-    .bg-accordion .card { border: 0 !important; border-radius: 0; }
-    .bg-accordion .card > .list-group:first-child .list-group-item:first-child {
-        border-radius: 0;
-    }
-    .bg-accordion .card > .list-group:last-child .list-group-item:last-child {
-        border-radius: 0;
-    }
-}

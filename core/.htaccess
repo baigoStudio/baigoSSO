@@ -1,3 +1,0 @@
-# 禁止访问
-order allow,deny
-deny from all

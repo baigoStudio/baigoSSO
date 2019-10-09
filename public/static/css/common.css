@@ -1,0 +1,32 @@
+.bg-loading {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, .8);
+}
+
+.bg-card-md { max-width: 576px; margin: 0 auto; }
+.bg-card-sm { max-width: 450px; margin: 0 auto; }
+.bg-card-xs { max-width: 350px; margin: 0 auto; }
+
+.bg-card-xs .card { border-radius: 0.3rem; }
+
+.bg-logo-sm { width: 200px; }
+
+.bg-pre-nostyle { border: none; background: transparent !important; }
+
+.bg-content, .bg-content * { max-width: 100% !important; }
+.bg-tooltip .tooltip-inner { max-width: 500px !important; }
+
+.bg-td-xs { min-width: 80px; width: 80px; }
+.bg-td-sm { width: 120px; }
+.bg-td-md { width: 160px; }
+.bg-td-lg { width: 220px; }
+.bg-td-xl { width: 300px; }
+
+.bg-textarea-sm { height: 150px !important; }
+.bg-textarea-md { height: 300px !important; }
+.bg-textarea-lg { height: 400px !important; }
+.bg-textarea-xl { height: 500px !important; }

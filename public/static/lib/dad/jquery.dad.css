@@ -1,0 +1,52 @@
+.dad-noSelect, .dad-noSelect * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: move !important;
+}
+
+.dad-container {
+    position: relative;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.dad-container::after {
+    content: '';
+    clear: both !important;
+    display: block;
+}
+.dad-active .dad-draggable-area {
+    cursor: move !important;
+}
+.dad-draggable-area > *, .dad-draggable-area img {
+    pointer-events: none;
+}
+.dads-children.active {
+    width: 100%;
+    pointer-events: none;
+}
+.dads-children-clone {
+    width: 100%;
+    opacity: 1;
+    z-index: 9999;
+    pointer-events: none;
+}
+.dads-children-placeholder {
+    pointer-events: none;
+    overflow: hidden;
+    position: absolute !important;
+    box-sizing: border-box;
+    border: 1px dashed #b06000;
+    border-radius: 4px;
+    margin: 5px;
+    text-align: center;
+    color: #639BF6;
+    font-weight: bold;
+}

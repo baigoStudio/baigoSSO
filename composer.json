@@ -1,0 +1,17 @@
+{
+    "name": "baigo-studio/baigo-sso",
+    "type": "project",
+    "keywords": [
+        "framework",
+        "baigo-sso",
+        "sso"
+    ],
+    "homepage": "http://www.baigo.net/sso/",
+    "license": "GPL-2",
+    "authors": [
+        {
+            "name": "fone",
+            "email": "fone@baigo.net"
+        }
+    ]
+}

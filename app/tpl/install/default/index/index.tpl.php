@@ -1,0 +1,27 @@
+<?php $cfg = array(
+    'title'         => $lang->get('Installer'),
+    'btn'           => $lang->get('Next'),
+    'btn_link'      => true,
+    'sub_title'     => $lang->get('PHP Extensions'),
+    'active'        => 'index',
+    'pathInclude'   => $path_tpl . 'include' . DS,
+);
+
+
+include($cfg['pathInclude'] . 'index_head' . GK_EXT_TPL);
+
+    include($cfg['pathInclude'] . 'phplib' . GK_EXT_TPL);
+
+    if (isset($err_count) && $err_count > 0) { ?>
+        <hr>
+
+        <div class="alert alert-danger">
+            <span class="fas fa-times-circle"></span>
+            <?php echo $lang->get('Missing PHP extensions'); ?>
+        </div>
+    <?php }
+
+    include($cfg['pathInclude'] . 'install_btn' . GK_EXT_TPL);
+
+include($cfg['pathInclude'] . 'install_foot' . GK_EXT_TPL);
+include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
