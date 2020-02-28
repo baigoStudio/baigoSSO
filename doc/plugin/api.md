@@ -3,7 +3,7 @@
 | 名称 | 类型 | 描述 | 位置 |
 | - | - | - | - |
 | action_api_init | action | API 初始化时触发 | 控制器 |
-| [action_api_pm_status](#action_api_pm_status) | action | 更改短信状态时触发 | 控制器 |
+| [action_api_pm_status](#action_api_pm_status) | action | 变更短信状态时触发 | 控制器 |
 | [action_api_pm_revoke](#action_api_pm_revoke) | action | 撤回短信时触发 | 控制器 |
 | [action_api_pm_delete](#action_api_pm_delete) | action | 删除短信时触发 | 控制器 |
 | [filter_api_pm_lists](#filter_api_pm_lists) | filter | 列出短信时过滤 | 控制器 |
@@ -20,7 +20,7 @@
 
     | 参数 | 类型 | 描述 |
     | - | - | - |
-    | pm_ids | array | 被更改的短信 ID |
+    | pm_ids | array | 被变更的短信 ID |
     | pm_status | array | 状态 |
     
 ----------

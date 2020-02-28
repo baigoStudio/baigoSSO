@@ -137,12 +137,12 @@ POST
 
 | 原接口 | 迁移至 | 新 URL | 版本 |
 | - | - | - | - |
-| 用户注册 | 注册接口 | http://server/index.php/api/reg/reg | 自 v4.0 起 |
-| 检查用户名 | 注册接口 | http://server/index.php/api/reg/chkname | 自 v4.0 起 |
-| 检查邮箱 | 注册接口 | http://server/index.php/api/reg/chkmail | 自 v4.0 起 |
-| 用户登录 | 登录接口 | http://server/index.php/api/login/login | 自 v4.0 起 |
-| 刷新访问口令 | 个人接口 | http://server/index.php/api/profile/token | 自 v4.0 起 |
-| 更换邮箱 | 个人接口 | http://server/index.php/api/profile/mailbox | 自 v4.0 起 |
+| 用户注册 | 注册接口 | http://server/index.php/api/reg/reg | v4.0 起 |
+| 检查用户名 | 注册接口 | http://server/index.php/api/reg/chkname | v4.0 起 |
+| 检查邮箱 | 注册接口 | http://server/index.php/api/reg/chkmail | v4.0 起 |
+| 用户登录 | 登录接口 | http://server/index.php/api/login/login | v4.0 起 |
+| 刷新访问口令 | 个人接口 | http://server/index.php/api/profile/token | v4.0 起 |
+| 更换邮箱 | 个人接口 | http://server/index.php/api/profile/mailbox | v4.0 起 |
 
 ----------
 
@@ -150,6 +150,6 @@ POST
 
 | 原接口 | 替代方案 | 版本 |
 | - | - | - |
-| 找回密码 | 直接访问 http://server/index.php/personal/forgot，也可通过 `基本信息接口` 获得该 URL | 自 v4.0 起 |
-| 重发激活邮件 | 直接访问 http://server/index.php/personal/reg/nomail，也可通过 `基本信息接口` 获得该 URL | 自 v4.0 起 |
-| 删除用户 | 不再提供 | 自 v4.0 起 |
+| 找回密码 | 直接访问 http://server/index.php/personal/forgot，也可通过 `基本信息接口` 获得该 URL | v4.0 起 |
+| 重发激活邮件 | 直接访问 http://server/index.php/personal/reg/nomail，也可通过 `基本信息接口` 获得该 URL | v4.0 起 |
+| 删除用户 | 不再提供 | v4.0 起 |

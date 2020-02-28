@@ -25,8 +25,8 @@ POST
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
 | code | string | true | 加密参数，将需要的参数进行 JSON 编码。 |
-| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 security 作为盐。  |
-| security | string | true | 通信密钥，随机生成，长度 32 位。 |
+| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 key 作为盐。  |
+| key | string | true | 通信密钥，随机生成，长度 32 位。 |
 
 ##### 加密参数
 
@@ -39,9 +39,9 @@ POST
 
 ##### 签名参数
 
-将加密参数加密前的 JSON 字符串进行签名，然后把结果作为 `请求参数` 的 sign 参数。因为应用尚未生成安全码，所以只需要把 security 作为签名的盐。
+将加密参数加密前的 JSON 字符串进行签名，然后把结果作为 `请求参数` 的 sign 参数。因为应用尚未生成安全码，所以只需要把 key 作为签名的盐。
 
-> 注意：此接口的签名参数只需要把 security 作为签名的盐。
+> 注意：此接口的签名参数只需要把 key 作为签名的盐。
 
 ##### 返回结果是否加密
 
@@ -66,9 +66,9 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| code | string | true | 加密参数，将需要的参数进行 JSON 编码，然后将 JSON 字符串进行加密。加密时，要把 security 作为 key 参数，secret 作为 iv 参数。 |
-| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 security 和 secret 连接作为盐。  |
-| security | string | true | 通信密钥，作用类似于其他接口的 App Key。 |
+| code | string | true | 加密参数，将需要的参数进行 JSON 编码，然后将 JSON 字符串进行加密。加密时，要把 key 作为 key 参数，secret 作为 iv 参数。 |
+| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 key 和 secret 连接作为盐。  |
+| key | string | true | 通信密钥，作用类似于其他接口的 App Key。 |
 
 ----------
 
