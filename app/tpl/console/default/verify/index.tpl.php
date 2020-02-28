@@ -61,7 +61,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                     <?php if (isset($value['userRow']['user_name'])) {
                                         echo $value['userRow']['user_name'];
                                     } else {
-                                        echo $lang->get('Unknow');
+                                        echo $lang->get('Unknown');
                                     } ?>
                                 </div>
                                 <div class="bg-manage-menu">
@@ -81,7 +81,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                         <small><?php echo $lang->get('Time'); ?></small>
                                     </dt>
                                     <dd class="col-9">
-                                        <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['verify_datetime_refresh']; ?>"><?php echo $value['verify_datetime_refresh_short']; ?></small>
+                                        <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['verify_time_refresh_format']['date_time']; ?>"><?php echo $value['verify_time_refresh_format']['date_time_short']; ?></small>
                                     </dd>
                                     <dt class="col-3">
                                         <small><?php echo $lang->get('Status'); ?></small>
@@ -99,7 +99,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 </dl>
                             </td>
                             <td class="d-none d-lg-table-cell bg-td-md">
-                                <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['verify_datetime_refresh']; ?>"><?php echo $value['verify_datetime_refresh_short']; ?></small>
+                                <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['verify_time_refresh_format']['date_time']; ?>"><?php echo $value['verify_time_refresh_format']['date_time_short']; ?></small>
                             </td>
                             <td class="d-none d-lg-table-cell bg-td-md text-right">
                                 <div>
@@ -190,7 +190,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

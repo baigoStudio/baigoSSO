@@ -35,7 +35,7 @@ class Func {
                 }
         	}
     	} else {
-        	if (empty($data) || trim($data) === '') {
+        	if (empty($data) || trim($data) === '' || trim($data) === 'NULL') {
         		return true;
         	}
     	}
@@ -125,13 +125,13 @@ class Func {
     }
 
 
-    static function safe($string) {
+    static function safe($string, $htmlmode = false) {
         //正则剔除
         $_arr_dangerRegs = array(
             /* -------- 跨站 --------*/
 
             //html 标签
-            '/<(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer|bgsound|link|base|meta)(\s+\S*)*>/i',
+            '/<(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer|bgsound|link|base|meta).*>/i',
 
             //html 标签结束
             '/<\/(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer)>/i',
@@ -192,23 +192,27 @@ class Func {
 
         //特殊字符 直接剔除
         $_arr_dangerChars = array(
-            '\t', '\r', '\n', PHP_EOL
+            "\t", "\r", "\n", PHP_EOL
         );
 
-        $_arr_src = array('!', '$', '%', '\'', '(', ')', '+', '-', ':', '=', '?', '[', ']', '^', '`', '{', '}', '~');
-        $_arr_dst = array('&#33;', '&#36;', '&#37;', '&#39;', '&#40;', '&#41;', '&#43;', '&#45;', '&#58;', '&#61;', '&#63;', '&#91;', '&#93;', '&#94;', '&#96;', '&#123;', '&#125;', '&#126;');
+        /*$_arr_src = array('!', '$', '%', '\'', '(', ')', '+', '-', ':', '=', '?', '[', ']', '^', '`', '{', '}', '~');
+        $_arr_dst = array('&#33;', '&#36;', '&#37;', '&#39;', '&#40;', '&#41;', '&#43;', '&#45;', '&#58;', '&#61;', '&#63;', '&#91;', '&#93;', '&#94;', '&#96;', '&#123;', '&#125;', '&#126;');*/
 
         $_str_return = trim($string);
 
         $_str_return = preg_replace($_arr_dangerRegs, '', $_str_return);
 
-        $_str_return = str_ireplace($_arr_dangerChars, '', $_str_return);
+        $_str_return = str_replace($_arr_dangerChars, '', $_str_return);
 
         $_str_return = Html::encode($_str_return);
 
-        $_str_return = str_replace($_arr_src, $_arr_dst, $_str_return);
+        //$_str_return = str_replace($_arr_src, $_arr_dst, $_str_return);
 
-        $_str_return = Html::decode($_str_return);
+        //print_r($htmlmode);
+
+        if ($htmlmode) {
+            $_str_return = Html::decode($_str_return);
+        }
 
         return trim($_str_return);
     }
@@ -248,10 +252,45 @@ class Func {
     }
 
 
+    static function strSecret($string, $left = 5, $right = 5, $hide = '*'){
+        $string     = (string)$string;
+        $_str_mid   = ''; //中间字符串
+        if (function_exists('mb_strlen')) {
+            $_num_len   = mb_strlen($string); //计算长度
+        } else {
+            $_num_len   = strlen($string);
+        }
+
+        if ($_num_len <= $left + $right) { //如果左右截取加起来大于等于长度, 则左右个保留一个字符
+            $left   = 1;
+            $right  = 1;
+        }
+
+        $_num_mid = $_num_len - $left - $right;
+
+        if (function_exists('mb_substr')) {
+            $_str_left      = mb_substr($string, 0, $left); //取左边字符
+        } else {
+            $_str_left      = substr($string, 0, $left);
+        }
+        if (function_exists('mb_substr')) {
+            $_str_right     = mb_substr($string, 0 - $_num_len, $right); //取右边字符
+        } else {
+            $_str_right     = substr($string, 0 - $_num_len, $right);
+        }
+
+        for ($_iii = 0; $_iii < $_num_mid; ++$_iii) { //隐藏
+            $_str_mid .= $hide;
+        }
+
+        return $_str_left . $_str_mid . $_str_right; //拼合返回
+    }
+
+
     static function fixDs($path, $ds = DS) {
         $path = rtrim($path, '/\\') . $ds;
 
-        return str_replace($ds . $ds, $ds, $path);
+        return preg_replace('/([A-Za-z0-9\-\_]{1})(\\\|\/){2,}([A-Za-z0-9\-\_]{1})/i', '$1$2$3', $path);
     }
 
 
@@ -399,33 +438,50 @@ class Func {
         return $arr;
     }
 
-    /**
-     * arrayEach function.
-     *
-     * @access public
-     * @param mixed $arr
-     * @param string $encode (default: 'encode')
-     * @return void
-     */
-    static function arrayEach($arr, $encode = '') {
+
+    static function arrayEach($arr, $encode = '', $left = 5, $right = 5, $hide = '*') {
         if (is_array($arr) && !self::isEmpty($arr)) {
             foreach ($arr as $_key=>$_value) {
                 if (is_array($_value) && !self::isEmpty($_value)) {
-                    $arr[$_key] = self::arrayEach($_value, $encode);
-                } else if (!self::isEmpty($_value)) {
-                    $_value = self::safe($_value);
+                    $arr[$_key] = self::arrayEach($_value, $encode, $left, $right, $hide);
+                } else if (is_scalar($_value) && !self::isEmpty($_value)) {
+                    //$_value = self::safe($_value);
 
                     switch ($encode) {
+                        case 'json_safe':
+                            $arr[$_key] = Html::decode($_value);
+                        break;
+
                         case 'urlencode':
                             $arr[$_key] = rawurlencode($_value);
                         break;
 
-                        case 'json_safe':
-                            $arr[$_key] = rawurlencode(str_replace(array("\r", "\n", "\r\n", "\t"), '{:br}', $_value));
+                        case 'urldecode':
+                            $arr[$_key] = rawurldecode($_value);
                         break;
+
+                        case 'base64encode':
+                            $arr[$_key] = Base64::encode($_value);
+                        break;
+
+                        case 'base64decode':
+                            $arr[$_key] = Base64::decode($_value);
+                        break;
+
+                        /*case 'utf8encode':
+                            $arr[$_key] = utf8_encode($_value);
+                        break;
+
+                        case 'utf8decode':
+                            $arr[$_key] = utf8_decode($_value);
+                        break;*/
 
                         case 'md5':
                             $arr[$_key] = md5($_value);
+                        break;
+
+                        case 'secret':
+                            $arr[$_key] = self::strSecret($_value, $left, $right, $hide);
                         break;
                     }
                 } else {
@@ -437,24 +493,6 @@ class Func {
         }
 
         return $arr;
-    }
-
-
-    static function ubbcode($string) {
-        $string = Html::decode($string, 'json');
-
-        $string = str_ireplace(array('[b]', '[strong]'), '<strong>', $string);
-        $string = str_ireplace(array('[/b]', '[/strong]'), '</strong>', $string);
-        $string = str_ireplace(array('[em]', '[i]'), '<i>', $string);
-        $string = str_ireplace(array('[/em]', '[/i]'), '</i>', $string);
-        $string = str_ireplace(array('[br]', '{:br}'), '<br>', $string);
-
-        $_arr_src = array('[code]', '[/code]', '[del]', '[/del]', '[kbd]', '[/kbd]', '[u]', '[/u]', '[hr]');
-        $_arr_dst = array('<code>', '</code>', '<del>', '</del>', '<kbd>', '</kbd>', '<u>', '</u>', '<hr>');
-
-        $string = str_ireplace($_arr_src, $_arr_dst, $string);
-
-        return $string;
     }
 }
 

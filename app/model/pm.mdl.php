@@ -149,11 +149,13 @@ class Pm extends User_Common {
 
         if (!$_arr_pmRow) {
             return array(
+                'msg'   => 'Message not found',
                 'rcode' => 'x110102', //不存在记录
             );
         }
 
         $_arr_pmRow['rcode']   = 'y110102';
+        $_arr_pmRow['msg']     = '';
 
         return $this->rowProcess($_arr_pmRow);
 
@@ -264,8 +266,7 @@ class Pm extends User_Common {
             $arr_pmRow['pm_time'] = GK_NOW;
         }
 
-        $arr_pmRow['pm_datetime']       = date($this->configBase['site_date'] . ' ' . $this->configBase['site_time_short'], $arr_pmRow['pm_time']);
-        $arr_pmRow['pm_datetime_short'] = date($this->configBase['site_date_short'] . ' ' . $this->configBase['site_time_short'], $arr_pmRow['pm_time']);
+        $arr_pmRow['pm_time_format'] = $this->dateFormat($arr_pmRow['pm_time']);
 
         return $arr_pmRow;
     }

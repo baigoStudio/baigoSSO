@@ -1,0 +1,17 @@
+@media (max-width: 991px) {
+    .bg-accordion .card { border: 0 !important; border-radius: 0; }
+    .bg-accordion .card > .list-group:first-child .list-group-item:first-child {
+        border-radius: 0;
+    }
+    .bg-accordion .card > .list-group:last-child .list-group-item:last-child {
+        border-radius: 0;
+    }
+}
+
+.bg-manage-tr .bg-manage-menu { min-height: 1.5rem; font-size: 0.9rem; }
+
+@media (min-width: 992px) {
+    .bg-manage-tr .bg-manage-menu div { display: none !important; }
+    .bg-manage-tr:hover .bg-manage-menu div { display: block !important; }
+}
+

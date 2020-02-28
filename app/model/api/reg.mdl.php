@@ -7,8 +7,6 @@ namespace app\model\api;
 
 use ginkgo\Json;
 use ginkgo\Func;
-use ginkgo\Crypt;
-use ginkgo\Config;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -57,12 +55,17 @@ class Reg extends User {
 
         $_mix_vld = $this->validate($_arr_userData, '', 'reg_db');
 
+        //print_r($_mix_vld);
+
         if ($_mix_vld !== true) {
             return array(
                 'rcode' => 'x010201',
                 'msg'   => end($_mix_vld),
             );
         }
+
+        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
 
         $_num_userId     = $this->insert($_arr_userData);
 
@@ -107,9 +110,6 @@ class Reg extends User {
         );
 
         $_arr_inputReg = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputReg['user_contact']    = Json::encode($_arr_inputReg['user_contact']);
-        $_arr_inputReg['user_extend']     = Json::encode($_arr_inputReg['user_extend']);
 
         $_mix_vld = $this->validate($_arr_inputReg, '', 'reg');
 

@@ -93,7 +93,7 @@ class User extends Ctrl {
         $_arr_userRow = $this->mdl_user->read($_num_userId);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->error('User not found', $_arr_userRow['rcode']);
+            return $this->error($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_arr_appRow = $this->mdl_app->read($_arr_userRow['user_app_id']);
@@ -162,7 +162,7 @@ class User extends Ctrl {
             $_arr_userRow = $this->mdl_user->read($_num_userId);
 
             if ($_arr_userRow['rcode'] != 'y010102') {
-                return $this->error('User not found', $_arr_userRow['rcode']);
+                return $this->error($_arr_userRow['msg'], $_arr_userRow['rcode']);
             }
         } else {
             if (!isset($this->adminLogged['admin_allow']['user']['add']) && !$this->isSuper) { //判断权限
@@ -197,7 +197,7 @@ class User extends Ctrl {
 
 
     function submit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -218,14 +218,6 @@ class User extends Ctrl {
                 return $this->fetchJson('You do not have permission', 'x010303');
             }
 
-            $_arr_userRow = $this->mdl_user->check($_arr_inputSubmit['user_id']);
-
-            //print_r($_arr_userRow);
-
-            if ($_arr_userRow['rcode'] != 'y010102') {
-                return $this->fetchJson('User not found', $_arr_userRow['rcode']);
-            }
-
             if (!Func::isEmpty($_arr_inputSubmit['user_pass'])) {
                 $_str_rand          = Func::rand();
                 $this->mdl_user->inputSubmit['user_pass']   = Crypt::crypt($_arr_inputSubmit['user_pass'], $_str_rand);
@@ -236,16 +228,7 @@ class User extends Ctrl {
                 return $this->fetchJson('You do not have permission', 'x010302');
             }
 
-            //检验用户名是否重复
-            $_arr_userRow = $this->mdl_user->check($_arr_inputSubmit['user_name'], 'user_name');
-
-            //print_r($_arr_userRow);
-
-            if ($_arr_userRow['rcode'] == 'y010102') {
-                return $this->fetchJson('User already exists', 'x010404');
-            }
-
-            $_str_rand          = Func::rand();
+            $_str_rand = Func::rand();
 
             $this->mdl_user->inputSubmit['user_pass']   = Crypt::crypt($_arr_inputSubmit['user_pass'], $_str_rand);
             $this->mdl_user->inputSubmit['user_rand']   = $_str_rand;
@@ -258,7 +241,7 @@ class User extends Ctrl {
 
 
     function status() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -296,7 +279,7 @@ class User extends Ctrl {
 
 
     function delete() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -333,7 +316,7 @@ class User extends Ctrl {
 
 
     function check() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);

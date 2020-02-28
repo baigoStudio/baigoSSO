@@ -9,7 +9,6 @@ namespace app\classes\api;
 use app\classes\Ctrl as Ctrl_Base;
 use ginkgo\Loader;
 use ginkgo\Func;
-use ginkgo\Config;
 use ginkgo\Crypt;
 use ginkgo\Sign;
 use ginkgo\Json;
@@ -72,14 +71,14 @@ abstract class Ctrl extends Ctrl_Base {
 
         if ($_arr_appRow['rcode'] != 'y050102') {
             return array(
-                'msg'   => $this->obj_lang->get('Application not found', 'api.common'),
+                'msg'   => $this->obj_lang->get($_arr_appRow['msg'], 'api.common'),
                 'rcode' => $_arr_appRow['rcode'],
             );
         }
 
         if ($_arr_appRow['app_status'] != 'enable') {
             return array(
-                'msg'   => $this->obj_lang->get('Application is disabled', 'api.common'),
+                'msg'   => $this->obj_lang->get('App is disabled', 'api.common'),
                 'rcode' => 'x050402',
             );
         }
@@ -132,22 +131,12 @@ abstract class Ctrl extends Ctrl_Base {
 
         $_arr_decryptRow = Json::decode($_str_decrypt);
 
-        $_arr_configApi = Config::get('api');
-
         if (!isset($_arr_decryptRow['timestamp'])) {
             return array(
                 'msg'   => $this->obj_lang->get('Timestamp require', 'api.common'),
                 'rcode' => 'x050201',
             );
         }
-
-        if ($_arr_decryptRow['timestamp'] > GK_NOW + $_arr_configApi['timestamp_deviation'] || $_arr_decryptRow['timestamp'] < GK_NOW - $_arr_configApi['timestamp_deviation']) {
-            return array(
-                'msg'   => $this->obj_lang->get('Timestamp out of range', 'api.common'),
-                'rcode' => 'x050201',
-            );
-        }
-
 
         $this->appRow       = $_arr_appRow;
         $this->decryptRow   = $_arr_decryptRow;
@@ -216,7 +205,7 @@ abstract class Ctrl extends Ctrl_Base {
     protected function userCheckProcess($arr_userRow, $arr_inputCheck) {
         if ($arr_userRow['rcode'] != 'y010102') {
             return array(
-                'msg'   => 'User not found',
+                'msg'   => $arr_userRow['msg'],
                 'rcode' => $arr_userRow['rcode'],
             );
         }

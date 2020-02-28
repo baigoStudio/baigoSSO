@@ -8,7 +8,6 @@ namespace app\ctrl\console;
 
 use app\classes\console\Ctrl;
 use ginkgo\Loader;
-use ginkgo\Crypt;
 use ginkgo\Db;
 
 //不能非法包含或直接执行
@@ -55,7 +54,7 @@ class App_Belong extends Ctrl {
         $_arr_appRow = $this->mdl_app->read($_arr_search['id']);
 
         if ($_arr_appRow['rcode'] != 'y050102') {
-            return $this->error('Application not found', $_arr_appRow['rcode']);
+            return $this->error($_arr_appRow['msg'], $_arr_appRow['rcode']);
         }
 
         $_arr_search['not_in'] = Db::table('app_belong')->where('belong_app_id', '=', $_arr_appRow['app_id'])->fetchSql()->select('belong_user_id');
@@ -101,7 +100,7 @@ class App_Belong extends Ctrl {
 
 
     function submit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -126,7 +125,7 @@ class App_Belong extends Ctrl {
         //print_r($_arr_appRow);
 
         if ($_arr_appRow['rcode'] != 'y050102') {
-            return $this->fetchJson('Application not found', $_arr_appRow['rcode']);
+            return $this->fetchJson($_arr_appRow['msg'], $_arr_appRow['rcode']);
         }
 
         $_arr_submitResult   = $this->mdl_appBelong->submit();
@@ -140,7 +139,7 @@ class App_Belong extends Ctrl {
 
 
     function remove() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -165,7 +164,7 @@ class App_Belong extends Ctrl {
         //print_r($_arr_appRow);
 
         if ($_arr_appRow['rcode'] != 'y050102') {
-            return $this->fetchJson('Application not found', $_arr_appRow['rcode']);
+            return $this->fetchJson($_arr_appRow['msg'], $_arr_appRow['rcode']);
         }
 
         $_arr_removeResult   = $this->mdl_appBelong->remove();

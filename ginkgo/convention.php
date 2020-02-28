@@ -33,8 +33,15 @@ return array(
     'tpl' => array( //模板
         'type'      => 'php', //默认模板驱动
         'path'      => '', //默认模板路径
-        'sys'       => '', //系统模板
         'suffix'    => '', //模板后缀 (默认 .tpl.php)
+    ),
+    'tpl_sys' => array( //模板
+        'path'      => '', //默认模板路径
+        'suffix'    => '', //模板后缀 (默认 .tpl.php)
+    ),
+    'exception_page' => array( //异常页面
+        '404'       => '404',
+        '500'       => '500',
     ),
     'session' => array( //会话
         'autostart'     => false, //自动开始
@@ -51,7 +58,7 @@ return array(
         'path'      => '/', // cookie 保存路径
         'domain'    => '', // cookie 有效域名
         'secure'    => false, //  cookie 启用安全传输
-        'httponly'  => false, // httponly 设置
+        'httponly'  => true, // httponly 设置
         'setcookie' => true, // 是否使用 setcookie
     ),
     'cache' => array( //缓存

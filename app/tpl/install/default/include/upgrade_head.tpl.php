@@ -4,7 +4,7 @@
         <div class="bg-card-md my-5">
             <div class="clearfix mb-2">
                 <div class="float-left">
-                    <img class="img-fluid bg-head-logo" src="{:DIR_STATIC}sso/console/<?php echo $config['tpl']['path']; ?>/image/logo_green.svg">
+                    <img class="img-fluid bg-logo-sm" src="<?php echo $ui_ctrl['logo_install']; ?>">
                 </div>
                 <h3 class="float-right"><?php echo $lang->get('Upgrader'); ?></h3>
             </div>
@@ -28,9 +28,14 @@
                             <hr>
 
                             <div class="alert alert-warning">
-                                <span class="fas fa-exclamation-triangle"></span>
-                                <?php echo $lang->get('Upgrading'); ?>
-                                <span class="badge badge-warning"><?php echo $installed['prd_installed_ver']; ?></span>
-                                <?php echo $lang->get('To'); ?>
-                                <span class="badge badge-warning"><?php echo $config['version']['prd_sso_ver']; ?></span>
+                                <h5>
+                                    <?php echo $lang->get('Upgrading'); ?>
+                                    <span class="badge badge-warning"><?php echo $installed['prd_installed_ver']; ?></span>
+                                    <?php echo $lang->get('To'); ?>
+                                    <span class="badge badge-warning"><?php echo $config['version']['prd_sso_ver']; ?></span>
+                                </h5>
+                                <div>
+                                    <span class="fas fa-exclamation-triangle"></span>
+                                    <?php echo $lang->get('Warning! Please backup the data before upgrading.'); ?>
+                                </div>
                             </div>

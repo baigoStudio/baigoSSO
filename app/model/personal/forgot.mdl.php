@@ -6,7 +6,6 @@
 
 namespace app\model\personal;
 
-use ginkgo\Json;
 use ginkgo\Request;
 use ginkgo\Loader;
 
@@ -75,8 +74,6 @@ class Forgot {
         );
 
         $_arr_inputBySecqa = $this->obj_request->post($_arr_inputParam);
-
-        $_arr_inputBySecqa['user_sec_answ'] = Json::encode($_arr_inputBySecqa['user_sec_answ']);
 
         $_is_vld = $this->vld_forgot->scene('by_secqa')->verify($_arr_inputBySecqa);
 

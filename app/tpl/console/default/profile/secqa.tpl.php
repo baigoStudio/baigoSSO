@@ -63,7 +63,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             </div>
                         <?php } ?>
 
-                        <div class="bg-validate-box mt-3"></div>
+                        <div class="bg-validate-box"></div>
                     </div>
 
                     <div class="card-footer">
@@ -75,6 +75,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             </div>
 
             <?php include($cfg['pathInclude'] . 'profile_side' . GK_EXT_TPL); ?>
+        </div>
     </form>
 
 <?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
@@ -114,7 +115,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

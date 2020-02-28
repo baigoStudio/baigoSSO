@@ -25,9 +25,9 @@ class Route {
         'act'   => 'index',
     );
 
+    private static $param;
     private static $pathOrig;
     private static $pathinfo;
-    private static $param;
     private static $url;
     private static $config;
     private static $obj_request;
@@ -99,9 +99,9 @@ class Route {
             throw $_obj_excpt;
         }
 
-        self::$obj_request->setRoute(self::$route);
-        self::$obj_request->setParam(self::$param);
-        self::$obj_request->setRouteOrig(self::$routeOrig);
+        self::$obj_request->route       = self::$route;
+        self::$obj_request->routeOrig   = self::$routeOrig;
+        self::$obj_request->param       = self::$param;
 
         return array(
             'route'     => self::$route,
@@ -112,7 +112,7 @@ class Route {
 
     public static function build($path = '', $param = '', $exclude = array()) {
         if (Func::isEmpty($path)) {
-            $_str_path  = self::$obj_request->baseUrl() . '/' . implode('/', self::$routeOrig);
+            $_str_path  = Func::fixDs(self::$obj_request->baseUrl(), '/') . implode('/', self::$routeOrig);
         } else {
             $_str_path  = $path;
         }
@@ -169,7 +169,7 @@ class Route {
 
     private static function parseRule() {
         $_str_pathinfo  = self::$pathinfo;
-        $_arr_pathinfo  = explode('/', $_str_pathinfo);
+        //$_arr_pathinfo  = explode('/', $_str_pathinfo);
 
         if (!Func::isEmpty(self::$config['route_rule'])) {
             foreach (self::$config['route_rule'] as $_key=>$_value) {
@@ -267,6 +267,9 @@ class Route {
 
     private static function parsePathinfo() {
         $_str_pathinfo = self::$obj_request->server('PATH_INFO'); //直接使用 pathinfo
+        if (Func::isEmpty($_str_pathinfo)) {
+            $_str_pathinfo = self::$obj_request->get('pathname'); //不支持 pathinfo 的处理
+        }
         $_str_pathinfo = str_replace('\\', '/', $_str_pathinfo);
         $_str_pathinfo = trim($_str_pathinfo, '/');
         $_str_pathinfo = Html::decode($_str_pathinfo, 'url');
@@ -274,7 +277,7 @@ class Route {
         $_arr_suffix = explode(',', self::$urlSuffix);
 
         foreach ($_arr_suffix as $_key=>$_value) {
-            $_str_pathinfo = str_ireplace($_value, '', $_str_pathinfo);
+            $_str_pathinfo = str_ireplace($_value, '', $_str_pathinfo); //去除后缀
         }
 
         $_str_pathinfo = trim($_str_pathinfo, '/');
@@ -320,12 +323,14 @@ class Route {
         $_arr_url   = array();
         $_arr_route = self::$route;
 
+        if (defined('GK_BIND_MOD')) {
+            $_arr_route['mod']  = GK_BIND_MOD;
+        }
+
         if (!Func::isEmpty($_str_pathinfo)) {
             $_arr_url = explode('/', $_str_pathinfo);
 
-            if (defined('GK_BIND_MOD') && !Func::isEmpty(GK_BIND_MOD)) {
-                $_arr_route['mod']  = GK_BIND_MOD;
-
+            if (defined('GK_BIND_MOD')) {
                 if (isset($_arr_url[0]) && !Func::isEmpty($_arr_url[0])) {
                     $_arr_route['ctrl']  = $_arr_url[0];
                 }
@@ -348,8 +353,10 @@ class Route {
             }
         }
 
-        $_arr_route['act'] = str_replace('_', '-', $_arr_route['act']);
-        $_arr_route['act'] = Func::toHump($_arr_route['act'], '-', true);
+        $_arr_route['mod']  = str_replace('-', '_', $_arr_route['mod']);
+        $_arr_route['ctrl'] = str_replace('-', '_', $_arr_route['ctrl']);
+        $_arr_route['act']  = str_replace('_', '-', $_arr_route['act']);
+        $_arr_route['act']  = Func::toHump($_arr_route['act'], '-', true);
 
         self::$route = array_replace_recursive(self::$route, $_arr_route);
 
@@ -368,36 +375,43 @@ class Route {
             unset($_arr_url[1]);
         }
 
-        if (isset($_arr_url[2])) {
-            unset($_arr_url[2]);
+        if (!defined('GK_BIND_MOD')) {
+            if (isset($_arr_url[2])) {
+                unset($_arr_url[2]);
+            }
         }
+
+        $_arr_url = array_values($_arr_url);
 
         $_arr_key   = array();
         $_arr_value = array();
+        $_arr_param = array();
 
         if (!Func::isEmpty($_arr_url)) {
             foreach ($_arr_url as $_key=>$_value) {
+                //$_value = (string)$_value;
+
                 if (Func::isOdd($_key)) {
+                    $_arr_value[] = $_value;
+                } else {
                     $_arr_key[] = $_value;
                 }
             }
+        }
 
-            foreach ($_arr_url as $_key=>$_value) {
-                if (!Func::isOdd($_key)) {
-                    $_arr_value[] = $_value;
+        foreach ($_arr_key as $_key=>$_value) {
+            if (!Func::isEmpty($_value)) {
+                if (isset($_arr_value[$_key])) {
+                    $_arr_param[$_value] = $_arr_value[$_key];
+                    $_GET[$_value] = $_arr_value[$_key];
+                } else {
+                    $_arr_param[$_value] = '';
+                    $_GET[$_value] = '';
                 }
             }
         }
 
-        //print_r(self::$param);
-
-        foreach ($_arr_key as $_key=>$_value) {
-            if (isset($_arr_value[$_key])) {
-                self::$param[$_value] = $_arr_value[$_key];
-            } else {
-                self::$param[$_value] = '';
-            }
-        }
+        self::$param = $_arr_param;
     }
 
 

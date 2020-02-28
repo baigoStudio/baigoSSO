@@ -48,14 +48,16 @@ class App extends App_Base {
             );
         }
 
+        $_arr_appData['app_allow'] = Json::encode($_arr_appData['app_allow']);
+
         $_num_appId  = $this->insert($_arr_appData);
 
         if ($_num_appId > 0) {
             $_str_rcode = 'y050101'; //更新成功
-            $_str_msg   = 'Add application successfully';
+            $_str_msg   = 'Add App successfully';
         } else {
             $_str_rcode = 'x050101'; //更新失败
-            $_str_msg   = 'Add application failed';
+            $_str_msg   = 'Add App failed';
         }
 
         return array(
@@ -88,7 +90,7 @@ class App extends App_Base {
             }
         }
 
-        $_arr_inputSubmit['app_allow']        = Json::encode($_arr_appAllow);
+        $_arr_inputSubmit['app_allow']        = $_arr_appAllow;
         $_arr_inputSubmit['app_url_notify']   = Html::decode($_arr_inputSubmit['app_url_notify'], 'url');
         $_arr_inputSubmit['app_url_sync']     = Html::decode($_arr_inputSubmit['app_url_sync'], 'url');
 

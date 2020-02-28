@@ -12,8 +12,12 @@ defined('IN_GINKGO') or exit('Access denied');
 class Http extends File {
 
     protected static $instance;
+    public $header = false;
+    public $verifyPeer = false;
+    public $verifyHost = false;
+    public $caInfo;
 
-    private $header = array(
+    private $httpHeader = array(
         'Content-Type'  => 'application/x-www-form-urlencoded; charset=UTF-8',
         'Accept'        => 'application/json',
     );
@@ -78,9 +82,9 @@ class Http extends File {
         $method         = strtolower($method);
         $_arr_header    = array();
 
-        if (!Func::isEmpty($this->header)) {
+        if (!Func::isEmpty($this->httpHeader)) {
             // 发送头部信息
-            foreach ($this->header as $_key=>$_value) {
+            foreach ($this->httpHeader as $_key=>$_value) {
                 if (Func::isEmpty($_value)) {
                     $_arr_header[] = $_key;
                 } else {
@@ -110,8 +114,21 @@ class Http extends File {
 
         curl_setopt($this->curl, CURLOPT_URL, $url);
         curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, 30); //设置超时
-        curl_setopt($this->curl, CURLOPT_HTTPHEADER, $_arr_header);
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
+        curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, $this->verifyHost);
+
+        if (!Func::isEmpty($_arr_header)) {
+            curl_setopt($this->curl, CURLOPT_HTTPHEADER, $_arr_header);
+        }
+
+        if ($this->header !== false) {
+            curl_setopt($this->curl, CURLOPT_HEADER, $this->header);
+        }
+
+        if (!Func::isEmpty($this->caInfo)) {
+            curl_setopt($this->curl, CURLOPT_CAINFO, $this->caInfo);
+        }
 
         if (!Func::isEmpty($this->port)) {
             curl_setopt($this->curl, CURLOPT_PORT, $this->port);
@@ -135,7 +152,7 @@ class Http extends File {
     }
 
     function setHeader($name, $value = '') {
-        $this->header[$name] = $value;
+        $this->httpHeader[$name] = $value;
     }
 
     function setPort($port = '') {
@@ -143,7 +160,7 @@ class Http extends File {
     }
 
     function setAccept($type = 'application/json') {
-        $this->header['Accept'] = $type;
+        $this->httpHeader['Accept'] = $type;
 
         $this->accept = $type;
     }
@@ -155,7 +172,7 @@ class Http extends File {
     function contentType($contentType, $charset = 'UTF-8') {
         $this->contentType  = $contentType;
         $this->charset      = $charset;
-        $this->header['Content-Type'] = $contentType . '; Charset=' . $charset;
+        $this->httpHeader['Content-Type'] = $contentType . '; Charset=' . $charset;
     }
 
     function getError() {

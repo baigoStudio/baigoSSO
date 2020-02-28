@@ -42,9 +42,7 @@ class Opt extends Opt_Base {
             $_arr_opt['site_tpl']        = Html::decode($this->inputSubmit['site_tpl'], 'url');
         }
 
-        $_str_outPut = '<?php return ' . var_export($_arr_opt, true) . ';';
-
-        $_num_size = $this->obj_file->fileWrite(GK_APP_CONFIG . 'extra_' . $this->inputSubmit['act'] . GK_EXT_INC, $_str_outPut);
+        $_num_size = Config::write(GK_APP_CONFIG . 'extra_' . $this->inputSubmit['act'] . GK_EXT_INC, $_arr_opt);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030401';
@@ -67,14 +65,12 @@ class Opt extends Opt_Base {
         $_arr_config = Config::get('mailtpl', 'console');
 
         foreach ($_arr_config as $_key=>$_value) {
-            foreach ($_value['list'] as $_key_list=>$_value_list) {
+            foreach ($_value['lists'] as $_key_list=>$_value_list) {
                 $_arr_opt[$_key . '_' . $_key_list] = Html::decode($this->inputMailtpl[$_key . '_' . $_key_list], 'url');
             }
         }
 
-        $_str_outPut = '<?php return ' . var_export($_arr_opt, true) . ';';
-
-        $_num_size = $this->obj_file->fileWrite(GK_APP_CONFIG . 'extra_mailtpl' . GK_EXT_INC, $_str_outPut);
+        $_num_size = Config::write(GK_APP_CONFIG . 'extra_mailtpl' . GK_EXT_INC, $_arr_opt);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030401';
@@ -106,11 +102,7 @@ class Opt extends Opt_Base {
             'debug'         => $this->inputSmtp['debug'],
         );
 
-        //print_r($_arr_opt);
-
-        $_str_outPut = '<?php return ' . var_export($_arr_opt, true) . ';';
-
-        $_num_size   = $this->obj_file->fileWrite(GK_APP_CONFIG . 'extra_smtp' . GK_EXT_INC, $_str_outPut);
+        $_num_size   = Config::write(GK_APP_CONFIG . 'extra_smtp' . GK_EXT_INC, $_arr_opt);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030401';
@@ -137,11 +129,7 @@ class Opt extends Opt_Base {
 
         $_arr_ver = Http::instance()->request($this->config['version']['prd_ver_check'], $_arr_data, 'post');
 
-        //print_r($_arr_ver);
-
-        $_str_outPut = '<?php return ' . var_export($_arr_ver, true) . ';';
-
-        $_num_size   = $this->obj_file->fileWrite($this->pathLatest, $_str_outPut);
+        $_num_size   = Config::write($this->pathLatest, $_arr_ver);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y040402';
@@ -164,7 +152,7 @@ class Opt extends Opt_Base {
 
         $_arr_ver = Loader::load($this->pathLatest);
 
-        if (Func::isEmpty($_arr_ver) || !isset($_arr_ver['time']) || $_arr_ver['time'] - GK_NOW > 30 * 86400) {
+        if (Func::isEmpty($_arr_ver) || !isset($_arr_ver['time']) || $_arr_ver['time'] - GK_NOW > 30 * GK_DAY) {
             $this->latest();
             $_arr_ver = Loader::load($this->pathLatest);
         }
@@ -254,7 +242,7 @@ class Opt extends Opt_Base {
         $_arr_config = Config::get('mailtpl', 'console');
 
         foreach ($_arr_config as $_key=>$_value) {
-            foreach ($_value['list'] as $_key_list=>$_value_list) {
+            foreach ($_value['lists'] as $_key_list=>$_value_list) {
                 $_arr_inputParam[$_key . '_' . $_key_list] = array('txt', '');
             }
         }

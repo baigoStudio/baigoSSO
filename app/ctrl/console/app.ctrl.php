@@ -98,7 +98,7 @@ class App extends Ctrl {
         $_arr_appRow = $this->mdl_app->read($_num_appId);
 
         if ($_arr_appRow['rcode'] != 'y050102') {
-            return $this->error('Application not found', $_arr_appRow['rcode']);
+            return $this->error($_arr_appRow['msg'], $_arr_appRow['rcode']);
         }
 
         $_arr_appRow['app_key'] = Crypt::crypt($_arr_appRow['app_key'], $_arr_appRow['app_name']);
@@ -143,7 +143,7 @@ class App extends Ctrl {
             $_arr_appRow = $this->mdl_app->read($_num_appId);
 
             if ($_arr_appRow['rcode'] != 'y050102') {
-                return $this->error('Application not found', $_arr_appRow['rcode']);
+                return $this->error($_arr_appRow['msg'], $_arr_appRow['rcode']);
             }
         } else {
             if (!isset($this->adminLogged['admin_allow']['app']['add']) && !$this->isSuper) { //判断权限
@@ -185,7 +185,7 @@ class App extends Ctrl {
 
 
     function submit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -205,14 +205,6 @@ class App extends Ctrl {
             if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->isSuper) {
                 return $this->fetchJson('You do not have permission', 'x050303');
             }
-
-            $_arr_appRow = $this->mdl_app->check($_arr_inputSubmit['app_id']);
-
-            //print_r($_arr_appRow);
-
-            if ($_arr_appRow['rcode'] != 'y050102') {
-                return $this->fetchJson('Application not found', $_arr_appRow['rcode']);
-            }
         } else {
             if (!isset($this->adminLogged['admin_allow']['app']['add']) && !$this->isSuper) {
                 return $this->fetchJson('You do not have permission', 'x050302');
@@ -226,7 +218,7 @@ class App extends Ctrl {
 
 
     function delete() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -257,7 +249,7 @@ class App extends Ctrl {
 
 
     function status() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -288,7 +280,7 @@ class App extends Ctrl {
 
 
     function reset() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -311,7 +303,7 @@ class App extends Ctrl {
         $_arr_appRow = $this->mdl_app->check($_arr_inputReset['app_id']);
 
         if ($_arr_appRow['rcode'] != 'y050102') {
-            return $this->fetchJson('Application not found', $_arr_appRow['rcode']);
+            return $this->fetchJson($_arr_appRow['msg'], $_arr_appRow['rcode']);
         }
 
         $_arr_resetResult = $this->mdl_app->reset();
@@ -321,30 +313,30 @@ class App extends Ctrl {
 
 
     function notify() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
-            return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
-        }
-
-        if (!$this->isAjaxPost) {
-            return $this->fetchJson('Access denied', '', 405);
+            return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
         if (!isset($this->adminLogged['admin_allow']['app']['browse']) && !$this->isSuper) { //判断权限
-            return $this->fetchJson('You do not have permission', 'x050303');
+            return $this->error('You do not have permission', 'x050303');
         }
 
-        $_arr_inputNotify = $this->mdl_app->inputCommon();
+        $_num_appId = 0;
 
-        if ($_arr_inputNotify['rcode'] != 'y050201') {
-            return $this->fetchJson($_arr_inputNotify['msg'], $_arr_inputNotify['rcode']);
+        if (isset($this->param['id'])) {
+            $_num_appId = $this->obj_request->input($this->param['id'], 'int', 0);
         }
 
-        $_arr_appRow = $this->mdl_app->read($_arr_inputNotify['app_id']);
+        if ($_num_appId < 1) {
+            return $this->error('Missing ID', 'x050202');
+        }
+
+        $_arr_appRow = $this->mdl_app->read($_num_appId);
 
         if ($_arr_appRow['rcode'] != 'y050102') {
-            return $this->fetchJson('Application not found', $_arr_appRow['rcode']);
+            return $this->error($_arr_appRow['msg'], $_arr_appRow['rcode']);
         }
 
         $_str_echo = Func::rand();
@@ -361,7 +353,7 @@ class App extends Ctrl {
 
         if ($_str_encrypt === false) {
             $_str_error = Crypt::getError();
-            return $this->fetchJson($_str_error, $_arr_appRow['rcode']);
+            return $this->error($_str_error, $_arr_appRow['rcode']);
         }
 
         $_arr_data = array(
@@ -398,19 +390,30 @@ class App extends Ctrl {
         //print_r($_obj_http->getResult());
 
         if (isset($_arr_notifyResult['echostr']) && $_arr_notifyResult['echostr'] == $_str_echo) {
-            $_arr_return = array(
-                'msg'   => 'Testing successfully',
-                'rcode' => 'y050401',
+            $_arr_tplData = array(
+                'msg'       => 'Testing successfully',
+                'rcode'     => 'y050401',
+                'rstatus'   => 'y',
             );
         } else {
-            $_arr_return = array(
-                'msg'   => 'Testing failed',
-                'rcode' => 'x050401',
+            $_str_result = $_obj_http->getResult();
+
+            $_arr_tplData = array(
+                'msg'       => 'Testing failed',
+                'rcode'     => 'x050401',
+                'rstatus'   => 'x',
+                'msg_more'  => $_str_result,
             );
 
-            Log::record('type: notify, action: ' . $_str_urlNotify . ', app_id: ' . $_arr_appRow['app_id'] . ', result: failed ' . Json::encode($_arr_notifyResult), 'log');
+            //Log::record('type: notify, action: ' . $_str_urlNotify . ', app_id: ' . $_arr_appRow['app_id'] . ', result: failed ' . $_str_result, 'log');
         }
 
-        return $this->fetchJson($_arr_return['msg'], $_arr_return['rcode']);
+        $_arr_tpl = array_replace_recursive($this->generalData, $_arr_tplData);
+
+        //print_r($_arr_appRows);
+
+        $this->assign($_arr_tpl);
+
+        return $this->fetch();
     }
 }

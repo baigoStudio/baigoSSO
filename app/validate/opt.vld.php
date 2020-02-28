@@ -6,7 +6,6 @@
 
 namespace app\validate;
 
-use ginkgo\Lang;
 use ginkgo\Validate;
 
 //不能非法包含或直接执行
@@ -73,8 +72,7 @@ class Opt extends Validate {
         ),
     );
 
-    function __construct() { //构造函数
-        $this->obj_lang = Lang::instance();
+    function v_init() { //构造函数
 
         $_arr_attrName = array(
             'host'       => $this->obj_lang->get('Database host'),

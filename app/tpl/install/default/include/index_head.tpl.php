@@ -1,10 +1,10 @@
 <?php include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
 
     <div class="container">
-        <div class="bg-card-md my-5">
+        <div class="bg-card-md my-lg-5 my-3">
             <div class="clearfix mb-2">
                 <div class="float-left">
-                    <img class="img-fluid bg-head-logo" src="{:DIR_STATIC}sso/console/<?php echo $config['tpl']['path']; ?>/image/logo_green.svg">
+                    <img class="img-fluid bg-logo-sm" src="<?php echo $ui_ctrl['logo_install']; ?>">
                 </div>
                 <h3 class="float-right"><?php echo $lang->get('Installer'); ?></h3>
             </div>

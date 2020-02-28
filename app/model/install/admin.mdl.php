@@ -6,7 +6,7 @@
 
 namespace app\model\install;
 
-use app\classes\Model;
+use app\classes\install\Model;
 use ginkgo\Loader;
 use ginkgo\Func;
 

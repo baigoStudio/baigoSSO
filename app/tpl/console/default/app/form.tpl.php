@@ -7,7 +7,7 @@
 }
 
 $cfg = array(
-    'title'             => $lang->get('Application', 'console.common') . ' &raquo; ' . $title_sub,
+    'title'             => $lang->get('App', 'console.common') . ' &raquo; ' . $title_sub,
     'menu_active'       => 'app',
     'sub_active'        => $str_sub,
     'baigoValidate'    => 'true',
@@ -35,7 +35,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-group">
-                            <label><?php echo $lang->get('Application name'); ?></label>
+                            <label><?php echo $lang->get('App name'); ?></label>
                             <input type="text" name="app_name" id="app_name" value="<?php echo $appRow['app_name']; ?>" class="form-control">
                             <small class="form-text" id="msg_app_name"></small>
                         </div>
@@ -230,7 +230,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             }
         },
         attr_names: {
-            app_name: '<?php echo $lang->get('Application name'); ?>',
+            app_name: '<?php echo $lang->get('App name'); ?>',
             app_url_notify: '<?php echo $lang->get('URL of notifications'); ?>',
             app_url_sync: '<?php echo $lang->get('URL of sync login notifications'); ?>',
             app_ip_allow: '<?php echo $lang->get('Allowed IPs'); ?>',
@@ -260,7 +260,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

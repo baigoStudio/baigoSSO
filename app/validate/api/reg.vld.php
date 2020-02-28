@@ -7,7 +7,6 @@
 namespace app\validate\api;
 
 use ginkgo\Validate;
-use ginkgo\Lang;
 use ginkgo\Config;
 
 //不能非法包含或直接执行
@@ -16,74 +15,84 @@ defined('IN_GINKGO') or exit('Access denied');
 /*-------------管理员模型-------------*/
 class Reg extends Validate {
 
-    protected $rule     = array(
-        'user_name' => array(
-            'length' => '1,30',
-            'format' => 'alpha_dash'
-        ),
-        'user_pass' => array(
-            'require' => true,
-        ),
-        'user_mail' => array(
-            'max'    => 300,
-            'format' => 'email',
-        ),
-        'user_nick' => array(
-            'max' => 30,
-        ),
-        'user_ip' => array(
-            'format' => 'ip',
-        ),
-        'user_contact' => array(
-            'max' => 3000,
-        ),
-        'user_extend' => array(
-            'max' => 3000,
-        ),
-        'not_id' => array(
-            'format'  => 'int',
-        ),
-        'timestamp' => array(
-            '>' => 0,
-        ),
-    );
+    function v_init() { //构造函数
+        parent::v_init();
 
-    protected $scene = array(
-        'reg' => array(
-            'user_name',
-            'user_pass',
-            'user_mail',
-            'user_nick',
-            'user_ip',
-            'user_contact',
-            'user_extend',
-            'timestamp',
-        ),
-        'reg_db' => array(
-            'user_name',
-            'user_pass',
-            'user_mail',
-            'user_nick',
-            'user_ip',
-            'user_contact',
-            'user_extend',
-        ),
-        'chkname' => array(
-            'user_name',
-            'timestamp',
-        ),
-        'chkmail' => array(
-            'user_mail' => array(
-                'require' => true,
-                'format'  => 'email',
+        $_arr_rule =  array(
+            'user_name' => array(
+                'length' => '1,30',
+                'format' => 'alpha_dash'
             ),
-            'not_id',
-            'timestamp',
-        ),
-    );
+            'user_pass' => array(
+                'require' => true,
+            ),
+            'user_mail' => array(
+                'max'    => 300,
+                'format' => 'email',
+            ),
+            'user_nick' => array(
+                'max' => 30,
+            ),
+            'user_ip' => array(
+                'format' => 'ip',
+            ),
+            'user_contact' => array(
+                'max' => 3000,
+            ),
+            'user_extend' => array(
+                'max' => 3000,
+            ),
+            'not_id' => array(
+                'format'  => 'int',
+            ),
+            'timestamp' => array(
+                '>' => 0,
+            ),
+        );
 
-    function __construct() { //构造函数
-        $this->obj_lang         = Lang::instance();
+        $_arr_configReg = Config::get('reg', 'var_extra');
+
+        if (isset($_arr_configReg['reg_needmail']) && $_arr_configReg['reg_needmail'] == 'on') {
+            $_arr_rule['user_mail'] = array(
+                'length'    => '1,300',
+                'format'    => 'email',
+            );
+        }
+
+        $_arr_scene = array(
+            'reg' => array(
+                'user_name',
+                'user_pass',
+                'user_mail',
+                'user_nick',
+                'user_ip',
+                'user_contact',
+                'user_extend',
+                'timestamp',
+            ),
+            'reg_db' => array(
+                'user_name',
+                'user_pass',
+                'user_mail',
+                'user_nick',
+                'user_ip',
+                'user_contact',
+                'user_extend',
+            ),
+            'chkname' => array(
+                'user_name',
+                'timestamp',
+            ),
+            'chkmail' => array(
+                'user_mail' => array(
+                    'require' => true,
+                    'format'  => 'email',
+                ),
+                'not_id',
+                'timestamp',
+            ),
+        );
+
 
         $_arr_attrName = array(
             'user_name'     => $this->obj_lang->get('Username'),
@@ -105,19 +114,16 @@ class Reg extends Validate {
         );
 
         $_arr_formatMsg = array(
-            'alpha_dash'   => $this->obj_lang->get('{:attr} must be alpha-numeric, dash, underscore'),
+            'alpha_dash'  => $this->obj_lang->get('{:attr} must be alpha-numeric, dash, underscore'),
             'int'         => $this->obj_lang->get('{:attr} must be integer'),
             'email'       => $this->obj_lang->get('{:attr} not a valid email address'),
             'ip'          => $this->obj_lang->get('{:attr} not a valid ip'),
         );
 
+        $this->rule($_arr_rule);
+        $this->setScene($_arr_scene);
         $this->setAttrName($_arr_attrName);
         $this->setTypeMsg($_arr_typeMsg);
         $this->setFormatMsg($_arr_formatMsg);
-
-        $_arr_config            = Config::get();
-
-        $this->configReg        = $_arr_config['var_extra']['reg'];
-        $this->configApi        = $_arr_config['api'];
     }
 }

@@ -7,7 +7,6 @@
 namespace app\validate\console;
 
 use ginkgo\Validate;
-use ginkgo\Lang;
 use ginkgo\Loader;
 
 //不能非法包含或直接执行
@@ -40,8 +39,7 @@ class Plugin extends Validate {
         ),
     );
 
-    function __construct() { //构造函数
-        $this->obj_lang         = Lang::instance();
+    function v_init() { //构造函数
 
         $_arr_attrName = array(
             'plugin_dir'    => $this->obj_lang->get('Directory'),

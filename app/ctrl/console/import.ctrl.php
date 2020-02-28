@@ -33,8 +33,8 @@ class Import extends Ctrl {
 
         $this->obj_lang->load($_str_langCharset, 'console.charset');
 
-        $_arr_charsetOften              = array_keys($this->charsetRows['often']['list']);
-        $_arr_charsetList               = array_keys($this->charsetRows['list']['list']);
+        $_arr_charsetOften              = array_keys($this->charsetRows['often']['lists']);
+        $_arr_charsetList               = array_keys($this->charsetRows['lists']['lists']);
 
         $this->mdl_import->charsetKeys  = Func::arrayFilter(array_replace_recursive($_arr_charsetOften, $_arr_charsetList));
 
@@ -53,7 +53,7 @@ class Import extends Ctrl {
             return $this->error('You do not have permission', 'x010305');
         }
 
-        $_str_charset = $this->obj_request->get('charset', '', 'txt', 'UTF-8');
+        $_str_charset = $this->obj_request->get('charset', 'txt', 'UTF-8');
         $_str_charset = Html::decode($_str_charset, 'url');
 
         //print_r($_str_charset);
@@ -88,8 +88,8 @@ class Import extends Ctrl {
 
         $_str_charset = '';
 
-        if (isset($this->param['id'])) {
-            $_str_charset = $this->obj_request->input($this->param['id'], 'txt', '');
+        if (isset($this->param['charset'])) {
+            $_str_charset = $this->obj_request->input($this->param['charset'], 'txt', '');
         }
 
         if (Func::isEmpty($_str_charset)) {
@@ -135,7 +135,7 @@ class Import extends Ctrl {
 
 
     function submit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -166,7 +166,7 @@ class Import extends Ctrl {
 
 
     function upload() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -198,12 +198,12 @@ class Import extends Ctrl {
 
         $this->obj_upload->setMime($_arr_csvMime);
 
-        if (!$this->obj_upload->upload('csv_files')) {
+        if (!$this->obj_upload->create('csv_files')) {
             $_str_error         = $this->obj_upload->getError();
             return $this->fetchJson($_str_error, 'x010403');
         }
 
-        if (!$this->obj_upload->move($this->csvPath)) {
+        if (!$this->obj_upload->move($this->mdl_import->csvPrefix, $this->mdl_import->csvName)) {
             $_str_error         = $this->obj_upload->getError();
 
             return $this->fetchJson($_str_error, 'x010403');
@@ -214,7 +214,7 @@ class Import extends Ctrl {
 
 
     function delete() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);

@@ -12,23 +12,23 @@ return array(
     'user' => array(
         'main' => array(
             'title'  => 'User management',
-            'mod'    => 'user',
+            'ctrl'   => 'user',
             'icon'   => 'users',
         ),
-        'list' => array(
+        'lists' => array(
             'index' => array(
                 'title' => 'User list',
-                'mod'   => 'user',
+                'ctrl'  => 'user',
                 'act'   => 'index',
             ),
             'form' => array(
                 'title' => 'Add user',
-                'mod'   => 'user',
+                'ctrl'  => 'user',
                 'act'   => 'form',
             ),
             'import' => array(
                 'title' => 'Import',
-                'mod'   => 'import',
+                'ctrl'  => 'import',
                 'act'   => 'index',
             ),
         ),
@@ -43,18 +43,18 @@ return array(
     'pm' => array(
         'main' => array(
             'title'  => 'Private message',
-            'mod'    => 'pm',
+            'ctrl'   => 'pm',
             'icon'   => 'envelope',
         ),
-        'list' => array(
+        'lists' => array(
             'index' => array(
                 'title' => 'Message list',
-                'mod'   => 'pm',
+                'ctrl'  => 'pm',
                 'act'   => 'index',
             ),
             'bulk' => array(
                 'title' => 'Bulk send',
-                'mod'   => 'pm',
+                'ctrl'  => 'pm',
                 'act'   => 'bulk',
             ),
         ),
@@ -66,19 +66,19 @@ return array(
     ),
     'app' => array(
         'main' => array(
-            'title'  => 'Application',
-            'mod'    => 'app',
+            'title'  => 'App',
+            'ctrl'   => 'app',
             'icon'   => 'mobile-alt',
         ),
-        'list' => array(
+        'lists' => array(
             'index' => array(
-                'title' => 'Application list',
-                'mod'   => 'app',
+                'title' => 'App list',
+                'ctrl'  => 'app',
                 'act'   => 'index',
             ),
             'form' => array(
-                'title' => 'Add application',
-                'mod'   => 'app',
+                'title' => 'Add App',
+                'ctrl'  => 'app',
                 'act'   => 'form',
             ),
         ),
@@ -93,13 +93,13 @@ return array(
     'verify' => array(
         'main' => array(
             'title'  => 'Validation token',
-            'mod'    => 'verify',
+            'ctrl'   => 'verify',
             'icon'   => 'file-alt',
         ),
-        'list' => array(
+        'lists' => array(
             'index' => array(
                 'title' => 'Token list',
-                'mod'   => 'verify',
+                'ctrl'  => 'verify',
                 'act'   => 'index',
             ),
         ),
@@ -110,23 +110,23 @@ return array(
     'admin' => array(
         'main' => array(
             'title'  => 'Administrator',
-            'mod'    => 'admin',
+            'ctrl'   => 'admin',
             'icon'   => 'user-lock',
         ),
-        'list' => array(
+        'lists' => array(
             'index' => array(
                 'title' => 'Administrator list',
-                'mod'   => 'admin',
+                'ctrl'  => 'admin',
                 'act'   => 'index',
             ),
             'form' => array(
                 'title' => 'Add',
-                'mod'   => 'admin',
+                'ctrl'  => 'admin',
                 'act'   => 'form',
             ),
             'auth' => array(
                 'title' => 'Authorization',
-                'mod'   => 'auth',
+                'ctrl'  => 'auth',
                 'act'   => 'form',
             ),
         ),
@@ -140,13 +140,13 @@ return array(
     'plugin' => array(
         'main' => array(
             'title' => 'Plugin',
-            'mod'   => 'plugin',
+            'ctrl'  => 'plugin',
             'icon'  => 'puzzle-piece',
         ),
-        'list' => array(
+        'lists' => array(
             'index' => array(
                 'title' => 'Plugin management',
-                'mod'   => 'plugin',
+                'ctrl'  => 'plugin',
                 'act'   => 'index',
             ),
         ),

@@ -47,7 +47,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 </div>
                             </div>
 
-                            <?php foreach ($value_m['list'] as $key_s=>$value_s) { ?>
+                            <?php foreach ($value_m['lists'] as $key_s=>$value_s) { ?>
                                 <div class="form-group ml-3">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input shortcut_option" <?php if (array_key_exists($key_m . '_' . $key_s, $adminLogged['admin_shortcut'])) { ?>checked<?php } ?> id="shortcut_option_<?php echo $key_m; ?>_<?php echo $key_s; ?>" value="<?php echo $key_m; ?>_<?php echo $key_s; ?>" data-ctrl="<?php echo $key_m; ?>" data-act="<?php echo $key_s; ?>" data-title="<?php echo $lang->get($value_s['title'], 'console.common'); ?>">
@@ -73,7 +73,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

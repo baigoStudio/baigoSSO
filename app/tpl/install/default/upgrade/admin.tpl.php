@@ -105,7 +105,7 @@ include($cfg['pathInclude'] . 'upgrade_head' . GK_EXT_TPL);
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

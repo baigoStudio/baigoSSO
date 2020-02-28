@@ -38,8 +38,9 @@ class Php {
 
         $this->obj['lang']      = Lang::instance();
 
-        $this->route            = $this->obj_request->route();
-        $this->param            = $this->obj_request->param();
+        $this->route            = $this->obj_request->route;
+        $this->routeOrig        = $this->obj_request->routeOrig;
+        $this->param            = $this->obj_request->param;
 
         $this->config           = Config::get('tpl');
 
@@ -150,7 +151,10 @@ class Php {
             }
         }
 
-        return $_str_tpl . $this->suffix;
+        $_str_tplPath = $_str_tpl . $this->suffix;
+        $_str_tplPath = str_replace(array('/', '\\'), DS, $_str_tplPath);
+
+        return str_replace('-', '_', $_str_tplPath);
     }
 }
 

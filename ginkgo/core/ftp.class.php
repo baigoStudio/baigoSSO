@@ -230,6 +230,8 @@ class Ftp {
             $path_remote = $this->config['path'] . $path_remote;
         }
 
+        //print_r($path_remote);
+
         return @ftp_delete($this->obj_conn, $path_remote);
     }
 

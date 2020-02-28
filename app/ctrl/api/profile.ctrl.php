@@ -9,7 +9,6 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Config;
 use ginkgo\Json;
 use ginkgo\Smtp;
 use ginkgo\Sign;
@@ -51,7 +50,7 @@ class Profile extends Ctrl {
         $_arr_userRow  = $this->mdl_profile->read($_arr_inputInfo['user_str'], $_arr_inputInfo['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputInfo['user_pass'], $_arr_userRow['user_rand'], true);
@@ -102,7 +101,7 @@ class Profile extends Ctrl {
         $_arr_userRow  = $this->mdl_profile->read($_arr_inputPass['user_str'], $_arr_inputPass['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputPass['user_pass'], $_arr_userRow['user_rand'], true);
@@ -145,7 +144,7 @@ class Profile extends Ctrl {
         $_arr_userRow  = $this->mdl_profile->read($_arr_inputSecqa['user_str'], $_arr_inputSecqa['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputSecqa['user_pass'], $_arr_userRow['user_rand'], true);
@@ -187,7 +186,7 @@ class Profile extends Ctrl {
         $_arr_userRow  = $this->mdl_profile->read($_arr_inputMailbox['user_str'], $_arr_inputMailbox['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputMailbox['user_pass'], $_arr_userRow['user_rand'], true);
@@ -202,7 +201,7 @@ class Profile extends Ctrl {
             $_arr_returnRow = $_mdl_verify->submit($_arr_userRow['user_id'], $_arr_inputMailbox['user_mail_new'], 'mailbox');
 
             if ($_arr_returnRow['rcode'] != 'y120101' && $_arr_returnRow['rcode'] != 'y120103') {
-                return $this->fetchJson('The mailbox already exists', 'x010405');
+                return $this->fetchJson('Mailbox already exists', 'x010405');
             }
 
             $_str_verifyUrl = $this->generalData['url_personal'] . 'verify/mailbox/id/' . $_arr_returnRow['verify_id'] . '/token/' . $_arr_returnRow['verify_token'] . '/';
@@ -275,7 +274,7 @@ class Profile extends Ctrl {
         $_arr_userRow  = $this->mdl_profile->read($_arr_inputToken['user_str'], $_arr_inputToken['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         if ($_arr_userRow['user_status'] == 'disabled') {

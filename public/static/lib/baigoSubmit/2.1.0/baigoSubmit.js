@@ -49,7 +49,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 },
                 btn_text: {
                     close: 'Close',
-                    ok: 'Ok'
+                    ok: 'OK'
                 },
                 tpl: '<div class="modal fade bg-submit-modal">' +
                     '<div class="modal-dialog modal-dialog-centered">' +
@@ -64,7 +64,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                             '</div>' +
                             '<div class="modal-footer">' +
                                 '<button type="button" class="btn btn-outline-secondary btn-sm bg-close" data-dismiss="modal">Close</button>' +
-                                '<a href="#" class="btn btn-primary btn-sm bg-ok">Ok</a>' +
+                                '<a href="#" class="btn btn-primary btn-sm bg-ok">OK</a>' +
                             '</div>' +
                         '</div>' +
                     '</div>' +
@@ -235,8 +235,10 @@ License: http://www.opensource.org/licenses/mit-license.php
                         }, opts.modal.delay);
                     },
                     success: function(result){ //读取返回结果
+                        var result_attach_value;
+
                         if (typeof opts.jump.attach_key != 'undefined' && typeof result[opts.jump.attach_key] != 'undefined') {
-                            var result_attach_value = result[opts.jump.attach_key];
+                            result_attach_value = result[opts.jump.attach_key];
                         }
 
                         //console.log(result);

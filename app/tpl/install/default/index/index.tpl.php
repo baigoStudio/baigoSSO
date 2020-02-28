@@ -4,6 +4,7 @@
     'btn_link'      => true,
     'sub_title'     => $lang->get('PHP Extensions'),
     'active'        => 'index',
+    'no_loading'    => 'true',
     'pathInclude'   => $path_tpl . 'include' . DS,
 );
 

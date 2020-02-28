@@ -23,11 +23,12 @@ License: http://www.opensource.org/licenses/mit-license.php
             '=': 'eq',
             'same': 'eq',
             '!=': 'neq',
-            '<>': 'neq',
+            '<>': 'neq'
         };
 
         var opts_default = {
             timeout: 30000,
+            delimiter: ' - ',
             type_msg: {
                 require: '{:attr} require',
                 confirm: '{:attr} out of accord with {:confirm}',
@@ -536,6 +537,14 @@ License: http://www.opensource.org/licenses/mit-license.php
                     if (typeof opts.attr_names[arr_rule.rule] != 'undefined') {
                         _str_confirm   = opts.attr_names[arr_rule.rule];
                         _str_different = opts.attr_names[arr_rule.rule];
+                    }
+
+                    switch (arr_rule.type) {
+                        case 'length':
+                        case 'between':
+                        case 'not_between':
+                            arr_rule.rule = arr_rule.rule.replace(',', opts.delimiter);
+                        break;
                     }
 
                     _str_msg = _str_msg.replace('{:attr}', _str_field);

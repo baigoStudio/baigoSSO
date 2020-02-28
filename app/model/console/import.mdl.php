@@ -21,10 +21,12 @@ class Import extends User {
     public $csvRows = array();
     public $inputSubmit;
     public $csvPath;
+    public $csvPrefix = GK_PATH_DATA;
+    public $csvName = 'user_import.csv';
     protected $table = 'user';
 
     function m_init() { //构造函数
-        $this->csvPath    = GK_PATH_DATA . 'user_import.csv';
+        $this->csvPath = $this->csvPrefix . $this->csvName;
     }
 
 
@@ -91,6 +93,8 @@ class Import extends User {
         unset($this->csvRows[0]);
 
         foreach ($this->csvRows as $_key_row=>$_value_row) {
+            $_arr_userData = array();
+
             foreach ($this->inputSubmit['user_convert'] as $_key_cel=>$_value_cel) {
                 switch ($_value_cel) {
                     case 'ignore':

@@ -12,15 +12,16 @@ defined('IN_GINKGO') or exit('Access denied');
 class Request {
 
     protected static $instance;
-    private static $param = array();
 
-    private static $route = array(
+    public $param = array();
+
+    public $route = array(
         'mod'   => 'index',
         'ctrl'  => 'index',
         'act'   => 'index',
     );
 
-    private static $routeOrig = array(
+    public $routeOrig = array(
         'mod'   => 'index',
         'ctrl'  => 'index',
         'act'   => 'index',
@@ -112,28 +113,13 @@ class Request {
                 $_arr_route['act']  = $name['act'];
             }
         } else if (is_scalar($name)) {
-            if (array_key_exists($name, self::$route) && Func::isEmpty($value)) {
+            if (array_key_exists($name, $this->route) && Func::isEmpty($value)) {
                 $_arr_route[$name] = $value;
             }
         }
 
-        self::$route = array_replace_recursive(self::$route, $_arr_route);
+        $this->route = array_replace_recursive($this->route, $_arr_route);
     }
-
-    function setParam($name, $value = '') {
-        $_arr_param = array();
-
-        if (is_array($name)) {
-            foreach ($name as $_key=>$_value) {
-                $_arr_param[$_key]  = $_value;
-            }
-        } else if (is_scalar($name)) {
-            $_arr_param[$name] = $value;
-        }
-
-        self::$param = array_replace_recursive(self::$param, $_arr_param);
-    }
-
 
     function setRouteOrig($name, $value = '') {
         $_arr_routeOrig = array();
@@ -151,22 +137,36 @@ class Request {
                 $_arr_routeOrig['act']  = $name['act'];
             }
         } else if (is_scalar($name)) {
-            if (in_array($name, self::$routeParam) && Func::isEmpty($value)) {
+            if (in_array($name, $this->routeOrig) && Func::isEmpty($value)) {
                 $_arr_routeOrig[$name] = $value;
             }
         }
 
-        self::$routeOrig = array_replace_recursive(self::$routeOrig, $_arr_routeOrig);
+        $this->routeOrig = array_replace_recursive($this->routeOrig, $_arr_routeOrig);
+    }
+
+    function setParam($name, $value = '') {
+        $_arr_param = array();
+
+        if (is_array($name)) {
+            foreach ($name as $_key=>$_value) {
+                $_arr_param[$_key]  = $_value;
+            }
+        } else if (is_scalar($name)) {
+            $_arr_param[$name] = $value;
+        }
+
+        $this->param = array_replace_recursive($this->param, $_arr_param);
     }
 
     function route($name = false) {
         $_mix_return = '';
 
         if ($name === false) {
-            $_mix_return = self::$route;
+            $_mix_return = $this->route;
         } else {
-            if (isset(self::$route[$name])) {
-                $_mix_return = self::$route[$name];
+            if (isset($this->route[$name])) {
+                $_mix_return = $this->route[$name];
             }
         }
 
@@ -177,14 +177,34 @@ class Request {
         $_mix_return = '';
 
         if ($name === false) {
-            $_mix_return = self::$routeOrig;
+            $_mix_return = $this->routeOrig;
         } else {
-            if (isset(self::$routeOrig[$name])) {
-                $_mix_return = self::$routeOrig[$name];
+            if (isset($this->routeOrig[$name])) {
+                $_mix_return = $this->routeOrig[$name];
             }
         }
 
         return $_mix_return;
+    }
+
+    function param($name = true, $type = 'str', $default = '', $htmlmode = false) {
+        $_return    = '';
+
+        if ($name === false) {
+            $_return = $this->param;
+        } else if ($name === true) {
+            $_return = Func::arrayEach($this->param);
+        } else if (is_array($name)) {
+            $_return = $this->fillParam($this->param, $name);
+        } else if (is_scalar($name)) {
+            if (isset($this->param[$name])) {
+                $_return = $this->param[$name];
+            }
+
+            $_return = $this->input($_return, $type, $default, $htmlmode);
+        }
+
+        return $_return;
     }
 
     function accept() {
@@ -299,28 +319,8 @@ class Request {
         return $_status;
     }
 
-    function param($name = true, $type = 'str', $default = '') {
-        $_return    = '';
 
-        if ($name === false) {
-            $_return = self::$param;
-        } else if ($name === true) {
-            $_return = Func::arrayEach(self::$param);
-        } else if (is_array($name)) {
-            $_return = $this->fillParam(self::$param, $name);
-        } else if (is_scalar($name)) {
-            if (isset(self::$param[$name])) {
-                $_return = self::$param[$name];
-            }
-
-            $_return = $this->input($_return, $type, $default);
-        }
-
-        return $_return;
-    }
-
-
-    function get($name = true, $type = 'str', $default = '') {
+    function get($name = true, $type = 'str', $default = '', $htmlmode = false) {
         $_return    = '';
 
         if ($name === false) {
@@ -334,14 +334,14 @@ class Request {
                 $_return = $_GET[$name];
             }
 
-            $_return = $this->input($_return, $type, $default);
+            $_return = $this->input($_return, $type, $default, $htmlmode);
         }
 
         return $_return;
     }
 
 
-    function post($name = true, $type = 'str', $default = '') {
+    function post($name = true, $type = 'str', $default = '', $htmlmode = false) {
         $_return    = '';
 
         if ($name === false) {
@@ -355,7 +355,7 @@ class Request {
                 $_return = $_POST[$name];
             }
 
-            $_return = $this->input($_return, $type, $default);
+            $_return = $this->input($_return, $type, $default, $htmlmode);
         }
 
         //print_r($_return);
@@ -364,7 +364,7 @@ class Request {
     }
 
 
-    function request($name = true, $type = 'str', $default = '') {
+    function request($name = true, $type = 'str', $default = '', $htmlmode = false) {
         $_return    = '';
 
         if ($name === false) {
@@ -378,7 +378,7 @@ class Request {
                 $_return = $_REQUEST[$name];
             }
 
-            $_return = $this->input($_return, $type, $default);
+            $_return = $this->input($_return, $type, $default, $htmlmode);
         }
 
         return $_return;
@@ -667,7 +667,11 @@ class Request {
                     $_value[1] = '';
                 }
 
-                $_arr_return[$_key] = $this->input($data[$_key], $_value[0], $_value[1]);
+                if (!isset($_value[2])) {
+                    $_value[2] = false;
+                }
+
+                $_arr_return[$_key] = $this->input($data[$_key], $_value[0], $_value[1], $_value[2]);
             }
         }
 
@@ -703,9 +707,9 @@ class Request {
                 break;
 
                 default:
-                    //print_r(self::$param);
-                    if (isset(self::$param[$param])) {
-                        $_num_this = $this->input(self::$param[$param], 'int', 1);
+                    //print_r($this->param);
+                    if (isset($this->param[$param])) {
+                        $_num_this = $this->input($this->param[$param], 'int', 1);
                     } else {
                         $_num_this = $this->get($param, false, 'int', 1);
                     }
@@ -786,7 +790,7 @@ class Request {
     }
 
 
-    function input($input = '', $type = 'str', $default = '') {
+    function input($input = '', $type = 'str', $default = '', $htmlmode = false) {
         //print_r($input);
         //print_r(PHP_EOL);
 
@@ -823,7 +827,7 @@ class Request {
             break;
 
             default: //默认
-                $_return = Func::safe($_mix_input);
+                $_return = Func::safe($_mix_input, $htmlmode);
             break;
 
         }

@@ -11,7 +11,6 @@ use ginkgo\Loader;
 use ginkgo\File;
 use ginkgo\Crypt;
 use ginkgo\Func;
-use ginkgo\Config;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -237,7 +236,7 @@ class Upgrade extends Ctrl {
             return $this->fetchJson('User not found, please use add administrator', $_arr_userRow['rcode']);
         }
 
-        $_arr_adminRow = $_mdl_admin->read($_arr_userRow['user_id']);
+        $_arr_adminRow = $_mdl_admin->check($_arr_userRow['user_id']);
         if ($_arr_adminRow['rcode'] == 'y020102') {
             return $this->fetchJson('Administrator already exists', 'x020404');
         }

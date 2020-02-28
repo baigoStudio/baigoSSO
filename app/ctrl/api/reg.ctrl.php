@@ -25,9 +25,9 @@ class Reg extends Ctrl {
 
         $this->mdl_reg       = Loader::model('Reg');
 
-        $this->configReg     = $this->config['var_extra']['reg'];
-        $this->configBase    = $this->config['var_extra']['base'];
-        $this->configMailtpl = $this->config['var_extra']['mailtpl'];
+        $this->configReg     = Config::get('reg', 'var_extra');
+        $this->configBase    = Config::get('base', 'var_extra');
+        $this->configMailtpl = Config::get('mailtpl', 'var_extra');
     }
 
 
@@ -66,10 +66,10 @@ class Reg extends Ctrl {
             return $this->fetchJson('User already exists', 'x010404');
         }
 
-        if ($this->configReg['reg_onemail'] != 'on' || $this->configReg['login_mail'] == 'on' && !Func::isEmpty($_arr_inputReg['user_mail'])) {
+        if (!Func::isEmpty($_arr_inputReg['user_mail'])) {
             $_arr_userRow = $this->mdl_reg->check($_arr_inputReg['user_mail'], 'user_mail'); //检查邮箱
             if ($_arr_userRow['rcode'] == 'y010102') {
-                return $this->fetchJson('Email already exists', 'x010404');
+                return $this->fetchJson('Mailbox already exists', 'x010404');
             }
         }
 
@@ -78,7 +78,6 @@ class Reg extends Ctrl {
         } else {
             $_str_status = 'enable';
         }
-
 
         $_str_rand = Func::rand();
 
@@ -106,7 +105,7 @@ class Reg extends Ctrl {
                 return $this->fetchJson('Send confirmation email failed', 'x010407');
             }
 
-            $_str_verifyUrl = $this->generalData['url_personal'] . 'verify/confirm/id/' . $_arr_verifySubmitResult['verify_id'] . '/token/' . $_arr_verifySubmitResult['verify_token'] . '/';
+            $_str_verifyUrl = $this->url['url_personal'] . 'verify/confirm/id/' . $_arr_verifySubmitResult['verify_id'] . '/token/' . $_arr_verifySubmitResult['verify_token'] . '/';
 
             $_arr_src   = array('{:verify_url}', '{:site_name}', '{:user_name}', '{:user_mail}');
 
@@ -207,14 +206,14 @@ class Reg extends Ctrl {
             return $this->fetchJson($_arr_inputChkmail['msg'], $_arr_inputChkmail['rcode']);
         }
 
+        $_str_rcode = 'y010401';
+        $_str_msg   = $this->obj_lang->get('Mailbox can be used');
+
         $_arr_userRow = $this->mdl_reg->check($_arr_inputChkmail['user_mail'], 'user_mail');
 
         if ($_arr_userRow['rcode'] == 'y010102') {
             $_str_rcode = 'x010404';
-            $_str_msg   = $this->obj_lang->get('Email already exists');
-        } else {
-            $_str_rcode = 'y010401';
-            $_str_msg   = $this->obj_lang->get('Email can be used');
+            $_str_msg   = $this->obj_lang->get('Mailbox already exists');
         }
 
         $_arr_return = array(

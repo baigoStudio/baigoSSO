@@ -11,7 +11,7 @@ defined('IN_GINKGO') or exit('Access denied');
 return array(
     'often' => array(
         'title' => 'Common charset encoding',
-        'list' => array(
+        'lists' => array(
             'EUC-CN' => array(
                 'title' => 'Simplified Chinese',
                 'note'  => 'China Mainland',
@@ -52,9 +52,9 @@ return array(
         ),
     ),
 
-    'list' => array(
+    'lists' => array(
         'title' => 'All charset encoding',
-        'list' => array(
+        'lists' => array(
             'CP936' => array(
                 'title' => 'Simplified Chinese',
                 'note'  => 'China Mainland',

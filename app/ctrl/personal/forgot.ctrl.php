@@ -11,7 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Crypt;
 use ginkgo\Func;
 use ginkgo\Smtp;
-use ginkgo\Config;
+use ginkgo\Json;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -53,7 +53,7 @@ class Forgot extends Ctrl {
         $_arr_userRow = $this->mdl_user->read($_str_userName, 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
             $this->generalData['rcode'] = $_arr_userRow['rcode'];
-            $this->generalData['msg']   = 'User not found';
+            $this->generalData['msg']   = $_arr_userRow['msg'];
 
             return $this->fetch('forgot' . DS . 'index', $this->generalData);
         }
@@ -98,7 +98,7 @@ class Forgot extends Ctrl {
 
         $_arr_userRow = $this->mdl_user->read($_arr_inputByMail['user_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         if ($_arr_userRow['user_status'] == 'disabled') {
@@ -155,12 +155,14 @@ class Forgot extends Ctrl {
 
         $_arr_userRow = $this->mdl_user->read($_arr_inputBySecqa['user_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         if ($_arr_userRow['user_status'] == 'disabled') {
             return $this->fetchJson('User is disabled', 'x010402');
         }
+
+        $_arr_inputBySecqa['user_sec_answ'] = Json::encode($_arr_inputBySecqa['user_sec_answ']);
 
         $_str_secAnsw = Crypt::crypt($_arr_inputBySecqa['user_sec_answ'], $_arr_userRow['user_name']);
 

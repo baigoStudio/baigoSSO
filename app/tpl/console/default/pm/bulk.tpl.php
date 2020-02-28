@@ -154,7 +154,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         },
         format_msg: {
             'int': '<?php echo $lang->get('{:attr} must be integer'); ?>',
-            date_time: '<?php echo $lang->get('{:attr} not a valid datetime'); ?>',
+            date_time: '<?php echo $lang->get('{:attr} not a valid datetime'); ?>'
         },
         box: {
             msg: '<?php echo $lang->get('Input error'); ?>'
@@ -165,7 +165,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

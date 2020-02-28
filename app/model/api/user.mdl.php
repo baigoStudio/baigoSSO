@@ -8,7 +8,6 @@ namespace app\model\api;
 use app\model\User as User_Base;
 use ginkgo\Json;
 use ginkgo\Func;
-use ginkgo\Crypt;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -63,7 +62,7 @@ class User extends User_Base {
             $_arr_userData['user_extend']  = $this->inputEdit['user_extend'];
         }
 
-        $_mix_vld = $this->validate($_arr_inputEdit, '', 'edit_db');
+        $_mix_vld = $this->validate($_arr_userData, '', 'edit_db');
 
         if ($_mix_vld !== true) {
             return array(
@@ -72,6 +71,9 @@ class User extends User_Base {
                 'msg'       => end($_mix_vld),
             );
         }
+
+        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
 
         $_num_count     = $this->where('user_id', '=', $this->inputEdit['user_id'])->update($_arr_userData); //更新数据
 
@@ -85,14 +87,8 @@ class User extends User_Base {
 
         unset($_arr_userData['user_pass']);
 
-        if (isset($_arr_userData['user_contact'])) {
-            $_arr_userData['user_contact']   = Json::decode($_arr_userData['user_contact']);
-        }
-        if (isset($_arr_userData['user_extend'])) {
-            $_arr_userData['user_extend']    = Json::decode($_arr_userData['user_extend']);
-        }
+        $_arr_userReturn = $this->rowProcess($_arr_userData);
 
-        $_arr_userReturn            = $_arr_userData;
         $_arr_userReturn['user_id'] = $this->inputEdit['user_id'];
         $_arr_userReturn['rcode']   = $_str_rcode;
         $_arr_userReturn['msg']     = $_str_msg;
@@ -144,9 +140,6 @@ class User extends User_Base {
         $_arr_inputUserCommon  = $this->inputUserCommon($arr_data);
 
         $_arr_inputEdit  = array_replace_recursive($_arr_inputEdit, $_arr_inputUserCommon);
-
-        $_arr_inputEdit['user_contact']    = Json::encode($_arr_inputEdit['user_contact']);
-        $_arr_inputEdit['user_extend']     = Json::encode($_arr_inputEdit['user_extend']);
 
         $_mix_vld = $this->validate($_arr_inputEdit, '', 'edit');
 

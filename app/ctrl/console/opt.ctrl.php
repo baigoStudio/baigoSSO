@@ -19,9 +19,6 @@ class Opt extends Ctrl {
     protected function c_init($param = array()) {
         parent::c_init();
 
-        $this->routeOrig        = $this->obj_request->routeOrig();
-        $this->generalData['route_orig'] = $this->routeOrig;
-
         $this->mdl_opt    = Loader::model('Opt');
     }
 
@@ -89,7 +86,7 @@ class Opt extends Ctrl {
 
 
     function submit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -145,7 +142,7 @@ class Opt extends Ctrl {
 
 
     function mailtplSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -200,7 +197,7 @@ class Opt extends Ctrl {
 
 
     function dbconfigSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -250,7 +247,7 @@ class Opt extends Ctrl {
 
 
     function smtpSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -287,6 +284,10 @@ class Opt extends Ctrl {
             return $this->error('You do not have permission', 'x030301');
         }
 
+        if (isset($this->config['ui_ctrl']['update_check']) && $this->config['ui_ctrl']['update_check'] != 'on') {
+            return $this->error('Check for updated module being disabled', 'x030301');
+        }
+
         $_arr_base      = Config::get('base', 'var_extra');
         $_arr_installed = Config::get('installed'); //当前安装的
         $_arr_version   = Config::get('version'); //已经下载的
@@ -314,7 +315,7 @@ class Opt extends Ctrl {
 
 
     function chkverSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);

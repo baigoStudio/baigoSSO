@@ -28,27 +28,14 @@ class Json {
      * @param string $encode (default: '')
      * @return void
      */
-    static function encode($array = '', $encode = false) {
+    static function encode($array = array(), $encode = 'json_safe', $option = false) {
         $_str_json   = '[]';
-        $_str_encode = $encode;
-
-        if ($encode === false) {
-            $_str_encode = 'json_safe';
-        }
 
         if (is_array($array) && !Func::isEmpty($array)) {
-            $array     = Func::arrayEach($array, $_str_encode);
-            $_str_json = json_encode($array); //json编码
+            $array     = Func::arrayEach($array, $encode);
+            $_str_json = json_encode($array, $option); //json编码
 
             self::backtrace();
-        }
-
-        if (!Func::isEmpty($_str_json)) {
-            if ($encode === false) {
-                $_str_json = urldecode($_str_json);
-            }
-
-            $_str_json = Html::decode($_str_json, 'json');
         }
 
         return $_str_json;
@@ -63,14 +50,19 @@ class Json {
      * @param string $encode (default: '')
      * @return void
      */
-    static function decode($string = '', $assoc = true) {
+    static function decode($string = '', $decode = false, $option = true) {
         $_arr_json = array();
 
         if (!Func::isEmpty($string)) {
-            $string    = Html::decode($string, 'json');
-            $_arr_json = json_decode($string, $assoc); //json解码
+            //$string    = Html::decode($string, 'json');
+            $_arr_json = json_decode($string, $option); //json解码
+            $_arr_json = Func::arrayEach($_arr_json, $decode); //json解码
 
             self::backtrace();
+        }
+
+        if (!is_array($_arr_json)) {
+            $_arr_json = array();
         }
 
         return $_arr_json;

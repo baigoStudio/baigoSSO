@@ -43,7 +43,7 @@ return array(
     'Create view failed'                           => '创建失败',
 
     'Close'                                             => '关闭',
-    'Ok'                                                => '确定',
+    'OK'                                                => '确定',
     'Complete'                                          => '完成',
     'Complete upgrade'                                  => '完成升级',
     'Confirm password'                                  => '确认密码',
@@ -81,6 +81,7 @@ return array(
     'Max size of {:attr} must be {:rule}'               => '{:attr} 最长 {:rule}',
     '{:attr} out of accord with {:confirm}'             => '{:attr} 和 {:confirm} 不一致',
 
+    'Warning! Please backup the data before upgrading.' => '警告！请在升级之前备份数据。',
     'This step will add a new user as a super administrator with all permissions.' => '此步骤将注册新用户作为超级管理员，拥有所有权限。',
     'This step will authorizes an existing user as a super administrator with all permissions.' => '此步骤将已存在的用户授权为超级管理员，拥有所有权限。',
 

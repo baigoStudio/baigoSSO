@@ -9,7 +9,6 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Config;
 use ginkgo\Json;
 use ginkgo\Sign;
 use ginkgo\Func;
@@ -135,7 +134,7 @@ class Pm extends Ctrl {
         $_arr_pmRow = $this->mdl_pm->read($_arr_inputRead['pm_id']);
 
         if ($_arr_pmRow['rcode'] != 'y110102') {
-            return $this->fetchJson('Message not found', $_arr_pmRow['rcode']);
+            return $this->fetchJson($_arr_pmRow['msg'], $_arr_pmRow['rcode']);
         }
 
         if ($_arr_pmRow['pm_from'] != $_arr_userRow['user_id'] && $_arr_pmRow['pm_to'] != $_arr_userRow['user_id']) {

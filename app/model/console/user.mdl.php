@@ -8,7 +8,6 @@ namespace app\model\console;
 
 use app\model\User as User_Base;
 use ginkgo\Func;
-use ginkgo\Json;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -132,11 +131,6 @@ class User extends User_Base {
 
         $_arr_inputSubmit = $this->obj_request->post($_arr_inputParam);
 
-        //print_r($_arr_inputSubmit);
-
-        $_arr_inputSubmit['user_contact']    = Json::encode($_arr_inputSubmit['user_contact']);
-        $_arr_inputSubmit['user_extend']     = Json::encode($_arr_inputSubmit['user_extend']);
-
         $_arr_remove = array();
 
         if ($_arr_inputSubmit['user_id'] > 0) {
@@ -150,6 +144,24 @@ class User extends User_Base {
                 'rcode' => 'x010201',
                 'msg'   => end($_mix_vld),
             );
+        }
+
+        if ($_arr_inputSubmit['user_id'] > 0) {
+            $_arr_userRow = $this->check($_arr_inputSubmit['user_id']);
+
+            if ($_arr_userRow['rcode'] != 'y010102') {
+                return $_arr_userRow;
+            }
+        } else {
+            //检验用户名是否重复
+            $_arr_userRow = $this->check($_arr_inputSubmit['user_name'], 'user_name');
+
+            if ($_arr_userRow['rcode'] == 'y010102') {
+                return array(
+                    'rcode' => 'x010404',
+                    'msg'   => 'User already exists',
+                );
+            }
         }
 
         $_arr_inputSubmit['rcode'] = 'y010201';

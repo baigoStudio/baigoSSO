@@ -16,7 +16,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         <div class="card">
             <div class="card-body">
                 <?php if (!empty($csvRows)) { ?>
-                    <form name="csv_convert" id="csv_convert" class="mb-3" action="<?php echo $route_console; ?>import/submit/">
+                    <form name="form_convert" id="form_convert" class="mb-3" action="<?php echo $route_console; ?>import/submit/">
                         <input type="hidden" name="__token__" value="<?php echo $token; ?>">
                         <input type="hidden" name="charset" value="<?php echo $charset; ?>">
 
@@ -65,7 +65,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <?php echo $lang->get('The first line of the CSV file must be a field name. It is recommended to use three columns. The password column must be encrypted with MD5. For the encryption tool, please see the next item. After uploading the CSV file, please refresh this page to preview, click here <a href="javascript:location.reload();" class="alert-link">Refresh</a>. After the import is successful, it is highly recommended to delete the CSV file.'); ?>
                 </div>
 
-                <form name="csv_import" id="csv_import">
+                <form name="form_upload" id="form_upload">
                     <div class="form-group">
                         <button type="button" id="upload_select" class="btn btn-success text-white fileinput-button">
                             <span class="fas fa-cloud-upload-alt"></span>
@@ -79,7 +79,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <form name="csv_del" id="csv_del" action="<?php echo $route_console; ?>import/delete/">
+                    <form name="form_delete" id="form_delete" action="<?php echo $route_console; ?>import/delete/">
                         <input type="hidden" name="__token__" value="<?php echo $token; ?>">
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit">
@@ -109,17 +109,26 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <form id="form_preview" name="form_preview" action="<?php echo $route_console; ?>import/index/">
                         <div class="form-group">
                             <label><?php echo $lang->get('CSV file charset encoding'); ?></label>
-                            <select name="charset" id="charset" class="form-control">
-                                <?php foreach ($charsetRows as $key=>$value) { ?>
-                                    <optgroup label="<?php echo $lang->get($value['title'], 'console.charset'); ?>">
-                                        <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
-                                            <option <?php if ($charset == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
-                                                <?php echo $lang->get($key_sub), ' - ', $lang->get($value_sub['title'], 'console.charset'); ?>
-                                            </option>
-                                        <?php } ?>
-                                    </optgroup>
-                                <?php } ?>
-                            </select>
+                            <div class="input-group">
+                                <input type="text" name="charset" id="charset" value="<?php echo $charset; ?>" class="form-control" placeholder="UTF-8">
+                                <select id="charset_opt" class="custom-select">
+                                    <option value=""><?php echo $lang->get('Common charset'); ?></option>
+                                    <?php foreach ($charsetRows as $key=>$value) { ?>
+                                        <optgroup label="<?php echo $lang->get($value['title'], 'console.charset'); ?>">
+                                            <?php foreach ($value['lists'] as $key_sub=>$value_sub) { ?>
+                                                <option <?php if ($charset == $key_sub) { ?>selected<?php } ?> value="<?php echo $key_sub; ?>">
+                                                    <?php echo $lang->get($key_sub), ' - ', $lang->get($value_sub['title'], 'console.charset'); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </optgroup>
+                                    <?php } ?>
+                                </select>
+                                <span class="input-group-append">
+                                    <a href="#charset_list_modal" class="btn btn-warning" data-toggle="modal">
+                                        <span class="fas fa-question-circle"></span>
+                                    </a>
+                                </span>
+                            </div>
                         </div>
                         <div class="form-group">
                             <div class="btn-group">
@@ -183,27 +192,15 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         btn_text: {
             cancel: '<?php echo $lang->get('Cancel'); ?>',
             confirm: '<?php echo $lang->get('Confirm'); ?>',
-            ok: '<?php echo $lang->get('Ok'); ?>'
+            ok: '<?php echo $lang->get('OK'); ?>'
         }
     };
 
-    var opts_submit_convert = {
+    var opts_submit = {
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
-            }
-        },
-        msg_text: {
-            submitting: '<?php echo $lang->get('Submitting'); ?>'
-        }
-    };
-
-    var opts_submit_del = {
-        modal: {
-            btn_text: {
-                close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {
@@ -238,13 +235,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     }
 
     $(document).ready(function(){
-        var obj_dialog = $.baigoDialog(opts_dialog);
-
         $('#charset_list_modal').on('shown.bs.modal',function(event){
             $('#charset_list_modal .modal-content').load('<?php echo $route_console; ?>import/charset/');
     	}).on('hidden.bs.modal', function(){
         	$('#charset_list_modal .modal-content').empty();
     	});
+
+        var obj_dialog = $.baigoDialog(opts_dialog);
 
     	$('#preview_all').click(function(){
             $.ajax({
@@ -350,13 +347,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             }, 5000);
         });
 
-        var obj_submit_convert = $('#csv_convert').baigoSubmit(opts_submit_convert);
-        $('#csv_convert').submit(function(){
+        var obj_submit_convert = $('#form_convert').baigoSubmit(opts_submit);
+        $('#form_convert').submit(function(){
             obj_submit_convert.formSubmit();
         });
 
-        var obj_submit_del  = $('#csv_del').baigoSubmit(opts_submit_del);
-        $('#csv_del').submit(function(){
+        var obj_submit_del  = $('#form_delete').baigoSubmit(opts_submit);
+        $('#form_delete').submit(function(){
             obj_dialog.confirm('<?php echo $lang->get('Are you sure to delete?'); ?>', function(result){
                 if (result) {
                     obj_submit_del.formSubmit();
@@ -372,6 +369,11 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         $('#pass_src').bind('change keyup',function(){
             var _src = $(this).val();
             $('#pass_result').val($.md5(_src));
+        });
+
+        $('#charset_opt').change(function(){
+            var _charset_val = $(this).val();
+            $('#charset').val(_charset_val);
         });
     });
     </script>

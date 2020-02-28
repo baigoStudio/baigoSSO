@@ -7,7 +7,6 @@
 namespace app\model;
 
 use ginkgo\Loader;
-use ginkgo\File;
 use ginkgo\Request;
 use ginkgo\Config;
 
@@ -18,7 +17,6 @@ defined('IN_GINKGO') or exit('Access denied');
 class Opt {
 
     function __construct() { //构造函数
-        $this->obj_file     = File::instance();
         $this->obj_request  = Request::instance();
         $this->vld_opt      = Loader::validate('Opt');
 
@@ -38,9 +36,7 @@ class Opt {
             'debug'     => $this->inputDbconfig['debug'],
         );
 
-        $_str_outPut = '<?php return ' . var_export($_arr_opt, true) . ';';
-
-        $_num_size   = $this->obj_file->fileWrite(GK_APP_CONFIG . 'dbconfig' . GK_EXT_INC, $_str_outPut);
+        $_num_size   = Config::write(GK_APP_CONFIG . 'dbconfig' . GK_EXT_INC, $_arr_opt);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030401';
@@ -64,9 +60,7 @@ class Opt {
             'prd_installed_time'    => GK_NOW,
         );
 
-        $_str_outPut = '<?php return ' . var_export($_arr_outPut, true) . ';';
-
-        $_num_size   = $this->obj_file->fileWrite(GK_APP_CONFIG . 'installed' . GK_EXT_INC, $_str_outPut);
+        $_num_size   = Config::write(GK_APP_CONFIG . 'installed' . GK_EXT_INC, $_arr_outPut);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030401';

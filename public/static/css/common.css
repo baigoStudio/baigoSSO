@@ -4,7 +4,7 @@
     bottom: 0;
     left: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, .8);
+    background: rgba(0, 0, 0, .2);
 }
 
 .bg-card-md { max-width: 576px; margin: 0 auto; }
@@ -17,6 +17,7 @@
 
 .bg-pre-nostyle { border: none; background: transparent !important; }
 
+.bg-list-group :last-child { border-bottom: none; }
 .bg-content, .bg-content * { max-width: 100% !important; }
 .bg-tooltip .tooltip-inner { max-width: 500px !important; }
 
@@ -30,3 +31,69 @@
 .bg-textarea-md { height: 300px !important; }
 .bg-textarea-lg { height: 400px !important; }
 .bg-textarea-xl { height: 500px !important; }
+
+.bg-captcha-img {
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.input-group-append > .bg-captcha-img, .input-group-append > .bg-custom-select {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.bg-btn-bottom { border-color: rgba(0, 0, 0, .125); border-width: 1px 0 0 0; border-radius: 0 0 .2rem .2rem; }
+.bg-head-logo, .bg-foot-logo { height: 16px; }
+
+.bg-modal-header-tabs {
+    margin-right: -0.625rem;
+    margin-bottom: -1rem;
+    margin-left: -0.625rem;
+    border-bottom: 0;
+}
+
+.bg-line-height-1 { line-height: 1; }
+
+.bg-bar {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.bg-bar-item + .bg-bar-item {
+  padding-left: 0.5rem;
+}
+
+.bg-bar-item + .bg-bar-item::before {
+  display: inline-block;
+  padding-right: 0.5rem;
+  color: var(--gray);
+  content: "|";
+}
+
+.bg-bar-item + .bg-bar-item:hover::before {
+  text-decoration: underline;
+}
+
+.bg-bar-item + .bg-bar-item:hover::before {
+  text-decoration: none;
+}
+
+.table .bg-child-2 { padding-left: 30px !important; }
+.table .bg-child-3 { padding-left: 60px !important; }
+.table .bg-child-4 { padding-left: 90px !important; }
+.table .bg-child-5 { padding-left: 120px !important; }
+.table .bg-child-6 { padding-left: 150px !important; }
+
+.bg-table .bg-child-2 { padding-left: 30px !important; }
+.bg-table .bg-child-3 { padding-left: 60px !important; }
+.bg-table .bg-child-4 { padding-left: 90px !important; }
+.bg-table .bg-child-5 { padding-left: 120px !important; }
+.bg-table .bg-child-6 { padding-left: 150px !important; }

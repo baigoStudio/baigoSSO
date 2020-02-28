@@ -19,7 +19,6 @@ abstract class Ctrl extends Gk_Ctrl {
 
     protected $isAjaxPost   = false;
     protected $isPost       = false;
-    protected $isSuper      = false;
     protected $generalData  = array();
     protected $url          = array();
     protected $config;
@@ -30,6 +29,14 @@ abstract class Ctrl extends Gk_Ctrl {
 
         $this->config = Config::get();
 
+        if (isset($this->config['ui_ctrl']['update_check']) && $this->config['ui_ctrl']['update_check'] != 'on') {
+            //print_r('dis');
+            Config::delete('chkver', 'console.opt');
+            if (isset($this->config['console']['opt']['chkver'])) {
+                unset($this->config['console']['opt']['chkver']);
+            }
+        }
+
         if ($this->obj_request->isAjax() && $this->obj_request->isPost()) {
             $this->isAjaxPost = true;
         }
@@ -38,10 +45,34 @@ abstract class Ctrl extends Gk_Ctrl {
             $this->isPost = true;
         }
 
+        $_arr_configUi = Config::get('ui_ctrl');
+
+        if (!isset($_arr_configUi['logo_personal']) || Func::isEmpty($_arr_configUi['logo_personal'])) {
+            $_arr_configUi['logo_personal'] = '{:DIR_STATIC}sso/image/logo_white.svg';
+        }
+
+        if (!isset($_arr_configUi['logo_console_login']) || Func::isEmpty($_arr_configUi['logo_console_login'])) {
+            $_arr_configUi['logo_console_login'] = '{:DIR_STATIC}sso/image/logo_green.svg';
+        }
+
+        if (!isset($_arr_configUi['logo_console_head']) || Func::isEmpty($_arr_configUi['logo_console_head'])) {
+            $_arr_configUi['logo_console_head'] = '{:DIR_STATIC}sso/image/logo_white.svg';
+        }
+
+        if (!isset($_arr_configUi['logo_console_foot']) || Func::isEmpty($_arr_configUi['logo_console_foot'])) {
+            $_arr_configUi['logo_console_foot'] = '{:DIR_STATIC}sso/image/logo_white.svg';
+        }
+
+        if (!isset($_arr_configUi['logo_install']) || Func::isEmpty($_arr_configUi['logo_install'])) {
+            $_arr_configUi['logo_install'] = '{:DIR_STATIC}sso/image/logo_green.svg';
+        }
+
         $_arr_data = array(
-            'config'    => $this->config,
-            'route'     => $this->route,
-            'param'     => $this->param,
+            'ui_ctrl'       => $_arr_configUi,
+            'config'        => $this->config,
+            'route'         => $this->route,
+            'route_orig'    => $this->routeOrig,
+            'param'         => $this->param,
         );
 
         $this->generalData = array_replace_recursive($this->generalData, $_arr_data);
@@ -93,9 +124,9 @@ abstract class Ctrl extends Gk_Ctrl {
 
 
     protected function pathProcess() {
-        $_str_dirRoot       = $this->obj_request->root();
-        $_str_urlRoot       = $this->obj_request->baseUrl(true);
-        $_str_routeRoot     = $this->obj_request->baseUrl();
+        $_str_dirRoot       = Func::fixDs($this->obj_request->root(), '/');
+        $_str_urlRoot       = Func::fixDs($this->obj_request->baseUrl(true), '/');
+        $_str_routeRoot     = Func::fixDs($this->obj_request->baseUrl(), '/');
 
         Route::setExclude('page_belong');
 
@@ -103,16 +134,16 @@ abstract class Ctrl extends Gk_Ctrl {
             'dir_root'          => $_str_dirRoot,
             'dir_static'        => $_str_dirRoot . GK_NAME_STATIC . '/',
             'url_root'          => $_str_urlRoot,
-            'url_api'           => $_str_urlRoot . '/api/',
-            'url_personal'      => $_str_urlRoot . '/personal/',
+            'url_api'           => $_str_urlRoot . 'api/',
+            'url_personal'      => $_str_urlRoot . 'personal/',
             'route_root'        => $_str_routeRoot,
-            'route_install'     => $_str_routeRoot . '/install/',
-            'route_console'     => $_str_routeRoot . '/console/',
-            'route_misc'        => $_str_routeRoot . '/misc/',
-            'route_personal'    => $_str_routeRoot . '/personal/',
+            'route_install'     => $_str_routeRoot . 'install/',
+            'route_console'     => $_str_routeRoot . 'console/',
+            'route_misc'        => $_str_routeRoot . 'misc/',
+            'route_personal'    => $_str_routeRoot . 'personal/',
         );
 
-        $this->url = array_replace_recursive($this->url, $_arr_url);;
+        $this->url = array_replace_recursive($this->url, $_arr_url);
 
         $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
     }

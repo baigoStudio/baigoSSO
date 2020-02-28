@@ -9,7 +9,6 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Config;
 use ginkgo\Json;
 use ginkgo\Sign;
 use ginkgo\Func;
@@ -52,7 +51,7 @@ class User extends Ctrl {
         $_arr_userRow = $this->mdl_user->check($_arr_inputEdit['user_str'], $_arr_inputEdit['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         if (!isset($this->appRow['app_allow']['user']['global'])) { //是否有全局权限
@@ -64,10 +63,10 @@ class User extends Ctrl {
             }
         }
 
-        if ($this->configReg['reg_onemail'] != 'on' || $this->configReg['login_mail'] == 'on' && !Func::isEmpty($_arr_inputEdit['user_mail_new'])) {
+        if (!Func::isEmpty($_arr_inputEdit['user_mail_new'])) {
             $_arr_checkResult = $this->mdl_user->check($_arr_inputEdit['user_mail_new'], 'user_mail', $_arr_userRow['user_id']); //检查邮箱
             if ($_arr_checkResult['rcode'] == 'y010102') {
-                return $this->fetchJson('Email already exists', $_arr_checkResult['rcode']);
+                return $this->fetchJson('Mailbox already exists', $_arr_checkResult['rcode']);
             }
         }
 
@@ -118,7 +117,7 @@ class User extends Ctrl {
         $_arr_userRow = $this->mdl_user->readBase($_arr_inputRead['user_str'], $_arr_inputRead['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_arr_userRow['timestamp'] = GK_NOW;

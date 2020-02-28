@@ -22,6 +22,8 @@ defined('IN_GINKGO') or exit('Access denied');
 /*-------------控制中心通用控制器-------------*/
 abstract class Ctrl extends Ctrl_Base {
 
+    protected $isSuper     = false;
+
     protected $adminLogged = array(
         'admin_status' => '',
     );
@@ -228,7 +230,9 @@ abstract class Ctrl extends Ctrl_Base {
         }
 
         if (!Func::isEmpty($_str_jump) && !$this->isAjaxPost) {
-            $this->redirect($_str_jump)->send();
+            $_obj_redirect = $this->redirect($_str_jump);
+            $_obj_redirect->remember();
+            return $_obj_redirect->send();
         }
 
         return array(
@@ -336,7 +340,7 @@ abstract class Ctrl extends Ctrl_Base {
             'path_tpl_console'  => $_str_pathTplConsole,
         );
 
-        $this->url = array_replace_recursive($this->url, $_arr_url);;
+        $this->url = array_replace_recursive($this->url, $_arr_url);
 
         $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
     }

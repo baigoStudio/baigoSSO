@@ -6,9 +6,7 @@
 
 namespace app\model\console;
 
-use ginkgo\Json;
 use ginkgo\Func;
-use ginkgo\Config;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');

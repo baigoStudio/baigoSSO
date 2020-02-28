@@ -39,7 +39,7 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->error('Token not found', $_arr_verifyRow['rcode']);
+            return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
 
         if ($_arr_verifyRow['verify_status'] != 'enable') {
@@ -98,9 +98,8 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_arr_inputConfirm['verify_id']);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->fetchJson('Token not found', $_arr_verifyRow['rcode']);
+            return $this->fetchJson($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
-
 
         if ($_arr_verifyRow['verify_status'] != 'enable') {
             return $this->fetchJson('Token is no longer valid', 'x120203');
@@ -161,7 +160,7 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->error('Token not found', $_arr_verifyRow['rcode']);
+            return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
 
         if ($_arr_verifyRow['verify_status'] != 'enable') {
@@ -216,7 +215,7 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_arr_inputMailbox['verify_id']);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->fetchJson('Token not found', $_arr_verifyRow['rcode']);
+            return $this->fetchJson($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
 
         if ($_arr_verifyRow['verify_status'] != 'enable') {
@@ -277,7 +276,7 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->error('Token not found', $_arr_verifyRow['rcode']);
+            return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
 
         if ($_arr_verifyRow['verify_status'] != 'enable') {
@@ -336,7 +335,7 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_arr_inputPass['verify_id']);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->fetchJson('Token not found', $_arr_verifyRow['rcode']);
+            return $this->fetchJson($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
 
 

@@ -6,7 +6,7 @@
 
 namespace app\model\install;
 
-use app\classes\Model;
+use app\classes\install\Model;
 use ginkgo\Loader;
 use ginkgo\Func;
 
@@ -124,8 +124,7 @@ class Verify extends Model {
 
 
     function alterTable() {
-        $_arr_col     = $this->show();
-        $_arr_alter   = array();
+        $_arr_alter = $this->alterProcess($this->create);
 
         $_str_rcode = 'y120111';
         $_str_msg   = 'No need to update table';

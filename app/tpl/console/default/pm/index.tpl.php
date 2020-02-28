@@ -159,7 +159,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                                 } else if (isset($value['fromUser']['user_name'])) {
                                                     echo $value['fromUser']['user_name'];
                                                 } else {
-                                                    echo $lang->get('Unknow');
+                                                    echo $lang->get('Unknown');
                                                 } ?>
                                             </a>
                                         </small>
@@ -173,7 +173,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                                 <?php if (isset($value['toUser']['user_name'])) {
                                                     echo $value['toUser']['user_name'];
                                                 } else {
-                                                    echo $lang->get('Unknow');
+                                                    echo $lang->get('Unknown');
                                                 } ?>
                                             </a>
                                         </small>
@@ -189,7 +189,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                         <small><?php echo $lang->get('Time'); ?></small>
                                     </dt>
                                     <dd class="col-9">
-                                        <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['pm_datetime']; ?>"><?php echo $value['pm_datetime_short']; ?></small>
+                                        <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['pm_time_format']['date_time']; ?>"><?php echo $value['pm_time_format']['date_time_short']; ?></small>
                                     </dd>
                                 </dl>
                             </td>
@@ -203,7 +203,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                             } else if (isset($value['fromUser']['user_name'])) {
                                                 echo $value['fromUser']['user_name'];
                                             } else {
-                                                echo $lang->get('Unknow');
+                                                echo $lang->get('Unknown');
                                             } ?>
                                         </a>
                                     </small>
@@ -216,7 +216,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                             <?php if (isset($value['toUser']['user_name'])) {
                                                 echo $value['toUser']['user_name'];
                                             } else {
-                                                echo $lang->get('Unknow');
+                                                echo $lang->get('Unknown');
                                             } ?>
                                         </a>
                                     </small>
@@ -228,7 +228,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                     include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
                                 </div>
                                 <div>
-                                    <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['pm_datetime']; ?>"><?php echo $value['pm_datetime_short']; ?></small>
+                                    <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['pm_time_format']['date_time']; ?>"><?php echo $value['pm_time_format']['date_time_short']; ?></small>
                                 </div>
                             </td>
                         </tr>
@@ -311,7 +311,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

@@ -30,7 +30,7 @@ class Profile extends User {
 
     function token($num_userId, $str_userName) {
         $_str_accessToken   = Func::rand();
-        $_tm_accessExpire   = GK_NOW + $this->configBase['access_expire'] * 60;
+        $_tm_accessExpire   = GK_NOW + $this->configBase['access_expire'] * GK_MINUTE;
 
         $_arr_userData = array(
             'user_access_token'     => $_str_accessToken,
@@ -82,6 +82,9 @@ class Profile extends User {
             );
         }
 
+        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
+
         $_num_count     = $this->where('user_id', '=', $this->inputInfo['user_id'])->update($_arr_userData);
 
         if ($_num_count > 0) {
@@ -122,9 +125,6 @@ class Profile extends User {
         $_arr_inputUserCommon  = $this->inputUserCommon($arr_data);
 
         $_arr_inputInfo  = array_replace_recursive($_arr_inputInfo, $_arr_inputUserCommon);
-
-        $_arr_inputInfo['user_contact']    = Json::encode($_arr_inputInfo['user_contact']);
-        $_arr_inputInfo['user_extend']     = Json::encode($_arr_inputInfo['user_extend']);
 
         $_mix_vld = $this->validate($_arr_inputInfo, '', 'info');
 
@@ -186,8 +186,6 @@ class Profile extends User {
         $_arr_inputUserCommon   = $this->inputUserCommon($arr_data);
 
         $_arr_inputSecqa  = array_replace_recursive($_arr_inputSecqa, $_arr_inputUserCommon);
-
-        $_arr_inputSecqa['user_sec_ques'] = Json::encode($_arr_inputSecqa['user_sec_ques']);
 
         $_mix_vld = $this->validate($_arr_inputSecqa, '', 'secqa');
 

@@ -61,7 +61,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 <div class="input-group">
                                     <input type="text" value="<?php echo $_value['this']; ?>" name="<?php echo $_key; ?>" id="<?php echo $_key; ?>" class="form-control">
                                     <span class="input-group-append">
-                                        <select id="select_<?php echo $_key; ?>" class="custom-select">
+                                        <select id="select_<?php echo $_key; ?>" class="custom-select bg-custom-select">
                                             <?php foreach ($_value['option'] as $_key_opt=>$_value_opt) { ?>
                                                 <option<?php if ($_value['this'] == $_key_opt) { ?> selected<?php } ?> value="<?php echo $_key_opt; ?>">
                                                     <?php $_arr_langReplace = array(
@@ -150,7 +150,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                             <div class="col">
                                 <select name="site_timezone" id="site_timezone" class="form-control">
-                                    <?php foreach ($timezoneRows[$timezoneType]['list'] as $_key=>$_value) { ?>
+                                    <?php foreach ($timezoneRows[$timezoneType]['lists'] as $_key=>$_value) { ?>
                                         <option<?php if ($config['var_extra']['base']['site_timezone'] == $_key) { ?> selected<?php } ?> value="<?php echo $_key; ?>">
                                             <?php echo $lang->get($_value, 'console.timezone'); ?>
                                         </option>
@@ -195,7 +195,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

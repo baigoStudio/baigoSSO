@@ -125,21 +125,15 @@
             $('#bg-caret-' + _key).attr('class', 'fas fa-chevron-down');
         });
 
-        $('#loading_mask').fadeOut();
+        <?php if (!isset($cfg['no_loading'])) { ?>
+            $('#loading_mask').fadeOut();
+        <?php } ?>
     });
     </script>
 
     <script src="{:DIR_STATIC}lib/bootstrap/4.3.1/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 
-    <!--
-        Powered by
-        <?php if ($config['tpl']['path'] == 'default') {
-            echo $config['version']['prd_sso_name'], ' ';
-        } else {
-            echo $config['tpl']['path'], ' SSO ';
-        }
-        echo $config['version']['prd_sso_ver']; ?>
-    -->
+    <!-- Powered by <?php echo $config['version']['prd_sso_name'], ' ', $config['version']['prd_sso_ver']; ?> -->
 
     <?php Plugin::listen('action_console_foot_after'); //后台界面底部触发 ?>
 </body>

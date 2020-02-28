@@ -10,7 +10,7 @@ defined('IN_GINKGO') or exit('Access denied');
 return array(
     'Africa'    => array(
         'title' => 'Africa',
-        'list'   => array(
+        'lists'   => array(
             'Africa/Abidjan'        => 'Abidjan',
             'Africa/Accra'          => 'Accra',
             'Africa/Addis_Ababa'    => 'Addis Ababa',
@@ -67,7 +67,7 @@ return array(
     ),
     'America' => array(
         'title' => 'America',
-        'list'   => array(
+        'lists'   => array(
             'America/Adak'                      => 'Adak',
             'America/Anchorage'                 => 'Anchorage',
             'America/Anguilla'                  => 'Anguilla',
@@ -218,7 +218,7 @@ return array(
     ),
     'Antarctica' => array(
         'title' => 'Antarctica',
-        'list'   => array(
+        'lists'   => array(
             'Antarctica/Casey'          => 'Casey',
             'Antarctica/Davis'          => 'Davis',
             'Antarctica/DumontDUrville' => 'DumontDUrville',
@@ -234,13 +234,13 @@ return array(
     ),
     'Arctic' => array(
         'title' => 'Arctic',
-        'list'   => array(
+        'lists'   => array(
             'Arctic/Longyearbyen' => 'Longyearbyen',
         ),
     ),
     'Asia' => array(
         'title' => 'Asia',
-        'list'   => array(
+        'lists'   => array(
             'Asia/Aden'             => 'Aden',
             'Asia/Almaty'           => 'Almaty',
             'Asia/Amman'            => 'Amman',
@@ -324,7 +324,7 @@ return array(
     ),
     'Atlantic' => array(
         'title' => 'Atlantic',
-        'list'   => array(
+        'lists'   => array(
             'Atlantic/Azores'           => 'Azores',
             'Atlantic/Bermuda'          => 'Bermuda',
             'Atlantic/Canary'           => 'Canary',
@@ -339,7 +339,7 @@ return array(
     ),
     'Australia' => array(
         'title' => 'Australia',
-        'list'   => array(
+        'lists'   => array(
             'Australia/Adelaide'    => 'Adelaide',
             'Australia/Brisbane'    => 'Brisbane',
             'Australia/Broken_Hill' => 'Broken Hill',
@@ -356,7 +356,7 @@ return array(
     ),
     'Europe' => array(
         'title' => 'Europe',
-        'list'   => array(
+        'lists'   => array(
             'Europe/Amsterdam'      => 'Amsterdam',
             'Europe/Andorra'        => 'Andorra',
             'Europe/Athens'         => 'Athens',
@@ -417,7 +417,7 @@ return array(
     ),
     'Indian' => array(
         'title' => 'Indian',
-        'list'   => array(
+        'lists'   => array(
             'Indian/Antananarivo'   => 'Antananarivo',
             'Indian/Chagos'         => 'Chagos',
             'Indian/Christmas'      => 'Christmas',
@@ -433,7 +433,7 @@ return array(
     ),
     'Pacific' => array(
         'title' => 'Pacific',
-        'list'   => array(
+        'lists'   => array(
             'Pacific/Apia'          => 'Apia',
             'Pacific/Auckland'      => 'Auckland',
             'Pacific/Bougainville'  => 'Bougainville',
@@ -477,7 +477,7 @@ return array(
     ),
     'Other' => array(
         'title' => 'Other',
-        'list'   => array(
+        'lists'   => array(
             'UTC' => 'UTC',
         ),
     ),

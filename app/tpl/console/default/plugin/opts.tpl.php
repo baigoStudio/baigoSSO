@@ -63,9 +63,9 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                             <div class="input-group">
                                                 <input type="text" value="<?php echo $optsVar[$_key]; ?>" name="<?php echo $_key; ?>" id="<?php echo $_key; ?>" class="form-control">
                                                 <span class="input-group-append">
-                                                    <select id="select_<?php echo $_key; ?>" class="custom-select">
+                                                    <select id="select_<?php echo $_key; ?>" class="custom-select bg-custom-select">
                                                         <?php foreach ($_value['option'] as $_key_opt=>$_value_opt) { ?>
-                                                            <option value="<?php echo $_key_opt; ?>">
+                                                            <option<?php if ($optsVar[$_key] == $_key_opt) { ?> selected<?php } ?> value="<?php echo $_key_opt; ?>">
                                                                 <?php echo $_value_opt; ?>
                                                             </option>
                                                         <?php } ?>
@@ -119,8 +119,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                              <?php }
                         } ?>
 
-                        <div class="bg-submit-box"></div>
-                        <div class="bg-validate-box mt-3"></div>
+                        <div class="bg-validate-box"></div>
                     </div>
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary"><?php echo $lang->get('Save'); ?></button>
@@ -155,7 +154,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

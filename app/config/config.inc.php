@@ -1,5 +1,4 @@
 <?php return array(
-    'site_name' => 'baigo SSO',
     'var_default'   => array(
         'count_secqa'    => 3,
     ),
@@ -40,10 +39,9 @@
             'verify_expire'     => 30,
         ),
         'reg' => array(
-            'reg_acc'        => 'enable',
-            'reg_needmail'   => 'on',
-            'reg_onemail'    => 'on',
-            'reg_confirm'    => 'on',
+            'reg_acc'        => 'on',
+            'reg_needmail'   => 'off',
+            'reg_confirm'    => 'off',
             'login_mail'     => 'off',
             'acc_mail'       => '',
             'bad_mail'       => '',
@@ -61,12 +59,18 @@
     'version' => array(
         'prd_sso_name'      => 'baigo SSO',
         'prd_sso_url'       => 'http://www.baigo.net/sso/',
-        'prd_sso_ver'       => '4.0 beta-1',
-        'prd_sso_pub'       => 20191009,
+        'prd_sso_ver'       => '4.0 beta-2',
+        'prd_sso_pub'       => 20200208,
         'prd_sso_help'      => 'http://doc.baigo.net/sso/',
         'prd_ver_check'     => 'http://www.baigo.net/ver_check/check.php',
     ),
-    'dbconfig' => array(
-        'prefix'    => 'sso_',
+    'ui_ctrl' => array(
+        'copyright'             => 'on',
+        'update_check'          => 'on',
+        'logo_install'          => '',
+        'logo_personal'         => '',
+        'logo_console_login'    => '',
+        'logo_console_head'     => '',
+        'logo_console_foot'     => '',
     ),
 );

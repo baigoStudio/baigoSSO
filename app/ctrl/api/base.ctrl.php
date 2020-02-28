@@ -52,6 +52,7 @@ class Base extends Ctrl {
         $_arr_return = array(
             'url_forgot' => $this->generalData['url_personal'] . 'forgot/',
             'url_nomail' => $this->generalData['url_personal'] . 'reg/nomail/',
+            'url_reg'    => $this->generalData['url_personal'] . 'reg/',
         );
 
         $_arr_tpl = array_replace_recursive($this->version, $_arr_return);

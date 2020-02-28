@@ -19,8 +19,7 @@ class Crypt {
         $_str_pathKey = GK_PATH_DATA . 'key_pub' . GK_EXT_INC;
 
         if (!Func::isFile($_str_pathKey)) {
-            $_str_outPut = '<?php return \'' . Func::rand() . '\';';
-            $_num_size   = File::instance()->fileWrite($_str_pathKey, $_str_outPut);
+            $_num_size   = Config::write($_str_pathKey, Func::rand());
         }
 
         self::$keyPub   = Loader::load($_str_pathKey);

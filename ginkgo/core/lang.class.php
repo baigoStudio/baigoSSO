@@ -23,7 +23,7 @@ class Lang {
         $this->config = Config::get('lang');
 
         $this->getCurrent();
-        $this->loadSys();
+        $this->init();
     }
 
     protected function __clone() {
@@ -46,23 +46,22 @@ class Lang {
     }
 
     //获取当前语言
-    function getCurrent() {
-        if (!Func::isEmpty($this->config['switch'])) { //语言开关为开
-            if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-                $this->clientLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-            }
+    function getCurrent($lower = false, $separator = '', $client = false) {
+        if ($client) {
+            $_str_current = $this->clientLang;
+        } else {
+            $_str_current = $this->current;
         }
 
-        if (Func::isEmpty($this->current)) {
-            $this->current = $this->config['default'];
+        if ($lower === true) {
+            $_str_current = strtolower($_str_current);
         }
 
-        //print_r($this->current);
+        if ((!Func::isEmpty($separator) && is_string($separator)) || $separator == '-') {
+            $_str_current = str_replace('_', $separator, $_str_current);
+        }
 
-        mb_internal_encoding('UTF-8'); //设置内部字符编码
-        setlocale(LC_ALL, $this->current . '.UTF-8'); //设置区域格式,主要针对 csv 处理
-
-        return $this->current;
+        return $_str_current;
     }
 
 
@@ -161,7 +160,7 @@ class Lang {
         //print_r($this->lang);
     }
 
-    function get($name, $range = '', $replace = array(), $show_key = true) { //获取语言字段
+    function get($name, $range = '', $replace = array(), $show_src = true) { //获取语言字段
         $name = (string)$name;
 
         $_mix_range     = $this->rangeProcess($range);
@@ -171,7 +170,7 @@ class Lang {
         print_r($_mix_range);
         print_r('<br>');*/
 
-        if ($show_key) {
+        if ($show_src) {
             $_str_return    = $name;
         } else {
             $_str_return    = '';
@@ -225,8 +224,28 @@ class Lang {
     }
 
 
-    private function loadSys() {
-        $_str_pathSys = GK_PATH_LANG . $this->current . GK_EXT_LANG;
+    private function init() {
+        $_str_current = $this->current;
+
+        if (!Func::isEmpty($this->config['switch'])) { //语言开关为开
+            if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+                $this->clientLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+            }
+        }
+
+        if (Func::isEmpty($_str_current)) {
+            $_str_current = $this->config['default'];
+        }
+
+        if (function_exists('mb_internal_encoding')) {
+            mb_internal_encoding('UTF-8'); //设置内部字符编码
+        }
+
+        setlocale(LC_ALL, $_str_current . '.UTF-8'); //设置区域格式,主要针对 csv 处理
+
+        $this->current = $_str_current;
+
+        $_str_pathSys = GK_PATH_LANG . $_str_current . GK_EXT_LANG;
 
         if (Func::isFile($_str_pathSys)) {
             $this->lang['__ginkgo__'] = Loader::load($_str_pathSys, 'include');

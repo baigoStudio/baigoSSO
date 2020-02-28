@@ -1,16 +1,3 @@
-# BEGIN baigo CMS
-#<IfModule mod_rewrite.c>
-#RewriteEngine On
-#RewriteBase /cms/public/
-# 确保请求路径不是一个文件名或目录
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
-# 重定向所有请求到 index.php?route=PATHNAME
-#RewriteRule ^(.*)$ /cms/public/index.php?pathname=$1 [PT,L]
-#</IfModule>
-# END baigo CMS
-
-
 <IfModule mod_rewrite.c>
 Options +FollowSymlinks -Multiviews
 RewriteEngine On

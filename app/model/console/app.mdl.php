@@ -88,13 +88,16 @@ class App extends App_Base {
             );
         }
 
+        $_arr_appData['app_allow']        = Json::encode($_arr_appData['app_allow']);
+        $_arr_appData['app_param']        = Json::encode($_arr_appData['app_param']);
+
         if ($this->inputSubmit['app_id'] > 0) {
             $_num_appId     = $this->inputSubmit['app_id'];
             $_num_count     = $this->where('app_id', '=', $_num_appId)->update($_arr_appData);
 
             if ($_num_count > 0) {
                 $_str_rcode = 'y050103'; //更新成功
-                $_str_msg   = 'Update application successfully';
+                $_str_msg   = 'Update App successfully';
             } else {
                 $_str_rcode = 'x050103'; //更新失败
                 $_str_msg   = 'Did not make any changes';
@@ -113,10 +116,10 @@ class App extends App_Base {
 
             if ($_num_appId > 0) {
                 $_str_rcode = 'y050101'; //更新成功
-                $_str_msg   = 'Add application successfully';
+                $_str_msg   = 'Add App successfully';
             } else {
                 $_str_rcode = 'x050101'; //更新失败
-                $_str_msg   = 'Add application failed';
+                $_str_msg   = 'Add App failed';
             }
         }
 
@@ -147,7 +150,7 @@ class App extends App_Base {
         //如影响行数大于0则返回成功
         if ($_num_count > 0) {
             $_str_rcode = 'y050103'; //成功
-            $_str_msg   = 'Successfully updated {:count} applications';
+            $_str_msg   = 'Successfully updated {:count} Apps';
         } else {
             $_str_rcode = 'x050103'; //失败
             $_str_msg   = 'Did not make any changes';
@@ -173,10 +176,10 @@ class App extends App_Base {
         //如车影响行数小于0则返回错误
         if ($_num_count > 0) {
             $_str_rcode = 'y050104'; //成功
-            $_str_msg   = 'Successfully deleted {:count} applications';
+            $_str_msg   = 'Successfully deleted {:count} Apps';
         } else {
             $_str_rcode = 'x050104'; //失败
-            $_str_msg   = 'No application have been deleted';
+            $_str_msg   = 'No App have been deleted';
         }
 
         return array(
@@ -211,10 +214,6 @@ class App extends App_Base {
 
         $_arr_inputSubmit = $this->obj_request->post($_arr_inputParam);
 
-        //print_r($_arr_inputSubmit);
-
-        $_arr_inputSubmit['app_allow']        = Json::encode($_arr_inputSubmit['app_allow']);
-        $_arr_inputSubmit['app_param']        = Json::encode($_arr_inputSubmit['app_param']);
         $_arr_inputSubmit['app_url_notify']   = Html::decode($_arr_inputSubmit['app_url_notify'], 'url');
         $_arr_inputSubmit['app_url_sync']     = Html::decode($_arr_inputSubmit['app_url_sync'], 'url');
 
@@ -225,6 +224,14 @@ class App extends App_Base {
                 'rcode' => 'x050201',
                 'msg'   => end($_mix_vld),
             );
+        }
+
+        if ($_arr_inputSubmit['app_id'] > 0) {
+            $_arr_appRow = $this->check($_arr_inputSubmit['app_id']);
+
+            if ($_arr_appRow['rcode'] != 'y050102') {
+                return $_arr_appRow;
+            }
         }
 
         $_arr_inputSubmit['rcode'] = 'y050201';

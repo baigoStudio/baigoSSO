@@ -1,5 +1,5 @@
 <?php $cfg = array(
-    'title'             => $lang->get('Application', 'console.common') . ' &raquo; ' . $lang->get('Show'),
+    'title'             => $lang->get('App', 'console.common') . ' &raquo; ' . $lang->get('Show'),
     'menu_active'       => 'app',
     'sub_active'        => 'index',
     'baigoSubmit'       => 'true',
@@ -16,16 +16,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </a>
     </nav>
 
-    <form name="app_form" id="app_form" action="<?php echo $route_console; ?>app/reset/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
-        <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
-
         <div class="row">
             <div class="col-xl-9">
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-group">
-                            <label><?php echo $lang->get('Application name'); ?></label>
+                            <label><?php echo $lang->get('App name'); ?></label>
                             <div class="form-text"><?php echo $appRow['app_name']; ?></div>
                         </div>
 
@@ -49,13 +45,19 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             <input type="text" value="<?php echo $appRow['app_secret']; ?>" class="form-control" readonly>
                         </div>
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">
-                                <span class="fas fa-redo-alt"></span>
-                                <?php echo $lang->get('Reset App Key & App Secret'); ?>
-                            </button>
-                            <small class="form-text"><?php echo $lang->get('If you suspect that the App Key or App Secret has been compromised, you can reset them.'); ?></small>
-                        </div>
+                        <form name="app_form" id="app_form" action="<?php echo $route_console; ?>app/reset/">
+                            <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                            <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="fas fa-redo-alt"></span>
+                                    <?php echo $lang->get('Reset App Key & App Secret'); ?>
+                                </button>
+                                <small class="form-text"><?php echo $lang->get('If you suspect that the App Key or App Secret has been compromised, you can reset them.'); ?></small>
+                            </div>
+
+                        </form>
 
                         <div class="form-group">
                             <label><?php echo $lang->get('URL of notifications'); ?></label>
@@ -102,12 +104,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             <div class="form-text"><?php echo $appRow['app_note']; ?></div>
                         </div>
                     </div>
-                    <div class="card-footer text-right">
+                    <div class="card-footer">
                         <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-info bg-notify">
+                            <a href="#notify_modal" class="btn btn-info" data-toggle="modal">
                                 <span class="fas fa-flag-checkered"></span>
                                 <?php echo $lang->get('Notification test'); ?>
-                            </button>
+                            </a>
 
                             <a href="<?php echo $route_console; ?>app/form/id/<?php echo $appRow['app_id']; ?>/">
                                 <span class="fas fa-edit"></span>
@@ -160,12 +162,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 </div>
             </div>
         </div>
-    </form>
 
-    <form id="app_notify" name="app_notify" action="<?php echo $route_console; ?>app/notify/">
-        <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
-    </form>
+    <div class="modal fade" id="notify_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 
 <?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
 
@@ -181,7 +184,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {
@@ -193,7 +196,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {
@@ -202,9 +205,15 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     };
 
     $(document).ready(function(){
+        $('#notify_modal').on('shown.bs.modal',function(event){
+            $('#notify_modal .modal-content').load('<?php echo $route_console; ?>app/notify/id/<?php echo $appRow['app_id']; ?>/');
+    	}).on('hidden.bs.modal', function(){
+        	$('#notify_modal .modal-content').empty();
+    	});
+
         var obj_submit_notify  = $('#app_notify').baigoSubmit(opts_submit_notify);
 
-        $('.bg-notify').click(function(){
+        $('#app_notify').submit(function(){
             obj_submit_notify.formSubmit();
         });
 

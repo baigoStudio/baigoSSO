@@ -14,15 +14,16 @@ defined('IN_GINKGO') or exit('Access denied');
 class Validate {
 
     protected static $instance;
-    private $message    = array();
+    private $message        = array();
 
-    protected $rule     = array();
-    protected $data     = array();
-    protected $attrName = array();
-    protected $scene    = array();
-    protected $only     = array();
-    protected $remove   = array();
-    protected $append   = array();
+    protected $rule         = array();
+    protected $data         = array();
+    protected $attrName     = array();
+    protected $scene        = array();
+    protected $only         = array();
+    protected $remove       = array();
+    protected $append       = array();
+    protected $delimiter    = ' - ';
 
     protected $currentScene = null;
 
@@ -91,7 +92,9 @@ class Validate {
     );
 
     public function __construct() {
+        $this->obj_lang = Lang::instance();
 
+        $this->v_init();
     }
 
     protected function __clone() {
@@ -103,6 +106,10 @@ class Validate {
             static::$instance = new static();
         }
         return static::$instance;
+    }
+
+    protected function v_init() {
+
     }
 
     function rule($rule, $value = '') {
@@ -161,7 +168,8 @@ class Validate {
                 }
 
                 if (is_array($data[$_key])) {
-                    $data[$_key]       = implode(',', $data[$_key]);
+                    //$data[$_key]       = implode(',', $data[$_key]);
+                    $data[$_key] = Json::encode($data[$_key]);
                     $this->data[$_key] = $data[$_key];
                 }
 
@@ -549,16 +557,16 @@ class Validate {
                     $_bool_return = true;
                 } else {
                     switch ($rule['rule']) {
-                        case 'number':
-                            $_bool_return = ctype_digit($value);
-                        break;
-
                         case 'alpha':
                             $_bool_return = ctype_alpha($value);
                         break;
 
                         case 'alpha_number':
                             $_bool_return = ctype_alnum($value);
+                        break;
+
+                        case 'number':
+                            $_bool_return = ctype_digit((string)$value);
                         break;
 
                         case 'bool':
@@ -650,6 +658,14 @@ class Validate {
             if (isset($this->attrName[$rule['rule']])) {
                 $_str_confirm   = $this->attrName[$rule['rule']];
                 $_str_different = $this->attrName[$rule['rule']];
+            }
+
+            switch ($rule['type']) {
+                case 'length':
+                case 'between':
+                case 'not_between':
+                    $rule['rule'] = str_ireplace(',', $this->delimiter, $rule['rule']);
+                break;
             }
 
             $_str_msg = str_ireplace('{:attr}', $_str_field, $_str_msg);

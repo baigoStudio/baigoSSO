@@ -7,7 +7,6 @@
 namespace app\validate\console;
 
 use ginkgo\Validate;
-use ginkgo\Lang;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -49,11 +48,10 @@ class App_Belong extends Validate {
         ),
     );
 
-    function __construct() { //构造函数
-        $this->obj_lang         = Lang::instance();
+    function v_init() { //构造函数
 
         $_arr_attrName = array(
-            'app_id'            => $this->obj_lang->get('Application ID'),
+            'app_id'            => $this->obj_lang->get('App ID'),
             'user_ids'          => $this->obj_lang->get('User'),
             'user_ids_belong'   => $this->obj_lang->get('User'),
             '__token__'         => $this->obj_lang->get('Token'),

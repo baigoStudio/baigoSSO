@@ -90,13 +90,13 @@ class Admin extends Ctrl {
         $_arr_userRow = $this->mdl_user->read($_num_adminId);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->error('User not found', $_arr_userRow['rcode']);
+            return $this->error($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_arr_adminRow = $this->mdl_admin->read($_num_adminId);
 
         if ($_arr_adminRow['rcode'] != 'y020102') {
-            return $this->error('Administrator not found', $_arr_adminRow['rcode']);
+            return $this->error($_arr_adminRow['msg'], $_arr_adminRow['rcode']);
         }
 
         $_arr_tplData['adminRow'] = $_arr_adminRow;
@@ -136,13 +136,13 @@ class Admin extends Ctrl {
             $_arr_userRow = $this->mdl_user->read($_num_adminId);
 
             if ($_arr_userRow['rcode'] != 'y010102') {
-                return $this->error('User not found', $_arr_userRow['rcode']);
+                return $this->error($_arr_userRow['msg'], $_arr_userRow['rcode']);
             }
 
             $_arr_adminRow = $this->mdl_admin->read($_num_adminId);
 
             if ($_arr_adminRow['rcode'] != 'y020102') {
-                return $this->error('Administrator not found', $_arr_adminRow['rcode']);
+                return $this->error($_arr_adminRow['msg'], $_arr_adminRow['rcode']);
             }
         } else {
             if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->isSuper) { //判断权限
@@ -205,13 +205,7 @@ class Admin extends Ctrl {
             //print_r($_arr_userRow);
 
             if ($_arr_userRow['rcode'] != 'y010102') {
-                return $this->fetchJson('User not found', $_arr_userRow['rcode']);
-            }
-
-            $_arr_adminRow = $this->mdl_admin->check($_arr_inputSubmit['admin_id']);
-
-            if ($_arr_adminRow['rcode'] != 'y020102') {
-                return $this->fetchJson('Administrator not found', $_arr_adminRow['rcode']);
+                return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
             }
 
             if (!Func::isEmpty($_arr_inputSubmit['admin_pass'])) {
@@ -240,7 +234,7 @@ class Admin extends Ctrl {
                 return $this->fetchJson($_str_msg, $_str_rcode);
             }
 
-            $_str_rand          = Func::rand();
+            $_str_rand = Func::rand();
 
             $this->mdl_user->inputSubmit['user_id']     = 0;
             $this->mdl_user->inputSubmit['user_name']   = $_arr_inputSubmit['admin_name'];

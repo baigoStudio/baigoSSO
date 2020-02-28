@@ -119,11 +119,6 @@ return array(
                 'type'      => 'switch',
                 'require'   => 'false',
             ),
-            'reg_onemail' => array(
-                'title'     => 'Allow duplicate email',
-                'type'      => 'switch',
-                'require'   => 'false',
-            ),
             'login_mail' => array(
                 'title'     => 'Allow login by email',
                 'type'      => 'switch',

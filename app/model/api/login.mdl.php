@@ -6,7 +6,6 @@
 namespace app\model\api;
 
 use app\model\User;
-use ginkgo\Json;
 use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Config;
@@ -42,7 +41,7 @@ class Login extends User {
 
         if ($_arr_userRow['user_access_expire'] <= GK_NOW) { //如果访问口令过期
             $_str_accessToken   = Func::rand();
-            $_tm_accessExpire   = GK_NOW + $this->configBase['access_expire'] * 60;
+            $_tm_accessExpire   = GK_NOW + $this->configBase['access_expire'] * GK_MINUTE;
 
             $_arr_userData['user_access_token']     = $_str_accessToken;
             $_arr_userData['user_access_expire']    = $_tm_accessExpire;
@@ -53,7 +52,7 @@ class Login extends User {
 
         if ($_arr_userRow['user_refresh_expire'] <= GK_NOW) { //如果刷新口令过期
             $_str_refreshToken  = Func::rand();
-            $_tm_refreshExpire  = GK_NOW + $this->configBase['refresh_expire'] * 86400;
+            $_tm_refreshExpire  = GK_NOW + $this->configBase['refresh_expire'] * GK_DAY;
 
             $_arr_userData['user_refresh_token']    = $_str_refreshToken;
             $_arr_userData['user_refresh_expire']   = $_tm_refreshExpire;

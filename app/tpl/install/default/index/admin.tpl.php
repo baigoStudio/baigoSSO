@@ -57,7 +57,7 @@ include($cfg['pathInclude'] . 'index_head' . GK_EXT_TPL); ?>
                 length: '1,30',
                 format: 'alpha_dash',
                 ajax: {
-                    url: '<?php echo $route_install; ?>index/admin_check/'
+                    url: '<?php echo $route_install; ?>index/admin-check/'
                 }
             },
             admin_pass: {
@@ -100,7 +100,7 @@ include($cfg['pathInclude'] . 'index_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

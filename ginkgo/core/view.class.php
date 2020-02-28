@@ -135,19 +135,20 @@ class View {
     }
 
     private function replaceProcess($content) {
-        $_arr_replace = $this->replace;
+        $replace = $this->replace;
 
-        if (is_array($_arr_replace) && !Func::isEmpty($_arr_replace)) {
-            $_arr_replace = array_keys($_arr_replace);
+        if (is_array($replace) && !Func::isEmpty($replace)) {
+            $_arr_replace = array_keys($replace);
             foreach ($_arr_replace as $_key=>&$_value) {
                 $_value = '{:' . $_value . '}';
             }
-            $content = str_ireplace($_arr_replace, $_arr_replace, $content);
+            $content = str_ireplace($_arr_replace, $replace, $content);
         }
 
-        $_str_urlBase       = $this->obj_request->baseUrl(true);
-        $_str_dirRoot       = $this->obj_request->root();
-        $_str_routeRoot     = $this->obj_request->baseUrl();
+        $_str_urlBase       = Func::fixDs($this->obj_request->baseUrl(true), '/');
+        $_str_urlRoot       = Func::fixDs($this->obj_request->root(true), '/');
+        $_str_dirRoot       = Func::fixDs($this->obj_request->root(), '/');
+        $_str_routeRoot     = Func::fixDs($this->obj_request->baseUrl(), '/');
 
         $_str_routePage     = Route::build();
 
@@ -157,6 +158,7 @@ class View {
         $_arr_replaceSrc = array(
             '{:URL_BASE}',
             '{:URL_ROOT}',
+            '{:DIR_ROOT}',
             '{:DIR_STATIC}',
             '{:ROUTE_ROOT}',
             '{:ROUTE_PAGE}',
@@ -164,6 +166,7 @@ class View {
 
         $_arr_replaceDst = array(
             $_str_urlBase,
+            $_str_urlRoot,
             $_str_dirRoot,
             $_str_dirRoot . GK_NAME_STATIC . '/',
             $_str_routeRoot,

@@ -8,25 +8,23 @@
                     <a href="<?php echo $route_console; ?>login/"><?php echo $lang->get('Login now'); ?></a>
                 <?php } ?>
 
-                <?php if (isset($config['site_name'])) { ?>
+                <?php if (isset($config['var_extra']['base']['site_name'])) { ?>
                     <hr>
                     <div>
-                        <?php echo $config['site_name']; ?>
+                        <?php echo $config['var_extra']['base']['site_name']; ?>
                     </div>
                 <?php } ?>
             </div>
 
-            <div class="mt-5">
-                <hr>
-                <div class="text-center">
-                    <span class="d-none d-lg-inline-block">Powered by</span>
-                    <?php if ($config['tpl']['path'] == 'default') { ?>
+            <?php if (!isset($ui_ctrl['copyright']) || $ui_ctrl['copyright'] == 'on') { ?>
+                <div class="mt-5">
+                    <hr>
+                    <div class="text-center">
+                        <span class="d-none d-lg-inline-block">Powered by</span>
                         <a href="<?php echo $config['version']['prd_sso_url']; ?>" target="_blank"><?php echo $config['version']['prd_sso_name']; ?></a>
-                    <?php } else {
-                        echo $config['tpl']['path'], ' SSO ';
-                    }
-                    echo $config['version']['prd_sso_ver']; ?>
+                        <?php echo $config['version']['prd_sso_ver']; ?>
+                    </div>
                 </div>
-            </div>
+            <?php } ?>
         </div>
     </div>

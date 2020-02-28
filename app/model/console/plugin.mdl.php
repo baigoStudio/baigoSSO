@@ -7,11 +7,12 @@
 namespace app\model\console;
 
 use app\model\Plugin as Plugin_Base;
+use ginkgo\Loader;
 use ginkgo\Func;
 use ginkgo\File;
 use ginkgo\Request;
 use ginkgo\Json;
-use ginkgo\Loader;
+use ginkgo\Config;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -25,7 +26,6 @@ class Plugin extends Plugin_Base {
     function __construct() { //构造函数
         parent::__construct();
 
-        $this->obj_file     = File::instance();
         $this->obj_request  = Request::instance();
         $this->vld_plugin   = Loader::validate('plugin');
     }
@@ -46,9 +46,7 @@ class Plugin extends Plugin_Base {
 
         $_arr_data[$this->inputSubmit['plugin_dir']] = $_arr_pluginData;
 
-        $_str_outPut = '<?php return ' . var_export($_arr_data, true) . ';';
-
-        $_num_size = $this->obj_file->fileWrite(GK_APP_CONFIG . 'plugin' . GK_EXT_INC, $_str_outPut);
+        $_num_size = Config::write(GK_APP_CONFIG . 'plugin' . GK_EXT_INC, $_arr_data);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y190101';
@@ -83,9 +81,7 @@ class Plugin extends Plugin_Base {
             }
         }
 
-        $_str_outPut = '<?php return ' . var_export($_arr_data, true) . ';';
-
-        $_num_size = $this->obj_file->fileWrite(GK_APP_CONFIG . 'plugin' . GK_EXT_INC, $_str_outPut);
+        $_num_size = Config::write(GK_APP_CONFIG . 'plugin' . GK_EXT_INC, $_arr_data);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y190104'; //成功
@@ -111,7 +107,7 @@ class Plugin extends Plugin_Base {
 
         $_str_outPut = Json::encode($this->inputOpts);
 
-        $_num_size   = $this->obj_file->fileWrite($_str_optsPath, $_str_outPut);
+        $_num_size   = File::instance()->fileWrite($_str_optsPath, $_str_outPut);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y190108'; //成功

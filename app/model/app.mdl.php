@@ -6,7 +6,7 @@
 
 namespace app\model;
 
-use ginkgo\Model;
+use app\classes\Model;
 use ginkgo\Func;
 use ginkgo\Json;
 use ginkgo\Html;
@@ -66,11 +66,13 @@ class App extends Model {
 
         if (!$_arr_appRow) {
             return array(
+                'msg'   => 'App not found',
                 'rcode' => 'x050102', //不存在记录
             );
         }
 
         $_arr_appRow['rcode'] = 'y050102';
+        $_arr_appRow['msg']   = '';
 
         return $this->rowProcess($_arr_appRow);
     }

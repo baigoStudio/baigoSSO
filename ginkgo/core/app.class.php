@@ -104,7 +104,7 @@ class App {
 
 
     private static function configProcess() {
-        $_arr_configExtra = Config::get('config_extra');;
+        $_arr_configExtra = Config::get('config_extra');
 
         if (is_array($_arr_configExtra) && !Func::isEmpty($_arr_configExtra)) {
             foreach ($_arr_configExtra as $_key=>$_value) {

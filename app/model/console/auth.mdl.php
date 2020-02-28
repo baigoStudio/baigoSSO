@@ -71,6 +71,9 @@ class Auth extends Admin_Base {
             );
         }
 
+        $_arr_adminData['admin_allow']            = Json::encode($_arr_adminData['admin_allow']);
+        $_arr_adminData['admin_allow_profile']    = Json::encode($_arr_adminData['admin_allow_profile']);
+
         if ($_arr_adminRow['rcode'] == 'x020102') {
             $_num_adminId   = $this->insert($_arr_adminData);
 
@@ -122,10 +125,6 @@ class Auth extends Admin_Base {
         );
 
         $_arr_inputSubmit = $this->obj_request->post($_arr_inputParam);
-
-        //print_r($_arr_inputSubmit);
-        $_arr_inputSubmit['admin_allow']            = Json::encode($_arr_inputSubmit['admin_allow']);
-        $_arr_inputSubmit['admin_allow_profile']    = Json::encode($_arr_inputSubmit['admin_allow_profile']);
 
         $_mix_vld = $this->validate($_arr_inputSubmit, '', 'submit');
 

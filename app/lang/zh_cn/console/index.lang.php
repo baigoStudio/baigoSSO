@@ -18,7 +18,7 @@ return array(
     'Token'                     => '表单令牌',
     'Back'                      => '返回',
     'User'                      => '用户',
-    'Application'               => '应用',
+    'App'               => '应用',
     'Administrator'             => '管理员',
     'Private message'           => '站内短信',
     'Total'                     => '总数',

@@ -1,8 +1,8 @@
 <?php $cfg = array(
     'title'             => $lang->get('System settings', 'console.common') . ' &raquo; ' . $lang->get('SMTP Settings', 'console.common'),
     'menu_active'       => 'opt',
-    'sub_active'        => $route_orig['act'],
-    'baigoValidate'    => 'true',
+    'sub_active'        => 'smtp',
+    'baigoValidate'     => 'true',
     'baigoSubmit'       => 'true',
     'pathInclude'       => $path_tpl . 'include' . DS,
 );
@@ -221,7 +221,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {
@@ -230,7 +230,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     };
 
     $(document).ready(function(){
-        var obj_validate_form  = $('#opt_form').baigoValidate(opts_validate_form);
+        var obj_validate_form   = $('#opt_form').baigoValidate(opts_validate_form);
         var obj_submit_form     = $('#opt_form').baigoSubmit(opts_submit_form);
 
         $('#opt_form').submit(function(){
@@ -238,30 +238,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 obj_submit_form.formSubmit();
             }
         });
-
-        <?php if ($route_orig['act'] == 'base') { ?>
-            var _timezoneRowsJson = <?php echo $timezoneRowsJson; ?>;
-            var _timezoneLangJson = <?php echo $timezoneLangJson; ?>;
-
-            $('#timezone_type').change(function(){
-                var _type = $(this).val();
-                var _str_appent;
-                $.each(_timezoneRowsJson[_type].sub, function(_key, _value){
-                    _str_appent += '<option';
-                    if (_key == '<?php echo $config['var_extra']['base']['site_timezone']; ?>') {
-                        _str_appent += ' selected';
-                    }
-                    _str_appent += ' value="' + _key + '">';
-                    if (typeof _timezoneLangJson[_value] != 'undefined') {
-                        _str_appent += _timezoneLangJson[_value];
-                    } else {
-                        _str_appent += _value;
-                    }
-                    _str_appent += '</option>';
-                });
-                $('#opt_base_site_timezone').html(_str_appent);
-            });
-        <?php } ?>
     });
     </script>
 

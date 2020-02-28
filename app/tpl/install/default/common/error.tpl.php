@@ -1,6 +1,7 @@
 <?php $cfg = array(
     'title'         => $lang->get('Installer', 'install.common'),
     'sub_title'     => $lang->get('Error', 'install.common'),
+    'no_loading'    => 'true',
     'pathInclude'   => $path_tpl . 'include' . DS,
 );
 
@@ -11,7 +12,7 @@ include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
             <h3><?php echo $lang->get('Installer', 'install.common'); ?></h3>
             <div class="card">
                 <div class="card-header">
-                    <img class="img-fluid mx-auto bg-head-logo" src="{:DIR_STATIC}sso/console/<?php echo $config['tpl']['path']; ?>/image/logo_green.svg">
+                    <img class="img-fluid mx-auto bg-logo-sm" src="<?php echo $ui_ctrl['logo_install']; ?>">
                 </div>
 
                 <div class="card-body">
@@ -40,15 +41,13 @@ include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
                 </div>
             </div>
 
-            <div class="my-3 text-right">
-                <span class="d-none d-lg-inline-block">Powered by</span>
-                <?php if ($config['tpl']['path'] == 'default') { ?>
+            <?php if (!isset($ui_ctrl['copyright']) || $ui_ctrl['copyright'] == 'on') { ?>
+                <div class="my-3 text-right">
+                    <span class="d-none d-lg-inline-block">Powered by</span>
                     <a href="<?php echo $config['version']['prd_sso_url']; ?>" target="_blank"><?php echo $config['version']['prd_sso_name']; ?></a>
-                <?php } else {
-                    echo $config['tpl']['path'], ' SSO ';
-                }
-                echo $config['version']['prd_sso_ver']; ?>
-            </div>
+                    <?php echo $config['version']['prd_sso_ver']; ?>
+                </div>
+            <?php } ?>
         </div>
     </div>
 

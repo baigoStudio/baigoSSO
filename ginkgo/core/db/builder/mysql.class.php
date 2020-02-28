@@ -405,11 +405,15 @@ class Mysql {
 
 
     function fieldProcess($field) {
-        if (strpos($field, '.')) {
-            $_arr_field  = explode('.', $field);
-            $_str_field  = $this->table($_arr_field[0]) . '.' . $this->addChar($_arr_field[1]);
+        if (strpos($field, '(') !== false || strpos($field, '`') !== false) {
+            $_str_field = $field;
         } else {
-            $_str_field  = $this->addChar($field);
+            if (strpos($field, '.')) {
+                $_arr_field = explode('.', $field);
+                $_str_field = $this->table($_arr_field[0]) . '.' . $this->addChar($_arr_field[1]);
+            } else {
+                $_str_field = $this->addChar($field);
+            }
         }
 
         return $_str_field;
@@ -725,7 +729,6 @@ class Mysql {
 
         return $param;
     }
-
 
     private function configProcess() {
         isset($this->dbconfig['host']) or $this->dbconfig['host'] = 'localhost';

@@ -18,7 +18,7 @@
       containerClass: 'dad-container',
       childrenClass: 'dads-children',
       cloneClass: 'dads-children-clone',
-      active: true,
+      active: true
     };
 
     var options = $.extend({}, defaults, opts);
@@ -44,22 +44,21 @@
         placeholder: false,
         cloneoffset: {
           x: 0,
-          y: 0,
+          y: 0
         },
         updatePosition: function (e) {
           this.x = e.pageX;
           this.y = e.pageY;
         },
-
         move: function (e) {
           this.updatePosition(e);
           if (this.clone !== false && _this.target !== false) {
             this.clone.css({
               left: this.x - this.cloneoffset.x,
-              top: this.y - this.cloneoffset.y,
+              top: this.y - this.cloneoffset.y
             });
           }
-        },
+        }
       };
 
       $(window).on('mousemove touchmove', function (e) {
@@ -186,10 +185,10 @@
           if ($.contains($daddy[0], mouse.target[0])) {
             mouse.clone.animate({
               top: mouse.target.offset().top - $daddy.offset().top - bTop,
-              left: mouse.target.offset().left - $daddy.offset().left - bLeft,
+              left: mouse.target.offset().left - $daddy.offset().left - bLeft
             }, 300, function () {
               appear.css({
-                visibility: 'visible',
+                visibility: 'visible'
               }).removeClass('active');
               desappear.remove();
             });
@@ -229,7 +228,7 @@
             top: mouse.target.offset().top - $daddy.offset().top,
             left: mouse.target.offset().left - $daddy.offset().left,
             width: mouse.target.outerWidth() - 10,
-            height: mouse.target.outerHeight() - 10,
+            height: mouse.target.outerHeight() - 10
           });
 
           $origin.remove();
@@ -272,7 +271,7 @@
             width: mouse.target.outerWidth() - 10,
             height: mouse.target.outerHeight() - 10,
             lineHeight: mouse.target.height() - 18 + 'px',
-            textAlign: 'center',
+            textAlign: 'center'
           }).text(placeholder);
 
           $daddy.append(mouse.placeholder);
@@ -289,7 +288,7 @@
           mouse.clone.removeClass(childrenClass).css({
             position: 'absolute',
             top: mouse.y - mouse.cloneoffset.y,
-            left: mouse.x - mouse.cloneoffset.x,
+            left: mouse.x - mouse.cloneoffset.x
           });
 
           // UNABLE THE TEXT SELECTION AND SET THE GRAB CURSOR

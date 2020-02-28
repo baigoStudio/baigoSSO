@@ -78,7 +78,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </div>
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span><?php echo $lang->get('Application'); ?></span>
+                <span><?php echo $lang->get('App'); ?></span>
                 <span><?php echo $lang->get('Count'); ?></span>
             </div>
             <ul class="list-group list-group-flush">

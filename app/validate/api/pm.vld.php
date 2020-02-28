@@ -7,7 +7,6 @@
 namespace app\validate\api;
 
 use ginkgo\Validate;
-use ginkgo\Lang;
 use ginkgo\Config;
 
 //不能非法包含或直接执行
@@ -113,8 +112,7 @@ class Pm extends Validate {
         ),
     );
 
-    function __construct() { //构造函数
-        $this->obj_lang         = Lang::instance();
+    function v_init() { //构造函数
 
         $_arr_attrName = array(
             'user_str'          => $this->obj_lang->get('User ID, Username or Email'),

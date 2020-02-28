@@ -14,14 +14,15 @@ class Image extends File {
 
     protected static $instance;
 
+    public $quality = 90;
 	private $res_imgSrc;
 	private $pathSrc;
 	private $pathDst = array();
     private $thumbs  = array();
 
     protected $info = array(
-        'width'  => 0,
-        'height' => 0,
+        'width'  => 100,
+        'height' => 100,
         'mime'   => '',
         'ext'    => '',
     );
@@ -254,7 +255,23 @@ class Image extends File {
 
         if (!Func::isEmpty($thumbRows)) {
             foreach ($thumbRows as $_key=>$_value) {
-                $_return = $this->thumb($_value['thumb_width'], $_value['thumb_height'], $_value['thumb_type'])->save();
+                if (!isset($_value['thumb_width'])) {
+                    $_value['thumb_width'] = 100;
+                }
+
+                if (!isset($_value['thumb_height'])) {
+                    $_value['thumb_height'] = 100;
+                }
+
+                if (!isset($_value['thumb_type'])) {
+                    $_value['thumb_type'] = 'ratio';
+                }
+
+                if (!isset($_value['thumb_quality'])) {
+                    $_value['thumb_quality'] = $this->quality;
+                }
+
+                $_return = $this->thumb($_value['thumb_width'], $_value['thumb_height'], $_value['thumb_type'], $_value['thumb_quality'])->save();
 
                 if (!$_return) {
                     break;
@@ -276,7 +293,7 @@ class Image extends File {
     }
 
 
-    function save($path_dir = false, $name = false, $type = false, $quality = 90, $interlace = true) {
+    function save($path_dir = false, $name = false, $type = false, $quality = false, $interlace = 1) {
         $_return        = false;
         $_str_ext       = false;
 
@@ -335,6 +352,16 @@ class Image extends File {
                 $type = $this->info['type'];
             }
 
+            if ($quality === false) {
+                $quality = $this->quality;
+            }
+
+            $quality = (int)$quality;
+
+            if ($quality < 1) {
+                $quality = 90;
+            }
+
             switch ($type) { //生成最终图片
                 case 'jpe':
                 case 'jpg':
@@ -350,7 +377,13 @@ class Image extends File {
 
                 case 'png':
                 case 'x-png':
-                    $_return = imagepng($this->res_imgDst, $_str_path);
+                    $quality = intval($quality / 10);
+
+                    if ($quality < 1) {
+                        $quality = 9;
+                    }
+
+                    $_return = imagepng($this->res_imgDst, $_str_path, $quality);
                 break;
 
                 case 'bmp':
@@ -565,7 +598,7 @@ class Image extends File {
                     $this->error = 'Failed to set the blending mode';
                     return false;
                 }
-                $_color_transparent = imagecolorallocatealpha($res_image, 0, 0, 0, 127);
+                $_color_transparent = imagecolorallocatealpha($res_image, 255, 255, 255, 127);
                 if (!$_color_transparent) {
                     $this->error = 'Failed to allocate a color + alpha';
                     return false;

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model;
 
-use ginkgo\Model;
+use app\classes\Model;
 use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Config;
@@ -55,7 +55,7 @@ class Verify extends Model {
             'verify_type'           => $str_type,
             'verify_token'          => $_str_token,
             'verify_rand'           => $_str_rand,
-            'verify_token_expire'   => GK_NOW + $this->configBase['verify_expire'] * 60,
+            'verify_token_expire'   => GK_NOW + $this->configBase['verify_expire'] * GK_MINUTE,
             'verify_status'         => 'enable',
             'verify_time_refresh'   => GK_NOW,
         );
@@ -127,11 +127,13 @@ class Verify extends Model {
 
         if (!$_arr_verifyRow) {
             return array(
+                'msg'   => 'Token not found',
                 'rcode' => 'x120102', //不存在记录
             );
         }
 
         $_arr_verifyRow['rcode'] = 'y120102';
+        $_arr_verifyRow['msg']   = '';
 
         return $this->rowProcess($_arr_verifyRow);
     }
@@ -208,10 +210,9 @@ class Verify extends Model {
             $arr_verifyRow['verify_time_disabled'] = GK_NOW;
         }
 
-        $arr_verifyRow['verify_datetime_refresh_short'] = date($this->configBase['site_date_short'] . ' ' . $this->configBase['site_time_short'], $arr_verifyRow['verify_time_refresh']);
-        $arr_verifyRow['verify_datetime_refresh']       = date($this->configBase['site_date'] . ' ' . $this->configBase['site_time_short'], $arr_verifyRow['verify_time_refresh']);
-        $arr_verifyRow['verify_datetime_expire']        = date($this->configBase['site_date'] . ' ' . $this->configBase['site_time_short'], $arr_verifyRow['verify_token_expire']);
-        $arr_verifyRow['verify_datetime_disabled']      = date($this->configBase['site_date'] . ' ' . $this->configBase['site_time_short'], $arr_verifyRow['verify_time_disabled']);
+        $arr_verifyRow['verify_time_refresh_format']       = $this->dateFormat($arr_verifyRow['verify_time_refresh']);
+        $arr_verifyRow['verify_time_expire_format']        = $this->dateFormat($arr_verifyRow['verify_token_expire']);
+        $arr_verifyRow['verify_time_disabled_format']      = $this->dateFormat($arr_verifyRow['verify_time_disabled']);
 
         return $arr_verifyRow;
     }

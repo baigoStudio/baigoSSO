@@ -17,7 +17,7 @@ return array(
     'Back'                              => '返回',
     'Show'                              => '查看',
     'Input error'                       => '输入错误，请检查！',
-    'Unknow'                            => '未知',
+    'Unknown'                           => '未知',
     'Save'                              => '保存',
     'Saving'                            => '正在保存 ...',
     'Checking'                          => '正在检查 ...',
@@ -100,6 +100,7 @@ return array(
     '<code>{:user_mail_new}</code> will be replaced with "New mailbox"'                 => '<code>{:user_mail_new}</code> 将被替换为 "新邮箱"',
     '<code>{:verify_url}</code> will be replaced with "Verify link"'                    => '<code>{:verify_url}</code> 将被替换为 "验证链接"',
 
+    'Check for updated module being disabled'                                           => '检查更新模块被禁用',
     'There are new versions, this is the latest version of the issues and help.'        => '有新版本可供升级，下面是最新版本的发布和更新帮助。',
     'Select or fill in days'                                                            => '选择或填入天数',
     'Select or fill in minutes'                                                         => '选择或填入分钟',

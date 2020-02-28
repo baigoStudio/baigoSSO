@@ -34,7 +34,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                             foreach ($mailtplRows as $key=>$value) { ?>
                                 <div class="tab-pane<?php if ($key == 'reg') { ?> active<?php } ?>" id="<?php echo $key; ?>">
-                                    <?php foreach ($value['list'] as $key_list=>$value_list) {
+                                    <?php foreach ($value['lists'] as $key_list=>$value_list) {
                                         $_arr_rule[$key . '_' . $key_list]['require'] = $value_list['require'];
 
                                         if (isset($value_list['format'])) {
@@ -120,7 +120,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

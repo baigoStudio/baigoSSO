@@ -10,7 +10,7 @@
                         <?php foreach ($charsetRows as $key=>$value) { ?>
                             <thead>
                                 <tr>
-                                    <th colspan="3"><?php echo $lang->get($value['title'], '', 'console.charset'); ?></th>
+                                    <th colspan="3"><?php echo $lang->get($value['title'], 'console.charset'); ?></th>
                                 </tr>
                                 <tr>
                                     <th class="text-nowrap"><?php echo $lang->get('Coding'); ?></th>
@@ -19,13 +19,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($value['list'] as $key_sub=>$value_sub) { ?>
+                                <?php foreach ($value['lists'] as $key_sub=>$value_sub) { ?>
                                     <tr>
                                         <td class="text-nowrap"><?php echo $key_sub; ?></td>
                                         <td class="text-nowrap">
-                                            <?php echo $lang->get($value_sub['title'], '', 'console.charset'); ?>
+                                            <?php echo $lang->get($value_sub['title'], 'console.charset'); ?>
                                         </td>
-                                        <td><?php echo $lang->get($value_sub['note'], '', 'console.charset'); ?></td>
+                                        <td><?php echo $lang->get($value_sub['note'], 'console.charset'); ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>

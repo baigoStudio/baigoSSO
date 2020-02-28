@@ -49,7 +49,7 @@ return array(
     'Sender'                                    => '发件人',
     'Recipient'                                 => '收件人',
     'Recipient not found'                       => '收件人不存在',
-    'Unknow'                                    => '未知',
+    'Unknown'                                    => '未知',
     'Apply'                                     => '提交',
     'Delete'                                    => '删除',
     'Action'                                    => '操作',

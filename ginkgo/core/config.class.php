@@ -138,6 +138,7 @@ class Config {
         }
     }
 
+
     public static function get($name = '', $range = '') {
         $name = (string)$name;
 
@@ -145,9 +146,9 @@ class Config {
             self::init();
         }
 
-        $_mix_range = self::rangeProcess($range);
+        $_mix_range  = self::rangeProcess($range);
 
-        $_mix_return    = '';
+        $_mix_return = '';
 
 
         if (Func::isEmpty($_mix_range)) {
@@ -197,6 +198,59 @@ class Config {
         return $_mix_return;
     }
 
+
+    public static function delete($name = '', $range = '') {
+        $name = (string)$name;
+
+        if (Func::isEmpty(self::$init)) {
+            self::init();
+        }
+
+        $_mix_range  = self::rangeProcess($range);
+
+        if (Func::isEmpty($_mix_range)) {
+            if (Func::isEmpty($name)) {
+                unset(self::$config);
+            } else {
+                if (isset(self::$config[$name])) {
+                    unset(self::$config[$name]);
+                }
+            }
+        } else if (is_array($_mix_range)) {
+            if (Func::isEmpty($name)) {
+                if (isset($_mix_range[1])) {
+                    if (isset(self::$config[$_mix_range[0]][$_mix_range[1]])) {
+                        unset(self::$config[$_mix_range[0]][$_mix_range[1]]);
+                    }
+                } else if (isset($_mix_range[0])) {
+                    if (isset(self::$config[$_mix_range[0]])) {
+                        unset(self::$config[$_mix_range[0]]);
+                    }
+                }
+            } else {
+                if (isset($_mix_range[1])) {
+                    if (isset(self::$config[$_mix_range[0]][$_mix_range[1]][$name])) {
+                        unset(self::$config[$_mix_range[0]][$_mix_range[1]][$name]);
+                    }
+                } else if (isset($_mix_range[0])) {
+                    if (isset(self::$config[$_mix_range[0]][$name])) {
+                        unset(self::$config[$_mix_range[0]][$name]);
+                    }
+                }
+            }
+        } else if (is_string($_mix_range)) {
+            if (Func::isEmpty($name)) {
+                if (isset(self::$config[$_mix_range])) {
+                    unset(self::$config[$_mix_range]);
+                }
+            } else {
+                if (isset(self::$config[$_mix_range][$name])) {
+                    unset(self::$config[$_mix_range][$name]);
+                }
+            }
+        }
+    }
+
     public static function count() {
         return self::$count;
     }
@@ -210,7 +264,7 @@ class Config {
 
         if (Func::isFile($path)) {
             $_arr_config = Loader::load($path);
-            self::$count++;
+            ++self::$count;
         } else {
             $_obj_excpt = new Exception('Config file not found', 500);
             $_obj_excpt->setData('err_detail', $path);
@@ -218,13 +272,25 @@ class Config {
             throw $_obj_excpt;
         }
 
-        if (!Func::isEmpty($_arr_config)) {
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
             $_arr_config = array_change_key_case($_arr_config);
 
             self::set($name, $_arr_config, $range);
         }
 
         return $_arr_config;
+    }
+
+    public static function write($path, $value = '') {
+        if (is_array($value)) {
+            $_str_outPut = '<?php return ' . var_export($value, true) . ';';
+        } else if (is_numeric($value)) {
+            $_str_outPut = '<?php return ' . $value . ';';
+        } else if (is_string($value)) {
+            $_str_outPut = '<?php return \'' . $value . '\';';
+        }
+
+        return File::instance()->fileWrite($path, $_str_outPut);
     }
 
     private static function loadSys() {
@@ -241,18 +307,18 @@ class Config {
 
         if (Func::isFile($_str_pathDbconfig)) {
             $_arr_config['dbconfig'] = Loader::load($_str_pathDbconfig);
-            self::$count++;
+            ++self::$count;
         }
 
         if (!Func::isEmpty($_arr_convention)) {
-            $_arr_convention    = array_change_key_case($_arr_convention);
+            $_arr_convention = array_change_key_case($_arr_convention);
         }
 
         if (!Func::isEmpty($_arr_config)) {
-            $_arr_config        = array_change_key_case($_arr_config);
+            $_arr_config = array_change_key_case($_arr_config);
         }
 
-        self::$config       = array_replace_recursive(self::$config, $_arr_convention, $_arr_config);
+        self::$config = array_replace_recursive(self::$config, $_arr_convention, $_arr_config);
     }
 
 
@@ -267,7 +333,7 @@ class Config {
             $_str_range = '';
         }
 
-        $_mix_return    = '';
+        $_mix_return = '';
 
         if (strpos($_str_range, '.')) {
             $_mix_return = explode('.', $_str_range);

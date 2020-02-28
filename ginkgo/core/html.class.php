@@ -59,7 +59,7 @@ class Html { // class start
         if (!Func::isEmpty($string)) {
             $string         = html_entity_decode($string, ENT_COMPAT, 'UTF-8');
             $_arr_src       = array('(', ')', '`');
-            $_arr_dst       = array('&#39;', '&#40;', '&#96;');
+            $_arr_dst       = array('&#40;', '&#41;', '&#96;');
             $_arr_srcSub    = array();
             $_arr_dstSub    = array();
 
@@ -69,8 +69,8 @@ class Html { // class start
                     $_arr_dstSub = array(':', '[', ']', '{', '}');
                 break;
                 case 'json_safe': //转换 json 特殊字符
-                    $_arr_srcSub = array('&#58;', '&#91;', '&#93;', '&#123;', '&#125;', '{:br}');
-                    $_arr_dstSub = array(':', '[', ']', '{', '}', '<br>');
+                    $_arr_srcSub = array('&#58;', '&#91;', '&#93;', '&#123;', '&#125;');
+                    $_arr_dstSub = array(':', '[', ']', '{', '}');
                 break;
                 case 'url': //转换 加密 特殊字符
                     $_arr_srcSub = array('&#58;', '&#45;', '&#61;', '&#63;');
@@ -80,9 +80,13 @@ class Html { // class start
                     $_arr_srcSub = array('&#58;', '&#45;', '&#61;', '&#33;');
                     $_arr_dstSub = array(':', '-', '=', '!');
                 break;
-                case 'datetime':
+                case 'date_time':
                     $_arr_srcSub = array('&#45;', '&#58;');
                     $_arr_dstSub = array('-', ':');
+                break;
+                case 'rgb':
+                    $_arr_src   = array('`');
+                    $_arr_dst   = array('&#96;');
                 break;
             }
 

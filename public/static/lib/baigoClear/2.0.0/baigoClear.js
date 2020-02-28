@@ -24,7 +24,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 progress: '.bg-progress',
                 msg: '.bg-msg',
                 icon: '.bg-icon',
-                msg_content: '.bg-msg-content',
+                msg_content: '.bg-msg-content'
             },
             msg: {
                 loading: 'Loading...',

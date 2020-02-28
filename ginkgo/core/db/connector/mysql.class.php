@@ -188,7 +188,7 @@ class Mysql extends Connector {
 
 
     function delete() {
-        $_str_sql = $this->buildDelete();;
+        $_str_sql = $this->buildDelete();
 
         if ($this->_fetchSql === true) {
             return $this->fetchBind($_str_sql, $this->_bind);
@@ -251,7 +251,7 @@ class Mysql extends Connector {
 
         //print_r($_str_sql);
 
-        return $this->fetchBind($_str_sql, $this->_bind);
+        return trim($this->fetchBind($_str_sql, $this->_bind));
     }
 
 

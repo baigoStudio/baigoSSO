@@ -87,7 +87,7 @@ class Verify extends Ctrl {
         $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
-            return $this->error('Token not found', $_arr_verifyRow['rcode']);
+            return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
 
         $_arr_verifyRow['userRow']      = $this->mdl_user->read($_arr_verifyRow['verify_user_id']);
@@ -107,7 +107,7 @@ class Verify extends Ctrl {
 
 
     function delete() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -138,7 +138,7 @@ class Verify extends Ctrl {
 
 
     function status() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);

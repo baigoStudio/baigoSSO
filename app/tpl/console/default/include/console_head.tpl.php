@@ -16,17 +16,19 @@
             <div class="navbar-nav mr-auto d-none d-lg-block">
                 <a href="<?php echo $route_console; ?>" class="nav-link">
                     <span class="fas fa-tachometer-alt"></span>
-                    <?php echo $config['site_name']; ?>
+                    <?php if (isset($config['var_extra']['base']['site_name'])) {
+                        echo $config['var_extra']['base']['site_name'];
+                    } ?>
                 </a>
             </div>
             <div class="navbar-nav mr-auto d-none d-lg-block">
                 <a href="<?php echo $route_console; ?>" class="navbar-brand">
-                    <img src="{:DIR_STATIC}sso/console/<?php echo $config['tpl']['path']; ?>/image/logo_white.svg" class="bg-head-logo">
+                    <img src="<?php echo $ui_ctrl['logo_console_head']; ?>" class="bg-head-logo">
                 </a>
             </div>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'profile') { ?> active<?php } ?>">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                    <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-toggle="dropdown">
                         <span class="fas fa-user"></span>
                         <?php if (isset($adminLogged['admin_nick']) && $adminLogged['admin_nick']) {
                             echo $adminLogged['admin_nick'];
@@ -67,7 +69,7 @@
                         <div class="card border-success">
                             <div class="list-group list-group-flush">
                                 <div class="dropright">
-                                    <a href="#" class="list-group-item d-flex justify-content-between align-items-center list-group-item-action" data-toggle="dropdown">
+                                    <a href="javascript:void(0);" class="list-group-item d-flex justify-content-between align-items-center list-group-item-action" data-toggle="dropdown">
                                         <span>
                                             <span class="fas fa-external-link-alt fa-fw"></span>
                                             <?php echo $lang->get('Shortcut', 'console.common'); ?>
@@ -108,8 +110,8 @@
                                             Plugin::listen('action_console_menu_plugin');
                                         }
 
-                                        foreach ($value_m['list'] as $key_s=>$value_s) { ?>
-                                            <a class="list-group-item<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m && isset($cfg['sub_active']) && $cfg['sub_active'] == $key_s) { ?> list-group-item-success<?php } ?>" href="<?php echo $route_console, $value_s['mod']; ?>/<?php echo $value_s['act']; ?>/">
+                                        foreach ($value_m['lists'] as $key_s=>$value_s) { ?>
+                                            <a class="list-group-item<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m && isset($cfg['sub_active']) && $cfg['sub_active'] == $key_s) { ?> list-group-item-success<?php } ?>" href="<?php echo $route_console, $value_s['ctrl']; ?>/<?php echo $value_s['act']; ?>/">
                                                 <?php echo $lang->get($value_s['title'], 'console.common'); ?>
                                             </a>
                                         <?php } ?>

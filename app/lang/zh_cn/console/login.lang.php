@@ -17,7 +17,7 @@ return array(
     'Username'                          => '用户名', //用户名
     'Password'                          => '密码', //密码
     'Close'                             => '关闭',
-    'Ok'                                => '确定',
+    'OK'                                => '确定',
     'Captcha'                           => '验证码',
     'Captcha is incorrect'              => '验证码错误',
     'Form token is incorrect'           => '表单令牌错误',

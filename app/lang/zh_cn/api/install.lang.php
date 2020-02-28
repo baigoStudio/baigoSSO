@@ -33,7 +33,7 @@ return array(
     'Create data successfully'          => '创建数据成功',
 
     'Close'                             => '关闭',
-    'Ok'                                => '确定',
+    'OK'                                => '确定',
     'Complete'                          => '完成',
     'Complete installation'             => '完成安装',
     'Confirm password'                  => '确认密码',

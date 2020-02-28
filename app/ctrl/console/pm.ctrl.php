@@ -11,6 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Func;
 use ginkgo\Html;
 use ginkgo\Plugin;
+use ginkgo\Ubbcode;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -102,11 +103,11 @@ class Pm extends Ctrl {
         $_arr_pmRow = $this->mdl_pm->read($_num_pmId);
 
         if ($_arr_pmRow['rcode'] != 'y110102') {
-            return $this->error('Message not found', $_arr_pmRow['rcode']);
+            return $this->error($_arr_pmRow['msg'], $_arr_pmRow['rcode']);
         }
 
-        $_arr_pmRow['pm_title']     = Func::ubbcode($_arr_pmRow['pm_title']);
-        $_arr_pmRow['pm_content']   = Func::ubbcode($_arr_pmRow['pm_content']);
+        $_arr_pmRow['pm_title']     = Ubbcode::convert($_arr_pmRow['pm_title']);
+        $_arr_pmRow['pm_content']   = Ubbcode::convert($_arr_pmRow['pm_content']);
         $_arr_pmRow['toUser']       = $this->mdl_user->read($_arr_pmRow['pm_to']);
         $_arr_pmRow['fromUser']     = $this->mdl_user->read($_arr_pmRow['pm_from']);
 
@@ -136,7 +137,7 @@ class Pm extends Ctrl {
         }
 
         $_arr_tplData = array(
-            'begin_datetime'    => date($this->config['var_extra']['base']['site_date'] . ' ' . $this->config['var_extra']['base']['site_time_short'], GK_NOW - 86400),
+            'begin_datetime'    => date($this->config['var_extra']['base']['site_date'] . ' ' . $this->config['var_extra']['base']['site_time_short'], GK_NOW - GK_DAY),
             'end_datetime'      => date($this->config['var_extra']['base']['site_date'] . ' ' . $this->config['var_extra']['base']['site_time_short'], GK_NOW),
             'token'         => $this->obj_request->token(),
         );
@@ -152,7 +153,7 @@ class Pm extends Ctrl {
 
 
     function bulkSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -245,7 +246,7 @@ class Pm extends Ctrl {
 
 
     function delete() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
@@ -282,7 +283,7 @@ class Pm extends Ctrl {
 
 
     function status() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
             return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);

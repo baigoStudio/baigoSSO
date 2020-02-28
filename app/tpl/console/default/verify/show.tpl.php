@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <?php echo $lang->get('Validation token', 'console.common') . ' &raquo; ' . $lang->get('Show'); ?>
+    <?php echo $lang->get('Validation token', 'console.common'), ' &raquo; ', $lang->get('Show'); ?>
     <button type="button" class="close" data-dismiss="modal">
         <span>&times;</span>
     </button>
@@ -28,23 +28,23 @@
         <div class="form-text"><?php if (isset($verifyRow['userRow']['user_name'])) {
             echo $verifyRow['userRow']['user_name'];
         } else {
-            echo $lang->get('Unknow');
+            echo $lang->get('Unknown');
         } ?></div>
     </div>
 
     <div class="form-group">
         <label><?php echo $lang->get('Expiry'); ?></label>
-        <div class="form-text"><?php echo $verifyRow['verify_datetime_expire']; ?></div>
+        <div class="form-text"><?php echo $verifyRow['verify_time_expire_format']['date_time']; ?></div>
     </div>
 
     <div class="form-group">
         <label><?php echo $lang->get('Initiate time'); ?></label>
-        <div class="form-text"><?php echo $verifyRow['verify_datetime_refresh']; ?></div>
+        <div class="form-text"><?php echo $verifyRow['verify_time_refresh_format']['date_time']; ?></div>
     </div>
 
     <div class="form-group">
         <label><?php echo $lang->get('Use time'); ?></label>
-        <div class="form-text"><?php echo $verifyRow['verify_datetime_disabled']; ?></div>
+        <div class="form-text"><?php echo $verifyRow['verify_time_disabled_format']['date_time']; ?></div>
     </div>
 
 </div>

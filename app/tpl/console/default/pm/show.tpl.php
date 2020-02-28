@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <?php echo $lang->get('Private message', 'console.common') . ' &raquo; ' . $lang->get('Show'); ?>
+    <?php echo $lang->get('Private message', 'console.common'), ' &raquo; ', $lang->get('Show'); ?>
     <button type="button" class="close" data-dismiss="modal">
         <span>&times;</span>
     </button>
@@ -14,7 +14,7 @@
                 } else if (isset($pmRow['fromUser']['user_name'])) {
                     echo $pmRow['fromUser']['user_name'];
                 } else {
-                    echo $lang->get('Unknow');
+                    echo $lang->get('Unknown');
                 } ?>
             </a>
         </li>
@@ -24,12 +24,12 @@
                 <?php if (isset($pmRow['toUser']['user_name'])) {
                     echo $pmRow['toUser']['user_name'];
                 } else {
-                    echo $lang->get('Unknow');
+                    echo $lang->get('Unknown');
                 } ?>
             </a>
         </li>
         <li class="list-inline-item">
-            <small><?php echo $pmRow['pm_datetime']; ?></small>
+            <small><?php echo $pmRow['pm_time_format']['date_time']; ?></small>
         </li>
     </ul>
 

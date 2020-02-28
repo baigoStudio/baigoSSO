@@ -45,7 +45,7 @@ class Login extends Ctrl {
         $_arr_userRow  = $this->mdl_login->read($_arr_inputSubmit['user_str'], $_arr_inputSubmit['user_by']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         if ($_arr_userRow['user_status'] == 'disabled') {

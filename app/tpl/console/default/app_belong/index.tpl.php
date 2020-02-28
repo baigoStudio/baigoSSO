@@ -1,5 +1,5 @@
 <?php $cfg = array(
-    'title'             => $lang->get('Application', 'console.common') . ' &raquo; ' . $appRow['app_name'] . ' &raquo; ' . $lang->get('Authorize users'),
+    'title'             => $lang->get('App', 'console.common') . ' &raquo; ' . $appRow['app_name'] . ' &raquo; ' . $lang->get('Authorize users'),
     'menu_active'       => 'app',
     'sub_active'        => 'index',
     'baigoValidate'    => 'true',
@@ -20,8 +20,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             </a>
         </nav>
 
-        <form name="user_search" id="user_search" class="d-none d-lg-inline-block" action="<?php echo $route_console; ?>app_belong/index/">
-            <input type="hidden" name="id" value="<?php echo $appRow['app_id']; ?>">
+        <form name="user_search" id="user_search" class="d-none d-lg-inline-block" action="<?php echo $route_console; ?>app-belong/index/id/<?php echo $appRow['app_id']; ?>/">
             <div class="input-group mb-3">
                 <input type="text" name="key" value="<?php echo $search['key']; ?>" placeholder="<?php echo $lang->get('Key word'); ?>" class="form-control">
                 <span class="input-group-append">
@@ -66,7 +65,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 </span>
             <?php } ?>
 
-            <a href="<?php echo $route_console; ?>app_belong/index/id/<?php echo $search['id']; ?>/" class="badge badge-danger badge-pill">
+            <a href="<?php echo $route_console; ?>app-belong/index/id/<?php echo $search['id']; ?>/" class="badge badge-danger badge-pill">
                 <span class="fas fa-times-circle"></span>
                 <?php echo $lang->get('Reset'); ?>
             </a>
@@ -75,7 +74,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
     <div class="card-group">
         <div class="card">
-            <form name="user_list_belong" id="user_list_belong" action="<?php echo $route_console; ?>app_belong/remove/">
+            <form name="user_list_belong" id="user_list_belong" action="<?php echo $route_console; ?>app-belong/remove/">
                 <input type="hidden" name="__token__" value="<?php echo $token; ?>">
                 <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
 
@@ -187,7 +186,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             </form>
         </div>
         <div class="card">
-            <form name="user_list" id="user_list" action="<?php echo $route_console; ?>app_belong/submit/">
+            <form name="user_list" id="user_list" action="<?php echo $route_console; ?>app-belong/submit/">
                 <input type="hidden" name="__token__" value="<?php echo $token; ?>">
                 <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
 
@@ -331,7 +330,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {
@@ -360,7 +359,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

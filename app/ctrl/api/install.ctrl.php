@@ -26,7 +26,7 @@ class Install extends Ctrl {
     protected $version;
 
     private $security = array(
-        'security'  => '',
+        'key'       => '',
         'secret'    => '',
     );
 
@@ -155,9 +155,9 @@ class Install extends Ctrl {
 
         $_str_src       = Json::encode($_arr_src);
 
-        $_str_sign      = Sign::make($_str_src, $this->security['security'] . $this->security['secret']);
+        $_str_sign      = Sign::make($_str_src, $this->security['key'] . $this->security['secret']);
 
-        $_str_encrypt   = Crypt::encrypt($_str_src, $this->security['security'], $this->security['secret']);
+        $_str_encrypt   = Crypt::encrypt($_str_src, $this->security['key'], $this->security['secret']);
 
         if ($_str_encrypt === false) {
             $_str_error = Crypt::getError();
@@ -286,6 +286,7 @@ class Install extends Ctrl {
         $_str_rand                          = Func::rand();
 
         $_mdl_user->inputReg['user_name']   = $_arr_inputSubmit['admin_name'];
+        $_mdl_user->inputReg['user_mail']   = $_arr_inputSubmit['admin_mail'];
         $_mdl_user->inputReg['user_pass']   = Crypt::crypt($_arr_inputSubmit['admin_pass'], $_str_rand, true);
         $_mdl_user->inputReg['user_rand']   = $_str_rand;
         $_mdl_user->inputReg['user_status'] = 'enable';
@@ -306,9 +307,9 @@ class Install extends Ctrl {
 
         $_str_src       = Json::encode($_arr_submitResult);
 
-        $_str_sign      = Sign::make($_str_src, $this->security['security'] . $this->security['secret']);
+        $_str_sign      = Sign::make($_str_src, $this->security['key'] . $this->security['secret']);
 
-        $_str_encrypt   = Crypt::encrypt($_str_src, $this->security['security'], $this->security['secret']);
+        $_str_encrypt   = Crypt::encrypt($_str_src, $this->security['key'], $this->security['secret']);
 
         if ($_str_encrypt === false) {
             $_str_error = Crypt::getError();
@@ -367,9 +368,9 @@ class Install extends Ctrl {
 
         $_str_src       = Json::encode($_arr_submitResult);
 
-        $_str_sign      = Sign::make($_str_src, $this->security['security'] . $this->security['secret']);
+        $_str_sign      = Sign::make($_str_src, $this->security['key'] . $this->security['secret']);
 
-        $_str_encrypt   = Crypt::encrypt($_str_src, $this->security['security'], $this->security['secret']);
+        $_str_encrypt   = Crypt::encrypt($_str_src, $this->security['key'], $this->security['secret']);
 
         if ($_str_encrypt === false) {
             $_str_error = Crypt::getError();
@@ -412,14 +413,14 @@ class Install extends Ctrl {
         }
 
         if ($chk_security) {
-            if ($_arr_inputCommon['security'] != $this->security['security']) {
+            if ($_arr_inputCommon['key'] != $this->security['key']) {
                 return array(
                     'rcode' => 'x030201',
                     'msg'   => $this->obj_lang->get('Security is incorrect', 'api.common'),
                 );
             }
 
-            $_str_decrypt = Crypt::decrypt($_arr_inputCommon['code'], $this->security['security'], $this->security['secret']);  //解密数据
+            $_str_decrypt = Crypt::decrypt($_arr_inputCommon['code'], $this->security['key'], $this->security['secret']);  //解密数据
 
             if ($_str_decrypt === false) {
                 $_str_error = Crypt::getError();
@@ -431,7 +432,7 @@ class Install extends Ctrl {
 
             //print_r($_arr_inputCommon);
 
-            if (!Sign::check($_str_decrypt, $_arr_inputCommon['sign'], $this->security['security'] . $this->security['secret'])) {
+            if (!Sign::check($_str_decrypt, $_arr_inputCommon['sign'], $this->security['key'] . $this->security['secret'])) {
                 return array(
                     'rcode' => 'x030406',
                     'msg'   => $this->obj_lang->get('Signature is incorrect', 'api.common'),
@@ -440,7 +441,7 @@ class Install extends Ctrl {
 
             $_arr_decryptRow = Json::decode($_str_decrypt);
         } else {
-            if (!Sign::check($_arr_inputCommon['code'], $_arr_inputCommon['sign'], $_arr_inputCommon['security'])) {
+            if (!Sign::check($_arr_inputCommon['code'], $_arr_inputCommon['sign'], $_arr_inputCommon['key'])) {
                 return array(
                     'rcode' => 'x030406',
                     'msg'   => $this->obj_lang->get('Signature is incorrect', 'api.common'),
@@ -468,7 +469,9 @@ class Install extends Ctrl {
         $_str_configSecurity = GK_PATH_TEMP . 'security' . GK_EXT_INC;
 
         if (Func::isFile($_str_configSecurity)) {
-            $this->security  = Loader::load($_str_configSecurity);
+            $_arr_security  = Loader::load($_str_configSecurity);
+
+            $this->security = array_replace_recursive($this->security, $_arr_security);
         }
     }
 

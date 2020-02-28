@@ -1,5 +1,5 @@
 <?php $cfg = array(
-    'title'             => $lang->get('Application', 'console.common'),
+    'title'             => $lang->get('App', 'console.common'),
     'menu_active'       => 'app',
     'sub_active'        => 'index',
     'baigoValidate'    => 'true',
@@ -102,7 +102,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             </div>
                         </th>
                         <th>
-                            <?php echo $lang->get('Application'); ?>
+                            <?php echo $lang->get('App'); ?>
                         </th>
                         <th class="d-none d-lg-table-cell bg-td-md">
                             <small><?php echo $lang->get('Note'); ?></small>
@@ -150,7 +150,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                             <span class="fas fa-key"></span>
                                             <?php echo $lang->get('View key'); ?>
                                         </a>
-                                        <a href="<?php echo $route_console; ?>app_belong/index/id/<?php echo $value['app_id']; ?>/" class="mr-2">
+                                        <a href="<?php echo $route_console; ?>app-belong/index/id/<?php echo $value['app_id']; ?>/" class="mr-2">
                                             <span class="fas fa-users"></span>
                                             <?php echo $lang->get('Authorize users'); ?>
                                         </a>
@@ -256,7 +256,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             }
         },
         attr_names: {
-            app_ids: '<?php echo $lang->get('Application'); ?>',
+            app_ids: '<?php echo $lang->get('App'); ?>',
             act: '<?php echo $lang->get('Action'); ?>'
         },
         type_msg: {
@@ -272,7 +272,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         modal: {
             btn_text: {
                 close: '<?php echo $lang->get('Close'); ?>',
-                ok: '<?php echo $lang->get('Ok'); ?>'
+                ok: '<?php echo $lang->get('OK'); ?>'
             }
         },
         msg_text: {

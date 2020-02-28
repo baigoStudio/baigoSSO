@@ -19,7 +19,7 @@ return array(
     'Token'                                                             => '表单令牌',
     'All'                                                               => '全部',
     'Close'                                                             => '关闭',
-    'Ok'                                                                => '确定',
+    'OK'                                                                => '确定',
     'Status'                                                            => '状态',
     'Type'                                                              => '类型',
     'Save'                                                              => '保存',

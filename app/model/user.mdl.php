@@ -67,6 +67,9 @@ class User extends User_Common {
             $_arr_userData['user_extend'] = $this->inputSubmit['user_extend'];
         }
 
+        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
+
         if ($this->inputSubmit['user_id'] > 0) {
             if (isset($this->inputSubmit['user_pass']) && !Func::isEmpty($this->inputSubmit['user_pass'])) {
                 $_arr_userData['user_pass'] = $this->inputSubmit['user_pass']; //如果密码为空，则不修改
@@ -166,7 +169,7 @@ class User extends User_Common {
             'user_sec_answ' => $this->inputSecqa['user_sec_answ'],
         );
 
-        //print_r($this->inputSecqa);
+        $_arr_userData['user_sec_ques'] = Json::encode($_arr_userData['user_sec_ques']);
 
         $_num_count     = $this->where('user_id', '=', $this->inputSecqa['user_id'])->update($_arr_userData); //更新数据
 
@@ -226,11 +229,13 @@ class User extends User_Common {
 
         if (!$_arr_userRow) {
             return array(
+                'msg'   => 'User not found',
                 'rcode' => 'x010102', //不存在记录
             );
         }
 
         $_arr_userRow['rcode'] = 'y010102';
+        $_arr_userRow['msg']   = '';
 
         return $this->rowProcess($_arr_userRow);
     }
@@ -378,6 +383,14 @@ class User extends User_Common {
             $arr_userRow['user_sec_ques']  = Json::decode($arr_userRow['user_sec_ques']);
         } else {
             $arr_userRow['user_sec_ques']  = array();
+        }
+
+        $_num_countSecqa = Config::get('count_secqa', 'var_default');
+
+        for ($_iii = 1; $_iii <= $_num_countSecqa; $_iii++) {
+            if (!isset($arr_userRow['user_sec_ques'][$_iii])) {
+                $arr_userRow['user_sec_ques'][$_iii] = '';
+            }
         }
 
         return $arr_userRow;

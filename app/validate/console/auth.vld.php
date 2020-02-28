@@ -7,7 +7,6 @@
 namespace app\validate\console;
 
 use ginkgo\Validate;
-use ginkgo\Lang;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -65,8 +64,7 @@ class Auth extends Validate {
         ),
     );
 
-    function __construct() { //构造函数
-        $this->obj_lang         = Lang::instance();
+    function v_init() { //构造函数
 
         $_arr_attrName = array(
             'admin_id'              => $this->obj_lang->get('ID'),

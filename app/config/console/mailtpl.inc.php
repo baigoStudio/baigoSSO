@@ -3,7 +3,7 @@ return array(
     /*------ 注册------*/
     'reg' => array(
         'title' => 'Confirm registration',
-        'list' => array(
+        'lists' => array(
             'subject'   => array(
                 'title'      => 'Subject',
                 'type'       => 'str',
@@ -22,7 +22,7 @@ return array(
     /*------ 更换邮箱------*/
     'mailbox' => array(
         'title' => 'Update mailbox',
-        'list' => array(
+        'lists' => array(
             'subject'   => array(
                 'title'      => 'Subject',
                 'type'       => 'str',
@@ -41,7 +41,7 @@ return array(
     /*------ 找回密码------*/
     'forgot' => array(
         'title' => 'Forgot password',
-        'list' => array(
+        'lists' => array(
             'subject'   => array(
                 'title'      => 'Subject',
                 'type'       => 'str',

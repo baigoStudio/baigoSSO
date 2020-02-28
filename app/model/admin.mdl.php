@@ -6,7 +6,7 @@
 
 namespace app\model;
 
-use ginkgo\Model;
+use app\classes\Model;
 use ginkgo\Json;
 use ginkgo\Func;
 
@@ -63,11 +63,13 @@ class Admin extends Model {
 
         if (!$_arr_adminRow) {
             return array(
+                'msg'   => 'Administrator not found',
                 'rcode' => 'x020102', //不存在记录
             );
         }
 
         $_arr_adminRow['rcode']   = 'y020102';
+        $_arr_adminRow['msg']     = '';
 
         return $this->rowProcess($_arr_adminRow);
     }

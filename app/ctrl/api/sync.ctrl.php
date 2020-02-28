@@ -8,7 +8,6 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Config;
 use ginkgo\Json;
 use ginkgo\Sign;
 
@@ -114,6 +113,9 @@ class Sync extends Ctrl {
             'user_id',
             'user_name',
             'user_mail',
+            'user_status',
+            'user_access_token',
+            'user_access_expire',
         );
 
         $_arr_userRow = $this->mdl_sync->read($arr_inputCheck['user_str'], $arr_inputCheck['user_by'], 0, $_arr_select);

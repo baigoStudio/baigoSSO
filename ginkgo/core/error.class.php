@@ -91,13 +91,7 @@ class Error {
         $_str_key = md5($err_no . $err_msg . $err_file . $err_line);
 
         if (self::isFatal($err_no)) {
-            /*if (class_exists('ginkgo\Exception')) {
-                $_obj_except = new Exception($err_msg, 500, $err_no, $err_file, $err_line);
-            } else {
-                $_obj_except = new \Exception($err_msg, 500);
-            }*/
-
-             self::sendErr($_arr_error);
+            self::sendErr($_arr_error);
         } else {
             Debug::record($_str_key, $_arr_error);
 
@@ -194,7 +188,7 @@ class Error {
 
         $error['http_status'] = $_obj_response->getStatus();
 
-        $_arr_configDefault = Config::get('var_default');
+        $_arr_configDefault  = Config::get('var_default');
 
         if (self::$obj_request->isAjax()) {
             if (Func::isEmpty($_arr_configDefault['return_type_ajax'])) {
@@ -214,7 +208,7 @@ class Error {
 
             self::$obj['lang'] = self::$lang;
 
-            $_str_content = self::fetch('exception', $error);
+            $_str_content = self::fetch($error['status_code'], $error);
         }
 
         $_obj_response->setContent($_str_content);
@@ -223,51 +217,61 @@ class Error {
     }
 
 
-    public static function fetch($tpl, $data) {
-        $_arr_configTpl = Config::get('tpl');
+    public static function fetch($tpl = '', $data = array()) {
+        $_arr_configTplSys     = Config::get('tpl_sys');
+        $_arr_configExceptPage = Config::get('exception_page');
 
-        if (!Func::isEmpty($_arr_configTpl['suffix'])) {
-            self::$suffix = $_arr_configTpl['suffix'];
+        if (!Func::isEmpty($_arr_configTplSys['suffix'])) {
+            self::$suffix = $_arr_configTplSys['suffix'];
         }
 
         $_str_pathTpl = GK_PATH_TPL;
 
-        if (!Func::isEmpty($_arr_configTpl['sys'])) {
-            if (strpos($_arr_configTpl['sys'], '/') !== false) {
-                $_str_pathTpl = Func::fixDs($_arr_configTpl['sys']);
+        if (!Func::isEmpty($_arr_configTplSys['path'])) {
+            if (strpos($_arr_configTplSys['path'], DS) !== false) {
+                $_str_pathTpl = Func::fixDs($_arr_configTplSys['path']);
             } else {
-                $_str_pathTpl .= Func::fixDs($_arr_configTpl['sys']);
+                $_str_pathTpl .= Func::fixDs($_arr_configTplSys['path']);
             }
         }
 
-        $_str_tpl = $_str_pathTpl . $tpl . self::$suffix;
+        if (self::$configDebug['dump']) {
+            $_str_tpl = $_str_pathTpl . 'exception' . self::$suffix;
 
-        if (!Func::isFile($_str_tpl)) {
-            if (self::$configDebug['dump']) {
-                $_str_msg = 'Template "' . $_str_tpl . '" not found';
-            } else {
-                $_str_msg = 'Template not found';
+            if (!Func::isFile($_str_tpl)) {
+                return '<pre>' . var_export($data, true) . '</pre>';
             }
 
-            $_str_content = 'Fatal error: ' . $_str_msg;
+            if (!Func::isEmpty($data)) {
+                extract($data, EXTR_OVERWRITE);
+            }
+        } else {
+            if (!Func::isEmpty($tpl) && isset($_arr_configExceptPage[$tpl])) {
+                $_str_tplName = $_arr_configExceptPage[$tpl];
+                if (strpos($_str_tplName, DS) !== false) {
+                    $_str_tpl = $_str_tplName;
+                } else {
+                    $_str_tpl = $_str_pathTpl . $_str_tplName . self::$suffix;
+                }
+            } else if (!Func::isEmpty($tpl)) {
+                $_str_tpl = $_str_pathTpl . $tpl . self::$suffix;
+            }
 
-            return $_str_content;
+            $_str_ext = pathinfo($_str_tpl, PATHINFO_EXTENSION);
+
+            if (Func::isEmpty($_str_ext)) {
+                $_str_tpl .= self::$suffix;
+            }
+
+            if (!Func::isFile($_str_tpl)) {
+                return '<div>' . $data['http_status'] . '</div>';
+            }
         }
 
         $_str_content = '';
 
-        //print_r(self::$config);
-
-        /*if (ob_get_length() > 0 && self::$configDebug['dump'] != true) {
-            ob_end_clean();
-        }*/
-
         ob_start();
         ob_implicit_flush(0);
-
-        if (!Func::isEmpty($data)) {
-            extract($data, EXTR_OVERWRITE);
-        }
 
         if (!Func::isEmpty(self::$obj)) {
             extract(self::$obj, EXTR_OVERWRITE);
@@ -277,19 +281,22 @@ class Error {
         $_str_content = ob_get_clean();
         //ob_end_clean();
 
-        $_str_urlBase       = self::$obj_request->baseUrl(true);
-        $_str_dirRoot       = self::$obj_request->root();
-        $_str_routeRoot     = self::$obj_request->baseUrl();
+        $_str_urlBase       = Func::fixDs(self::$obj_request->baseUrl(true), '/');
+        $_str_urlRoot       = Func::fixDs(self::$obj_request->root(true), '/');
+        $_str_dirRoot       = Func::fixDs(self::$obj_request->root(), '/');
+        $_str_routeRoot     = Func::fixDs(self::$obj_request->baseUrl(), '/');
 
         $_arr_replaceSrc = array(
             '{:URL_BASE}',
             '{:URL_ROOT}',
+            '{:DIR_ROOT}',
             '{:DIR_STATIC}',
             '{:ROUTE_ROOT}',
         );
 
         $_arr_replaceDst = array(
             $_str_urlBase,
+            $_str_urlRoot,
             $_str_dirRoot,
             $_str_dirRoot . GK_NAME_STATIC . '/',
             $_str_routeRoot,

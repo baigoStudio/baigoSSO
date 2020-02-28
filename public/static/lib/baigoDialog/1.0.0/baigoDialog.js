@@ -22,7 +22,7 @@ License: http://www.opensource.org/licenses/mit-license.php
             btn_text: {
                 cancel: 'Cancel',
                 confirm: 'Confirm',
-                ok: 'Ok'
+                ok: 'OK'
             },
             tpl: '<div class="modal bg-confirm-modal">' +
                 '<div class="modal-dialog modal-dialog-centered">' +
@@ -33,7 +33,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                         '<div class="modal-footer">' +
                             '<button type="button" class="btn btn-outline-secondary btn-sm bg-cancel bg-btn-confirm" data-act="cancel">Cancel</button>' +
                             '<button type="button" class="btn btn-primary btn-sm bg-confirm bg-btn-confirm" data-act="confirm">Confirm</button>' +
-                            '<button type="button" class="btn btn-primary btn-sm bg-ok bg-btn-ok" data-dismiss="modal">Ok</button>' +
+                            '<button type="button" class="btn btn-primary btn-sm bg-ok bg-btn-ok" data-dismiss="modal">OK</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
@@ -55,8 +55,10 @@ License: http://www.opensource.org/licenses/mit-license.php
                 if (typeof msg != 'undefined' && msg.length > 0) {
                     $(opts.selector.modal + ' ' + opts.selector.msg).text(msg);
                 }
+                
+                var _option = { backdrop: 'static', show: true };
 
-                $(opts.selector.modal).modal('show');
+                $(opts.selector.modal).modal(_option);
             }
         };
 

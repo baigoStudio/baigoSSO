@@ -8,7 +8,6 @@ namespace app\model\console;
 
 use app\model\Admin as Admin_Base;
 use ginkgo\Func;
-use ginkgo\Json;
 use ginkgo\Html;
 
 //不能非法包含或直接执行
@@ -140,9 +139,6 @@ class Profile extends Admin_Base {
         );
 
         $_arr_inputSecqa = $this->obj_request->post($_arr_inputParam);
-
-        $_arr_inputSecqa['admin_sec_ques']    = Json::encode($_arr_inputSecqa['admin_sec_ques']);
-        $_arr_inputSecqa['admin_sec_answ']    = Json::encode($_arr_inputSecqa['admin_sec_answ']);
 
         $_mix_vld = $this->validate($_arr_inputSecqa, '', 'secqa');
 

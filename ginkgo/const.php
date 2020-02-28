@@ -8,11 +8,19 @@
 defined('IN_GINKGO') or exit('Access denied');
 
 define('DS', DIRECTORY_SEPARATOR); //目录分离符
-define('GK_VERSION', '0.1.0'); //框架版本
-define('GK_PUBLISH', 20190830); //框架发布时间
+define('GK_VERSION', '0.1.1'); //框架版本
+define('GK_PUBLISH', 20200228); //框架发布时间
 define('GK_NOW', $_SERVER['REQUEST_TIME']); //当前时间
 define('GK_START_TIME', microtime(true));
 define('GK_START_MEM', memory_get_usage());
+
+//用于时间计算
+define('GK_MINUTE', 60);
+define('GK_HOUR', 3600);
+define('GK_DAY', 86400);
+define('GK_WEEK', 604800);
+define('GK_MONTH', 2592000);
+define('GK_YEAR', 31536000);
 
 //扩展名-------
 defined('GK_EXT') or define('GK_EXT', '.php'); //扩展名

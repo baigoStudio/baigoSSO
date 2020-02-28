@@ -14,14 +14,16 @@ abstract class Ctrl {
     protected $obj_request;
     protected $obj_lang;
     protected $obj_view;
-    protected $route = array();
-    protected $param = array();
+    protected $route        = array();
+    protected $routeOrig    = array();
+    protected $param        = array();
 
     function __construct($param = array()) {
         $this->obj_request  = Request::instance();
         $this->obj_lang     = Lang::instance();
         $this->obj_view     = View::instance();
-        $this->route        = $this->obj_request->route();
+        $this->route        = $this->obj_request->route;
+        $this->routeOrig    = $this->obj_request->routeOrig;
         $this->param        = $param;
 
         // 控制器初始化

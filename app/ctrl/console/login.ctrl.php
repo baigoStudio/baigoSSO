@@ -10,7 +10,6 @@ use app\classes\console\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
 use ginkgo\Func;
-use ginkgo\Html;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -74,7 +73,7 @@ class Login extends Ctrl {
 
         $_arr_userRow = $this->mdl_user->read($_arr_inputSubmit['admin_name'], 'user_name');
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->fetchJson('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         if ($_arr_userRow['user_status'] == 'disabled') {
@@ -83,7 +82,7 @@ class Login extends Ctrl {
 
         $_arr_adminRow = $this->mdl_login->read($_arr_userRow['user_id']);
         if ($_arr_adminRow['rcode'] != 'y020102') {
-            return $this->fetchJson('Administrator not found', 'rcode');
+            return $this->fetchJson($_arr_adminRow['msg'], $_arr_adminRow['rcode']);
         }
 
         if ($_arr_adminRow['admin_status'] != 'enable') {

@@ -6,7 +6,7 @@
 
 namespace app\model\install;
 
-use app\classes\Model;
+use app\classes\install\Model;
 use ginkgo\Func;
 
 //不能非法包含或直接执行

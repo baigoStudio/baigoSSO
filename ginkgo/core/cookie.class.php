@@ -20,7 +20,7 @@ class Cookie {
         'path_arr'  => array(), // cookie 保存路径 数组
         'domain'    => '', // cookie 有效域名
         'secure'    => false, //  cookie 启用安全传输
-        'httponly'  => false, // httponly 设置
+        'httponly'  => true, // httponly 设置
         'setcookie' => true, // 是否使用 setcookie
     );
 
@@ -139,10 +139,10 @@ class Cookie {
         $name = $prefix . $name;
 
         if (Func::isEmpty($_arr_config['path_arr'])) {
-            setcookie($name, '', GK_NOW - 3600, $_arr_config['path'], $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
+            setcookie($name, '', GK_NOW - GK_HOUR, $_arr_config['path'], $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
         } else {
             foreach ($_arr_config['path_arr'] as $_key=>$_value) {
-                setcookie($name, '', GK_NOW - 3600, $_value, $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
+                setcookie($name, '', GK_NOW - GK_HOUR, $_value, $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
             }
         }
 

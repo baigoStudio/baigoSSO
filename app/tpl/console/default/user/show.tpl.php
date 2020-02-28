@@ -47,14 +47,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             </div>
 
             <h5>
-                <?php echo $lang->get('Authorized application'); ?>
+                <?php echo $lang->get('Authorized App'); ?>
             </h5>
             <div class="table-responsive">
                 <table class="table table-striped table-hover border">
                     <thead>
                         <tr>
                             <th class="text-nowrap bg-td-xs"><?php echo $lang->get('ID'); ?></th>
-                            <th><?php echo $lang->get('Application'); ?></th>
+                            <th><?php echo $lang->get('App'); ?></th>
                             <th class="text-nowrap bg-td-md"><?php echo $lang->get('Status'); ?></th>
                         </tr>
                     </thead>
@@ -113,7 +113,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     } ?>
 
                     <div class="form-group">
-                        <label><?php echo $lang->get('Registered from application'); ?></label>
+                        <label><?php echo $lang->get('Registered from App'); ?></label>
                         <div>
                             <?php if (isset($appRow['app_name'])) { ?>
                                 <a href="<?php echo $route_console; ?>/app/show/id/<?php echo $userRow['user_app_id']; ?>/">

@@ -53,48 +53,43 @@ class Profile extends Ctrl {
 
 
     function infoSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
-            return $this->json($_mix_init['msg'], $_mix_init['rcode']);
+            return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
         }
 
         if (!$this->isAjaxPost) {
-            return $this->json('Access denied', '', 405);
+            return $this->fetchJson('Access denied', '', 405);
         }
 
         if (isset($this->adminLogged['admin_allow_profile']['info'])) {
-            return $this->json('You do not have permission', 'x020305');
+            return $this->fetchJson('You do not have permission', 'x020305');
         }
 
         $_arr_inputInfo = $this->mdl_profile->inputInfo();
 
         if ($_arr_inputInfo['rcode'] != 'y020201') {
-            return $this->json($_arr_inputInfo['msg'], $_arr_inputInfo['rcode']);
-        }
-
-        $_arr_adminRow = $this->mdl_profile->check($this->adminLogged['admin_id']);
-        if ($_arr_adminRow['rcode'] != 'y020102') {
-            return $this->json('Administrator not found', $_arr_adminRow['rcode']);
+            return $this->fetchJson($_arr_inputInfo['msg'], $_arr_inputInfo['rcode']);
         }
 
         $_arr_userRow = $this->mdl_user->read($this->adminLogged['admin_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->json('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputInfo['admin_pass'], $_arr_userRow['user_rand']);
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
-            return $this->json('Password is incorrect', 'x010201');
+            return $this->fetchJson('Password is incorrect', 'x010201');
         }
 
         $this->mdl_profile->inputInfo['admin_id'] = $this->adminLogged['admin_id'];
 
         $_arr_infoResult = $this->mdl_profile->info();
 
-        return $this->json($_arr_infoResult['msg'], $_arr_infoResult['rcode']);
+        return $this->fetchJson($_arr_infoResult['msg'], $_arr_infoResult['rcode']);
     }
 
 
@@ -124,41 +119,36 @@ class Profile extends Ctrl {
 
 
     function passSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
-            return $this->json($_mix_init['msg'], $_mix_init['rcode']);
+            return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
         }
 
         if (!$this->isAjaxPost) {
-            return $this->json('Access denied', '', 405);
+            return $this->fetchJson('Access denied', '', 405);
         }
 
         if (isset($this->adminLogged['admin_allow_profile']['pass'])) {
-            return $this->json('You do not have permission', 'x020305');
+            return $this->fetchJson('You do not have permission', 'x020305');
         }
 
         $_arr_inputPass = $this->mdl_profile->inputPass();
 
         if ($_arr_inputPass['rcode'] != 'y020201') {
-            return $this->json($_arr_inputPass['msg'], $_arr_inputPass['rcode']);
-        }
-
-        $_arr_adminRow = $this->mdl_profile->check($this->adminLogged['admin_id']);
-        if ($_arr_adminRow['rcode'] != 'y020102') {
-            return $this->json('Administrator not found', $_arr_adminRow['rcode']);
+            return $this->fetchJson($_arr_inputPass['msg'], $_arr_inputPass['rcode']);
         }
 
         $_arr_userRow = $this->mdl_user->read($this->adminLogged['admin_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->json('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputPass['admin_pass'], $_arr_userRow['user_rand']);
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
-            return $this->json('Password is incorrect', 'x010201');
+            return $this->fetchJson('Password is incorrect', 'x010201');
         }
 
         $_str_rand     = Func::rand();
@@ -167,7 +157,7 @@ class Profile extends Ctrl {
 
         $_arr_passResult   = $this->mdl_user->pass($this->adminLogged['admin_id'], $_str_passNew, $_str_rand);
 
-        return $this->json($_arr_passResult['msg'], $_arr_passResult['rcode']);
+        return $this->fetchJson($_arr_passResult['msg'], $_arr_passResult['rcode']);
     }
 
 
@@ -206,42 +196,40 @@ class Profile extends Ctrl {
 
 
     function secqaSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
-            return $this->json($_mix_init['msg'], $_mix_init['rcode']);
+            return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
         }
 
         if (!$this->isAjaxPost) {
-            return $this->json('Access denied', '', 405);
+            return $this->fetchJson('Access denied', '', 405);
         }
 
         if (isset($this->adminLogged['admin_allow_profile']['secqa'])) {
-            return $this->json('You do not have permission', 'x020305');
+            return $this->fetchJson('You do not have permission', 'x020305');
         }
 
         $_arr_inputSecqa = $this->mdl_profile->inputSecqa();
 
         if ($_arr_inputSecqa['rcode'] != 'y020201') {
-            return $this->json($_arr_inputSecqa['msg'], $_arr_inputSecqa['rcode']);
-        }
-
-        $_arr_adminRow = $this->mdl_profile->check($this->adminLogged['admin_id']);
-        if ($_arr_adminRow['rcode'] != 'y020102') {
-            return $this->json('Administrator not found', $_arr_adminRow['rcode']);
+            return $this->fetchJson($_arr_inputSecqa['msg'], $_arr_inputSecqa['rcode']);
         }
 
         $_arr_userRow = $this->mdl_user->read($this->adminLogged['admin_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->json('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputSecqa['admin_pass'], $_arr_userRow['user_rand']);
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
-            return $this->json('Password is incorrect', 'x010201');
+            return $this->fetchJson('Password is incorrect', 'x010201');
         }
+
+        $_arr_inputSecqa['admin_sec_ques']    = Json::encode($_arr_inputSecqa['admin_sec_ques']);
+        $_arr_inputSecqa['admin_sec_answ']    = Json::encode($_arr_inputSecqa['admin_sec_answ']);
 
         $this->mdl_user->inputSecqa['user_sec_ques']    = $_arr_inputSecqa['admin_sec_ques'];
         $this->mdl_user->inputSecqa['user_sec_answ']    = Crypt::crypt($_arr_inputSecqa['admin_sec_answ'], $_arr_userRow['user_name']);
@@ -249,7 +237,7 @@ class Profile extends Ctrl {
 
         $_arr_secqaResult    = $this->mdl_user->secqa();
 
-        return $this->json($_arr_secqaResult['msg'], $_arr_secqaResult['rcode']);
+        return $this->fetchJson($_arr_secqaResult['msg'], $_arr_secqaResult['rcode']);
     }
 
 
@@ -280,48 +268,43 @@ class Profile extends Ctrl {
 
 
     function mailboxSubmit() {
-        $_mix_init = $this->init(false);
+        $_mix_init = $this->init();
 
         if ($_mix_init !== true) {
-            return $this->json($_mix_init['msg'], $_mix_init['rcode']);
+            return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
         }
 
         if (!$this->isAjaxPost) {
-            return $this->json('Access denied', '', 405);
+            return $this->fetchJson('Access denied', '', 405);
         }
 
         if (isset($this->adminLogged['admin_allow_profile']['mailbox'])) {
-            return $this->json('You do not have permission', 'x020305');
+            return $this->fetchJson('You do not have permission', 'x020305');
         }
 
         $_arr_inputMailbox = $this->mdl_profile->inputMailbox();
 
         if ($_arr_inputMailbox['rcode'] != 'y020201') {
-            return $this->json($_arr_inputMailbox['msg'], $_arr_inputMailbox['rcode']);
-        }
-
-        $_arr_adminRow = $this->mdl_profile->check($this->adminLogged['admin_id']);
-        if ($_arr_adminRow['rcode'] != 'y020102') {
-            return $this->json('Administrator not found', $_arr_adminRow['rcode']);
+            return $this->fetchJson($_arr_inputMailbox['msg'], $_arr_inputMailbox['rcode']);
         }
 
         $_arr_userRow = $this->mdl_user->read($this->adminLogged['admin_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
-            return $this->json('User not found', $_arr_userRow['rcode']);
+            return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
         }
 
         $_str_crypt = Crypt::crypt($_arr_inputMailbox['admin_pass'], $_arr_userRow['user_rand']);
 
         if ($_str_crypt != $_arr_userRow['user_pass']) {
-            return $this->json('Password is incorrect', 'x010201');
+            return $this->fetchJson('Password is incorrect', 'x010201');
         }
 
 
-        if (($this->config['var_extra']['reg']['reg_onemail'] != 'on' || $this->config['var_extra']['reg']['login_mail'] == 'on') && isset($_arr_inputMailbox['admin_mail_new']) && !Func::isEmpty($_arr_inputMailbox['admin_mail_new'])) {
+        if (isset($_arr_inputMailbox['admin_mail_new']) && !Func::isEmpty($_arr_inputMailbox['admin_mail_new'])) {
             $_arr_userRowChk = $this->mdl_user->read($_arr_inputMailbox['admin_mail_new'], 'user_mail', $_arr_userRow['user_id']); //检查邮箱
             if ($_arr_userRowChk['rcode'] == 'y010102') {
-                return $this->json('The mailbox already exists', 'x010201');
+                return $this->fetchJson('Mailbox already exists', 'x010201');
             }
         }
 
@@ -329,7 +312,7 @@ class Profile extends Ctrl {
             $_arr_submitResult    = $this->mdl_verify->submit($_arr_userRow['user_id'], $_arr_inputMailbox['admin_mail_new'], 'mailbox');
 
             if ($_arr_submitResult['rcode'] != 'y120101' && $_arr_submitResult['rcode'] != 'y120103') {
-                return $this->json('The mailbox already exists', 'x010405');
+                return $this->fetchJson('Mailbox already exists', 'x010405');
             }
 
             $_str_verifyUrl = $this->generalData['url_personal'] . 'verify/mailbox/id/' . $_arr_submitResult['verify_id'] . '/token/' . $_arr_submitResult['verify_token'] . '/';
@@ -344,7 +327,7 @@ class Profile extends Ctrl {
 
             if (!$_obj_smtp->connect()) {
                 $_arr_error = $_obj_smtp->getError();
-                return $this->json(end($_arr_error), 'x010405');
+                return $this->fetchJson(end($_arr_error), 'x010405');
             }
             $_obj_smtp->addRcpt($_arr_inputMailbox['admin_mail_new']); //发送至
             $_obj_smtp->setSubject($this->config['extra_mailtpl']['mailbox_subject']); //主题
@@ -353,7 +336,7 @@ class Profile extends Ctrl {
 
             if (!$_obj_smtp->send()) {
                 $_arr_error = $_obj_smtp->getError();
-                return $this->json(end($_arr_error), 'x010405');
+                return $this->fetchJson(end($_arr_error), 'x010405');
             }
 
             $_arr_mailboxResult = array(
@@ -367,6 +350,6 @@ class Profile extends Ctrl {
             $_arr_mailboxResult    = $this->mdl_user->mailbox();
         }
 
-        return $this->json($_arr_mailboxResult['msg'], $_arr_mailboxResult['rcode']);
+        return $this->fetchJson($_arr_mailboxResult['msg'], $_arr_mailboxResult['rcode']);
     }
 }

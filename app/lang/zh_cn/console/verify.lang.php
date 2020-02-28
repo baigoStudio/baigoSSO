@@ -23,7 +23,7 @@ return array(
     'Status'                                => '状态',
     'Type'                                  => '类型',
     'Time'                                  => '时间',
-    'Unknow'                                => '未知',
+    'Unknown'                                => '未知',
     'Apply'                                 => '提交',
     'Submitting'                            => '正在提交 ...',
     'Delete'                                => '删除',

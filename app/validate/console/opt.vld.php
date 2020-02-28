@@ -16,8 +16,8 @@ defined('IN_GINKGO') or exit('Access denied');
 /*-------------设置项模型-------------*/
 class Opt extends Opt_Base {
 
-    function __construct() { //构造函数
-        parent::__construct();
+    function v_init() { //构造函数
+        parent::v_init();
 
         $_arr_rule =  array(
             'secure' => array(
@@ -82,6 +82,11 @@ class Opt extends Opt_Base {
             '__token__'     => $this->obj_lang->get('Token'),
         );
 
+        $_arr_typeMsg = array(
+            'require'   => $this->obj_lang->get('{:attr} require'),
+            'token'     => $this->obj_lang->get('Form token is incorrect'),
+        );
+
         $_arr_formatMsg = array(
             'url' => $this->obj_lang->get('{:attr} not a valid url'),
         );
@@ -90,7 +95,7 @@ class Opt extends Opt_Base {
 
         if (!Func::isEmpty($_arr_config)) {
             foreach ($_arr_config as $_key=>$_value) {
-                foreach ($_value['list'] as $_key_list=>$_value_list) {
+                foreach ($_value['lists'] as $_key_list=>$_value_list) {
                     $_arr_rule[$_key . '_' . $_key_list]['require'] = 'true';
                     $_arr_scene['mailtpl'][] = $_key . '_' . $_key_list;
                     $_arr_attrName[$_key . '_' . $_key_list] = $this->obj_lang->get($_value_list['title']);
@@ -127,6 +132,7 @@ class Opt extends Opt_Base {
         $this->rule($_arr_rule);
         $this->setScene($_arr_scene);
         $this->setAttrName($_arr_attrName);
+        $this->setTypeMsg($_arr_typeMsg);
         $this->setFormatMsg($_arr_formatMsg);
     }
 }

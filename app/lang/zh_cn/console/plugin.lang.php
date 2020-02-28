@@ -25,7 +25,7 @@ return array(
     'Key word'          => '关键词',
     'All'               => '全部',
     'Close'             => '关闭',
-    'Ok'                => '确定',
+    'OK'                => '确定',
     'Save'              => '保存',
     'Server side error' => '服务器错误',
     'Bulk actions'      => '批量操作',

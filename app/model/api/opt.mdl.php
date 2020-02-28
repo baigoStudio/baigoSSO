@@ -7,6 +7,7 @@
 namespace app\model\api;
 
 use app\model\Opt as Opt_Base;
+use ginkgo\Config;
 
 //不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -16,13 +17,11 @@ class Opt extends Opt_Base {
 
     function security() {
         $_arr_outPut = array(
-            'security'  => $this->inputCommon['security'],
+            'key'       => $this->inputCommon['key'],
             'secret'    => $this->inputSecurity['secret'],
         );
 
-        $_str_outPut = '<?php return ' . var_export($_arr_outPut, true) . ';';
-
-        $_num_size   = $this->obj_file->fileWrite(GK_PATH_TEMP . 'security' . GK_EXT_INC, $_str_outPut);
+        $_num_size   = Config::write(GK_PATH_TEMP . 'security' . GK_EXT_INC, $_arr_outPut);
 
         if ($_num_size > 0) {
             $_str_rcode = 'y030401';
@@ -125,9 +124,9 @@ class Opt extends Opt_Base {
 
     function inputCommon() {
         $_arr_inputParam = array(
-            'security'  => array('txt', ''),
-            'sign'      => array('txt', ''),
-            'code'      => array('txt', ''),
+            'key'   => array('txt', ''),
+            'sign'  => array('txt', ''),
+            'code'  => array('txt', '', true),
         );
 
         $_arr_inputCommon = $this->obj_request->request($_arr_inputParam);

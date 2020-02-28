@@ -16,8 +16,8 @@ defined('IN_GINKGO') or exit('Access denied');
 /*-------------设置项模型-------------*/
 class Opt extends Opt_Base {
 
-    function __construct() { //构造函数
-        parent::__construct();
+    function v_init() { //构造函数
+        parent::v_init();
 
         $_arr_rule     = array(
             'sign' => array(
@@ -55,7 +55,7 @@ class Opt extends Opt_Base {
             'common' => array(
                 'sign',
                 'code',
-                'security',
+                'key',
             ),
         );
 
