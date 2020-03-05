@@ -19,8 +19,6 @@ class Opt {
     function __construct() { //构造函数
         $this->obj_request  = Request::instance();
         $this->vld_opt      = Loader::validate('Opt');
-
-        $this->config       = Config::get('version');
     }
 
 
@@ -55,8 +53,8 @@ class Opt {
 
     function over() {
         $_arr_outPut = array(
-            'prd_installed_ver'     => $this->config['prd_sso_ver'],
-            'prd_installed_pub'     => $this->config['prd_sso_pub'],
+            'prd_installed_ver'     => PRD_SSO_VER,
+            'prd_installed_pub'     => PRD_SSO_PUB,
             'prd_installed_time'    => GK_NOW,
         );
 

@@ -1,7 +1,6 @@
 <?php $cfg = array(
     'title'             => $lang->get('Shortcut', 'console.common'),
     'menu_active'       => 'shortcut',
-    'baigoValidate'    => 'true',
     'baigoSubmit'       => 'true',
     'dad'               => 'true',
     'pathInclude'       => $path_tpl . 'include' . DS,

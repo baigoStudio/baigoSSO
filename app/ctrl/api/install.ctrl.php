@@ -34,8 +34,8 @@ class Install extends Ctrl {
         parent::c_init();
 
         $_arr_version = array(
-            'prd_sso_ver' => $this->config['version']['prd_sso_ver'],
-            'prd_sso_pub' => $this->config['version']['prd_sso_pub'],
+            'prd_sso_ver' => PRD_SSO_VER,
+            'prd_sso_pub' => PRD_SSO_PUB,
         );
 
         $this->version = $_arr_version;
@@ -490,7 +490,7 @@ class Install extends Ctrl {
             $_str_rcode     = 'x030402';
             $_str_msg       = 'SSO Already installed';
 
-            if (isset($_arr_installed['prd_installed_pub']) && $this->version['prd_sso_pub'] > $_arr_installed['prd_installed_pub']) { //如果小于当前版本
+            if (isset($_arr_installed['prd_installed_pub']) && PRD_SSO_PUB > $_arr_installed['prd_installed_pub']) { //如果小于当前版本
                 $_str_rcode     = 'x030404';
                 $_str_msg       = 'SSO Need to execute the upgrader';
             }

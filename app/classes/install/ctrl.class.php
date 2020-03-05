@@ -108,7 +108,7 @@ abstract class Ctrl extends Ctrl_Base {
             $_str_rcode     = 'x030402';
             $_str_msg       = 'System already installed';
 
-            if (isset($_arr_installed['prd_installed_pub']) && $this->config['version']['prd_sso_pub'] > $_arr_installed['prd_installed_pub']) { //如果小于当前版本
+            if (isset($_arr_installed['prd_installed_pub']) && PRD_SSO_PUB > $_arr_installed['prd_installed_pub']) { //如果小于当前版本
                 $_str_rcode     = 'x030404';
                 $_str_msg       = 'Need to execute the upgrader';
                 $_str_jump      = $this->url['route_install'] . 'upgrade/';
@@ -138,7 +138,7 @@ abstract class Ctrl extends Ctrl_Base {
                 $_str_rcode     = 'x030403';
                 $_str_msg       = 'Need to execute the installer';
                 $_str_jump      = $this->url['route_install'];
-            } else if ($this->config['version']['prd_sso_pub'] <= $_arr_installed['prd_installed_pub']) { //如果小于当前版本
+            } else if (PRD_SSO_PUB <= $_arr_installed['prd_installed_pub']) { //如果小于当前版本
                 $_str_rcode     = 'x030402';
                 $_str_msg       = 'System already installed';
             }

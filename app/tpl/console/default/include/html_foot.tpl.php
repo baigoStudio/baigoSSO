@@ -133,7 +133,7 @@
 
     <script src="{:DIR_STATIC}lib/bootstrap/4.3.1/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 
-    <!-- Powered by <?php echo $config['version']['prd_sso_name'], ' ', $config['version']['prd_sso_ver']; ?> -->
+    <!-- Powered by <?php echo PRD_SSO_NAME, ' ', PRD_SSO_VER; ?> -->
 
     <?php Plugin::listen('action_console_foot_after'); //后台界面底部触发 ?>
 </body>

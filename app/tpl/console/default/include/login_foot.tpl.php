@@ -21,8 +21,8 @@
                     <hr>
                     <div class="text-center">
                         <span class="d-none d-lg-inline-block">Powered by</span>
-                        <a href="<?php echo $config['version']['prd_sso_url']; ?>" target="_blank"><?php echo $config['version']['prd_sso_name']; ?></a>
-                        <?php echo $config['version']['prd_sso_ver']; ?>
+                        <a href="<?php echo PRD_SSO_URL; ?>" target="_blank"><?php echo PRD_SSO_NAME; ?></a>
+                        <?php echo PRD_SSO_VER; ?>
                     </div>
                 </div>
             <?php } ?>

@@ -25,8 +25,6 @@
 $cfg = array(
     'title'             => $lang->get('Dashboard', 'console.common'),
     'menu_active'       => 'dashboard',
-    'baigoValidate'    => 'true',
-    'baigoSubmit'       => 'true',
     'pathInclude'       => $path_tpl . 'include' . DS,
 );
 

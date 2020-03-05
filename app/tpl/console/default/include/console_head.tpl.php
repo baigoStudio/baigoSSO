@@ -140,7 +140,7 @@
                             </div>
                             <div class="card-footer d-none d-lg-block">
                                 <small>
-                                    <a href="<?php echo $config['version']['prd_sso_help']; ?>" target="_blank">
+                                    <a href="<?php echo PRD_SSO_HELP; ?>" target="_blank">
                                         <span class="fas fa-question-circle"></span>
                                         <?php echo $lang->get('Help', 'console.common'); ?>
                                     </a>

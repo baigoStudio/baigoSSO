@@ -32,7 +32,7 @@
                                     <?php echo $lang->get('Upgrading'); ?>
                                     <span class="badge badge-warning"><?php echo $installed['prd_installed_ver']; ?></span>
                                     <?php echo $lang->get('To'); ?>
-                                    <span class="badge badge-warning"><?php echo $config['version']['prd_sso_ver']; ?></span>
+                                    <span class="badge badge-warning"><?php echo PRD_SSO_VER; ?></span>
                                 </h5>
                                 <div>
                                     <span class="fas fa-exclamation-triangle"></span>

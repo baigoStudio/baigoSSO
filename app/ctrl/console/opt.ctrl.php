@@ -290,18 +290,17 @@ class Opt extends Ctrl {
 
         $_arr_base      = Config::get('base', 'var_extra');
         $_arr_installed = Config::get('installed'); //当前安装的
-        $_arr_version   = Config::get('version'); //已经下载的
         $_arr_latest    = $this->mdl_opt->chkver();
 
         $_arr_installed['prd_installed_pub_datetime']   = date($_arr_base['site_date'], strtotime($_arr_installed['prd_installed_pub']));
         $_arr_installed['prd_installed_datetime']       = date($_arr_base['site_date'] . ' ' . $_arr_base['site_time_short'], $_arr_installed['prd_installed_time']);
 
-        $_arr_version['prd_sso_pub_datetime']   = date($_arr_base['site_date'], strtotime($_arr_version['prd_sso_pub']));
+        //$_arr_version['prd_sso_pub_datetime']   = date($_arr_base['site_date'], strtotime(PRD_SSO_PUB));
         $_arr_latest['prd_pub_datetime']        = date($_arr_base['site_date'], strtotime($_arr_latest['prd_pub']));
 
         $_arr_tplData = array(
             'installed' => $_arr_installed,
-            'version'   => $_arr_version,
+            //'version'   => $_arr_version,
             'latest'    => $_arr_latest,
             'token'     => $this->obj_request->token(),
         );

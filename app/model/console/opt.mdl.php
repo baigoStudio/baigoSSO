@@ -122,12 +122,12 @@ class Opt extends Opt_Base {
     function latest($method = 'auto') {
         $_arr_data = array(
             'name'      => 'baigo SSO',
-            'ver'       => $this->config['version']['prd_sso_ver'],
+            'ver'       => PRD_SSO_VER,
             'referer'   => $this->obj_request->root(true),
             'method'    => $method,
         );
 
-        $_arr_ver = Http::instance()->request($this->config['version']['prd_ver_check'], $_arr_data, 'post');
+        $_arr_ver = Http::instance()->request(PRD_VER_CHECK, $_arr_data, 'post');
 
         $_num_size   = Config::write($this->pathLatest, $_arr_ver);
 

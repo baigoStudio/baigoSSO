@@ -1,6 +1,7 @@
 <?php return array(
     'var_default'   => array(
-        'count_secqa'    => 3,
+        'site_name'     => 'baigo SSO',
+        'count_secqa'   => 3,
     ),
     'tpl' => array(
         'path'      => 'default',
@@ -55,14 +56,6 @@
             'forgot_subject'    => '',
             'forgot_content'    => '',
         ),
-    ),
-    'version' => array(
-        'prd_sso_name'      => 'baigo SSO',
-        'prd_sso_url'       => 'http://www.baigo.net/sso/',
-        'prd_sso_ver'       => '4.0 beta-2',
-        'prd_sso_pub'       => 20200208,
-        'prd_sso_help'      => 'http://doc.baigo.net/sso/',
-        'prd_ver_check'     => 'http://www.baigo.net/ver_check/check.php',
     ),
     'ui_ctrl' => array(
         'copyright'             => 'on',

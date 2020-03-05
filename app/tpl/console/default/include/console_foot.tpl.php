@@ -10,8 +10,8 @@
         <?php if (!isset($ui_ctrl['copyright']) || $ui_ctrl['copyright'] == 'on') { ?>
             <div class="float-right">
                 <span class="d-none d-lg-inline-block">Powered by</span>
-                <a href="<?php echo $config['version']['prd_sso_url']; ?>"  class="text-light" target="_blank"><?php echo $config['version']['prd_sso_name']; ?></a>
-                <?php echo $config['version']['prd_sso_ver']; ?>
+                <a href="<?php echo PRD_SSO_URL; ?>"  class="text-light" target="_blank"><?php echo PRD_SSO_NAME; ?></a>
+                <?php echo PRD_SSO_VER; ?>
             </div>
         <?php } ?>
     </footer>

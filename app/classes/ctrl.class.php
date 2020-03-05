@@ -48,7 +48,7 @@ abstract class Ctrl extends Gk_Ctrl {
         $_arr_configUi = Config::get('ui_ctrl');
 
         if (!isset($_arr_configUi['logo_personal']) || Func::isEmpty($_arr_configUi['logo_personal'])) {
-            $_arr_configUi['logo_personal'] = '{:DIR_STATIC}sso/image/logo_white.svg';
+            $_arr_configUi['logo_personal'] = '{:DIR_STATIC}sso/image/logo_green.svg';
         }
 
         if (!isset($_arr_configUi['logo_console_login']) || Func::isEmpty($_arr_configUi['logo_console_login'])) {

@@ -34,8 +34,8 @@ abstract class Ctrl extends Ctrl_Base {
         $this->mdl_app      = Loader::model('App');
 
         $_arr_version = array(
-            'prd_sso_ver' => $this->config['version']['prd_sso_ver'],
-            'prd_sso_pub' => $this->config['version']['prd_sso_pub'],
+            'prd_sso_ver' => PRD_SSO_VER,
+            'prd_sso_pub' => PRD_SSO_PUB,
         );
 
         $this->version = $_arr_version;

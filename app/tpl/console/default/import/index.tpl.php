@@ -2,7 +2,6 @@
     'title'             => $lang->get('User management', 'console.common') . ' &raquo; ' . $lang->get('Import', 'console.common'),
     'menu_active'       => 'user',
     'sub_active'        => 'import',
-    'baigoValidate'    => 'true',
     'baigoSubmit'       => 'true',
     'baigoDialog'       => 'true',
     'upload'            => 'true',

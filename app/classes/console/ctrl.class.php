@@ -252,7 +252,7 @@ abstract class Ctrl extends Ctrl_Base {
         if (Func::isFile($_str_configInstalled)) { //如果新文件存在
             $_arr_installed = Config::load($_str_configInstalled, 'installed');
 
-            if ($this->config['version']['prd_sso_pub'] > $_arr_installed['prd_installed_pub']) { //如果小于当前版本
+            if (PRD_SSO_PUB > $_arr_installed['prd_installed_pub']) { //如果小于当前版本
                 $_str_rcode = 'x030404';
                 $_str_msg   = 'Need to execute the upgrader';
                 $_str_jump  = $this->url['route_install'] . 'upgrade';
