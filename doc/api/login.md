@@ -2,7 +2,7 @@
 
 用户登录接口
 
-> v4.0 起
+`4.0` 新增
 
 ----------
 
@@ -43,12 +43,12 @@ POST
 | user_mail | string | 邮箱 | |
 | user_nick | string | 昵称 | |
 | user_status | string | 用户状态 | |
-| user_time | int | 注册时间| Unix 时间戳 |
-| user_time_login | int | 最后登录时间 | Unix 时间戳 |
+| user_time | int | 注册时间| UNIX 时间戳 |
+| user_time_login | int | 最后登录时间 | UNIX 时间戳 |
 | user_access_token | string | 访问口令| |
-| user_access_expire | int | 访问口令过期时间 | Unix 时间戳 |
+| user_access_expire | int | 访问口令过期时间 | UNIX 时间戳 |
 | user_refresh_token | string | 刷新口令 | |
-| user_refresh_expire | int | 刷新口令过期时间| Unix 时间戳 |
+| user_refresh_expire | int | 刷新口令过期时间| UNIX 时间戳 |
 | timestamp | int | UNIX 时间戳 | |
 
 解密结果示例

@@ -10,7 +10,7 @@
 include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
     <form name="opt_form" id="opt_form" action="<?php echo $route_console; ?>opt/submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <input type="hidden" name="act" value="<?php echo $route_orig['act']; ?>">
 
         <div class="card">
@@ -48,10 +48,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 <select name="<?php echo $_key; ?>" id="<?php echo $_key; ?>"  class="form-control">
                                     <?php foreach ($_value['option'] as $_key_opt=>$_value_opt) { ?>
                                         <option<?php if ($_value['this'] == $_key_opt) { ?> selected<?php } ?> value="<?php echo $_key_opt; ?>">
-                                            <?php $_arr_langReplace = array(
-                                                'option'   => $_key_opt,
-                                            );
-                                            echo $lang->get($_value_opt, '', $_arr_langReplace); ?>
+                                            <?php echo $lang->get($_value_opt, '', $_value['lang_replace']); ?>
                                         </option>
                                     <?php } ?>
                                 </select>
@@ -61,16 +58,17 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 <div class="input-group">
                                     <input type="text" value="<?php echo $_value['this']; ?>" name="<?php echo $_key; ?>" id="<?php echo $_key; ?>" class="form-control">
                                     <span class="input-group-append">
-                                        <select id="select_<?php echo $_key; ?>" class="custom-select bg-custom-select">
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                                            <?php echo $lang->get('Please select'); ?>
+                                        </button>
+
+                                        <div class="dropdown-menu">
                                             <?php foreach ($_value['option'] as $_key_opt=>$_value_opt) { ?>
-                                                <option<?php if ($_value['this'] == $_key_opt) { ?> selected<?php } ?> value="<?php echo $_key_opt; ?>">
-                                                    <?php $_arr_langReplace = array(
-                                                        'option' => $_key_opt,
-                                                    );
-                                                    echo $lang->get($_value_opt, '', $_arr_langReplace); ?>
-                                                </option>
+                                                <button class="dropdown-item bg-select-input" data-value="<?php echo $_key_opt; ?>" data-target="#<?php echo $_key; ?>" type="button">
+                                                    <?php echo $lang->get($_value_opt, '', $_value['lang_replace']); ?>
+                                                </button>
                                             <?php } ?>
-                                        </select>
+                                        </div>
                                     </span>
                                 </div>
                             <?php break;
@@ -95,7 +93,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                             case 'switch': ?>
                                 <div class="custom-control custom-switch">
-                                    <input type="checkbox" id="<?php echo $_key; ?>" name="<?php echo $_key; ?>" <?php if ($_value['this'] == 'on') { ?>checked<?php } ?> value="on" class="custom-control-input">
+                                    <input type="checkbox" id="<?php echo $_key; ?>" name="<?php echo $_key; ?>" <?php if ($_value['this'] === 'on') { ?>checked<?php } ?> value="on" class="custom-control-input">
                                     <label for="<?php echo $_key; ?>" class="custom-control-label">
                                         <?php echo $lang->get($_value['title']); ?>
                                     </label>
@@ -113,11 +111,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                         <small class="form-text" id="msg_<?php echo $_key; ?>"></small>
 
-                        <?php if (isset($_value['note'])) {
-                            $_arr_langReplace = array(
-                                'site_url'   => 'http://' . $_SERVER['SERVER_NAME'],
-                            ); ?>
-                            <small class="form-text"><?php echo $lang->get($_value['note'], '', $_arr_langReplace); ?></small>
+                        <?php if (isset($_value['note'])) { ?>
+                            <small class="form-text"><?php echo $lang->get($_value['note']); ?></small>
                         <?php } ?>
                     </div>
                 <?php }
@@ -235,18 +230,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 });
                 $('#site_timezone').html(_str_appent);
             });
-        <?php }
+        <?php } ?>
 
-        foreach ($consoleOpt as $_key=>$_value) {
-            switch ($_value['type']) {
-                case 'select_input': ?>
-                    $('#select_<?php echo $_key; ?>').change(function(){
-                        var _val_<?php echo $_key; ?> = $(this).val();
-                        $('#<?php echo $_key; ?>').val(_val_<?php echo $_key; ?>);
-                    });
-                <?php break;
-            }
-        } ?>
+        $('.bg-select-input').click(function(){
+            var _val    = $(this).data('value');
+            var _target = $(this).data('target');
+            $(_target).val(_val);
+        });
     });
     </script>
 

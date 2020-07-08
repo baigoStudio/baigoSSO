@@ -27,7 +27,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </nav>
 
     <form name="app_form" id="app_form" action="<?php echo $route_console; ?>app/submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <input type="hidden" name="app_id" id="app_id" value="<?php echo $appRow['app_id']; ?>">
 
         <div class="row">
@@ -47,7 +47,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         </div>
 
                         <div class="form-group">
-                            <label><?php echo $lang->get('URL of sync login notifications'); ?></label>
+                            <label><?php echo $lang->get('URL of sync notifications'); ?></label>
                             <input type="text" name="app_url_sync" id="app_url_sync" value="<?php echo $appRow['app_url_sync']; ?>" class="form-control" title="<?php echo $lang->get('Start with <code>http://</code> or <code>https://</code>'); ?>" data-toggle="tooltip" data-placement="bottom">
                             <small class="form-text" id="msg_app_url_sync"><?php echo $lang->get('Start with <code>http://</code> or <code>https://</code>'); ?></small>
                         </div>
@@ -89,14 +89,18 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                         <div class="form-group">
                             <label><?php echo $lang->get('Allowed IPs'); ?></label>
-                            <textarea name="app_ip_allow" id="app_ip_allow" class="form-control bg-textarea-md" title="<?php echo $lang->get('One IP per line, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>" data-toggle="tooltip" data-placement="bottom"><?php echo $appRow['app_ip_allow']; ?></textarea>
-                            <small class="form-text" id="msg_app_ip_allow"><?php echo $lang->get('One IP per line, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?></small>
+                            <textarea name="app_ip_allow" id="app_ip_allow" class="form-control bg-textarea-md" title="<?php echo $lang->get('For multiple IP, please use <kbd>|</kbd> to separate, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>" data-toggle="tooltip" data-placement="bottom"><?php echo $appRow['app_ip_allow']; ?></textarea>
+                            <small class="form-text" id="msg_app_ip_allow">
+                                <?php echo $lang->get('For multiple IP, please use <kbd>|</kbd> to separate, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>
+                            </small>
                         </div>
 
                         <div class="form-group">
                             <label><?php echo $lang->get('Banned IPs'); ?></label>
-                            <textarea name="app_ip_bad" id="app_ip_bad" class="form-control bg-textarea-md" title="<?php echo $lang->get('One IP per line, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>" data-toggle="tooltip" data-placement="bottom"><?php echo $appRow['app_ip_bad']; ?></textarea>
-                            <small class="form-text" id="msg_app_ip_bad" title="<?php echo $lang->get('One IP per line, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>"><?php echo $lang->get('One IP per line, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?></small>
+                            <textarea name="app_ip_bad" id="app_ip_bad" class="form-control bg-textarea-md" title="<?php echo $lang->get('For multiple IP, please use <kbd>|</kbd> to separate, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>" data-toggle="tooltip" data-placement="bottom"><?php echo $appRow['app_ip_bad']; ?></textarea>
+                            <small class="form-text" id="msg_app_ip_bad">
+                                <?php echo $lang->get('For multiple IP, please use <kbd>|</kbd> to separate, allowing the use of the wildcard <kbd>*</kbd> (eg 192.168.1.*)'); ?>
+                            </small>
                         </div>
 
                         <div class="form-group">
@@ -139,7 +143,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         </div>
 
                         <div class="form-group">
-                            <label><?php echo $lang->get('Sync status'); ?> <span class="text-danger">*</span></label>
+                            <label><?php echo $lang->get('Sync'); ?> <span class="text-danger">*</span></label>
                             <?php foreach ($sync as $key=>$value) { ?>
                                 <div class="form-check">
                                     <input type="radio" name="app_sync" id="app_sync_<?php echo $value; ?>" value="<?php echo $value; ?>" <?php if ($appRow['app_sync'] == $value) { ?>checked<?php } ?> class="form-check-input">
@@ -232,12 +236,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         attr_names: {
             app_name: '<?php echo $lang->get('App name'); ?>',
             app_url_notify: '<?php echo $lang->get('URL of notifications'); ?>',
-            app_url_sync: '<?php echo $lang->get('URL of sync login notifications'); ?>',
+            app_url_sync: '<?php echo $lang->get('URL of sync notifications'); ?>',
             app_ip_allow: '<?php echo $lang->get('Allowed IPs'); ?>',
             app_ip_bad: '<?php echo $lang->get('Banned IPs'); ?>',
             app_note: '<?php echo $lang->get('Note'); ?>',
             app_status: '<?php echo $lang->get('Status'); ?>',
-            app_sync: '<?php echo $lang->get('Sync status'); ?>'
+            app_sync: '<?php echo $lang->get('Sync'); ?>'
         },
         selector_types: {
             app_status: 'name',

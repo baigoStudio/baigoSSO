@@ -9,17 +9,17 @@
 
     if (isset($cfg['baigoValidate'])) { ?>
         <!--表单验证 js-->
-        <script src="{:DIR_STATIC}lib/baigoValidate/3.0.0/baigoValidate.min.js" type="text/javascript"></script>
+        <script src="{:DIR_STATIC}lib/baigoValidate/3.0.1/baigoValidate.min.js" type="text/javascript"></script>
     <?php }
 
     if (isset($cfg['baigoSubmit'])) { ?>
         <!--表单 ajax 提交 js-->
-        <script src="{:DIR_STATIC}lib/baigoSubmit/2.1.0/baigoSubmit.min.js" type="text/javascript"></script>
+        <script src="{:DIR_STATIC}lib/baigoSubmit/2.1.1/baigoSubmit.min.js" type="text/javascript"></script>
     <?php }
 
     if (isset($cfg['baigoDialog'])) { ?>
         <!--表单 ajax 提交 js-->
-        <script src="{:DIR_STATIC}lib/baigoDialog/1.0.0/baigoDialog.min.js" type="text/javascript"></script>
+        <script src="{:DIR_STATIC}lib/baigoDialog/1.0.1/baigoDialog.min.js" type="text/javascript"></script>
     <?php }
 
     if (isset($cfg['baigoQuery'])) { ?>
@@ -95,9 +95,9 @@
 
     $(document).ready(function(){
         <?php if (isset($cfg['captchaReload'])) { ?>
-            $('.bg-captcha-btn, .bg-captcha-img').click(function(){
+            $('.bg-captcha-img').click(function(){
                 var imgSrc = '<?php echo $route_misc; ?>captcha/index/' + new Date().getTime() + '/' + Math.random() + '/';
-                $('.bg-captcha-img').attr('src', imgSrc);
+                $(this).attr('src', imgSrc);
             });
         <?php }
 

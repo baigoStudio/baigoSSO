@@ -8,11 +8,21 @@ namespace ginkgo\validate;
 
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 验证规则
 class Rule {
 
+    /** 正则验证
+     * regex function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function regex($value, $rule) {
         if (Func::isEmpty($value)) {
             return true;
@@ -28,12 +38,15 @@ class Rule {
 
 
 
-    /**
-     * 使用filter_var方式验证
-     * @access private
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @return bool
+    /** 使用 filter_var 函数验证
+     * filter function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @param mixed $param (default: null) 参数
+     * @return void
      */
     static function filter($value, $rule, $param = null) {
         if (Func::isEmpty($value)) {
@@ -48,16 +61,15 @@ class Rule {
     }
 
 
-
-    /*------验证长度------
-    @str 需验证字符串
-    @length(min, max) 数组，(最小长度, 最大长度) 0 为不限制
-
-    返回字符
-    too_short 太短
-    too_long 太长
-    ok 正常
-    */
+    /** 验证长度
+     * leng function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function leng($value, $rule) {
         $_status = true;
 
@@ -75,6 +87,15 @@ class Rule {
     }
 
 
+    /** 验证最小长度
+     * min function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function min($value, $rule = 0) {
         $_status = true;
 
@@ -87,6 +108,15 @@ class Rule {
         return $_status;
     }
 
+    /** 验证最大长度
+     * max function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function max($value, $rule = 0) {
         $_status = true;
 
@@ -99,6 +129,15 @@ class Rule {
         return $_status;
     }
 
+    /** 日期格式是否正确
+     * dateFormat function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function dateFormat($value, $rule) {
         if (Func::isEmpty($value)) {
             return true;
@@ -110,6 +149,15 @@ class Rule {
     }
 
 
+    /** 是否在有效期内
+     * expire function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function expire($value, $rule) {
         if (Func::isEmpty($value)) {
             return true;
@@ -131,6 +179,15 @@ class Rule {
     }
 
 
+    /** 是否晚于规定时间
+     * after function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function after($value, $rule) {
         if (Func::isEmpty($value)) {
             return true;
@@ -147,29 +204,28 @@ class Rule {
         return $value >= $rule;
     }
 
-    /**
-     * 验证日期
-     * @access protected
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @return bool
+    /** 是否早于规定时间
+     * before function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
      */
     static function before($value, $rule) {
-        if (Func::isEmpty($value)) {
-            return true;
-        }
-
-        if (!is_numeric($value)) {
-            $value = Func::strtotime($value);
-        }
-
-        if (!is_numeric($rule)) {
-            $rule = Func::strtotime($rule);
-        }
-
-        return $value <= $rule;
+        return !self::after($value, $rule);
     }
 
+    /** 值是否在规定的选项内
+     * in function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function in($value, $rule) {
         if (Func::isEmpty($value)) {
             return true;
@@ -180,23 +236,30 @@ class Rule {
         return in_array($value, $_arr_rule);
     }
 
-    /**
-     * 验证是否不在某个范围
-     * @access protected
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @return bool
+
+    /** 值是否不在规定的选项内
+     * notIn function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
      */
     static function notIn($value, $rule) {
-        if (Func::isEmpty($value)) {
-            return true;
-        }
-
-        $_arr_rule = explode(',', $rule);
-
-        return !in_array($value, $_arr_rule);
+        return !self::in($value, $_arr_rule);
     }
 
+
+    /** 值介于规定之间
+     * between function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function between($value, $rule) {
         if (Func::isEmpty($value)) {
             return true;
@@ -210,42 +273,28 @@ class Rule {
     }
 
 
-    static function notBetween($value, $rule) {
-        if (Func::isEmpty($value)) {
-            return true;
-        }
-
-        $_arr_rule = explode(',', $rule);
-
-        list($min, $max) = $_arr_rule;
-
-        return $value < $min || $value > $max;
-    }
-
-
-    /**
-     * 验证是否大于等于某个值
-     * @access private
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @param array     $data  数据
-     * @return bool
+    /** 值在规定之外
+     * notBetween function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
      */
-    static function egt($value, $rule) {
-        if (Func::isEmpty($value)) {
-            return true;
-        }
-
-        return $value >= $rule;
+    static function notBetween($value, $rule) {
+        return !self::between($value, $rule);
     }
 
-    /**
-     * 验证是否大于某个值
-     * @access private
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @param array     $data  数据
-     * @return bool
+
+    /** 是否大于某个值
+     * gt function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
      */
     static function gt($value, $rule) {
         if (Func::isEmpty($value)) {
@@ -255,13 +304,45 @@ class Rule {
         return $value > $rule;
     }
 
-    /**
-     * 验证是否小于等于某个值
-     * @access private
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @param array     $data  数据
-     * @return bool
+    /** 是否小于某个值
+     * lt function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
+    static function lt($value, $rule) {
+        return !self::gt($value, $rule);
+    }
+
+
+    /** 是否大于等于某个值
+     * egt function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
+    static function egt($value, $rule) {
+        if (Func::isEmpty($value)) {
+            return true;
+        }
+
+        return $value >= $rule;
+    }
+
+    /** 是否小于等于某个值
+     * elt function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
      */
     static function elt($value, $rule) {
         if (Func::isEmpty($value)) {
@@ -271,28 +352,15 @@ class Rule {
         return $value <= $rule;
     }
 
-    /**
-     * 验证是否小于某个值
-     * @access private
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @param array     $data  数据
-     * @return bool
-     */
-    static function lt($value, $rule) {
-        if (Func::isEmpty($value)) {
-            return true;
-        }
 
-        return $value < $rule;
-    }
-
-    /**
-     * 验证是否等于某个值
-     * @access private
-     * @param mixed     $value  字段值
-     * @param mixed     $rule  验证规则
-     * @return bool
+    /** 是否等于某个值
+     * eq function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
      */
     static function eq($value, $rule) {
         if (Func::isEmpty($value)) {
@@ -302,11 +370,16 @@ class Rule {
         return $value == $rule;
     }
 
+    /** 是否不等于某个值
+     * neq function.
+     *
+     * @access public
+     * @static
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return void
+     */
     static function neq($value, $rule) {
-        if (Func::isEmpty($value)) {
-            return true;
-        }
-
-        return $value != $rule;
+        return !self::eq($value, $rule);
     }
 }

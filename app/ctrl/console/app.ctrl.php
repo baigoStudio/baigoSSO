@@ -17,7 +17,7 @@ use ginkgo\Http;
 use ginkgo\Html;
 use ginkgo\Log;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class App extends Ctrl {
@@ -39,7 +39,7 @@ class App extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x050301');
         }
 
@@ -81,7 +81,7 @@ class App extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x050301');
         }
 
@@ -103,8 +103,7 @@ class App extends Ctrl {
 
         $_arr_appRow['app_key'] = Crypt::crypt($_arr_appRow['app_key'], $_arr_appRow['app_name']);
 
-        $_str_configAllow   = BG_PATH_CONFIG . 'console' . DS . 'allow' . GK_EXT_INC;
-        $_arr_allowRows     = Config::load($_str_configAllow, 'allow', 'console');
+        $_arr_allowRows     = Config::get('app', 'console');
 
         $_arr_tplData = array(
             'appRow'    => $_arr_appRow,
@@ -136,7 +135,7 @@ class App extends Ctrl {
         }
 
         if ($_num_appId > 0) {
-            if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->isSuper) { //判断权限
+            if (!isset($this->adminAllow['app']['edit']) && !$this->isSuper) { //判断权限
                 return $this->error('You do not have permission', 'x050303');
             }
 
@@ -146,7 +145,7 @@ class App extends Ctrl {
                 return $this->error($_arr_appRow['msg'], $_arr_appRow['rcode']);
             }
         } else {
-            if (!isset($this->adminLogged['admin_allow']['app']['add']) && !$this->isSuper) { //判断权限
+            if (!isset($this->adminAllow['app']['add']) && !$this->isSuper) { //判断权限
                 return $this->error('You do not have permission', 'x050302');
             }
 
@@ -165,8 +164,7 @@ class App extends Ctrl {
             );
         }
 
-        $_str_configAllow   = BG_PATH_CONFIG . 'console' . DS . 'allow' . GK_EXT_INC;
-        $_arr_allowRows     = Config::load($_str_configAllow, 'allow', 'console');
+        $_arr_allowRows     = Config::get('app', 'console');
 
         $_arr_tplData = array(
             'appRow'    => $_arr_appRow,
@@ -202,11 +200,11 @@ class App extends Ctrl {
         }
 
         if ($_arr_inputSubmit['app_id'] > 0) {
-            if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->isSuper) {
+            if (!isset($this->adminAllow['app']['edit']) && !$this->isSuper) {
                 return $this->fetchJson('You do not have permission', 'x050303');
             }
         } else {
-            if (!isset($this->adminLogged['admin_allow']['app']['add']) && !$this->isSuper) {
+            if (!isset($this->adminAllow['app']['add']) && !$this->isSuper) {
                 return $this->fetchJson('You do not have permission', 'x050302');
             }
         }
@@ -228,7 +226,7 @@ class App extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['delete']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['delete']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x050304');
         }
 
@@ -259,7 +257,7 @@ class App extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['edit']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x050303');
         }
 
@@ -290,7 +288,7 @@ class App extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['edit']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['edit']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x050303');
         }
 
@@ -319,7 +317,7 @@ class App extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x050303');
         }
 

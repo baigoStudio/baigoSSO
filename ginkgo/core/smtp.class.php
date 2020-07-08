@@ -6,29 +6,41 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
-/*-------------邮件类-------------*/
+// 邮件发送类
 class Smtp {
 
-    protected static $instance;
-    private $config;
-    private $rcpt;
-    private $reply;
-    private $subject;
-    private $content;
-    private $contentAlt;
-    protected $error;
-    private $crlf = "\r\n";
-    private $le = "\n";
+    protected static $instance; // 当前实例
+    protected $error; // 错误
 
+    private $config; // 配置
+    private $rcpt; // 收件人
+    private $reply; // 回复地址
+    private $subject; // 主题
+    private $content; // 内容
+    private $contentAlt; // 纯文本内容
+    private $serverCaps = array(); // 服务器说明
+    private $crlf = "\r\n"; // 换行符 (主要用于发送命令)
+    private $le = "\n"; // 换行符 (主要用于数据换行)
+
+
+    /** 构造函数
+     * __construct function.
+     *
+     * @access protected
+     * @param array $config (default: array()) 配置
+     * @return void
+     */
     protected function __construct($config = array()) {
-        $this->config = Config::get('smtp', 'var_extra');
+        $_arr_config = Config::get('smtp', 'var_extra'); // 读取配置
 
         if (!Func::isEmpty($config)) {
-            $this->config = array_replace_recursive($this->config, $config);
+            $_arr_config = array_replace_recursive($_arr_config, $config); // 合并配置
         }
+
+        $this->config = $_arr_config;
 
         $this->obj_request = Request::instance();
     }
@@ -37,6 +49,14 @@ class Smtp {
 
     }
 
+    /** 实例化
+     * instance function.
+     *
+     * @access public
+     * @static
+     * @param array $config (default: array()) 配置
+     * @return void
+     */
     public static function instance($config = array()) {
         if (Func::isEmpty(static::$instance)) {
             static::$instance = new static($config);
@@ -44,12 +64,18 @@ class Smtp {
         return static::$instance;
     }
 
+    /** 连接服务器
+     * connect function.
+     *
+     * @access public
+     * @return void
+     */
     function connect() {
-        if (!$this->initConfig()) {
+        if (!$this->initConfig()) { // 初始化配置
             return false;
         }
 
-        switch ($this->config['secure']) {
+        switch ($this->config['secure']) { // 加密类型
             case 'ssl':
                 $_str_host = 'ssl://' . $this->config['host'];
             break;
@@ -63,94 +89,30 @@ class Smtp {
             break;
         }
 
-        $socket_context = stream_context_create();
+        $_res_socket = stream_context_create(); // 创建资源流上下文
 
-        $this->obj_conn = stream_socket_client($_str_host . ':' . $this->config['port'], $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $socket_context);
+        // 打开互联网套接字连接
+        $this->res_conn = stream_socket_client($_str_host . ':' . $this->config['port'], $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $_res_socket);
 
-        if (!$this->obj_conn) {
+        if (!$this->res_conn) { // 报错
             $this->error = 'FSOCKOPEN Error: Cannot conect to ' . $this->config['host'];
             return false;
         }
 
-        $this->getResult();
+        $this->getResult(); // 取得结果
 
         return true;
     }
 
-    function send() {
-        //HELO 向服务器标识用户身份发送者 收到 220 或 250 时OK
-        if (!$this->hello($this->obj_request->host())) {
-            return false;
-        }
 
-        $_authtype = $this->getAuthtype();
-
-        if ($_authtype != 'none' && $this->config['auth'] = true) {
-            switch ($_authtype) {
-                case 'plain':
-                    //AUTH PLAIN 请求登录认证 334 OK
-                    if (!$this->sendCmd('AUTH', 'AUTH PLAIN', 334)) {
-                        return false;
-                    }
-
-                    //发送经 Base64 加密的用户名 & 密码 334 OK
-                    if (!$this->sendCmd('User & Password', base64_encode("\0" . $this->config['user'] . "\0" . $this->config['pass']), 334)) {
-                        return false;
-                    }
-                break;
-
-                case 'login':
-                    //AUTH LOGIN 请求登录认证 334 OK
-                    if (!$this->sendCmd('AUTH', 'AUTH LOGIN', 334)) {
-                        return false;
-                    }
-
-                    //发送经 Base64 加密的用户账号 334 OK
-                    if (!$this->sendCmd('Username', base64_encode($this->config['user']), 334)) {
-                        return false;
-                    }
-
-                    //发送经 Base64 加密的用户密码 235 OK
-                    if (!$this->sendCmd('Password', base64_encode($this->config['pass']), 235)) {
-                        return false;
-                    }
-                break;
-            }
-        }
-
-        //Mail From 发送发件人邮箱 250 OK
-        if (!$this->sendCmd('MAIL FROM', 'MAIL FROM:<' . $this->config['from_addr'] . '>', 250)) {
-            return false;
-        }
-
-        if (Func::isEmpty($this->rcpt)) {
-            return false;
-        }
-
-        //发送收件人邮箱 250 OK
-        foreach ($this->rcpt as $_key=>$_value) {
-            if (!isset($_value['addr'])) {
-                return false;
-            }
-
-            if (!$this->sendCmd('RCPT TO', 'RCPT TO:<' . $_value['addr'] . '>', array(250, 251))) {
-                return false;
-            }
-        }
-
-        $this->createBody();
-
-        //结束会话 221
-        if (!$this->sendCmd('QUIT', 'QUIT', 221)) {
-            return false;
-        }
-
-        //关闭连接
-        fclose($this->obj_conn);
-
-        return true;
-    }
-
+    /** 增加收件人
+     * addRcpt function.
+     *
+     * @access public
+     * @param string $addr 地址
+     * @param string $name (default: '') 名称
+     * @return void
+     */
     function addRcpt($addr, $name = '') {
         if (Func::isEmpty($name)) {
             $this->rcpt[] = array(
@@ -164,10 +126,25 @@ class Smtp {
         }
     }
 
+    /** 设置主题
+     * setSubject function.
+     *
+     * @access public
+     * @param string $subject (default: '') 主题
+     * @return void
+     */
     function setSubject($subject = '') {
         $this->subject = $subject;
     }
 
+    /** 设置发件人
+     * setFrom function.
+     *
+     * @access public
+     * @param string $addr 地址
+     * @param string $name (default: '') 名称
+     * @return void
+     */
     function setFrom($addr, $name = '') {
         if (Func::isEmpty($name)) {
             $this->config['from'] = array(
@@ -181,6 +158,14 @@ class Smtp {
         }
     }
 
+    /** 增加回复地址
+     * addReply function.
+     *
+     * @access public
+     * @param string $addr 地址
+     * @param string $name (default: '') 名称
+     * @return void
+     */
     function addReply($addr, $name = '') {
         if (Func::isEmpty($name)) {
             $this->reply[] = array(
@@ -194,81 +179,321 @@ class Smtp {
         }
     }
 
+    /** 设置纯文本内容
+     * setContentAlt function.
+     *
+     * @access public
+     * @param string $content (default: '') 纯文本内容
+     * @return void
+     */
     function setContentAlt($content = '') {
         $this->contentAlt = $content;
     }
 
+    /** 设置内容
+     * setContentAlt function.
+     *
+     * @access public
+     * @param string $content (default: '') 内容
+     * @return void
+     */
     function setContent($content = '') {
         $this->content = $content;
     }
 
+
+    /** 获取错误
+     * getError function.
+     *
+     * @access public
+     * @return 错误
+     */
     function getError() {
         return $this->error;
     }
 
+
+    /** 发送邮件
+     * send function.
+     *
+     * @access public
+     * @return void
+     */
+    function send() {
+        // HELO 向服务器标识用户身份, 发送者 收到 220 或 250 时 OK
+        if (!$this->createHello($this->obj_request->host())) {
+            return false;
+        }
+
+        $_authtype = $this->getAuthtype(); // 取得服务器认证类型
+
+        if ($_authtype != 'none' && $this->config['auth'] = true) { // 如果需要身份认证
+            switch ($_authtype) {
+                case 'plain':
+                    // AUTH PLAIN 请求登录认证 334 OK
+                    if (!$this->sendCmd('AUTH', 'AUTH PLAIN', 334)) {
+                        return false;
+                    }
+
+                    // 发送经 Base64 加密的用户名 & 密码 334 OK
+                    if (!$this->sendCmd('User & Password', base64_encode("\0" . $this->config['user'] . "\0" . $this->config['pass']), 334)) {
+                        return false;
+                    }
+                break;
+
+                case 'login':
+                    // AUTH LOGIN 请求登录认证 334 OK
+                    if (!$this->sendCmd('AUTH', 'AUTH LOGIN', 334)) {
+                        return false;
+                    }
+
+                    // 发送经 Base64 加密的用户账号 334 OK
+                    if (!$this->sendCmd('Username', base64_encode($this->config['user']), 334)) {
+                        return false;
+                    }
+
+                    // 发送经 Base64 加密的用户密码 235 OK
+                    if (!$this->sendCmd('Password', base64_encode($this->config['pass']), 235)) {
+                        return false;
+                    }
+                break;
+            }
+        }
+
+        // Mail From 发送发件人邮箱 250 OK
+        if (!$this->sendCmd('MAIL FROM', 'MAIL FROM:<' . $this->config['from_addr'] . '>', 250)) {
+            return false;
+        }
+
+        // 收件人为空的话返回错误
+        if (Func::isEmpty($this->rcpt)) {
+            return false;
+        }
+
+        // 发送收件人邮箱 250 OK
+        foreach ($this->rcpt as $_key=>$_value) {
+            if (!isset($_value['addr']) || Func::isEmpty($_value['addr'])) { // 发件人地址参数未设置返回错误
+                return false;
+            }
+
+            if (!$this->sendCmd('RCPT TO', 'RCPT TO:<' . $_value['addr'] . '>', array(250, 251))) {
+                return false;
+            }
+        }
+
+        $this->createBody(); // 创建邮件主体
+
+        // 结束会话 221
+        if (!$this->sendCmd('QUIT', 'QUIT', 221)) {
+            return false;
+        }
+
+        // 关闭连接
+        fclose($this->res_conn);
+
+        return true;
+    }
+
+
+    /** 创建 hello 消息
+     * hello function.
+     *
+     * @access private
+     * @param string $host (default: '')
+     * @return void
+     */
+    private function createHello($host = '') {
+        // 首先尝试扩展 hello（RFC 2821）
+        $_return = $this->sendHello('EHLO', $host);
+
+        // 如果失败继续尝试
+        if (!$_return) {
+            $_return = $this->sendHello('HELO', $host);
+        }
+
+        return $_return;
+    }
+
+
+    /** 创建邮件主体
+     * createBody function.
+     *
+     * @access private
+     * @return 发送命令结果
+     */
+    private function createBody() {
+        $_unique_id     = md5(uniqid(GK_NOW));
+        $_boundary      = 'b1_' . $_unique_id;
+        $_message_id    = sprintf('<%s@%s>', $_unique_id, $this->obj_request->host());
+
+        if (Func::isEmpty(strip_tags($this->contentAlt))) { // 如果没有专门设置纯文本内容, 则使用内容过滤标签
+            $this->contentAlt = strip_tags($this->content);
+        }
+
+        // 开始发送邮件数据 354 OK
+        if (!$this->sendCmd('DATA', 'DATA', 354)) {
+            return false;
+        }
+
+        // 邮件头 -> 日期
+        $this->sendDo($this->headerLine('Date', date('D, j M Y H:i:s O')));
+
+        // 邮件头 -> 收件人
+        if (!Func::isEmpty($this->rcpt)) {
+            // 邮件头 -> 收件人
+            $this->sendDo($this->addrProcess('To', $this->rcpt));
+        }
+
+        $_arr_from[0]['addr'] = $this->config['from_addr'];
+
+        if (isset($this->config['from_name']) && !Func::isEmpty($this->config['from_name'])) {
+            $_arr_from[0]['name'] = $this->config['from_name'];
+        }
+
+        // 邮件头 -> 发件人
+        $this->sendDo($this->addrProcess('From', $_arr_from));
+
+        // 邮件头 -> 回复地址
+        if (!Func::isEmpty($this->reply)) {
+            $this->sendDo($this->addrProcess('Reply-To', $this->reply));
+        }
+
+        // 邮件头 -> 标题
+        $this->sendDo($this->headerLine('Subject', $this->subject));
+
+        // 邮件头 -> Message-ID
+        $this->sendDo($this->headerLine('Message-ID', $_message_id));
+
+        // 邮件头 -> 发件代理客户端
+        $this->sendDo($this->headerLine('X-Mailer', 'ginkgo'));
+
+        // 邮件头 -> 邮件重要级别 1（Highest） 3（Normal） 5（Lowest）
+        $this->sendDo($this->headerLine('X-Priority', '1 (Highest)'));
+
+        // 邮件头 -> mime
+        $this->sendDo($this->headerLine('MIME-Version', '1.0'));
+
+        // 邮件头 -> 多段内容
+        $this->sendDo($this->headerLine('Content-Type', 'multipart/alternative;'));
+
+        // 邮件头 -> 边界
+        $this->sendDo($this->contentLine("\tboundary=\"" . $_boundary . '"'));
+
+        // 邮件头 -> 传输编码
+        $this->sendDo($this->headerLine('Content-Transfer-Encoding', '8bit'));
+
+        // 邮件头 -> 多段内容
+        $this->sendDo($this->contentLine($this->le . 'This is a multi-part message in MIME format.' . $this->le));
+
+        // 内容
+        $this->sendDo($this->contentProcess($_boundary, strip_tags($this->contentAlt)));
+
+        // 内容
+        $this->sendDo($this->contentProcess($_boundary, $this->content, 'text/html'));
+
+        // 边界结束
+        $this->sendDo($this->contentLine($this->le . '--' . $_boundary . '--' . $this->le));
+
+        // 结束发送邮件数据 250
+        $_result = $this->sendCmd('Data End', $this->crlf . '.', 250);
+
+        return $_result;
+    }
+
+
+    /** 发送命令
+     * sendCmd function.
+     *
+     * @access private
+     * @param mixed $cmd 命令标记
+     * @param mixed $cmd_str 命令字符
+     * @param int $expect (default: 250) 期待返回代码
+     * @return void
+     */
     private function sendCmd($cmd, $cmd_str, $expect = 250) {
-        //发送请求信息
-        //$this->clientSend($cmd_str . $this->crlf);
+        // 发送请求信息
+        $this->sendDo($cmd_str . $this->crlf); // 第一个换行符
 
-        $this->clientSend($cmd_str . $this->crlf);
-
-        //接收信息
+        // 接收信息
         $this->lastResult  = $this->getResult();
 
-        $_arr_matches = array();
+        $_arr_matches = array(); // 匹配结果
 
-        if (is_numeric($expect)) {
-            $_arr_expect = array($expect);
-        } else {
-            $_arr_expect = $expect;
+        if (!is_array($expect) && is_scalar($expect)) { // 如果期待返回代码不是数组
+            $expect = array($expect);
         }
 
-        if (preg_match('/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/', $this->lastResult, $_arr_matches)) {
-            $code       = $_arr_matches[1];
-            $code_ex    = null;
-            $_str_regex = '';
-            if (isset($_arr_matches[2])) {
-                $code_ex = $_arr_matches[2];
+        if (preg_match('/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/', $this->lastResult, $_arr_matches)) { // 用正则匹配返回信息
+            $_str_code      = $_arr_matches[1]; // 返回代码
+            $_str_codeEx    = null; // 返回代码扩展
+            $_str_regex     = ''; // 正则规则
+            if (isset($_arr_matches[2])) { // 如果有代码扩展, 则定义
+                $_str_codeEx = $_arr_matches[2];
             }
-            if ($code_ex) {
-                $_str_regex = str_replace('.', '\\.', $code_ex) . ' ';
+            if ($_str_codeEx) {
+                $_str_regex = str_replace('.', '\\.', $_str_codeEx) . ' '; // 处理正则规则
             }
-            // Cut off error code from each response line
-            $detail     = preg_replace("/{$code}[ -]" . $_str_regex . "/m", '', $this->lastResult);
-        } else {
-            // Fall back to simple parsing if regex fails
-            $code       = substr($this->lastResult, 0, 3);
-            $code_ex    = null;
-            $detail     = substr($this->lastResult, 4);
+            // 用正则解析
+            $_str_detail     = preg_replace("/{$_str_code}[ -]" . $_str_regex . "/m", '', $this->lastResult); // 切断每个响应行的错误代码
+        } else { // 如果正则匹配失败, 则简单解析
+            $_str_code      = substr($this->lastResult, 0, 3); // 截取代码
+            $_str_detail    = substr($this->lastResult, 4);
         }
 
-        if (!in_array($code, $_arr_expect)) {
-            $this->error[$cmd] = $code . ' - ' .$detail;
+        if (!in_array($_str_code, $expect)) {
+            $this->error[$cmd] = $_str_code . ' - ' . $_str_detail;
             return false;
         }
 
         return true;
     }
 
-    private function clientSend($data) {
-        return fwrite($this->obj_conn, $data);
+
+    /** 发送 hello 命令
+     * sendHello function.
+     *
+     * @access private
+     * @param mixed $hello 消息
+     * @param mixed $host 主机
+     * @return 发送结果
+     */
+    private function sendHello($hello, $host) {
+        $_return = $this->sendCmd($hello, $hello . ' ' . $host, 250);
+
+        if ($_return) {
+            $this->serverCapsProcess($hello);
+        }
+
+        return $_return;
     }
 
-    private function headerLine($name, $value) {
-        return $name . ': ' . $value . $this->le;
+
+    /** 发送真实命令
+     * sendDo function.
+     *
+     * @access private
+     * @param mixed $data 命令数据
+     * @return 发送结果
+     */
+    private function sendDo($data) {
+        return fwrite($this->res_conn, $data);
     }
 
-    private function textLine($value) {
-        return $value . $this->le;
-    }
-
-    private function addrAppend($type, $addr) {
+    /** 地址信息处理
+     * addrProcess function.
+     *
+     * @access private
+     * @param mixed $type 类型
+     * @param array $addr 地址
+     * @return 拼合后的结果
+     */
+    private function addrProcess($type, $addr) {
         $_str_return = '';
 
-        foreach ($addr as $_key=>$_value) {
+        foreach ($addr as $_key=>$_value) { // 遍历
             $_str_return .= $type . ': ';
 
-            if (isset($_value['name']) && !Func::isEmpty($_value['name'])) {
+            if (isset($_value['name']) && !Func::isEmpty($_value['name'])) { // 如果定义了 name 则加上
                 $_str_return .= $_value['name'] . ' ';
             }
 
@@ -278,138 +503,26 @@ class Smtp {
         return $_str_return;
     }
 
-    private function contentEncode($string) {
-        return $this->le . chunk_split(base64_encode($string), 76, $this->le) . $this->le;
-    }
 
-    private function createBody() {
-        $_uniqueid     = md5(uniqid(GK_NOW));
-        $_boundary     = 'b1_' . $_uniqueid;
-        $_messageID    = sprintf('<%s@%s>', $_uniqueid, $this->obj_request->host());
+    /** 服务器说明处理
+     * serverCapsProcess function.
+     *
+     * @access private
+     * @param mixed $type 类型
+     * @return void
+     */
+    private function serverCapsProcess($type) {
+        $_arr_result = explode("\n", $this->lastResult); // 用换行符分拆接收到的说明信息
 
-        if (Func::isEmpty(strip_tags($this->contentAlt))) {
-            $this->contentAlt = strip_tags($this->content);
-        }
-
-        //开始发送邮件数据 354 OK
-        if (!$this->sendCmd('DATA', 'DATA', 354)) {
-            return false;
-        }
-
-        //邮件头 -> 日期
-        $this->clientSend($this->headerLine('Date', date('D, j M Y H:i:s O')));
-
-        //邮件头 -> 收件人
-        if (!Func::isEmpty($this->rcpt)) {
-            //邮件头 -> 收件人
-            $this->clientSend($this->addrAppend('To', $this->rcpt));
-        }
-
-        $_arr_from[0]['addr'] = $this->config['from_addr'];
-        if (isset($this->config['from_name']) && !Func::isEmpty($this->config['from_name'])) {
-            $_arr_from[0]['name'] = $this->config['from_name'];
-        }
-
-        //邮件头 -> 发件人
-        $this->clientSend($this->addrAppend('From', $_arr_from));
-        //邮件头 -> 回复地址
-        if (!Func::isEmpty($this->reply)) {
-            $this->clientSend($this->addrAppend('Reply-To', $this->reply));
-        }
-
-        //邮件头 -> 标题
-        $this->clientSend($this->headerLine('Subject', $this->subject));
-
-        //邮件头 -> Message-ID
-        $this->clientSend($this->headerLine('Message-ID', $_messageID));
-
-        //邮件头 -> 发件代理客户端
-        $this->clientSend($this->headerLine('X-Mailer', 'ginkgo'));
-
-        //邮件头 -> 邮件重要级别 1（Highest） 3（Normal） 5（Lowest）
-        $this->clientSend($this->headerLine('X-Priority', '1 (Highest)'));
-
-        //邮件头 -> mime
-        $this->clientSend($this->headerLine('MIME-Version', '1.0'));
-
-        //邮件头 -> 多段内容
-        $this->clientSend($this->headerLine('Content-Type', 'multipart/alternative;'));
-
-        //邮件头 -> 边界
-        $this->clientSend($this->textLine("\tboundary=\"" . $_boundary . '"'));
-
-        //邮件头 -> 传输编码
-        $this->clientSend($this->headerLine('Content-Transfer-Encoding', '8bit'));
-
-        //邮件头 -> 多段内容
-        $this->clientSend($this->textLine($this->le . 'This is a multi-part message in MIME format.' . $this->le));
-
-        //内容
-        $this->clientSend($this->createContent($_boundary, strip_tags($this->contentAlt)));
-
-        //内容
-        $this->clientSend($this->createContent($_boundary, $this->content, 'text/html'));
-
-        //边界结束
-        $this->clientSend($this->textLine($this->le . '--' . $_boundary . '--' . $this->le));
-
-        //结束发送邮件数据 250
-        $_result = $this->sendCmd('Data End', $this->crlf . '.', 250);
-
-        return $_result;
-    }
-
-    private function createContent($boundary, $content, $type = 'text/plain') {
-        $_str_content = '';
-        $_str_content .= $this->textLine($this->le . '--' . $boundary);
-        $_str_content .= $this->headerLine('Content-Type', $type. '; charset=UTF-8');
-        $_str_content .= $this->headerLine('Content-Transfer-Encoding', 'base64');
-        $_str_content .= $this->contentEncode($content);
-
-        return $_str_content;
-    }
-
-
-    private function hello($host = '') {
-        $_return = $this->sendHello('EHLO', $host);
-
-        //Try extended hello first (RFC 2821)
-        if (!$_return) {
-            $_return = $this->sendHello('HELO', $host);
-        }
-
-        return $_return;
-    }
-
-
-    private function sendHello($hello, $host) {
-        $_return = $this->sendCmd($hello, $hello . ' ' . $host, 250);
-
-        $this->helloResult = $this->lastResult;
-
-        if ($_return) {
-            $this->parseHello($hello);
-        } else {
-            $this->serverCaps = null;
-        }
-
-        return $_return;
-    }
-
-    private function parseHello($type) {
-        $this->serverCaps = array();
-
-        $_result = explode("\n", $this->lastResult);
-
-        foreach ($_result as $_key => $_value) {
-            //First 4 chars contain response code followed by - or space
+        foreach ($_arr_result as $_key => $_value) { // 遍历说明信息
+            // 前 4 个字符包含响应代码，后跟 - 或空格
             $_value = trim(substr($_value, 4));
-            if (empty($_value)) {
+            if (empty($_value)) { // 如果为空则继续
                 continue;
             }
-            $_fields = explode(' ', $_value);
-            if (!empty($_fields)) {
-                if (!$_key) {
+            $_fields = explode(' ', $_value); // 用空格分拆字段
+            if (!empty($_fields)) { // 如果有内容
+                if (!$_key) { // 如果不是第一条说明信息
                     $_name      = $type;
                     $_fields    = $_fields[0];
                 } else {
@@ -418,7 +531,7 @@ class Smtp {
                         case 'SIZE':
                             $_fields = ($_fields ? $_fields[0] : 0);
                         break;
-                        case 'AUTH':
+                        case 'AUTH': // 认证类型
                             if (!is_array($_fields)) {
                                 $_fields = array();
                             }
@@ -428,13 +541,41 @@ class Smtp {
                         break;
                     }
                 }
-                $this->serverCaps[$_name] = $_fields;
+                $_arr_serverCaps[$_name] = $_fields; // 向服务器说明属性中写入该字段
             }
         }
+
+        $this->serverCaps = $_arr_serverCaps;
     }
 
+
+    /** 处理内容
+     * contentProcess function.
+     *
+     * @access private
+     * @param mixed $boundary
+     * @param mixed $content
+     * @param string $type (default: 'text/plain')
+     * @return void
+     */
+    private function contentProcess($boundary, $content, $type = 'text/plain') {
+        $_str_content = '';
+        $_str_content .= $this->contentLine($this->le . '--' . $boundary);
+        $_str_content .= $this->headerLine('Content-Type', $type. '; charset=UTF-8');
+        $_str_content .= $this->headerLine('Content-Transfer-Encoding', 'base64');
+        $_str_content .= $this->contentEncode($content);
+
+        return $_str_content;
+    }
+
+    /** 获取认证类型
+     * getAuthtype function.
+     *
+     * @access private
+     * @return 认证类型
+     */
     private function getAuthtype() {
-        if (!isset($this->serverCaps['AUTH'])) {
+        if (!is_array($this->serverCaps) || !isset($this->serverCaps['AUTH']) || !is_array($this->serverCaps['AUTH'])) { // 如果服务器说明不是数组, 没有关于认证的信息, 认证类型不是数组
             return 'none';
         }
 
@@ -447,31 +588,73 @@ class Smtp {
         return 'none';
     }
 
+    /** 处理头部行
+     * headerLine function.
+     *
+     * @access private
+     * @param mixed $name 名称
+     * @param mixed $value 值
+     * @return 拼合后结果
+     */
+    private function headerLine($name, $value) {
+        return $name . ': ' . $value . $this->le;
+    }
+
+    /** 处理内容行
+     * contentLine function.
+     *
+     * @access private
+     * @param mixed $value 值
+     * @return 拼合后结果
+     */
+    private function contentLine($value) {
+        return $value . $this->le;
+    }
+
+
+    /** 内容编码
+     * contentEncode function.
+     *
+     * @access private
+     * @param mixed $string 内容字符串
+     * @return 编码后结果
+     */
+    private function contentEncode($string) {
+        return $this->le . chunk_split(base64_encode($string), 76, $this->le) . $this->le;
+    }
+
+
+    /** 获取命令发送结果
+     * getResult function.
+     *
+     * @access private
+     * @return 发送结果
+     */
     private function getResult() {
-        if (!is_resource($this->obj_conn)) {
+        if (!is_resource($this->res_conn)) {
             return '';
         }
 
         $_str_return = '';
 
-        //stream_set_timeout($this->obj_conn, 30);
+        //stream_set_timeout($this->res_conn, 30);
 
         $endtime = GK_NOW + 30;
 
-        while (is_resource($this->obj_conn) && !feof($this->obj_conn)) {
-            $_str_get = fgets($this->obj_conn, 515);
-            $_str_return .= $_str_get;
+        while (is_resource($this->res_conn) && !feof($this->res_conn)) { // 遍历连接资源
+            $_str_get     = fgets($this->res_conn, 515); // 从连接资源取得消息
+            $_str_return .= $_str_get; // 拼合
 
-            if ((isset($_str_get[3]) && $_str_get[3] == ' ')) {
+            if ((isset($_str_get[3]) && $_str_get[3] == ' ')) { // 第四个数组为返回消息
                 break;
             }
 
-            $info = stream_get_meta_data($this->obj_conn);
-            if ($info['timed_out']) {
+            $info = stream_get_meta_data($this->res_conn); // 从连接资源用流取得消息
+            if ($info['timed_out']) { // 超时
                 break;
             }
 
-            if (GK_NOW > $endtime) {
+            if (GK_NOW > $endtime) { // 超时
                 break;
             }
         }
@@ -480,6 +663,12 @@ class Smtp {
     }
 
 
+    /** 配置初始化
+     * initConfig function.
+     *
+     * @access private
+     * @return void
+     */
     private function initConfig() {
         if (!isset($this->config['host'])) {
             return false;
@@ -498,7 +687,7 @@ class Smtp {
         isset($this->config['secure']) or $this->config['secure'] = 'off';
         isset($this->config['debug']) or $this->config['debug'] = 0; //SMTP 调试开关 0 关闭，1 客户端消息, 2 客户端与服务端消息
 
-        if ($this->config['auth'] == 'true' || $this->config['auth'] === true) {
+        if ($this->config['auth'] === 'true' || $this->config['auth'] === true) {
             $this->config['auth'] = true;
         }
 

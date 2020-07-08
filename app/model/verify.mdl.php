@@ -10,7 +10,7 @@ use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------验证模型-------------*/
@@ -21,7 +21,7 @@ class Verify extends Model {
     public $configBase;
 
     function m_init() { //构造函数
-        $this->configBase   = Config::get('base', 'var_extra');
+        $this->configBase       = Config::get('base', 'var_extra');
     }
 
 
@@ -95,16 +95,19 @@ class Verify extends Model {
     }
 
 
-    /** 读取
-     * read function.
-     *
-     * @access public
-     * @param mixed $mix_verify
-     * @param string $str_by (default: 'verify_id')
-     * @param int $num_notId (default: 0)
-     * @return void
-     */
     function read($mix_verify, $str_by = 'verify_id', $arr_select = array()) {
+        $_arr_verifyRow = $this->readProcess($mix_verify, $str_by, $arr_select);
+
+        if ($_arr_verifyRow['rcode'] != 'y120102') {
+            return $_arr_verifyRow;
+        }
+
+        return $this->rowProcess($_arr_verifyRow);
+
+    }
+
+
+    function readProcess($mix_verify, $str_by = 'verify_id', $arr_select = array()) {
         if (Func::isEmpty($arr_select)) {
             $arr_select = array(
                 'verify_id',
@@ -135,7 +138,7 @@ class Verify extends Model {
         $_arr_verifyRow['rcode'] = 'y120102';
         $_arr_verifyRow['msg']   = '';
 
-        return $this->rowProcess($_arr_verifyRow);
+        return $_arr_verifyRow;
     }
 
 

@@ -25,7 +25,6 @@ License: http://www.opensource.org/licenses/mit-license.php
         var opts = $.extend(true, opts_default, options);
 
         var process = {
-            //调用弹出框
             serialize: function() {
                 var _arr_param = $(obj_form).serializeArray();
                 var _str_param = '';

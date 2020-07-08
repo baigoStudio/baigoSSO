@@ -24,6 +24,17 @@
             "opt_3": "选项-3"
         }
     },
+    "select_input": {
+        "type": "select_input",
+        "title": "下拉输入",
+        "require": true,
+        "default": "opt_1",
+        "option": {
+            "opt_1": "选项-1",
+            "opt_2": "选项-2",
+            "opt_3": "选项-3"
+        }
+    },
     "radio": {
         "type": "radio",
         "title": "单选",

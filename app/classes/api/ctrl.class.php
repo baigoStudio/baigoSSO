@@ -16,8 +16,9 @@ use ginkgo\Http;
 use ginkgo\Html;
 use ginkgo\Log;
 use ginkgo\Plugin;
+use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 
@@ -41,6 +42,10 @@ abstract class Ctrl extends Ctrl_Base {
         $this->version = $_arr_version;
 
         Plugin::listen('action_api_init'); //管理后台初始化时触发
+
+        $_arr_configMailtpl     = Config::get('mailtpl', 'var_extra');
+
+        $this->configMailtpl    = Config::get('mailtpl', 'var_extra');
     }
 
 
@@ -85,6 +90,8 @@ abstract class Ctrl extends Ctrl_Base {
 
         $_str_ip = $this->obj_request->ip();
 
+        //print_r($_str_ip);
+
         if (!Func::isEmpty($_arr_appRow['app_ip_allow'])) {
             $_str_ipAllow = str_replace(PHP_EOL, '|', $_arr_appRow['app_ip_allow']);
             if (!Func::checkRegex($_str_ip, $_str_ipAllow, true)) {
@@ -95,7 +102,7 @@ abstract class Ctrl extends Ctrl_Base {
             }
         } else if (!Func::isEmpty($_arr_appRow['app_ip_bad'])) {
             $_str_ipBad = str_replace(PHP_EOL, '|', $_arr_appRow['app_ip_bad']);
-            if (Func::checkRegex($_str_ip, $_str_ipBad)) {
+            if (Func::checkRegex($_str_ip, $_str_ipBad, true)) {
                 return array(
                     'msg'   => $this->obj_lang->get('Your IP address is forbidden', 'api.common'),
                     'rcode' => 'x050408',

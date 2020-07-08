@@ -14,7 +14,7 @@ use ginkgo\Smtp;
 use ginkgo\Sign;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Profile extends Ctrl {
@@ -24,9 +24,7 @@ class Profile extends Ctrl {
 
         $this->mdl_profile  = Loader::model('Profile');
 
-        $this->configReg      = $this->config['var_extra']['reg'];
-        $this->configBase     = $this->config['var_extra']['base'];
-        $this->configMailtpl  = $this->config['var_extra']['mailtpl'];
+        $this->configReg     = Config::get('reg', 'var_extra');
     }
 
 
@@ -195,7 +193,7 @@ class Profile extends Ctrl {
             return $this->fetchJson('The old password is incorrect', 'x010201');
         }
 
-        if ($this->configReg['reg_confirm'] == 'on') {
+        if ($this->configReg['reg_confirm'] === 'on') {
             $_mdl_verify    = Loader::model('Verify');
 
             $_arr_returnRow = $_mdl_verify->submit($_arr_userRow['user_id'], $_arr_inputMailbox['user_mail_new'], 'mailbox');

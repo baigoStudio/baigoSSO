@@ -8,7 +8,7 @@ namespace app\validate\console;
 
 use ginkgo\Validate;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/
@@ -124,8 +124,8 @@ class Pm extends Validate {
             'pm_content'        => $this->obj_lang->get('Content'),
             'pm_bulk_type'      => $this->obj_lang->get('Bulk send type'),
             'pm_to_users'       => $this->obj_lang->get('Recipient'),
-            'pm_to_key_name'    => $this->obj_lang->get('Key word'),
-            'pm_to_key_mail'    => $this->obj_lang->get('Key word'),
+            'pm_to_key_name'    => $this->obj_lang->get('Keyword'),
+            'pm_to_key_mail'    => $this->obj_lang->get('Keyword'),
             'pm_to_min_id'      => $this->obj_lang->get('Start ID'),
             'pm_to_max_id'      => $this->obj_lang->get('End ID'),
             'pm_to_begin_reg'   => $this->obj_lang->get('Start time'),

@@ -4,23 +4,28 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
-define('DS', DIRECTORY_SEPARATOR); //目录分离符
 define('GK_VERSION', '0.1.1'); //框架版本
 define('GK_PUBLISH', 20200228); //框架发布时间
 define('GK_NOW', $_SERVER['REQUEST_TIME']); //当前时间
-define('GK_START_TIME', microtime(true));
-define('GK_START_MEM', memory_get_usage());
+define('GK_START_TIME', microtime(true)); //启动时间
+define('GK_START_MEM', memory_get_usage()); //启动时内存
 
-//用于时间计算
+//用于时间计算的秒数
 define('GK_MINUTE', 60);
 define('GK_HOUR', 3600);
 define('GK_DAY', 86400);
 define('GK_WEEK', 604800);
 define('GK_MONTH', 2592000);
 define('GK_YEAR', 31536000);
+
+//用于容量计算的字节数
+define('GK_KB', 1024);
+define('GK_MB', 1048576);
+define('GK_GB', 1073741824);
+define('GK_TB', 1099511627776);
 
 //扩展名-------
 defined('GK_EXT') or define('GK_EXT', '.php'); //扩展名

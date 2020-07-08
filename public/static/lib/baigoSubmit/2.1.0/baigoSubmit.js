@@ -199,7 +199,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                     break;
 
                     default:
-                        //$(modal_selector).modal('hide');
+                        $(modal_selector).modal('hide');
 
                         obj_form.find(opts.selector.submit_btn).removeAttr('disabled');
                     break;

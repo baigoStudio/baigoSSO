@@ -65,7 +65,8 @@ Email：<?php echo $data['email']; ?>
 | $route_root | string | 根路径 | |
 | $route_personal | string | 个人模块路径 | |
 | $route_misc | string | 杂项模块路径 | 通常用于显示验证码 |
-| $token | string | 表单令牌 | 所有需要提交的表单都必须用 hidden 域包含这个变量，hidden 表单的名称必须为 `__token__`。 |
+| $token | array | 表单令牌 | 所有需要提交的表单都必须用 hidden 域包含这个变量，`4.0-beta-3` 起变更为数组类型，$token['name'] 为表单名，$token['value'] 为表单值 |
+| | string | | 4.0-beta-3 之前的版本，表单的名称必须为 `__token__`。 |
 | $lang | object | 语言对象 |  |
 | $request | object | 请求对象 |  |
 | $config | array | 配置数组 |  |

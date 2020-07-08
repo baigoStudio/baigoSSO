@@ -10,7 +10,7 @@ use app\classes\console\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Db;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class App_Belong extends Ctrl {
@@ -35,7 +35,7 @@ class App_Belong extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['belong']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['app']['belong']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x050305');
         }
 
@@ -69,7 +69,7 @@ class App_Belong extends Ctrl {
             'app_id' => $_arr_appRow['app_id'],
         );
 
-        $_str_pageParamBelong   = 'page_belong';
+        $_str_pageParamBelong   = 'page-belong';
 
         $_num_userCountBelong   = $this->mdl_userAppView->count($_arr_searchBelong); //统计记录数
         $_arr_pageRowBelong     = $this->obj_request->pagination($_num_userCountBelong, 0, 'get', $_str_pageParamBelong); //取得分页数据
@@ -79,7 +79,7 @@ class App_Belong extends Ctrl {
             'appRow'            => $_arr_appRow,
 
             'search'            => $_arr_search,
-            'pageRow'           => $_arr_pageRow,
+            'pageRowUser'       => $_arr_pageRow,
             'userRows'          => $_arr_userRows,
 
             'pageParamBelong'   => $_str_pageParamBelong,
@@ -110,7 +110,7 @@ class App_Belong extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['belong']) && !$this->isSuper) {
+        if (!isset($this->adminAllow['app']['belong']) && !$this->isSuper) {
             return $this->fetchJson('You do not have permission', 'x050305');
         }
 
@@ -149,7 +149,7 @@ class App_Belong extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['app']['belong']) && !$this->isSuper) {
+        if (!isset($this->adminAllow['app']['belong']) && !$this->isSuper) {
             return $this->fetchJson('You do not have permission', 'x050305');
         }
 

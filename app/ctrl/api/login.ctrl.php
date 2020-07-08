@@ -13,7 +13,7 @@ use ginkgo\Json;
 use ginkgo\Sign;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Login extends Ctrl {

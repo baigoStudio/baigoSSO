@@ -8,7 +8,7 @@ namespace app\model\install;
 
 use app\model\Opt as Opt_Base;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------设置项模型-------------*/

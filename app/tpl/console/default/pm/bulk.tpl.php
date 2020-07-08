@@ -19,7 +19,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </nav>
 
     <form name="pm_bulk" id="pm_bulk" action="<?php echo $route_console; ?>pm/bulk-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
         <div class="card">
             <div class="card-body">
@@ -44,13 +44,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     </div>
 
                     <div id="bulk_key_name" class="bulk_types">
-                        <label><?php echo $lang->get('Key word'); ?> <span class="text-danger">*</span></label>
+                        <label><?php echo $lang->get('Keyword'); ?> <span class="text-danger">*</span></label>
                         <input type="text" name="pm_to_key_name" id="pm_to_key_name" class="form-control" title="<?php echo $lang->get('Send to users where username contains the keyword'); ?>" data-toggle="tooltip" data-placement="bottom">
                         <small class="form-text" id="msg_pm_to_key_name"><?php echo $lang->get('Send to users where username contains the keyword'); ?></small>
                     </div>
 
                     <div id="bulk_key_mail" class="bulk_types">
-                        <label><?php echo $lang->get('Key word'); ?> <span class="text-danger">*</span></label>
+                        <label><?php echo $lang->get('Keyword'); ?> <span class="text-danger">*</span></label>
                         <input type="text" name="pm_to_key_mail" id="pm_to_key_mail" class="form-control" title="<?php echo $lang->get('Send to users where username contains the keyword'); ?>" data-toggle="tooltip" data-placement="bottom">
                         <small class="form-text" id="msg_pm_to_key_mail"><?php echo $lang->get('Send to users where email contains the keyword'); ?></small>
                     </div>
@@ -138,8 +138,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             pm_content: '<?php echo $lang->get('Content'); ?>',
             pm_bulk_type: '<?php echo $lang->get('Bulk send type'); ?>',
             pm_to_users: '<?php echo $lang->get('Recipient'); ?>',
-            pm_to_key_name: '<?php echo $lang->get('Key word'); ?>',
-            pm_to_key_mail: '<?php echo $lang->get('Key word'); ?>',
+            pm_to_key_name: '<?php echo $lang->get('Keyword'); ?>',
+            pm_to_key_mail: '<?php echo $lang->get('Keyword'); ?>',
             pm_to_min_id: '<?php echo $lang->get('Start ID'); ?>',
             pm_to_max_id: '<?php echo $lang->get('End ID'); ?>',
             pm_to_begin_reg: '<?php echo $lang->get('Start time'); ?>',

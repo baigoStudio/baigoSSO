@@ -15,7 +15,7 @@ use ginkgo\Sign;
 use ginkgo\Func;
 use ginkgo\Smtp;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Reg extends Ctrl {
@@ -26,8 +26,6 @@ class Reg extends Ctrl {
         $this->mdl_reg       = Loader::model('Reg');
 
         $this->configReg     = Config::get('reg', 'var_extra');
-        $this->configBase    = Config::get('base', 'var_extra');
-        $this->configMailtpl = Config::get('mailtpl', 'var_extra');
     }
 
 
@@ -60,30 +58,10 @@ class Reg extends Ctrl {
             return $this->fetchJson($_arr_inputReg['msg'], $_arr_inputReg['rcode']);
         }
 
-        $_arr_userRow  = $this->mdl_reg->check($_arr_inputReg['user_name'], 'user_name');
-
-        if ($_arr_userRow['rcode'] == 'y010102') {
-            return $this->fetchJson('User already exists', 'x010404');
-        }
-
-        if (!Func::isEmpty($_arr_inputReg['user_mail'])) {
-            $_arr_userRow = $this->mdl_reg->check($_arr_inputReg['user_mail'], 'user_mail'); //检查邮箱
-            if ($_arr_userRow['rcode'] == 'y010102') {
-                return $this->fetchJson('Mailbox already exists', 'x010404');
-            }
-        }
-
-        if ($this->configReg['reg_confirm'] == 'on') { //开启验证则为等待
-            $_str_status = 'wait';
-        } else {
-            $_str_status = 'enable';
-        }
-
         $_str_rand = Func::rand();
 
         $this->mdl_reg->inputReg['user_pass']      = Crypt::crypt($_arr_inputReg['user_pass'], $_str_rand, true);
         $this->mdl_reg->inputReg['user_rand']      = $_str_rand;
-        $this->mdl_reg->inputReg['user_status']    = $_str_status;
         $this->mdl_reg->inputReg['user_app_id']    = $this->appRow['app_id'];
 
         $_arr_regResult = $this->mdl_reg->reg();
@@ -96,7 +74,7 @@ class Reg extends Ctrl {
 
         $_mdl_appBelong->submit($this->appRow['app_id'], $_arr_regResult['user_id']); //用户授权
 
-        if ($this->configReg['reg_confirm'] == 'on') { //开启验证则为等待
+        if ($this->configReg['reg_confirm'] === 'on') { //开启验证则为等待
             $_mdl_verify   = Loader::model('Verify');
 
             $_arr_verifySubmitResult    = $_mdl_verify->submit($_arr_regResult['user_id'], $_arr_inputReg['user_mail'], 'confirm');
@@ -172,9 +150,9 @@ class Reg extends Ctrl {
             return $this->fetchJson($_arr_inputChkname['msg'], $_arr_inputChkname['rcode']);
         }
 
-        $_arr_userRow = $this->mdl_reg->check($_arr_inputChkname['user_name'], 'user_name');
+        $_arr_checkResult = $this->mdl_reg->check($_arr_inputChkname['user_name'], 'user_name');
 
-        if ($_arr_userRow['rcode'] == 'y010102') {
+        if ($_arr_checkResult['rcode'] == 'y010102') {
             $_str_rcode = 'x010404';
             $_str_msg   = $this->obj_lang->get('User already exists');
         } else {
@@ -209,9 +187,9 @@ class Reg extends Ctrl {
         $_str_rcode = 'y010401';
         $_str_msg   = $this->obj_lang->get('Mailbox can be used');
 
-        $_arr_userRow = $this->mdl_reg->check($_arr_inputChkmail['user_mail'], 'user_mail');
+        $_arr_checkResult = $this->mdl_reg->check($_arr_inputChkmail['user_mail'], 'user_mail');
 
-        if ($_arr_userRow['rcode'] == 'y010102') {
+        if ($_arr_checkResult['rcode'] == 'y010102') {
             $_str_rcode = 'x010404';
             $_str_msg   = $this->obj_lang->get('Mailbox already exists');
         }

@@ -27,3 +27,12 @@
 | filter_fw_view | filter | 视图渲染时过滤 |
 
 `filter_fw_view` 返回参数为渲染后的 HTML，回传参数也必须是 HTML。
+
+----------
+
+##### 钩子
+
+* [安装程序钩子](hook_install.md)
+* [管理后台钩子](hook_console.md)
+* [API 接口钩子](hook_api.md)
+* [用户模块钩子](hook_personal.md)

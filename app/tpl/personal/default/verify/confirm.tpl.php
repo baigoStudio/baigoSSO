@@ -13,7 +13,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
             <form name="personal_form" id="personal_form" action="<?php echo $route_personal; ?>verify/confirm-submit/">
                 <input type="hidden" name="verify_id" value="<?php echo $verifyRow['verify_id']; ?>">
                 <input type="hidden" name="verify_token" value="<?php echo $verifyRow['verify_token']; ?>">
-                <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
                 <div class="form-group">
                     <label><?php echo $lang->get('Username'); ?></label>

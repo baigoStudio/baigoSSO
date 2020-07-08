@@ -6,4 +6,4 @@
 
 插件开发的详情请查看 ginkgo 文档的 [扩展 -> 插件](//doc.baigo.net/ginkgo/extend/plugin)，本文档将列出 baigo SSO 预埋的插件钩子。
 
-> v2.2 起支持插件
+`2.2` 起支持插件

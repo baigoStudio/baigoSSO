@@ -38,7 +38,7 @@ POST
 | - | - | - | - |
 | user_id | int | 用户 ID | |
 | user_access_token | string | 访问口令 | |
-| user_access_expire | int | 访问口令过期时间 | Unix 时间戳 |
+| user_access_expire | int | 访问口令过期时间 | UNIX 时间戳 |
 | timestamp | int | UNIX 时间戳 | |
 
 解密结果示例
@@ -58,7 +58,7 @@ POST
 
 本接口用于修改当前用户的信息
 
-> v2.0 起
+`2.0` 新增
 
 ##### URL
 
@@ -142,7 +142,7 @@ $_arr_data = array(
 
 本接口用于修改当前用户的密码
 
-> v2.0 起
+`2.0` 新增
 
 ##### URL
 
@@ -186,7 +186,7 @@ POST
 
 本接口用于修改当前用户的密保问题
 
-> v2.0 起
+`2.0` 新增
 
 ##### URL
 

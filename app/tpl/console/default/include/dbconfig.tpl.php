@@ -43,7 +43,7 @@
                 <div class="form-group">
                     <div>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" <?php if ($config['dbconfig']['debug'] == 'true') { ?>checked<?php } ?> name="debug" id="debug" value='true'>
+                            <input type="checkbox" class="custom-control-input" <?php if ($config['dbconfig']['debug'] === 'true') { ?>checked<?php } ?> name="debug" id="debug" value='true'>
                             <label class="custom-control-label" for="debug">
                                 <?php echo $lang->get('Database debug'); ?>
                             </label>

@@ -13,7 +13,7 @@ use ginkgo\File;
 use ginkgo\Func;
 use ginkgo\Json;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Plugin extends Ctrl {
@@ -21,9 +21,9 @@ class Plugin extends Ctrl {
     protected function c_init($param = array()) {
         parent::c_init();
 
-        $this->obj_file         = File::instance();
+        $this->obj_file     = File::instance();
 
-        $this->mdl_plugin  = Loader::model('Plugin');
+        $this->mdl_plugin   = Loader::model('Plugin');
 
         $this->configPlugin = Config::get('plugin');
     }
@@ -36,7 +36,7 @@ class Plugin extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['plugin']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['plugin']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x190301');
         }
 
@@ -124,7 +124,7 @@ class Plugin extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['plugin']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['plugin']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x190301');
         }
 
@@ -205,7 +205,7 @@ class Plugin extends Ctrl {
         }
 
         if (isset($this->configPlugin[$_str_pluginDir])) {
-            if (!isset($this->adminLogged['admin_allow']['plugin']['edit']) && !$this->isSuper) { //判断权限
+            if (!isset($this->adminAllow['plugin']['edit']) && !$this->isSuper) { //判断权限
                 return $this->error('You do not have permission', 'x190303');
             }
 
@@ -213,7 +213,7 @@ class Plugin extends Ctrl {
 
             $_arr_pluginRow['plugin_status'] = 'enable';
         } else {
-            if (!isset($this->adminLogged['admin_allow']['plugin']['install']) && !$this->isSuper) { //判断权限
+            if (!isset($this->adminAllow['plugin']['install']) && !$this->isSuper) { //判断权限
                 return $this->error('You do not have permission', 'x190302');
             }
 
@@ -304,7 +304,7 @@ class Plugin extends Ctrl {
         }
 
 
-        if (!isset($this->adminLogged['admin_allow']['plugin']['option']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['plugin']['option']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x190301');
         }
 
@@ -396,7 +396,7 @@ class Plugin extends Ctrl {
             return $this->fetchJson($_arr_inputOpts['msg'], $_arr_inputOpts['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['plugin']['option']) && !$this->isSuper) {
+        if (!isset($this->adminAllow['plugin']['option']) && !$this->isSuper) {
             return $this->fetchJson('You do not have permission', 'x190303');
         }
 
@@ -429,7 +429,7 @@ class Plugin extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['plugin']['uninstall']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['plugin']['uninstall']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x190304');
         }
 
@@ -479,7 +479,6 @@ class Plugin extends Ctrl {
 
 
     private function pluginDisable($arr_pluginDisable) {
-        //print_r($arr_pluginDisable);
         if (!Func::isEmpty($arr_pluginDisable)) {
             $this->mdl_plugin->inputUninstall['plugin_dirs'] = Func::arrayFilter($arr_pluginDisable);
             $this->mdl_plugin->uninstall();

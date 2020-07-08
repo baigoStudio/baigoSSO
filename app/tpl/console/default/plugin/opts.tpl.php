@@ -17,7 +17,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </nav>
 
     <form name="plugin_opts" id="plugin_opts" action="<?php echo $route_console; ?>plugin/opts-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <input type="hidden" name="plugin_dir" id="plugin_dir" value="<?php echo $pluginRow['plugin_dir']; ?>">
 
         <div class="row">
@@ -63,13 +63,17 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                             <div class="input-group">
                                                 <input type="text" value="<?php echo $optsVar[$_key]; ?>" name="<?php echo $_key; ?>" id="<?php echo $_key; ?>" class="form-control">
                                                 <span class="input-group-append">
-                                                    <select id="select_<?php echo $_key; ?>" class="custom-select bg-custom-select">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                                                        <?php echo $lang->get('Please select'); ?>
+                                                    </button>
+
+                                                    <div class="dropdown-menu">
                                                         <?php foreach ($_value['option'] as $_key_opt=>$_value_opt) { ?>
-                                                            <option<?php if ($optsVar[$_key] == $_key_opt) { ?> selected<?php } ?> value="<?php echo $_key_opt; ?>">
+                                                            <button class="dropdown-item bg-select-input" data-value="<?php echo $_key_opt; ?>" data-target="#<?php echo $_key; ?>" type="button">
                                                                 <?php echo $_value_opt; ?>
-                                                            </option>
+                                                            </button>
                                                         <?php } ?>
-                                                    </select>
+                                                    </div>
                                                 </span>
                                             </div>
                                         <?php break;
@@ -94,7 +98,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                                         case 'switch': ?>
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" id="<?php echo $_key; ?>" name="<?php echo $_key; ?>" <?php if ($optsVar[$_key] == 'on') { ?>checked<?php } ?> value="on" class="custom-control-input">
+                                                <input type="checkbox" id="<?php echo $_key; ?>" name="<?php echo $_key; ?>" <?php if ($optsVar[$_key] === 'on') { ?>checked<?php } ?> value="on" class="custom-control-input">
                                                 <label for="<?php echo $_key; ?>" class="custom-control-label">
                                                     <?php echo $lang->get($_value['title']); ?>
                                                 </label>
@@ -171,16 +175,11 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             }
         });
 
-        <?php foreach ($pluginOpts as $_key=>$_value) {
-            switch ($_value['type']) {
-                case 'select_input': ?>
-                    $('#select_<?php echo $_key; ?>').change(function(){
-                        var _val_<?php echo $_key; ?> = $(this).val();
-                        $('#<?php echo $_key; ?>').val(_val_<?php echo $_key; ?>);
-                    });
-                <?php break;
-            }
-        } ?>
+        $('.bg-select-input').click(function(){
+            var _val    = $(this).data('value');
+            var _target = $(this).data('target');
+            $(_target).val(_val);
+        });
     });
     </script>
 

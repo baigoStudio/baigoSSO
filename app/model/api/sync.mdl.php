@@ -7,7 +7,7 @@ namespace app\model\api;
 
 use app\model\User;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户模型-------------*/

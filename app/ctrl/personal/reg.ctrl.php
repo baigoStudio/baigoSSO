@@ -13,7 +13,7 @@ use ginkgo\Func;
 use ginkgo\Smtp;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 
@@ -23,16 +23,18 @@ class Reg extends Ctrl {
     protected function c_init($param = array()) {
         parent::c_init();
 
-        $this->configReg        = Config::get('reg', 'var_extra');
-        $this->configBase       = Config::get('base', 'var_extra');
-        $this->configMailtpl    = Config::get('mailtpl', 'var_extra');
-
         $this->mdl_reg          = Loader::model('Reg');
         $this->mdl_verify       = Loader::model('Verify');
+
+        $this->configReg     = Config::get('reg', 'var_extra');
     }
 
 
     function index() {
+        if ($this->configReg['reg_acc'] != 'on') {
+            return $this->error('Registration is prohibited', 'x050316');
+        }
+
         $_arr_tplData = array(
             'token'     => $this->obj_request->token(),
         );
@@ -50,30 +52,20 @@ class Reg extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
+        if ($this->configReg['reg_acc'] != 'on') {
+            return $this->fetchJson('Registration is prohibited', 'x050316');
+        }
+
         $_arr_inputReg = $this->mdl_reg->inputReg();
 
         if ($_arr_inputReg['rcode'] != 'y010201') {
             return $this->fetchJson($_arr_inputReg['msg'], $_arr_inputReg['rcode']);
         }
 
-        if (!Func::isEmpty($_arr_inputReg['user_mail'])) {
-            $_arr_userRow = $this->mdl_reg->check($_arr_inputReg['user_mail'], 'user_mail'); //检查邮箱
-            if ($_arr_userRow['rcode'] == 'y010102') {
-                return $this->fetchJson('Mailbox already exists', 'x010404');
-            }
-        }
-
-        if ($this->configReg['reg_confirm'] == 'on') { //开启验证则为等待
-            $_str_status = 'wait';
-        } else {
-            $_str_status = 'enable';
-        }
-
         $_str_rand = Func::rand();
 
         $this->mdl_reg->inputReg['user_pass']      = Crypt::crypt($_arr_inputReg['user_pass'], $_str_rand);
         $this->mdl_reg->inputReg['user_rand']      = $_str_rand;
-        $this->mdl_reg->inputReg['user_status']    = $_str_status;
 
         $_arr_regResult = $this->mdl_reg->reg();
 
@@ -81,7 +73,7 @@ class Reg extends Ctrl {
             return $this->fetchJson($_arr_regResult['msg'], $_arr_regResult['rcode']);
         }
 
-        if ($this->configReg['reg_confirm'] == 'on') { //开启验证则为等待
+        if ($this->configReg['reg_confirm'] === 'on') { //开启验证则为等待
             $_arr_verifySubmitResult    = $this->mdl_verify->submit($_arr_regResult['user_id'], $_arr_inputReg['user_mail'], 'confirm');
 
             if ($_arr_verifySubmitResult['rcode'] != 'y120101' && $_arr_verifySubmitResult['rcode'] != 'y120103') { //生成验证失败
@@ -119,6 +111,10 @@ class Reg extends Ctrl {
 
 
     function nomail() {
+        if ($this->configReg['reg_acc'] != 'on') {
+            return $this->error('Registration is prohibited', 'x050316');
+        }
+
         $_arr_tplData = array(
             'token'     => $this->obj_request->token(),
         );
@@ -134,6 +130,10 @@ class Reg extends Ctrl {
     function nomailSubmit() {
         if (!$this->isAjaxPost) {
             return $this->fetchJson('Access denied', '', 405);
+        }
+
+        if ($this->configReg['reg_acc'] != 'on') {
+            return $this->fetchJson('Registration is prohibited', 'x050316');
         }
 
         $_arr_inputNomail = $this->mdl_reg->inputNomail();

@@ -12,7 +12,7 @@ use ginkgo\Json;
 use ginkgo\Crypt;
 use ginkgo\Html;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------应用模型-------------*/

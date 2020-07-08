@@ -6,30 +6,46 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 语言处理类
 class Lang {
 
-    protected static $instance;
-    private $lang;
-    private $config;
-    private $current; //默认语言
-    private $clientLang; //客户端语言
-    private $route;
-    private $range = '';
+    protected static $instance; // 当前实例
+    private $lang; // 语言数据
+    private $config; // 语言配置
+    private $current; // 当前语言
+    private $clientLang; // 客户端语言
+    private $route; // 路由信息
+    private $range = ''; // 作用域
 
+    private $this_config = array( //语言
+        'switch'    => false, //语言开关
+        'default'   => 'zh_CN', //默认语言
+    );
+
+    // 构造函数
     protected function __construct() {
-        $this->config = Config::get('lang');
+        $_arr_config = Config::get('lang'); // 读取语言配置
 
-        $this->getCurrent();
-        $this->init();
+        $this->config = array_replace_recursive($this->this_config, $_arr_config);
+
+        $this->getCurrent(); // 获取当前语言
+        $this->init(); // 初始化
     }
 
     protected function __clone() {
 
     }
 
+    /** 实例化
+     * instance function.
+     *
+     * @access public
+     * @static
+     * @return 当前类的实例
+     */
     public static function instance() {
         if (Func::isEmpty(static::$instance)) {
             static::$instance = new static();
@@ -37,6 +53,13 @@ class Lang {
         return static::$instance;
     }
 
+    /** 设置, 获取作用域
+     * range function.
+     *
+     * @access public
+     * @param string $range (default: '') 作用域
+     * @return 如果参数为空则返回当前作用域, 否则无返回
+     */
     public function range($range = '') {
         if (Func::isEmpty($range)) {
             return $this->range;
@@ -45,7 +68,16 @@ class Lang {
         }
     }
 
-    //获取当前语言
+
+    /** 获取当前语言
+     * getCurrent function.
+     *
+     * @access public
+     * @param bool $lower (default: false) 是否转换为小写
+     * @param string $separator (default: '') 语言、国家分隔符
+     * @param bool $client (default: false) 是否以客户端语言为准
+     * @return void
+     */
     function getCurrent($lower = false, $separator = '', $client = false) {
         if ($client) {
             $_str_current = $this->clientLang;
@@ -65,11 +97,27 @@ class Lang {
     }
 
 
+    /** 设置当前语言
+     * setCurrent function.
+     *
+     * @access public
+     * @param string $lang (default: '') 语言代码
+     * @return void
+     */
     function setCurrent($lang = '') {
         $this->current = $lang;
     }
 
 
+    /** 添加变量 (冲突不覆盖)
+     * add function.
+     *
+     * @access public
+     * @param string $name 变量名
+     * @param string $value (default: '') 值
+     * @param string $range (default: '') 作用域
+     * @return void
+     */
     function add($name, $value = '', $range = '') {
         $_mix_range = $this->rangeProcess($range);
 
@@ -95,6 +143,15 @@ class Lang {
     }
 
 
+    /** 设置变量 (冲突覆盖)
+     * set function.
+     *
+     * @access public
+     * @param mixed $name 变量名
+     * @param string $value (default: '') 值
+     * @param string $range (default: '') 作用域
+     * @return void
+     */
     function set($name, $value = '', $range = '') { //设置语言字段
         $_mix_range = $this->rangeProcess($range);
 
@@ -160,6 +217,17 @@ class Lang {
         //print_r($this->lang);
     }
 
+
+    /** 获取语言变量
+     * get function.
+     *
+     * @access public
+     * @param string $name 变量名
+     * @param string $range (default: '') 作用域
+     * @param array $replace (default: array()) 输出替换
+     * @param bool $show_src (default: true) 如果变量不存在, 是否显示变量名
+     * @return void
+     */
     function get($name, $range = '', $replace = array(), $show_src = true) { //获取语言字段
         $name = (string)$name;
 
@@ -201,13 +269,21 @@ class Lang {
             foreach ($_arr_replace as $_key=>&$_value) {
                 $_value = '{:' . $_value . '}';
             }
-            $_str_return = str_ireplace($_arr_replace, $replace, $_str_return);
+            $_str_return = str_replace($_arr_replace, $replace, $_str_return);
         }
 
         return $_str_return;
     }
 
 
+    /** 载入语言包
+     * load function.
+     *
+     * @access public
+     * @param string $path 路径
+     * @param string $range (default: '') 作用域
+     * @return void
+     */
     function load($path, $range = '') {
         $_arr_lang = array();
 
@@ -218,16 +294,22 @@ class Lang {
         /*print_r($range);
         print_r('<br>');*/
 
-        $this->set($_arr_lang, '', $range);
+        $this->set($_arr_lang, '', $range); // 设置变量
 
         return $_arr_lang;
     }
 
 
+    /** 初始化
+     * init function.
+     *
+     * @access private
+     * @return void
+     */
     private function init() {
         $_str_current = $this->current;
 
-        if (!Func::isEmpty($this->config['switch'])) { //语言开关为开
+        if ($this->config['switch'] === true || $this->config['switch'] === 'true') { // 语言开关为开
             if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
                 $this->clientLang = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
             }
@@ -238,21 +320,29 @@ class Lang {
         }
 
         if (function_exists('mb_internal_encoding')) {
-            mb_internal_encoding('UTF-8'); //设置内部字符编码
+            mb_internal_encoding('UTF-8'); // 设置内部字符编码
         }
 
-        setlocale(LC_ALL, $_str_current . '.UTF-8'); //设置区域格式,主要针对 csv 处理
+        setlocale(LC_ALL, $_str_current . '.UTF-8'); // 设置区域格式,主要针对 csv 处理
 
         $this->current = $_str_current;
 
         $_str_pathSys = GK_PATH_LANG . $_str_current . GK_EXT_LANG;
 
         if (Func::isFile($_str_pathSys)) {
-            $this->lang['__ginkgo__'] = Loader::load($_str_pathSys, 'include');
+            $this->lang['__ginkgo__'] = Loader::load($_str_pathSys, 'include'); // 载入框架语言包
         }
     }
 
 
+    /** 作用域处理
+     * rangeProcess function.
+     *
+     * @access private
+     * @static
+     * @param string $range (default: '') 作用域
+     * @return 作用域数组
+     */
     private function rangeProcess($range = '') {
         if (Func::isEmpty($range)) {
             $_str_range = $this->range;

@@ -8,7 +8,7 @@ namespace app\validate\api;
 
 use ginkgo\Validate;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/

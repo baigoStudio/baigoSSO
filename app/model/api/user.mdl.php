@@ -9,7 +9,7 @@ use app\model\User as User_Base;
 use ginkgo\Json;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户模型-------------*/

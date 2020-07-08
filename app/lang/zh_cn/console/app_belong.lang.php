@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
@@ -13,7 +13,7 @@ return array(
     'All'                                       => '全部',
     'Token'                                     => '表单令牌',
     'Close'                                     => '关闭',
-    'Key word'                                  => '关键词',
+    'Keyword'                                   => '关键词',
     'Back'                                      => '返回',
     'Show'                                      => '查看',
     'Users'                                     => '用户',
@@ -21,7 +21,7 @@ return array(
     'Missing ID'                                => '无法获取 ID',
     'Reset'                                     => '清除',
     'Status'                                    => '状态',
-    'Unknown'                                    => '未知',
+    'Unknown'                                   => '未知',
     'Nickname'                                  => '昵称',
     'Note'                                      => '备注',
     'enable'                                    => '启用',
@@ -37,11 +37,11 @@ return array(
     'Action'                                    => '操作',
     'Submitting'                                => '正在提交 ...',
     'Bulk actions'                              => '批量操作',
-    'Form token is incorrect'                          => '表单令牌错误',
+    'Form token is incorrect'                   => '表单令牌错误',
     'All status'                                => '所有状态',
-    'App'                               => '应用',
-    'App name'                          => '应用名称',
-    'App not found'                     => '应用不存在',
+    'App'                                       => '应用',
+    'App name'                                  => '应用名称',
+    'App not found'                             => '应用不存在',
     'Choose at least one item'                  => '至少选择一项',
     'Choose at least one {:attr}'               => '至少选择一项 {:attr}',
     'User'                                      => '用户',

@@ -6,22 +6,23 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
-/*------会话模型------*/
+// 会话处理
 class Session {
 
-    protected static $instance;
-    private static $init;
+    private static $init; // 是否初始化标志
 
+    // 默认配置
     private static $this_config = array(
         'type'      => 'file',
         'autostart' => false,
         'name'      => '',
+        'path'      => '',
     );
 
-    private static $prefix = '';
+    private static $prefix = ''; // 前缀
 
     protected function __construct() {
     }
@@ -31,45 +32,36 @@ class Session {
 
     }
 
-
-    public static function prefix($prefix = '') {
-        if (Func::isEmpty(self::$init)) {
-            self::boot();
-        }
-
-        if (Func::isEmpty($prefix)) {
-            return self::$prefix;
-        } else {
-            self::$prefix = $prefix;
-        }
-    }
-
+    /** 初始化
+     * init function.
+     *
+     * @access public
+     * @static
+     * @param array $config (default: array()) 会话配置
+     * @return void
+     */
     public static function init($config = array()) {
-        $_arr_config   = Config::get('session');
-
         $_do_start = false;
 
-        $_arr_config = array_replace_recursive(self::$this_config, $_arr_config);
+        $_arr_config    = Config::get('session');
 
         if (!Func::isEmpty($config)) {
-            $_arr_config = array_replace_recursive($_arr_config, $config);
+            $_arr_config = array_replace_recursive(self::$this_config, $_arr_config, $config); // 合并配置
         }
 
-        if (isset($_arr_config['type']) && !Func::isEmpty($_arr_config['type']) && $_arr_config['type'] != 'file') {
-            // 读取session驱动
-
-            if (strpos($_arr_config['type'], '\\')) {
+        if (isset($_arr_config['type']) && !Func::isEmpty($_arr_config['type']) && $_arr_config['type'] != 'file') { // 如果指定了驱动类型, 且不是文件类型
+            if (strpos($_arr_config['type'], '\\')) { // 如果类型包含命名空间则直接使用
                 $_class = $_arr_config['type'];
-            } else {
+            } else { // 否则补全命名空间
                 $_class = 'ginkgo\\session\\driver\\' . Func::ucwords($_arr_config['type'], '_');
             }
 
             // 检查驱动类
             if (class_exists($_class)) {
-                $_obj_session = $_class::instance();
+                $_obj_session = $_class::instance(); // 实例化驱动
 
-                $_arr_return = session_set_save_handler(array($_obj_session, 'open'), array($_obj_session, 'close'), array($_obj_session, 'read'), array($_obj_session, 'write'), array($_obj_session, 'destroy'), array($_obj_session, 'gc'));
-            } else {
+                $_arr_return = session_set_save_handler(array($_obj_session, 'open'), array($_obj_session, 'close'), array($_obj_session, 'read'), array($_obj_session, 'write'), array($_obj_session, 'destroy'), array($_obj_session, 'gc')); // 定义处理函数
+            } else { // 报错
                 $_obj_excpt = new Exception('Session driver not found', 500);
 
                 $_obj_excpt->setData('err_detail', $_class);
@@ -102,7 +94,7 @@ class Session {
 
         //print_r(session_id());
 
-        if ($_arr_config['autostart'] == true && Func::isEmpty(session_id())) {
+        if ($_arr_config['autostart'] === true && Func::isEmpty(session_id())) {
             //print_r('auto_start');
             ini_set('session.auto_start', 0);
             $_do_start = true;
@@ -117,6 +109,14 @@ class Session {
         }
     }
 
+    /** 引导
+     * boot function.
+     *
+     * @access public
+     * @static
+     * @param array $config (default: array()) 会话配置
+     * @return void
+     */
     public static function boot($config = array()) {
         if (Func::isEmpty(self::$init)) {
             //print_r('init');
@@ -131,13 +131,44 @@ class Session {
         }
     }
 
+    /** 设置, 获取前缀
+     * prefix function.
+     *
+     * @access public
+     * @static
+     * @param string $prefix (default: '')
+     * @return 如果参数为空则返回前缀, 否则无返回
+     */
+    public static function prefix($prefix = '') {
+        if (Func::isEmpty(self::$init)) {
+            self::boot();
+        }
+
+        if (Func::isEmpty($prefix)) {
+            return self::$prefix;
+        } else {
+            self::$prefix = $prefix;
+        }
+    }
+
+
+    /** 设置会话变量
+     * set function.
+     *
+     * @access public
+     * @static
+     * @param mixed $name 名称
+     * @param mixed $value 值
+     * @param string $prefix (default: '') 前缀
+     * @return void
+     */
     static function set($name, $value, $prefix = '') {
         if (Func::isEmpty(self::$init)) {
             //print_r('boot');
             self::boot();
         }
 
-        $_arr_prefix = self::prefixProcess($prefix);
+        $_arr_prefix = self::prefixProcess($prefix); // 前缀处理
 
         if (!Func::isEmpty($_arr_prefix[0]) && isset($_arr_prefix[1]) && !Func::isEmpty($_arr_prefix[1])) {
             $_SESSION[$_arr_prefix[0]][$_arr_prefix[1]][$name] = $value;
@@ -150,6 +181,16 @@ class Session {
         //print_r($_SESSION);
     }
 
+
+    /** 读取会话变量
+     * get function.
+     *
+     * @access public
+     * @static
+     * @param mixed $name 名称
+     * @param string $prefix (default: '') 前缀
+     * @return 变量
+     */
     static function get($name, $prefix = '') {
         $_value = null;
 
@@ -177,6 +218,15 @@ class Session {
     }
 
 
+    /** 删除会话变量
+     * delete function.
+     *
+     * @access public
+     * @static
+     * @param mixed $name 名称
+     * @param string $prefix (default: '') 前缀
+     * @return void
+     */
     static function delete($name, $prefix = '') {
         if (Func::isEmpty(self::$init)) {
             self::boot();
@@ -194,6 +244,14 @@ class Session {
     }
 
 
+    /** 前缀处理
+     * prefixProcess function.
+     *
+     * @access private
+     * @static
+     * @param string $prefix (default: '') 前缀
+     * @return 前缀
+     */
     private static function prefixProcess($prefix = '') {
         if (Func::isEmpty($prefix)) {
             $_str_prefix = self::$prefix;

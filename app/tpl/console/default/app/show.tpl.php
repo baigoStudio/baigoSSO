@@ -46,7 +46,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         </div>
 
                         <form name="app_form" id="app_form" action="<?php echo $route_console; ?>app/reset/">
-                            <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                            <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
                             <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
 
                             <div class="form-group">
@@ -65,7 +65,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         </div>
 
                         <div class="form-group">
-                            <label><?php echo $lang->get('URL of sync login notifications'); ?></label>
+                            <label><?php echo $lang->get('URL of sync notifications'); ?></label>
                             <div class="form-text"><?php echo $appRow['app_url_sync']; ?></div>
                         </div>
 
@@ -135,7 +135,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         </div>
 
                         <div class="form-group">
-                            <label><?php echo $lang->get('Sync status'); ?></label>
+                            <label><?php echo $lang->get('Sync'); ?></label>
                             <div class="form-text"><?php $str_status = $appRow['app_sync'];
                             include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?></div>
                         </div>

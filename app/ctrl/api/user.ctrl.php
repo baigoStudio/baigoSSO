@@ -13,7 +13,7 @@ use ginkgo\Json;
 use ginkgo\Sign;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class User extends Ctrl {
@@ -22,8 +22,6 @@ class User extends Ctrl {
         parent::c_init();
 
         $this->mdl_user     = Loader::model('User');
-
-        $this->configReg    = $this->config['var_extra']['reg'];
     }
 
 

@@ -11,9 +11,10 @@ use ginkgo\Debug;
 use ginkgo\Func;
 use ginkgo\Json as Json_Data;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// jsonp 响应类
 class Jsonp extends Response {
 
     protected $contentType = 'application/javascript';

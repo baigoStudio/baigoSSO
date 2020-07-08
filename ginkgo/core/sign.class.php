@@ -6,12 +6,22 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 签名类
 class Sign {
 
-    //生成签名
+    /** 生成签名
+     * make function.
+     *
+     * @access public
+     * @static
+     * @param string $string 待签名字符
+     * @param string $salt (default: '') 盐
+     * @param bool $is_upper (default: true) 是否大写
+     * @return 签名
+     */
     static function make($string, $salt = '', $is_upper = true) {
         $_str_sign = md5($string . $salt);
         if ($is_upper) {
@@ -20,7 +30,17 @@ class Sign {
     	return $_str_sign;
     }
 
-    //验证签名
+    /** 验证签名
+     * check function.
+     *
+     * @access public
+     * @static
+     * @param string $string 待签名字符
+     * @param string $sign 签名
+     * @param string $salt (default: '') 盐
+     * @param bool $is_upper (default: true) 是否大写
+     * @return 验证结果
+     */
     static function check($string, $sign, $salt = '', $is_upper = true) {
         $_str_signChk = self::make($string, $salt, $is_upper);
 

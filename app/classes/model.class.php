@@ -9,7 +9,7 @@ namespace app\classes;
 use ginkgo\Model as Gk_Model;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access Denied');
 
 /*-------------单点登录类-------------*/

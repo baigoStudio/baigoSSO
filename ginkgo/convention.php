@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 return array(
@@ -27,8 +27,8 @@ return array(
         'tag'   => 'div', //调试信息包含在标签内
         'class' => 'container p-5', //调试信息包含标签的 css 类名
     ),
-    'log' => array(
-        'file_size' => 2 * 1024 * 1024,
+    'log' => array( //日志
+        'file_size' => 2 * GK_MB, //日志大小限制
     ),
     'tpl' => array( //模板
         'type'      => 'php', //默认模板驱动
@@ -39,18 +39,15 @@ return array(
         'path'      => '', //默认模板路径
         'suffix'    => '', //模板后缀 (默认 .tpl.php)
     ),
-    'exception_page' => array( //异常页面
-        '404'       => '404',
-        '500'       => '500',
-    ),
+    'exception_page' => array( ),
     'session' => array( //会话
         'autostart'     => false, //自动开始
         'name'          => '', //Session ID 名称
         'type'          => 'file', //类型 (可选 db,file)
         'path'          => '', //保存路径 (默认为 /runtime/session)
         'prefix'        => 'ginkgo_', //前缀
-        'cookie_domain' => '',
-        'life_time'     => 1200, // session 生存时间
+        'cookie_domain' => '', //cookie 域名
+        'life_time'     => 20 * GK_MINUTE, // session 生存时间
     ),
     'cookie' => array( //cookie
         'prefix'    => '', // cookie 名称前缀
@@ -61,12 +58,16 @@ return array(
         'httponly'  => true, // httponly 设置
         'setcookie' => true, // 是否使用 setcookie
     ),
+    'auth' => array(
+        'session_expire'    => 20 * GK_MINUTE,
+        'remember_expire'   => 30 * GK_DAY,
+    ),
     'cache' => array( //缓存
         'type'          => 'file', //类型 (可选 file)
         'prefix'        => 'ginkgo', //前缀
-        'life_time'     => 86400, // cache 生存时间 0 为永久保存
+        'life_time'     => 24 * GK_HOUR, // cache 生存时间 0 为永久保存
     ),
-    'route' => array(
+    'route' => array( //路由
         'route_type'    => '', //路由模式 (可选 normal, noBaseFile)
         'url_suffix'    => '', //URL 后缀
         'default_mod'   => '', //默认模块 (默认为 index)
@@ -78,7 +79,7 @@ return array(
             array('/^cate[\/\S+]+\/(\d+)+\S*$/i', 'index/cate/index', 'id'),*/ //正则例子 array(规则, 地址, 参数)
         ),
     ),
-    'image' => array(
+    'image' => array( //图片扩展名及 mime
         'gif' => array(
             'image/gif',
         ),
@@ -112,12 +113,12 @@ return array(
             'application/x-win-bitmap'
         ),
     ),
-    'config_extra' => array(
+    'config_extra' => array( //扩展配置
         'upload'    => true,
         'ftp'       => true,
         'smtp'      => true,
     ),
-    'var_extra' => array(
+    'var_extra' => array( //扩展配置默认值
         'upload' => array(
             'limit_size'    => 200, //上传尺寸
             'limit_unit'    => 'kb', //尺寸单位
@@ -146,9 +147,9 @@ return array(
             'debug'         => '0',
         ),
     ),
-    'func_extra' => array(),
-    'plugin' => array(),
-    'dbconfig' => array(
+    'func_extra' => array(), //扩展函数
+    'plugin' => array(), //插件
+    'dbconfig' => array( //数据库
         'type'      => 'mysql',
         'host'      => '',
         'name'      => '',

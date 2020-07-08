@@ -13,7 +13,7 @@ use ginkgo\Html;
 use ginkgo\Plugin;
 use ginkgo\Ubbcode;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Pm extends Ctrl {
@@ -36,7 +36,7 @@ class Pm extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['pm']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['pm']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x110301');
         }
 
@@ -86,7 +86,7 @@ class Pm extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['pm']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['pm']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x110301');
         }
 
@@ -132,7 +132,7 @@ class Pm extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['pm']['bulk']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['pm']['bulk']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x110302');
         }
 
@@ -163,7 +163,7 @@ class Pm extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['pm']['bulk']) && !$this->isSuper) {
+        if (!isset($this->adminAllow['pm']['bulk']) && !$this->isSuper) {
             return $this->fetchJson('You do not have permission', 'x110302');
         }
 
@@ -219,6 +219,10 @@ class Pm extends Ctrl {
 
         $_arr_userRows = $this->mdl_user->lists(1000, 0, $_arr_search);
 
+        if (Func::isEmpty($_arr_userRows)) {
+            return $this->fetchJson('No eligible recipients', 'x110201');
+        }
+
         $_num_count = 0;
 
         foreach ($_arr_userRows as $_key=>$_value) {
@@ -256,7 +260,7 @@ class Pm extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['pm']['delete']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['pm']['delete']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x110304');
         }
 
@@ -293,7 +297,7 @@ class Pm extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['pm']['edit']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['pm']['edit']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x110305');
         }
 

@@ -7,27 +7,34 @@
 namespace ginkgo\db\connector;
 
 use ginkgo\Func;
+use ginkgo\Log;
 use ginkgo\Config;
 use ginkgo\db\Connector;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
-/*-------------数据库类-------------*/
+// 数据库连接器类
 class Mysql extends Connector {
 
+    /** 取得插入 id
+     * insertId function.
+     *
+     * @access public
+     * @return void
+     */
     function insertId() {
         $_num_id        = 0;
 
         //print_r('test');
 
-        $_obj_result    = $this->query('SELECT LAST_INSERT_ID()');
+        $_obj_result    = $this->query('SELECT LAST_INSERT_ID()'); // 尝试使用 sql 语句
 
-        $_inserResult   = $this->getRow();
+        $_inserResult   = $this->getRow(); // 取得行内容
 
-        if ($_inserResult > 0) {
+        if ($_inserResult > 0) { // 成功直接使用
             $_num_id = $_inserResult;
-        } else {
+        } else { // 失败使用 pdo 函数
             $_num_id = $this->lastInsertId();
         }
 
@@ -35,6 +42,13 @@ class Mysql extends Connector {
     }
 
 
+    /** 切换数据表
+     * table function.
+     *
+     * @access public
+     * @param mixed $table 表明
+     * @return 当前实例
+     */
     function table($table) {
         $this->_tableTemp[$this->mid] = $this->obj_builder->table($table);
 
@@ -42,6 +56,13 @@ class Mysql extends Connector {
     }
 
 
+    /** 强制使用索引名
+     * force function.
+     *
+     * @access public
+     * @param mixed $index 索引名
+     * @return 当前实例
+     */
     function force($index) {
         $this->_force = $this->obj_builder->force($index);
 
@@ -49,6 +70,15 @@ class Mysql extends Connector {
     }
 
 
+    /** join 语句处理
+     * join function.
+     *
+     * @access public
+     * @param mixed $table join 的表
+     * @param string $on (default: '') on 条件
+     * @param string $type (default: '') join 类型
+     * @return 当前实例
+     */
     function join($table, $on = '', $type = '') {
         $this->_join = $this->obj_builder->join($table, $on, $type);
 
@@ -56,25 +86,47 @@ class Mysql extends Connector {
     }
 
 
-    function where($where, $exp = '', $value = '', $type = '', $param = '') {
-        $_arr_result = $this->obj_builder->where($where, $exp, $value, $type, $param);
+    /** where 语句处理
+     * where function.
+     *
+     * @access public
+     * @param mixed $where 条件
+     * @param string $exp (default: '') 运算符
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return 当前实例
+     */
+    function where($where, $exp = '', $value = '', $param = '', $type = '') {
+        $_arr_sql = $this->obj_builder->where($where, $exp, $value, $param, $type);
 
-        $this->_where = $_arr_result['where'];
-        $this->_bind  = $_arr_result['bind'];
+        $this->_where = $_arr_sql['where'];
+        $this->_bind  = $_arr_sql['bind'];
 
         return $this;
     }
 
 
-    function whereAnd($where, $exp = '', $value = '', $type = '', $param = '') {
-        $_arr_result = $this->obj_builder->where($where, $exp, $value, $type, $param);
+    /** whereAnd 语句处理
+     * whereAnd function.
+     *
+     * @access public
+     * @param mixed $where 条件
+     * @param string $exp (default: '') 运算符
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return 当前实例
+     */
+    function whereAnd($where, $exp = '', $value = '', $param = '', $type = '') {
+        $_arr_sql = $this->obj_builder->where($where, $exp, $value, $param, $type);
 
-        if (!Func::isEmpty($_arr_result['where'])) {
-            $this->_whereAnd[]  = '(' . $_arr_result['where'] . ')';
+        if (!Func::isEmpty($_arr_sql['where'])) {
+            $this->_whereAnd[]  = '(' . $_arr_sql['where'] . ')';
             if (Func::isEmpty($this->_bind)) {
-                $this->_bind        = $_arr_result['bind'];
+                $this->_bind        = $_arr_sql['bind'];
             } else {
-                $this->_bind        = array_merge($this->_bind, $_arr_result['bind']);
+                $this->_bind        = array_merge($this->_bind, $_arr_sql['bind']);
             }
         }
 
@@ -82,15 +134,26 @@ class Mysql extends Connector {
     }
 
 
-    function whereOr($where, $exp = '', $value = '', $type = '', $param = '') {
-        $_arr_result = $this->obj_builder->where($where, $exp, $value, $type, $param);
+    /** whereOr 语句处理
+     * whereOr function.
+     *
+     * @access public
+     * @param mixed $where 条件
+     * @param string $exp (default: '') 运算符
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return 当前实例
+     */
+    function whereOr($where, $exp = '', $value = '', $param = '', $type = '') {
+        $_arr_sql = $this->obj_builder->where($where, $exp, $value, $param, $type);
 
-        if (!Func::isEmpty($_arr_result['where'])) {
-            $this->_whereOr[]   = '(' . $_arr_result['where'] . ')';
+        if (!Func::isEmpty($_arr_sql['where'])) {
+            $this->_whereOr[]   = '(' . $_arr_sql['where'] . ')';
             if (Func::isEmpty($this->_bind)) {
-                $this->_bind        = $_arr_result['bind'];
+                $this->_bind        = $_arr_sql['bind'];
             } else {
-                $this->_bind        = array_merge($this->_bind, $_arr_result['bind']);
+                $this->_bind        = array_merge($this->_bind, $_arr_sql['bind']);
             }
         }
 
@@ -98,6 +161,13 @@ class Mysql extends Connector {
     }
 
 
+    /** group 语句处理
+     * group function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return 当前实例
+     */
     function group($field) {
         $this->_group = $this->obj_builder->group($field);
 
@@ -105,6 +175,14 @@ class Mysql extends Connector {
     }
 
 
+    /** order 语句处理
+     * order function.
+     *
+     * @access public
+     * @param mixed $field
+     * @param string $order (default: '')
+     * @return 当前实例
+     */
     function order($field, $order = '') {
         $this->_order = $this->obj_builder->order($field, $order);
 
@@ -112,6 +190,14 @@ class Mysql extends Connector {
     }
 
 
+    /** limit 语句处理
+     * limit function.
+     *
+     * @access public
+     * @param int $offset (default: 1)
+     * @param bool $length (default: false)
+     * @return 当前实例
+     */
     function limit($offset = 1, $length = false) {
         $this->_limit = $this->obj_builder->limit($offset, $length);
 
@@ -119,272 +205,424 @@ class Mysql extends Connector {
     }
 
 
+    /** 读取一条记录
+     * find function.
+     *
+     * @access public
+     * @param string $field (default: '') 字段名
+     * @return 读取结果
+     */
     function find($field = '') {
         $this->limit();
 
-        $_arr_result = $this->select($field, false);
+        $_arr_result = $this->select($field, false); // 执行 select 查询
 
         return $_arr_result;
     }
 
 
+    /** 执行 select 查询
+     * select function.
+     *
+     * @access public
+     * @param string $field (default: '') 字段
+     * @param bool $all (default: true) 是否全部记录
+     * @return 查询结果
+     */
     function select($field = '', $all = true) {
-        $_str_sql = $this->buildSelect($field);
+        $_str_sql       = $this->buildSelect($field); // 构建 select 语句
+        $_str_realSql   = ''; // 真实 sql 语句
 
-        /*print_r($this->_bind);
-        print_r(' -+-+-+-+-+-+-+-+- ');
-        print_r(PHP_EOL);*/
+        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+            $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
+        }
 
-        if ($this->_fetchSql === true) {
-            return $this->fetchBind($_str_sql, $this->_bind);
+        if ($this->_fetchSql === true) { // 如果为获取 sql
+            $this->resetSql(); // 重置 sql
+            return $_str_realSql; // 返回 sql 语句
         } else {
-            $this->prepare($_str_sql, $this->_bind);
+            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+                Log::record($_str_realSql, 'sql'); // 记录日志
+            }
 
-            $this->execute();
+            $this->prepare($_str_sql, $this->_bind); // 预处理语句
 
-            //print_r($this->obj_result->debugDumpParams());
-            //print_r('<br>');
+            $this->execute(); // 执行
 
-            return $this->getResult($all);
+            return $this->getResult($all); // 获取数据集
         }
     }
 
 
+    /** 插入记录
+     * insert function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return void
+     */
     function insert($field, $value = '', $param = '', $type = '') {
-        $_arr_result = $this->buildInsert($field, $value, $param , $type);
+        $_arr_sql        = $this->buildInsert($field, $value, $param , $type); // 构建 insert 语句
+        $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true) {
-            return $this->fetchBind($_arr_result['sql'], $_arr_result['bind']);
+        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+            $_str_realSql = $this->fetchBind($_arr_sql['sql'], $_arr_sql['bind']); // 取得绑定处理
+        }
+
+        if ($this->_fetchSql === true) { // 如果为获取 sql
+            $this->resetSql(); // 重置 sql
+            return $_str_realSql; // 返回 sql 语句
         } else {
-            $this->prepare($_arr_result['sql']);
+            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+                Log::record($_str_realSql, 'sql'); // 记录日志
+            }
 
-            $this->execute($_arr_result['bind']);
+            $this->prepare($_arr_sql['sql']); // 预处理语句
+
+            $this->execute($_arr_sql['bind']); // 执行
 
             //print_r($this->obj_result->debugDumpParams());
 
-            return $this->insertId();
+            return $this->insertId(); // 取得插入的 id
         }
     }
 
 
+    /** 更新记录
+     * update function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return void
+     */
     function update($field, $value = '', $param = '', $type = '') {
-        $_arr_result = $this->buildUpdate($field, $value, $param , $type);
+        $_arr_sql        = $this->buildUpdate($field, $value, $param , $type); // 构建 update 语句
+        $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true) {
-            $_str_sql = $this->fetchBind($_arr_result['sql'], $this->_bind);
-            $_str_sql = $this->fetchBind($_arr_result['sql'], $_arr_result['bind']);
+        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+            $_str_realSql = $this->fetchBind($_arr_sql['sql'], $this->_bind); // 取得绑定处理
+            $_str_realSql = $this->fetchBind($_arr_sql['sql'], $_arr_sql['bind']);
+        }
 
-            return $_str_sql;
+        if ($this->_fetchSql === true) { // 如果为获取 sql
+            $this->resetSql(); // 重置 sql
+            return $_str_realSql; // 返回 sql 语句
         } else {
-            $this->prepare($_arr_result['sql'], $this->_bind);
+            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+                Log::record($_str_realSql, 'sql'); // 记录日志
+            }
 
-            $this->execute($_arr_result['bind']);
+            $this->prepare($_arr_sql['sql'], $this->_bind); // 预处理语句
+
+            $this->execute($_arr_sql['bind']); // 执行
 
             //print_r($this->obj_result->debugDumpParams());
 
-            return $this->getRowCount();
+            return $this->getRowCount(); // 取得影响行数
         }
     }
 
 
+    /** 删除记录
+     * delete function.
+     *
+     * @access public
+     * @return void
+     */
     function delete() {
-        $_str_sql = $this->buildDelete();
+        $_str_sql        = $this->buildDelete(); // 构建 delete 语句
+        $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true) {
-            return $this->fetchBind($_str_sql, $this->_bind);
+        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+            $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
+        }
+
+        if ($this->_fetchSql === true) { // 如果为获取 sql
+            $this->resetSql(); // 重置 sql
+            return $_str_realSql; // 返回 sql 语句
         } else {
-            $this->prepare($_str_sql, $this->_bind);
+            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+                Log::record($_str_realSql, 'sql'); // 记录日志
+            }
 
-            $this->execute();
+            $this->prepare($_str_sql, $this->_bind); // 预处理语句
+
+            $this->execute(); // 执行
 
             //print_r($this->obj_result->debugDumpParams());
 
-            return $this->getRowCount();
+            return $this->getRowCount(); // 取得影响行数
         }
     }
 
 
+    /** 克隆数据
+     * duplicate function.
+     *
+     * @access public
+     * @param array $field (default: array()) 字段
+     * @param string $table (default: '') 目的地表名
+     * @return void
+     */
     function duplicate($field = array(), $table = '') {
-        $_str_sql = $this->buildDuplicate($field, $table);
+        $_str_sql        = $this->buildDuplicate($field, $table); // 构建 duplicate 语句
+        $_str_realSql    = ''; // 真实 sql 语句
 
-        //print_r($_str_sql);
+        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+            $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
+        }
 
-        if ($this->_fetchSql === true) {
-            return $this->fetchBind($_str_sql, $this->_bind);
+        if ($this->_fetchSql === true) { // 如果为获取 sql
+            $this->resetSql(); // 重置 sql
+            return $_str_realSql; // 返回 sql 语句
         } else {
-            $this->prepare($_str_sql, $this->_bind);
+            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+                Log::record($_str_realSql, 'sql'); // 记录日志
+            }
 
-            $this->execute();
+            $this->prepare($_str_sql, $this->_bind); // 预处理语句
 
-            return $this->insertId();
+            $this->execute(); // 执行
+
+            return $this->insertId(); // 取得插入的 id
         }
     }
 
 
+    /** 记录数
+     * count function.
+     *
+     * @access public
+     * @param string $field (default: '') 字段
+     * @return void
+     */
     function count($field = '') {
         return $this->aggProcess('count', $field);
     }
 
 
+    /** 最大值
+     * max function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return void
+     */
     function max($field) {
         return $this->aggProcess('max', $field);
     }
 
 
+    /** 最小值
+     * min function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return void
+     */
     function min($field) {
         return $this->aggProcess('min', $field);
     }
 
 
+    /** 平均值
+     * avg function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return void
+     */
     function avg($field) {
         return $this->aggProcess('avg', $field);
     }
 
 
+    /** 和
+     * sum function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return void
+     */
     function sum($field) {
         return $this->aggProcess('sum', $field);
     }
 
 
+    /** 构建 sql 语句
+     * buildSql function.
+     *
+     * @access public
+     * @return sql 语句
+     */
     function buildSql() {
-        $_str_sql = $this->buildWhere(false);
+        $_str_sql = $this->buildWhere(false); // 构建 where 语句
 
         //print_r($_str_sql);
 
-        return trim($this->fetchBind($_str_sql, $this->_bind));
+        $_str_sql = trim($this->fetchBind($_str_sql, $this->_bind)); // 取得绑定处理
+
+        $this->resetSql(); // 重置 sql
+
+        return $_str_sql;
     }
 
 
-    protected function buildSelect($field = '') {
+    /** 聚合处理
+     * aggProcess function.
+     *
+     * @access private
+     * @param mixed $type 类型
+     * @param mixed $field 字段
+     * @return void
+     */
+    private function aggProcess($type, $field) {
+        $_str_sql       = $this->buildAgg($type, $field); // 构建聚合语句
+        $_str_realSql   = ''; // 真实 sql 语句
+
+        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+            $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
+        }
+
+        if ($this->_fetchSql === true) { // 如果为获取 sql
+            $this->resetSql(); // 重置 sql
+            return $_str_realSql; // 返回 sql 语句
+        } else {
+            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+                Log::record($_str_realSql, 'sql'); // 记录日志
+            }
+
+            $this->prepare($_str_sql, $this->_bind); // 预处理
+
+            $this->execute(); // 执行
+
+            //print_r($this->obj_result->debugDumpParams());
+
+            return $this->getRow(); // 取得当前记录
+        }
+    }
+
+
+    /** 构建 select 语句
+     * buildSelect function.
+     *
+     * @access private
+     * @param string $field (default: '') 字段
+     * @return sql 语句
+     */
+    private function buildSelect($field = '') {
         $_str_field = $this->obj_builder->field($field);
 
         $_str_sql = 'SELECT';
 
         if ($this->_distinct === true) {
-            $_str_sql .= ' DISTINCT';
+            $_str_sql .= ' DISTINCT'; // 不重复记录
         }
 
         $_str_sql .= ' ' . $_str_field . ' FROM ' . $this->getTable();
 
         if (!Func::isEmpty($this->_force)) {
-            $_str_sql .= ' FORCE INDEX (' . $this->_force . ')';
+            $_str_sql .= ' FORCE INDEX (' . $this->_force . ')'; // 强制使用索引
         }
 
         if (!Func::isEmpty($this->_join)) {
-            $_str_sql .= ' ' . $this->_join;
+            $_str_sql .= ' ' . $this->_join; // join
         }
 
-        $_str_sql .= $this->buildWhere();
+        $_str_sql .= $this->buildWhere(); // 构建 where 语句
 
         if (!Func::isEmpty($this->_group)) {
-            $_str_sql .= ' GROUP BY ' . $this->_group;
+            $_str_sql .= ' GROUP BY ' . $this->_group; // group
         }
 
         if (!Func::isEmpty($this->_order)) {
-            $_str_sql .= ' ORDER BY ' . $this->_order;
+            $_str_sql .= ' ORDER BY ' . $this->_order; // order
         }
 
         if (!Func::isEmpty($this->_limit)) {
-            $_str_sql .= ' LIMIT ' . $this->_limit;
+            $_str_sql .= ' LIMIT ' . $this->_limit; // limit
         }
 
         return $_str_sql;
     }
 
 
-    protected function buildAgg($type, $field = '') {
-        $type = strtoupper($type);
-        $_str_func = '';
+    /** 构建 insert 语句
+     * buildInsert function.
+     *
+     * @access private
+     * @param mixed $field 字段
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 类型
+     * @return sql 语句及绑定参数
+     */
+    private function buildInsert($field, $value = '', $param = '', $type = '') {
+        $_arr_sql = $this->obj_builder->insert($field, $value, $param, $type);
 
-        switch ($type) {
-            case 'MAX':
-                $_str_func = 'MAX';
-            break;
-
-            case 'MIN':
-                $_str_func = 'MIN';
-            break;
-
-            case 'AVG':
-                $_str_func = 'AVG';
-            break;
-
-            case 'SUM':
-                $_str_func = 'SUM';
-            break;
-
-            default:
-                $_str_func = 'COUNT';
-            break;
-        }
-
-        $_str_field = $this->obj_builder->field($field);
-
-        $_str_sql = 'SELECT ' . $_str_func . '(' . $_str_field . ') FROM';
-
-        if (Func::isEmpty($this->_group)) {
-            $_str_sql .= ' ' . $this->getTable();
-        } else {
-            $_str_sql .= ' (SELECT ' . $_str_func . '(' . $_str_field . ') FROM ' . $this->getTable();
-        }
-
-
-        if (!Func::isEmpty($this->_force)) {
-            $_str_sql .= ' FORCE INDEX (' . $this->_force . ')';
-        }
-
-        if (!Func::isEmpty($this->_join)) {
-            $_str_sql .= ' ' . $this->_join;
-        }
-
-        $_str_sql .= $this->buildWhere();
-
-        if (!Func::isEmpty($this->_group)) {
-            $_str_sql .= ' GROUP BY ' . $this->_group . ') a';
-        }
-
-        //print_r($_str_sql);
-
-        return $_str_sql;
-    }
-
-
-    protected function buildInsert($field, $value = '', $param = '', $type = '') {
-        $_arr_result = $this->obj_builder->insert($field, $value, $param, $type);
-
-        $_str_sql = 'INSERT INTO ' . $this->getTable() . ' SET ' . $_arr_result['insert'];
+        $_str_sql = 'INSERT INTO ' . $this->getTable() . ' SET ' . $_arr_sql['insert'];
 
         return array(
             'sql'   => $_str_sql,
-            'bind'  => $_arr_result['bind'],
+            'bind'  => $_arr_sql['bind'],
         );
     }
 
 
-    protected function buildUpdate($field, $value = '', $param = '', $type = '') {
-        $_arr_result = $this->obj_builder->update($field, $value, $param, $type);
+    /** 构建 update 语句
+     * buildUpdate function.
+     *
+     * @access private
+     * @param mixed $field 字段
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 类型
+     * @return sql 语句及绑定参数
+     */
+    private function buildUpdate($field, $value = '', $param = '', $type = '') {
+        $_arr_sql = $this->obj_builder->update($field, $value, $param, $type);
 
-        $_str_sql = 'UPDATE ' . $this->getTable() . ' SET ' . $_arr_result['update'];
+        $_str_sql = 'UPDATE ' . $this->getTable() . ' SET ' . $_arr_sql['update'];
 
-        $_str_sql .= $this->buildWhere();
+        $_str_sql .= $this->buildWhere(); // 构建 where 语句
 
         return array(
             'sql'   => $_str_sql,
-            'bind'  => $_arr_result['bind'],
+            'bind'  => $_arr_sql['bind'],
         );
     }
 
 
-    protected function buildDelete() {
+    /** 构建 delete 语句
+     * buildDelete function.
+     *
+     * @access private
+     * @return sql 语句
+     */
+    private function buildDelete() {
         $_str_sql = 'DELETE FROM ' . $this->getTable();
 
-        $_str_sql .= $this->buildWhere();
+        $_str_sql .= $this->buildWhere(); // 构建 where 语句
 
         return $_str_sql;
     }
 
 
-    protected function buildDuplicate($field = array(), $table = '') {
+    /** 构建 duplicate 语句
+     * buildDuplicate function.
+     *
+     * @access private
+     * @param array $field (default: array()) 字段
+     * @param string $table (default: '') 目的地表名
+     * @return sql 语句
+     */
+    private function buildDuplicate($field = array(), $table = '') {
         if (Func::isEmpty($table)) {
             $_str_table = $this->getTable();
         } else {
@@ -401,7 +639,14 @@ class Mysql extends Connector {
     }
 
 
-    protected function buildWhere($add_where = true) {
+    /** 构建 where 语句
+     * buildWhere function.
+     *
+     * @access private
+     * @param bool $add_where (default: true) 是否添加 "WHERE"
+     * @return void
+     */
+    private function buildWhere($add_where = true) {
         $_str_sql = '';
 
         if (!Func::isEmpty($this->_where)) {
@@ -436,19 +681,66 @@ class Mysql extends Connector {
     }
 
 
-    protected function aggProcess($type, $field) {
-        $_str_sql = $this->buildAgg($type, $field);
+    /** 构建聚合 sql 语句
+     * buildAgg function.
+     *
+     * @access private
+     * @param mixed $type 类型 (聚合函数)
+     * @param string $field (default: '') 字段
+     * @return sql 语句
+     */
+    private function buildAgg($type, $field = '') {
+        $type       = strtoupper($type);
+        $_str_func  = '';
 
-        if ($this->_fetchSql === true) {
-            return $this->fetchBind($_str_sql, $this->_bind);
-        } else {
-            $this->prepare($_str_sql, $this->_bind);
+        switch ($type) {
+            case 'MAX':
+                $_str_func = 'MAX';
+            break;
 
-            $this->execute();
+            case 'MIN':
+                $_str_func = 'MIN';
+            break;
 
-            //print_r($this->obj_result->debugDumpParams());
+            case 'AVG':
+                $_str_func = 'AVG';
+            break;
 
-            return $this->getRow();
+            case 'SUM':
+                $_str_func = 'SUM';
+            break;
+
+            default:
+                $_str_func = 'COUNT';
+            break;
         }
-    }
-}
+
+        $_str_field = $this->obj_builder->field($field); // 构建字段
+
+        $_str_sql = 'SELECT ' . $_str_func . '(' . $_str_field . ') FROM';
+
+        if (Func::isEmpty($this->_group)) {
+            $_str_sql .= ' ' . $this->getTable();
+        } else {
+            $_str_sql .= ' (SELECT ' . $_str_func . '(' . $_str_field . ') FROM ' . $this->getTable();
+        }
+
+
+        if (!Func::isEmpty($this->_force)) {
+            $_str_sql .= ' FORCE INDEX (' . $this->_force . ')'; // 强制索引
+        }
+
+        if (!Func::isEmpty($this->_join)) {
+            $_str_sql .= ' ' . $this->_join; // join
+        }
+
+        $_str_sql .= $this->buildWhere(); // 构建 where 语句
+
+        if (!Func::isEmpty($this->_group)) {
+            $_str_sql .= ' GROUP BY ' . $this->_group . ') a'; // group
+        }
+
+        //print_r($_str_sql);
+
+        return $_str_sql;
+    }}

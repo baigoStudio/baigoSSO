@@ -12,34 +12,54 @@ use ginkgo\Route;
 use ginkgo\Func;
 use ginkgo\Html;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 重定向响应类
 class Redirect extends Response {
 
-    protected $param;
-    protected $exclude;
+    protected $param; // 参数
+    protected $exclude; // 排除参数
 
+    /** 记住 url
+     * remember function.
+     *
+     * @access public
+     * @param string $url (default: '')
+     * @return void
+     */
     function remember($url = '') {
         if (Func::isEmpty($url)) {
-            $_str_url = $this->obj_request->server('REQUEST_URI');
-        } else {
-            $_str_url = $url;
+            $url = $this->obj_request->server('REQUEST_URI'); // 未指定参数则取服务器变量
         }
 
-        Session::set('__redirect__', rawurlencode($this->obj_request->server('REQUEST_URI')));
+        Session::set('__redirect__', rawurlencode($url)); // 设置会话
     }
 
+    /** 读取 url
+     * restore function.
+     *
+     * @access public
+     * @return void
+     */
     function restore() {
-        $_str_url = Session::get('__redirect__');
+        $_str_url = Session::get('__redirect__'); // 从会话读取
         $_str_url = Html::decode($_str_url, 'url');
         $_str_url = rawurldecode($_str_url);
 
-        Session::delete('__redirect__');
+        Session::delete('__redirect__'); // 删除会话
 
-        return $_str_url;
+        return $_str_url; // 返回
     }
 
+    /** 设置参数
+     * param function.
+     *
+     * @access public
+     * @param mixed $param
+     * @param string $value (default: '')
+     * @return void
+     */
     function param($param, $value = '') {
         if (is_array($param)) {
             $this->param = array_param_recursive($this->param, $param);
@@ -48,6 +68,13 @@ class Redirect extends Response {
         }
     }
 
+    /** 排除参数
+     * exclude function.
+     *
+     * @access public
+     * @param array $exclude (default: array())
+     * @return void
+     */
     function exclude($exclude = array()) {
         if (!Func::isEmpty($exclude)) {
             if (is_array($exclude)) {
@@ -62,8 +89,15 @@ class Redirect extends Response {
         }
     }
 
+    /** 输出处理
+     * output function.
+     *
+     * @access protected
+     * @param mixed $data
+     * @return void
+     */
     protected function output($data) {
-        $_str_jump = $this->getUrl();
+        $_str_jump = $this->getUrl(); // 取得 url
 
         if (!Func::isEmpty($_str_jump)) {
             //$this->cacheControl('no-cache, must-revalidate, no-store, max-age=0');
@@ -72,13 +106,19 @@ class Redirect extends Response {
         }
     }
 
+    /** 取得 url
+     * getUrl function.
+     *
+     * @access private
+     * @return void
+     */
     private function getUrl() {
         $_return = '';
 
         if (is_scalar($this->data)) {
             if (strpos($this->data, '://') || strpos($this->data, '/') === 0) {
-                $_return = $this->data;
-            } else {
+                $_return = $this->data; // 如果响应内容存在, 切符合跳转 url 规则, 则直接使用
+            } else { // 否则构建 url
                 $_return = Route::build($this->data, $this->param, $this->exclude);
             }
         }

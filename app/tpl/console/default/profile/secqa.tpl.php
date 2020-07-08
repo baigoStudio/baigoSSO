@@ -10,7 +10,7 @@
 include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
     <form name="profile_form" id="profile_form" action="<?php echo $route_console; ?>profile/secqa-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
         <div class="row">
             <div class="col-xl-9">
@@ -41,7 +41,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                         <select class="form-control" id="admin_ques_often_<?php echo $_iii; ?>">
                                             <option value=""><?php echo $lang->get('Frequently security questions'); ?></option>
                                             <?php foreach ($secqaRows as $_key=>$_value) { ?>
-                                                <option value="<?php echo $lang->get($_value, 'console.secqa'); ?>"><?php echo $lang->get($_value, 'console.secqa'); ?></option>
+                                                <option value="<?php echo $lang->get($_value); ?>"><?php echo $lang->get($_value); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>

@@ -12,7 +12,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
     <div class="card">
         <div class="card-body">
             <form name="reg_form" id="reg_form" action='<?php echo $route_personal; ?>reg/submit/'>
-                <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
                 <div class="form-group">
                     <label><?php echo $lang->get('Username'); ?></label>

@@ -128,13 +128,20 @@ License: http://www.opensource.org/licenses/mit-license.php
                         process.output(result.status + ' ' + result.statusText, opts.class_msg.err, opts.class_icon.err);
                     },
                     success: function(result) { //读取返回结果
+                        if (typeof result.count == 'undefined') {
+                            result.count = 0;
+                        }
+
                         if (_count < 1) {
                             _count = result.count;
                         }
+
                         _progress_width = parseInt(page / _count * 100 + '%');
+
                         if (_progress_width > 100) {
                             _progress_width = 100;
                         }
+
                         switch (result.status) {
                             case 'err':
                                 if (typeof result.msg != 'undefined') {
@@ -144,7 +151,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                                 }
                                 process.output(_msg_result, opts.class_msg.err,opts.class_icon.err);
                                 _count  = 0;
-                                page   = 1;
+                                page    = 1;
                             break;
 
                             case 'complete':

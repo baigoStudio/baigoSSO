@@ -16,7 +16,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             <div class="card-body">
                 <?php if (!empty($csvRows)) { ?>
                     <form name="form_convert" id="form_convert" class="mb-3" action="<?php echo $route_console; ?>import/submit/">
-                        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
                         <input type="hidden" name="charset" value="<?php echo $charset; ?>">
 
                         <table>
@@ -79,7 +79,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <form name="form_delete" id="form_delete" action="<?php echo $route_console; ?>import/delete/">
-                        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
                         <div class="form-group">
                             <button class="btn btn-primary" type="submit">
                                 <span class="fas fa-trash-alt"></span>
@@ -272,7 +272,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         var obj_wu = new WebUploader.Uploader({
             //附加表单数据
             formData: {
-                __token__: '<?php echo $token; ?>'
+                <?php echo $token['name']; ?>: '<?php echo $token['value']; ?>'
             },
             server: '<?php echo $route_console; ?>import/upload/',
             pick: {

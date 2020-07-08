@@ -1,0 +1,31 @@
+/*
+v1.0.0 jQuery baigoTag plugin tag 输入插件
+(c) 2013 baigo studio - http://www.baigo.net/
+License: http://www.opensource.org/licenses/mit-license.php
+*/
+.bg-tag-list { margin-bottom: 0.5em; }
+
+.bg-tag-list .bg-tag-item {
+    display: inline-block;
+    padding: 0.2em 0.4em;
+    font-size: 100%;
+    font-weight: 400;
+    margin: 0 0.3em 0.3em 0;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+.bg-tag-list .bg-tag-item [data-act="remove"] {
+    display: inline-block;
+    cursor: pointer;
+    color: #eee;
+    margin-left: 0.3em;
+    padding: 0 0.3em 0.15em 0.3em;
+}
+
+.bg-tag-list .bg-tag-item svg {
+    width: 1em;
+    height: 1em;
+}

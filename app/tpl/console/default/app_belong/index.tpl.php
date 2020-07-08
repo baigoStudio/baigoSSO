@@ -2,7 +2,7 @@
     'title'             => $lang->get('App', 'console.common') . ' &raquo; ' . $appRow['app_name'] . ' &raquo; ' . $lang->get('Authorize users'),
     'menu_active'       => 'app',
     'sub_active'        => 'index',
-    'baigoValidate'    => 'true',
+    'baigoValidate'     => 'true',
     'baigoSubmit'       => 'true',
     'baigoCheckall'     => 'true',
     'baigoQuery'        => 'true',
@@ -22,7 +22,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
         <form name="user_search" id="user_search" class="d-none d-lg-inline-block" action="<?php echo $route_console; ?>app-belong/index/id/<?php echo $appRow['app_id']; ?>/">
             <div class="input-group mb-3">
-                <input type="text" name="key" value="<?php echo $search['key']; ?>" placeholder="<?php echo $lang->get('Key word'); ?>" class="form-control">
+                <input type="text" name="key" value="<?php echo $search['key']; ?>" placeholder="<?php echo $lang->get('Keyword'); ?>" class="form-control">
                 <span class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">
                         <span class="fas fa-search"></span>
@@ -53,7 +53,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         <div class="mb-3 text-right">
             <?php if (!empty($search['key'])) { ?>
                 <span class="badge badge-info">
-                    <?php echo $lang->get('Key word'); ?>:
+                    <?php echo $lang->get('Keyword'); ?>:
                     <?php echo $search['key']; ?>
                 </span>
             <?php }
@@ -75,7 +75,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     <div class="card-group">
         <div class="card">
             <form name="user_list_belong" id="user_list_belong" action="<?php echo $route_console; ?>app-belong/remove/">
-                <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
                 <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
 
                 <div class="table-responsive">
@@ -107,7 +107,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 <tr class="bg-manage-tr">
                                     <td class="text-nowrap bg-td-xs">
                                         <div class="form-check">
-                                            <input type="checkbox" name="user_ids_belong[]" value="<?php echo $value['user_id']; ?>" id="user_id_belong_<?php echo $value['user_id']; ?>" data-parent="chk_all_belong" data-validate="user_ids_belong" class="form-check-input">
+                                            <input type="checkbox" name="user_ids_belong[]" value="<?php echo $value['user_id']; ?>" id="user_id_belong_<?php echo $value['user_id']; ?>" data-parent="chk_all_belong" data-validate="user_ids_belong" class="form-check-input user_id_belong">
                                             <label for="user_id_belong_<?php echo $value['user_id']; ?>" class="form-check-label">
                                                 <small><?php echo $value['user_id']; ?></small>
                                             </label>
@@ -177,8 +177,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             </div>
                         </div>
                         <div class="float-right">
-                            <?php $_arr_pageRow = $pageRowBelong;
-                            $_str_pageParam = $pageParamBelong;
+                            <?php $pageRow = $pageRowBelong;
+                            $pageParam = $pageParamBelong;
                             include($cfg['pathInclude'] . 'pagination' . GK_EXT_TPL); ?>
                         </div>
                     </div>
@@ -187,7 +187,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </div>
         <div class="card">
             <form name="user_list" id="user_list" action="<?php echo $route_console; ?>app-belong/submit/">
-                <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
                 <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
 
                 <div class="table-responsive">
@@ -219,7 +219,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 <tr class="bg-manage-tr">
                                     <td class="text-nowrap bg-td-xs">
                                         <div class="form-check">
-                                            <input type="checkbox" name="user_ids[]" value="<?php echo $value['user_id']; ?>" id="user_id_<?php echo $value['user_id']; ?>" data-parent="chk_all" data-validate="user_ids" class="form-check-input">
+                                            <input type="checkbox" name="user_ids[]" value="<?php echo $value['user_id']; ?>" id="user_id_<?php echo $value['user_id']; ?>" data-parent="chk_all" data-validate="user_ids" class="form-check-input user_id">
                                             <label for="user_id_<?php echo $value['user_id']; ?>" class="form-check-label">
                                                 <small><?php echo $value['user_id']; ?></small>
                                             </label>
@@ -289,8 +289,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             </div>
                         </div>
                         <div class="float-right">
-                            <?php $_arr_pageRow = $pageRow;
-                            $_str_pageParam = 'page';
+                            <?php $pageRow = $pageRowUser;
+                            $pageParam = 'page';
                             include($cfg['pathInclude'] . 'pagination' . GK_EXT_TPL); ?>
                         </div>
                     </div>

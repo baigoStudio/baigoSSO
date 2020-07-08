@@ -19,8 +19,9 @@
 
 * [概况](./console/overview.md)
 * [用户管理](./console/user.md)
-* [站内短信接口](./console/pm.md)
+* [站内短信](./console/pm.md)
 * [应用管理](./console/app.md)
+* [同步组](./console/combine.md)
 * [验证口令](./console/verify.md)
 * [管理员](./console/admin.md)
 * [插件](./console/plugin.md)

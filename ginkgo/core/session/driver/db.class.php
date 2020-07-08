@@ -12,17 +12,22 @@ use ginkgo\Config;
 use ginkgo\Exception;
 use ginkgo\Db as Db_Base;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
-/*------会话模型------*/
+// 数据库类型的会话驱动
 class Db {
 
-    protected static $instance;
-    private $lifeTime = 0;
-    private $obj_db;
-    protected $connection;
+    protected static $instance; // 当前实例
+    private $lifeTime = 0; // 生命周期
+    private $obj_db; // 数据库实例
 
+    /** 构造函数
+     * __construct function.
+     *
+     * @access public
+     * @return void
+     */
     public function __construct() {
         $_arr_config   = Config::get('session');
 
@@ -48,6 +53,13 @@ class Db {
 
     }
 
+    /** 实例化
+     * instance function.
+     *
+     * @access public
+     * @static
+     * @return 当前类的实例
+     */
     public static function instance() {
         if (Func::isEmpty(static::$instance)) {
             static::$instance = new static();
@@ -56,30 +68,44 @@ class Db {
     }
 
 
+    /** 开启会话
+     * open function.
+     *
+     * @access public
+     * @param mixed $save_path
+     * @param mixed $session_name
+     * @return void
+     */
     function open($save_path, $session_name) {
         // get session-lifetime
         if ($this->lifeTime <= 1) {
             $this->lifeTime = get_cfg_var('session.gc_maxlifetime');
         }
-        // open database-connection
-        /*$dbHandle       = @mysql_connect('server','user','password');
-        $dbSel          = @mysql_select_db('database',$dbHandle);
-        // return success
-        if (!$dbHandle || !$dbSel) {
-            return false;
-        }
-        $this->dbHandle = $dbHandle;*/
+
         return true;
     }
 
 
+    /** 关闭会话
+     * close function.
+     *
+     * @access public
+     * @return void
+     */
     function close() {
-        /*$this->gc(ini_get('session.gc_maxlifetime'));
-        // close database-connection*/
+        // $this->gc(ini_get('session.gc_maxlifetime'));
+
         return true;
     }
 
 
+    /** 读取会话
+     * read function.
+     *
+     * @access public
+     * @param mixed $session_id
+     * @return 会话数据
+     */
     function read($session_id) {
         //print_r('read');
         $_arr_sessionRow['session_data'] = '';
@@ -90,6 +116,14 @@ class Db {
     }
 
 
+    /** 写入会话
+     * write function.
+     *
+     * @access public
+     * @param mixed $session_id
+     * @param mixed $session_data
+     * @return void
+     */
     function write($session_id, $session_data) {
         //print_r('write');
         $_status = false;
@@ -124,6 +158,13 @@ class Db {
     }
 
 
+    /** 销毁会话
+     * destroy function.
+     *
+     * @access public
+     * @param mixed $session_id
+     * @return void
+     */
     function destroy($session_id) {
         $_status = false;
 
@@ -139,6 +180,13 @@ class Db {
     }
 
 
+    /** 清理会话
+     * gc function.
+     *
+     * @access public
+     * @param mixed $ssin_max_lifetime
+     * @return void
+     */
     function gc($ssin_max_lifetime) {
         $_status = false;
 
@@ -152,6 +200,14 @@ class Db {
     }
 
 
+    /** 读取处理
+     * readProcess function.
+     *
+     * @access private
+     * @param mixed $session_id
+     * @param int $expire (default: 0)
+     * @return 数据记录
+     */
     private function readProcess($session_id, $expire = 0) {
         $_arr_sessionSelect = array(
             'session_id',
@@ -171,6 +227,12 @@ class Db {
     }
 
 
+    /** 创建表
+     * createTable function.
+     *
+     * @access private
+     * @return void
+     */
     private function createTable() {
         $_str_sql    = 'CREATE TABLE IF NOT EXISTS `' . $this->obj_db->dbconfig['prefix'] . 'session` (';
         $_str_sql   .= '`session_id` varchar(255) NOT NULL DEFAULT \'\' COMMENT \'ID\',';
@@ -189,6 +251,12 @@ class Db {
     }
 
 
+    /** 列出表
+     * showTables function.
+     *
+     * @access private
+     * @return void
+     */
     private function showTables() {
         $_str_sql = 'SHOW TABLES FROM `' . $this->obj_db->dbconfig['name'] . '`';
 

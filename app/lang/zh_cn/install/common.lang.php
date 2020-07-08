@@ -4,17 +4,17 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
 return array(
     'Installer'                             => '安装程序',
     'Error'                                 => '错误',
-    'Need to execute the installer' => '需要执行安装程序',
-    'Need to execute the upgrader'  => '需要执行升级程序',
-    'System already installed'      => '系统已安装',
-    'PDO (The PHP Data Objects)'            => 'PDO (PHP 数据对象)',
+    'Need to execute the installer'         => '需要执行安装程序',
+    'Need to execute the upgrader'          => '需要执行升级程序',
+    'System already installed'              => '系统已安装',
+    'PDO (The PHP Data Objects) for MySQL'  => 'PDO (PHP 数据对象) MySQL 驱动',
     'GD Library (Image Processing and GD)'  => 'GD 库 (图像处理和 GD)',
     'MBString (Multibyte String)'           => 'MBString (多字节字符串)',
     'cURL (Client URL Library)'             => 'cURL (Client URL)',

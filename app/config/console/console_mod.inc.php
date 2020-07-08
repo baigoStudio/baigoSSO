@@ -4,7 +4,7 @@
 以下为系统文件，请勿编辑
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*----------后台管理模块----------*/
@@ -81,6 +81,11 @@ return array(
                 'ctrl'  => 'app',
                 'act'   => 'form',
             ),
+            'combine' => array(
+                'title' => 'Sync combine',
+                'ctrl'  => 'combine',
+                'act'   => 'index',
+            ),
         ),
         'allow' => array(
             'browse'    => 'Browse',
@@ -88,6 +93,7 @@ return array(
             'edit'      => 'Edit',
             'delete'    => 'Delete',
             'belong'    => 'User authorization',
+            'combine'   => 'Sync combine management',
         ),
     ),
     'verify' => array(

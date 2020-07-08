@@ -9,7 +9,7 @@
 include($cfg['pathInclude'] . 'index_head' . GK_EXT_TPL); ?>
 
     <form name="admin_form" id="admin_form" autocomplete="off" action="<?php echo $route_install; ?>index/admin-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <div class="alert alert-warning">
             <span class="fas fa-exclamation-triangle"></span>
             <?php echo $lang->get('This step will add a new user as a super administrator with all permissions.'); ?>

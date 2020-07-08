@@ -4,13 +4,12 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
 return array(
     'Access denied'                         => '禁止访问',
-    'Registration is prohibited'            => '禁止注册',
     'User ID, Username or Email'            => '用户 ID, 用户名 或 Email',
     'Password'                              => '密码',
     'Old password'                          => '原密码',

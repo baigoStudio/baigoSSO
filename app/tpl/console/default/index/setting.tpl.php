@@ -17,7 +17,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
     <form name="shortcut_setting_form" id="shortcut_setting_form" action="<?php echo $route_console; ?>index/submit/">
         <input type="hidden" name="admin_shortcut" id="admin_shortcut" value="">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <div class="card">
             <div class="card-header">
                 <?php echo $lang->get('Shortcut', 'console.common'); ?>
@@ -39,7 +39,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         <?php foreach ($config['console']['console_mod'] as $key_m=>$value_m) { ?>
                             <div class="form-group">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input shortcut_option" <?php if (array_key_exists($key_m, $adminLogged['admin_shortcut'])) { ?>checked<?php } ?> id="shortcut_option_<?php echo $key_m; ?>" value="<?php echo $key_m; ?>" data-ctrl="<?php echo $key_m; ?>" data-act="index" data-title="<?php echo $lang->get($value_m['main']['title'], 'console.common'); ?>">
+                                    <input type="checkbox" class="form-check-input shortcut_option" <?php if (isset($adminLogged['admin_shortcut'][$key_m])) { ?>checked<?php } ?> id="shortcut_option_<?php echo $key_m; ?>" value="<?php echo $key_m; ?>" data-ctrl="<?php echo $value_m['main']['ctrl']; ?>" data-act="index" data-title="<?php echo $lang->get($value_m['main']['title'], 'console.common'); ?>">
                                     <label class="form-check-label" for="shortcut_option_<?php echo $key_m; ?>">
                                         <?php echo $lang->get($value_m['main']['title'], 'console.common'); ?>
                                     </label>
@@ -49,7 +49,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                             <?php foreach ($value_m['lists'] as $key_s=>$value_s) { ?>
                                 <div class="form-group ml-3">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input shortcut_option" <?php if (array_key_exists($key_m . '_' . $key_s, $adminLogged['admin_shortcut'])) { ?>checked<?php } ?> id="shortcut_option_<?php echo $key_m; ?>_<?php echo $key_s; ?>" value="<?php echo $key_m; ?>_<?php echo $key_s; ?>" data-ctrl="<?php echo $key_m; ?>" data-act="<?php echo $key_s; ?>" data-title="<?php echo $lang->get($value_s['title'], 'console.common'); ?>">
+                                        <input type="checkbox" class="form-check-input shortcut_option" <?php if (isset($adminLogged['admin_shortcut'][$key_m . '_' . $key_s])) { ?>checked<?php } ?> id="shortcut_option_<?php echo $key_m; ?>_<?php echo $key_s; ?>" value="<?php echo $key_m; ?>_<?php echo $key_s; ?>" data-ctrl="<?php echo $value_s['ctrl']; ?>" data-act="<?php echo $value_s['act']; ?>" data-title="<?php echo $lang->get($value_s['title'], 'console.common'); ?>">
                                         <label class="form-check-label" for="shortcut_option_<?php echo $key_m; ?>_<?php echo $key_s; ?>">
                                             <?php echo $lang->get($value_s['title'], 'console.common'); ?>
                                         </label>

@@ -9,7 +9,7 @@ namespace app\validate\api;
 use ginkgo\Validate;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/
@@ -52,7 +52,7 @@ class Reg extends Validate {
 
         $_arr_configReg = Config::get('reg', 'var_extra');
 
-        if (isset($_arr_configReg['reg_needmail']) && $_arr_configReg['reg_needmail'] == 'on') {
+        if (isset($_arr_configReg['reg_needmail']) && $_arr_configReg['reg_needmail'] === 'on') {
             $_arr_rule['user_mail'] = array(
                 'length'    => '1,300',
                 'format'    => 'email',

@@ -71,7 +71,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <div class="form-group">
                         <label><?php echo $lang->get('Personal permission'); ?></label>
                         <div>
-                            <?php foreach ($config['console']['profile'] as $key=>$value) {
+                            <?php foreach ($config['console']['profile_mod'] as $key=>$value) {
                                 if (isset($adminRow['admin_allow_profile'][$key])) { ?>
                                     <div>
                                         <span class="badge badge-danger">

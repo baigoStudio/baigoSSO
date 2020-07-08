@@ -13,7 +13,7 @@ use ginkgo\Func;
 use ginkgo\Config;
 use ginkgo\Plugin;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 
@@ -116,7 +116,7 @@ abstract class Ctrl extends Ctrl_Base {
         }
 
         if (!Func::isEmpty($_str_jump) && !$this->isAjaxPost) {
-            $this->redirect($_str_jump)->send();
+            $this->redirect($_str_jump)->send('install->chk_install');
         }
 
         return array(
@@ -149,7 +149,7 @@ abstract class Ctrl extends Ctrl_Base {
         }
 
         if (!Func::isEmpty($_str_jump) && !$this->isAjaxPost) {
-            $this->redirect($_str_jump)->send();
+            $this->redirect($_str_jump)->send('install->chk_upgrade');
         }
 
         return array(

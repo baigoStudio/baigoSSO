@@ -11,7 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Crypt;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Login extends Ctrl {
@@ -37,7 +37,7 @@ class Login extends Ctrl {
 
         $_str_forward = $this->redirect()->restore();
 
-        if (Func::isEmpty($_str_forward)) {
+        if (Func::isEmpty($_str_forward) || !stristr($_str_forward, 'console')) {
             $_str_forward = $this->url['route_console'];
         }
 
@@ -95,11 +95,13 @@ class Login extends Ctrl {
             return $this->fetchJson('Password is incorrect', 'x010201');
         }
 
-        $this->mdl_user->inputSubmit['user_id'] = $_arr_userRow['user_id'];
-
+        $this->mdl_user->inputSubmit['user_id']     = $_arr_userRow['user_id'];
         $this->mdl_user->login();
 
-        //如新加密规则与数据库不一致，则对密码重新加密
+        $this->mdl_login->inputSubmit['admin_id']   = $_arr_adminRow['admin_id'];
+        $_arr_loginResult = $this->mdl_login->login();
+
+        // 如新加密规则与数据库不一致，则对密码重新加密
         /*$_str_userPass  = Crypt::crypt($_arr_inputSubmit['admin_pass'], $_arr_userRow['user_name']);
 
         if ($_str_userPass != $_arr_userRow['user_pass']) {
@@ -110,13 +112,15 @@ class Login extends Ctrl {
         print_r($_arr_userRow['user_pass']);
         exit;*/
 
-        $_arr_loginResult = $this->sessionLogin($_arr_adminRow, $_arr_inputSubmit['admin_remember']);
+        $_arr_adminRow = array_replace_recursive($_arr_adminRow, $_arr_loginResult);
 
-        return $this->fetchJson($_arr_loginResult['msg'], $_arr_loginResult['rcode']);
+        $this->obj_auth->write($_arr_adminRow, true, 'form', $_arr_inputSubmit['admin_remember'], $this->url['route_console']);
+
+        return $this->fetchJson('Login successful', 'y020401');
     }
 
     function logout() {
-        $this->sessionEnd();
+        $this->obj_auth->end(true);
 
         return $this->redirect($this->url['route_console']);
     }

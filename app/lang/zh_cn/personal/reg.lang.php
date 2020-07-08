@@ -4,12 +4,13 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
 return array(
     'Access denied'                         => '拒绝访问',
+    'Registration is prohibited'            => '禁止注册',
     'Register'                              => '注册',
     'Username'                              => '用户名', //用户名
     'Password'                              => '密码', //密码
@@ -37,6 +38,9 @@ return array(
 
     'Registration successfully'     => '注册成功',
     'Registration failed'           => '注册失败',
+    'Illegal content in username'   => '用户名中含有非法内容',
+    'Email is not allowed'          => '邮箱不被允许',
+    'Illegal content in mailbox'    => '邮箱中含有非法内容',
 
     'Send confirmation email failed'        => '发送确认邮件失败',
     'Not receiving confirmation emails'     => '没有收到确认邮件',

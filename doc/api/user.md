@@ -42,8 +42,8 @@ GET
 | user_nick | string | 昵称 | |
 | user_status | string | 用户状态 | |
 | user_sec_ques | array | 密保问题 |
-| user_time | int | 注册时间 | Unix 时间戳。 |
-| user_time_login | int | 最后登录时间 | Unix 时间戳。 |
+| user_time | int | 注册时间 | UNIX 时间戳。 |
+| user_time_login | int | 最后登录时间 | UNIX 时间戳。 |
 | user_ip | string | 最后登录 IP 地址 | |
 | user_contact | array | 联系方式 | |
 | user_extend | array | 扩展字段 | |
@@ -137,12 +137,12 @@ POST
 
 | 原接口 | 迁移至 | 新 URL | 版本 |
 | - | - | - | - |
-| 用户注册 | 注册接口 | http://server/index.php/api/reg/reg | v4.0 起 |
-| 检查用户名 | 注册接口 | http://server/index.php/api/reg/chkname | v4.0 起 |
-| 检查邮箱 | 注册接口 | http://server/index.php/api/reg/chkmail | v4.0 起 |
-| 用户登录 | 登录接口 | http://server/index.php/api/login/login | v4.0 起 |
-| 刷新访问口令 | 个人接口 | http://server/index.php/api/profile/token | v4.0 起 |
-| 更换邮箱 | 个人接口 | http://server/index.php/api/profile/mailbox | v4.0 起 |
+| 用户注册 | 注册接口 | http://server/index.php/api/reg/reg | `4.0` 新增 |
+| 检查用户名 | 注册接口 | http://server/index.php/api/reg/chkname | `4.0` 新增 |
+| 检查邮箱 | 注册接口 | http://server/index.php/api/reg/chkmail | `4.0` 新增 |
+| 用户登录 | 登录接口 | http://server/index.php/api/login/login | `4.0` 新增 |
+| 刷新访问口令 | 个人接口 | http://server/index.php/api/profile/token | `4.0` 新增 |
+| 更换邮箱 | 个人接口 | http://server/index.php/api/profile/mailbox | `4.0` 新增 |
 
 ----------
 
@@ -150,6 +150,6 @@ POST
 
 | 原接口 | 替代方案 | 版本 |
 | - | - | - |
-| 找回密码 | 直接访问 http://server/index.php/personal/forgot，也可通过 `基本信息接口` 获得该 URL | v4.0 起 |
-| 重发激活邮件 | 直接访问 http://server/index.php/personal/reg/nomail，也可通过 `基本信息接口` 获得该 URL | v4.0 起 |
-| 删除用户 | 不再提供 | v4.0 起 |
+| 找回密码 | 直接访问 http://server/index.php/personal/forgot，也可通过 `基本信息接口` 获得该 URL | `4.0` 新增 |
+| 重发激活邮件 | 直接访问 http://server/index.php/personal/reg/nomail，也可通过 `基本信息接口` 获得该 URL | `4.0` 新增 |
+| 删除用户 | 不再提供 | `4.0` 新增 |

@@ -20,6 +20,8 @@
                     'Admin',
                     'App',
                     'App_Belong',
+                    'Combine',
+                    'Combine_Belong',
                     'Pm',
                     'User',
                     'Verify',
@@ -28,6 +30,7 @@
             'view' => array(
                 'title' => 'Create view',
                 'lists' => array(
+                    'App_Combine_View',
                     'User_App_View',
                 ),
             ),
@@ -37,6 +40,8 @@
                 'title' => 'Create table',
                 'lists' => array(
                     'App_Belong',
+                    'Combine',
+                    'Combine_Belong',
                     'Pm',
                     'Verify',
                 ),
@@ -54,6 +59,7 @@
             'view' => array(
                 'title' => 'Create view',
                 'lists' => array(
+                    'App_Combine_View',
                     'User_App_View',
                 ),
             ),

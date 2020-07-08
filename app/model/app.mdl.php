@@ -11,7 +11,7 @@ use ginkgo\Func;
 use ginkgo\Json;
 use ginkgo\Html;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------应用模型-------------*/
@@ -41,6 +41,17 @@ class App extends Model {
      * @return void
      */
     function read($mix_app, $str_by = 'app_id', $num_notId = 0, $arr_select = array()) {
+        $_arr_appRow = $this->readProcess($mix_app, $str_by, $num_notId, $arr_select);
+
+        if ($_arr_appRow['rcode'] != 'y050102') {
+            return $_arr_appRow;
+        }
+
+        return $this->rowProcess($_arr_appRow);
+    }
+
+
+    function readProcess($mix_app, $str_by = 'app_id', $num_notId = 0, $arr_select = array()) {
         if (Func::isEmpty($arr_select)) {
             $arr_select = array(
                 'app_id',
@@ -74,7 +85,7 @@ class App extends Model {
         $_arr_appRow['rcode'] = 'y050102';
         $_arr_appRow['msg']   = '';
 
-        return $this->rowProcess($_arr_appRow);
+        return $_arr_appRow;
     }
 
 

@@ -7,7 +7,7 @@ namespace app\model\personal;
 
 use app\model\Verify as Verify_Base;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------验证模型-------------*/

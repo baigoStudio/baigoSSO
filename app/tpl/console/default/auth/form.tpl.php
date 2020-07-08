@@ -18,7 +18,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </nav>
 
     <form name="admin_form" id="admin_form" autocomplete="off" action="<?php echo $route_console; ?>auth/submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
         <div class="row">
             <div class="col-xl-9">
@@ -84,7 +84,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                         <div class="form-group">
                             <label><?php echo $lang->get('Personal permission'); ?></label>
-                            <?php foreach ($config['console']['profile'] as $key=>$value) { ?>
+                            <?php foreach ($config['console']['profile_mod'] as $key=>$value) { ?>
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" name="admin_allow_profile[<?php echo $key; ?>]" id="admin_allow_profile_<?php echo $key; ?>" value="1" class="custom-control-input">
                                     <label for="admin_allow_profile_<?php echo $key; ?>" class="custom-control-label">

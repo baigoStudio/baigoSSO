@@ -6,16 +6,16 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 配置管理类
 class Config {
 
-    protected static $instance;
-    private static $range  = '';
-    private static $config = array();
-    private static $init;
-    private static $count  = 1;
+    private static $range  = ''; // 作用域
+    private static $config = array(); // 配置值
+    private static $init; // 是否初始化标志
+    private static $count  = 1; // 载入配置计数
 
     protected function __construct() {
     }
@@ -24,12 +24,21 @@ class Config {
 
     }
 
+    // 初始化
     public static function init() {
-        self::loadSys();
+        self::loadSys(); // 载入系统配置
 
-        self::$init = true;
+        self::$init = true; // 标识为已初始化
     }
 
+    /** 设置, 获取作用域
+     * range function.
+     *
+     * @access public
+     * @static
+     * @param string $range (default: '') 作用域
+     * @return 如果参数为空则返回当前作用域, 否则无返回
+     */
     public static function range($range = '') {
         if (Func::isEmpty(self::$init)) {
             self::init();
@@ -43,6 +52,16 @@ class Config {
     }
 
 
+    /** 添加配置 (冲突不覆盖)
+     * add function.
+     *
+     * @access public
+     * @static
+     * @param string $name 配置名
+     * @param string $value (default: '') 配置值
+     * @param string $range (default: '') 作用域
+     * @return void
+     */
     public static function add($name, $value = '', $range = '') {
         $name = (string)$name;
 
@@ -50,7 +69,7 @@ class Config {
             self::init();
         }
 
-        $_mix_range = self::rangeProcess($range);
+        $_mix_range = self::rangeProcess($range); // 作用域处理
 
         if (Func::isEmpty($_mix_range)) {
             if (!isset(self::$config[$name])) {
@@ -74,12 +93,22 @@ class Config {
     }
 
 
+    /** 设置配置 (冲突覆盖)
+     * set function.
+     *
+     * @access public
+     * @static
+     * @param mixed $name 配置名
+     * @param string $value (default: '') 配置值
+     * @param string $range (default: '') 作用域
+     * @return void
+     */
     public static function set($name, $value = '', $range = '') {
         if (Func::isEmpty(self::$init)) {
             self::init();
         }
 
-        $_mix_range = self::rangeProcess($range);
+        $_mix_range = self::rangeProcess($range); // 作用域处理
 
         if (Func::isEmpty($_mix_range)) {
             if (is_array($name)) {
@@ -139,6 +168,15 @@ class Config {
     }
 
 
+    /** 读取配置
+     * get function.
+     *
+     * @access public
+     * @static
+     * @param string $name (default: '') 配置名
+     * @param string $range (default: '') 作用域
+     * @return 配置值
+     */
     public static function get($name = '', $range = '') {
         $name = (string)$name;
 
@@ -199,6 +237,15 @@ class Config {
     }
 
 
+    /** 删除配置
+     * delete function.
+     *
+     * @access public
+     * @static
+     * @param string $name (default: '') 配置名
+     * @param string $range (default: '') 作用域
+     * @return void
+     */
     public static function delete($name = '', $range = '') {
         $name = (string)$name;
 
@@ -251,10 +298,27 @@ class Config {
         }
     }
 
+    /** 统计配置文件
+     * count function.
+     *
+     * @access public
+     * @static
+     * @return 配置文件数
+     */
     public static function count() {
         return self::$count;
     }
 
+    /** 载入配置文件
+     * load function.
+     *
+     * @access public
+     * @static
+     * @param string $path 路径
+     * @param string $name (default: '') 配置名
+     * @param string $range (default: '') 作用域
+     * @return 配置文件返回值
+     */
     public static function load($path, $name = '', $range = '') {
         if (Func::isEmpty(self::$init)) {
             self::init();
@@ -263,24 +327,29 @@ class Config {
         $_arr_config = array();
 
         if (Func::isFile($path)) {
-            $_arr_config = Loader::load($path);
+            $_arr_config = Loader::load($path, 'include');
             ++self::$count;
-        } else {
-            $_obj_excpt = new Exception('Config file not found', 500);
-            $_obj_excpt->setData('err_detail', $path);
-
-            throw $_obj_excpt;
         }
 
         if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
             $_arr_config = array_change_key_case($_arr_config);
 
-            self::set($name, $_arr_config, $range);
+            self::set($name, $_arr_config, $range); // 设置配置变量
         }
 
         return $_arr_config;
     }
 
+
+    /** 写入配置文件
+     * write function.
+     *
+     * @access public
+     * @static
+     * @param string $path 路径
+     * @param string $value (default: '') 配置内容
+     * @return 写入字节数
+     */
     public static function write($path, $value = '') {
         if (is_array($value)) {
             $_str_outPut = '<?php return ' . var_export($value, true) . ';';
@@ -293,16 +362,18 @@ class Config {
         return File::instance()->fileWrite($path, $_str_outPut);
     }
 
+    // 载入系统配置
     private static function loadSys() {
-        $_arr_convention    = Loader::load(GK_PATH_FW . 'convention' . GK_EXT); //配置规范
+        $_arr_convention    = Loader::load(GK_PATH_FW . 'convention' . GK_EXT); // 配置规范 (默认值)
 
-        $_str_pathBase      = GK_APP_CONFIG . 'config' . GK_EXT_INC;
-        $_str_pathDbconfig  = GK_APP_CONFIG . 'dbconfig' . GK_EXT_INC;
+        $_str_pathBase      = GK_APP_CONFIG . 'config' . GK_EXT_INC; // 全局配置
+        $_str_pathDbconfig  = GK_APP_CONFIG . 'dbconfig' . GK_EXT_INC; // 数据库配置
 
         $_arr_config = array();
 
         if (Func::isFile($_str_pathBase)) {
             $_arr_config = Loader::load($_str_pathBase);
+            ++self::$count;
         }
 
         if (Func::isFile($_str_pathDbconfig)) {
@@ -322,6 +393,14 @@ class Config {
     }
 
 
+    /** 作用域处理
+     * rangeProcess function.
+     *
+     * @access private
+     * @static
+     * @param string $range (default: '') 作用域
+     * @return 作用域数组
+     */
     private static function rangeProcess($range = '') {
         if (Func::isEmpty($range)) {
             $_str_range = self::$range;

@@ -10,7 +10,7 @@ use app\classes\console\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Auth extends Ctrl {
@@ -33,7 +33,7 @@ class Auth extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['admin']['add']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x020302');
         }
 
@@ -68,7 +68,7 @@ class Auth extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['admin']['add']) && !$this->isSuper) {
+        if (!isset($this->adminAllow['admin']['add']) && !$this->isSuper) {
             return $this->fetchJson('You do not have permission', 'x020302');
         }
 

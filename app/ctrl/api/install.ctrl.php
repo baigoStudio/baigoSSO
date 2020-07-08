@@ -16,7 +16,7 @@ use ginkgo\Sign;
 use ginkgo\Crypt;
 use ginkgo\Db;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员控制器-------------*/
@@ -364,7 +364,7 @@ class Install extends Ctrl {
 
         $_arr_submitResult['timestamp'] = GK_NOW;
 
-        $_arr_submitResult['base_url']  = $this->obj_request->baseUrl(true) . '/api/';
+        $_arr_submitResult['base_url']  = $this->obj_request->baseUrl(true) . 'api/';
 
         $_str_src       = Json::encode($_arr_submitResult);
 
@@ -415,7 +415,7 @@ class Install extends Ctrl {
         if ($chk_security) {
             if ($_arr_inputCommon['key'] != $this->security['key']) {
                 return array(
-                    'rcode' => 'x030201',
+                    'rcode' => 'x030203',
                     'msg'   => $this->obj_lang->get('Security is incorrect', 'api.common'),
                 );
             }
@@ -468,11 +468,9 @@ class Install extends Ctrl {
 
         $_str_configSecurity = GK_PATH_TEMP . 'security' . GK_EXT_INC;
 
-        if (Func::isFile($_str_configSecurity)) {
-            $_arr_security  = Loader::load($_str_configSecurity);
+        $_arr_security  = Loader::load($_str_configSecurity);
 
-            $this->security = array_replace_recursive($this->security, $_arr_security);
-        }
+        $this->security = array_replace_recursive($this->security, $_arr_security);
     }
 
 

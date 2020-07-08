@@ -7,7 +7,7 @@ namespace app\model\api;
 
 use app\model\App_Belong as App_Belong_Base;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------应用归属-------------*/

@@ -9,7 +9,7 @@
 include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
     <form name="opt_form" id="opt_form" action="<?php echo $route_console; ?>opt/chkver-submit/" class="mb-3">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
         <button type="submit" class="btn btn-primary">
             <?php echo $lang->get('Check for updates', 'console.common'); ?>

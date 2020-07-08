@@ -13,7 +13,7 @@ use ginkgo\Config;
 use ginkgo\Func;
 use ginkgo\Smtp;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Profile extends Ctrl {
@@ -172,12 +172,7 @@ class Profile extends Ctrl {
             return $this->error('You do not have permission', 'x020305');
         }
 
-        $_str_configSecqa  = BG_PATH_CONFIG . 'console' . DS . 'secqa' . GK_EXT_INC;
-        $_arr_secqaRows    = Config::load($_str_configSecqa, 'secqa', 'console');
-
-        $_str_current   = $this->obj_lang->getCurrent();
-        $_str_langPath  = GK_APP_LANG . $_str_current .  DS . 'console' . DS . 'secqa' . GK_EXT_LANG;
-        $this->obj_lang->load($_str_langPath, 'console.secqa');
+        $_arr_secqaRows    = Config::get('secqa', 'console.profile');
 
         $_arr_userRow = $this->mdl_user->read($this->adminLogged['admin_id']);
 
@@ -308,7 +303,7 @@ class Profile extends Ctrl {
             }
         }
 
-        if ($this->config['var_extra']['reg']['reg_confirm'] == 'on') {
+        if ($this->config['var_extra']['reg']['reg_confirm'] === 'on') {
             $_arr_submitResult    = $this->mdl_verify->submit($_arr_userRow['user_id'], $_arr_inputMailbox['admin_mail_new'], 'mailbox');
 
             if ($_arr_submitResult['rcode'] != 'y120101' && $_arr_submitResult['rcode'] != 'y120103') {

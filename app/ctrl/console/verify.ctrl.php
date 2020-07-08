@@ -9,7 +9,7 @@ namespace app\ctrl\console;
 use app\classes\console\Ctrl;
 use ginkgo\Loader;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Verify extends Ctrl {
@@ -32,7 +32,7 @@ class Verify extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['verify']['verify']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['verify']['verify']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x120301');
         }
 
@@ -70,7 +70,7 @@ class Verify extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['verify']['verify']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['verify']['verify']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x120301');
         }
 
@@ -117,7 +117,7 @@ class Verify extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['verify']['verify']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['verify']['verify']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x120301');
         }
 
@@ -148,7 +148,7 @@ class Verify extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['verify']['verify']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['verify']['verify']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x120301');
         }
 

@@ -14,7 +14,7 @@ use ginkgo\Config;
 use ginkgo\Upload;
 use ginkgo\Html;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Import extends Ctrl {
@@ -49,7 +49,7 @@ class Import extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['import']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['import']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x010305');
         }
 
@@ -82,7 +82,7 @@ class Import extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['import']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['import']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x010305');
         }
 
@@ -145,7 +145,7 @@ class Import extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['import']) && !$this->isSuper) {
+        if (!isset($this->adminAllow['user']['import']) && !$this->isSuper) {
             return $this->fetchJson('You do not have permission', 'x010305');
         }
 
@@ -176,7 +176,7 @@ class Import extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['import']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['import']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x010305');
         }
 
@@ -224,7 +224,7 @@ class Import extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['import']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['import']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x010305');
         }
 

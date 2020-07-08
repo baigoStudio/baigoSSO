@@ -8,7 +8,7 @@ namespace app\model\console;
 use app\model\Pm as Pm_Base;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------短消息模型-------------*/

@@ -13,7 +13,7 @@ use ginkgo\Func;
 use ginkgo\Config;
 use ginkgo\Plugin;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 
@@ -28,7 +28,10 @@ abstract class Ctrl extends Ctrl_Base {
         $this->mdl_user       = Loader::model('User');
         $this->mdl_verify     = Loader::model('Verify');
 
-        $this->configMailtpl    = $this->config['var_extra']['mailtpl'];
+        $this->configMailtpl    = Config::get('mailtpl', 'var_extra');;
+
+
+        $this->obj_view->setPath(BG_TPL_PERSONAL . $this->configBase['site_tpl']);
     }
 
     protected function pathProcess() {

@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
@@ -31,9 +31,11 @@ return array(
     'Message list'                      => '所有短信',
     'Send message'                      => '发送短信',
     'Bulk send'                         => '群发短信',
-    'App'                       => '应用管理',
-    'App list'                  => '所有应用',
-    'Add App'                   => '添加应用',
+    'App'                               => '应用管理',
+    'App list'                          => '所有应用',
+    'Add App'                           => '添加应用',
+    'Sync combine'                      => '同步组',
+    'Sync combine management'           => '同步组管理',
     'Validation token'                  => '验证口令',
     'Plugin'                            => '插件',
     'Plugin management'                 => '插件管理',

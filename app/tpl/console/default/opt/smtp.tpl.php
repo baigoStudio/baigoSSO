@@ -10,7 +10,7 @@
 include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
     <form name="opt_form" id="opt_form" action="<?php echo $route_console; ?>opt/smtp-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
         <div class="card">
             <div class="card-body">
@@ -61,7 +61,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
                 <div class="form-group">
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" <?php if ($config['var_extra']['smtp']['auth'] == 'true') { ?>checked<?php } ?> value="true" name="auth" id="auth" class="custom-control-input">
+                        <input type="checkbox" <?php if ($config['var_extra']['smtp']['auth'] === 'true') { ?>checked<?php } ?> value="true" name="auth" id="auth" class="custom-control-input">
                         <label for="auth" class="custom-control-label">
                             <?php echo $lang->get('Server authentication'); ?>
                         </label>

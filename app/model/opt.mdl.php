@@ -10,7 +10,7 @@ use ginkgo\Loader;
 use ginkgo\Request;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------设置项模型-------------*/
@@ -78,7 +78,7 @@ class Opt {
     function inputDbconfig($arr_data = '') {
         $_arr_inputParam = array(
             'host'      => array('txt', 'localhost'),
-            'port'      => array('num', 3306),
+            'port'      => array('int', 3306),
             'name'      => array('txt', ''),
             'user'      => array('txt', ''),
             'pass'      => array('txt', ''),

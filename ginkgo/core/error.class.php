@@ -6,11 +6,13 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 错误处理
 class Error {
 
+    // 错误类型
     private static $errType = array(
         E_ERROR              => 'Error - E_ERROR',
         E_CORE_ERROR         => 'Core Error - E_CORE_ERROR',
@@ -31,6 +33,7 @@ class Error {
         E_STRICT             => 'Runtime Notice - E_STRICT',
     );
 
+    // 致命错误类型
     private static $errFatal = array(
         E_ERROR,
         E_PARSE,
@@ -40,11 +43,7 @@ class Error {
         E_STRICT,
     );
 
-    private static $configDebug;
-    private static $lang;
-    private static $obj;
-    private static $obj_request;
-    private static $suffix = GK_EXT_TPL; // 默认模板文件后缀
+    private static $configDebug; // 调试配置
 
     protected function __construct() {
 
@@ -54,26 +53,36 @@ class Error {
 
     }
 
-    //运行
-    static function register() { //运行
-        self::$configDebug = Config::get('debug');
+    // 注册错误处理方法
+    static function register() {
+        self::$configDebug = Config::get('debug'); // 取得调试配置
 
-        error_reporting(0);
-        libxml_use_internal_errors(true); //禁止 html xml 解析报错
-        set_error_handler(array(__CLASS__, 'appError'));
-        set_exception_handler(array(__CLASS__, 'appException'));
-        register_shutdown_function(array(__CLASS__, 'appShutdown'));
-
-        self::$obj_request = Request::instance();
+        error_reporting(0); // 禁用系统报错
+        error_reporting(E_ALL);
+        libxml_use_internal_errors(true); // 禁止 html xml 解析报错
+        set_error_handler(array(__CLASS__, 'appError')); // 注册错误处理方法
+        set_exception_handler(array(__CLASS__, 'appException')); // 注册异常处理方法
+        register_shutdown_function(array(__CLASS__, 'appShutdown')); // 注册关闭处理方法
     }
 
 
+    /** 错误处理
+     * appError function.
+     *
+     * @access public
+     * @static
+     * @param int $err_no 错误号
+     * @param string $err_msg 错误消息
+     * @param string $err_file 出错文件
+     * @param int $err_line 出错行号
+     * @return void
+     */
     static function appError($err_no, $err_msg, $err_file, $err_line) {
-        $_str_errType   = 'Unknown error';
+        $_str_errType   = 'Unknown error'; // 默认消息
 
         //print_r($err_msg);
 
-        if (isset(self::$errType[$err_no])) {
+        if (isset(self::$errType[$err_no])) { // 设置错误类型
             $_str_errType = self::$errType[$err_no];
         }
 
@@ -83,16 +92,16 @@ class Error {
             'err_message'   => $err_msg,
         );
 
-        if (self::$configDebug['dump']) {
+        if (self::$configDebug['dump']) { // 假如配置为输出
             $_arr_error['err_file'] = $err_file;
             $_arr_error['err_line'] = $err_line;
         }
 
-        $_str_key = md5($err_no . $err_msg . $err_file . $err_line);
+        $_str_key = md5($err_no . $err_msg . $err_file . $err_line); // 生成错误号 (避免冲突)
 
-        if (self::isFatal($err_no)) {
+        if (self::isFatal($err_no)) { // 如果是致命错误, 则直接报错
             self::sendErr($_arr_error);
-        } else {
+        } else { // 否则只记录错误
             Debug::record($_str_key, $_arr_error);
 
             $_arr_error['err_file'] = $err_file;
@@ -103,11 +112,20 @@ class Error {
     }
 
 
+
+    /** 异常处理
+     * appException function.
+     *
+     * @access public
+     * @static
+     * @param object $excpt 异常实例
+     * @return void
+     */
     static function appException($excpt) {
-        $_str_type      = $excpt->getCode();
+        $_str_type      = $excpt->getCode(); // 取得错误号
         $_str_errType   = 'Unknown error';
 
-        if (isset(self::$errType[$_str_type])) {
+        if (isset(self::$errType[$_str_type])) { // 设置错误类型
             $_str_errType = self::$errType[$_str_type];
         }
 
@@ -116,18 +134,18 @@ class Error {
         $_arr_error['status_code']  = 500;
 
         if (method_exists($excpt, 'getStatusCode')) {
-            $_arr_error['status_code']  = $excpt->getStatusCode();
+            $_arr_error['status_code']  = $excpt->getStatusCode(); // 取得 http 状态码
         }
 
-        if (method_exists($excpt, 'getData')) {
+        if (method_exists($excpt, 'getData')) { // 取得错误详情
             $err_detail = $excpt->getData('err_detail');
         } else {
             $err_detail = '';
         }
 
-        $err_message    = $excpt->getMessage();
-        $err_file       = $excpt->getFile();
-        $err_line       = $excpt->getLine();
+        $err_message    = $excpt->getMessage(); // 错误消息
+        $err_file       = $excpt->getFile(); // 出错文件
+        $err_line       = $excpt->getLine(); // 出错行号
 
         if (self::$configDebug['dump']) {
             $_arr_error['err_message']  = $err_message;
@@ -138,8 +156,9 @@ class Error {
 
         //print_r($excpt->getTrace());
 
-        unset($excpt);
+        unset($excpt); //销毁异常实例
 
+        // 记录日志
         if (class_exists('ginkgo\Log')) {
             $_arr_errorRecord = $_arr_error;
 
@@ -148,164 +167,99 @@ class Error {
             $_arr_errorRecord['err_line']     = $err_line;
             $_arr_errorRecord['err_detail']   = $err_detail;
 
-            Log::record($_arr_errorRecord, 'excpt');
+            Log::record($_arr_errorRecord, 'excpt'); // 记录日志
         }
 
-        self::sendErr($_arr_error);
+        self::sendErr($_arr_error); // 输出报错信息
     }
 
 
+    /** 程序关闭处理
+     * appShutdown function.
+     *
+     * @access public
+     * @static
+     * @return void
+     */
     static function appShutdown() {
-        $_error_last = error_get_last();
+        $_error_last = error_get_last(); // 取得最后一个错误
 
         //print_r($_error_last);
 
-        if (!Func::isEmpty($_error_last)) {
-            if (self::isFatal($_error_last['type'])) {
+        if (!Func::isEmpty($_error_last)) { // 假如有错误, 则处理
+            if (self::isFatal($_error_last['type'])) { // 仅处理致命错误
                 $_obj_except = new Exception($_error_last['message'], 500, $_error_last['type'], $_error_last['file'], $_error_last['line']);
 
                 self::appException($_obj_except);
             }
         }
 
-        Log::save();
+        Log::save(); // 写入日志
 
         //print_r((memory_get_usage() - GK_START_MEM) / 1024 / 1024);
     }
 
 
+    /** 判断是否为致命错误
+     * isFatal function.
+     *
+     * @access private
+     * @static
+     * @param mixed $type
+     * @return 是否为致命错误 (bool)
+     */
     private static function isFatal($type) {
         return in_array($type, self::$errFatal);
     }
 
 
+
+    /** 输出报错信息
+     * sendErr function.
+     *
+     * @access private
+     * @static
+     * @param array $error 错误数组
+     * @return void
+     */
     private static function sendErr($error) {
-        if (!isset($error['status_code'])) {
+        if (!isset($error['status_code'])) { // 假如未设置 http 状态码, 则设为 500
             $error['status_code'] = 500;
         }
 
-        $_obj_response  = Response::create('', '', $error['status_code']);
+        $_obj_response  = Response::create('', '', $error['status_code']); // 实例化响应类
+        $_obj_request   = Request::instance();
 
-        $error['http_status'] = $_obj_response->getStatus();
+        $error['http_status'] = $_obj_response->getStatus(); // 设置响应状态
 
-        $_arr_configDefault  = Config::get('var_default');
+        $_arr_configDefault  = Config::get('var_default'); // 读取默认配置
 
-        if (self::$obj_request->isAjax()) {
+        // 处理请求类型
+        if ($_obj_request->isAjax()) {
             if (Func::isEmpty($_arr_configDefault['return_type_ajax'])) {
                 $_str_type = $_arr_configDefault['return_type'];
             } else {
                 $_str_type = $_arr_configDefault['return_type_ajax'];
             }
         } else {
-            $_str_type = self::$obj_request->type();
+            $_str_type = $_obj_request->type();
         }
 
         if ($_str_type == 'json') {
             $_str_content   = Json::encode($error);
         } else {
-            self::$lang     = Lang::instance();
-            self::$lang->range('__ginkgo__');  //设置语言作用域
 
-            self::$obj['lang'] = self::$lang;
-
-            $_str_content = self::fetch($error['status_code'], $error);
+            // 用模板渲染错误
+            $_str_content = View_Sys::fetch($error['status_code'], $error);
         }
 
+        // 设置响应内容
         $_obj_response->setContent($_str_content);
 
-        $_obj_response->send();
+        // 输出响应内容
+        $_obj_response->send('error');
     }
 
-
-    public static function fetch($tpl = '', $data = array()) {
-        $_arr_configTplSys     = Config::get('tpl_sys');
-        $_arr_configExceptPage = Config::get('exception_page');
-
-        if (!Func::isEmpty($_arr_configTplSys['suffix'])) {
-            self::$suffix = $_arr_configTplSys['suffix'];
-        }
-
-        $_str_pathTpl = GK_PATH_TPL;
-
-        if (!Func::isEmpty($_arr_configTplSys['path'])) {
-            if (strpos($_arr_configTplSys['path'], DS) !== false) {
-                $_str_pathTpl = Func::fixDs($_arr_configTplSys['path']);
-            } else {
-                $_str_pathTpl .= Func::fixDs($_arr_configTplSys['path']);
-            }
-        }
-
-        if (self::$configDebug['dump']) {
-            $_str_tpl = $_str_pathTpl . 'exception' . self::$suffix;
-
-            if (!Func::isFile($_str_tpl)) {
-                return '<pre>' . var_export($data, true) . '</pre>';
-            }
-
-            if (!Func::isEmpty($data)) {
-                extract($data, EXTR_OVERWRITE);
-            }
-        } else {
-            if (!Func::isEmpty($tpl) && isset($_arr_configExceptPage[$tpl])) {
-                $_str_tplName = $_arr_configExceptPage[$tpl];
-                if (strpos($_str_tplName, DS) !== false) {
-                    $_str_tpl = $_str_tplName;
-                } else {
-                    $_str_tpl = $_str_pathTpl . $_str_tplName . self::$suffix;
-                }
-            } else if (!Func::isEmpty($tpl)) {
-                $_str_tpl = $_str_pathTpl . $tpl . self::$suffix;
-            }
-
-            $_str_ext = pathinfo($_str_tpl, PATHINFO_EXTENSION);
-
-            if (Func::isEmpty($_str_ext)) {
-                $_str_tpl .= self::$suffix;
-            }
-
-            if (!Func::isFile($_str_tpl)) {
-                return '<div>' . $data['http_status'] . '</div>';
-            }
-        }
-
-        $_str_content = '';
-
-        ob_start();
-        ob_implicit_flush(0);
-
-        if (!Func::isEmpty(self::$obj)) {
-            extract(self::$obj, EXTR_OVERWRITE);
-        }
-
-        require($_str_tpl);
-        $_str_content = ob_get_clean();
-        //ob_end_clean();
-
-        $_str_urlBase       = Func::fixDs(self::$obj_request->baseUrl(true), '/');
-        $_str_urlRoot       = Func::fixDs(self::$obj_request->root(true), '/');
-        $_str_dirRoot       = Func::fixDs(self::$obj_request->root(), '/');
-        $_str_routeRoot     = Func::fixDs(self::$obj_request->baseUrl(), '/');
-
-        $_arr_replaceSrc = array(
-            '{:URL_BASE}',
-            '{:URL_ROOT}',
-            '{:DIR_ROOT}',
-            '{:DIR_STATIC}',
-            '{:ROUTE_ROOT}',
-        );
-
-        $_arr_replaceDst = array(
-            $_str_urlBase,
-            $_str_urlRoot,
-            $_str_dirRoot,
-            $_str_dirRoot . GK_NAME_STATIC . '/',
-            $_str_routeRoot,
-        );
-
-        $_str_content = str_ireplace($_arr_replaceSrc, $_arr_replaceDst, $_str_content);
-
-        return $_str_content;
-    }
 }
 
 

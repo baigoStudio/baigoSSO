@@ -9,7 +9,7 @@
 include($cfg['pathInclude'] . 'index_head' . GK_EXT_TPL); ?>
 
     <form name="dbconfig_form" id="dbconfig_form" action="<?php echo $route_install; ?>index/dbconfig-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <?php include($path_tpl_console . 'include' . DS . 'dbconfig' . GK_EXT_TPL);
         include($cfg['pathInclude'] . 'install_btn' . GK_EXT_TPL); ?>
     </form>

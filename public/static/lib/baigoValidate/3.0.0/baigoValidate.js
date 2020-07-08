@@ -83,7 +83,6 @@ License: http://www.opensource.org/licenses/mit-license.php
             },
             field_selector: {
                 prefix_msg: '#msg_',
-                prefix_label: '#label_',
                 prefix_group: '#group_'
             },
             class_name: {
@@ -169,7 +168,7 @@ License: http://www.opensource.org/licenses/mit-license.php
 
                         switch (key) {
                             case 'require':
-                                if (value == true || value == 'true') {
+                                if (value === true || value === 'true') {
                                     _arr_ruleReturn[key] = {
                                         type: key,
                                         rule: value
@@ -668,11 +667,25 @@ License: http://www.opensource.org/licenses/mit-license.php
             getData: function() {
                 form_data = {};
                 err_count = 0;
-                var _arr_data = obj_form.serializeArray();
-                $.each(opts.rules, function(key, value){
-                    var _selector = process.getSelector(key);
+                var _arr_data = {};
 
-                    form_data[key] = $(_selector).val();
+                var _arr_serialize = obj_form.serializeArray();
+
+                $.each(_arr_serialize, function(i, field){
+                    //console.log(field.value);
+                    _arr_data[field.name] = field.value;
+                });
+
+                //console.log(_arr_data);
+
+                $.each(opts.rules, function(key, value){
+                    if (_arr_data[key] != 'undefined') {
+                        form_data[key] = _arr_data[key];
+                    } else {
+                        var _selector  = process.getSelector(key);
+
+                        form_data[key] = $(_selector).val();
+                    }
                 });
 
                 //console.log(form_data);

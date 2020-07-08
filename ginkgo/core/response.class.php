@@ -6,16 +6,18 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 响应类
 class Response {
 
-    protected $data;
-    protected $statusCode;
-    protected $header;
-    protected $replace  = array();
+    protected $data; // 数据
+    protected $statusCode; // http 状态码
+    protected $header; // 头数据
+    protected $replace  = array(); // 输出替换
 
+    // 常用 http 状态码及含义
     protected $statusRow = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -63,18 +65,27 @@ class Response {
         505 => 'HTTP Version not supported',
     );
 
-    protected $charset;
-    protected $type;
-    protected $contentType = 'text/html';
+    protected $charset; // 字符编码
+    protected $type; // 请求类型
+    protected $contentType = 'text/html'; // 输出类型
 
-    protected $config;
+    protected $config; // 配置
 
+    /** 构造函数
+     * __construct function.
+     *
+     * @access public
+     * @param mixed $data (default: '') 数据
+     * @param int $code (default: 200) http 状态码
+     * @param array $header (default: array()) 头数据
+     * @return void
+     */
     public function __construct($data = '', $code = 200, $header = array()) {
         $this->config       = Config::get('var_default');
 
-        $this->setStatusCode($code);
-        $this->setContent($data);
-        $this->setHeader($header);
+        $this->setStatusCode($code); // 设置 http 状态码
+        $this->setContent($data); // 设置数据
+        $this->setHeader($header); // 设置头数据
 
         $this->obj_request  = Request::instance();
     }
@@ -83,30 +94,57 @@ class Response {
 
     }
 
+    /** 创建响应实例
+     * create function.
+     *
+     * @access public
+     * @static
+     * @param string $data (default: '') 数据
+     * @param string $type (default: '') 响应类型
+     * @param int $code (default: 200)  http 状态码
+     * @param array $header (default: array()) 头数据
+     * @return void
+     */
     public static function create($data = '', $type = '', $code = 200, $header = array()) {
-        if (Func::isEmpty($type)) {
-            return new static($data, $code, $header);
-        } else {
-            if (strpos($type, '\\')) {
+        $_class = '';
+
+        if (!Func::isEmpty($type)) { // 指定类型
+            if (strpos($type, '\\')) { // 如指定类型包含命名空间, 则直接使用
                 $_class = $type;
-            } else {
+            } else { // 否则补全命名空间
                 $_class = 'ginkgo\\response\\' . Func::ucwords($type, '_');
             }
         }
 
-        if (class_exists($_class)) {
-            return new $_class($data, $code, $header);
-        } else {
+        if (class_exists($_class)) { // 如指定的类存在
+            return new $_class($data, $code, $header); // 实例化响应并返回
+        } else { // 如不存在, 则用本类实例化 (html)
             return new static($data, $code, $header);
         }
     }
 
 
+    /** 设置 http 状态码
+     * setStatusCode function.
+     *
+     * @access public
+     * @param int $statusCode (default: 200) http 状态码
+     * @return void
+     */
     function setStatusCode($statusCode = 200) {
         $this->statusCode = $statusCode;
         $this->header['HTTP/1.0 ' . $this->getStatusCode()] = '';
     }
 
+
+    /** 设置头数据
+     * setHeader function.
+     *
+     * @access public
+     * @param mixed $header
+     * @param string $value (default: '') 头数据
+     * @return void
+     */
     function setHeader($header, $value = '') {
         if (is_array($header)) {
             $this->header = array_replace_recursive($this->header, $header);
@@ -115,6 +153,13 @@ class Response {
         }
     }
 
+    /** 设置数据
+     * setContent function.
+     *
+     * @access public
+     * @param mixed $data 数据
+     * @return void
+     */
     function setContent($data) {
         $this->data = $data;
 
@@ -122,6 +167,14 @@ class Response {
         //print_r('<br>');
     }
 
+    /** 设置输出替换
+     * setReplace function.
+     *
+     * @access public
+     * @param mixed $replace 查找内容
+     * @param string $value (default: '') 替换的值
+     * @return void
+     */
     function setReplace($replace, $value = '') {
         if (is_array($replace)) {
             $this->replace = array_replace_recursive($this->replace, $replace);
@@ -130,6 +183,12 @@ class Response {
         }
     }
 
+    /** 取得 http 状态信息
+     * getStatus function.
+     *
+     * @access public
+     * @return 状态信息
+     */
     function getStatus() {
         if (isset($this->statusRow[$this->statusCode])) {
             $_str_status = $this->statusRow[$this->statusCode];
@@ -140,32 +199,66 @@ class Response {
         return $_str_status;
     }
 
+    /** 取得 http 状态码
+     * getStatusCode function.
+     *
+     * @access public
+     * @return 状态码
+     */
     function getStatusCode() {
         return $this->statusCode;
     }
 
+    /** 取得头数据
+     * getHeader function.
+     *
+     * @access public
+     * @return 头数据
+     */
     function getHeader() {
         return $this->header;
     }
 
+    /** 取得数据
+     * getContent function.
+     *
+     * @access public
+     * @return 数据
+     */
     function getContent() {
         return $this->output($this->data);
     }
 
+    /** 设置过期时间
+     * expires function.
+     *
+     * @access public
+     * @param mixed $time
+     * @return void
+     */
     function expires($time) {
         $this->header['Expires'] = $time;
     }
 
 
+    /** 设置缓存控制
+     * cacheControl function.
+     *
+     * @access public
+     * @param mixed $cache
+     * @return void
+     */
     function cacheControl($cache) {
         $this->header['Cache-Control'] = $cache;
     }
 
-    /**
-     * 页面输出类型
-     * @param string $contentType 输出类型
-     * @param string $charset     输出编码
-     * @return $this
+    /** 设置输出类型
+     * contentType function.
+     *
+     * @access public
+     * @param mixed $contentType
+     * @param string $charset (default: 'UTF-8')
+     * @return void
      */
     function contentType($contentType, $charset = 'UTF-8') {
         $this->contentType  = $contentType;
@@ -173,9 +266,16 @@ class Response {
         $this->header['Content-Type'] = $contentType . '; Charset=' . $charset;
     }
 
+    /** 输出并注入调试信息
+     * output function.
+     *
+     * @access protected
+     * @param mixed $data
+     * @return void
+     */
     protected function output($data) {
-        if (is_array($data)) {
-            $data = Debug::inject($data, 'arr');
+        if (is_array($data)) { // 如果是数组
+            $data = Debug::inject($data, 'arr'); // 注入调试信息 (是否注入具体内容, 由 ginkgo/Debug 类决定)
         } else if (is_string($data)) {
             $data = Debug::inject($data, 'str');
         }
@@ -183,16 +283,23 @@ class Response {
         return $data;
     }
 
+    /** 向浏览器发送内容
+     * send function.
+     *
+     * @access public
+     * @param int $id (default: 0) ID
+     * @return void
+     */
     function send($id = 0) {
         Plugin::listen('action_fw_response_send');
 
-        $_str_content = $this->getContent();
+        $_str_content = $this->getContent(); // 取得内容
 
-        $_str_content = $this->replaceProcess($_str_content);
+        $_str_content = $this->replaceProcess($_str_content); // 输出替换
 
         if (!headers_sent() && !Func::isEmpty($this->header)) {
             //print_r($this->header);
-            // 发送头部信息
+            // 发送头数据
             foreach ($this->header as $_key => $_value) {
                 if (Func::isEmpty($_value)) {
                     header($_key);
@@ -204,10 +311,17 @@ class Response {
 
         Plugin::listen('action_fw_response_end');
 
-        exit($_str_content);
+        exit($_str_content); // 输出并关闭
     }
 
 
+    /** 输出替换处理
+     * replaceProcess function.
+     *
+     * @access protected
+     * @param mixed $content 内容
+     * @return void
+     */
     protected function replaceProcess($content) {
         $_arr_replace = $this->replace;
 

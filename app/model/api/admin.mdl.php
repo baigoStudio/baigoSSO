@@ -8,7 +8,7 @@ namespace app\model\api;
 
 use app\model\Admin as Admin_Base;
 use ginkgo\Func;
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/

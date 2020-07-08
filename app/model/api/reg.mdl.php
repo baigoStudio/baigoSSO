@@ -8,7 +8,7 @@ namespace app\model\api;
 use ginkgo\Json;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户模型-------------*/
@@ -120,6 +120,63 @@ class Reg extends User {
             );
         }
 
+        $_arr_configReg     = Config::get('reg', 'var_extra');
+
+        if (isset($_arr_configReg['bad_name']) && !Func::isEmpty($_arr_configReg['bad_name'])) {
+            $_str_badName = str_replace(PHP_EOL, '|', $_arr_configReg['bad_name']);
+
+            if (Func::checkRegex($_arr_inputReg['user_name'], $_str_badName, true)) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'Illegal content in username',
+                );
+            }
+        }
+
+        if (isset($_arr_configReg['acc_mail']) && !Func::isEmpty($_arr_configReg['acc_mail'])) {
+            $_str_accName = str_replace(PHP_EOL, '|', $_arr_configReg['acc_mail']);
+
+            if (!Func::checkRegex($_arr_inputReg['user_mail'], $_str_accName, true)) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'Email is not allowed',
+                );
+            }
+        } else if (isset($_arr_configReg['bad_mail']) && !Func::isEmpty($_arr_configReg['bad_mail'])) {
+            $_str_badName = str_replace(PHP_EOL, '|', $_arr_configReg['bad_mail']);
+
+            if (Func::checkRegex($_arr_inputReg['user_mail'], $_str_badName, true)) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'Illegal content in mailbox',
+                );
+            }
+        }
+
+        $_arr_userRow = $this->check($_arr_inputReg['user_name'], 'user_name');
+
+        if ($_arr_userRow['rcode'] == 'y010102') {
+            return array(
+                'rcode' => 'x010404',
+                'msg'   => 'User already exists',
+            );
+        }
+
+        if (!Func::isEmpty($_arr_inputReg['user_mail'])) {
+            $_arr_checkResult = $this->check($_arr_inputReg['user_mail'], 'user_mail'); //检查邮箱
+
+            return array(
+                'rcode' => 'x010404',
+                'msg'   => 'Mailbox already exists',
+            );
+        }
+
+        if ($_arr_configReg['reg_confirm'] === 'on') { //开启验证则为等待
+            $_arr_inputReg['user_status'] = 'wait';
+        } else {
+            $_arr_inputReg['user_status'] = 'enable';
+        }
+
         $_arr_inputReg['rcode'] = 'y010201';
 
         $this->inputReg = $_arr_inputReg;
@@ -156,7 +213,6 @@ class Reg extends User {
     function inputChkmail($arr_data) {
         $_arr_inputParam = array(
             'user_mail'     => array('txt', ''),
-            'not_id'        => array('int', 0),
             'timestamp'     => array('int', 0),
         );
 

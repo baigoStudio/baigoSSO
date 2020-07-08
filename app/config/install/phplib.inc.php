@@ -4,12 +4,12 @@
 以下为系统文件，请勿编辑
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 return array(
-    'pdo' => array(
-        'title'     => 'PDO (The PHP Data Objects)',
+    'pdo_mysql' => array(
+        'title'     => 'PDO (The PHP Data Objects) for MySQL',
         'installed' => false,
     ),
     'gd' => array(

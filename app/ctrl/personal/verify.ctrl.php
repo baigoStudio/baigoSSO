@@ -11,32 +11,28 @@ use ginkgo\Loader;
 use ginkgo\Crypt;
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Verify extends Ctrl {
 
     function confirm() {
-        $_num_verifyId      = 0;
-        $_str_verifyToken   = '';
+        $_arr_searchParam = array(
+            'id'       => array('int', 0),
+            'token'    => array('txt', ''),
+        );
 
-        if (isset($this->param['id'])) {
-            $_num_verifyId = $this->obj_request->input($this->param['id'], 'int', 0);
-        }
+        $_arr_search = $this->obj_request->param($_arr_searchParam);
 
-        if (isset($this->param['token'])) {
-            $_str_verifyToken = $this->obj_request->input($this->param['token'], 'txt', '');
-        }
-
-        if ($_num_verifyId < 1) {
+        if ($_arr_search['id'] < 1) {
             return $this->error('Missing ID', 'x120201');
         }
 
-        if (Func::isEmpty($_str_verifyToken)) {
+        if (Func::isEmpty($_arr_search['token'])) {
             return $this->error('Unable to get token', 'x120202');
         }
 
-        $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
+        $_arr_verifyRow = $this->mdl_verify->read($_arr_search['id']);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
             return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
@@ -54,7 +50,7 @@ class Verify extends Ctrl {
             return $this->error('Token expired', 'x120204');
         }
 
-        if (Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']) != $_str_verifyToken) {
+        if (Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']) != $_arr_search['token']) {
             return $this->error('Token is incorrect', 'x120205');
         }
 
@@ -68,7 +64,7 @@ class Verify extends Ctrl {
             return $this->error('No need to activate again', 'x010409');
         }
 
-        $_arr_verifyRow['verify_token'] = $_str_verifyToken;
+        $_arr_verifyRow['verify_token'] = $_arr_search['token'];
 
         $_arr_tplData = array(
             'userRow'   => $_arr_userRow,
@@ -138,26 +134,22 @@ class Verify extends Ctrl {
 
 
     function mailbox() {
-        $_num_verifyId      = 0;
-        $_str_verifyToken   = '';
+        $_arr_searchParam = array(
+            'id'       => array('int', 0),
+            'token'    => array('txt', ''),
+        );
 
-        if (isset($this->param['id'])) {
-            $_num_verifyId = $this->obj_request->input($this->param['id'], 'int', 0);
-        }
+        $_arr_search = $this->obj_request->param($_arr_searchParam);
 
-        if (isset($this->param['token'])) {
-            $_str_verifyToken = $this->obj_request->input($this->param['token'], 'txt', '');
-        }
-
-        if ($_num_verifyId < 1) {
+        if ($_arr_search['id'] < 1) {
             return $this->error('Missing ID', 'x120201');
         }
 
-        if (Func::isEmpty($_str_verifyToken)) {
+        if (Func::isEmpty($_arr_search['token'])) {
             return $this->error('Unable to get token', 'x120202');
         }
 
-        $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
+        $_arr_verifyRow = $this->mdl_verify->read($_arr_search['id']);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
             return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
@@ -175,7 +167,7 @@ class Verify extends Ctrl {
             return $this->error('Token expired', 'x120204');
         }
 
-        if (Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']) != $_str_verifyToken) {
+        if (Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']) != $_arr_search['token']) {
             return $this->error('Token is incorrect', 'x120205');
         }
 
@@ -185,7 +177,7 @@ class Verify extends Ctrl {
             return $this->error('User is disabled', 'x010402');
         }
 
-        $_arr_verifyRow['verify_token'] = $_str_verifyToken;
+        $_arr_verifyRow['verify_token'] = $_arr_search['token'];
 
         $_arr_tplData = array(
             'userRow'   => $_arr_userRow,
@@ -254,26 +246,22 @@ class Verify extends Ctrl {
 
 
     function pass() {
-        $_num_verifyId      = 0;
-        $_str_verifyToken   = '';
+        $_arr_searchParam = array(
+            'id'       => array('int', 0),
+            'token'    => array('txt', ''),
+        );
 
-        if (isset($this->param['id'])) {
-            $_num_verifyId = $this->obj_request->input($this->param['id'], 'int', 0);
-        }
+        $_arr_search = $this->obj_request->param($_arr_searchParam);
 
-        if (isset($this->param['token'])) {
-            $_str_verifyToken = $this->obj_request->input($this->param['token'], 'txt', '');
-        }
-
-        if ($_num_verifyId < 1) {
+        if ($_arr_search['id'] < 1) {
             return $this->error('Missing ID', 'x120201');
         }
 
-        if (Func::isEmpty($_str_verifyToken)) {
+        if (Func::isEmpty($_arr_search['token'])) {
             return $this->error('Unable to get token', 'x120202');
         }
 
-        $_arr_verifyRow = $this->mdl_verify->read($_num_verifyId);
+        $_arr_verifyRow = $this->mdl_verify->read($_arr_search['id']);
 
         if ($_arr_verifyRow['rcode'] != 'y120102') {
             return $this->error($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
@@ -293,9 +281,9 @@ class Verify extends Ctrl {
 
         /*print_r(Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']));
         print_r('<br>');
-        print_r($_str_verifyToken);*/
+        print_r($_arr_search['token']);*/
 
-        if (Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']) != $_str_verifyToken) {
+        if (Crypt::crypt($_arr_verifyRow['verify_token'], $_arr_verifyRow['verify_rand']) != $_arr_search['token']) {
             return $this->error('Token is incorrect', 'x120205');
         }
 
@@ -305,7 +293,7 @@ class Verify extends Ctrl {
             return $this->error('User is disabled', 'x010402');
         }
 
-        $_arr_verifyRow['verify_token'] = $_str_verifyToken;
+        $_arr_verifyRow['verify_token'] = $_arr_search['token'];
 
         $_arr_tplData = array(
             'userRow'   => $_arr_userRow,
@@ -337,7 +325,6 @@ class Verify extends Ctrl {
         if ($_arr_verifyRow['rcode'] != 'y120102') {
             return $this->fetchJson($_arr_verifyRow['msg'], $_arr_verifyRow['rcode']);
         }
-
 
         if ($_arr_verifyRow['verify_status'] != 'enable') {
             return $this->fetchJson('Token is no longer valid', 'x120203');

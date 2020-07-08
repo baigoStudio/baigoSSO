@@ -6,17 +6,17 @@
 
 namespace ginkgo;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access Denied');
 
-
-class Html { // class start
+// html 处理类
+class Html {
 
     private $str           = ''; // 源字符串
-    private $tagAllow      = array(); // 允许保留的tag 例如:array('p','div')
-    private $attrAllow     = array(); // 允许保留的属性 例如:array('id','class','title')
-    private $attrExcept    = array(); // 特例 例如:array('a'=>array('href','class'),'span'=>array('class'))
-    private $attrIgnore    = array(); // 忽略过滤的标记 例如:array('span','img')
+    private $tagAllow      = array(); // 允许保留的tag 例如: array('p', 'div')
+    private $attrAllow     = array(); // 允许保留的属性 例如 :array('id', 'class', 'title')
+    private $attrExcept    = array(); // 特例 例如: array('a' => array('href', 'class'), 'span' => array('class'))
+    private $attrIgnore    = array(); // 忽略过滤的标记 例如: array('span','img')
 
     protected static $instance; //用静态属性保存实例
 
@@ -34,7 +34,7 @@ class Html { // class start
      * 实例化
      * @access public
      * @static
-     * @return void
+     * @return 当前类的实例
      */
     public static function instance() {
         if (Func::isEmpty(static::$instance)) {
@@ -44,6 +44,14 @@ class Html { // class start
     }
 
 
+    /** html 编码
+     * encode function.
+     *
+     * @access public
+     * @static
+     * @param string $string 待编码的的 html
+     * @return 编码后的 html
+     */
     static function encode($string) {
         if (!Func::isEmpty($string)) {
             $string = trim(htmlentities($string, ENT_QUOTES, 'UTF-8'));
@@ -53,6 +61,15 @@ class Html { // class start
     }
 
 
+    /** html 解码
+     * decode function.
+     *
+     * @access public
+     * @static
+     * @param string $string 待解码的的 html
+     * @param string $spec (default: '') 特殊处理
+     * @return 解码后的 html
+     */
     static function decode($string, $spec = '') {
         //print_r($string);
 
@@ -109,6 +126,13 @@ class Html { // class start
     }
 
 
+    /** 剔除 tag
+     * stripTag function.
+     *
+     * @access public
+     * @param string $str 待处理 html
+     * @return 处理后的 html
+     */
     public function stripTag($str) {
         $this->str = $str;
 
@@ -121,15 +145,25 @@ class Html { // class start
     }
 
 
+    /** 设置允许的 tag
+     * setTagAllow function.
+     *
+     * @access public
+     * @param array $param (default: array())
+     * @return void
+     */
     public function setTagAllow($param = array()) {
         $this->tagAllow = $param;
     }
 
 
-    /** 处理HTML,过滤不保留的属性
-    * @param String $str 源字符串
-    * @return String
-    */
+    /** 剔除属性
+     * stripAttr function.
+     *
+     * @access public
+     * @param string $str 待处理 html
+     * @return 处理后的 html
+     */
     public function stripAttr($str) {
         $this->str = $str;
 
@@ -149,29 +183,47 @@ class Html { // class start
 
 
     /** 设置允许的属性
-    * @param Array $param
-    */
+     * setAttrAllow function.
+     *
+     * @access public
+     * @param array $param (default: array()) 属性
+     * @return void
+     */
     public function setAttrAllow($param = array()) {
         $this->attrAllow = $param;
     }
 
 
     /** 设置特例
-    * @param Array $param
-    */
+     * setAttrExcept function.
+     *
+     * @access public
+     * @param array $param (default: array()) 特例
+     * @return void
+     */
     public function setAttrExcept($param = array()) {
         $this->attrExcept = $param;
     }
 
 
     /** 设置忽略的标记
-    * @param Array $param
-    */
+     * setAttrIgnore function.
+     *
+     * @access public
+     * @param array $param (default: array()) 忽略
+     * @return void
+     */
     public function setAttrIgnore($param = array()) {
         $this->attrIgnore = $param;
     }
 
 
+    /** 处理保留标签
+     * tagAllowProcess function.
+     *
+     * @access private
+     * @return 保留标签参数值
+     */
     private function tagAllowProcess() {
         $_str_tagAllow = '';
         if (!Func::isEmpty($this->tagAllow)) {
@@ -181,7 +233,12 @@ class Html { // class start
     }
 
 
-    /** 搜寻需要处理的元素 */
+    /** 搜索需要处理的元素
+     * findEle function.
+     *
+     * @access private
+     * @return void
+     */
     private function findEle() {
         $_arr_nodeRows = array();
         preg_match_all('/<([^ !\/\>\n]+)([^>]*)>/i', $this->str, $_arr_eleRows);
@@ -211,9 +268,14 @@ class Html { // class start
         }
     }
 
-    /** 搜寻属性
-    * @param Array $arr_nodeRows 需要处理的元素
-    */
+
+    /** 搜索属性
+     * findAttr function.
+     *
+     * @access private
+     * @param array $arr_nodeRows 待处理节点
+     * @return 处理完的数据
+     */
     private function findAttr($arr_nodeRows) {
         foreach($arr_nodeRows as $_key=>&$_value) {
             preg_match_all('/([^ =]+)\s*=\s*["|\']{0,1}([^"\']*)["|\']{0,1}/i', $_value['attrs'], $_arr_attrRows);
@@ -239,8 +301,12 @@ class Html { // class start
     }
 
     /** 移除属性
-    * @param Array $arr_nodeRows 需要处理的元素
-    */
+     * removeAttr function.
+     *
+     * @access private
+     * @param array $arr_nodeRows 待处理节点
+     * @return void
+     */
     private function removeAttr($arr_nodeRows) {
         foreach ($arr_nodeRows as $_key=>$_value) {
             $_str_nodeName = $_value['name'];
@@ -258,10 +324,13 @@ class Html { // class start
     }
 
     /** 判断是否特例
-    * @param String $ele_name  元素名
-    * @param String $attr_name 属性名
-    * @return boolean
-    */
+     * isAttrExcept function.
+     *
+     * @access private
+     * @param String $ele_name 元素名
+     * @param String $attr_name 属性名
+     * @return void
+     */
     private function isAttrExcept($ele_name, $attr_name) {
         if (isset($this->attrExcept[$ele_name])) {
             if (in_array($attr_name, $this->attrExcept[$ele_name])) {
@@ -287,9 +356,12 @@ class Html { // class start
 
 
     /** 特殊字符转义
-    * @param String $str 源字符串
-    * @return String
-    */
+     * protect function.
+     *
+     * @access private
+    * @param string $str 源字符串
+     * @return 处理完的字符串
+     */
     private function protect($str) {
         $conversions = array(
             '^'     => '\^',

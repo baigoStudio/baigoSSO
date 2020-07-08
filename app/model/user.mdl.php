@@ -10,7 +10,7 @@ use ginkgo\Json;
 use ginkgo\Func;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户模型-------------*/
@@ -188,16 +188,19 @@ class User extends User_Common {
     }
 
 
-    /** 读取
-     * read function.
-     *
-     * @access public
-     * @param mixed $str_user
-     * @param string $str_by (default: 'user_id')
-     * @param int $num_notId (default: 0)
-     * @return void
-     */
     function read($mix_user, $str_by = 'user_id', $num_notId = 0, $arr_select = array()) {
+        $_arr_userRow = $this->readProcess($mix_user, $str_by, $num_notId, $arr_select);
+
+        if ($_arr_userRow['rcode'] != 'y010102') {
+            return $_arr_userRow;
+        }
+
+        return $this->rowProcess($_arr_userRow);
+
+    }
+
+
+    function readProcess($mix_user, $str_by = 'user_id', $num_notId = 0, $arr_select = array()) {
         if (Func::isEmpty($arr_select)) {
             $arr_select = array(
                 'user_id',
@@ -237,7 +240,7 @@ class User extends User_Common {
         $_arr_userRow['rcode'] = 'y010102';
         $_arr_userRow['msg']   = '';
 
-        return $this->rowProcess($_arr_userRow);
+        return $_arr_userRow;
     }
 
 

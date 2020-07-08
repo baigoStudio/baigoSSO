@@ -11,7 +11,7 @@ use ginkgo\Crypt;
 use ginkgo\Json;
 use ginkgo\Sign;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户类-------------*/
@@ -20,7 +20,6 @@ class Sync extends Ctrl {
     protected function c_init($param = array()) {
         parent::c_init();
 
-        $this->mdl_app      = Loader::model('App');
         $this->mdl_sync     = Loader::model('Sync');
     }
 
@@ -94,13 +93,23 @@ class Sync extends Ctrl {
 
 
     private function appLists() {
+        $_mdl_appCombineView    = Loader::model('App_Combine_View');
+        $_mdl_combineBelong     = Loader::model('Combine_Belong');
+
+        $_arr_search = array(
+            'app_id' => $this->appRow['app_id'],
+        );
+
+        $_arr_combineIds = $_mdl_combineBelong->combineIds($_arr_search);
+
         $_arr_search = array(
             'status'        => 'enable',
             'sync'          => 'on',
             'has_sync'      => true,
             'not_ids'       => array($this->appRow['app_id']),
+            'combine_ids'   => $_arr_combineIds,
         );
-        $this->appRows = $this->mdl_app->lists(100, 0, $_arr_search);
+        $this->appRows = $_mdl_appCombineView->lists(100, 0, $_arr_search);
     }
 
 

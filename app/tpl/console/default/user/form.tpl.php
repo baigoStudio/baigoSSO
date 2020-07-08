@@ -56,7 +56,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </nav>
 
     <form name="user_form" id="user_form" autocomplete="off" action="<?php echo $route_console; ?>user/submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <input type="hidden" name="user_id" id="user_id" value="<?php echo $userRow['user_id']; ?>">
 
         <div class="row">
@@ -182,8 +182,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     ajax: {
                         url: '<?php echo $route_console; ?>user/check/',
                         attach: {
-                            selectors: ["#user_id"],
-                            keys: ["user_id"]
+                            selectors: ['#user_id'],
+                            keys: ['user_id']
                         }
                     }
                 },

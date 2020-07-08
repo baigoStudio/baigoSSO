@@ -13,7 +13,7 @@ use ginkgo\Func;
 use ginkgo\Smtp;
 use ginkgo\Json;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class Forgot extends Ctrl {

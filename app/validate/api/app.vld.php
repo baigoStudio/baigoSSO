@@ -8,7 +8,7 @@ namespace app\validate\api;
 
 use ginkgo\Validate;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/
@@ -75,7 +75,7 @@ class App extends Validate {
             'app_key'           => $this->obj_lang->get('App Key', 'api.common'),
             'app_name'          => $this->obj_lang->get('App name'),
             'app_url_notify'    => $this->obj_lang->get('URL of notifications'),
-            'app_url_sync'      => $this->obj_lang->get('URL of sync login notifications'),
+            'app_url_sync'      => $this->obj_lang->get('URL of sync notifications'),
             'sign'              => $this->obj_lang->get('Signature', 'api.common'),
             'code'              => $this->obj_lang->get('Encrypted code', 'api.common'),
             'timestamp'         => $this->obj_lang->get('Timestamp', 'api.common'),

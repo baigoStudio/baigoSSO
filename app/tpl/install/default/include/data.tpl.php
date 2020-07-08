@@ -40,7 +40,7 @@
                     data: {
                         type: '<?php echo $key; ?>',
                         model: '<?php echo $value_data; ?>',
-                        __token__: '<?php echo $token; ?>'
+                        <?php echo $token['name']; ?>: '<?php echo $token['value']; ?>'
                     },
                     timeout: 30000,
                     error: function (result) {

@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="form-group">
-                    <?php foreach ($config['console']['profile'] as $key=>$value) {
+                    <?php foreach ($config['console']['profile_mod'] as $key=>$value) {
                         if (isset($adminLogged['admin_allow_profile'][$key])) { ?>
                             <div class="form-text">
                                 <span class="badge badge-danger">

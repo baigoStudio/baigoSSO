@@ -8,7 +8,7 @@ namespace app\model;
 use ginkgo\Func;
 use ginkgo\Config;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------短消息模型-------------*/
@@ -131,6 +131,18 @@ class Pm extends User_Common {
      * @return void
      */
     function read($mix_pm, $str_by = 'pm_id', $num_notId = 0) {
+        $_arr_pmRow = $this->readProcess($mix_pm, $str_by, $num_notId);
+
+        if ($_arr_pmRow['rcode'] != 'y020102') {
+            return $_arr_pmRow;
+        }
+
+        return $this->rowProcess($_arr_pmRow);
+
+    }
+
+
+    function readProcess($mix_pm, $str_by = 'pm_id', $num_notId = 0) {
         $_arr_pmSelect = array(
             'pm_id',
             'pm_send_id',
@@ -157,7 +169,7 @@ class Pm extends User_Common {
         $_arr_pmRow['rcode']   = 'y110102';
         $_arr_pmRow['msg']     = '';
 
-        return $this->rowProcess($_arr_pmRow);
+        return $_arr_pmRow;
 
     }
 

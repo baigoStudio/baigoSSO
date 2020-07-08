@@ -13,7 +13,7 @@ use ginkgo\Crypt;
 use ginkgo\Json;
 use ginkgo\Html;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------应用模型-------------*/
@@ -81,8 +81,8 @@ class App extends App_Base {
         $_arr_inputSubmit = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
 
         //print_r($_arr_inputSubmit);
-        $_str_configAllow   = BG_PATH_CONFIG . 'console' . DS . 'allow' . GK_EXT_INC;
-        $_arr_allowRows     = Config::load($_str_configAllow, 'allow', 'console');
+        $_str_configAllow   = BG_PATH_CONFIG . 'console' . DS . 'app' . GK_EXT_INC;
+        $_arr_allowRows     = Config::load($_str_configAllow, 'app', 'console');
 
         foreach ($_arr_allowRows as $_key=>$_value) {
             foreach ($_value['allow'] as $_key_sub=>$_value_sub) {

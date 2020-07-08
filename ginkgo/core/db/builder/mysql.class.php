@@ -8,17 +8,14 @@ namespace ginkgo\db\builder;
 
 use ginkgo\Func;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------数据库类-------------*/
 class Mysql {
 
-    protected static $instance;
-    private $dbconfig;
-
-    // 查询对象实例
-    private $query;
+    protected static $instance; // 当前实例
+    private $dbconfig; // 数据库配置
 
     // SQL 操作符
     private $exp = array(
@@ -41,23 +38,72 @@ class Mysql {
     );
 
 
+    /** 比较运算符
+     * compopr
+     *
+     * @var mixed
+     * @access private
+     */
     private $compopr = array(
         '=', '<>', '>', '>=', '<', '<='
     );
 
+    /** 逻辑运算符
+     * logic
+     *
+     * @var mixed
+     * @access private
+     */
     private $logic = array(
         'AND', 'OR'
     );
 
+    /** 排序方式
+     * order
+     *
+     * @var mixed
+     * @access private
+     */
     private $order = array(
         'DESC', 'ASC'
     );
 
+    /** join 方式
+     * join
+     *
+     * @var mixed
+     * @access private
+     */
     private $join = array(
         'INNER', 'LEFT', 'RIGHT', 'FULL'
     );
 
 
+    /** 配置参数
+     * this_config
+     *
+     * @var mixed
+     * @access private
+     */
+    private $this_config = array(
+        'type'      => 'mysql',
+        'host'      => '',
+        'name'      => '',
+        'user'      => '',
+        'pass'      => '',
+        'charset'   => 'utf8',
+        'prefix'    => 'ginkgo_',
+        'debug'     => false,
+        'port'      => 3306,
+    );
+
+    /** 构造函数
+     * __construct function.
+     *
+     * @access protected
+     * @param array $dbconfig (default: array()) 配置
+     * @return void
+     */
     protected function __construct($dbconfig = array()) {
         $this->config($dbconfig);
     }
@@ -66,6 +112,14 @@ class Mysql {
 
     }
 
+    /** 实例化
+     * instance function.
+     *
+     * @access public
+     * @static
+     * @param array $dbconfig (default: array()) 配置
+     * @return 当前类的实例
+     */
     public static function instance($dbconfig = array()) {
         if (Func::isEmpty(static::$instance)) {
             static::$instance = new static($dbconfig);
@@ -74,15 +128,25 @@ class Mysql {
     }
 
 
+    /** 设定配置
+     * config function.
+     *
+     * @access public
+     * @param array $dbconfig (default: array())
+     * @return void
+     */
     function config($dbconfig = array()) {
-        $this->dbconfig = $dbconfig;
-
-        $this->configProcess();
-
-        $this->isConfig = true;
+        $this->dbconfig = array_replace_recursive($this->this_config, $dbconfig); // 合并配置
     }
 
 
+    /** 处理字段
+     * field function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return 字段字符串
+     */
     function field($field) {
         $_str_field = '*';
 
@@ -115,6 +179,16 @@ class Mysql {
     }
 
 
+    /** 处理 insert 语句
+     * insert function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return sql 语句及绑定参数
+     */
     function insert($field, $value = '', $param = '', $type = '') {
         $_arr_result = $this->update($field, $value, $param, $type, 'insert');
 
@@ -125,6 +199,17 @@ class Mysql {
     }
 
 
+    /** 处理 update 语句
+     * update function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @param string $from (default: 'update')
+     * @return sql 语句及绑定参数
+     */
     function update($field, $value = '', $param = '', $type = '', $from = 'update') {
         $_str_update    = '';
         $_arr_bind      = array();
@@ -145,12 +230,12 @@ class Mysql {
                         $_value[2] = '';
                     }
 
-                    $_arr_condition[$_key]  = $this->buildUpdate($_key, $_value[1], $_value[0], $from);
-                    $_arr_bind[]            = $this->buildBind($_key, $_value[0], $from, $_value[1], $_value[2]);
+                    $_arr_condition[$_key]  = $this->updateProcess($_key, $_value[1], $_value[0], $from);
+                    $_arr_bind[]            = $this->bindProcess($_key, $_value[0], $from, $_value[1], $_value[2]);
 
                 } else if (is_scalar($_value)) {
-                    $_arr_condition[$_key]  = $this->buildUpdate($_key, $_key, $_value, $from);
-                    $_arr_bind[]            = $this->buildBind($_key, $_value, $from);
+                    $_arr_condition[$_key]  = $this->updateProcess($_key, $_key, $_value, $from);
+                    $_arr_bind[]            = $this->bindProcess($_key, $_value, $from);
                 }
             }
 
@@ -159,8 +244,8 @@ class Mysql {
             if (Func::isEmpty($value)) {
                 $_str_update = $field;
             } else {
-                $_str_update = $this->buildUpdate($field, $param, $value, $from);
-                $_arr_bind   = $this->buildBind($field, $value, $from, $param, $type);
+                $_str_update = $this->updateProcess($field, $param, $value, $from);
+                $_arr_bind   = $this->bindProcess($field, $value, $from, $param, $type);
             }
         }
 
@@ -171,16 +256,39 @@ class Mysql {
     }
 
 
+    /** 处理表名
+     * table function.
+     *
+     * @access public
+     * @param mixed $table 表名
+     * @return 完整表名
+     */
     function table($table) {
         return $this->addChar($this->dbconfig['prefix'] . $table);
     }
 
 
+    /** 处理强制索引名
+     * force function.
+     *
+     * @access public
+     * @param mixed $index 索引名
+     * @return 索引名
+     */
     function force($index) {
         return $this->addChar($index);
     }
 
 
+    /** 处理 join 命令
+     * join function.
+     *
+     * @access public
+     * @param mixed $join join 表
+     * @param string $on (default: '') 条件
+     * @param string $type (default: '') join 类型
+     * @return sql 语句
+     */
     function join($join, $on = '', $type = '') {
         $_str_join = '';
 
@@ -200,7 +308,7 @@ class Mysql {
                                     $_value[2] = '';
                                 }
 
-                                $_str_condition = $this->buildJoin($_value[0], $_value[1], $_value[2]);
+                                $_str_condition = $this->joinProcess($_value[0], $_value[1], $_value[2]);
 
                                 if (!Func::isEmpty($_str_condition)) {
                                     $_arr_condition[] = $_str_condition;
@@ -219,14 +327,14 @@ class Mysql {
                         $join[2] = '';
                     }
 
-                    $_str_join = $this->buildJoin($join[0], $join[1], $join[2]);
+                    $_str_join = $this->joinProcess($join[0], $join[1], $join[2]);
                 }
             }
         } else if (is_scalar($join)) {
             if (Func::isEmpty($on)) {
                 $_str_join = $join;
             } else {
-                $_str_join = $this->buildJoin($join, $on, $type);
+                $_str_join = $this->joinProcess($join, $on, $type);
             }
         }
 
@@ -234,6 +342,17 @@ class Mysql {
     }
 
 
+    /** 处理 where 语句
+     * where function.
+     *
+     * @access public
+     * @param mixed $where where 条件
+     * @param string $exp (default: '') 运算符
+     * @param string $value (default: '') 值
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @return sql 语句及绑定参数
+     */
     function where($where, $exp = '', $value = '', $param = '', $type = '') {
         $_str_where = '';
         $_arr_bind  = array();
@@ -257,9 +376,9 @@ class Mysql {
                                 }
 
                                 if (strpos($_value[0], '|') || strpos($_value[0], '&')) {
-                                    $_str_condition = $this->buildWhereSub($_value[0], $_value[1], $_value[3], $_value[2]);
+                                    $_str_condition = $this->whereProcessSub($_value[0], $_value[1], $_value[3], $_value[2]);
                                 } else {
-                                    $_str_condition = $this->buildWhere($_value[0], $_value[1], $_value[3], $_value[2]);
+                                    $_str_condition = $this->whereProcess($_value[0], $_value[1], $_value[3], $_value[2]);
                                 }
 
                                 if (!Func::isEmpty($_str_condition)) {
@@ -274,9 +393,9 @@ class Mysql {
                                     $_value[5]   = $this->inArrayProcess($_value[5], 'logic');
 
                                     if ($this->isSpecBind($_value[2], $_value[1])) {
-                                        $_arr_bind = $this->buildBind($_value[0], $_value[2], 'where', $_value[3], $_value[4], $_value[1], $_arr_bind);
+                                        $_arr_bind = $this->bindProcess($_value[0], $_value[2], 'where', $_value[3], $_value[4], $_value[1], $_arr_bind);
                                     } else {
-                                        $_arr_bind[] = $this->buildBind($_value[0], $_value[2], 'where', $_value[3], $_value[4], $_value[1]);
+                                        $_arr_bind[] = $this->bindProcess($_value[0], $_value[2], 'where', $_value[3], $_value[4], $_value[1]);
                                     }
 
                                     if (Func::isEmpty($_str_where)) {
@@ -306,12 +425,12 @@ class Mysql {
                     }
 
                     if (strpos($where[0], '|') || strpos($where[0], '&')) {
-                        $_str_where = $this->buildWhereSub($where[0], $where[1], $where[3], $where[2]);
+                        $_str_where = $this->whereProcessSub($where[0], $where[1], $where[3], $where[2]);
                     } else {
-                        $_str_where = $this->buildWhere($where[0], $where[1], $where[3], $where[2]);
+                        $_str_where = $this->whereProcess($where[0], $where[1], $where[3], $where[2]);
                     }
 
-                    $_arr_bind = $this->buildBind($where[0], $where[2], 'where', $where[3], $where[4], $where[1]);
+                    $_arr_bind = $this->bindProcess($where[0], $where[2], 'where', $where[3], $where[4], $where[1]);
                 }
             }
         } else if (is_scalar($where)) {
@@ -319,12 +438,12 @@ class Mysql {
                 $_str_where = $where;
             } else {
                 if (strpos($where, '|') || strpos($where, '&')) {
-                    $_str_where = $this->buildWhereSub($where, $exp, $param, $value);
+                    $_str_where = $this->whereProcessSub($where, $exp, $param, $value);
                 } else {
-                    $_str_where = $this->buildWhere($where, $exp, $param, $value);
+                    $_str_where = $this->whereProcess($where, $exp, $param, $value);
                 }
 
-                $_arr_bind = $this->buildBind($where, $value, 'where', $param, $type, $exp);
+                $_arr_bind = $this->bindProcess($where, $value, 'where', $param, $type, $exp);
             }
         }
 
@@ -335,11 +454,26 @@ class Mysql {
     }
 
 
+    /** 处理 group 命令
+     * group function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @return group 语句
+     */
     function group($field) {
         return $this->field($field);
     }
 
 
+    /** 处理 order 语句
+     * order function.
+     *
+     * @access public
+     * @param mixed $field 字段
+     * @param string $type (default: '') 排序类型
+     * @return order 语句
+     */
     function order($field, $type = '') {
         $_str_order  = '';
 
@@ -355,7 +489,7 @@ class Mysql {
                                     $_value[1] = '';
                                 }
 
-                                $_str_condition = $this->buildOrder($_value[0], $_value[1]);
+                                $_str_condition = $this->orderProcess($_value[0], $_value[1]);
 
                                 if (!Func::isEmpty($_str_condition)) {
                                     $_arr_condition[] = $_str_condition;
@@ -370,14 +504,14 @@ class Mysql {
                         $field[1] = '';
                     }
 
-                    $_str_order = $this->buildOrder($field[0], $field[1]);
+                    $_str_order = $this->orderProcess($field[0], $field[1]);
                 }
             }
         } else if (is_scalar($field)) {
             if (Func::isEmpty($type)) {
                 $_str_order = $field;
             } else {
-                $_str_order = $this->buildOrder($field, $type);
+                $_str_order = $this->orderProcess($field, $type);
             }
         }
 
@@ -385,6 +519,14 @@ class Mysql {
     }
 
 
+    /** 处理 limit 语句
+     * limit function.
+     *
+     * @access public
+     * @param int $offset (default: 1) 偏离或数量
+     * @param bool $length (default: false) 数量
+     * @return void
+     */
     function limit($offset = 1, $length = false) {
         if ($length === false) {
             return $offset;
@@ -394,8 +536,15 @@ class Mysql {
     }
 
 
+    /** 添加 sql 名称界定符
+     * addChar function.
+     *
+     * @access public
+     * @param mixed $value 字符
+     * @return 处理以后的字符
+     */
     function addChar($value) {
-        //如果包含* 或者 使用了sql方法 则不作处理
+        // 如果包含 * 或者 使用了 sql 函数, 则不作处理
         if ($value != '*' && strpos($value, '(') === false && strpos($value, '`') === false) {
             $value = '`' . trim($value) . '`';
         }
@@ -404,6 +553,13 @@ class Mysql {
     }
 
 
+    /** 字段名处理
+     * fieldProcess function.
+     *
+     * @access public
+     * @param mixed $field 字段名
+     * @return 完整字段名
+     */
     function fieldProcess($field) {
         if (strpos($field, '(') !== false || strpos($field, '`') !== false) {
             $_str_field = $field;
@@ -420,6 +576,14 @@ class Mysql {
     }
 
 
+    /** 命令合法性处理, 到属性规定的数组中过滤一遍
+     * inArrayProcess function.
+     *
+     * @access public
+     * @param mixed $name 命令
+     * @param string $type (default: 'order') 类型
+     * @return 命令
+     */
     function inArrayProcess($name, $type = 'order') {
         $_str_return = '';
 
@@ -434,6 +598,13 @@ class Mysql {
     }
 
 
+    /** 运算符合法性处理
+     * expProcess function.
+     *
+     * @access public
+     * @param mixed $name 运算符
+     * @return 运算符
+     */
     function expProcess($name) {
         $_str_return = '';
 
@@ -449,7 +620,17 @@ class Mysql {
     }
 
 
-    private function buildUpdate($field, $param = '', $value = '', $from = 'update') {
+    /** 处理 update 语句
+     * updateProcess function.
+     *
+     * @access private
+     * @param mixed $field 字段
+     * @param string $param (default: '') 参数
+     * @param string $value (default: '') 值
+     * @param string $from (default: 'update')
+     * @return sql 语句
+     */
+    private function updateProcess($field, $param = '', $value = '', $from = 'update') {
         $_str_update = '';
 
         if (Func::isEmpty($param)) {
@@ -474,7 +655,16 @@ class Mysql {
     }
 
 
-    private function buildJoin($join, $on = '', $type = 'INNER') {
+    /** 处理 join 语句
+     * joinProcess function.
+     *
+     * @access private
+     * @param mixed $join join 表
+     * @param string $on (default: '') 条件
+     * @param string $type (default: 'INNER') join 类型
+     * @return sql 语句
+     */
+    private function joinProcess($join, $on = '', $type = 'INNER') {
         $_str_join = '';
 
         if (Func::isEmpty($type)) {
@@ -486,7 +676,7 @@ class Mysql {
                 if (is_array($on[0])) {
                     foreach ($on[0] as $_key=>$_value) {
                         if (isset($_value[0]) && isset($_value[1]) && isset($_value[2])) {
-                            $_str_condition = $this->buildOn($_value[0], $_value[1], $_value[2]);
+                            $_str_condition = $this->onProcess($_value[0], $_value[1], $_value[2]);
                         }
 
                         if (!isset($_value[3]) || Func::isEmpty($_value[3])) {
@@ -503,7 +693,7 @@ class Mysql {
                     }
                 } else {
                     if (isset($on[1]) && isset($on[2])) {
-                        $_str_on = $this->buildOn($on[0], $on[1], $on[2]);
+                        $_str_on = $this->onProcess($on[0], $on[1], $on[2]);
                     }
                 }
             }
@@ -525,7 +715,16 @@ class Mysql {
     }
 
 
-    private function buildOn($fidle_1 = '', $compopr = '', $fidle_2 = '') {
+    /** join 语句的 on 命令处理
+     * onProcess function.
+     *
+     * @access private
+     * @param string $fidle_1 (default: '') 字段 1
+     * @param string $compopr (default: '') 运算符
+     * @param string $fidle_2 (default: '') 字段 2
+     * @return sql 语句
+     */
+    private function onProcess($fidle_1 = '', $compopr = '', $fidle_2 = '') {
         if (Func::isEmpty($compopr)) {
             $compopr = '=';
         }
@@ -536,7 +735,17 @@ class Mysql {
     }
 
 
-    private function buildWhere($field, $exp = '=', $param = '', $value = '') {
+    /** 处理 where 语句
+     * whereProcess function.
+     *
+     * @access private
+     * @param mixed $field 字段
+     * @param string $exp (default: '=') 运算符
+     * @param string $param (default: '') 参数
+     * @param string $value (default: '') 值
+     * @return sql 语句
+     */
+    private function whereProcess($field, $exp = '=', $param = '', $value = '') {
         $_str_where = '';
 
         $_str_param = $field;
@@ -611,7 +820,17 @@ class Mysql {
     }
 
 
-    private function buildWhereSub($where, $exp = '=', $param = '', $value = '') {
+    /** 处理 where 子语句
+     * whereProcessSub function.
+     *
+     * @access private
+     * @param mixed $field 字段
+     * @param string $exp (default: '=') 运算符
+     * @param string $param (default: '') 参数
+     * @param string $value (default: '') 值
+     * @return sql 语句
+     */
+    private function whereProcessSub($where, $exp = '=', $param = '', $value = '') {
         $_str_where     = '';
         $_arr_condition = array();
 
@@ -627,7 +846,7 @@ class Mysql {
             $_str_logic = $this->inArrayProcess($_str_logic, 'logic');
 
             foreach ($_arr_where as $_key=>$_value) {
-                $_arr_condition[] = $this->buildWhere($_value, $exp, $param, $value);
+                $_arr_condition[] = $this->whereProcess($_value, $exp, $param, $value);
             }
 
             $_str_where = '(' . implode(' ' . $_str_logic . ' ', $_arr_condition) . ')';
@@ -637,7 +856,15 @@ class Mysql {
     }
 
 
-    private function buildOrder($field, $type = 'ASC') {
+    /** 排序语句处理
+     * orderProcess function.
+     *
+     * @access private
+     * @param mixed $field 字段
+     * @param string $type (default: 'ASC') 排序类型
+     * @return sql 语句
+     */
+    private function orderProcess($field, $type = 'ASC') {
         $_str_order = '';
 
         if (Func::isEmpty($type)) {
@@ -656,7 +883,20 @@ class Mysql {
     }
 
 
-    private function buildBind($bind, $value, $from = '', $param = '', $type = '', $exp = '', $return = array()) {
+    /** 绑定处理
+     * bindProcess function.
+     *
+     * @access private
+     * @param mixed $bind 绑定
+     * @param mixed $value 值
+     * @param string $from (default: '') 来源
+     * @param string $param (default: '') 参数
+     * @param string $type (default: '') 参数类型
+     * @param string $exp (default: '') 运算符
+     * @param array $return (default: array()) 返回值 (用于递归)
+     * @return void
+     */
+    private function bindProcess($bind, $value, $from = '', $param = '', $type = '', $exp = '', $return = array()) {
         /*print_r('bind: ');
         print_r($bind);
         print_r(PHP_EOL);
@@ -713,31 +953,37 @@ class Mysql {
     }
 
 
+    /** 是否特殊绑定
+     * isSpecBind function.
+     *
+     * @access private
+     * @param mixed $value 值
+     * @param mixed $exp 运算符
+     * @return void
+     */
     private function isSpecBind($value, $exp) {
         $_arr_specExp = array('IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN');
 
         return is_array($value) && in_array($exp, $_arr_specExp);
     }
 
-    //绑定参数名处理
+
+    /** 绑定参数名处理
+     * paramChar function.
+     *
+     * @access private
+     * @param mixed $param 参数
+     * @param bool $is_sql (default: true) 是否为 sql 命令
+     * @param string $from (default: '')
+     * @return void
+     */
     private function paramChar($param, $is_sql = true, $from = '') {
-        if ($is_sql) {
+        if ($is_sql) { // 如果不是 sql, 而是参数, 则加上前缀
             $param = ':' . $param;
         }
 
         $param .= '_' . $from . '__';
 
         return $param;
-    }
-
-    private function configProcess() {
-        isset($this->dbconfig['host']) or $this->dbconfig['host'] = 'localhost';
-        isset($this->dbconfig['name']) or $this->dbconfig['name'] = '';
-        isset($this->dbconfig['user']) or $this->dbconfig['user'] = '';
-        isset($this->dbconfig['pass']) or $this->dbconfig['pass'] = '';
-        isset($this->dbconfig['charset']) or $this->dbconfig['charset'] = 'utf8';
-        isset($this->dbconfig['prefix']) or $this->dbconfig['prefix'] = '';
-        isset($this->dbconfig['debug']) or $this->dbconfig['debug'] = false;
-        isset($this->dbconfig['port']) or $this->dbconfig['port'] = 3306;
     }
 }

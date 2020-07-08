@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
@@ -14,7 +14,7 @@ return array(
     'Close'                                     => '关闭',
     'Send'                                      => '发送',
     'Sending'                                   => '正在发送 ...',
-    'Key word'                                  => '关键词',
+    'Keyword'                                  => '关键词',
     'Bulk'                                      => '群发',
     'To'                                        => '至',
     'Reset'                                     => '清除',
@@ -49,7 +49,7 @@ return array(
     'Sender'                                    => '发件人',
     'Recipient'                                 => '收件人',
     'Recipient not found'                       => '收件人不存在',
-    'Unknown'                                    => '未知',
+    'Unknown'                                   => '未知',
     'Apply'                                     => '提交',
     'Delete'                                    => '删除',
     'Action'                                    => '操作',
@@ -74,6 +74,7 @@ return array(
     'You do not have permission'                => '您没有权限',
     'Successfully deleted {:count} messages'    => '成功删除 {:count} 条短信',
     'No message have been deleted'              => '未删除任何短信',
+    'No eligible recipients'                    => '没有符合条件的收件人',
     '{:attr} require'                           => '{:attr} 是必需的',
     'Size of {:attr} must be {:rule}'           => '{:attr} 的长度必须在 {:rule} 之间',
     '{:attr} must be integer'                   => '{:attr} 必须是整数',

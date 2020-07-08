@@ -12,7 +12,7 @@ use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Plugin;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 class User extends Ctrl {
@@ -35,7 +35,7 @@ class User extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x010301');
         }
 
@@ -76,7 +76,7 @@ class User extends Ctrl {
             return $this->error($_mix_init['msg'], $_mix_init['rcode']);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['browse']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['browse']) && !$this->isSuper) { //判断权限
             return $this->error('You do not have permission', 'x010301');
         }
 
@@ -155,7 +155,7 @@ class User extends Ctrl {
         //print_r($_num_userId);
 
         if ($_num_userId > 0) {
-            if (!isset($this->adminLogged['admin_allow']['user']['edit']) && !$this->isSuper) { //判断权限
+            if (!isset($this->adminAllow['user']['edit']) && !$this->isSuper) { //判断权限
                 return $this->error('You do not have permission', 'x010303');
             }
 
@@ -165,7 +165,7 @@ class User extends Ctrl {
                 return $this->error($_arr_userRow['msg'], $_arr_userRow['rcode']);
             }
         } else {
-            if (!isset($this->adminLogged['admin_allow']['user']['add']) && !$this->isSuper) { //判断权限
+            if (!isset($this->adminAllow['user']['add']) && !$this->isSuper) { //判断权限
                 return $this->error('You do not have permission', 'x010302');
             }
 
@@ -214,7 +214,7 @@ class User extends Ctrl {
         }
 
         if ($_arr_inputSubmit['user_id'] > 0) {
-            if (!isset($this->adminLogged['admin_allow']['user']['edit']) && !$this->isSuper) {
+            if (!isset($this->adminAllow['user']['edit']) && !$this->isSuper) {
                 return $this->fetchJson('You do not have permission', 'x010303');
             }
 
@@ -224,7 +224,7 @@ class User extends Ctrl {
                 $this->mdl_user->inputSubmit['user_rand']   = $_str_rand;
             }
         } else {
-            if (!isset($this->adminLogged['admin_allow']['user']['add']) && !$this->isSuper) {
+            if (!isset($this->adminAllow['user']['add']) && !$this->isSuper) {
                 return $this->fetchJson('You do not have permission', 'x010302');
             }
 
@@ -251,7 +251,7 @@ class User extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['edit']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['edit']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x010303');
         }
 
@@ -289,7 +289,7 @@ class User extends Ctrl {
             return $this->fetchJson('Access denied', '', 405);
         }
 
-        if (!isset($this->adminLogged['admin_allow']['user']['delete']) && !$this->isSuper) { //判断权限
+        if (!isset($this->adminAllow['user']['delete']) && !$this->isSuper) { //判断权限
             return $this->fetchJson('You do not have permission', 'x010304');
         }
 

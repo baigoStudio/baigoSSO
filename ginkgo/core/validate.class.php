@@ -8,25 +8,26 @@ namespace ginkgo;
 
 use ginkgo\validate\Rule;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
+// 验证
 class Validate {
 
-    protected static $instance;
-    private $message        = array();
+    public $delimiter       = ' - '; // 范围符号
+    protected static $instance; // 当前实例
+    protected $rule         = array(); // 验证规则
+    protected $data         = array(); // 待验证数据
+    protected $attrName     = array(); // 字段名称
+    protected $scene        = array(); // 场景
+    protected $only         = array(); // 仅验证指定字段
+    protected $remove       = array(); // 移除规则
+    protected $append       = array(); // 追加规则
+    protected $currentScene = null; // 当前场景
 
-    protected $rule         = array();
-    protected $data         = array();
-    protected $attrName     = array();
-    protected $scene        = array();
-    protected $only         = array();
-    protected $remove       = array();
-    protected $append       = array();
-    protected $delimiter    = ' - ';
+    private $message        = array(); // 验证消息
 
-    protected $currentScene = null;
-
+    // 规则别名
     private $alias = array(
         '>'         => 'gt',
         '>='        => 'egt',
@@ -38,7 +39,8 @@ class Validate {
         '<>'        => 'neq',
     );
 
-    //验证规则默认提示信息
+
+    // 默认提示信息 (类型验证)
     protected $typeMsg = array(
         'require'           => '{:attr} require',
         'confirm'           => '{:attr} out of accord with {:confirm}',
@@ -70,6 +72,8 @@ class Validate {
         'captcha'           => 'Captcha is incorrect',
     );
 
+
+    // 默认提示信息 (格式验证)
     protected $formatMsg = array(
         'number'            => '{:attr} must be numeric',
         'int'               => '{:attr} must be integer',
@@ -91,16 +95,29 @@ class Validate {
         'ip'                => '{:attr} not a valid ip',
     );
 
+    /** 构造函数
+     * __construct function.
+     *
+     * @access public
+     * @return void
+     */
     public function __construct() {
         $this->obj_lang = Lang::instance();
 
-        $this->v_init();
+        $this->v_init(); // 验证类初始化
     }
 
     protected function __clone() {
 
     }
 
+    /** 实例化
+     * instance function.
+     *
+     * @access public
+     * @static
+     * @return 当前类的实例
+     */
     public static function instance() {
         if (Func::isEmpty(static::$instance)) {
             static::$instance = new static();
@@ -108,10 +125,19 @@ class Validate {
         return static::$instance;
     }
 
+    // 验证器初始化
     protected function v_init() {
 
     }
 
+    /** 设置规则
+     * rule function.
+     *
+     * @access public
+     * @param mixed $rule 规则
+     * @param string $value (default: '') 值
+     * @return void
+     */
     function rule($rule, $value = '') {
         if (is_array($rule)) {
             $this->rule = array_replace_recursive($this->rule, $rule);
@@ -120,6 +146,14 @@ class Validate {
         }
     }
 
+    /** 设置场景
+     * setScene function.
+     *
+     * @access public
+     * @param mixed $scene 场景
+     * @param array $value (default: array()) 值
+     * @return void
+     */
     function setScene($scene, $value = array()) {
         if (is_array($scene)) {
             $this->scene = array_replace_recursive($this->scene, $scene);
@@ -128,6 +162,14 @@ class Validate {
         }
     }
 
+    /** 设置类型消息
+     * setTypeMsg function.
+     *
+     * @access public
+     * @param mixed $msg 消息
+     * @param string $value (default: '') 值
+     * @return void
+     */
     function setTypeMsg($msg, $value = '') {
         if (is_array($msg)) {
             $this->typeMsg = array_replace_recursive($this->typeMsg, $msg);
@@ -136,6 +178,14 @@ class Validate {
         }
     }
 
+    /** 设置格式消息
+     * setFormatMsg function.
+     *
+     * @access public
+     * @param mixed $msg 消息
+     * @param string $value (default: '') 值
+     * @return void
+     */
     function setFormatMsg($msg, $value = '') {
         if (is_array($msg)) {
             $this->formatMsg = array_replace_recursive($this->formatMsg, $msg);
@@ -144,6 +194,14 @@ class Validate {
         }
     }
 
+    /** 设置字段名
+     * setAttrName function.
+     *
+     * @access public
+     * @param mixed $attr 字段
+     * @param string $value (default: '') 值
+     * @return void
+     */
     function setAttrName($attr, $value = '') {
         if (is_array($attr)) {
             $this->attrName = array_replace_recursive($this->attrName, $attr);
@@ -152,25 +210,32 @@ class Validate {
         }
     }
 
+    /** 验证
+     * verify function.
+     *
+     * @access public
+     * @param array $data (default: array()) 待验证数据
+     * @return bool
+     */
     function verify($data = array()) {
         $_bool_return   = true;
         $_num_err       = 0;
 
         $this->data     = $data;
 
-        $_arr_rule = $this->getRule();
+        $_arr_rule      = $this->getRule(); // 获取规则
 
         if (!Func::isEmpty($_arr_rule)) {
-            foreach ($_arr_rule as $_key=>$_value) {
-                if (!isset($data[$_key])) {
-                    $data[$_key]       = '';
+            foreach ($_arr_rule as $_key=>$_value) { // 遍历规则
+                if (!isset($data[$_key])) { // 数据中没有规则中定义的数据
+                    $data[$_key]       = ''; // 补全
                     $this->data[$_key] = '';
                 }
 
-                if (is_array($data[$_key])) {
-                    //$data[$_key]       = implode(',', $data[$_key]);
-                    $data[$_key] = Json::encode($data[$_key]);
-                    $this->data[$_key] = $data[$_key];
+                if (is_array($data[$_key])) { // 如果数据为数组
+                    //$data[$_key]      = implode(',', $data[$_key]);
+                    $data[$_key]        = Json::encode($data[$_key]);
+                    $this->data[$_key]  = $data[$_key];
                 }
 
                 /*print_r($_key);
@@ -178,21 +243,28 @@ class Validate {
                 print_r($data[$_key]);
                 print_r(PHP_EOL);*/
 
-                $_num_errCheck  = $this->check($data[$_key], $_value, $_key);
-                if ($_num_errCheck > 0) {
+                $_num_errCheck  = $this->check($data[$_key], $_value, $_key); // 验证
+                if ($_num_errCheck > 0) { // 错误计数
                     $_num_err = $_num_err + $_num_errCheck;
                 }
             }
         }
 
         if ($_num_err > 0) {
-            $_bool_return   = false;
+            $_bool_return = false; // 计算大于 0, 验证失败
         }
 
         return $_bool_return;
     }
 
 
+    /** 设置当前场景
+     * scene function.
+     *
+     * @access public
+     * @param mixed $scene 场景名
+     * @return 当前实例
+     */
     public function scene($scene) {
         // 设置当前场景
         $this->currentScene = $scene;
@@ -200,6 +272,13 @@ class Validate {
         return $this;
     }
 
+    /** 设置仅验证字段
+     * only function.
+     *
+     * @access public
+     * @param mixed $fields 字段名
+     * @return 当前实例
+     */
     public function only($fields) {
         if (is_array($field)) {
             $this->only = $fields;
@@ -208,12 +287,12 @@ class Validate {
         return $this;
     }
 
-    /**
-     * 移除某个字段的验证规则
+    /** 移除规则
+     * remove function.
+     *
      * @access public
-     * @param  string|array  $field  字段名
-     * @param  mixed         $rule   验证规则 null 移除所有规则
-     * @return $this
+     * @param mixed $field 字段
+     * @return void
      */
     public function remove($field) {
         if (is_array($field)) {
@@ -225,12 +304,13 @@ class Validate {
         return $this;
     }
 
-    /**
-     * 追加某个字段的验证规则
+    /** 追加规则
+     * append function.
+     *
      * @access public
-     * @param  string|array  $field  字段名
-     * @param  mixed         $rule   验证规则
-     * @return $this
+     * @param mixed $field 字段
+     * @param string $rule (default: '') 规则
+     * @return void
      */
     public function append($field, $rule = '') {
         if (is_array($field)) {
@@ -243,12 +323,110 @@ class Validate {
     }
 
 
+
+    /** 直接验证
+     * is function.
+     *
+     * @access public
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @return bool
+     */
+    public function is($value, $rule) {
+        $_bool_return = false;
+
+        if (isset($this->formatMsg[$rule])) { // 有效类型
+            $_arr_rule = array(
+                'type' => $rule,
+            );
+            $_bool_return = $this->checkItem($value, $_arr_rule); // 验证单个项目
+        }
+
+        return $_bool_return;
+    }
+
+
+    /** 获取消息
+     * getMessage function.
+     *
+     * @access public
+     * @return void
+     */
+    public function getMessage() {
+        return $this->message;
+    }
+
+
+    /** 魔术静态调用
+     * __callStatic function.
+     *
+     * @access public
+     * @static
+     * @param mixed $method 方法名
+     * @param mixed $params 参数
+     * @return void
+     */
+    public static function __callStatic($method, $params) {
+        $_class = self::instance();
+        if (method_exists('Rule', $method)) {
+            return call_user_func_array('ginkgo\validate\Rule::' . Func::toHump($method, '_', true), $params);
+        } else {
+            $_obj_excpt = new Exception('Method not found', 500);
+            $_obj_excpt->setData('err_detail', __CLASS__ . '->' . $method);
+
+            throw $_obj_excpt;
+        }
+    }
+
+
+    /** 验证表单令牌
+     * token function.
+     *
+     * @access public
+     * @param mixed $value
+     * @param string $rule (default: '__token__')
+     * @return void
+     */
+    private function token($value, $rule = '__token__') {
+        return Session::get($rule) === $value;
+    }
+
+    /** 验证码
+     * captcha function.
+     *
+     * @access public
+     * @param mixed $value
+     * @return void
+     */
+    private function captcha($value, $id = '') {
+        $_obj_captcha = Captcha::instance();
+
+        /*print_r('value: ');
+        print_r($value);
+        print_r('<br>id: ');
+        print_r($id);*/
+
+        return $_obj_captcha->check($value, $id);
+    }
+
+
+    /** 验证
+     * check function.
+     *
+     * @access private
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @param string $key (default: '') 名称
+     * @return 错误数
+     */
     private function check($value, $rule, $key = '') {
         $_num_err   = 0;
-        $_arr_rule  = $this->parseRule($rule);
+        $_arr_rule  = $this->parseRule($rule); // 解析规则
+
+        //print_r($_arr_rule);
 
         if (!Func::isEmpty($_arr_rule)) {
-            foreach ($_arr_rule as $_key_item=>$_value_item) {
+            foreach ($_arr_rule as $_key_item=>$_value_item) { // 遍历单个规则
                 /*print_r('key: ' . $key);
                 print_r(' --- ');
                 print_r('value: ' . $value);
@@ -259,7 +437,7 @@ class Validate {
                 print_r(PHP_EOL);*/
 
                 if (isset($_value_item['type']) && isset($_value_item['rule'])) {
-                    if (!$this->checkItem($value, $_value_item, $key)) {
+                    if (!$this->checkItem($value, $_value_item, $key)) { // 验证单个项目
                         ++$_num_err;
                     }
                 }
@@ -270,200 +448,15 @@ class Validate {
     }
 
 
-    private function parseRule($rule) { //验证规则是否有效
-        $_arr_ruleReturn    = array();
-
-        foreach ($rule as $_key=>$_value) {
-            if (isset($this->alias[$_key])) {
-                $_key = $this->alias[$_key];
-            }
-
-            if (isset($this->typeMsg[$_key])) {
-                switch ($_key) {
-                    case 'token':
-                        $_arr_ruleReturn[$_key]['type']    = $_key;
-                        if (is_string($_value)) {
-                            $_arr_ruleReturn[$_key]['rule']    = $_value;
-                        } else {
-                            $_arr_ruleReturn[$_key]['rule']    = '__token__';
-                        }
-
-                    break;
-
-                    case 'require':
-                        if ($_value === true || $_value == 'true') {
-                            $_arr_ruleReturn[$_key] = array(
-                                'type' => $_key,
-                                'rule' => 1,
-                            );
-                        }
-                    break;
-
-                    case 'length':
-                    case 'between':
-                    case 'not_between':
-                    case 'expire':
-                        if (!Func::isEmpty($_value) && strpos($_value, ',')) {
-                            $_arr_ruleReturn[$_key] = array(
-                                'type' => $_key,
-                                'rule' => $_value,
-                            );
-                        }
-                    break;
-
-                    case 'min':
-                    case 'max':
-                    case 'in':
-                    case 'not_in':
-                    case 'egt':
-                    case 'gt':
-                    case 'elt':
-                    case 'lt':
-                    case 'eq':
-                    case 'neq':
-                    case 'before':
-                    case 'after':
-                    case 'filter':
-                    case 'regex':
-                    case 'captcha':
-                        if (!Func::isEmpty($_value)) {
-                            $_arr_ruleReturn[$_key] = array(
-                                'type' => $_key,
-                                'rule' => $_value,
-                            );
-                        }
-                    break;
-
-                    case 'date_format':
-                    case 'time_format':
-                    case 'date_time_format':
-                        $_str_format = $this->getRuleDate($_key);
-
-                        if (!Func::isEmpty($_value)) {
-                            $_str_format = $_value;
-                        }
-
-                        $_arr_ruleReturn[$_key] = array(
-                            'type' => $_key,
-                            'rule' => $_str_format,
-                        );
-                    break;
-
-                    case 'format':
-                        if (isset($this->formatMsg[$_value])) {
-                            $_arr_ruleReturn[$_key] = array(
-                                'type' => $_key,
-                                'rule' => $_value,
-                            );
-                        }
-                    break;
-
-                    default:
-                        $_arr_ruleReturn[$_key]['type']    = $_key;
-                        if (is_string($_value)) {
-                            $_arr_ruleReturn[$_key]['rule']    = $_value;
-                        } else {
-                            $_arr_ruleReturn[$_key]['rule']    = 1;
-                        }
-                    break;
-                }
-            }
-        }
-
-        //print_r($_arr_ruleReturn);
-
-        return $_arr_ruleReturn;
-    }
-
-
-    private function getRule() {
-        $_arr_rule = array();
-
-        if (Func::isEmpty($this->currentScene)) {
-            $_arr_rule = $this->rule;
-        } else {
-            if (isset($this->scene[$this->currentScene]) && !Func::isEmpty($this->scene[$this->currentScene])) {
-                foreach ($this->scene[$this->currentScene] as $_key=>$_value) {
-                    if (is_numeric($_key)) {
-                        if (isset($this->rule[$_value])) {
-                            $_arr_rule[$_value] = $this->rule[$_value];
-                        }
-                    } else {
-                        if (isset($this->rule[$_key])) {
-                            $_arr_rule[$_key] = $this->rule[$_key];
-                        } else if (is_array($_value)) {
-                            $_arr_rule[$_key] = $_value;
-                        }
-                    }
-                }
-            } else {
-                $_arr_rule = $this->rule;
-            }
-        }
-
-        if (!Func::isEmpty($this->only)) {
-            $_arr_only = array();
-
-            foreach ($this->only as $_key=>$_value) {
-                if (isset($_arr_rule[$_value])) {
-                    $_arr_only[$_value] = $_arr_rule[$_value];
-                }
-            }
-
-            if (!Func::isEmpty($_arr_only)) {
-                $_arr_rule = $_arr_only;
-            }
-        } else if (!Func::isEmpty($this->remove)) {
-            foreach ($this->remove as $_key=>$_value) {
-                if (isset($_arr_rule[$_value])) {
-                    unset($_arr_rule[$_value]);
-                }
-            }
-        } else if (!Func::isEmpty($this->append)) {
-            foreach ($this->append as $_key=>$_value) {
-                if (!isset($_arr_rule[$_key])) {
-                    $_arr_rule[$_key] = $_value;
-                }
-            }
-        }
-
-        return $_arr_rule;
-    }
-
-
-    private function getRuleDate($rule) { //验证规则是否有效
-        $_str_format = '';
-
-        switch ($rule) {
-            case 'date_format':
-                $_str_format = 'Y-m-d';
-            break;
-
-            case 'time_format':
-                $_str_format = 'H:i:s';
-            break;
-
-            case 'date_time_format':
-                $_str_format = 'Y-m-d H:i:s';
-            break;
-        }
-
-        return $_str_format;
-    }
-
-    public function is($value, $rule) {
-        $_bool_return = false;
-
-        if (isset($this->formatMsg[$rule])) {
-            $_arr_rule = array(
-                'type' => $rule,
-            );
-            $_bool_return = $this->checkItem($value, $_arr_rule);
-        }
-
-        return $_bool_return;
-    }
-
+    /** 验证单个项目
+     * checkItem function.
+     *
+     * @access private
+     * @param mixed $value 待验证值
+     * @param mixed $rule 规则
+     * @param string $key (default: '') 名称
+     * @return void
+     */
     private function checkItem($value, $rule, $key = '') {
         $_bool_return = false;
 
@@ -505,11 +498,11 @@ class Validate {
             break;
 
             case 'token':
-                $_bool_return = $this->token($value, $rule['rule']);
+                $_bool_return = $this->token($value, $rule['rule']); // 表单令牌
             break;
 
             case 'captcha':
-                $_bool_return = $this->captcha($value);
+                $_bool_return = $this->captcha($value, $rule['rule']); // 验证码
             break;
 
             case 'accepted':
@@ -535,7 +528,7 @@ class Validate {
                 print_r('value: ' . $value . ' -- ');
                 print_r('rule: ' . $_str_rule . ' -- ');*/
 
-                $_bool_return = $this->confirm($value, $_str_rule);
+                $_bool_return = $this->confirm($value, $_str_rule); // 确认输入
             break;
 
             case 'different':
@@ -636,44 +629,44 @@ class Validate {
         }
 
         if (!$_bool_return) {
-            $_str_msg       = 'unknown';
-            $_str_field     = $key;
-            $_str_confirm   = $key;
-            $_str_different = $key;
+            $_str_msg       = 'unknown'; // 错误消息
+            $_str_field     = $key; // 字段名
+            $_str_confirm   = $key; // 确认字段名
+            $_str_different = $key; // 不同字段名
 
             if ($rule['type'] == 'format') {
                 if (isset($this->formatMsg[$rule['rule']])) {
-                    $_str_msg = $this->formatMsg[$rule['rule']];
+                    $_str_msg = $this->formatMsg[$rule['rule']]; // 设置格式验证消息
                 }
             } else {
                 if (isset($this->typeMsg[$rule['type']])) {
-                    $_str_msg = $this->typeMsg[$rule['type']];
+                    $_str_msg = $this->typeMsg[$rule['type']]; // 设置类型验证消息
                 }
             }
 
             if (isset($this->attrName[$key])) {
-                $_str_field = $this->attrName[$key];
+                $_str_field = $this->attrName[$key]; // 设置字段名
             }
 
             if (isset($this->attrName[$rule['rule']])) {
-                $_str_confirm   = $this->attrName[$rule['rule']];
-                $_str_different = $this->attrName[$rule['rule']];
+                $_str_confirm   = $this->attrName[$rule['rule']]; // 设置确认字段名
+                $_str_different = $this->attrName[$rule['rule']]; // 设置不同字段名
             }
 
             switch ($rule['type']) {
                 case 'length':
                 case 'between':
                 case 'not_between':
-                    $rule['rule'] = str_ireplace(',', $this->delimiter, $rule['rule']);
+                    $rule['rule'] = str_replace(',', $this->delimiter, $rule['rule']); // 替换范围符号
                 break;
             }
 
-            $_str_msg = str_ireplace('{:attr}', $_str_field, $_str_msg);
-            $_str_msg = str_ireplace('{:rule}', $rule['rule'], $_str_msg);
-            $_str_msg = str_ireplace('{:confirm}', $_str_confirm, $_str_msg);
-            $_str_msg = str_ireplace('{:different}', $_str_different, $_str_msg);
+            $_str_msg = str_ireplace('{:attr}', $_str_field, $_str_msg); // 替换字段名
+            $_str_msg = str_ireplace('{:rule}', $rule['rule'], $_str_msg); // 替换规则
+            $_str_msg = str_ireplace('{:confirm}', $_str_confirm, $_str_msg); // 替换确认字段名
+            $_str_msg = str_ireplace('{:different}', $_str_different, $_str_msg); // 替换不同字段名
 
-            $this->message[$key] = $_str_msg;
+            $this->message[$key] = $_str_msg; // 设置消息
         }
 
         /*print_r($rule['type']);
@@ -686,6 +679,15 @@ class Validate {
         return $_bool_return;
     }
 
+    /** 比较值是否相同
+     * confirm function.
+     *
+     * @access protected
+     * @param mixed $value 值
+     * @param mixed $rule 规则
+     * @param bool $is_different (default: false) 是否不同
+     * @return void
+     */
     protected function confirm($value, $rule, $is_different = false) {
         /*print_r('data[$rule]: ');
         print_r($this->data);
@@ -699,30 +701,208 @@ class Validate {
         }
     }
 
-    function token($value, $rule = '__token__') {
-        return Session::get($rule) === $value;
-    }
 
-    function captcha($value) {
-        $_obj_captcha = Captcha::instance();
+    /** 解析规则
+     * parseRule function.
+     *
+     * @access private
+     * @param mixed $rule 规则
+     * @return 解析后的规则
+     */
+    private function parseRule($rule) {
+        $_arr_ruleReturn    = array();
 
-        return $_obj_captcha->check($value);
-    }
+        foreach ($rule as $_key=>$_value) {
+            if (isset($this->alias[$_key])) { // 到规则别名数组中过滤一遍
+                $_key = $this->alias[$_key];
+            }
 
-    public function getMessage() {
-        return $this->message;
-    }
+            if (isset($this->typeMsg[$_key])) { // 有效类型
+                switch ($_key) {
+                    case 'token': // 表单令牌
+                        $_arr_ruleReturn[$_key]['type']    = $_key;
+                        if (is_string($_value)) {
+                            $_arr_ruleReturn[$_key]['rule']    = $_value;
+                        } else {
+                            $_arr_ruleReturn[$_key]['rule']    = '__token__';
+                        }
+                    break;
 
+                    case 'captcha': // 验证码
+                        $_arr_ruleReturn[$_key]['type']    = $_key;
+                        if (is_string($_value)) {
+                            $_arr_ruleReturn[$_key]['rule']    = $_value;
+                        } else {
+                            $_arr_ruleReturn[$_key]['rule']    = '';
+                        }
+                    break;
 
-    public static function __callStatic($method, $params) {
-        $_class = self::instance();
-        if (method_exists('Rule', $method)) {
-            return call_user_func_array('ginkgo\validate\Rule::' . Func::toHump($method, '_', true), $params);
-        } else {
-            $_obj_excpt = new Exception('Method not found', 500);
-            $_obj_excpt->setData('err_detail', __CLASS__ . '->' . $method);
+                    case 'require':
+                        if ($_value === true || $_value === 'true') {
+                            $_arr_ruleReturn[$_key] = array(
+                                'type' => $_key,
+                                'rule' => 1,
+                            );
+                        }
+                    break;
 
-            throw $_obj_excpt;
+                    case 'length':
+                    case 'between':
+                    case 'not_between':
+                    case 'expire':
+                        if (!Func::isEmpty($_value) && strpos($_value, ',')) {
+                            $_arr_ruleReturn[$_key] = array(
+                                'type' => $_key,
+                                'rule' => $_value,
+                            );
+                        }
+                    break;
+
+                    case 'min':
+                    case 'max':
+                    case 'in':
+                    case 'not_in':
+                    case 'egt':
+                    case 'gt':
+                    case 'elt':
+                    case 'lt':
+                    case 'eq':
+                    case 'neq':
+                    case 'before':
+                    case 'after':
+                    case 'filter':
+                    case 'regex':
+                        if (!Func::isEmpty($_value)) {
+                            $_arr_ruleReturn[$_key] = array(
+                                'type' => $_key,
+                                'rule' => $_value,
+                            );
+                        }
+                    break;
+
+                    case 'date_format':
+                    case 'time_format':
+                    case 'date_time_format':
+                        $_str_format = $this->getRuleDate($_key); // 取得日期规则
+
+                        if (!Func::isEmpty($_value)) {
+                            $_str_format = $_value;
+                        }
+
+                        $_arr_ruleReturn[$_key] = array(
+                            'type' => $_key,
+                            'rule' => $_str_format,
+                        );
+                    break;
+
+                    case 'format':
+                        if (isset($this->formatMsg[$_value])) {
+                            $_arr_ruleReturn[$_key] = array(
+                                'type' => $_key,
+                                'rule' => $_value,
+                            );
+                        }
+                    break;
+
+                    default:
+                        $_arr_ruleReturn[$_key]['type']    = $_key;
+                        if (is_string($_value)) {
+                            $_arr_ruleReturn[$_key]['rule']    = $_value;
+                        } else {
+                            $_arr_ruleReturn[$_key]['rule']    = 1;
+                        }
+                    break;
+                }
+            }
         }
+
+        //print_r($_arr_ruleReturn);
+
+        return $_arr_ruleReturn;
+    }
+
+
+    /** 取得规则
+     * getRule function.
+     *
+     * @access private
+     * @return void
+     */
+    private function getRule() {
+        $_arr_rule = array();
+
+        if (Func::isEmpty($this->currentScene) || !isset($this->scene[$this->currentScene]) || Func::isEmpty($this->scene[$this->currentScene])) { // 如果没有规定场景, 或规定的场景不存在, 则返回全部规则
+            $_arr_rule = $this->rule;
+        } else {
+            foreach ($this->scene[$this->currentScene] as $_key=>$_value) { // 遍历当前场景下的规则
+                if (is_numeric($_key)) {
+                    if (isset($this->rule[$_value])) {
+                        $_arr_rule[$_value] = $this->rule[$_value];
+                    }
+                } else {
+                    if (isset($this->rule[$_key])) {
+                        $_arr_rule[$_key] = $this->rule[$_key];
+                    } else if (is_array($_value)) {
+                        $_arr_rule[$_key] = $_value;
+                    }
+                }
+            }
+        }
+
+        if (!Func::isEmpty($this->only)) { // 如果规定了仅验证规则, 则取出匹配的规则
+            $_arr_only = array();
+
+            foreach ($this->only as $_key=>$_value) {
+                if (isset($_arr_rule[$_value])) {
+                    $_arr_only[$_value] = $_arr_rule[$_value];
+                }
+            }
+
+            if (!Func::isEmpty($_arr_only)) {
+                $_arr_rule = $_arr_only;
+            }
+        } else if (!Func::isEmpty($this->remove)) { // 移除规则
+            foreach ($this->remove as $_key=>$_value) {
+                if (isset($_arr_rule[$_value])) {
+                    unset($_arr_rule[$_value]);
+                }
+            }
+        } else if (!Func::isEmpty($this->append)) { // 追加规则
+            foreach ($this->append as $_key=>$_value) {
+                if (!isset($_arr_rule[$_key])) {
+                    $_arr_rule[$_key] = $_value;
+                }
+            }
+        }
+
+        return $_arr_rule;
+    }
+
+
+    /** 取得日期规则
+     * getRuleDate function.
+     *
+     * @access private
+     * @param mixed $rule 规则类型
+     * @return 规则
+     */
+    private function getRuleDate($rule) {
+        $_str_format = '';
+
+        switch ($rule) {
+            case 'date_format':
+                $_str_format = 'Y-m-d';
+            break;
+
+            case 'time_format':
+                $_str_format = 'H:i:s';
+            break;
+
+            case 'date_time_format':
+                $_str_format = 'Y-m-d H:i:s';
+            break;
+        }
+
+        return $_str_format;
     }
 }

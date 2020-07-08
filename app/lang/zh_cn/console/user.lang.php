@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
@@ -27,7 +27,7 @@ return array(
     'User'                                                  => '用户',
     'Missing ID'                                            => '无法获取 ID',
     'User not found'                                        => '用户不存在',
-    'Key word'                                              => '关键词',
+    'Keyword'                                              => '关键词',
     'Token'                                                 => '表单令牌',
     'Close'                                                 => '关闭',
     'OK'                                                    => '确定',
@@ -64,7 +64,6 @@ return array(
     'Apply'                                                 => '提交',
     'Bulk actions'                                          => '批量操作',
     'Form token is incorrect'                               => '表单令牌错误',
-    'Please select a status'                                => '请选择状态',
     'Choose at least one item'                              => '至少选择一项',
     'Choose at least one {:attr}'                           => '至少选择一项 {:attr}',
     'Are you sure to delete?'                               => '确认删除吗？此操作不可恢复',

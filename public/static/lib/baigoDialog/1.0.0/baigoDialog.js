@@ -16,8 +16,9 @@ License: http://www.opensource.org/licenses/mit-license.php
                 msg: '.bg-msg',
                 cancel: '.bg-cancel',
                 confirm: '.bg-confirm',
-                btn: '.bg-btn-confirm',
-                ok: '.bg-btn-ok'
+                ok: '.bg-ok',
+                group_confirm: '.bg-group-confirm',
+                group_alert: '.bg-group-alert'
             },
             btn_text: {
                 cancel: 'Cancel',
@@ -31,9 +32,9 @@ License: http://www.opensource.org/licenses/mit-license.php
                             '<p class="bg-msg"></p>' +
                         '</div>' +
                         '<div class="modal-footer">' +
-                            '<button type="button" class="btn btn-outline-secondary btn-sm bg-cancel bg-btn-confirm" data-act="cancel">Cancel</button>' +
-                            '<button type="button" class="btn btn-primary btn-sm bg-confirm bg-btn-confirm" data-act="confirm">Confirm</button>' +
-                            '<button type="button" class="btn btn-primary btn-sm bg-ok bg-btn-ok" data-dismiss="modal">OK</button>' +
+                            '<button type="button" class="btn btn-outline-secondary btn-sm bg-cancel bg-group-confirm" data-act="cancel">Cancel</button>' +
+                            '<button type="button" class="btn btn-primary btn-sm bg-confirm bg-group-confirm" data-act="confirm">Confirm</button>' +
+                            '<button type="button" class="btn btn-primary btn-sm bg-ok bg-group-alert" data-dismiss="modal">OK</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
@@ -55,7 +56,7 @@ License: http://www.opensource.org/licenses/mit-license.php
                 if (typeof msg != 'undefined' && msg.length > 0) {
                     $(opts.selector.modal + ' ' + opts.selector.msg).text(msg);
                 }
-                
+
                 var _option = { backdrop: 'static', show: true };
 
                 $(opts.selector.modal).modal(_option);
@@ -65,15 +66,15 @@ License: http://www.opensource.org/licenses/mit-license.php
         var el = {
             confirm: function(msg, callback) {
                 var _status = true;
-                $(opts.selector.ok).hide();
-                $(opts.selector.btn).show();
+                $(opts.selector.group_alert).hide();
+                $(opts.selector.group_confirm).show();
 
                 if (typeof msg != 'undefined' && msg.length > 0) {
                     process.modalShow(msg);
 
                     if (callback && callback instanceof Function) {
-                        $(opts.selector.modal + ' ' + opts.selector.btn).off('click');
-                        $(opts.selector.modal + ' ' + opts.selector.btn).click(function() {
+                        $(opts.selector.modal + ' ' + opts.selector.group_confirm).off('click');
+                        $(opts.selector.modal + ' ' + opts.selector.group_confirm).click(function() {
                             if ($(this).data('act') == 'confirm') {
                                 callback(true);
                             } else {
@@ -86,10 +87,10 @@ License: http://www.opensource.org/licenses/mit-license.php
                 }
             },
             alert: function (msg) {
-                $(opts.selector.ok).show();
-                $(opts.selector.btn).hide();
+                $(opts.selector.group_alert).show();
+                $(opts.selector.group_confirm).hide();
                 process.modalShow(msg);
-                $(opts.selector.modal + ' ' + opts.selector.btn).click(function() {
+                $(opts.selector.modal + ' ' + opts.selector.group_confirm).click(function() {
                     $(opts.selector.modal).modal('hide');
                 });
             }

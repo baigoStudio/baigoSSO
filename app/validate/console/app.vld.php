@@ -8,7 +8,7 @@ namespace app\validate\console;
 
 use ginkgo\Validate;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/
@@ -102,12 +102,12 @@ class App extends Validate {
         $_arr_attrName = array(
             'app_name'          => $this->obj_lang->get('App name'),
             'app_url_notify'    => $this->obj_lang->get('URL of notifications'),
-            'app_url_sync'      => $this->obj_lang->get('URL of sync login notifications'),
+            'app_url_sync'      => $this->obj_lang->get('URL of sync notifications'),
             'app_ip_allow'      => $this->obj_lang->get('Allowed IPs'),
             'app_ip_bad'        => $this->obj_lang->get('Banned IPs'),
             'app_note'          => $this->obj_lang->get('Note'),
             'app_status'        => $this->obj_lang->get('Status'),
-            'app_sync'          => $this->obj_lang->get('Sync status'),
+            'app_sync'          => $this->obj_lang->get('Sync'),
             '__token__'         => $this->obj_lang->get('Token'),
         );
 

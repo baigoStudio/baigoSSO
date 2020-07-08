@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
@@ -32,6 +32,7 @@ return array(
     'Forgot password'                   => '忘记密码',
     'Redirecting'                       => '正在跳转 ...',
     'Redirect immediately'              => '立刻跳转',
+    'Login successful'                  => '登录成功',
     'Loading'                           => '正在验证',
     'Server side error'                 => '服务器错误',
     '{:attr} require'                   => '{:attr} 是必需的',

@@ -8,7 +8,7 @@ namespace app\validate\personal;
 
 use ginkgo\Validate;
 
-//不能非法包含或直接执行
+// 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------管理员模型-------------*/
@@ -30,12 +30,12 @@ class Forgot extends Validate {
         'captcha_mail' => array(
             'length'    => '4,4',
             'format'    => 'alpha_number',
-            'captcha'   => true,
+            'captcha'   => 'captcha_mail',
         ),
         'captcha_secqa' => array(
             'length'    => '4,4',
             'format'    => 'alpha_number',
-            'captcha'   => true,
+            'captcha'   => 'captcha_secqa',
         ),
         '__token__' => array(
             'require' => true,

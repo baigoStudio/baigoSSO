@@ -9,7 +9,7 @@
 include($cfg['pathInclude'] . 'upgrade_head' . GK_EXT_TPL); ?>
 
     <form name="over_form" id="over_form" action="<?php echo $route_install; ?>upgrade/over-submit/">
-        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
         <div class="alert alert-success">
             <span class="fas fa-check-circle"></span>
             <?php echo $lang->get('Last step, complete the upgrade'); ?>

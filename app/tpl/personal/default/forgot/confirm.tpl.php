@@ -1,7 +1,7 @@
 <?php $cfg = array(
     'title'          => $lang->get('Forgot password'),
     'active'         => 'forgot',
-    'baigoValidate' => 'true',
+    'baigoValidate'  => 'true',
     'baigoSubmit'    => 'true',
     'captchaReload'  => 'true',
     'pathInclude'    => $path_tpl . 'include' . DS,
@@ -28,7 +28,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
             <div class="tab-content">
                 <div class="tab-pane active" id="mail">
                     <form name="forgot_mail" id="forgot_mail" action='<?php echo $route_personal; ?>forgot/bymail/'>
-                        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
                         <div class="form-group">
                             <label><?php echo $lang->get('Username'); ?></label>
@@ -52,7 +52,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                                 <div class="input-group">
                                     <input type="text" name="captcha_mail" id="captcha_mail" class="form-control">
                                     <div class="input-group-append">
-                                        <img src="<?php echo $route_misc; ?>captcha/" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
+                                        <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_mail/" id="captcha_mail_img" class="bg-captcha-img" data-id="captcha_mail" alt="<?php echo $lang->get('Captcha'); ?>">
                                     </div>
                                 </div>
                                 <small class="form-text" id="msg_captcha_mail"></small>
@@ -70,7 +70,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                 </div>
                 <div class="tab-pane" id="secqa">
                     <form name="forgot_secqa" id="forgot_secqa" action='<?php echo $route_personal; ?>forgot/bysecqa/'>
-                        <input type="hidden" name="__token__" value="<?php echo $token; ?>">
+                        <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
                         <div class="form-group">
                             <label><?php echo $lang->get('Username'); ?></label>
@@ -109,7 +109,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                                 <div class="input-group">
                                     <input type="text" name="captcha_secqa" id="captcha_secqa" class="form-control">
                                     <div class="input-group-append">
-                                        <img src="<?php echo $route_misc; ?>captcha/" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
+                                        <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_secqa/" id="captcha_secqa_img" class="bg-captcha-img" data-id="captcha_secqa" alt="<?php echo $lang->get('Captcha'); ?>">
                                     </div>
                                 </div>
                                 <small class="form-text" id="msg_captcha_secqa"></small>
@@ -136,7 +136,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                 format: 'alpha_number',
                 ajax: {
                     key: 'captcha',
-                    url: '<?php echo $route_misc; ?>captcha/check/'
+                    url: '<?php echo $route_misc; ?>captcha/check/id/captcha_mail/'
                 }
             }
         },
@@ -177,7 +177,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                 format: 'alpha_number',
                 ajax: {
                     key: 'captcha',
-                    url: '<?php echo $route_misc; ?>captcha/check/'
+                    url: '<?php echo $route_misc; ?>captcha/check/id/captcha_secqa/'
                 }
             }
         },
