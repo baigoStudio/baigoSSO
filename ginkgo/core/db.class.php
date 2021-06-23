@@ -12,12 +12,12 @@ defined('IN_GINKGO') or exit('Access denied');
 // 数据库类
 class Db {
 
+    public static $config = array();
+
     protected static $instance; // 当前实例
-    private static $isConfig; // 是否已配置标志
 
-    public static $dbconfig = array();
-
-    private static $this_config = array(
+    private static $init; // 是否已初始化标志
+    private static $configThis = array(
         'type'      => 'mysql',
         'host'      => '',
         'name'      => '',
@@ -29,42 +29,33 @@ class Db {
         'port'      => 3306,
     );
 
-    protected function __construct($dbconfig = array()) {
-    }
-
-    protected function __clone() {
-
-    }
 
     /** 连接数据库
      * connect function.
      *
      * @access public
      * @static
-     * @param array $dbconfig (default: array()) 数据库配置
+     * @param array $config (default: array()) 数据库配置
      * @return 数据库实例
      */
-    public static function connect($dbconfig = array()) {
-        if (Func::isEmpty(static::$instance)) {
-
-            if (Func::isEmpty(self::$isConfig)) {
-                self::config($dbconfig); // 数据库配置
+    public static function connect($config = array()) {
+        if (Func::isEmpty(self::$instance)) {
+            if (Func::isEmpty(self::$init)) {
+                self::config($config); // 数据库配置
             }
 
-            if (Func::isEmpty(self::$dbconfig['type'])) { // 假如未指定类型, 则默认为 mysql
-                self::$dbconfig['type'] = 'mysql';
+            if (Func::isEmpty(self::$config['type'])) {
+                self::$config['type'] = String::ucwords(self::$configThis['type']);
             }
 
-            if (strpos(self::$dbconfig['type'], '\\')) {
-                $_class = self::$dbconfig['type'];
+            if (strpos(self::$config['type'], '\\')) {
+                $_class = self::$config['type'];
             } else {
-                $_class = 'ginkgo\\db\\connector\\' . Func::ucwords(self::$dbconfig['type'], '_');
+                $_class = 'ginkgo\\db\\connector\\' . String::ucwords(self::$config['type'], '_');
             }
-
-            //print_r($_class);
 
             if (class_exists($_class)) {
-                static::$instance = $_class::instance(self::$dbconfig); // 实例化数据库驱动
+                self::$instance = $_class::instance(self::$config); // 实例化数据库驱动
             } else {
                 $_obj_excpt = new Exception('Unsupported database type', 500);
 
@@ -74,7 +65,7 @@ class Db {
             }
         }
 
-        return static::$instance;
+        return self::$instance;
     }
 
 
@@ -83,19 +74,29 @@ class Db {
      *
      * @access public
      * @static
-     * @param array $dbconfig (default: array()) 数据库配置
+     * @param array $config (default: array()) 数据库配置
      * @return void
      */
-    public static function config($dbconfig = array()) {
-        $_arr_dbconfig = Config::get('dbconfig'); // 获取数据库配置
+    public static function config($config = array()) {
+        $_arr_config   = Config::get('dbconfig'); // 获取数据库配置
 
-        if (!Func::isEmpty($dbconfig)) { // 假如配置参数不为空, 则采用
-            $_arr_dbconfig = $dbconfig;
+        $_arr_configDo = self::$configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
         }
 
-        self::$dbconfig = array_replace_recursive(self::$this_config, $_arr_dbconfig); // 合并配置
+        if (is_array(self::$config) && !Func::isEmpty(self::$config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, self::$config); // 合并配置
+        }
 
-        self::$isConfig = true; // 标识为已配置
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        self::$config  = $_arr_configDo;
+
+        self::$init    = true; // 标识为已初始化
     }
 
 

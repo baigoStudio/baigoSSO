@@ -7,7 +7,7 @@
 namespace app\model\console;
 
 use app\model\Admin as Admin_Base;
-use ginkgo\Json;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -71,8 +71,8 @@ class Auth extends Admin_Base {
             );
         }
 
-        $_arr_adminData['admin_allow']            = Json::encode($_arr_adminData['admin_allow']);
-        $_arr_adminData['admin_allow_profile']    = Json::encode($_arr_adminData['admin_allow_profile']);
+        $_arr_adminData['admin_allow']            = Arrays::toJson($_arr_adminData['admin_allow']);
+        $_arr_adminData['admin_allow_profile']    = Arrays::toJson($_arr_adminData['admin_allow_profile']);
 
         if ($_arr_adminRow['rcode'] == 'x020102') {
             $_num_adminId   = $this->insert($_arr_adminData);

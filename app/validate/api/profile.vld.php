@@ -7,7 +7,6 @@
 namespace app\validate\api;
 
 use ginkgo\Validate;
-use ginkgo\Config;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -16,11 +15,8 @@ defined('IN_GINKGO') or exit('Access denied');
 class Profile extends Validate {
 
     protected $rule     = array(
-        'user_str' => array(
-            'require' => true,
-        ),
-        'user_by' => array(
-            'in' => 'user_id,user_name,user_mail',
+        'user_id' => array(
+            '>' => 0,
         ),
         'user_pass' => array(
             'require' => true,
@@ -57,8 +53,7 @@ class Profile extends Validate {
 
     protected $scene = array(
         'info' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_pass',
             'user_nick',
             'user_contact',
@@ -71,30 +66,26 @@ class Profile extends Validate {
             'user_extend',
         ),
         'pass' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_pass',
             'user_pass_new',
             'timestamp',
         ),
         'secqa' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_pass',
             'user_sec_ques',
             'user_sec_answ',
             'timestamp',
         ),
         'mailbox' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_pass',
             'user_mail_new',
             'timestamp',
         ),
         'token' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_refresh_token',
             'timestamp',
         ),
@@ -103,7 +94,7 @@ class Profile extends Validate {
     function v_init() { //构造函数
 
         $_arr_attrName = array(
-            'user_str'              => $this->obj_lang->get('User ID, Username or Email'),
+            'user_id'               => $this->obj_lang->get('User ID'),
             'user_pass'             => $this->obj_lang->get('Password'),
             'user_pass_new'         => $this->obj_lang->get('New password'),
             'user_nick'             => $this->obj_lang->get('Nickname'),

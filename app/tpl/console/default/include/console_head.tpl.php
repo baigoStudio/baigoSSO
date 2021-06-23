@@ -92,7 +92,7 @@
                                 </div>
 
                                 <?php foreach ($config['console']['console_mod'] as $key_m=>$value_m) { ?>
-                                    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?> bg-success border-success active<?php } ?>" data-toggle="collapse" href="#bg-collapse-<?php echo $key_m; ?>">
+                                    <a class="list-group-item d-flex justify-content-between align-items-center list-group-item-action<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?> bg-success border-success active<?php } ?>" <?php if (isset($value_m['lists']) && !empty($value_m['lists'])) { ?>data-toggle="collapse" href="#bg-collapse-<?php echo $key_m; ?>"<?php } else { ?>href="<?php echo $route_console, $value_m['main']['ctrl']; ?>/"<?php } ?>>
                                         <span>
                                             <?php if (isset($value_m['main']['icon'])) { ?>
                                                 <span class="fas fa-<?php echo $value_m['main']['icon']; ?> fa-fw"></span>
@@ -101,7 +101,9 @@
                                             echo $lang->get($value_m['main']['title'], 'console.common'); ?>
                                         </span>
 
-                                        <small class="fas fa-chevron-<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?>up<?php } else { ?>down<?php } ?>" id="bg-caret-<?php echo $key_m; ?>"></small>
+                                        <?php if (isset($value_m['lists']) && !empty($value_m['lists'])) { ?>
+                                            <small class="fas fa-chevron-<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?>down<?php } else { ?>right<?php } ?>" id="bg-caret-<?php echo $key_m; ?>"></small>
+                                        <?php } ?>
                                     </a>
 
                                     <div id="bg-collapse-<?php echo $key_m; ?>" data-key="<?php echo $key_m; ?>" class="collapse<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m) { ?> show<?php } ?>" data-parent="#bg-accordion">
@@ -110,11 +112,13 @@
                                             Plugin::listen('action_console_menu_plugin');
                                         }
 
-                                        foreach ($value_m['lists'] as $key_s=>$value_s) { ?>
-                                            <a class="list-group-item<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m && isset($cfg['sub_active']) && $cfg['sub_active'] == $key_s) { ?> list-group-item-success<?php } ?>" href="<?php echo $route_console, $value_s['ctrl']; ?>/<?php echo $value_s['act']; ?>/">
-                                                <?php echo $lang->get($value_s['title'], 'console.common'); ?>
-                                            </a>
-                                        <?php } ?>
+                                        if (isset($value_m['lists']) && !empty($value_m['lists'])) {
+                                            foreach ($value_m['lists'] as $key_s=>$value_s) { ?>
+                                                <a class="list-group-item<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == $key_m && isset($cfg['sub_active']) && $cfg['sub_active'] == $key_s) { ?> list-group-item-success<?php } ?>" href="<?php echo $route_console, $value_s['ctrl']; ?>/<?php echo $value_s['act']; ?>/">
+                                                    <?php echo $lang->get($value_s['title'], 'console.common'); ?>
+                                                </a>
+                                            <?php }
+                                        } ?>
                                     </div>
                                 <?php } ?>
 
@@ -125,7 +129,7 @@
                                         <?php echo $lang->get('System settings', 'console.common'); ?>
                                     </span>
 
-                                    <small class="fas fa-chevron-<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt') { ?>up<?php } else { ?>down<?php } ?>" id="bg-caret-opt"></small>
+                                    <small class="fas fa-chevron-<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt') { ?>down<?php } else { ?>right<?php } ?>" id="bg-caret-opt"></small>
                                 </a>
 
                                 <div id="bg-collapse-opt" data-key="opt" class="collapse<?php if (isset($cfg['menu_active']) && $cfg['menu_active'] == 'opt') { ?> show<?php } ?>" data-parent="#bg-accordion">

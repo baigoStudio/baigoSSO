@@ -7,7 +7,6 @@
 namespace app\validate\api;
 
 use ginkgo\Validate;
-use ginkgo\Config;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -16,11 +15,8 @@ defined('IN_GINKGO') or exit('Access denied');
 class Pm extends Validate {
 
     protected $rule     = array(
-        'user_str' => array(
-            'require' => true,
-        ),
-        'user_by' => array(
-            'in' => 'user_id,user_name,user_mail',
+        'user_id' => array(
+            '>' => 0,
         ),
         'user_access_token' => array(
             'require' => true,
@@ -61,30 +57,26 @@ class Pm extends Validate {
 
     protected $scene = array(
         'lists' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_access_token',
             'pm_type',
             'timestamp',
         ),
         'read' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_access_token',
             'pm_id',
             'timestamp',
         ),
         'status' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_access_token',
             'pm_status',
             'pm_ids',
             'timestamp',
         ),
         'send' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_access_token',
             'pm_to_name',
             'pm_title',
@@ -98,15 +90,13 @@ class Pm extends Validate {
             'pm_content',
         ),
         'delete' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_access_token',
             'pm_ids',
             'timestamp',
         ),
         'check' => array(
-            'user_str',
-            'user_by',
+            'user_id',
             'user_access_token',
             'timestamp',
         ),
@@ -115,7 +105,7 @@ class Pm extends Validate {
     function v_init() { //构造函数
 
         $_arr_attrName = array(
-            'user_str'          => $this->obj_lang->get('User ID, Username or Email'),
+            'user_id'           => $this->obj_lang->get('User ID'),
             'user_access_token' => $this->obj_lang->get('Access token'),
             'pm_type'           => $this->obj_lang->get('Message type'),
             'pm_status'         => $this->obj_lang->get('Message status'),

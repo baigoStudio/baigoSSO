@@ -18,8 +18,8 @@ defined('IN_GINKGO') or exit('Access denied');
 // 重定向响应类
 class Redirect extends Response {
 
-    protected $param; // 参数
-    protected $exclude; // 排除参数
+    public $param; // 参数
+    public $exclude; // 排除参数
 
     /** 记住 url
      * remember function.
@@ -28,7 +28,7 @@ class Redirect extends Response {
      * @param string $url (default: '')
      * @return void
      */
-    function remember($url = '') {
+    public function remember($url = '') {
         if (Func::isEmpty($url)) {
             $url = $this->obj_request->server('REQUEST_URI'); // 未指定参数则取服务器变量
         }
@@ -42,7 +42,7 @@ class Redirect extends Response {
      * @access public
      * @return void
      */
-    function restore() {
+    public function restore() {
         $_str_url = Session::get('__redirect__'); // 从会话读取
         $_str_url = Html::decode($_str_url, 'url');
         $_str_url = rawurldecode($_str_url);
@@ -60,7 +60,7 @@ class Redirect extends Response {
      * @param string $value (default: '')
      * @return void
      */
-    function param($param, $value = '') {
+    public function param($param, $value = '') {
         if (is_array($param)) {
             $this->param = array_param_recursive($this->param, $param);
         } else {
@@ -75,7 +75,7 @@ class Redirect extends Response {
      * @param array $exclude (default: array())
      * @return void
      */
-    function exclude($exclude = array()) {
+    public function exclude($exclude) {
         if (!Func::isEmpty($exclude)) {
             if (is_array($exclude)) {
                 if (Func::isEmpty($this->exclude)) {
@@ -126,5 +126,3 @@ class Redirect extends Response {
         return $_return;
     }
 }
-
-

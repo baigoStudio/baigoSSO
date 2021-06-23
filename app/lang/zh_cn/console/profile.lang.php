@@ -53,6 +53,7 @@ return array(
     '{:attr} out of accord with {:confirm}' => '{:attr} 与 {:confirm} 不一致',
     'Size of {:attr} must be {:rule}'       => '{:attr} 的长度必须在 {:rule} 之间',
     '{:attr} not a valid email address'     => '{:attr} 必须为 Email 地址',
+    'Send verification email failed'        => '发送确认邮件失败',
     'A verification email has been sent to your new mailbox, please verify.' => '已将验证邮件发送至您的新邮箱，请验证。',
     'What is your grandmother&rsquo;s name?'                    => '您祖母叫什么名字？',
     'What is your grandfather&rsquo;s name?'                    => '您祖父叫什么名字？',

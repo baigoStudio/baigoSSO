@@ -5,7 +5,7 @@
             <?php echo $key; ?>
         </span>
     </h5>
-    <?php if (is_array($detail)) {
+    <?php if (is_array($detail) && !empty($detail)) {
         foreach ($detail as $_key=>$_value) {
             if ($_key == 'args') {
                 if (!empty($_value)) { ?>
@@ -17,8 +17,10 @@
                     </div>
                     <div id="trace-collapse-<?php echo $key; ?>" class="collapse" data-parent="#bg-trace-accordion" role="args_detail">
                         <div class="text-break">
-                            <?php foreach($_value as $_key_sub=>$_value_sub) {
-                                listDetail($_value_sub, $_key_sub, 'badge badge-secondary', 'text-muted');
+                            <?php if (is_array($_value) && !empty($_value)) {
+                                foreach($_value as $_key_sub=>$_value_sub) {
+                                    listDetail($_value_sub, $_key_sub, 'badge badge-secondary', 'text-muted');
+                                }
                             } ?>
                         </div>
                     </div>
@@ -73,7 +75,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane active" id="base">
-                        <?php if (isset($trace['base'])) {
+                        <?php if (isset($trace['base']) && !empty($trace['base'])) {
                             foreach($trace['base'] as $key=>$value) { ?>
                                 <div>
                                     <strong><?php echo $key; ?> : </strong>
@@ -83,14 +85,14 @@
                         } ?>
                     </div>
                     <div class="tab-pane" id="backtrace">
-                        <?php if (isset($trace['backtrace'])) {
+                        <?php if (isset($trace['backtrace']) && !empty($trace['backtrace'])) {
                             foreach($trace['backtrace'] as $key=>$value) {
                                 listDetail($value, $key, 'badge badge-primary');
                             }
                         } ?>
                     </div>
                     <div class="tab-pane" id="files">
-                        <?php if (isset($trace['files'])) {
+                        <?php if (isset($trace['files']) && !empty($trace['files'])) {
                             foreach($trace['files'] as $key=>$value) { ?>
                                 <h5>
                                     <span class="badge badge-primary"><?php echo $key; ?></span>
@@ -103,7 +105,7 @@
                         } ?>
                     </div>
                     <div class="tab-pane" id="sql">
-                        <?php if (isset($trace['sql'])) {
+                        <?php if (isset($trace['sql']) && !empty($trace['sql'])) {
                             foreach($trace['sql'] as $key=>$value) { ?>
                                 <h5>
                                     <div class="badge badge-primary"><?php echo $key; ?></span>
@@ -115,7 +117,7 @@
                         } ?>
                     </div>
                     <div class="tab-pane" id="error">
-                        <?php if (isset($trace['error'])) {
+                        <?php if (isset($trace['error']) && !empty($trace['error'])) {
                             foreach($trace['error'] as $key=>$value) {
                                 if (isset($value['err_message'])) { ?>
                                     <div class="text-break">

@@ -11,6 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Plugin;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -50,7 +51,7 @@ class User extends Ctrl {
 
         $_num_userCount = $this->mdl_user->count($_arr_search); //统计记录数
         $_arr_pageRow   = $this->obj_request->pagination($_num_userCount); //取得分页数据
-        $_arr_userRows  = $this->mdl_user->lists($this->config['var_default']['perpage'], $_arr_pageRow['except'], $_arr_search); //列出
+        $_arr_userRows  = $this->mdl_user->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
 
         $_arr_tplData = array(
             'pageRow'    => $_arr_pageRow,
@@ -113,7 +114,7 @@ class User extends Ctrl {
         }
 
         if (!Func::isEmpty($_arr_belongAppIds)) {
-            $_arr_belongAppIds = Func::arrayFilter($_arr_belongAppIds);
+            $_arr_belongAppIds = Arrays::filter($_arr_belongAppIds);
 
             foreach ($_arr_belongAppIds as $_key=>$_value) {
                 $_arr_appRow = $this->mdl_app->read($_value);
@@ -333,8 +334,8 @@ class User extends Ctrl {
 
             if ($_arr_userRow['rcode'] == 'y010102') {
                 $_arr_return = array(
-                    'rcode' => $_arr_userRow['rcode'],
-                    'error' => $this->obj_lang->get('User already exists'),
+                    'rcode'     => $_arr_userRow['rcode'],
+                    'error_msg' => $this->obj_lang->get('User already exists'),
                 );
             }
         }

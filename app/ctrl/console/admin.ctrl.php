@@ -47,7 +47,7 @@ class Admin extends Ctrl {
 
         $_num_adminCount  = $this->mdl_admin->count($_arr_search); //统计记录数
         $_arr_pageRow     = $this->obj_request->pagination($_num_adminCount); //取得分页数据
-        $_arr_adminRows   = $this->mdl_admin->lists($this->config['var_default']['perpage'], $_arr_pageRow['except'], $_arr_search); //列出
+        $_arr_adminRows   = $this->mdl_admin->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
 
         $_arr_tplData = array(
             'pageRow'    => $_arr_pageRow,
@@ -328,13 +328,13 @@ class Admin extends Ctrl {
                 $_arr_adminRow = $this->mdl_admin->check($_arr_userRow['user_id']);
                 if ($_arr_adminRow['rcode'] == 'y020102') {
                     $_arr_return = array(
-                        'rcode' => $_arr_adminRow['rcode'],
-                        'error' => $this->obj_lang->get('Administrator already exists'),
+                        'rcode'     => $_arr_adminRow['rcode'],
+                        'error_msg' => $this->obj_lang->get('Administrator already exists'),
                     );
                 } else {
                     $_arr_return = array(
-                        'rcode' => $_arr_userRow['rcode'],
-                        'error' => $this->obj_lang->get('User already exists, please use authorization as administrator'),
+                        'rcode'     => $_arr_userRow['rcode'],
+                        'error_msg' => $this->obj_lang->get('User already exists, please use authorization as administrator'),
                     );
                 }
             }

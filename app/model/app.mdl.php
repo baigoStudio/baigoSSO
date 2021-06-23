@@ -8,8 +8,8 @@ namespace app\model;
 
 use app\classes\Model;
 use ginkgo\Func;
-use ginkgo\Json;
 use ginkgo\Html;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -25,9 +25,7 @@ class App extends Model {
             'app_id',
         );
 
-        $_arr_appRow = $this->read($mix_app, $str_by, $num_notId, $_arr_select);
-
-        return $_arr_appRow;
+        return $this->readProcess($mix_app, $str_by, $num_notId, $_arr_select);
     }
 
 
@@ -94,11 +92,11 @@ class App extends Model {
      *
      * @access public
      * @param mixed $num_no
-     * @param int $num_except (default: 0)
+     * @param int $num_offset (default: 0)
      * @param array $arr_search (default: array())
      * @return void
      */
-    function lists($num_no, $num_except = 0, $arr_search = array()) {
+    function lists($num_no, $num_offset = 0, $arr_search = array()) {
         $_arr_appSelect = array(
             'app_id',
             'app_key',
@@ -115,7 +113,7 @@ class App extends Model {
 
         $_arr_where = $this->queryProcess($arr_search);
 
-        $_arr_appRows = $this->where($_arr_where)->order('app_id', 'DESC')->limit($num_except, $num_no)->select($_arr_appSelect);
+        $_arr_appRows = $this->where($_arr_where)->order('app_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_appSelect);
 
         foreach ($_arr_appRows as $_key=>$_value) {
             $_arr_appRows[$_key] = $this->rowProcess($_value);
@@ -172,7 +170,7 @@ class App extends Model {
         }
 
         if (isset($arr_search['not_ids']) && !Func::isEmpty($arr_search['not_ids'])) {
-            $arr_search['not_ids'] = Func::arrayFilter($arr_search['not_ids']);
+            $arr_search['not_ids'] = Arrays::filter($arr_search['not_ids']);
             $_arr_where[] = array('app_id', 'NOT IN', $arr_search['not_ids'], 'not_ids');
         }
 
@@ -193,13 +191,13 @@ class App extends Model {
 
     protected function rowProcess($arr_appRow = array()) {
         if (isset($arr_appRow['app_allow'])) {
-            $arr_appRow['app_allow'] = Json::decode($arr_appRow['app_allow']);
+            $arr_appRow['app_allow'] = Arrays::fromJson($arr_appRow['app_allow']);
         } else {
             $arr_appRow['app_allow'] = array();
         }
 
         if (isset($arr_appRow['app_param'])) {
-            $arr_appRow['app_param'] = Json::decode($arr_appRow['app_param']);
+            $arr_appRow['app_param'] = Arrays::fromJson($arr_appRow['app_param']);
         } else {
             $arr_appRow['app_param'] = array();
         }

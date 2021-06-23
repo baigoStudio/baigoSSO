@@ -22,9 +22,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | pm_to | string | true | 接收者用户名，多个接收者请用 <kbd>,</kbd> 分隔。 |
 | pm_title | string | false | 短信标题 |
@@ -66,9 +64,7 @@ GET
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | timestamp | int | true | UNIX 时间戳 |
 
@@ -106,9 +102,7 @@ GET
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | pm_type | string | true | 短信类型，in（收件箱）、out（已发送）。 |
 | pm_status | string | false | 短信状态，wait（未读）、read（已读）。 |
@@ -149,9 +143,7 @@ GET
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | pm_id | int | true | 短信 ID |
 | timestamp | int | true | UNIX 时间戳 |
@@ -218,9 +210,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | pm_ids | string | true | 准备更改状态的短信 ID，多个 ID 请用 <kbd>,</kbd> 分隔。 |
 | pm_status | string | true | 准备更改的短信状态，wait（未读）、read（已读）。 |
@@ -261,9 +251,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | pm_ids | string | true | 准备撤回的短信 ID，多个 ID 请用 <kbd>,</kbd> 分隔，此处的短信 ID 可从已发送短信的 pm_send_id 字段获得。 |
 | timestamp | int | true | UNIX 时间戳 |
@@ -303,9 +291,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | pm_ids | string | true | 准备删除的短信 ID，多个 ID 请用 <kbd>,</kbd> 分隔。 |
 | timestamp | int | true | UNIX 时间戳 |

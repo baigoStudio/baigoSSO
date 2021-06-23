@@ -11,10 +11,11 @@ use PDO;
 use ginkgo\Loader;
 use ginkgo\Config;
 use ginkgo\Func;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Sign;
 use ginkgo\Crypt;
 use ginkgo\Db;
+use ginkgo\File;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -153,7 +154,7 @@ class Install extends Ctrl {
             'timestamp' => GK_NOW,
         );
 
-        $_str_src       = Json::encode($_arr_src);
+        $_str_src       = Arrays::toJson($_arr_src);
 
         $_str_sign      = Sign::make($_str_src, $this->security['key'] . $this->security['secret']);
 
@@ -305,7 +306,7 @@ class Install extends Ctrl {
 
         $_arr_submitResult['timestamp'] = GK_NOW;
 
-        $_str_src       = Json::encode($_arr_submitResult);
+        $_str_src       = Arrays::toJson($_arr_submitResult);
 
         $_str_sign      = Sign::make($_str_src, $this->security['key'] . $this->security['secret']);
 
@@ -366,7 +367,7 @@ class Install extends Ctrl {
 
         $_arr_submitResult['base_url']  = $this->obj_request->baseUrl(true) . 'api/';
 
-        $_str_src       = Json::encode($_arr_submitResult);
+        $_str_src       = Arrays::toJson($_arr_submitResult);
 
         $_str_sign      = Sign::make($_str_src, $this->security['key'] . $this->security['secret']);
 
@@ -439,7 +440,7 @@ class Install extends Ctrl {
                 );
             }
 
-            $_arr_decryptRow = Json::decode($_str_decrypt);
+            $_arr_decryptRow = Arrays::fromJson($_str_decrypt);
         } else {
             if (!Sign::check($_arr_inputCommon['code'], $_arr_inputCommon['sign'], $_arr_inputCommon['key'])) {
                 return array(
@@ -448,7 +449,7 @@ class Install extends Ctrl {
                 );
             }
 
-            $_arr_decryptRow = Json::decode($_arr_inputCommon['code']);
+            $_arr_decryptRow = Arrays::fromJson($_arr_inputCommon['code']);
         }
 
         $this->decryptRow   = $_arr_decryptRow;
@@ -483,7 +484,7 @@ class Install extends Ctrl {
 
         $_str_configInstalled   = GK_APP_CONFIG . 'installed' . GK_EXT_INC;
 
-        if (Func::isFile($_str_configInstalled)) { //如果新文件存在
+        if (File::fileHas($_str_configInstalled)) { //如果新文件存在
             $_arr_installed = Config::load($_str_configInstalled, 'installed');
             $_str_rcode     = 'x030402';
             $_str_msg       = 'SSO Already installed';

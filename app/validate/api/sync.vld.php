@@ -15,11 +15,8 @@ defined('IN_GINKGO') or exit('Access denied');
 class Sync extends Validate {
 
     protected $rule     = array(
-        'user_str' => array(
-            'require' => true,
-        ),
-        'user_by' => array(
-            'in' => 'user_id,user_name,user_mail',
+        'user_id' => array(
+            '>' => 0,
         ),
         'user_access_token' => array(
             'require' => true,
@@ -32,7 +29,7 @@ class Sync extends Validate {
     function v_init() { //构造函数
 
         $_arr_attrName = array(
-            'user_str'          => $this->obj_lang->get('User ID, Username or Email'),
+            'user_id'           => $this->obj_lang->get('User ID'),
             'user_access_token' => $this->obj_lang->get('Access token'),
             'timestamp'         => $this->obj_lang->get('Timestamp', 'api.common'),
         );

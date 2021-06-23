@@ -7,10 +7,9 @@
 namespace app\ctrl\misc;
 
 use ginkgo\Request;
-use ginkgo\Session;
 use ginkgo\Lang;
-use ginkgo\Json;
-use ginkgo\Captcha as CaptchaGen;
+use ginkgo\Arrays;
+use ginkgo\Captcha as Captcha_Gen;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -18,34 +17,25 @@ defined('IN_GINKGO') or exit('Access denied');
 class Captcha {
 
     function __construct($param = array()) {
-        $this->param = $param;
-        $this->obj_captcha  = CaptchaGen::instance();
+        $this->obj_captcha  = Captcha_Gen::instance();
         $this->obj_request  = Request::instance();
+
+        if (isset($param['id'])) {
+            $param['id'] = $this->obj_request->input($param['id'], 'str', '');
+        } else {
+            $param['id'] = '';
+        }
+
+        $this->param = $param;
     }
 
     public function index() {
-        $_str_id = '';
-
-        if (isset($this->param['id'])) {
-            $_str_id = $this->obj_request->input($this->param['id'], 'str', '');
-        }
-
-        $this->obj_captcha->set();
-
-        return $this->obj_captcha->create($_str_id);
+        return $this->obj_captcha->create($this->param['id']);
     }
 
     public function check() {
-        $_str_id = '';
-
-        if (isset($this->param['id'])) {
-            $_str_id = $this->obj_request->input($this->param['id'], 'str', '');
-        }
-
         $_obj_lang     = Lang::instance();
-
         $_route        = $this->obj_request->route();
-
         $_obj_lang->range($_route['mod'] . '.' . $_route['ctrl']);
         $_str_current       = $_obj_lang->getCurrent();
         $_str_langPath      = GK_APP_LANG . $_str_current . DS . $_route['mod'] . DS . $_route['ctrl'] . GK_EXT_LANG;
@@ -55,17 +45,17 @@ class Captcha {
 
         //print_r($_str_captcha);
 
-        if ($this->obj_captcha->check($_str_captcha, $_str_id, false)) {
+        if ($this->obj_captcha->check($_str_captcha, $this->param['id'], false)) {
             $_arr_return = array(
                 'msg'   => '',
             );
         } else {
             $_arr_return = array(
-                'rcode' => 'x030202',
-                'error' => $_obj_lang->get('Captcha is incorrect'),
+                'rcode'     => 'x030202',
+                'error_msg' => $_obj_lang->get('Captcha is incorrect'),
             );
         }
 
-        return Json::encode($_arr_return);
+        return Arrays::toJson($_arr_return);
     }
 }

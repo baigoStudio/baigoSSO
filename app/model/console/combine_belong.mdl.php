@@ -7,6 +7,7 @@ namespace app\model\console;
 
 use app\model\Combine_Belong as Combine_Belong_Base;
 use ginkgo\Func;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -114,7 +115,7 @@ class Combine_Belong extends Combine_Belong_Base {
     }
 
 
-    function clear($num_no, $num_except = 0, $arr_search = array()) {
+    function clear($num_no, $num_offset = 0, $arr_search = array()) {
         $_arr_belongSelect = array(
             'belong_id',
             'belong_combine_id',
@@ -123,7 +124,7 @@ class Combine_Belong extends Combine_Belong_Base {
 
         $_arr_where = $this->queryProcess($arr_search);
 
-        $_arr_belongRows = $this->where($_arr_where)->order('belong_id', 'DESC')->limit($num_except, $num_no)->select($_arr_belongSelect);
+        $_arr_belongRows = $this->where($_arr_where)->order('belong_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_belongSelect);
 
         foreach ($_arr_belongRows as $_key=>$_value) {
             $_arr_appSelect = array(
@@ -181,25 +182,25 @@ class Combine_Belong extends Combine_Belong_Base {
         }
 
         if (!Func::isEmpty($arr_combineIds)) {
-            $arr_combineIds = Func::arrayFilter($arr_combineIds);
+            $arr_combineIds = Arrays::filter($arr_combineIds);
 
             $_arr_where[] = array('belong_combine_id', 'IN', $arr_combineIds, 'combine_ids');
         }
 
         if (!Func::isEmpty($arr_appIds)) {
-            $arr_appIds = Func::arrayFilter($arr_appIds);
+            $arr_appIds = Arrays::filter($arr_appIds);
 
             $_arr_where[] = array('belong_app_id', 'IN', $arr_appIds, 'app_ids');
         }
 
         if (!Func::isEmpty($arr_notCombineIds)) {
-            $arr_notCombineIds = Func::arrayFilter($arr_notCombineIds);
+            $arr_notCombineIds = Arrays::filter($arr_notCombineIds);
 
             $_arr_where[] = array('belong_combine_id', 'NOT IN', $arr_notCombineIds, 'not_combine_ids');
         }
 
         if (!Func::isEmpty($arr_notUserIds)) {
-            $arr_notUserIds = Func::arrayFilter($arr_notUserIds);
+            $arr_notUserIds = Arrays::filter($arr_notUserIds);
 
             $_arr_where[] = array('belong_app_id', 'NOT IN', $arr_notUserIds, 'not_app_ids');
         }

@@ -57,19 +57,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 <div class="card bg-light">
                     <div class="card-body">
                         <div class="form-group">
-                            <label><?php echo $lang->get('Type'); ?> <span class="text-danger">*</span></label>
-                            <?php foreach ($type as $key=>$value) { ?>
-                                <div class="form-check">
-                                    <input type="radio" name="admin_type" id="admin_type_<?php echo $value; ?>" value="<?php echo $value; ?>" <?php if ($adminRow['admin_type'] == $value) { ?>checked<?php } ?> class="form-check-input">
-                                    <label for="admin_type_<?php echo $value; ?>" class="form-check-label">
-                                        <?php echo $lang->get($value); ?>
-                                    </label>
-                                </div>
-                            <?php } ?>
-                            <small class="form-text" id="msg_admin_type"></small>
-                        </div>
-
-                        <div class="form-group">
                             <label><?php echo $lang->get('Status'); ?> <span class="text-danger">*</span></label>
                             <?php foreach ($status as $key=>$value) { ?>
                                 <div class="form-check">
@@ -80,6 +67,19 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                                 </div>
                             <?php } ?>
                             <small class="form-text" id="msg_admin_status"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label><?php echo $lang->get('Type'); ?> <span class="text-danger">*</span></label>
+                            <?php foreach ($type as $key=>$value) { ?>
+                                <div class="form-check">
+                                    <input type="radio" name="admin_type" id="admin_type_<?php echo $value; ?>" value="<?php echo $value; ?>" <?php if ($adminRow['admin_type'] == $value) { ?>checked<?php } ?> class="form-check-input">
+                                    <label for="admin_type_<?php echo $value; ?>" class="form-check-label">
+                                        <?php echo $lang->get($value); ?>
+                                    </label>
+                                </div>
+                            <?php } ?>
+                            <small class="form-text" id="msg_admin_type"></small>
                         </div>
 
                         <div class="form-group">

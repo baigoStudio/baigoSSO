@@ -40,7 +40,7 @@ class Verify extends Ctrl {
 
         $_num_verifyCount   = $this->mdl_verify->count(); //统计记录数
         $_arr_pageRow       = $this->obj_request->pagination($_num_verifyCount); //取得分页数据
-        $_arr_verifyRows    = $this->mdl_verify->lists($this->config['var_default']['perpage'], $_arr_pageRow['except']); //列出
+        $_arr_verifyRows    = $this->mdl_verify->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset']); //列出
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
             //print_r($_value);

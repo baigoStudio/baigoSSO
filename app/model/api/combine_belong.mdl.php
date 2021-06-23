@@ -7,6 +7,7 @@ namespace app\model\api;
 
 use app\model\Combine_Belong as Combine_Belong_Base;
 use ginkgo\Func;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -29,7 +30,7 @@ class Combine_Belong extends Combine_Belong_Base {
             $_arr_belongIds[]   = $_value['belong_combine_id'];
         }
 
-        return Func::arrayFilter($_arr_belongIds);
+        return Arrays::filter($_arr_belongIds);
     }
 
 }

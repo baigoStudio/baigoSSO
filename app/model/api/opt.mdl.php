@@ -73,7 +73,6 @@ class Opt extends Opt_Base {
             'pass'          => array('txt', ''),
             'charset'       => array('txt', ''),
             'prefix'        => array('txt', ''),
-            'debug'         => array('txt', ''),
             'timestamp'     => array('int', 0),
         );
 

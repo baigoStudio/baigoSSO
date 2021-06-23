@@ -10,7 +10,7 @@ defined('IN_GINKGO') or exit('Access denied');
 /*-------------------------通用-------------------------*/
 return array(
     'Access denied'                         => '禁止访问',
-    'User ID, Username or Email'            => '用户 ID, 用户名 或 Email',
+    'User ID'                               => '用户 ID',
     'Password'                              => '密码',
     'Old password'                          => '原密码',
     'New password'                          => '新密码',
@@ -35,5 +35,6 @@ return array(
     'Max size of {:attr} must be {:rule}'   => '{:attr} 最长 {:rule}',
     '{:attr} not a valid email address'     => '{:attr} 必须为 Email 地址',
     'Size of {:attr} must be {:rule}'       => '{:attr} 的长度必须在 {:rule} 之间',
+    'Send verification email failed'        => '发送确认邮件失败',
     'A verification email has been sent to your new mailbox, please verify.' => '已将验证邮件发送至您的新邮箱，请验证。',
 );

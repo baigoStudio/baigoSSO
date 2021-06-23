@@ -114,8 +114,8 @@ class Index extends Ctrl {
 
             if ($_arr_userRow['rcode'] == 'y010102') {
                 $_arr_return = array(
-                    'rcode' => 'x010404',
-                    'error' => $this->obj_lang->get('User already exists'),
+                    'rcode'     => 'x010404',
+                    'error_msg' => $this->obj_lang->get('User already exists'),
                 );
             }
         }

@@ -12,6 +12,7 @@ use ginkgo\Func;
 use ginkgo\Http;
 use ginkgo\Html;
 use ginkgo\Loader;
+use ginkgo\File;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -89,6 +90,7 @@ class Opt extends Opt_Base {
 
     function smtp() {
         $_arr_opt = array(
+            'method'        => $this->inputSmtp['method'],
             'host'          => $this->inputSmtp['host'],
             'port'          => $this->inputSmtp['port'],
             'user'          => $this->inputSmtp['user'],
@@ -99,7 +101,6 @@ class Opt extends Opt_Base {
             'from_name'     => $this->inputSmtp['from_name'],
             'reply_addr'    => $this->inputSmtp['reply_addr'],
             'reply_name'    => $this->inputSmtp['reply_name'],
-            'debug'         => $this->inputSmtp['debug'],
         );
 
         $_num_size   = Config::write(GK_APP_CONFIG . 'extra_smtp' . GK_EXT_INC, $_arr_opt);
@@ -146,7 +147,7 @@ class Opt extends Opt_Base {
     }
 
     function chkver() {
-        if (!Func::isFile($this->pathLatest)) {
+        if (!File::fileHas($this->pathLatest)) {
             $this->latest();
         }
 
@@ -163,6 +164,7 @@ class Opt extends Opt_Base {
 
     function inputSmtp() {
         $_arr_inputParam = array(
+            'method'        => array('txt', ''),
             'host'          => array('txt', 'localhost'),
             'port'          => array('num', 25),
             'secure'        => array('txt', ''),
@@ -173,13 +175,12 @@ class Opt extends Opt_Base {
             'from_name'     => array('txt', ''),
             'reply_addr'    => array('txt', 'root@localhost'),
             'reply_name'    => array('txt', ''),
-            'debug'         => array('num', 0),
             '__token__'     => array('txt', ''),
         );
 
         $_arr_inputSmtp = $this->obj_request->post($_arr_inputParam);
 
-        $_is_vld = $this->vld_opt->scene('smtp')->verify($_arr_inputSmtp);
+        $_is_vld = $this->vld_opt->scene($_arr_inputSmtp['method'])->verify($_arr_inputSmtp);
 
         if ($_is_vld !== true) {
             $_arr_message = $this->vld_opt->getMessage();

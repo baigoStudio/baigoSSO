@@ -17,15 +17,12 @@ class Sync extends User {
 
     function inputCommon($arr_data) {
         $_arr_inputParam = array(
-            'timestamp'         => array('int', 0),
+            'user_id'           => array('int', 0),
             'user_access_token' => array('txt', ''),
+            'timestamp'         => array('int', 0),
         );
 
         $_arr_inputCommon  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputUserCommon    = $this->inputUserCommon($arr_data);
-
-        $_arr_inputCommon  = array_replace_recursive($_arr_inputCommon, $_arr_inputUserCommon);
 
         $_mix_vld = $this->validate($_arr_inputCommon);
 
@@ -43,4 +40,3 @@ class Sync extends User {
         return $_arr_inputCommon;
     }
 }
-

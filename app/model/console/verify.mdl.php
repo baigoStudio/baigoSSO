@@ -7,6 +7,7 @@ namespace app\model\console;
 
 use app\model\Verify as Verify_Base;
 use ginkgo\Func;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -90,7 +91,7 @@ class Verify extends Verify_Base {
 
         //print_r($_arr_inputStatus);
 
-        $_arr_inputStatus['verify_ids'] = Func::arrayFilter($_arr_inputStatus['verify_ids']);
+        $_arr_inputStatus['verify_ids'] = Arrays::filter($_arr_inputStatus['verify_ids']);
 
         $_mix_vld = $this->validate($_arr_inputStatus, '', 'status');
 
@@ -121,7 +122,7 @@ class Verify extends Verify_Base {
 
         //print_r($_arr_inputDelete);
 
-        $_arr_inputDelete['verify_ids'] = Func::arrayFilter($_arr_inputDelete['verify_ids']);
+        $_arr_inputDelete['verify_ids'] = Arrays::filter($_arr_inputDelete['verify_ids']);
 
         $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

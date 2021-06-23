@@ -32,7 +32,7 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
             <div class="input-group">
                 <input type="text" name="captcha" id="captcha" class="form-control">
                 <div class="input-group-append">
-                    <img src="<?php echo $route_misc; ?>captcha/" class="bg-captcha-img" alt="<?php echo $lang->get('Refresh'); ?>">
+                    <img src="<?php echo $route_misc; ?>captcha/index/id/console_login/" data-id="console_login" class="bg-captcha-img" alt="<?php echo $lang->get('Refresh'); ?>">
                 </div>
             </div>
 
@@ -72,7 +72,7 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
                 length: '4,4',
                 format: 'alpha_number',
                 ajax: {
-                    url: '<?php echo $route_misc; ?>captcha/check/'
+                    url: '<?php echo $route_misc; ?>captcha/check/id/console_login/'
                 }
             }
         },
@@ -120,7 +120,11 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
 
         $('#login_form').submit(function(){
             if (obj_validate_form.verify()) {
-                obj_submit_form.formSubmit();
+                obj_submit_form.formSubmit(false, function(result){
+                    if (typeof result.rcode == 'undefined' || result.rcode != 'y020401') {
+                        captchaReload('console_login');
+                    }
+                });
             }
         });
     });

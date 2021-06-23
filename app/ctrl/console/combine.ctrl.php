@@ -9,7 +9,6 @@ namespace app\ctrl\console;
 use app\classes\console\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Func;
-use ginkgo\Config;
 use ginkgo\Crypt;
 use ginkgo\Sign;
 use ginkgo\Json;
@@ -50,7 +49,7 @@ class Combine extends Ctrl {
 
         $_num_combineCount  = $this->mdl_combine->count($_arr_search); //统计记录数
         $_arr_pageRow   = $this->obj_request->pagination($_num_combineCount); //取得分页数据
-        $_arr_combineRows   = $this->mdl_combine->lists($this->config['var_default']['perpage'], $_arr_pageRow['except'], $_arr_search); //列出
+        $_arr_combineRows   = $this->mdl_combine->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
 
         $_arr_tplData = array(
             'pageRow'   => $_arr_pageRow,

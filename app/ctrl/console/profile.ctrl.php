@@ -12,6 +12,7 @@ use ginkgo\Crypt;
 use ginkgo\Config;
 use ginkgo\Func;
 use ginkgo\Smtp;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -223,8 +224,8 @@ class Profile extends Ctrl {
             return $this->fetchJson('Password is incorrect', 'x010201');
         }
 
-        $_arr_inputSecqa['admin_sec_ques']    = Json::encode($_arr_inputSecqa['admin_sec_ques']);
-        $_arr_inputSecqa['admin_sec_answ']    = Json::encode($_arr_inputSecqa['admin_sec_answ']);
+        $_arr_inputSecqa['admin_sec_ques']    = Arrays::toJson($_arr_inputSecqa['admin_sec_ques']);
+        $_arr_inputSecqa['admin_sec_answ']    = Arrays::toJson($_arr_inputSecqa['admin_sec_answ']);
 
         $this->mdl_user->inputSecqa['user_sec_ques']    = $_arr_inputSecqa['admin_sec_ques'];
         $this->mdl_user->inputSecqa['user_sec_answ']    = Crypt::crypt($_arr_inputSecqa['admin_sec_answ'], $_arr_userRow['user_name']);
@@ -320,10 +321,6 @@ class Profile extends Ctrl {
 
             $_obj_smtp = Smtp::instance();
 
-            if (!$_obj_smtp->connect()) {
-                $_arr_error = $_obj_smtp->getError();
-                return $this->fetchJson(end($_arr_error), 'x010405');
-            }
             $_obj_smtp->addRcpt($_arr_inputMailbox['admin_mail_new']); //发送至
             $_obj_smtp->setSubject($this->config['extra_mailtpl']['mailbox_subject']); //主题
             $_obj_smtp->setContent($_str_html); //内容
@@ -331,7 +328,13 @@ class Profile extends Ctrl {
 
             if (!$_obj_smtp->send()) {
                 $_arr_error = $_obj_smtp->getError();
-                return $this->fetchJson(end($_arr_error), 'x010405');
+                $_str_msg   = end($_arr_error);
+
+                if (Func::isEmpty($_str_msg)) {
+                    $_str_msg = 'Send verification email failed';
+                }
+
+                return $this->fetchJson($_str_msg, 'x010405');
             }
 
             $_arr_mailboxResult = array(

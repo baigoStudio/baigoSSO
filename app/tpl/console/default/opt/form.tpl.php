@@ -40,7 +40,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         <label>
                             <?php echo $lang->get($_value['title']);
 
-                            if (isset($_value['require']) && $_value['require'] > 0) { ?> <span class="text-danger">*</span><?php } ?>
+                            if (isset($_value['require']) && ($_value['require'] == true || $_value['require'] == 'true')) { ?> <span class="text-danger">*</span><?php } ?>
                         </label>
 
                         <?php switch ($_value['type']) {
@@ -215,7 +215,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             $('#timezone_type').change(function(){
                 var _type = $(this).val();
                 var _str_appent;
-                $.each(_timezoneRowsJson[_type].list, function(_key, _value){
+                $.each(_timezoneRowsJson[_type].lists, function(_key, _value){
                     _str_appent += '<option';
                     if (_key == '<?php echo $config['var_extra']['base']['site_timezone']; ?>') {
                         _str_appent += ' selected';

@@ -28,7 +28,7 @@ return array(
     'Validator not found'           => '验证器不存在',
     'Class not found'               => '类不存在',
     'Method not found'              => '方法不存在',
-    'View engine not found'         => '视图引擎不存在',
+    'View driver not found'         => '视图驱动不存在',
     'Unsupported database type'     => '不支持的数据库类型',
     'Create session table failed'   => '创建会话数据表失败',
     'SQL Builder not found'         => 'SQL 生成器不存在',

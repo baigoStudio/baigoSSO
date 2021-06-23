@@ -11,7 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Config;
 use ginkgo\File;
 use ginkgo\Func;
-use ginkgo\Json;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -77,11 +77,11 @@ class Plugin extends Ctrl {
 
             $_str_optsPath   = GK_PATH_PLUGIN . $_value['name'] . DS . 'opts.json';
 
-            $_mix_pluginOpts = Func::isFile($_str_optsPath);
+            $_mix_pluginOpts = File::fileHas($_str_optsPath);
 
             if ($_mix_pluginOpts) {
                 $_str_pluginOpts  = $this->obj_file->fileRead($_str_optsPath);
-                $_mix_pluginOpts  = Json::decode($_str_pluginOpts);
+                $_mix_pluginOpts  = Arrays::fromJson($_str_pluginOpts);
 
                 if (Func::isEmpty($_mix_pluginOpts)) {
                     $_mix_pluginOpts = false;
@@ -160,11 +160,11 @@ class Plugin extends Ctrl {
 
         $_str_optsPath   = GK_PATH_PLUGIN . $_str_pluginDir . DS . 'opts.json';
 
-        $_mix_pluginOpts = Func::isFile($_str_optsPath);
+        $_mix_pluginOpts = File::fileHas($_str_optsPath);
 
         if ($_mix_pluginOpts) {
             $_str_pluginOpts  = $this->obj_file->fileRead($_str_optsPath);
-            $_mix_pluginOpts  = Json::decode($_str_pluginOpts);
+            $_mix_pluginOpts  = Arrays::fromJson($_str_pluginOpts);
 
             if (Func::isEmpty($_mix_pluginOpts)) {
                 $_mix_pluginOpts = false;
@@ -234,11 +234,11 @@ class Plugin extends Ctrl {
 
         $_str_optsPath   = GK_PATH_PLUGIN . $_str_pluginDir . DS . 'opts.json';
 
-        $_mix_pluginOpts = Func::isFile($_str_optsPath);
+        $_mix_pluginOpts = File::fileHas($_str_optsPath);
 
         if ($_mix_pluginOpts) {
             $_str_pluginOpts  = $this->obj_file->fileRead($_str_optsPath);
-            $_mix_pluginOpts  = Json::decode($_str_pluginOpts);
+            $_mix_pluginOpts  = Arrays::fromJson($_str_pluginOpts);
 
             if (Func::isEmpty($_mix_pluginOpts)) {
                 $_mix_pluginOpts = false;
@@ -328,13 +328,13 @@ class Plugin extends Ctrl {
 
         $_str_optsPath = GK_PATH_PLUGIN . $_str_pluginDir . DS . 'opts.json';
 
-        if (!Func::isFile($_str_optsPath)) {
+        if (!File::fileHas($_str_optsPath)) {
             return $this->error('There are no options to set', 'x190401');
         }
 
         $_str_pluginOpts  = $this->obj_file->fileRead($_str_optsPath);
 
-        $_arr_pluginOpts  = Json::decode($_str_pluginOpts);
+        $_arr_pluginOpts  = Arrays::fromJson($_str_pluginOpts);
 
         if (Func::isEmpty($_arr_pluginOpts)) {
             return $this->error('There are no options to set', 'x190401');
@@ -344,9 +344,9 @@ class Plugin extends Ctrl {
 
         $_arr_optsVar  = array();
 
-        if (Func::isFile($_str_optsVarPath)) {
+        if (File::fileHas($_str_optsVarPath)) {
             $_str_optsVar  = $this->obj_file->fileRead($_str_optsVarPath);
-            $_arr_optsVar  = Json::decode($_str_optsVar);
+            $_arr_optsVar  = Arrays::fromJson($_str_optsVar);
         }
 
         foreach ($_arr_pluginOpts as $_key=>$_value) {
@@ -452,9 +452,9 @@ class Plugin extends Ctrl {
     private function check($str_name) {
         $_str_configPath = GK_PATH_PLUGIN . $str_name . DS . 'config.json';
 
-        if (Func::isFile($_str_configPath)) {
+        if (File::fileHas($_str_configPath)) {
             $_str_pluginConfig  = $this->obj_file->fileRead($_str_configPath);
-            $_arr_pluginConfig  = Json::decode($_str_pluginConfig);
+            $_arr_pluginConfig  = Arrays::fromJson($_str_pluginConfig);
         } else {
             $_arr_pluginConfig = array();
         }
@@ -463,7 +463,7 @@ class Plugin extends Ctrl {
             $_arr_pluginConfig['class'] = $str_name;
         }
 
-        if (!Func::isFile(GK_PATH_PLUGIN . $str_name . DS . $_arr_pluginConfig['class'] . GK_EXT_CLASS)) {
+        if (!File::fileHas(GK_PATH_PLUGIN . $str_name . DS . $_arr_pluginConfig['class'] . GK_EXT_CLASS)) {
             return array(
                 'msg'   => 'Missing required files',
                 'rcode' => 'x190102',
@@ -480,7 +480,7 @@ class Plugin extends Ctrl {
 
     private function pluginDisable($arr_pluginDisable) {
         if (!Func::isEmpty($arr_pluginDisable)) {
-            $this->mdl_plugin->inputUninstall['plugin_dirs'] = Func::arrayFilter($arr_pluginDisable);
+            $this->mdl_plugin->inputUninstall['plugin_dirs'] = Arrays::filter($arr_pluginDisable);
             $this->mdl_plugin->uninstall();
         }
     }

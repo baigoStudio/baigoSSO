@@ -12,76 +12,60 @@ defined('IN_GINKGO') or exit('Access denied');
 // 路由处理
 class Route {
 
+    public static $config = array(); // 配置
+
     // 默认路由
-    private static $route = array(
+    public static $route = array(
         'mod'   => 'index',
         'ctrl'  => 'index',
         'act'   => 'index',
     );
 
     // 默认原始路由
-    private static $routeOrig = array(
+    public static $routeOrig = array(
         'mod'   => 'index',
         'ctrl'  => 'index',
         'act'   => 'index',
     );
 
-    private static $param = array(); // 参数
+    public static $param = array(); // 参数
 
-    private static $pathOrig; // 原始 pathinfo
-    private static $pathinfo; // pathinfo
-    private static $arr_path; // pathinfo 解析后的路径数组
-    private static $config; // 配置
+    public static $pathInfo; // pathInfo
+    public static $pathOrig; // 原始 pathInfo
+    public static $pathArr; // pathInfo 解析后的路径数组
+    public static $routeExclude = array('page'); // 排除参数
+
+    private static $configThis = array(
+        'url_suffix'   => '.html', // URL 后缀
+        'route_rule'   => array(), // 路由规则
+        'default_mod'  => '', // 默认模块 (默认为 index)
+        'default_ctrl' => '', // 默认控制器 (默认为 index)
+        'default_act'  => '', // 默认动作 (默认为 index)
+    );
+
     private static $obj_request; // 请求实例
-    private static $urlSuffix = '.html'; // url 后缀
     private static $init; // 是否初始化标志
-    private static $routeExclude = array('page'); // 排除参数
 
-    protected function __construct() {
 
-    }
+    // 配置 since 0.2.0
+    public static function config($config = array()) {
+        $_arr_config   = Config::get('route'); // 取得配置
 
-    protected function __clone() {
+        $_arr_configDo = self::$configThis;
 
-    }
-
-    /** 初始化
-     * init function.
-     *
-     * @access private
-     * @static
-     * @return void
-     */
-    private static function init() {
-        self::$obj_request  = Request::instance();
-        $_arr_config        = Config::get('route'); // 取得路由配置
-
-        $_arr_route     = array();
-        $_arr_routeOrig = array();
-
-        if (!Func::isEmpty($_arr_config['url_suffix'])) {
-            self::$urlSuffix = $_arr_config['url_suffix'];
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
         }
 
-        if (!Func::isEmpty($_arr_config['default_mod'])) {
-            $_arr_route['mod']     = $_arr_config['default_mod'];
-            $_arr_routeOrig['mod'] = $_arr_config['default_mod'];
+        if (is_array(self::$config) && !Func::isEmpty(self::$config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, self::$config); // 合并配置
         }
 
-        if (!Func::isEmpty($_arr_config['default_ctrl'])) {
-            $_arr_route['ctrl']        = $_arr_config['default_ctrl'];
-            $_arr_routeOrig['ctrl']    = $_arr_config['default_ctrl'];
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
         }
 
-        if (!Func::isEmpty($_arr_config['default_act'])) {
-            $_arr_route['act']     = $_arr_config['default_act'];
-            $_arr_routeOrig['act'] = $_arr_config['default_act'];
-        }
-
-        self::$route        = array_replace_recursive(self::$route, $_arr_route);
-        self::$routeOrig    = array_replace_recursive(self::$routeOrig, $_arr_routeOrig);
-        self::$config       = $_arr_config;
-        self::$init         = true; // 标识为已初始化
+        self::$config  = $_arr_configDo;
     }
 
 
@@ -92,8 +76,16 @@ class Route {
      * @static
      * @return void
      */
-    public static function get() {
-        return self::$route;
+    public static function get($name = '') {
+        $_return = '';
+
+        if (Func::isEmpty($name)) {
+            $_return = self::$route;
+        } else if (isset(self::$route[$name])) {
+            $_return = self::$route[$name];
+        }
+
+        return $_return;
     }
 
     /** 设置路由规则
@@ -104,8 +96,12 @@ class Route {
      * @param array $rule (default: array())
      * @return void
      */
-    public static function rule($rule = array()) {
-        self::$config['route_rule'] = array_replace_recursive(self::$config['route_rule'], $rule);
+    public static function rule($rule, $value = '') {
+        if (is_array($rule)) {
+            self::$config['route_rule'] = array_replace_recursive(self::$config['route_rule'], $rule);
+        } else {
+            self::$config['route_rule'][$rule] = $value;
+        }
     }
 
     /** 解析路由
@@ -123,7 +119,7 @@ class Route {
         $_str_error     = '';
         $_str_detail    = '';
 
-        self::pathinfoProcess(); // 解析 pathinfo
+        self::pathInfoProcess(); // 解析 pathInfo
         self::ruleProcess(); // 解析规则
         self::routeProcess(); // 解析路由
         self::routeOrigProcess(); // 解析原始路由
@@ -131,7 +127,7 @@ class Route {
 
         if (self::validateRoute() === false) {
             $_obj_excpt = new Exception('Not a valid route', 404);
-            $_obj_excpt->setData('err_detail', self::$pathinfo);
+            $_obj_excpt->setData('err_detail', self::$pathInfo);
 
             throw $_obj_excpt;
         }
@@ -158,7 +154,7 @@ class Route {
      * @param array $exclude (default: array()) 排除参数
      * @return void
      */
-    public static function build($path = '', $param = '', $exclude = array()) {
+    public static function build($path = '', $param = array(), $exclude = '') {
         if (Func::isEmpty($path)) { // 如果路径为空, 则取得当前原始路径
             $path  = self::$obj_request->baseUrl() . implode('/', self::$routeOrig);
         }
@@ -166,8 +162,14 @@ class Route {
         $_arr_routeExclude  = self::$routeExclude; // 排除参数
 
         if (!Func::isEmpty($exclude)) {
-            $_arr_routeExclude = array_merge($_arr_routeExclude, $exclude); // 合并排除参数
+            if (is_array($exclude)) {
+                $_arr_routeExclude   = array_merge($_arr_routeExclude, $exclude); // 合并排除参数
+            } else if (is_string($exclude)) {
+                array_push($_arr_routeExclude, $exclude);
+            }
         }
+
+        $_arr_routeExclude = Arrays::filter($_arr_routeExclude);
 
         $_str_param = '';
 
@@ -204,146 +206,125 @@ class Route {
                 array_push(self::$routeExclude, $exclude);
             }
         }
+
+        self::$routeExclude = Arrays::filter(self::$routeExclude);
     }
 
 
-    /// pathinfo 处理
-    private static function pathinfoProcess() {
-        $_str_pathinfo = self::$obj_request->server('PATH_INFO'); //直接使用 pathinfo
-        if (Func::isEmpty($_str_pathinfo)) {
-            $_str_pathinfo = self::$obj_request->get('pathname'); //不支持 pathinfo 的处理
-        }
-        $_str_pathinfo = str_replace('\\', '/', $_str_pathinfo); // 替换分隔符
-        $_str_pathinfo = trim($_str_pathinfo, '/'); // 去除两边多余的分隔符
-        $_str_pathinfo = Html::decode($_str_pathinfo, 'url'); // html 解码
+    /** 初始化
+     * init function.
+     *
+     * @access private
+     * @static
+     * @return void
+     */
+    private static function init($config = array()) {
+        self::$obj_request  = Request::instance();
 
-        $_arr_suffix = explode(',', self::$urlSuffix); // 分离后缀配置
+        self::config($config);
+
+        $_arr_route     = array();
+        $_arr_routeOrig = array();
+
+        if (!Func::isEmpty(self::$config['default_mod'])) {
+            $_arr_route['mod']     = self::$config['default_mod'];
+            $_arr_routeOrig['mod'] = self::$config['default_mod'];
+        }
+
+        if (!Func::isEmpty(self::$config['default_ctrl'])) {
+            $_arr_route['ctrl']        = self::$config['default_ctrl'];
+            $_arr_routeOrig['ctrl']    = self::$config['default_ctrl'];
+        }
+
+        if (!Func::isEmpty(self::$config['default_act'])) {
+            $_arr_route['act']     = self::$config['default_act'];
+            $_arr_routeOrig['act'] = self::$config['default_act'];
+        }
+
+        self::$route        = array_replace_recursive(self::$route, $_arr_route);
+        self::$routeOrig    = array_replace_recursive(self::$routeOrig, $_arr_routeOrig);
+        self::$init         = true; // 标识为已初始化
+    }
+
+
+    /// pathInfo 处理
+    private static function pathInfoProcess() {
+        $_str_pathInfo = self::$obj_request->server('PATH_INFO'); //直接使用 pathInfo
+        if (Func::isEmpty($_str_pathInfo)) {
+            $_str_pathInfo = self::$obj_request->get('pathname'); //不支持 pathInfo 的处理
+        }
+        $_str_pathInfo = str_replace('\\', '/', $_str_pathInfo); // 替换分隔符
+        $_str_pathInfo = trim($_str_pathInfo, '/'); // 去除两边多余的分隔符
+        $_str_pathInfo = Html::decode($_str_pathInfo, 'url'); // html 解码
+
+        $_arr_suffix = explode(',', self::$config['url_suffix']); // 分离后缀配置
 
         foreach ($_arr_suffix as $_key=>$_value) { // 遍历后缀配置
-            $_str_pathinfo = str_ireplace($_value, '', $_str_pathinfo); // 去除后缀
+            $_str_pathInfo = str_ireplace($_value, '', $_str_pathInfo); // 去除后缀
         }
 
-        $_str_pathinfo = trim($_str_pathinfo, '/'); // 去除两边多余的分隔符
+        $_str_pathInfo = trim($_str_pathInfo, '/'); // 去除两边多余的分隔符
 
-        //print_r($_str_pathinfo);
+        //print_r($_str_pathInfo);
 
-        self::$pathinfo = $_str_pathinfo; // 定义 pathinfo
-        self::$pathOrig = $_str_pathinfo; // 定义原始 pathinfo
+        self::$pathInfo = $_str_pathInfo; // 定义 pathInfo
+        self::$pathOrig = $_str_pathInfo; // 定义原始 pathInfo
     }
 
 
     // 规则处理
     private static function ruleProcess() {
-        $_str_pathinfo  = self::$pathinfo;
-        //$_arr_pathinfo  = explode('/', $_str_pathinfo);
+        $_str_pathInfo  = self::$pathInfo;
+        //$_arr_pathInfo  = explode('/', $_str_pathInfo);
 
         if (!Func::isEmpty(self::$config['route_rule'])) {
             foreach (self::$config['route_rule'] as $_key=>$_value) { // 遍历规则
-                if (is_array($_value)) { // 如果是数组
-                    if (!isset($_value[1])) { // 规则格式错误
-                        $_obj_excpt = new Exception('Routing configuration error', 500);
-                        $_obj_excpt->setData('err_detail', 'Missing parameter');
-
-                        throw $_obj_excpt;
+                if (strpos($_key, '/') !== false && strpos($_key, '$') !== false) { // 正则规则
+                    if (preg_match($_key, $_str_pathInfo, $_arr_pathInfo) && is_array($_value) && isset($_value[0]) && isset($_value[1])) {
+                        self::regexRuleProcess($_arr_pathInfo, $_value[0], $_value[1]);
+                        break;
                     }
-
-                    if (isset($_value[2])) { // 正则规则
-                        if (preg_match($_value[0], $_str_pathinfo, $_arr_pathinfo)) {
-                            //print_r($_arr_pathinfo);
-
-                            $_str_param = '';
-
-                            if (is_array($_value[2])) { // 正则解析多个参数
-                                foreach ($_value[2] as $_key_param=>$_value_param) { // 遍历参数规则
-                                    if (!Func::isEmpty($_value_param) && isset($_arr_pathinfo[$_key_param + 1])) {
-                                        $_str_param .= $_value_param  . '/' . $_arr_pathinfo[$_key_param + 1] . '/'; // 拼合
-                                    }
-                                }
-                            } else { // 单个参数
-                                $_str_param .= $_value[2]  . '/' . $_arr_pathinfo[1] . '/'; // 拼合
+                } else if (strpos($_key, '/:') !== false) { // 动态规则
+                    if (self::activeRuleProcess($_key, $_value)) {
+                        break;
+                    }
+                } else {
+                    if (is_array($_value) && isset($_value[0]) && isset($_value[1])) { // 如果是数组
+                        if (strpos($_value[0], '/') !== false && strpos($_value[0], '$') !== false) { // 正则规则
+                            if (preg_match($_value[0], $_str_pathInfo, $_arr_pathInfo) && isset($_value[2])) { // 正则规则
+                                self::regexRuleProcess($_arr_pathInfo, $_value[1], $_value[2]);
+                                break; // 匹配到第一条就跳出遍历
                             }
-
-                            $_str_param = str_replace('//', '/', $_str_param); // 替换多余分隔符
-
-                            //print_r($_str_param);
-
-                            self::$pathinfo = $_value[1] . '/' . $_str_param; // 拼合
+                        } else if (strpos($_value[0], '/:') !== false) { // 动态规则
+                            if (self::activeRuleProcess($_value[0], $_value[1])) {
+                                break; // 匹配到第一条就跳出遍历
+                            }
+                        }
+                    } else if (is_string($_key) && is_string($_value)) { // 静态规则, 简单替换
+                        if (self::staticRuleProcess($_key, $_value)) {
                             break; // 匹配到第一条就跳出遍历
                         }
-                    } else { // 动态规则
-                        $_arr_rule  = explode('/', trim($_value[0], '/')); // 分解参数规则
-                        $_str_rule  = '';
-                        $_arr_param = array();
-
-                        if (!Func::isEmpty($_arr_rule)) {
-                            foreach ($_arr_rule as $_key_rule=>$_value_rule) { // 遍历参数规则
-                                if (strpos($_value_rule, ':') === false) { // 没有包含 : 符号的, 直接拼合
-                                    $_str_rule .= $_value_rule . '/';
-                                } else { // 否则去除 : 符号, 并将此作为参数名
-                                    $_arr_param[] = ltrim($_value_rule, ':');
-                                }
-                            }
-                        }
-
-                        //print_r($_arr_param);
-
-                        $_str_rule = str_replace('//', '/', $_str_rule); // 替换多余分隔符
-
-                        /*print_r($_str_rule);
-                        print_r('<br>');*/
-
-                        if (strripos($_str_pathinfo, $_str_rule) === 0) { // pathinfo 是否匹配规则
-                            $_str_pathinfo  = str_ireplace($_str_rule, '', $_str_pathinfo);
-                            $_str_pathinfo  = trim($_str_pathinfo, '/');
-
-                            //print_r($_str_pathinfo);
-
-                            $_arr_pathinfo  = explode('/', $_str_pathinfo);
-
-                            $_str_param     = '';
-
-                            foreach ($_arr_param as $_key_param=>$_value_param) { // 遍历参数
-                                if (isset($_arr_pathinfo[$_key_param]) && !Func::isEmpty($_arr_pathinfo[$_key_param])) { // 参数是否存在
-                                    $_str_param .= $_value_param . '/' . $_arr_pathinfo[$_key_param] . '/';
-                                }
-                            }
-
-                            $_str_param = str_replace('//', '/', $_str_param); // 替换多余分隔符
-
-                            self::$pathinfo = $_value[1] . '/' . $_str_param; // 拼合
-                            break; // 匹配到第一条就跳出遍历
-                        }
-                    }
-                } else { // 静态规则, 简单替换
-                    $_key           = Func::fixDs($_key, '/');
-                    $_value         = Func::fixDs($_value, '/');
-                    $_str_pathinfo  = Func::fixDs($_str_pathinfo, '/');
-
-                    if (strripos($_str_pathinfo, $_key) === 0) {
-                        self::$pathinfo = str_ireplace($_key, $_value, $_str_pathinfo); // 简单替换
-                        break; // 匹配到第一条就跳出遍历
                     }
                 }
             }
         }
 
-        //print_r(self::$pathinfo);
+        //print_r(self::$pathInfo);
     }
 
 
     // 路由处理
     private static function routeProcess() {
-        $_str_pathinfo = self::$pathinfo;
-
-        $_arr_path   = array();
-        $_arr_route = self::$route;
+        $_str_pathInfo = self::$pathInfo;
+        $_arr_path     = array();
+        $_arr_route    = self::$route;
 
         if (defined('GK_BIND_MOD')) {
             $_arr_route['mod']  = GK_BIND_MOD;
         }
 
-        if (!Func::isEmpty($_str_pathinfo)) {
-            $_arr_path = explode('/', $_str_pathinfo); // 分解 pathinfo
+        if (!Func::isEmpty($_str_pathInfo)) {
+            $_arr_path = explode('/', $_str_pathInfo); // 分解 pathInfo
 
             if (defined('GK_BIND_MOD')) { // 如果定义了绑定模块, 则路由依次为 控制器->动作, 忽略模块
                 if (isset($_arr_path[0]) && !Func::isEmpty($_arr_path[0])) {
@@ -374,25 +355,25 @@ class Route {
         $_arr_route['act']  = str_replace('_', '-', $_arr_route['act']);
 
         // 转换为下划线分隔的驼峰命名
-        $_arr_route['act']  = Func::toHump($_arr_route['act'], '-', true);
+        $_arr_route['act']  = String::toHump($_arr_route['act'], '-', true);
 
         // 合并路由
         self::$route = array_replace_recursive(self::$route, $_arr_route);
 
         // 定义路径数组
-        self::$arr_path   = $_arr_path;
+        self::$pathArr = $_arr_path;
     }
 
 
     // 原始路由处理
     private static function routeOrigProcess() {
-        $_str_pathinfo = self::$pathOrig;
+        $_str_pathInfo  = self::$pathOrig;
 
-        $_arr_path       = array();
+        $_arr_path      = array();
         $_arr_routeOrig = self::$routeOrig;
 
-        if (!Func::isEmpty($_str_pathinfo)) {
-            $_arr_path = explode('/', $_str_pathinfo); // 分解 pathinfo
+        if (!Func::isEmpty($_str_pathInfo)) {
+            $_arr_path = explode('/', $_str_pathInfo); // 分解 pathInfo
 
             if (isset($_arr_path[0]) && !Func::isEmpty($_arr_path[0])) {
                 $_arr_routeOrig['mod']  = $_arr_path[0];
@@ -413,7 +394,7 @@ class Route {
 
     // 参数处理
     private static function paramProcess() {
-        $_arr_path = self::$arr_path;
+        $_arr_path = self::$pathArr;
 
         // 默认情况提出第一第二个元素
         if (isset($_arr_path[0])) {
@@ -432,7 +413,7 @@ class Route {
         }
 
         // 重置 路径 数组
-        $_arr_path = array_values($_arr_path);
+        $_arr_path  = array_values($_arr_path);
 
         $_arr_key   = array();
         $_arr_value = array();
@@ -466,6 +447,94 @@ class Route {
     }
 
 
+    // 静态规则处理 since 0.2.0
+    private static function staticRuleProcess($rule, $value) {
+        $_str_pathInfo = Func::fixDs(self::$pathInfo, '/');
+        $rule          = Func::fixDs($rule, '/');
+        $value         = Func::fixDs($value, '/');
+
+        if (strripos($_str_pathInfo, $rule) === 0) {
+            self::$pathInfo = str_ireplace($rule, $value, $_str_pathInfo); // 简单替换
+            return true; // 匹配到就返回
+        }
+
+        return false;
+    }
+
+
+    // 静态规则处理 since 0.2.0
+    private static function activeRuleProcess($rule, $value) {
+        $_str_pathInfo = Func::fixDs(self::$pathInfo, '/');
+
+        $_arr_rule  = explode('/', trim($rule, '/')); // 分解参数规则
+        $_str_rule  = '';
+        $_arr_param = array();
+
+        if (!Func::isEmpty($_arr_rule)) {
+            foreach ($_arr_rule as $_key_rule=>$_value_rule) { // 遍历参数规则
+                if (strpos($_value_rule, ':') === false) { // 没有包含 : 符号的, 直接拼合
+                    $_str_rule .= $_value_rule . '/';
+                } else { // 否则去除 : 符号, 并将此作为参数名
+                    $_arr_param[] = ltrim($_value_rule, ':');
+                }
+            }
+        }
+
+        //print_r($_arr_param);
+
+        $_str_rule = str_replace('//', '/', $_str_rule); // 替换多余分隔符
+
+        /*print_r($_str_rule);
+        print_r('<br>');*/
+
+        if (strripos($_str_pathInfo, $_str_rule) === 0) { // pathInfo 是否匹配规则
+            $_str_pathInfo  = str_ireplace($_str_rule, '', $_str_pathInfo);
+            $_str_pathInfo  = trim($_str_pathInfo, '/');
+
+            //print_r($_str_pathInfo);
+
+            $_arr_pathInfo  = explode('/', $_str_pathInfo);
+
+            $_str_param     = '';
+
+            foreach ($_arr_param as $_key_param=>$_value_param) { // 遍历参数
+                if (isset($_arr_pathInfo[$_key_param]) && !Func::isEmpty($_arr_pathInfo[$_key_param])) { // 参数是否存在
+                    $_str_param .= $_value_param . '/' . $_arr_pathInfo[$_key_param] . '/';
+                }
+            }
+
+            $_str_param = str_replace('//', '/', $_str_param); // 替换多余分隔符
+
+            self::$pathInfo = $value . '/' . $_str_param; // 拼合
+            return true; // 匹配到就返回
+        }
+
+        return false;
+    }
+
+
+    // 正则规则处理 since 0.2.0
+    private static function regexRuleProcess($pathArr, $value, $param) {
+        $_str_param = '';
+
+        if (is_array($param)) { // 正则解析多个参数
+            foreach ($param as $_key_param=>$_value_param) { // 遍历参数规则
+                if (!Func::isEmpty($_value_param) && isset($pathArr[$_key_param + 1])) {
+                    $_str_param .= $_value_param  . '/' . $pathArr[$_key_param + 1] . '/'; // 拼合
+                }
+            }
+        } else if (is_string($param)) { // 单个参数
+            $_str_param .= $param  . '/' . $pathArr[1] . '/'; // 拼合
+        }
+
+        $_str_param = str_replace('//', '/', $_str_param); // 替换多余分隔符
+
+        //print_r($_str_param);
+
+        self::$pathInfo = $value . '/' . $_str_param; // 拼合
+    }
+
+
     /** 验证路由是否合法
      * validateRoute function.
      *
@@ -492,5 +561,3 @@ class Route {
         return $_obj_validate->verify(self::$route);
     }
 }
-
-

@@ -19,7 +19,7 @@ return array(
     'Content'                                   => '内容',
     'Message ID'                                => '短信 ID',
     'Message not found'                         => '短信不存在',
-    'User ID, Username or Email'                => '用户 ID, 用户名 或 Email',
+    'User ID'                                   => '用户 ID',
     'User not found'                            => '用户不存在',
     'User is disabled'                          => '用户被禁用',
     'Access token expired'                      => '访问口令过期',

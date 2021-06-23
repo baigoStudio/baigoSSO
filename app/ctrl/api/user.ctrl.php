@@ -9,7 +9,7 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Sign;
 use ginkgo\Func;
 
@@ -46,7 +46,7 @@ class User extends Ctrl {
             return $this->fetchJson($_arr_inputEdit['msg'], $_arr_inputEdit['rcode']);
         }
 
-        $_arr_userRow = $this->mdl_user->check($_arr_inputEdit['user_str'], $_arr_inputEdit['user_by']);
+        $_arr_userRow = $this->mdl_user->check($_arr_inputEdit['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -84,7 +84,7 @@ class User extends Ctrl {
 
         $_arr_editResult['timestamp'] = GK_NOW;
 
-        $_str_src   = Json::encode($_arr_editResult);
+        $_str_src   = Arrays::toJson($_arr_editResult);
 
         $this->notify($_str_src, 'edit'); //通知
 
@@ -112,7 +112,7 @@ class User extends Ctrl {
             return $this->fetchJson($_arr_inputRead['msg'], $_arr_inputRead['rcode']);
         }
 
-        $_arr_userRow = $this->mdl_user->readBase($_arr_inputRead['user_str'], $_arr_inputRead['user_by']);
+        $_arr_userRow = $this->mdl_user->readBase($_arr_inputRead['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -120,7 +120,7 @@ class User extends Ctrl {
 
         $_arr_userRow['timestamp'] = GK_NOW;
 
-        $_str_src     = Json::encode($_arr_userRow);
+        $_str_src     = Arrays::toJson($_arr_userRow);
         $_str_sign    = Sign::make($_str_src, $this->appRow['app_key'] . $this->appRow['app_secret']);
         $_str_encrypt = Crypt::encrypt($_str_src, $this->appRow['app_key'], $this->appRow['app_secret']);
 

@@ -10,11 +10,31 @@ namespace ginkgo;
 defined('IN_GINKGO') or exit('Access Denied');
 
 // 上传类
-class Upload extends File {
+class Upload {
+
+    public $config    = array(); // 配置
+    public $limitSize = 0; // 允许上传大小
+    public $error; // 错误
+    public $rule = 'md5'; // 生成文件名规则 (函数名)
+    public $mimeRows = array(); // mime 池
+
+    public $fileInfo = array(
+        'name'     => '',
+        'tmp_name' => '',
+        'ext'      => '',
+        'mime'     => '',
+        'size'     => 0,
+    );
 
     protected static $instance; // 当前实例
 
-    private $limitSize = 0; // 允许上传大小
+    private $configThis     = array(
+        'limit_size'    => 200, //上传尺寸
+        'limit_unit'    => 'kb', //尺寸单位
+    ); // 默认配置
+
+    private $obj_file; // 文件对象
+
 
     /** 构造函数
      * __construct function.
@@ -23,13 +43,11 @@ class Upload extends File {
      * @param string $config (default: '') 配置
      * @return void
      */
-    protected function __construct($config = '') {
-        $this->init($config); // 初始化
+    protected function __construct($config = array()) {
+        $this->config($config); // 初始化
+        $this->obj_file = File::instance();
     }
 
-    protected function __clone() {
-
-    }
 
     /** 实例化
      * instance function.
@@ -38,13 +56,64 @@ class Upload extends File {
      * @static
      * @return 当前类的实例
      */
-    public static function instance() {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static();
+    public static function instance($config = array()) {
+        if (Func::isEmpty(self::$instance)) {
+            self::$instance = new static($config);
         }
 
-        return static::$instance;
+        return self::$instance;
     }
+
+
+    // 配置 since 0.2.0
+    public function config($config = array()) {
+        $_arr_config   = Config::get('upload', 'var_extra');
+
+        $_arr_configDo = $this->configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
+        }
+
+        if (is_array($this->config) && !Func::isEmpty($this->config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $this->config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        $_arr_configDo['limit_unit'] = strtolower($_arr_configDo['limit_unit']);
+
+        switch ($_arr_configDo['limit_unit']) { // 初始化单位
+            case 'tb':
+                $_num_sizeUnit = GK_TB;
+            break;
+
+            case 'gb':
+                $_num_sizeUnit = GK_GB;
+            break;
+
+            case 'mb':
+                $_num_sizeUnit = GK_MB;
+            break;
+
+            case 'kb':
+                $_num_sizeUnit = GK_KB;
+            break;
+
+            default:
+                $_num_sizeUnit = 1;
+            break;
+        }
+
+        if ($this->limitSize < 1) { // 如果大小限制未定义
+            $this->limitSize = $_arr_configDo['limit_size'] * $_num_sizeUnit;
+        }
+
+        $this->config  = $_arr_configDo;
+    }
+
 
     /** 创建上传对象
      * create function.
@@ -83,7 +152,7 @@ class Upload extends File {
         $_str_ext   = $this->getExt($_arr_fileInfo['name'], $_str_mime);
 
         // 验证是否为允许的文件
-        if (!$this->checkFile($_str_ext, $_str_mime)) {
+        if (!$this->verifyFile($_str_ext, $_str_mime)) {
             return false;
         }
 
@@ -97,9 +166,26 @@ class Upload extends File {
         $_arr_fileInfo['ext']   = $_str_ext;
         $_arr_fileInfo['mime']  = $_str_mime;
 
-        $this->fileInfo = $_arr_fileInfo;
+        $_arr_fileInfoDo = array_replace_recursive($this->fileInfo, $_arr_fileInfo);
+        $this->fileInfo  = $_arr_fileInfoDo;
 
-        return $_arr_fileInfo;
+        return $_arr_fileInfoDo;
+    }
+
+
+    /** 设置、获取大小限制
+     * setLimit function.
+     *
+     * @access public
+     * @param mixed $size
+     * @return void
+     */
+    public function limit($size = false) {
+        if ($size === false) {
+            return $this->limitSize;
+        } else {
+            $this->limitSize = (float)$size;
+        }
     }
 
 
@@ -107,13 +193,13 @@ class Upload extends File {
      * move function.
      *
      * @access public
-     * @param string $path_dir 目的地路径
+     * @param string $dir 目的地路径
      * @param mixed $name (default: true) 文件名, 参数为 true 时, 按规则生成文件名, false 时, 使用原始文件名, 字符串直接使用
      * @param bool $replace (default: true) 是否替换
      * @return void
      */
-    function move($path_dir, $name = true, $replace = true) {
-        if (!$this->dirMk($path_dir)) { // 建目录
+    public function move($dir, $name = true, $replace = true) {
+        if (!$this->obj_file->dirMk($dir)) { // 建目录
             $this->error = 'Failed to create directory';
 
             return false;
@@ -127,9 +213,9 @@ class Upload extends File {
             return false;
         }
 
-        $_str_path = Func::fixDs($path_dir) . $name; // 补全路径
+        $_str_path = Func::fixDs($dir) . $name; // 补全路径
 
-        if (!$replace && Func::isFile($_str_path)) { // 如果为不替换, 冲突时报错
+        if (!$replace && File::fileHas($_str_path)) { // 如果为不替换, 冲突时报错
             $this->error = 'Has the same filename: ' . $_str_path;
 
             return false;
@@ -141,120 +227,126 @@ class Upload extends File {
             return false;
         }
 
-        if (Func::isFile($this->fileInfo['tmp_name'])) { // 如果临时文件仍然存在
-            $this->fileDelete($this->fileInfo['tmp_name']); // 删除临时文件
+        if (File::fileHas($this->fileInfo['tmp_name'])) { // 如果临时文件仍然存在
+            $this->obj_file->fileDelete($this->fileInfo['tmp_name']); // 删除临时文件
         }
 
         return $_str_path;
     }
 
 
-    /** 设置尺寸限制
-     * setLimit function.
+    /** 设置 mime
+     * setMime function.
      *
      * @access public
-     * @param mixed $size
+     * @param mixed $mime
+     * @param array $value (default: array())
      * @return void
      */
-    function setLimit($size) {
-        $this->limitSize = $size;
+    public function setMime($mime, $value = array()) {
+        if (is_array($mime)) {
+            $this->mimeRows = array_replace_recursive($this->mimeRows, $mime);
+        } else {
+            $this->mimeRows[$mime] = $value;
+        }
     }
 
 
-    /** 取得扩展名
-     * ext function.
-     *
-     * @access public
-     * @return void
-     */
-    public function ext() {
-        return $this->fileInfo['ext'];
+    // 兼容用
+    public function __call($method, $params) {
+        return $this->getInfo($method);
     }
 
 
-    /** 取得 mime
-     * mime function.
-     *
-     * @access public
-     * @return void
-     */
-    public function mime() {
-        return $this->fileInfo['mime'];
-    }
-
-
-    /** 取得原始文件名
-     * name function.
-     *
-     * @access public
-     * @return void
-     */
-    public function name() {
-        return $this->fileInfo['name'];
-    }
-
-    /** 取得文件尺寸
+    /** 获取信息
      * size function.
      *
      * @access public
-     * @return void
+     * @return 0 - 图像宽度, 1 - 图像高度
      */
-    public function size() {
-        return $this->fileInfo['size'];
+    public function getInfo($name = '') {
+        $_mix_retrun = '';
+
+        if (Func::isEmpty($name)) {
+            $_mix_retrun = $this->fileInfo;
+        } else if (isset($this->fileInfo[$name])) {
+            $_mix_retrun = $this->fileInfo[$name];
+        }
+
+        return $_mix_retrun;
     }
 
-    /** 取得错误
-     * getError function.
+
+    /** 获取文件的 mime 类型
+     * getMime function.
      *
      * @access public
-     * @return void
+     * @param string $path 路径
+     * @param bool $strict (default: false) 严格获取 mime, true 严格, 字符串 直接报告, false 以路径为准
+     * @return mime 类型
      */
-    function getError() {
+    public function getMime($path, $strict = false) {
+        if ($strict === true || $strict === 'true') {
+            $_obj_finfo = new \finfo();
+
+            $_str_mime  = $_obj_finfo->file($path, FILEINFO_MIME_TYPE);
+        } else if (!Func::isEmpty($strict) && is_string($strict)) {
+            $_str_mime = $strict;
+        } else {
+            $_str_ext = $this->getExt($path); //取得扩展名
+
+            if (isset($this->mimeRows[$_str_ext])) {
+                $_str_mime = $this->mimeRows[$_str_ext][0];
+            }
+        }
+
+        return $_str_mime;
+    }
+
+
+    /** 获取扩展名
+     * getExt function.
+     *
+     * @access public
+     * @param string $path 路径
+     * @param mixed $mime (default: false) mime 类型
+     * @return 扩展名
+     */
+    public function getExt($path, $mime = false) {
+        $_str_ext = strtolower(pathinfo($path, PATHINFO_EXTENSION)); //取得扩展名
+
+        if ($mime) {
+            // 扩展名与 mime 不符的情况下, 反向查找, 如果存在, 则更改扩展名
+            if (!isset($this->mimeRows[$_str_ext]) || !in_array($mime, $this->mimeRows[$_str_ext])) {
+                foreach ($this->mimeRows as $_key_allow=>$_value_allow) {
+                    if (in_array($mime, $_value_allow)) {
+                        return $_key_allow;
+                    }
+                }
+            }
+        }
+
+        return $_str_ext;
+    }
+
+
+    // 获取错误
+    public function getError() {
         return $this->error;
     }
 
 
-    /** 上传初始化
-     * init function.
+    /** 设置生成文件名规则 (函数名)
+     * rule function.
      *
-     * @access private
-     * @param array $config (default: array()) 配置
-     * @return void
+     * @access public
+     * @param mixed $rule
+     * @return 当前实例
      */
-    private function init($config = array()) {
-        $_arr_config   = Config::get('upload', 'var_extra');
+    public function rule($rule) {
+        $this->rule = $rule;
 
-        if (!Func::isEmpty($config)) {
-            $_arr_config = array_replace_recursive($_arr_config, $config);
-        }
-
-        $_arr_config['limit_unit'] = strtolower($_arr_config['limit_unit']);
-
-        switch ($_arr_config['limit_unit']) { // 初始化单位
-            case 'tb':
-                $_num_sizeUnit = GK_TB;
-            break;
-
-            case 'gb':
-                $_num_sizeUnit = GK_GB;
-            break;
-
-            case 'mb':
-                $_num_sizeUnit = GK_MB;
-            break;
-
-            case 'kb':
-                $_num_sizeUnit = GK_KB;
-            break;
-
-            default:
-                $_num_sizeUnit = 1;
-            break;
-        }
-
-        if ($this->limitSize < 1) { // 如果大小限制未定义
-            $this->limitSize = $_arr_config['limit_size'] * $_num_sizeUnit;
-        }
+        return $this;
     }
 
 
@@ -295,6 +387,66 @@ class Upload extends File {
                 $this->error = 'Unknown upload error';
             break;
         }
+    }
+
+
+
+    /** 验证是否为允许的文件
+     * verifyFile function.
+     *
+     * @access protected
+     * @param mixed $ext
+     * @param mixed $mime
+     * @return 验证结果 (bool)
+     */
+    private function verifyFile($ext, $mime) {
+        if (!Func::isEmpty($this->mimeRows)) {
+            if (!isset($this->mimeRows[$ext])) { //该扩展名的 mime 数组是否存在
+                $this->error = 'MIME check failed';
+
+                return false;
+            }
+
+            if (!in_array($mime, $this->mimeRows[$ext])) { //是否允许
+                $this->error = 'MIME not allowed';
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /** 生成文件名
+     * genFilename function.
+     *
+     * @access protected
+     * @param mixed $name (default: true) 文件名
+     * @return 文件名
+     */
+    private function genFilename($name = true) {
+        if ($name === true) { // 参数为 true 时, 按规则生成文件名
+            if (is_callable($this->rule)) {
+                $_str_type = $this->rule;
+            } else {
+                $_str_type = 'md5';
+            }
+
+            if (isset($_SERVER['REQUEST_TIME_FLOAT'])) {
+                $_tm_time = $_SERVER['REQUEST_TIME_FLOAT'];
+            } else {
+                $_tm_time = GK_NOW;
+            }
+
+            $name = call_user_func($_str_type, $_tm_time) . '.' . $this->fileInfo['ext'];
+        } else if ($name === false) { // 参数为 false 时, 使用原始文件名
+            $name = $this->fileInfo['name'];
+        }
+
+        // 指定为字符串时, 直接使用
+
+        return $name;
     }
 
 

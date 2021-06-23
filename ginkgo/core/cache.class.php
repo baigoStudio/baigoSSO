@@ -12,28 +12,24 @@ defined('IN_GINKGO') or exit('Access denied');
 // 缓存
 class Cache {
 
-    protected static $instance; // 当前实例
-    public $obj_driver; // 驱动实例
+    public $config = array(); // 配置
 
-    private $config; // 配置
+    protected static $instance; // 当前实例
 
     // 默认配置
-    private $this_config = array(
+    private $configThis = array(
         'type'      => 'file',
         'prefix'    => '',
     );
 
-    protected function __construct($type = 'file', $config = array()) {
-        $type = (string)$type;
-        $_arr_config  = Config::get('cache'); // 获取缓存配置
-        $this->config = array_replace_recursive($this->this_config, $config, $_arr_config); // 合并配置
+    private $obj_driver; // 驱动实例
 
+    protected function __construct($type = 'file', $config = array()) {
+        $this->config($config);
         $this->driver($type, $this->config); // 设置驱动
     }
 
-    protected function __clone() {
-
-    }
+    protected function __clone() { }
 
     /** 实例化
      * instance function.
@@ -45,10 +41,37 @@ class Cache {
      * @return 当前类的实例
      */
     public static function instance($type = 'file', $config = array()) {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static($type, $config);
+        if (Func::isEmpty(self::$instance)) {
+            self::$instance = new static($type, $config);
         }
-        return static::$instance;
+        return self::$instance;
+    }
+
+    /** 配置
+     * prefix function.
+     * since 0.2.0
+     * @access public
+     * @param string $config (default: array()) 配置
+     * @return
+     */
+    public function config($config = array()) {
+        $_arr_config       = Config::get('cache'); // 获取缓存配置
+
+        $_arr_configDo = $this->configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
+        }
+
+        if (is_array($this->config) && !Func::isEmpty($this->config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $this->config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        $this->config      = $_arr_configDo;
     }
 
     /** 设置, 取得前缀
@@ -73,13 +96,19 @@ class Cache {
     public function driver($type = 'file', $config = array()) {
         // 未指定驱动, 则使用默认
         if (Func::isEmpty($type)) {
-            $type = 'file';
+            if (isset($config['type']) && !Func::isEmpty($config['type'])) {
+                $type = $config['type'];
+            }
+        }
+
+        if (Func::isEmpty($type)) {
+            $type = $this->configThis['type'];
         }
 
         if (strpos($type, '\\')) {
             $_class = $type;
         } else {
-            $_class = 'ginkgo\\cache\\driver\\' . Func::ucwords($type, '_');
+            $_class = 'ginkgo\\cache\\driver\\' . String::ucwords($type, '_');
         }
 
         // 初始化驱动类
@@ -104,7 +133,7 @@ class Cache {
      * @param bool $check_expire (default: false) 是否检查过期时间 (默认不检查)
      * @return 检查结果 (bool)
      */
-    function check($name, $check_expire = false) {
+    public function check($name, $check_expire = false) {
         return $this->obj_driver->check($name, $check_expire);
     }
 
@@ -115,7 +144,7 @@ class Cache {
      * @param mixed $name 缓存名称
      * @return 缓存内容
      */
-    function read($name) {
+    public function read($name) {
         return $this->obj_driver->read($name);
     }
 
@@ -128,7 +157,7 @@ class Cache {
      * @param mixed $life_time 有效时间
      * @return 写入字节数
      */
-    function write($name, $content, $life_time = 0) {
+    public function write($name, $content, $life_time = 0) {
         return $this->obj_driver->write($name, $content, $life_time);
     }
 
@@ -139,7 +168,7 @@ class Cache {
      * @param mixed $name 缓存名称
      * @return 删除结果 (bool)
      */
-    function delete($name) {
+    public function delete($name) {
         return $this->obj_driver->delete();
     }
 }

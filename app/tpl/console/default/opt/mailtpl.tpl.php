@@ -1,5 +1,5 @@
 <?php $cfg = array(
-    'title'             => $lang->get('System settings', 'console.common') . ' &raquo; ' . $lang->get('Mail template settings', 'console.common'),
+    'title'             => $lang->get('System settings', 'console.common') . ' &raquo; ' . $lang->get('Email template settings', 'console.common'),
     'menu_active'       => 'opt',
     'sub_active'        => 'mailtpl',
     'baigoValidate'    => 'true',

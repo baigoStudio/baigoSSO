@@ -8,9 +8,9 @@ namespace app\model\console;
 
 use app\model\App as App_Base;
 use ginkgo\Func;
-use ginkgo\Json;
 use ginkgo\Crypt;
 use ginkgo\Html;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -88,8 +88,8 @@ class App extends App_Base {
             );
         }
 
-        $_arr_appData['app_allow']        = Json::encode($_arr_appData['app_allow']);
-        $_arr_appData['app_param']        = Json::encode($_arr_appData['app_param']);
+        $_arr_appData['app_allow']        = Arrays::toJson($_arr_appData['app_allow']);
+        $_arr_appData['app_param']        = Arrays::toJson($_arr_appData['app_param']);
 
         if ($this->inputSubmit['app_id'] > 0) {
             $_num_appId     = $this->inputSubmit['app_id'];
@@ -289,7 +289,7 @@ class App extends App_Base {
 
         $_arr_inputStatus = $this->obj_request->post($_arr_inputParam);
 
-        $_arr_inputStatus['app_ids'] = Func::arrayFilter($_arr_inputStatus['app_ids']);
+        $_arr_inputStatus['app_ids'] = Arrays::filter($_arr_inputStatus['app_ids']);
 
         $_mix_vld = $this->validate($_arr_inputStatus, '', 'status');
 
@@ -322,7 +322,7 @@ class App extends App_Base {
 
         $_arr_inputDelete = $this->obj_request->post($_arr_inputParam);
 
-        $_arr_inputDelete['app_ids'] = Func::arrayFilter($_arr_inputDelete['app_ids']);
+        $_arr_inputDelete['app_ids'] = Arrays::filter($_arr_inputDelete['app_ids']);
 
         $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

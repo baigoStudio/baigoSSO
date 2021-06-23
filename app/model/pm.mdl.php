@@ -5,21 +5,18 @@
 -----------------------------------------------------------------*/
 namespace app\model;
 
+use app\classes\Model;
 use ginkgo\Func;
-use ginkgo\Config;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------短消息模型-------------*/
-class Pm extends User_Common {
+class Pm extends Model {
 
     public $arr_status  = array('wait', 'read'); //状态
     public $arr_type    = array('in', 'out'); //类型
-
-    function m_init() { //构造函数
-        $this->configBase = Config::get('base', 'var_extra');
-    }
 
 
     /** 删除
@@ -133,7 +130,7 @@ class Pm extends User_Common {
     function read($mix_pm, $str_by = 'pm_id', $num_notId = 0) {
         $_arr_pmRow = $this->readProcess($mix_pm, $str_by, $num_notId);
 
-        if ($_arr_pmRow['rcode'] != 'y020102') {
+        if ($_arr_pmRow['rcode'] != 'y110102') {
             return $_arr_pmRow;
         }
 
@@ -179,11 +176,11 @@ class Pm extends User_Common {
      *
      * @access public
      * @param mixed $num_no
-     * @param int $num_except (default: 0)
+     * @param int $num_offset (default: 0)
      * @param array $arr_search (default: array())
      * @return void
      */
-    function lists($num_no, $num_except = 0, $arr_search = array()) {
+    function lists($num_no, $num_offset = 0, $arr_search = array()) {
         $_arr_pmSelect = array(
             'pm_id',
             'pm_send_id',
@@ -197,7 +194,7 @@ class Pm extends User_Common {
 
         $_arr_where  = $this->queryProcess($arr_search);
 
-        $_arr_pmRows = $this->where($_arr_where)->order('pm_id', 'DESC')->limit($num_except, $num_no)->select($_arr_pmSelect);
+        $_arr_pmRows = $this->where($_arr_where)->order('pm_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_pmSelect);
 
         foreach ($_arr_pmRows as $_key=>$_value) {
             $_arr_pmRows[$_key] = $this->rowProcess($_value);
@@ -253,7 +250,7 @@ class Pm extends User_Common {
         }
 
         if (isset($arr_search['ids']) && !Func::isEmpty($arr_search['ids'])) {
-            $arr_search['ids'] = Func::arrayFilter($arr_search['ids']);
+            $arr_search['ids'] = Arrays::filter($arr_search['ids']);
 
             $_arr_where[] = array('pm_id', 'IN', $arr_search['ids'], 'ids');
         }

@@ -8,8 +8,9 @@ namespace app\ctrl\api;
 
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
+use ginkgo\Config;
 use ginkgo\Crypt;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Smtp;
 use ginkgo\Sign;
 use ginkgo\Func;
@@ -45,7 +46,7 @@ class Profile extends Ctrl {
             return $this->fetchJson($_arr_inputInfo['msg'], $_arr_inputInfo['rcode']);
         }
 
-        $_arr_userRow  = $this->mdl_profile->read($_arr_inputInfo['user_str'], $_arr_inputInfo['user_by']);
+        $_arr_userRow  = $this->mdl_profile->read($_arr_inputInfo['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -67,7 +68,7 @@ class Profile extends Ctrl {
 
         $_arr_infoResult['timestamp'] = GK_NOW;
 
-        $_str_src   = Json::encode($_arr_infoResult);
+        $_str_src   = Arrays::toJson($_arr_infoResult);
 
         $this->notify($_str_src, 'info'); //通知
 
@@ -96,7 +97,7 @@ class Profile extends Ctrl {
             return $this->fetchJson($_arr_inputPass['msg'], $_arr_inputPass['rcode']);
         }
 
-        $_arr_userRow  = $this->mdl_profile->read($_arr_inputPass['user_str'], $_arr_inputPass['user_by']);
+        $_arr_userRow  = $this->mdl_profile->read($_arr_inputPass['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -139,7 +140,7 @@ class Profile extends Ctrl {
             return $this->fetchJson($_arr_inputSecqa['msg'], $_arr_inputSecqa['rcode']);
         }
 
-        $_arr_userRow  = $this->mdl_profile->read($_arr_inputSecqa['user_str'], $_arr_inputSecqa['user_by']);
+        $_arr_userRow  = $this->mdl_profile->read($_arr_inputSecqa['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -181,7 +182,7 @@ class Profile extends Ctrl {
             return $this->fetchJson($_arr_inputMailbox['msg'], $_arr_inputMailbox['rcode']);
         }
 
-        $_arr_userRow  = $this->mdl_profile->read($_arr_inputMailbox['user_str'], $_arr_inputMailbox['user_by']);
+        $_arr_userRow  = $this->mdl_profile->read($_arr_inputMailbox['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -212,11 +213,6 @@ class Profile extends Ctrl {
 
             $_obj_smtp = Smtp::instance();
 
-            if (!$_obj_smtp->connect()) {
-                $_arr_error = $_obj_smtp->getError();
-
-                return $this->fetchJson(end($_arr_error), 'x010405');
-            }
             $_obj_smtp->addRcpt($_arr_inputMailbox['user_mail_new']); //发送至
             $_obj_smtp->setSubject($this->configMailtpl['mailbox_subject']); //主题
             $_obj_smtp->setContent($_str_html); //内容
@@ -224,8 +220,13 @@ class Profile extends Ctrl {
 
             if (!$_obj_smtp->send()) {
                 $_arr_error = $_obj_smtp->getError();
+                $_str_msg   = end($_arr_error);
 
-                return $this->fetchJson(end($_arr_error), 'x010405');
+                if (Func::isEmpty($_str_msg)) {
+                    $_str_msg = 'Send verification email failed';
+                }
+
+                return $this->fetchJson($_str_msg, 'x010405');
             }
 
             $_arr_mailboxResult = array(
@@ -240,7 +241,7 @@ class Profile extends Ctrl {
 
         $_arr_mailboxResult['timestamp'] = GK_NOW;
 
-        $_str_src   = Json::encode($_arr_mailboxResult);
+        $_str_src   = Arrays::toJson($_arr_mailboxResult);
 
         $this->notify($_str_src, 'mailbox'); //通知
 
@@ -269,7 +270,7 @@ class Profile extends Ctrl {
             return $this->fetchJson($_arr_inputToken['msg'], $_arr_inputToken['rcode']);
         }
 
-        $_arr_userRow  = $this->mdl_profile->read($_arr_inputToken['user_str'], $_arr_inputToken['user_by']);
+        $_arr_userRow  = $this->mdl_profile->read($_arr_inputToken['user_id']);
 
         if ($_arr_userRow['rcode'] != 'y010102') {
             return $this->fetchJson($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -297,7 +298,7 @@ class Profile extends Ctrl {
 
         $_arr_tokenResult['timestamp'] = GK_NOW;
 
-        $_str_src       = Json::encode($_arr_tokenResult);
+        $_str_src       = Arrays::toJson($_arr_tokenResult);
 
         $_str_sign      = Sign::make($_str_src, $this->appRow['app_key'] . $this->appRow['app_secret']);
 

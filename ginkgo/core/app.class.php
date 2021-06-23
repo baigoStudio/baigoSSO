@@ -12,19 +12,24 @@ defined('IN_GINKGO') or exit('Access denied');
 // 应用调度
 class App {
 
+    public static $config = array(); // 配置
+
+    private static $configThis = array( // 默认配置
+        'timezone'         => 'Asia/Shanghai', //默认时区
+        'return_type'      => 'html', //默认 返回类型
+        'return_type_ajax' => 'json', //默认 ajax 返回类型
+    );
+
     private static $obj_request; // 请求实例
     private static $obj_lang; // 语言实例
     private static $route; // 路由
     private static $init; // 是否初始化标志
 
-    protected function __construct() { }
-
-    protected function __clone() { }
-
-    public static function init() {
+    public static function init($config = array()) {
         self::$obj_request  = Request::instance();
         self::$obj_lang     = Lang::instance();
 
+        self::config($config); // 配置
         self::configProcess(); // 配置处理
         self::langProcess(); // 语言处理
 
@@ -41,17 +46,15 @@ class App {
      * @static
      * @return 响应实例
      */
-    public static function run() {
+    public static function run($config = array()) {
         $_arr_route     = Route::check(); // 验证路由
         self::$route    = $_arr_route['route'];
 
         if (Func::isEmpty(self::$init)) {
-            self::init();
+            self::init($config);
         }
 
-        $_arr_configDefault = Config::get('var_default'); // 获取默认配置
-
-        self::setTimezone($_arr_configDefault['timezone']); // 设置时区
+        self::setTimezone(self::$config['timezone']); // 设置时区
 
         Loader::load(GK_PATH_APP . 'common' . GK_EXT); // 载入应用通用文件
 
@@ -85,10 +88,10 @@ class App {
             $_obj_response = $_mix_content;
         } else { //返回的是普通数据
             if (self::$obj_request->isAjax()) { // 如果请求为 ajax
-                if (Func::isEmpty($_arr_configDefault['return_type_ajax'])) { // 根据配置处理返回类型
-                    $_str_type = $_arr_configDefault['return_type'];
+                if (Func::isEmpty(self::$config['return_type_ajax'])) { // 根据配置处理返回类型
+                    $_str_type = self::$config['return_type'];
                 } else {
-                    $_str_type = $_arr_configDefault['return_type_ajax'];
+                    $_str_type = self::$config['return_type_ajax'];
                 }
             } else {
                 $_str_type = self::$obj_request->type(); // 取得返回类型
@@ -100,6 +103,52 @@ class App {
         return $_obj_response; // 返回响应实例
     }
 
+
+    // 配置 since 0.2.0
+    public static function config($config = array()) {
+        $_arr_config   = Config::get('var_default'); // 取得配置
+
+        $_arr_configDo = self::$configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
+        }
+
+        if (is_array(self::$config) && !Func::isEmpty(self::$config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, self::$config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        self::$config  = $_arr_configDo;
+    }
+
+
+    /** 设置时区
+     * setTimezone function.
+     *
+     * @access public
+     * @static
+     * @param string $timezone (default: '') 时区字符串
+     * @param string $enforce (default: '') 强制
+     * @return void
+     */
+    public static function setTimezone($timezone, $enforce = false) {
+        $_str_timezoneIni = ini_get('date.timezone');
+
+        if (Func::isEmpty($_str_timezoneIni) || $enforce) {
+            if (Func::isEmpty($timezone)) {
+                $timezone = self::$config['timezone'];
+            }
+
+            $timezone = (string)$timezone; //转换为字符串类型
+
+            ini_set('date.timezone', $timezone);
+            date_default_timezone_set($timezone);
+        }
+    }
 
     // 配置处理
     private static function configProcess() {
@@ -121,7 +170,7 @@ class App {
 
         // 载入控制器配置
         $_str_pathCtrl = GK_APP_CONFIG . self::$route['mod'] . DS . self::$route['ctrl'] . GK_EXT_INC;
-        Config::load($_str_pathCtrl, self::$route['mod'], self::$route['ctrl']);
+        Config::load($_str_pathCtrl, self::$route['ctrl'], self::$route['mod']);
 
         // 载入插件注册配置
         $_str_pathPlugin = GK_APP_CONFIG . 'plugin' . GK_EXT_INC;
@@ -153,23 +202,4 @@ class App {
         $_str_pathCtrl = GK_APP_LANG . $_current . DS . self::$route['mod'] . DS . self::$route['ctrl'] . GK_EXT_LANG;
         self::$obj_lang->load($_str_pathCtrl, self::$route['mod'] . '.' . self::$route['ctrl']);
     }
-
-
-    /** 设置时区
-     * setTimezone function.
-     *
-     * @access public
-     * @static
-     * @param string $timezone (default: '') 时区字符串
-     * @return void
-     */
-    public static function setTimezone($timezone = '') {
-        $timezone = (string)$timezone; //转换为字符串类型
-
-        if (!Func::isEmpty($timezone)) {
-            date_default_timezone_set($timezone);
-        }
-    }
 }
-
-

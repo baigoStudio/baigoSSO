@@ -9,6 +9,7 @@ namespace ginkgo\db\connector;
 use ginkgo\Func;
 use ginkgo\Log;
 use ginkgo\Config;
+use ginkgo\Paginator;
 use ginkgo\db\Connector;
 
 // 不能非法包含或直接执行
@@ -23,7 +24,7 @@ class Mysql extends Connector {
      * @access public
      * @return void
      */
-    function insertId() {
+    public function insertId() {
         $_num_id        = 0;
 
         //print_r('test');
@@ -49,7 +50,7 @@ class Mysql extends Connector {
      * @param mixed $table 表明
      * @return 当前实例
      */
-    function table($table) {
+    public function table($table) {
         $this->_tableTemp[$this->mid] = $this->obj_builder->table($table);
 
         return $this;
@@ -63,7 +64,7 @@ class Mysql extends Connector {
      * @param mixed $index 索引名
      * @return 当前实例
      */
-    function force($index) {
+    public function force($index) {
         $this->_force = $this->obj_builder->force($index);
 
         return $this;
@@ -79,7 +80,7 @@ class Mysql extends Connector {
      * @param string $type (default: '') join 类型
      * @return 当前实例
      */
-    function join($table, $on = '', $type = '') {
+    public function join($table, $on = '', $type = '') {
         $this->_join = $this->obj_builder->join($table, $on, $type);
 
         return $this;
@@ -97,7 +98,7 @@ class Mysql extends Connector {
      * @param string $type (default: '') 参数类型
      * @return 当前实例
      */
-    function where($where, $exp = '', $value = '', $param = '', $type = '') {
+    public function where($where, $exp = '', $value = '', $param = '', $type = '') {
         $_arr_sql = $this->obj_builder->where($where, $exp, $value, $param, $type);
 
         $this->_where = $_arr_sql['where'];
@@ -118,7 +119,7 @@ class Mysql extends Connector {
      * @param string $type (default: '') 参数类型
      * @return 当前实例
      */
-    function whereAnd($where, $exp = '', $value = '', $param = '', $type = '') {
+    public function whereAnd($where, $exp = '', $value = '', $param = '', $type = '') {
         $_arr_sql = $this->obj_builder->where($where, $exp, $value, $param, $type);
 
         if (!Func::isEmpty($_arr_sql['where'])) {
@@ -145,7 +146,7 @@ class Mysql extends Connector {
      * @param string $type (default: '') 参数类型
      * @return 当前实例
      */
-    function whereOr($where, $exp = '', $value = '', $param = '', $type = '') {
+    public function whereOr($where, $exp = '', $value = '', $param = '', $type = '') {
         $_arr_sql = $this->obj_builder->where($where, $exp, $value, $param, $type);
 
         if (!Func::isEmpty($_arr_sql['where'])) {
@@ -168,7 +169,7 @@ class Mysql extends Connector {
      * @param mixed $field 字段
      * @return 当前实例
      */
-    function group($field) {
+    public function group($field) {
         $this->_group = $this->obj_builder->group($field);
 
         return $this;
@@ -183,7 +184,7 @@ class Mysql extends Connector {
      * @param string $order (default: '')
      * @return 当前实例
      */
-    function order($field, $order = '') {
+    public function order($field, $order = '') {
         $this->_order = $this->obj_builder->order($field, $order);
 
         return $this;
@@ -194,12 +195,12 @@ class Mysql extends Connector {
      * limit function.
      *
      * @access public
-     * @param int $offset (default: 1)
+     * @param int $limit
      * @param bool $length (default: false)
      * @return 当前实例
      */
-    function limit($offset = 1, $length = false) {
-        $this->_limit = $this->obj_builder->limit($offset, $length);
+    public function limit($limit = false, $length = false) {
+        $this->_limit = $this->obj_builder->limit($limit, $length);
 
         return $this;
     }
@@ -212,8 +213,8 @@ class Mysql extends Connector {
      * @param string $field (default: '') 字段名
      * @return 读取结果
      */
-    function find($field = '') {
-        $this->limit();
+    public function find($field = '') {
+        $this->limit(1);
 
         $_arr_result = $this->select($field, false); // 执行 select 查询
 
@@ -229,11 +230,20 @@ class Mysql extends Connector {
      * @param bool $all (default: true) 是否全部记录
      * @return 查询结果
      */
-    function select($field = '', $all = true) {
-        $_str_sql       = $this->buildSelect($field); // 构建 select 语句
+    public function select($field = '', $all = true) {
+        $_arr_return    = array();
+        $_arr_pageRow   = array();
         $_str_realSql   = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+        if (Func::isEmpty($this->_limit) && !Func::isEmpty($this->_paginate)) { // 如果没有指定 limit 且指定了分页参数, 则执行分页
+            $_arr_pageRow = $this->pagination($this->_paginate['perpage'], $this->_paginate['current'], $this->_paginate['pageparam'], $this->_paginate['pergroup'], false);
+
+            $this->limit($_arr_pageRow['offset'], $this->_paginate['perpage']);
+        }
+
+        $_str_sql = $this->buildSelect($field); // 构建 select 语句
+
+        if ($this->_fetchSql === true || $this->optDebugDump === 'trace') { // 如果调试模式打开
             $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
         }
 
@@ -241,7 +251,7 @@ class Mysql extends Connector {
             $this->resetSql(); // 重置 sql
             return $_str_realSql; // 返回 sql 语句
         } else {
-            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+            if ($this->optDebugDump === 'trace') { // 如果调试模式为追踪模式
                 Log::record($_str_realSql, 'sql'); // 记录日志
             }
 
@@ -249,7 +259,18 @@ class Mysql extends Connector {
 
             $this->execute(); // 执行
 
-            return $this->getResult($all); // 获取数据集
+            $_arr_dataRows = $this->getResult($all); // 获取数据集
+
+            if (Func::isEmpty($_arr_pageRow)) {
+                $_arr_return = $_arr_dataRows;
+            } else {
+                $_arr_return    = array(
+                    'dataRows'  => $_arr_dataRows, // 获取数据集
+                    'pageRow'   => $_arr_pageRow, // 获取数据集
+                );
+            }
+
+            return $_arr_return;
         }
     }
 
@@ -264,11 +285,11 @@ class Mysql extends Connector {
      * @param string $type (default: '') 参数类型
      * @return void
      */
-    function insert($field, $value = '', $param = '', $type = '') {
+    public function insert($field, $value = '', $param = '', $type = '') {
         $_arr_sql        = $this->buildInsert($field, $value, $param , $type); // 构建 insert 语句
         $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+        if ($this->_fetchSql === true || $this->optDebugDump === 'trace') { // 如果调试模式打开
             $_str_realSql = $this->fetchBind($_arr_sql['sql'], $_arr_sql['bind']); // 取得绑定处理
         }
 
@@ -276,7 +297,7 @@ class Mysql extends Connector {
             $this->resetSql(); // 重置 sql
             return $_str_realSql; // 返回 sql 语句
         } else {
-            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+            if ($this->optDebugDump === 'trace') { // 如果调试模式为追踪模式
                 Log::record($_str_realSql, 'sql'); // 记录日志
             }
 
@@ -301,20 +322,20 @@ class Mysql extends Connector {
      * @param string $type (default: '') 参数类型
      * @return void
      */
-    function update($field, $value = '', $param = '', $type = '') {
+    public function update($field, $value = '', $param = '', $type = '') {
         $_arr_sql        = $this->buildUpdate($field, $value, $param , $type); // 构建 update 语句
         $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+        if ($this->_fetchSql === true || $this->optDebugDump === 'trace') { // 如果调试模式打开
             $_str_realSql = $this->fetchBind($_arr_sql['sql'], $this->_bind); // 取得绑定处理
-            $_str_realSql = $this->fetchBind($_arr_sql['sql'], $_arr_sql['bind']);
+            $_str_realSql = $this->fetchBind($_str_realSql, $_arr_sql['bind']);
         }
 
         if ($this->_fetchSql === true) { // 如果为获取 sql
             $this->resetSql(); // 重置 sql
             return $_str_realSql; // 返回 sql 语句
         } else {
-            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+            if ($this->optDebugDump === 'trace') { // 如果调试模式为追踪模式
                 Log::record($_str_realSql, 'sql'); // 记录日志
             }
 
@@ -335,11 +356,11 @@ class Mysql extends Connector {
      * @access public
      * @return void
      */
-    function delete() {
+    public function delete() {
         $_str_sql        = $this->buildDelete(); // 构建 delete 语句
         $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+        if ($this->_fetchSql === true || $this->optDebugDump === 'trace') { // 如果调试模式打开
             $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
         }
 
@@ -347,7 +368,7 @@ class Mysql extends Connector {
             $this->resetSql(); // 重置 sql
             return $_str_realSql; // 返回 sql 语句
         } else {
-            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+            if ($this->optDebugDump === 'trace') { // 如果调试模式为追踪模式
                 Log::record($_str_realSql, 'sql'); // 记录日志
             }
 
@@ -367,14 +388,14 @@ class Mysql extends Connector {
      *
      * @access public
      * @param array $field (default: array()) 字段
-     * @param string $table (default: '') 目的地表名
+     * @param string $table (default: '') 目的表名
      * @return void
      */
-    function duplicate($field = array(), $table = '') {
+    public function duplicate($field = array(), $table = '') {
         $_str_sql        = $this->buildDuplicate($field, $table); // 构建 duplicate 语句
         $_str_realSql    = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+        if ($this->_fetchSql === true || $this->optDebugDump === 'trace') { // 如果调试模式打开
             $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
         }
 
@@ -382,7 +403,7 @@ class Mysql extends Connector {
             $this->resetSql(); // 重置 sql
             return $_str_realSql; // 返回 sql 语句
         } else {
-            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+            if ($this->optDebugDump === 'trace') { // 如果调试模式为追踪模式
                 Log::record($_str_realSql, 'sql'); // 记录日志
             }
 
@@ -395,6 +416,31 @@ class Mysql extends Connector {
     }
 
 
+    /** 统计分页
+     * pagination function.
+     *
+     * @access public
+     * @param int $perpage (default: 0) 每页记录
+     * @param string $current (default: 'get') 当前页
+     * @param string $pageparam (default: 'page') 分页参数
+     * @param int $pergroup (default: 0) 每组页数
+     * @param bool $reset (default: true) 是否重置查询条件
+     * @return void
+     */
+    public function pagination($perpage = 0, $current = 'get', $pageparam = 'page', $pergroup = 0, $reset = true) {
+        $_num_count = $this->count('', $reset);
+
+        $_obj_paginator = Paginator::instance();
+
+        $_obj_paginator->count($_num_count);
+        $_obj_paginator->perpage($perpage);
+        $_obj_paginator->pergroup($pergroup);
+        $_obj_paginator->pageparam($pageparam);
+
+        return $_obj_paginator->make($current);
+    }
+
+
     /** 记录数
      * count function.
      *
@@ -402,8 +448,8 @@ class Mysql extends Connector {
      * @param string $field (default: '') 字段
      * @return void
      */
-    function count($field = '') {
-        return $this->aggProcess('count', $field);
+    public function count($field = '', $reset = true) {
+        return $this->aggProcess('count', $field, $reset);
     }
 
 
@@ -414,7 +460,7 @@ class Mysql extends Connector {
      * @param mixed $field 字段
      * @return void
      */
-    function max($field) {
+    public function max($field) {
         return $this->aggProcess('max', $field);
     }
 
@@ -426,7 +472,7 @@ class Mysql extends Connector {
      * @param mixed $field 字段
      * @return void
      */
-    function min($field) {
+    public function min($field) {
         return $this->aggProcess('min', $field);
     }
 
@@ -438,7 +484,7 @@ class Mysql extends Connector {
      * @param mixed $field 字段
      * @return void
      */
-    function avg($field) {
+    public function avg($field) {
         return $this->aggProcess('avg', $field);
     }
 
@@ -450,7 +496,7 @@ class Mysql extends Connector {
      * @param mixed $field 字段
      * @return void
      */
-    function sum($field) {
+    public function sum($field) {
         return $this->aggProcess('sum', $field);
     }
 
@@ -461,7 +507,7 @@ class Mysql extends Connector {
      * @access public
      * @return sql 语句
      */
-    function buildSql() {
+    public function buildSql() {
         $_str_sql = $this->buildWhere(false); // 构建 where 语句
 
         //print_r($_str_sql);
@@ -482,25 +528,27 @@ class Mysql extends Connector {
      * @param mixed $field 字段
      * @return void
      */
-    private function aggProcess($type, $field) {
+    private function aggProcess($type, $field, $reset = true) {
         $_str_sql       = $this->buildAgg($type, $field); // 构建聚合语句
         $_str_realSql   = ''; // 真实 sql 语句
 
-        if ($this->_fetchSql === true || $this->configDebug === 'trace') { // 如果调试模式打开
+        if ($this->_fetchSql === true || $this->optDebugDump === 'trace') { // 如果调试模式打开
             $_str_realSql = $this->fetchBind($_str_sql, $this->_bind); // 取得绑定处理
         }
 
         if ($this->_fetchSql === true) { // 如果为获取 sql
-            $this->resetSql(); // 重置 sql
+            if ($reset) {
+                $this->resetSql(); // 重置 sql
+            }
             return $_str_realSql; // 返回 sql 语句
         } else {
-            if ($this->configDebug === 'trace') { // 如果调试模式为追踪模式
+            if ($this->optDebugDump === 'trace') { // 如果调试模式为追踪模式
                 Log::record($_str_realSql, 'sql'); // 记录日志
             }
 
             $this->prepare($_str_sql, $this->_bind); // 预处理
 
-            $this->execute(); // 执行
+            $this->execute(array(), '', '', $reset); // 执行
 
             //print_r($this->obj_result->debugDumpParams());
 

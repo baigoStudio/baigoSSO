@@ -9,7 +9,7 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Sign;
 use ginkgo\Func;
 
@@ -68,7 +68,7 @@ class Login extends Ctrl {
 
         $_arr_loginResult['timestamp'] = GK_NOW;
 
-        $_str_src       = Json::encode($_arr_loginResult);
+        $_str_src       = Arrays::toJson($_arr_loginResult);
 
         $_str_sign      = Sign::make($_str_src, $this->appRow['app_key'] . $this->appRow['app_secret']);
 

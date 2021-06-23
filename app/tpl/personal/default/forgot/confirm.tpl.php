@@ -39,7 +39,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                             <div class="alert alert-danger alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <span class="fas fa-times-circle"></span>
-                                <?php echo $lang->get('You have not reserve mailbox!'); ?>
+                                <?php echo $lang->get('You have not set a mailbox!'); ?>
                             </div>
                         <?php } else { ?>
                             <div class="alert alert-warning">
@@ -52,7 +52,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                                 <div class="input-group">
                                     <input type="text" name="captcha_mail" id="captcha_mail" class="form-control">
                                     <div class="input-group-append">
-                                        <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_mail/" id="captcha_mail_img" class="bg-captcha-img" data-id="captcha_mail" alt="<?php echo $lang->get('Captcha'); ?>">
+                                        <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_mail/" data-id="captcha_mail" class="bg-captcha-img"  alt="<?php echo $lang->get('Captcha'); ?>">
                                     </div>
                                 </div>
                                 <small class="form-text" id="msg_captcha_mail"></small>
@@ -109,7 +109,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                                 <div class="input-group">
                                     <input type="text" name="captcha_secqa" id="captcha_secqa" class="form-control">
                                     <div class="input-group-append">
-                                        <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_secqa/" id="captcha_secqa_img" class="bg-captcha-img" data-id="captcha_secqa" alt="<?php echo $lang->get('Captcha'); ?>">
+                                        <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_secqa/" data-id="captcha_secqa" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
                                     </div>
                                 </div>
                                 <small class="form-text" id="msg_captcha_secqa"></small>
@@ -224,7 +224,11 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
 
         $('#forgot_mail').submit(function(){
             if (obj_validate_mail.verify()) {
-                obj_submit_mail.formSubmit();
+                obj_submit_mail.formSubmit(false, function(result){
+                    if (typeof result.rcode == 'undefined' || result.rcode != 'y010406') {
+                        captchaReload('captcha_mail');
+                    }
+                });
             }
         });
 
@@ -233,7 +237,11 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
 
         $('#forgot_secqa').submit(function(){
             if (obj_validate_secqa.verify()) {
-                obj_submit_secqa.formSubmit();
+                obj_submit_secqa.formSubmit(false, function(result){
+                    if (typeof result.rcode == 'undefined' || result.rcode != 'y010103') {
+                        captchaReload('captcha_secqa');
+                    }
+                });
             }
         });
     });

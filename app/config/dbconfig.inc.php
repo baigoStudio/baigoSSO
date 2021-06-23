@@ -6,5 +6,4 @@
   'pass' => '',
   'charset' => 'utf8',
   'prefix' => 'sso_',
-  'debug' => 'true',
 );

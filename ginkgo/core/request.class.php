@@ -12,8 +12,6 @@ defined('IN_GINKGO') or exit('Access denied');
 // 请求处理类
 class Request {
 
-    protected static $instance; // 当前实例
-
     // 默认路由, 一般由 ginkgo/Route 类定义, 避免直接使用
     public $route = array(
         'mod'   => 'index',
@@ -30,6 +28,8 @@ class Request {
 
     // 参数, 一般由 ginkgo/Route 类定义, 避免直接使用
     public $param = array();
+
+    protected static $instance; // 当前实例
 
     // 常用 mime
     protected $mimeType = array(
@@ -87,12 +87,9 @@ class Request {
         ),
     );
 
-    protected function __construct() {
-    }
+    protected function __construct() { }
 
-    protected function __clone() {
-
-    }
+    protected function __clone() { }
 
     /** 实例化
      * instance function.
@@ -102,11 +99,11 @@ class Request {
      * @return 当前类的实例
      */
     public static function instance() {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static();
+        if (Func::isEmpty(self::$instance)) {
+            self::$instance = new static();
         }
 
-        return static::$instance;
+        return self::$instance;
     }
 
 
@@ -118,7 +115,7 @@ class Request {
      * @param string $value (default: '') 路由值
      * @return void
      */
-    function setRoute($name, $value = '') {
+    public function setRoute($name, $value = '') {
         $_arr_route = array();
 
         if (is_array($name)) {
@@ -151,7 +148,7 @@ class Request {
      * @param string $value (default: '') 路由值
      * @return void
      */
-    function setRouteOrig($name, $value = '') {
+    public function setRouteOrig($name, $value = '') {
         $_arr_routeOrig = array();
 
         if (is_array($name)) {
@@ -184,7 +181,7 @@ class Request {
      * @param string $value (default: '') 参数值
      * @return void
      */
-    function setParam($name, $value = '') {
+    public function setParam($name, $value = '') {
         $_arr_param = array();
 
         if (is_array($name)) {
@@ -205,7 +202,7 @@ class Request {
      * @param mixed $name (default: false) 名称
      * @return 值
      */
-    function route($name = false) {
+    public function route($name = false) {
         $_mix_return = '';
 
         if ($name === false) {
@@ -226,7 +223,7 @@ class Request {
      * @param mixed $name (default: false) 名称
      * @return 值
      */
-    function routeOrig($name = false) {
+    public function routeOrig($name = false) {
         $_mix_return = '';
 
         if ($name === false) {
@@ -251,7 +248,7 @@ class Request {
      * @param bool $htmlmode (default: false) html 模式
      * @return 变量
      */
-    function param($name = true, $type = 'str', $default = '', $htmlmode = false) {
+    public function param($name = true, $type = 'str', $default = '', $htmlmode = false) {
         return $this->varProcessR($name, $type, $default, $htmlmode, $this->param);
     }
 
@@ -266,7 +263,7 @@ class Request {
      * @param bool $htmlmode (default: false) html 模式
      * @return 变量
      */
-    function get($name = true, $type = 'str', $default = '', $htmlmode = false) {
+    public function get($name = true, $type = 'str', $default = '', $htmlmode = false) {
         return $this->varProcessR($name, $type, $default, $htmlmode, $_GET);
     }
 
@@ -281,7 +278,7 @@ class Request {
      * @param bool $htmlmode (default: false) html 模式
      * @return 变量
      */
-    function post($name = true, $type = 'str', $default = '', $htmlmode = false) {
+    public function post($name = true, $type = 'str', $default = '', $htmlmode = false) {
         return $this->varProcessR($name, $type, $default, $htmlmode, $_POST);
     }
 
@@ -296,7 +293,7 @@ class Request {
      * @param bool $htmlmode (default: false) html 模式
      * @return 变量
      */
-    function request($name = true, $type = 'str', $default = '', $htmlmode = false) {
+    public function request($name = true, $type = 'str', $default = '', $htmlmode = false) {
         return $this->varProcessR($name, $type, $default, $htmlmode, $_REQUEST);
     }
 
@@ -308,7 +305,7 @@ class Request {
      * @param mixed $name (default: true) 变量名
      * @return 变量
      */
-    function server($name = '') {
+    public function server($name = '') {
         return $this->varProcessS($name, $_SERVER);
     }
 
@@ -319,7 +316,7 @@ class Request {
      * @param mixed $name (default: true) 变量名
      * @return 变量
      */
-    function session($name = '') {
+    public function session($name = '') {
         return $this->varProcessS($name, $_SESSION);
     }
 
@@ -330,7 +327,7 @@ class Request {
      * @param mixed $name (default: true) 变量名
      * @return 变量
      */
-    function cookie($name = '') {
+    public function cookie($name = '') {
         return $this->varProcessS($name, $_COOKIE);
     }
 
@@ -340,7 +337,7 @@ class Request {
      * @access public
      * @return mime
      */
-    function accept() {
+    public function accept() {
         return $this->server('HTTP_ACCEPT');
     }
 
@@ -351,8 +348,8 @@ class Request {
      * @access public
      * @return 返回类型
      */
-    function type() {
-        $_str_type   = 'html';
+    public function type() {
+        $_str_type   = '';
         $_str_accept = $this->accept();
 
         foreach ($this->mimeType as $_key=>$_value) {
@@ -368,13 +365,31 @@ class Request {
     }
 
 
+    // 设置 mime 类型
+    public function mimeType($type, $value = '') {
+        if (is_array($type)) {
+            $this->mimeType = array_replace_recursive($this->mimeType, $type);
+        } else if (is_string($type)) {
+            if (isset($this->mimeType[$type])) {
+                if (is_array($value)) {
+                    $this->mimeType[$type] = array_merge($this->mimeType[$type], $value);
+                } else if (is_string($value)) {
+                    $this->mimeType[$type][] = $value;
+                }
+            } else {
+                $this->mimeType[$type] = $value;
+            }
+        }
+    }
+
+
     /** 取得 IP 地址
      * ip function.
      *
      * @access public
      * @return IP
      */
-    function ip() {
+    public function ip() {
         if (!Func::isEmpty($this->server('REMOTE_ADDR'))) {
             $_str_ip = $this->server('REMOTE_ADDR');
         } else if (!Func::isEmpty(getenv('REMOTE_ADDR'))) {
@@ -393,7 +408,7 @@ class Request {
      * @access public
      * @return 请求方法
      */
-    function method() {
+    public function method() {
         $_str_method = 'GET';
 
         //print_r($this->server('HTTP_X_HTTP_METHOD_OVERRIDE'));
@@ -432,7 +447,7 @@ class Request {
      * @access public
      * @return bool
      */
-    function isAjax() {
+    public function isAjax() {
         $_str_value  = $this->server('HTTP_X_REQUESTED_WITH');
         $_str_value  = strtolower($_str_value);
 
@@ -444,7 +459,7 @@ class Request {
      * @access public
      * @return bool
      */
-    function isPjax() {
+    public function isPjax() {
         $_str_value = $this->server('HTTP_X_PJAX');
 
         return !Func::isEmpty($_str_value);
@@ -455,7 +470,7 @@ class Request {
      * @access public
      * @return bool
      */
-    function isSsl() {
+    public function isSsl() {
         $_status = false;
 
         if ($this->server('HTTPS') == '1' || strtolower($this->server('HTTPS')) === 'on') {
@@ -476,8 +491,7 @@ class Request {
      * @access public
      * @return bool
      */
-
-    function isMobile() {
+    public function isMobile() {
         $_status = false;
 
         if (!Func::isEmpty($this->server('HTTP_VIA')) && stristr($this->server('HTTP_VIA'), 'wap')) {
@@ -501,7 +515,7 @@ class Request {
      * @param bool $with_domain (default: false) 是否包含域名
      * @return 应用根目录
      */
-    function root($with_domain = false) {
+    public function root($with_domain = false) {
         $_str_baseFile  = $this->baseFile();
         $_str_baseFile  = str_replace('\\', '/', dirname($_str_baseFile));
         $_str_root      = rtrim($_str_baseFile, '/\\');
@@ -521,7 +535,7 @@ class Request {
      * @param bool $with_domain (default: false) 是否包含域名
      * @return 当前 url
      */
-    function url($with_domain = false) {
+    public function url($with_domain = false) {
         $_str_url = '';
 
         if (!Func::isEmpty($this->server('HTTP_X_REWRITE_URL'))) {
@@ -552,7 +566,7 @@ class Request {
      * @access public
      * @return void
      */
-    function domain() {
+    public function domain() {
         return strtolower($this->scheme() . '://' . $this->host());
     }
 
@@ -563,7 +577,7 @@ class Request {
      * @param bool $strict (default: false) 是否严格模式 (严格模式只包含域名部分)
      * @return void
      */
-    function host($strict = false) {
+    public function host($strict = false) {
         if (Func::isEmpty($this->server('HTTP_X_REAL_HOST'))) {
             $_str_host = $this->server('HTTP_HOST');
         } else {
@@ -583,7 +597,7 @@ class Request {
      * @access public
      * @return 协议名
      */
-    function scheme() {
+    public function scheme() {
         return strtolower($this->isSsl() ? 'https' : 'http');
     }
 
@@ -595,8 +609,9 @@ class Request {
      * @param $separator $name (default: '-') 分隔符
      * @return 头信息
      */
-    function header($name = '', $separator = '-') {
+    public function header($name = '', $separator = '-') {
         $_arr_header = array();
+        $_mix_return = '';
 
         if (function_exists('apache_request_headers')) {
             $_arr_header = apache_request_headers();
@@ -621,16 +636,10 @@ class Request {
         }
 
         if (Func::isEmpty($name)) {
-            return $_arr_header;
-        }
-
-        $name = str_replace('_', $separator, strtolower($name));
-
-        $_mix_return = '';
-
-        if (Func::isEmpty($name)) {
-            $_mix_return = $_arr_header;
+            $_mix_return =  $_arr_header;
         } else {
+            $name = str_replace('_', $separator, strtolower($name));
+
             if (isset($_arr_header[$name])) {
                 $_mix_return = $_arr_header[$name];
             }
@@ -649,7 +658,7 @@ class Request {
      * @param string $renew (default: false) 验证完毕是否重新生成
      * @return 表单名称及令牌
      */
-    function token($name = '__token__', $type = 'md5', $renew = false) {
+    public function token($name = '__token__', $type = 'md5', $renew = false) {
         if (!$name || Func::isEmpty($name)) {
             $_str_name = '__token__';
         } else {
@@ -694,7 +703,7 @@ class Request {
      * @param string $method (default: 'POST') 方法
      * @return void
      */
-    function checkDuplicate($method = 'POST') {
+    public function checkDuplicate($method = 'POST') {
         $_str_input = $this->duplicateProcess($method);
         $_str_check = $this->cookie('check_duplicate');
 
@@ -717,7 +726,7 @@ class Request {
      * @param string $method (default: 'POST') 方法
      * @return void
      */
-    function setDuplicate($method = 'POST') {
+    public function setDuplicate($method = 'POST') {
         $_str_input = $this->duplicateProcess($method);
 
         Cookie::set('check_duplicate', $_str_input);
@@ -730,7 +739,7 @@ class Request {
      * @access public
      * @return 路径
      */
-    function baseFile() {
+    public function baseFile() {
         $_str_url = '';
 
         $_script_name = basename($this->server('SCRIPT_FILENAME'));
@@ -758,9 +767,10 @@ class Request {
      *
      * @access public
      * @param bool $with_domain (default: false) 是否包含域名
+     * @param bool $route_type (default: false) 路由类型
      * @return URL
      */
-    function baseUrl($with_domain = false) {
+    public function baseUrl($with_domain = false, $route_type = '') {
         $_arr_configRoute = Config::get('route');
 
         $_str_baseFile  = $this->baseFile();
@@ -771,7 +781,7 @@ class Request {
         /*print_r($_arr_configRoute['route_type']);
         print_r('<br>');*/
 
-        if ($_arr_configRoute['route_type'] == 'noBaseFile' || strpos($_str_url, $_str_baseFile) === false) {
+        if ($_arr_configRoute['route_type'] == 'noBaseFile' || $route_type == 'noBaseFile' || strpos($_str_url, $_str_baseFile) === false) {
             $_str_baseRoute = $this->root();
         }
 
@@ -791,29 +801,37 @@ class Request {
      * @param mixed $param 参数 (如参数中不存在该元素, 则用空值填充)
      * @return 补全后的数据
      */
-    function fillParam($data, $param) {
+    public function fillParam($data, $param) {
         //print_r($param);
         $_arr_return    = array();
 
         if (is_array($param) && !Func::isEmpty($param)) {
             foreach ($param as $_key=>$_value) { // 遍历参数
+                $_type      = 'str'; // 未指定期待类型, 则认为是字符串
+                $_default   = ''; // 未指定默认值, 则用空值
+                $_html      = false; // 未指定 html 模式, 则为否
+
                 if (!isset($data[$_key])) {
                     $data[$_key] = ''; // 如果不存在则用空值填充
                 }
 
-                if (!isset($_value[0])) {
-                    $_value[0] = 'str'; // 未指定期待类型, 则认为是字符串
+                if (is_array($_value)) {
+                    if (isset($_value[0])) {
+                        $_type = $_value[0]; // 指定期待类型
+                    }
+
+                    if (isset($_value[1])) {
+                        $_default = $_value[1]; // 指定默认值
+                    }
+
+                    if (isset($_value[2])) {
+                        $_html = $_value[2]; // 指定 html 模式
+                    }
+                } else if (is_scalar($_value)) {
+                    $_type = $_value; // 仅指定类型
                 }
 
-                if (!isset($_value[1])) {
-                    $_value[1] = ''; // 未指定默认值, 则用空值
-                }
-
-                if (!isset($_value[2])) {
-                    $_value[2] = false; // 未指定 html 模式, 则为否
-                }
-
-                $_arr_return[$_key] = $this->input($data[$_key], $_value[0], $_value[1], $_value[2]); // 过滤
+                $_arr_return[$_key] = $this->input($data[$_key], $_type, $_default, $_html); // 过滤
             }
         }
 
@@ -821,123 +839,26 @@ class Request {
     }
 
 
-    /** 取得分也参数
+    /** 取得分页参数
      * pagination function.
      *
      * @access public
      * @param int $count (default: 0) 记录数
      * @param int $perpage (default: 0) 每页数
-     * @param string $method (default: 'get') 方法
+     * @param string $current (default: 'get') 方法
      * @param string $param (default: 'page') 参数名
      * @param int $pergroup (default: 0) 每个分组的页数
      * @return 分页参数
      */
-    function pagination($count = 0, $perpage = 0, $method = 'get', $param = 'page', $pergroup = 0) {
-        if ($perpage < 1) { // 如果未指定每页数, 则用默认配置
-            $_arr_configDefault = Config::get('var_default'); // 取得默认配置
-            $perpage       = $_arr_configDefault['perpage'];
-        }
+    public function pagination($count, $perpage = 0, $current = 'get', $pageparam = 'page', $pergroup = 0) {
+        $_obj_paginator = Paginator::instance();
 
-        if ($perpage < 1) { // 如果每页数依然小于 1, 则直接为 10
-            $perpage = 10;
-        }
+        $_obj_paginator->count($count);
+        $_obj_paginator->perpage($perpage);
+        $_obj_paginator->pergroup($pergroup);
+        $_obj_paginator->pageparam($pageparam);
 
-        if ($pergroup < 1) { // 如果未指定每个分组的页数, 则默认为 10
-            $pergroup = 10;
-        }
-
-        if (is_numeric($method)) { // 如果方法为数字, 则直接认为是当前页码
-            $_num_this = $method;
-        } else {
-            $method = strtolower($method); // 将方法转为小些
-
-            switch ($method) {
-                case 'post':
-                    $_num_this = $this->post($param, false, 'int', 1); // 从 post 中取得当前页码
-                break;
-
-                default:
-                    //print_r($this->param);
-                    if (isset($this->param[$param])) { // 如果参数中有当前页码, 则直接使用
-                        $_num_this = $this->input($this->param[$param], 'int', 1);
-                    } else { // 否则从 get 中取得
-                        $_num_this = $this->get($param, false, 'int', 1);
-                    }
-                break;
-            }
-        }
-
-        if ($_num_this < 1) { // 如果当前页小与 1, 则直接认为是首页
-            $_num_this = 1;
-        }
-
-        $_num_total = $count / $perpage; // 记录数除以每页数
-
-        if (intval($_num_total) < $_num_total) { // 有余数, 则总页数加 1
-            $_num_total = intval($_num_total) + 1;
-        } else if ($_num_total < 1) { // 总页数小于 1, 则认为只有一页
-            $_num_total = 1;
-        } else {
-            $_num_total = intval($_num_total); // 将总页数转换为整数
-        }
-
-        if ($_num_this > $_num_total) { // 如果当前页码大于总页数, 则总页数为当前页码
-            $_num_this = $_num_total;
-        }
-
-        if ($_num_this <= 1) { // 如果当前页码小于等于 1, 则无需排除记录
-            $_num_except = 0;
-        } else { // 否则计算应排除的记录数
-            $_num_except = ($_num_this - 1) * $perpage;
-        }
-
-        $_num_p     = intval(($_num_this - 1) / $pergroup); // 是否存在上十页、下十页参数
-        $_num_groupBegin = $_num_p * $pergroup + 1; // 当前组起始页
-        $_num_groupEnd   = $_num_p * $pergroup + $pergroup; // 当前组结束页
-
-        if ($_num_groupEnd >= $_num_total) { // 如果当前组的结束页大于总页数, 则总页数为当前组的结束页
-            $_num_groupEnd = $_num_total;
-        }
-
-        // 链接以及数值
-        $_num_first     = false; // 首页 (false 为隐藏, 以下同)
-        $_num_final     = false; // 尾页
-        $_num_prev      = false; // 上一页
-        $_num_next      = false; // 下一页
-        $_num_groupPrev = false; // 上一组
-        $_num_groupNext = false; // 下一组
-
-        if ($_num_this > 1) { // 当前页码大于 1 时
-            $_num_first = 1; // 显示首页连接
-            $_num_prev  = $_num_this - 1; // 上一页设置为当前页减 1
-        }
-
-        if ($_num_this < $_num_total) { // 当前页小于总页数时
-            $_num_final = $_num_total; // 显示尾页
-            $_num_next  = $_num_this + 1; // 下一页设置为当前页加 1
-        }
-
-        if ($_num_p * $pergroup > 0) {
-            $_num_groupPrev = $_num_p * $pergroup;
-        }
-
-        if ($_num_groupEnd < $_num_final) { // 当前组的结束页小于尾页
-            $_num_groupNext = $_num_groupEnd + 1; // 下一组为当前组的结束页加 1
-        }
-
-        return array(
-            'page'          => $_num_this, // 当前页码
-            'total'         => $_num_total, // 总页数
-            'except'        => $_num_except, // 应排除的记录数
-            'first'         => $_num_first, // 首页
-            'final'         => $_num_final, // 尾页
-            'prev'          => $_num_prev, // 上一页
-            'next'          => $_num_next, // 下一页
-            'group_begin'   => $_num_groupBegin, // 当前组的起始页
-            'group_end'     => $_num_groupEnd, // 当前组的结束页
-            'group_prev'    => $_num_groupPrev, // 上一组
-            'group_next'    => $_num_groupNext, // 下一组
-        );
+        return $_obj_paginator->make($current);
     }
 
 
@@ -951,7 +872,7 @@ class Request {
      * @param bool $htmlmode (default: false) html 模式
      * @return void
      */
-    function input($input = '', $type = 'str', $default = '', $htmlmode = false) {
+    public function input($input = '', $type = 'str', $default = '', $htmlmode = false) {
         //print_r($input);
         //print_r(PHP_EOL);
 
@@ -982,10 +903,14 @@ class Request {
             break;
 
             case 'arr': //数组
-                $_return = Func::arrayEach($input); // 遍历数组
+                if (!is_array($input)) {
+                    $input = array();
+                }
+
+                $_return = Arrays::each($input); // 遍历数组
             break;
 
-            default: //默认
+            default: // 默认
                 $_return = Func::safe($input, $htmlmode); // 安全过滤
             break;
 
@@ -1042,7 +967,7 @@ class Request {
         if ($name === false) { // 如果为 false, 返回全部原始参数
             $_return = $var;
         } else if ($name === true) { // 如果是 true, 返回全部参数, 并作安全过滤
-            $_return = Func::arrayEach($var);
+            $_return = Arrays::each($var);
         } else if (is_array($name)) { // 如果为数组, 则补全
             $_return = $this->fillParam($var, $name);
         } else if (is_scalar($name)) { // 如果为标量, 则返回该元素
@@ -1081,5 +1006,3 @@ class Request {
         return $_mix_return;
     }
 }
-
-

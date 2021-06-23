@@ -10,16 +10,15 @@ use PDO;
 use ginkgo\Func;
 use ginkgo\Config;
 use ginkgo\Exception;
+use ginkgo\session\Driver;
 use ginkgo\Db as Db_Base;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 // 数据库类型的会话驱动
-class Db {
+class Db extends Driver {
 
-    protected static $instance; // 当前实例
-    private $lifeTime = 0; // 生命周期
     private $obj_db; // 数据库实例
 
     /** 构造函数
@@ -28,43 +27,20 @@ class Db {
      * @access public
      * @return void
      */
-    public function __construct() {
-        $_arr_config   = Config::get('session');
+    public function __construct($config = array()) {
+        parent::__construct($config);
 
-        if (isset($_arr_config['life_time'])) {
-            $this->lifeTime = $_arr_config['life_time'];
-        }
-
-        if (isset($_arr_config['dbconfig'])) {
-            $this->obj_db = Db_Base::connect($_arr_config['dbconfig']);
+        if (isset($this->config['dbconfig'])) {
+            $this->obj_db = Db_Base::connect($this->config['dbconfig']);
         } else  {
             $this->obj_db = Db_Base::connect();
         }
 
         $_arr_tableRows = $this->showTables();
 
-        if (!in_array($this->obj_db->dbconfig['prefix'] . 'session', $_arr_tableRows)) {
+        if (!in_array($this->obj_db->config['prefix'] . 'session', $_arr_tableRows)) {
             $this->createTable();
         }
-    }
-
-
-    protected function __clone() {
-
-    }
-
-    /** 实例化
-     * instance function.
-     *
-     * @access public
-     * @static
-     * @return 当前类的实例
-     */
-    public static function instance() {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static();
-        }
-        return static::$instance;
     }
 
 
@@ -76,10 +52,10 @@ class Db {
      * @param mixed $session_name
      * @return void
      */
-    function open($save_path, $session_name) {
+    public function open($save_path, $session_name) {
         // get session-lifetime
-        if ($this->lifeTime <= 1) {
-            $this->lifeTime = get_cfg_var('session.gc_maxlifetime');
+        if ($this->config['life_time'] <= 1) {
+            $this->config['life_time'] = get_cfg_var('session.gc_maxlifetime');
         }
 
         return true;
@@ -92,7 +68,7 @@ class Db {
      * @access public
      * @return void
      */
-    function close() {
+    public function close() {
         // $this->gc(ini_get('session.gc_maxlifetime'));
 
         return true;
@@ -106,7 +82,7 @@ class Db {
      * @param mixed $session_id
      * @return 会话数据
      */
-    function read($session_id) {
+    public function read($session_id) {
         //print_r('read');
         $_arr_sessionRow['session_data'] = '';
 
@@ -124,11 +100,11 @@ class Db {
      * @param mixed $session_data
      * @return void
      */
-    function write($session_id, $session_data) {
+    public function write($session_id, $session_data) {
         //print_r('write');
         $_status = false;
 
-        $_tm_expire = GK_NOW + $this->lifeTime;
+        $_tm_expire = GK_NOW + $this->config['life_time'];
         // is a session with this id in the database?
 
         $_arr_sessionData = array(
@@ -165,7 +141,7 @@ class Db {
      * @param mixed $session_id
      * @return void
      */
-    function destroy($session_id) {
+    public function destroy($session_id) {
         $_status = false;
 
         // delete session-data
@@ -187,7 +163,7 @@ class Db {
      * @param mixed $ssin_max_lifetime
      * @return void
      */
-    function gc($ssin_max_lifetime) {
+    public function gc($ssin_max_lifetime) {
         $_status = false;
 
         $_num_db = $this->obj_db->table('session')->where('session_expire', '<', GK_NOW)->delete();
@@ -234,12 +210,12 @@ class Db {
      * @return void
      */
     private function createTable() {
-        $_str_sql    = 'CREATE TABLE IF NOT EXISTS `' . $this->obj_db->dbconfig['prefix'] . 'session` (';
+        $_str_sql    = 'CREATE TABLE IF NOT EXISTS `' . $this->obj_db->config['prefix'] . 'session` (';
         $_str_sql   .= '`session_id` varchar(255) NOT NULL DEFAULT \'\' COMMENT \'ID\',';
         $_str_sql   .= '`session_data` text NOT NULL DEFAULT \'\' COMMENT \'SESSION 数据\',';
         $_str_sql   .= '`session_expire` int NOT NULL DEFAULT 0 COMMENT \'SESSION 过期时间\',';
         $_str_sql   .= ' PRIMARY KEY (`session_id`)';
-        $_str_sql   .= ') ENGINE=InnoDB DEFAULT CHARSET=' . $this->obj_db->dbconfig['charset'] . ' COMMENT=\'SESSION\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
+        $_str_sql   .= ') ENGINE=InnoDB DEFAULT CHARSET=' . $this->obj_db->config['charset'] . ' COMMENT=\'SESSION\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
 
         //print_r($_str_sql);
 
@@ -258,7 +234,7 @@ class Db {
      * @return void
      */
     private function showTables() {
-        $_str_sql = 'SHOW TABLES FROM `' . $this->obj_db->dbconfig['name'] . '`';
+        $_str_sql = 'SHOW TABLES FROM `' . $this->obj_db->config['name'] . '`';
 
         $_query_result  = $this->obj_db->query($_str_sql);
 

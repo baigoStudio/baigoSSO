@@ -10,6 +10,7 @@ use app\model\User;
 use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Html;
+use ginkgo\File;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -37,7 +38,7 @@ class Import extends User {
      * @return void
      */
     function preview($str_charset = '', $offset = 5) {
-        if (Func::isFile($this->csvPath)) {
+        if (File::fileHas($this->csvPath)) {
             $_res_csv    = fopen($this->csvPath, 'r');
 
             $_str_sample = fread($_res_csv, 100);

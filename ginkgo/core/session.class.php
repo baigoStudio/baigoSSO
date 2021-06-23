@@ -12,25 +12,20 @@ defined('IN_GINKGO') or exit('Access denied');
 // 会话处理
 class Session {
 
-    private static $init; // 是否初始化标志
+    public static $config = array(); // 配置
 
     // 默认配置
-    private static $this_config = array(
-        'type'      => 'file',
-        'autostart' => false,
-        'name'      => '',
-        'path'      => '',
+    private static $configThis = array(
+        'autostart'     => false, //自动开始
+        'name'          => '', //Session ID 名称
+        'type'          => 'file', //类型 (可选 db,file)
+        'path'          => '', //保存路径 (默认为 /runtime/session)
+        'prefix'        => 'ginkgo_', //前缀
+        'cookie_domain' => '', //cookie 域名
+        'life_time'     => 1200, // session 生存时间
     );
 
-    private static $prefix = ''; // 前缀
-
-    protected function __construct() {
-    }
-
-
-    protected function __clone() {
-
-    }
+    private static $init; // 是否初始化标志
 
     /** 初始化
      * init function.
@@ -43,22 +38,18 @@ class Session {
     public static function init($config = array()) {
         $_do_start = false;
 
-        $_arr_config    = Config::get('session');
+        self::config($config);
 
-        if (!Func::isEmpty($config)) {
-            $_arr_config = array_replace_recursive(self::$this_config, $_arr_config, $config); // 合并配置
-        }
-
-        if (isset($_arr_config['type']) && !Func::isEmpty($_arr_config['type']) && $_arr_config['type'] != 'file') { // 如果指定了驱动类型, 且不是文件类型
-            if (strpos($_arr_config['type'], '\\')) { // 如果类型包含命名空间则直接使用
-                $_class = $_arr_config['type'];
+        if (isset(self::$config['type']) && !Func::isEmpty(self::$config['type']) && self::$config['type'] != 'file') { // 如果指定了驱动类型, 且不是文件类型
+            if (strpos(self::$config['type'], '\\')) { // 如果类型包含命名空间则直接使用
+                $_class = self::$config['type'];
             } else { // 否则补全命名空间
-                $_class = 'ginkgo\\session\\driver\\' . Func::ucwords($_arr_config['type'], '_');
+                $_class = 'ginkgo\\session\\driver\\' . String::ucwords(self::$config['type'], '_');
             }
 
             // 检查驱动类
             if (class_exists($_class)) {
-                $_obj_session = $_class::instance(); // 实例化驱动
+                $_obj_session = $_class::instance(self::$config); // 实例化驱动
 
                 $_arr_return = session_set_save_handler(array($_obj_session, 'open'), array($_obj_session, 'close'), array($_obj_session, 'read'), array($_obj_session, 'write'), array($_obj_session, 'destroy'), array($_obj_session, 'gc')); // 定义处理函数
             } else { // 报错
@@ -69,10 +60,10 @@ class Session {
                 throw $_obj_excpt;
             }
         } else {
-            if (Func::isEmpty($_arr_config['path'])) {
+            if (Func::isEmpty(self::$config['path'])) {
                 $_str_sessionPath = GK_PATH_SESSION;
             } else {
-                $_str_sessionPath = $_arr_config['path'];
+                $_str_sessionPath = self::$config['path'];
             }
 
             File::instance()->dirMk($_str_sessionPath);
@@ -80,21 +71,17 @@ class Session {
             session_save_path($_str_sessionPath);
         }
 
-        if (!Func::isEmpty($_arr_config['cookie_domain'])) {
-            ini_set('session.cookie_domain', $_arr_config['cookie_domain']);
+        if (!Func::isEmpty(self::$config['cookie_domain'])) {
+            ini_set('session.cookie_domain', self::$config['cookie_domain']);
         }
 
-        if (!Func::isEmpty($_arr_config['prefix'])) {
-            self::$prefix = $_arr_config['prefix'];
-        }
-
-        if (isset($_arr_config['name']) && !Func::isEmpty($_arr_config['name'])) {
-            session_name($_arr_config['name']);
+        if (isset(self::$config['name']) && !Func::isEmpty(self::$config['name'])) {
+            session_name(self::$config['name']);
         }
 
         //print_r(session_id());
 
-        if ($_arr_config['autostart'] === true && Func::isEmpty(session_id())) {
+        if (self::$config['autostart'] === true && Func::isEmpty(session_id())) {
             //print_r('auto_start');
             ini_set('session.auto_start', 0);
             $_do_start = true;
@@ -109,27 +96,28 @@ class Session {
         }
     }
 
-    /** 引导
-     * boot function.
-     *
-     * @access public
-     * @static
-     * @param array $config (default: array()) 会话配置
-     * @return void
-     */
-    public static function boot($config = array()) {
-        if (Func::isEmpty(self::$init)) {
-            //print_r('init');
 
-            self::init($config);
-        } else if (self::$init === false) {
-            if (Func::isEmpty(session_id())) {
-                session_start();
-            }
+    // 配置 since 0.2.0
+    public static function config($config = array()) {
+        $_arr_config   = Config::get('session'); // 取得配置
 
-            self::$init = true;
+        $_arr_configDo = self::$configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
         }
+
+        if (is_array(self::$config) && !Func::isEmpty(self::$config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, self::$config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        self::$config  = $_arr_configDo;
     }
+
 
     /** 设置, 获取前缀
      * prefix function.
@@ -141,13 +129,13 @@ class Session {
      */
     public static function prefix($prefix = '') {
         if (Func::isEmpty(self::$init)) {
-            self::boot();
+            self::init();
         }
 
         if (Func::isEmpty($prefix)) {
-            return self::$prefix;
+            return self::$config['prefix'];
         } else {
-            self::$prefix = $prefix;
+            self::$config['prefix'] = $prefix;
         }
     }
 
@@ -162,10 +150,10 @@ class Session {
      * @param string $prefix (default: '') 前缀
      * @return void
      */
-    static function set($name, $value, $prefix = '') {
+    public static function set($name, $value, $prefix = '') {
         if (Func::isEmpty(self::$init)) {
             //print_r('boot');
-            self::boot();
+            self::init();
         }
 
         $_arr_prefix = self::prefixProcess($prefix); // 前缀处理
@@ -191,12 +179,12 @@ class Session {
      * @param string $prefix (default: '') 前缀
      * @return 变量
      */
-    static function get($name, $prefix = '') {
+    public static function get($name, $prefix = '') {
         $_value = null;
 
         if (Func::isEmpty(self::$init)) {
             //print_r('boot');
-            self::boot();
+            self::init();
         }
 
         $_arr_prefix = self::prefixProcess($prefix);
@@ -227,9 +215,9 @@ class Session {
      * @param string $prefix (default: '') 前缀
      * @return void
      */
-    static function delete($name, $prefix = '') {
+    public static function delete($name, $prefix = '') {
         if (Func::isEmpty(self::$init)) {
-            self::boot();
+            self::init();
         }
 
         $_arr_prefix = self::prefixProcess($prefix);
@@ -252,9 +240,9 @@ class Session {
      * @param string $prefix (default: '') 前缀
      * @return 前缀
      */
-    private static function prefixProcess($prefix = '') {
+    private static function prefixProcess($prefix) {
         if (Func::isEmpty($prefix)) {
-            $_str_prefix = self::$prefix;
+            $_str_prefix = self::$config['prefix'];
         } else {
             $_str_prefix = $prefix;
         }

@@ -11,7 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Crypt;
 use ginkgo\Func;
 use ginkgo\Smtp;
-use ginkgo\Json;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -67,7 +67,7 @@ class Forgot extends Ctrl {
 
         if (Func::isEmpty($_arr_userRow['user_mail']) && Func::isEmpty($_arr_userRow['user_sec_ques'])) {
             $this->generalData['rcode'] = 'x010403';
-            $this->generalData['msg']   = 'You have not reserve mailbox and security question, cannot reset your password. Please contact your system administrator!';
+            $this->generalData['msg']   = 'You have not set a mailbox and security question, cannot reset your password. Please contact your system administrator!';
 
             return $this->fetch('forgot' . DS . 'index', $this->generalData);
         }
@@ -123,11 +123,6 @@ class Forgot extends Ctrl {
 
         $_obj_smtp  = Smtp::instance();
 
-        if (!$_obj_smtp->connect()) {
-            $_arr_error = $_obj_smtp->getError();
-            return $this->fetchJson(end($_arr_error), 'x010406');
-        }
-
         $_obj_smtp->addRcpt($_arr_userRow['user_mail']); //发送至
         $_obj_smtp->setSubject($this->configMailtpl['forgot_subject']); //主题
         $_obj_smtp->setContent($_str_html); //内容
@@ -135,7 +130,13 @@ class Forgot extends Ctrl {
 
         if (!$_obj_smtp->send()) {
             $_arr_error = $_obj_smtp->getError();
-            return $this->fetchJson(end($_arr_error), 'x010406');
+            $_str_msg   = end($_arr_error);
+
+            if (Func::isEmpty($_str_msg)) {
+                $_str_msg = 'Send verification email failed';
+            }
+
+            return $this->fetchJson($_str_msg, 'x010406');
         }
 
         return $this->fetchJson('A verification email has been sent to your mailbox, please verify.', 'y010406');
@@ -162,7 +163,7 @@ class Forgot extends Ctrl {
             return $this->fetchJson('User is disabled', 'x010402');
         }
 
-        $_arr_inputBySecqa['user_sec_answ'] = Json::encode($_arr_inputBySecqa['user_sec_answ']);
+        $_arr_inputBySecqa['user_sec_answ'] = Arrays::toJson($_arr_inputBySecqa['user_sec_answ']);
 
         $_str_secAnsw = Crypt::crypt($_arr_inputBySecqa['user_sec_answ'], $_arr_userRow['user_name']);
 

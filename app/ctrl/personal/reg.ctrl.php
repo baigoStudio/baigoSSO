@@ -26,7 +26,7 @@ class Reg extends Ctrl {
         $this->mdl_reg          = Loader::model('Reg');
         $this->mdl_verify       = Loader::model('Verify');
 
-        $this->configReg     = Config::get('reg', 'var_extra');
+        $this->configReg        = Config::get('reg', 'var_extra');
     }
 
 
@@ -77,7 +77,7 @@ class Reg extends Ctrl {
             $_arr_verifySubmitResult    = $this->mdl_verify->submit($_arr_regResult['user_id'], $_arr_inputReg['user_mail'], 'confirm');
 
             if ($_arr_verifySubmitResult['rcode'] != 'y120101' && $_arr_verifySubmitResult['rcode'] != 'y120103') { //生成验证失败
-                return $this->fetchJson('Send confirmation email failed', 'x010407');
+                return $this->fetchJson('Send verification email failed', 'x010407');
             }
 
             $_str_verifyUrl = $this->url['url_personal'] . 'verify/confirm/id/' . $_arr_verifySubmitResult['verify_id'] . '/token/' . $_arr_verifySubmitResult['verify_token'] . '/';
@@ -90,11 +90,6 @@ class Reg extends Ctrl {
 
             $_obj_smtp = Smtp::instance();
 
-            if (!$_obj_smtp->connect()) {
-                $_arr_error = $_obj_smtp->getError();
-                return $this->fetchJson(end($_arr_error), 'x010407');
-            }
-
             $_obj_smtp->addRcpt($_arr_regResult['user_mail']); //发送至
             $_obj_smtp->setSubject($this->configMailtpl['reg_subject']); //主题
             $_obj_smtp->setContent($_str_html); //内容
@@ -102,6 +97,12 @@ class Reg extends Ctrl {
 
             if (!$_obj_smtp->send()) {
                 $_arr_error = $_obj_smtp->getError();
+                $_str_msg   = end($_arr_error);
+
+                if (Func::isEmpty($_str_msg)) {
+                    $_str_msg = 'Send verification email failed';
+                }
+
                 return $this->fetchJson(end($_arr_error), 'x010407');
             }
         }
@@ -154,7 +155,7 @@ class Reg extends Ctrl {
         $_arr_submitResult = $this->mdl_verify->submit($_arr_userRow['user_id'], $_arr_userRow['user_mail'], 'confirm');
 
         if ($_arr_submitResult['rcode'] != 'y120101' && $_arr_submitResult['rcode'] != 'y120103') {
-            return $this->fetchJson('Send confirmation email failed', 'x010407');
+            return $this->fetchJson('Send verification email failed', 'x010407');
         }
 
         $_str_verifyUrl = $this->generalData['url_personal'] . 'verify/confirm/id/' . $_arr_submitResult['verify_id'] . '/token/' . $_arr_submitResult['verify_token'] . '/';
@@ -169,11 +170,6 @@ class Reg extends Ctrl {
 
         $_obj_smtp  = Smtp::instance();
 
-        if (!$_obj_smtp->connect()) {
-            $_arr_error = $_obj_smtp->getError();
-            return $this->fetchJson(end($_arr_error), 'x010407');
-        }
-
         $_obj_smtp->addRcpt($_arr_userRow['user_mail']); //发送至
         $_obj_smtp->setSubject($this->configMailtpl['reg_subject']); //主题
         $_obj_smtp->setContent($_str_html); //内容
@@ -181,7 +177,13 @@ class Reg extends Ctrl {
 
         if (!$_obj_smtp->send()) {
             $_arr_error = $_obj_smtp->getError();
-            return $this->fetchJson(end($_arr_error), 'x010407');
+            $_str_msg   = end($_arr_error);
+
+            if (Func::isEmpty($_str_msg)) {
+                $_str_msg = 'Send verification email failed';
+            }
+
+            return $this->fetchJson($_str_msg, 'x010407');
         }
 
         return $this->fetchJson('A verification email has been sent to your mailbox, please verify.', 'y010407');
@@ -193,17 +195,13 @@ class Reg extends Ctrl {
             'msg' => '',
         );
 
-        $_str_userName = $this->obj_request->get('user_name');
+        $_arr_inputChkname = $this->mdl_reg->inputChkname();
 
-        if (!Func::isEmpty($_str_userName)) {
-            $_arr_userRow   = $this->mdl_user->check($_str_userName, 'user_name');
-
-            if ($_arr_userRow['rcode'] == 'y010102') {
-                $_arr_return = array(
-                    'rcode' => 'x010404',
-                    'error' => $this->obj_lang->get('User already exists'),
-                );
-            }
+        if ($_arr_inputChkname['rcode'] != 'y010201') {
+            $_arr_return = array(
+                'rcode'     => $_arr_inputChkname['rcode'],
+                'error_msg' => $this->obj_lang->get($_arr_inputChkname['msg']),
+            );
         }
 
         return $this->json($_arr_return);
@@ -215,17 +213,13 @@ class Reg extends Ctrl {
             'msg' => '',
         );
 
-        $_str_userMail = $this->obj_request->get('user_mail');
+        $_arr_inputChkmail = $this->mdl_reg->inputChkmail();
 
-        if (!Func::isEmpty($_str_userMail)) {
-            $_arr_userRow   = $this->mdl_user->check($_str_userMail, 'user_mail');
-
-            if ($_arr_userRow['rcode'] == 'y010102') {
-                $_arr_return = array(
-                    'rcode' => 'x010404',
-                    'error' => $this->obj_lang->get('Mailbox already exists'),
-                );
-            }
+        if ($_arr_inputChkmail['rcode'] != 'y010201') {
+            $_arr_return = array(
+                'rcode'     => $_arr_inputChkmail['rcode'],
+                'error_msg' => $this->obj_lang->get($_arr_inputChkmail['msg']),
+            );
         }
 
         return $this->json($_arr_return);

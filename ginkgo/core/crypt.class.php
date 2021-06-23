@@ -12,14 +12,15 @@ defined('IN_GINKGO') or exit('Access denied');
 // 加密解密 需要 openssl 支持
 class Crypt {
 
+    public static $error; // 错误
+
     private static $init; // 是否初始化标志
     private static $keyPub; // 公钥
-    private static $error; // 错误
 
-    static function init() {
+    public static function init() {
         $_str_pathKey = GK_PATH_DATA . 'key_pub' . GK_EXT_INC;
 
-        if (!Func::isFile($_str_pathKey)) { // 如果没有公钥, 则生成一个
+        if (!File::fileHas($_str_pathKey)) { // 如果没有公钥, 则生成一个
             $_num_size   = Config::write($_str_pathKey, Func::rand());
         }
 
@@ -39,7 +40,7 @@ class Crypt {
      * @param int $crypt_type (default: 2) 加密类型 (历史技术债务, 向下兼容)
      * @return 加密后字符串
      */
-    static function crypt($str, $salt, $is_md5 = false, $crypt_type = 2) {
+    public static function crypt($str, $salt, $is_md5 = false, $crypt_type = 2) {
         $str = (string)$str;
 
         if (Func::isEmpty(self::$init)) {
@@ -84,17 +85,17 @@ class Crypt {
      * @param string $iv 初始化向量
      * @return 加密后字符串
      */
-    static function encrypt($string, $key, $iv) {
+    public static function encrypt($string, $key, $iv) {
         $string = (string)$string;
 
         if (strlen($iv) != 16) {
-            static::$error = 'Size of Secret code must be 16';
+            self::$error = 'Size of Secret code must be 16';
             return false;
         }
 
         $_str_encrypt = openssl_encrypt($string, 'AES-128-CBC', $key, 1, $iv); // 加密
 
-        return Base64::encode($_str_encrypt); // base64 编码
+        return String::toBase64($_str_encrypt); // base64 编码
     }
 
 
@@ -107,13 +108,13 @@ class Crypt {
      * @param string $iv 初始化向量
      * @return 解密后字符串
      */
-    static function decrypt($string, $key, $iv) {
+    public static function decrypt($string, $key, $iv) {
         if (strlen($iv) != 16) {
-            static::$error = 'Size of Secret code must be 16';
+            self::$error = 'Size of Secret code must be 16';
             return false;
         }
 
-        $string = Base64::decode($string); // base64 解码
+        $string = String::fromBase64($string); // base64 解码
 
         return openssl_decrypt($string, 'AES-128-CBC', $key, 1, $iv); // 解密
     }
@@ -125,7 +126,7 @@ class Crypt {
      * @static
      * @return 错误内容
      */
-    static function getError() {
-        return static::$error;
+    public static function getError() {
+        return self::$error;
     }
 }

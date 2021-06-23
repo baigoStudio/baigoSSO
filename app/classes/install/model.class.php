@@ -179,7 +179,7 @@ abstract class Model extends Model_Base {
 
             $_str_sql     .= implode(',', $_values);
 
-            $_str_sql     .= ', PRIMARY KEY (' . $this->obj_builder->addChar($pk) . ')) ENGINE=InnoDB DEFAULT CHARSET=' . $this->dbconfig['charset'] . ' COMMENT=\'' . $comment . '\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
+            $_str_sql     .= ', PRIMARY KEY (' . $this->obj_builder->addChar($pk) . ')) ENGINE=InnoDB DEFAULT CHARSET=' . $this->config['charset'] . ' COMMENT=\'' . $comment . '\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
             $_str_sql     .= ' SELECT ';
 
             $_values   = array();
@@ -219,7 +219,7 @@ abstract class Model extends Model_Base {
             break;
 
             case 'table':
-                $_str_sql = 'SHOW TABLES FROM ' . $this->obj_builder->addChar($this->dbconfig['name']);
+                $_str_sql = 'SHOW TABLES FROM ' . $this->obj_builder->addChar($this->config['name']);
             break;
 
             default:
@@ -242,7 +242,7 @@ abstract class Model extends Model_Base {
                         break;
 
                         case 'table':
-                            $_arr_return[] = str_ireplace($this->dbconfig['prefix'], '', $_value[$_index]);
+                            $_arr_return[] = str_ireplace($this->config['prefix'], '', $_value[$_index]);
                         break;
 
                         default:
@@ -337,7 +337,7 @@ abstract class Model extends Model_Base {
 
                 $_str_sql  .= ' PRIMARY KEY (' . $this->obj_builder->addChar($pk) . ')';
 
-                $_str_sql  .= ') ENGINE=InnoDB DEFAULT CHARSET=' . $this->dbconfig['charset'] . ' COMMENT=\'' . $comment . '\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
+                $_str_sql  .= ') ENGINE=InnoDB DEFAULT CHARSET=' . $this->config['charset'] . ' COMMENT=\'' . $comment . '\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
             }
         }
 
@@ -446,7 +446,7 @@ abstract class Model extends Model_Base {
                 case 'char':
                 case 'varchar':
                     if (!isset($field['default']) || Func::isEmpty($field['default'])) {
-                        $field['default'] = 'NULL';
+                        $field['default'] = '';
                     } else {
                         $field['default'] = (string)$field['default'];
                     }
@@ -467,7 +467,7 @@ abstract class Model extends Model_Base {
                         if (isset($_arr_enum[0])) {
                             $field['default'] = $_arr_enum[0];
                         } else {
-                            $field['default'] = 'NULL';
+                            $field['default'] = '';
                         }
                     } else {
                         $field['default'] = (string)$field['default'];
@@ -475,7 +475,7 @@ abstract class Model extends Model_Base {
                 break;
 
                 default:
-                    $field['default'] = 'NULL';
+                    $field['default'] = '';
                 break;
             }
 

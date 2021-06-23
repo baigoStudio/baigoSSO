@@ -11,8 +11,8 @@ use ginkgo\Loader;
 use ginkgo\Func;
 use ginkgo\File;
 use ginkgo\Request;
-use ginkgo\Json;
 use ginkgo\Config;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -105,7 +105,7 @@ class Plugin extends Plugin_Base {
 
         unset($this->inputOpts['plugin_id'], $this->inputOpts['plugin_dir'], $this->inputOpts['__token__']);
 
-        $_str_outPut = Json::encode($this->inputOpts);
+        $_str_outPut = Arrays::toJson($this->inputOpts);
 
         $_num_size   = File::instance()->fileWrite($_str_optsPath, $_str_outPut);
 
@@ -134,7 +134,7 @@ class Plugin extends Plugin_Base {
 
         $_str_optsPath  = GK_PATH_PLUGIN . $_str_pluginDir . DS . 'opts.json';
 
-        if (Func::isFile($_str_optsPath)) {
+        if (File::fileHas($_str_optsPath)) {
             $_arr_pluginOpts = Loader::load($_str_optsPath);
 
             foreach ($_arr_pluginOpts as $_key=>$_value) {
@@ -210,7 +210,7 @@ class Plugin extends Plugin_Base {
 
         //print_r($_arr_inputUninstall);
 
-        $_arr_inputUninstall['plugin_dirs'] = Func::arrayFilter($_arr_inputUninstall['plugin_dirs']);
+        $_arr_inputUninstall['plugin_dirs'] = Arrays::filter($_arr_inputUninstall['plugin_dirs']);
 
         $_is_vld = $this->vld_plugin->scene('uninstall')->verify($_arr_inputUninstall);
 

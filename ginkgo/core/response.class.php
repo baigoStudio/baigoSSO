@@ -12,10 +12,15 @@ defined('IN_GINKGO') or exit('Access denied');
 // 响应类
 class Response {
 
+    public $config = array(); // 配置
+    public $statusCode; // http 状态码
+    public $replace  = array(); // 输出替换
+
+    public $header   = array(
+        'Content-Type'  => 'text/html; Charset=UTF-8',
+    ); // 头数据
+
     protected $data; // 数据
-    protected $statusCode; // http 状态码
-    protected $header; // 头数据
-    protected $replace  = array(); // 输出替换
 
     // 常用 http 状态码及含义
     protected $statusRow = array(
@@ -65,34 +70,32 @@ class Response {
         505 => 'HTTP Version not supported',
     );
 
-    protected $charset; // 字符编码
-    protected $type; // 请求类型
-    protected $contentType = 'text/html'; // 输出类型
+    protected $configThis = array(
+        'charset'              => 'UTF-8', // 字符编码
+        'jsonp_callback'       => '', // 回调函数
+        'jsonp_callback_param' => '', // 请求回调函数的参数
+    );
 
-    protected $config; // 配置
 
     /** 构造函数
      * __construct function.
      *
      * @access public
      * @param mixed $data (default: '') 数据
-     * @param int $code (default: 200) http 状态码
+     * @param int $statusCode (default: 200) http 状态码
      * @param array $header (default: array()) 头数据
      * @return void
      */
-    public function __construct($data = '', $code = 200, $header = array()) {
-        $this->config       = Config::get('var_default');
-
-        $this->setStatusCode($code); // 设置 http 状态码
+    public function __construct($data, $statusCode = 200, $header = array()) {
+        $this->config();
+        $this->setStatusCode($statusCode); // 设置 http 状态码
         $this->setContent($data); // 设置数据
         $this->setHeader($header); // 设置头数据
 
         $this->obj_request  = Request::instance();
     }
 
-    protected function __clone() {
-
-    }
+    protected function __clone() { }
 
     /** 创建响应实例
      * create function.
@@ -101,26 +104,48 @@ class Response {
      * @static
      * @param string $data (default: '') 数据
      * @param string $type (default: '') 响应类型
-     * @param int $code (default: 200)  http 状态码
+     * @param int $statusCode (default: 200)  http 状态码
      * @param array $header (default: array()) 头数据
      * @return void
      */
-    public static function create($data = '', $type = '', $code = 200, $header = array()) {
+    public static function create($data, $type = '', $statusCode = 200, $header = array()) {
         $_class = '';
 
         if (!Func::isEmpty($type)) { // 指定类型
             if (strpos($type, '\\')) { // 如指定类型包含命名空间, 则直接使用
                 $_class = $type;
             } else { // 否则补全命名空间
-                $_class = 'ginkgo\\response\\' . Func::ucwords($type, '_');
+                $_class = 'ginkgo\\response\\' . String::ucwords($type, '_');
             }
         }
 
         if (class_exists($_class)) { // 如指定的类存在
-            return new $_class($data, $code, $header); // 实例化响应并返回
+            return new $_class($data, $statusCode, $header); // 实例化响应并返回
         } else { // 如不存在, 则用本类实例化 (html)
-            return new static($data, $code, $header);
+            return new static($data, $statusCode, $header);
         }
+    }
+
+
+    // 配置 since 0.2.0
+    public function config($config = array()) {
+        $_arr_config   = Config::get('var_default'); // 取得配置
+
+        $_arr_configDo = $this->configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
+        }
+
+        if (is_array($this->config) && !Func::isEmpty($this->config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $this->config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        $this->config  = $_arr_configDo;
     }
 
 
@@ -131,7 +156,7 @@ class Response {
      * @param int $statusCode (default: 200) http 状态码
      * @return void
      */
-    function setStatusCode($statusCode = 200) {
+    public function setStatusCode($statusCode = 200) {
         $this->statusCode = $statusCode;
         $this->header['HTTP/1.0 ' . $this->getStatusCode()] = '';
     }
@@ -145,7 +170,7 @@ class Response {
      * @param string $value (default: '') 头数据
      * @return void
      */
-    function setHeader($header, $value = '') {
+    public function setHeader($header, $value = '') {
         if (is_array($header)) {
             $this->header = array_replace_recursive($this->header, $header);
         } else {
@@ -160,7 +185,7 @@ class Response {
      * @param mixed $data 数据
      * @return void
      */
-    function setContent($data) {
+    public function setContent($data) {
         $this->data = $data;
 
         //print_r($this->data);
@@ -175,7 +200,7 @@ class Response {
      * @param string $value (default: '') 替换的值
      * @return void
      */
-    function setReplace($replace, $value = '') {
+    public function setReplace($replace, $value = '') {
         if (is_array($replace)) {
             $this->replace = array_replace_recursive($this->replace, $replace);
         } else {
@@ -189,7 +214,7 @@ class Response {
      * @access public
      * @return 状态信息
      */
-    function getStatus() {
+    public function getStatus() {
         if (isset($this->statusRow[$this->statusCode])) {
             $_str_status = $this->statusRow[$this->statusCode];
         } else {
@@ -205,7 +230,7 @@ class Response {
      * @access public
      * @return 状态码
      */
-    function getStatusCode() {
+    public function getStatusCode() {
         return $this->statusCode;
     }
 
@@ -215,8 +240,16 @@ class Response {
      * @access public
      * @return 头数据
      */
-    function getHeader() {
-        return $this->header;
+    public function getHeader($header = '') {
+        $_return = '';
+
+        if (Func::isEmpty($header)) {
+            $_return = $this->header;
+        } else if (isset($this->header[$header])) {
+            $_return = $this->header[$header];
+        }
+
+        return $_return;
     }
 
     /** 取得数据
@@ -225,7 +258,7 @@ class Response {
      * @access public
      * @return 数据
      */
-    function getContent() {
+    public function getContent() {
         return $this->output($this->data);
     }
 
@@ -236,7 +269,7 @@ class Response {
      * @param mixed $time
      * @return void
      */
-    function expires($time) {
+    public function expires($time) {
         $this->header['Expires'] = $time;
     }
 
@@ -245,11 +278,11 @@ class Response {
      * cacheControl function.
      *
      * @access public
-     * @param mixed $cache
+     * @param mixed $cacheControl
      * @return void
      */
-    function cacheControl($cache) {
-        $this->header['Cache-Control'] = $cache;
+    public function cacheControl($cacheControl) {
+        $this->header['Cache-Control'] = $cacheControl;
     }
 
     /** 设置输出类型
@@ -260,11 +293,49 @@ class Response {
      * @param string $charset (default: 'UTF-8')
      * @return void
      */
-    function contentType($contentType, $charset = 'UTF-8') {
-        $this->contentType  = $contentType;
-        $this->charset      = $charset;
-        $this->header['Content-Type'] = $contentType . '; Charset=' . $charset;
+    public function contentType($contentType, $charset = '') {
+        if (!Func::isEmpty($charset)) {
+            $this->config['charset'] = $charset;
+        }
+
+        $this->header['Content-Type'] = $contentType . '; Charset=' . $this->config['charset'];
     }
+
+
+    /** 向浏览器发送内容
+     * send function.
+     *
+     * @access public
+     * @param int $id (default: 0) ID
+     * @return void
+     */
+    public function send($id = 0) {
+        Plugin::listen('action_fw_response_send');
+
+        $_str_content = $this->getContent(); // 取得内容
+
+        $_str_content = $this->replaceProcess($_str_content); // 输出替换
+
+        if (!headers_sent() && !Func::isEmpty($this->header)) {
+            if (function_exists('http_response_code')) {
+                // 发送状态码
+                http_response_code($this->statusCode);
+            }
+            // 发送头数据
+            foreach ($this->header as $_key => $_value) {
+                if (Func::isEmpty($_value)) {
+                    header($_key);
+                } else {
+                    header($_key . ': ' . $_value);
+                }
+            }
+        }
+
+        Plugin::listen('action_fw_response_end');
+
+        exit($_str_content); // 输出并关闭
+    }
+
 
     /** 输出并注入调试信息
      * output function.
@@ -281,37 +352,6 @@ class Response {
         }
 
         return $data;
-    }
-
-    /** 向浏览器发送内容
-     * send function.
-     *
-     * @access public
-     * @param int $id (default: 0) ID
-     * @return void
-     */
-    function send($id = 0) {
-        Plugin::listen('action_fw_response_send');
-
-        $_str_content = $this->getContent(); // 取得内容
-
-        $_str_content = $this->replaceProcess($_str_content); // 输出替换
-
-        if (!headers_sent() && !Func::isEmpty($this->header)) {
-            //print_r($this->header);
-            // 发送头数据
-            foreach ($this->header as $_key => $_value) {
-                if (Func::isEmpty($_value)) {
-                    header($_key);
-                } else {
-                    header($_key . ': ' . $_value);
-                }
-            }
-        }
-
-        Plugin::listen('action_fw_response_end');
-
-        exit($_str_content); // 输出并关闭
     }
 
 
@@ -335,5 +375,3 @@ class Response {
         return $content;
     }
 }
-
-

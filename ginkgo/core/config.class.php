@@ -12,17 +12,11 @@ defined('IN_GINKGO') or exit('Access denied');
 // 配置管理类
 class Config {
 
-    private static $range  = ''; // 作用域
-    private static $config = array(); // 配置值
+    public static $range  = ''; // 作用域
+    public static $config = array(); // 配置值
+    public static $count  = 1; // 载入配置计数
+
     private static $init; // 是否初始化标志
-    private static $count  = 1; // 载入配置计数
-
-    protected function __construct() {
-    }
-
-    protected function __clone() {
-
-    }
 
     // 初始化
     public static function init() {
@@ -326,7 +320,7 @@ class Config {
 
         $_arr_config = array();
 
-        if (Func::isFile($path)) {
+        if (File::fileHas($path)) {
             $_arr_config = Loader::load($path, 'include');
             ++self::$count;
         }
@@ -371,12 +365,12 @@ class Config {
 
         $_arr_config = array();
 
-        if (Func::isFile($_str_pathBase)) {
+        if (File::fileHas($_str_pathBase)) {
             $_arr_config = Loader::load($_str_pathBase);
             ++self::$count;
         }
 
-        if (Func::isFile($_str_pathDbconfig)) {
+        if (File::fileHas($_str_pathDbconfig)) {
             $_arr_config['dbconfig'] = Loader::load($_str_pathDbconfig);
             ++self::$count;
         }
@@ -423,5 +417,3 @@ class Config {
         return $_mix_return;
     }
 }
-
-

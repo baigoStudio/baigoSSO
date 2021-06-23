@@ -9,7 +9,7 @@ namespace app\ctrl\api;
 use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Sign;
 use ginkgo\Func;
 use ginkgo\Html;
@@ -69,7 +69,7 @@ class Pm extends Ctrl {
 
         $_num_pmCount   = $this->mdl_pm->count($_arr_search);
         $_arr_pageRow   = $this->obj_request->pagination($_num_pmCount, $_arr_inputLists['perpage'], $_arr_inputLists['page']);
-        $_arr_pmRows    = $this->mdl_pm->lists($_arr_inputLists['perpage'], $_arr_pageRow['except'], $_arr_search);
+        $_arr_pmRows    = $this->mdl_pm->lists($_arr_inputLists['perpage'], $_arr_pageRow['offset'], $_arr_search);
 
         foreach ($_arr_pmRows as $_key=>$_value) {
             $_arr_pmRows[$_key]['fromUser'] = $this->mdl_user->readBase($_value['pm_from']);
@@ -90,12 +90,11 @@ class Pm extends Ctrl {
             'pageRow'   => $_arr_pageRow,
         );
 
-        $_mix_result    = Plugin::listen('filter_api_pm_lists', $_arr_return); //编辑文章时触发
-        $_arr_return    = Plugin::resultProcess($_arr_return, $_mix_result);
+        $_arr_return    = Plugin::listen('filter_api_pm_lists', $_arr_return); //编辑文章时触发
 
         $_arr_return['timestamp'] = GK_NOW;
 
-        $_str_src     = Json::encode($_arr_return);
+        $_str_src     = Arrays::toJson($_arr_return);
         $_str_sign    = Sign::make($_str_src, $this->appRow['app_key'] . $this->appRow['app_secret']);
         $_str_encrypt = Crypt::encrypt($_str_src, $this->appRow['app_key'], $this->appRow['app_secret']);
 
@@ -148,10 +147,9 @@ class Pm extends Ctrl {
 
         $_arr_pmRow['timestamp'] = GK_NOW;
 
-        $_mix_result    = Plugin::listen('filter_api_pm_read', $_arr_pmRow); //编辑文章时触发
-        $_arr_pmRow     = Plugin::resultProcess($_arr_pmRow, $_mix_result);
+        $_arr_pmRow   = Plugin::listen('filter_api_pm_read', $_arr_pmRow); //编辑文章时触发
 
-        $_str_src     = Json::encode($_arr_pmRow);
+        $_str_src     = Arrays::toJson($_arr_pmRow);
         $_str_sign    = Sign::make($_str_src, $this->appRow['app_key'] . $this->appRow['app_secret']);
         $_str_encrypt = Crypt::encrypt($_str_src, $this->appRow['app_key'], $this->appRow['app_secret']);
 
@@ -403,7 +401,7 @@ class Pm extends Ctrl {
             return $arr_inputCheck;
         }
 
-        $_arr_userRow = $this->mdl_user->read($arr_inputCheck['user_str'], $arr_inputCheck['user_by']);
+        $_arr_userRow = $this->mdl_user->read($arr_inputCheck['user_id']);
 
         return $this->userCheckProcess($_arr_userRow, $arr_inputCheck);
     }

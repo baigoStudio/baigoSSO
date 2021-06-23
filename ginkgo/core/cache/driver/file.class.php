@@ -8,72 +8,19 @@ namespace ginkgo\cache\driver;
 
 use ginkgo\Loader;
 use ginkgo\Func;
-use ginkgo\Config;
+use ginkgo\cache\Driver;
 use ginkgo\File as File_Base;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 // 文件型缓存驱动
-class File extends File_Base {
+class File extends Driver {
 
-    protected static $instance; // 当前实例
-
-    // 默认配置
-    private $this_config = array(
-        'prefix'    => '',
-        'life_time' => 1200,
-    );
-
-    /** 构造函数
-     * __construct function.
-     *
-     * @access protected
-     * @param array $config (default: array()) 配置
-     * @return void
-     */
     protected function __construct($config = array()) {
-        $_arr_config  = Config::get('cache');
+        parent::__construct($config);
 
-        $this->config = array_replace_recursive($this->this_config, $_arr_config);
-
-        if (!Func::isEmpty($config)) {
-            $this->config = array_replace_recursive($this->config, $config);
-        }
-    }
-
-    protected function __clone() {
-
-    }
-
-    /** 实例化
-     * instance function.
-     *
-     * @access public
-     * @static
-     * @return 当前类的实例
-     */
-    public static function instance() {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static();
-        }
-
-        return static::$instance;
-    }
-
-    /** 设置, 取得前缀
-     * prefix function.
-     *
-     * @access public
-     * @param string $prefix (default: '') 前缀
-     * @return 如果参数为空则返回当前前缀, 否则无返回
-     */
-    public function prefix($prefix = '') {
-        if (Func::isEmpty($prefix)) {
-            return $this->config['prefix'];
-        } else {
-            $this->config['prefix'] = $prefix;
-        }
+        $this->obj_file = File_Base::instance();
     }
 
     /** 检查缓存是否存在
@@ -84,11 +31,11 @@ class File extends File_Base {
      * @param bool $check_expire (default: false) 是否检查过期时间 (默认不检查)
      * @return 检查结果 (bool)
      */
-    function check($name, $check_expire = false) {
+    public function check($name, $check_expire = false) {
         $_bool_return = true;
         $_str_path    = $this->getPath($name); // 取得路径
 
-        $_bool_return = Func::isFile($_str_path); // 文件是否存在
+        $_bool_return = File_Base::fileHas($_str_path); // 文件是否存在
 
         if ($_bool_return && $check_expire) { // 如果存在, 根据参数验证时间
             $_arr_content = Loader::load($_str_path);
@@ -110,7 +57,7 @@ class File extends File_Base {
      * @param mixed $name 缓存名称
      * @return 缓存内容
      */
-    function read($name) {
+    public function read($name) {
         $_str_path    = $this->getPath($name); // 取得路径
 
         $_arr_content = Loader::load($_str_path); // 读取
@@ -142,7 +89,7 @@ class File extends File_Base {
      * @param mixed $content 缓存内容
      * @return 写入字节数
      */
-    function write($name, $content, $life_time = 0) {
+    public function write($name, $content, $life_time = 0) {
         $_str_path = $this->getPath($name); // 取得路径
 
         $_str_content = '';
@@ -168,7 +115,7 @@ class File extends File_Base {
 
         $_str_outPut = '<?php return ' . var_export($_arr_outPut, true) . ';'; // 转换为 php 语句
 
-        return $this->fileWrite($_str_path, $_str_outPut); // 写入文件
+        return $this->obj_file->fileWrite($_str_path, $_str_outPut); // 写入文件
     }
 
     /** 删除
@@ -178,10 +125,10 @@ class File extends File_Base {
      * @param mixed $name 缓存名称
      * @return 删除结果 (bool)
      */
-    function delete($name) {
+    public function delete($name) {
         $_str_path = $this->getPath($name);
 
-        return $this->fileDelete($_str_path);
+        return $this->obj_file->fileDelete($_str_path);
     }
 
 

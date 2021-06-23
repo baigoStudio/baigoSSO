@@ -12,19 +12,11 @@ defined('IN_GINKGO') or exit('Access Denied');
 // 插件管理类
 class Plugin {
 
-    public static $instance = array(); // 用静态属性保存实例
+    protected static $instance = array(); // 用静态属性保存实例
 
     private static $listeners = array(); // 监听已注册的插件
     private static $obj_file; // 文件操作实例
     private static $init; // 是否初始化标志
-
-    protected function __construct() {
-
-    }
-
-    protected function __clone() {
-
-    }
 
 
     /** 向钩子注册动作
@@ -37,7 +29,7 @@ class Plugin {
      * @param mixed $method 插件方法
      * @return void
      */
-    static function add($hook, &$object, $method) {
+    public static function add($hook, &$object, $method) {
         if (Func::isEmpty(self::$init)) {
             self::init();
         }
@@ -75,12 +67,12 @@ class Plugin {
      * @param mixed $data (default: '') 数据
      * @return void
      */
-    static function listen($hook, $data = '') {
+    public static function listen($hook, $data = '') {
         if (Func::isEmpty(self::$init)) {
             self::init();
         }
 
-        $_result = false;
+        //$_result = false;
 
         // 查看要实现的钩子, 是否在监听数组之中
         if (isset(self::$listeners[$hook]) && is_array(self::$listeners[$hook]) && count(self::$listeners[$hook]) > 0) {
@@ -89,33 +81,7 @@ class Plugin {
                 // 取出插件对象的引用和方法
                 if (method_exists($_value['object'], $_value['method'])) {
                     // 动态调用插件的方法
-                    $_result[$_key] = call_user_func(array($_value['object'], $_value['method']), $data);
-                }
-            }
-        }
-
-        return $_result;
-    }
-
-
-    /** 插件返回结果处理
-     * resultProcess function.
-     *
-     * @access public
-     * @static
-     * @param mixed $data
-     * @param mixed $result
-     * @return 处理后的数据
-     */
-    static function resultProcess($data, $result) {
-        if (!Func::isEmpty($result)) {
-            foreach ($result as $_key=>$_value) {
-                if (!Func::isEmpty($_value)) {
-                    if (is_array($_value)) {
-                        $data = array_replace_recursive($data, $_value);
-                    } else if (is_scalar($_value)) {
-                        $data = $_value;
-                    }
+                    $data = call_user_func(array($_value['object'], $_value['method']), $data);
                 }
             }
         }
@@ -152,17 +118,17 @@ class Plugin {
                 if (class_exists($_str_plugin)) {
                     // 初始化所有插件
                     $_pid = md5($_str_plugin);
-                    static::$instance[$_pid] = new $_str_plugin(); // 实例化
+                    self::$instance[$_pid] = new $_str_plugin(); // 实例化
 
                     if (!Func::isEmpty($_arr_pluginConfig)) {
-                        static::$instance[$_pid]->config = $_arr_pluginConfig;
+                        self::$instance[$_pid]->config = $_arr_pluginConfig;
                     }
 
                     $_str_optsPath   = GK_PATH_PLUGIN . $_str_dir . DS . 'opts_var.json'; // 用户设置文件
 
-                    if (Func::isFile($_str_optsPath)) {
-                        $_str_pluginOpts               = self::$obj_file->fileRead($_str_optsPath); // 读取用户设置
-                        static::$instance[$_pid]->opts = Json::decode($_str_pluginOpts); // 解码用户设置
+                    if (File::fileHas($_str_optsPath)) {
+                        $_str_pluginOpts             = self::$obj_file->fileRead($_str_optsPath); // 读取用户设置
+                        self::$instance[$_pid]->opts = Arrays::fromJson($_str_pluginOpts); // 解码用户设置
                     }
                 }
             }
@@ -183,9 +149,9 @@ class Plugin {
 
         $_str_configPath = GK_PATH_PLUGIN . $dir . DS . 'config.json'; // 插件配置文件
 
-        if (Func::isFile($_str_configPath)) {
+        if (File::fileHas($_str_configPath)) {
             $_str_pluginConfig  = self::$obj_file->fileRead($_str_configPath); // 读取插件配置
-            $_arr_pluginConfig  = Json::decode($_str_pluginConfig); // 解码配置
+            $_arr_pluginConfig  = Arrays::fromJson($_str_pluginConfig); // 解码配置
         } else {
             $_arr_pluginConfig = array();
         }
@@ -237,7 +203,7 @@ class Plugin {
         }
 
         if (strpos($_str_class, '\\') === false) { // 如果未定义命名空间
-            $_str_class = 'extend\\plugin\\' . $dir . '\\' . Func::ucwords($_str_class, '_'); // 补全命名空间
+            $_str_class = 'extend\\plugin\\' . $dir . '\\' . String::ucwords($_str_class, '_'); // 补全命名空间
         }
 
         return $_str_class;

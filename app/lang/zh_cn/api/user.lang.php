@@ -9,7 +9,7 @@ defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------------------通用-------------------------*/
 return array(
-    'User ID, Username or Email'    => '用户 ID, 用户名 或 Email',
+    'User ID'                       => '用户 ID',
     'Username'                      => '用户名',
     'Password'                      => '密码',
     'Email'                         => '邮箱地址',

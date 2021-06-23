@@ -58,14 +58,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     </div>
 
                     <div class="form-group">
-                        <label><?php echo $lang->get('Type'); ?></label>
-                        <div class="form-text"><?php echo $lang->get($adminRow['admin_type']); ?></div>
-                    </div>
-
-                    <div class="form-group">
                         <label><?php echo $lang->get('Status'); ?></label>
                         <div class="form-text"><?php $str_status = $adminRow['admin_status'];
                         include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><?php echo $lang->get('Type'); ?></label>
+                        <div class="form-text"><?php echo $lang->get($adminRow['admin_type']); ?></div>
                     </div>
 
                     <div class="form-group">

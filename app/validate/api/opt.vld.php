@@ -7,7 +7,6 @@
 namespace app\validate\api;
 
 use app\validate\Opt as Opt_Base;
-use ginkgo\Config;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行

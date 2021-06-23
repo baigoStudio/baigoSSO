@@ -18,7 +18,7 @@ return array(
             'site_date' => array(
                 'title'      => 'Date format',
                 'type'       => 'select_input',
-                'note'       => 'Select or fill in the format parameter of the <code>date</code> function',
+                'note'       => 'Select or type the format parameter of the <code>date</code> function',
                 'require'    => 'true',
                 'date_param' => 'true',
                 'option'     => array(
@@ -30,7 +30,7 @@ return array(
             'site_date_short' => array(
                 'title'      => 'Short date format',
                 'type'       => 'select_input',
-                'note'       => 'Select or fill in the format parameter of the <code>date</code> function',
+                'note'       => 'Select or type the format parameter of the <code>date</code> function',
                 'require'    => 'true',
                 'date_param' => 'true',
                 'option'     => array(
@@ -41,7 +41,7 @@ return array(
             'site_time' => array(
                 'title'      => 'Time format',
                 'type'       => 'select_input',
-                'note'       => 'Select or fill in the format parameter of the <code>date</code> function',
+                'note'       => 'Select or type the format parameter of the <code>date</code> function',
                 'require'    => 'true',
                 'date_param' => 'true',
                 'option'     => array(
@@ -52,7 +52,7 @@ return array(
             'site_time_short' => array(
                 'title'      => 'Short time format',
                 'type'       => 'select_input',
-                'note'       => 'Select or fill in the format parameter of the <code>date</code> function',
+                'note'       => 'Select or type the format parameter of the <code>date</code> function',
                 'require'    => 'true',
                 'date_param' => 'true',
                 'option'     => array(
@@ -63,7 +63,7 @@ return array(
             'access_expire' => array(
                 'title'     => 'Access token expiration time',
                 'type'      => 'select_input',
-                'note'      => 'Select or fill in minutes',
+                'note'      => 'Select or type minutes',
                 'require'   => 'true',
                 'option' => array(
                     10    => '{:value} Minutes',
@@ -80,7 +80,7 @@ return array(
             'refresh_expire' => array(
                 'title'     => 'Refresh token expiration time',
                 'type'      => 'select_input',
-                'note'      => 'Select or fill in days',
+                'note'      => 'Select or type days',
                 'require'   => 'true',
                 'option' => array(
                     10    => '{:value} Days',
@@ -94,7 +94,7 @@ return array(
             'verify_expire' => array(
                 'title'     => 'Validation token expiration time',
                 'type'      => 'select_input',
-                'note'      => 'Select or fill in minutes',
+                'note'      => 'Select or type minutes',
                 'require'   => 'true',
                 'option' => array(
                     10    => '{:value} Minutes',
@@ -153,15 +153,15 @@ return array(
         ),
     ),
     'smtp'      => array(
-        'title' => 'SMTP Settings'
+        'title' => 'Email sending settings',
     ),
     'mailtpl'   => array(
-        'title' => 'Mail template settings'
+        'title' => 'Email template settings',
     ),
     'dbconfig'  => array(
-        'title' => 'Database settings'
+        'title' => 'Database settings',
     ),
     'chkver'    => array(
-        'title' => 'Check for updates'
+        'title' => 'Check for updates',
     ),
 );

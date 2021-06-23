@@ -12,6 +12,7 @@ use ginkgo\Route;
 use ginkgo\Func;
 use ginkgo\Config;
 use ginkgo\Plugin;
+use ginkgo\File;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -103,7 +104,7 @@ abstract class Ctrl extends Ctrl_Base {
         $_str_jump      = '';
         $_str_msg       = '';
 
-        if (Func::isFile(GK_APP_CONFIG . $this->configInstalled)) {
+        if (File::fileHas(GK_APP_CONFIG . $this->configInstalled)) {
             $_arr_installed = Config::load(GK_APP_CONFIG . $this->configInstalled, 'installed');
             $_str_rcode     = 'x030402';
             $_str_msg       = 'System already installed';
@@ -131,7 +132,7 @@ abstract class Ctrl extends Ctrl_Base {
         $_str_jump      = '';
         $_str_msg       = '';
 
-        if (Func::isFile(GK_APP_CONFIG . $this->configInstalled)) { //如果新文件存在
+        if (File::fileHas(GK_APP_CONFIG . $this->configInstalled)) { //如果新文件存在
             $_arr_installed = Config::load(GK_APP_CONFIG . $this->configInstalled, 'installed');
 
             if (!isset($_arr_installed['prd_installed_pub'])) {
@@ -174,7 +175,7 @@ abstract class Ctrl extends Ctrl_Base {
             'path_tpl_console'  => $_str_pathTplConsole,
         );
 
-        $this->url = $_arr_url;
+        $this->url = array_replace_recursive($this->url, $_arr_url);
 
         $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
     }

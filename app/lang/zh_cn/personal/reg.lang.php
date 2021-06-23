@@ -42,7 +42,7 @@ return array(
     'Email is not allowed'          => '邮箱不被允许',
     'Illegal content in mailbox'    => '邮箱中含有非法内容',
 
-    'Send confirmation email failed'        => '发送确认邮件失败',
+    'Send verification email failed'        => '发送确认邮件失败',
     'Not receiving confirmation emails'     => '没有收到确认邮件',
     'Repeat activation is unnecessary'      => '无需重复激活',
     'A verification email has been sent to your mailbox, please verify.' => '已将验证邮件发送至您的邮箱，请验证。',

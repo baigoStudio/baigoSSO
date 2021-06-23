@@ -35,9 +35,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | timestamp | int | true | UNIX 时间戳 |
 
@@ -49,7 +47,7 @@ POST
 | - | - | - | - |
 | rcode | string | 返回代码 | |
 | urlRows | array | 同步登录通知 URL | 系统会在“同步登录通知 URL”上附加 `m=sso&c=sync&a=login` 参数，以便接收通知的系统识别。 |
- 
+
 返回结果示例
 
 ``` javascript
@@ -61,7 +59,7 @@ POST
     ]
 }
 ```
- 
+
 ----------
 
 ### 同步登出
@@ -82,9 +80,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_access_token | string | true | 访问口令，必须用 MD5 加密后传输。 |
 | timestamp | int | true | UNIX 时间戳 |
 
@@ -126,7 +122,7 @@ $(document).ready(function(){
 });
 </script>
 ```
- 
+
 ##### SCRIPT 方式
 
 开发者也可以根据实际情况选择 SCRIPT 方式或者 IFRAME 方式，这两种方式的优点是无跨域问题，缺点是无法获知调用的状态，无法判断同步是否成功。

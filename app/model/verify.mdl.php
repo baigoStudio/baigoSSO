@@ -8,7 +8,6 @@ namespace app\model;
 use app\classes\Model;
 use ginkgo\Func;
 use ginkgo\Crypt;
-use ginkgo\Config;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -18,21 +17,13 @@ class Verify extends Model {
 
     public $arr_status  = array('enable', 'disabled');
     public $arr_type    = array('mailbox', 'confirm', 'forgot');
-    public $configBase;
-
-    function m_init() { //构造函数
-        $this->configBase       = Config::get('base', 'var_extra');
-    }
-
 
     function check($mix_verify, $str_by = 'verify_id') {
         $_arr_select = array(
             'verify_id',
         );
 
-        $_arr_verifyRow = $this->read($mix_verify, $str_by, $_arr_select);
-
-        return $_arr_verifyRow;
+        return $this->readProcess($mix_verify, $str_by, $_arr_select);
     }
 
 
@@ -147,10 +138,10 @@ class Verify extends Model {
      *
      * @access public
      * @param mixed $num_no
-     * @param int $num_except (default: 0)
+     * @param int $num_offset (default: 0)
      * @return void
      */
-    function lists($num_no, $num_except = 0) {
+    function lists($num_no, $num_offset = 0) {
         $_arr_verifySelect = array(
             'verify_id',
             'verify_user_id',
@@ -164,7 +155,7 @@ class Verify extends Model {
             'verify_time_disabled',
         );
 
-        $_arr_verifyRows = $this->order('verify_id', 'DESC')->limit($num_except, $num_no)->select($_arr_verifySelect);
+        $_arr_verifyRows = $this->order('verify_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_verifySelect);
 
         foreach ($_arr_verifyRows as $_key=>$_value) {
             $_arr_verifyRows[$_key] = $this->rowProcess($_value);

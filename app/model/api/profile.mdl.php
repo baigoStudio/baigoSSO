@@ -6,10 +6,9 @@
 namespace app\model\api;
 
 use app\model\User;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Func;
 use ginkgo\Crypt;
-use ginkgo\Config;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -22,10 +21,6 @@ class Profile extends User {
     public $inputToken;
     public $configDefault;
     protected $table = 'user';
-
-    function m_init() { //构造函数
-        $this->configBase       = Config::get('base', 'var_extra');
-    }
 
 
     function token($num_userId, $str_userName) {
@@ -82,8 +77,8 @@ class Profile extends User {
             );
         }
 
-        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
-        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
+        $_arr_userData['user_contact']    = Arrays::toJson($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Arrays::toJson($_arr_userData['user_extend']);
 
         $_num_count     = $this->where('user_id', '=', $this->inputInfo['user_id'])->update($_arr_userData);
 
@@ -113,6 +108,7 @@ class Profile extends User {
      */
     function inputInfo($arr_data) {
         $_arr_inputParam = array(
+            'user_id'       => array('int', 0),
             'user_pass'     => array('txt', ''),
             'user_nick'     => array('txt', ''),
             'user_contact'  => array('arr', array()),
@@ -121,10 +117,6 @@ class Profile extends User {
         );
 
         $_arr_inputInfo  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputUserCommon  = $this->inputUserCommon($arr_data);
-
-        $_arr_inputInfo  = array_replace_recursive($_arr_inputInfo, $_arr_inputUserCommon);
 
         $_mix_vld = $this->validate($_arr_inputInfo, '', 'info');
 
@@ -145,16 +137,13 @@ class Profile extends User {
 
     function inputPass($arr_data) {
         $_arr_inputParam = array(
+            'user_id'       => array('int', 0),
             'user_pass'     => array('txt', ''),
             'user_pass_new' => array('txt', ''),
             'timestamp'     => array('int', 0),
         );
 
         $_arr_inputPass  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputUserCommon  = $this->inputUserCommon($arr_data);
-
-        $_arr_inputPass  = array_replace_recursive($_arr_inputPass, $_arr_inputUserCommon);
 
         $_mix_vld = $this->validate($_arr_inputPass, '', 'pass');
 
@@ -175,6 +164,7 @@ class Profile extends User {
 
     function inputSecqa($arr_data) {
         $_arr_inputParam = array(
+            'user_id'          => array('int', 0),
             'user_pass'        => array('txt', ''),
             'user_sec_ques'    => array('arr', array()),
             'user_sec_answ'    => array('str', ''),
@@ -182,10 +172,6 @@ class Profile extends User {
         );
 
         $_arr_inputSecqa  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputUserCommon   = $this->inputUserCommon($arr_data);
-
-        $_arr_inputSecqa  = array_replace_recursive($_arr_inputSecqa, $_arr_inputUserCommon);
 
         $_mix_vld = $this->validate($_arr_inputSecqa, '', 'secqa');
 
@@ -206,16 +192,13 @@ class Profile extends User {
 
     function inputMailbox($arr_data) {
         $_arr_inputParam = array(
+            'user_id'          => array('int', 0),
             'user_pass'        => array('txt', ''),
             'user_mail_new'    => array('txt', ''),
             'timestamp'        => array('int', 0),
         );
 
         $_arr_inputMailbox  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputUserCommon     = $this->inputUserCommon($arr_data);
-
-        $_arr_inputMailbox  = array_replace_recursive($_arr_inputMailbox, $_arr_inputUserCommon);
 
         $_mix_vld = $this->validate($_arr_inputMailbox, '', 'mailbox');
 
@@ -236,15 +219,12 @@ class Profile extends User {
 
     function inputToken($arr_data) {
         $_arr_inputParam = array(
+            'user_id'            => array('int', 0),
             'user_refresh_token' => array('txt', ''),
             'timestamp'          => array('int', 0),
         );
 
         $_arr_inputToken  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
-
-        $_arr_inputUserCommon   = $this->inputUserCommon($arr_data);
-
-        $_arr_inputToken  = array_replace_recursive($_arr_inputToken, $_arr_inputUserCommon);
 
         $_mix_vld = $this->validate($_arr_inputToken, '', 'token');
 
@@ -262,4 +242,3 @@ class Profile extends User {
         return $_arr_inputToken;
     }
 }
-

@@ -22,9 +22,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_refresh_token | string | true | 刷新口令。 |
 | timestamp | int | true | UNIX 时间戳 |
 
@@ -56,9 +54,9 @@ POST
 
 ### 编辑个人资料
 
-本接口用于修改当前用户的信息
-
 `2.0` 新增
+
+本接口用于修改当前用户的信息
 
 ##### URL
 
@@ -74,9 +72,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_pass | string | true | 密码，必须用 MD5 加密后传输 |
 | user_nick | string | false | 昵称，仅在需要修改时传递该参数。 |
 | user_contact | string | false | 联系方式，仅在需要修改时传递该参数。 |
@@ -140,9 +136,9 @@ $_arr_data = array(
 
 ### 修改密码
 
-本接口用于修改当前用户的密码
-
 `2.0` 新增
+
+本接口用于修改当前用户的密码
 
 ##### URL
 
@@ -158,9 +154,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_pass | string | true | 密码，必须用 MD5 加密后传输 |
 | user_pass_new | string | true | 新密码，必须用 MD5 加密后传输。 |
 | timestamp | int | true | UNIX 时间戳 |
@@ -184,9 +178,9 @@ POST
 
 ### 修改密保问题
 
-本接口用于修改当前用户的密保问题
-
 `2.0` 新增
+
+本接口用于修改当前用户的密保问题
 
 ##### URL
 
@@ -202,9 +196,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_pass | string | true | 密码，必须用 MD5 加密后传输 |
 | user_sec_ques | array | true | 密保问题，个数请根据 `用户读取` 接口的返回确定。 |
 | user_sec_answ | array | true | 密保答案进行 JSON 编码后，将 JSON 字符串用 MD5 加密后传输。 |
@@ -277,9 +269,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_pass | string | true | 密码，必须用 MD5 加密后传输 |
 | user_mail_new | string | true | 新邮箱 |
 | timestamp | int | true | UNIX 时间戳 |

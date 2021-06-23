@@ -40,18 +40,6 @@
                     <small class="form-text" id="msg_prefix"></small>
                 </div>
 
-                <div class="form-group">
-                    <div>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" <?php if ($config['dbconfig']['debug'] === 'true') { ?>checked<?php } ?> name="debug" id="debug" value='true'>
-                            <label class="custom-control-label" for="debug">
-                                <?php echo $lang->get('Database debug'); ?>
-                            </label>
-                        </div>
-                    </div>
-                    <small class="form-text" id="msg_debug"></small>
-                </div>
-
                 <script type="text/javascript">
                 var opts_validate_form = {
                     rules: {
@@ -76,9 +64,6 @@
                         },
                         prefix: {
                             require: true
-                        },
-                        debug: {
-                            require: true
                         }
                     },
                     attr_names: {
@@ -88,11 +73,7 @@
                         user: '<?php echo $lang->get('Username'); ?>',
                         pass: '<?php echo $lang->get('Password'); ?>',
                         charset: '<?php echo $lang->get('Charset'); ?>',
-                        prefix: '<?php echo $lang->get('Prefix'); ?>',
-                        debug: '<?php echo $lang->get('Database debug'); ?>'
-                    },
-                    selector_types: {
-                        debug: 'name'
+                        prefix: '<?php echo $lang->get('Prefix'); ?>'
                     },
                     type_msg: {
                         require: '<?php echo $lang->get('{:attr} require'); ?>'

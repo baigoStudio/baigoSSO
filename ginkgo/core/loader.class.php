@@ -23,10 +23,9 @@ class Loader {
      * @param string $type (default: 'require')
      * @return void
      */
-    static function load($path, $type = 'require') {
+    public static function load($path, $type = 'require') {
         /*print_r($path);
         print_r(' ::: ');
-        print_r(Func::isFile(strtolower($path)));
         print_r('<br>');
         print_r(PHP_EOL);*/
 
@@ -63,34 +62,13 @@ class Loader {
      * @static
      * @return void
      */
-    static function register() {
+    public static function register() {
         // 自动加载
         spl_autoload_register(array(__CLASS__, 'autoload'), true, true);
 
-        if (Func::isFile(GK_PATH_VENDOR . 'autoload.php')) {
+        if (File::fileHas(GK_PATH_VENDOR . 'autoload.php')) {
             self::load(GK_PATH_VENDOR . 'autoload.php'); // 加载 composer
         }
-    }
-
-
-    /** 自动加载函数
-     * autoload function.
-     *
-     * @access private
-     * @static
-     * @param mixed $class_name
-     * @return void
-     */
-    private static function autoload($class_name) {
-        $_str_path = self::getPath($class_name); // 根据类名分析路径
-
-        /*print_r($_str_path);
-        print_r('<br>');
-        print_r(PHP_EOL);*/
-
-        self::load($_str_path);
-
-        return true;
     }
 
 
@@ -107,7 +85,7 @@ class Loader {
      */
     public static function ctrl($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod, 'ctrl');
-        $_str_ctrl      = $_str_namespace . Func::ucwords($class, '_');
+        $_str_ctrl      = $_str_namespace . String::ucwords($class, '_');
 
         $_str_ctrlEmpty = $_str_namespace . 'C_Empty'; // 空控制器名
 
@@ -116,14 +94,14 @@ class Loader {
 
         if (class_exists($_str_ctrl)) { // 如果控制器存在, 直接实例化
             $_cid = md5($_str_ctrl);
-            static::$instance[$_cid] = new $_str_ctrl($option); // 实例化控制器
+            self::$instance[$_cid] = new $_str_ctrl($option); // 实例化控制器
 
-            return static::$instance[$_cid];
+            return self::$instance[$_cid];
         } else if (class_exists($_str_ctrlEmpty)) { // 如果控制器不存在, 实例化空控制器
             $_cid = md5($_str_ctrlEmpty);
-            static::$instance[$_cid] = new $_str_ctrlEmpty($option); // 实例化空控制器
+            self::$instance[$_cid] = new $_str_ctrlEmpty($option); // 实例化空控制器
 
-            return static::$instance[$_cid];
+            return self::$instance[$_cid];
         } else { // 都不存在报错
             $_obj_excpt = new Exception('Controller not found', 404);
             $_obj_excpt->setData('err_detail', $_str_ctrl);
@@ -146,12 +124,12 @@ class Loader {
      */
     public static function model($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod, 'model');
-        $_str_mdl       = $_str_namespace . Func::ucwords($class, '_');
+        $_str_mdl       = $_str_namespace . String::ucwords($class, '_');
 
         if (class_exists($_str_mdl)) { // 如果模型存在, 直接实例化
             $_mid = md5($_str_mdl);
-            static::$instance[$_mid] = new $_str_mdl($option); //实例化模型
-            return static::$instance[$_mid];
+            self::$instance[$_mid] = new $_str_mdl($option); //实例化模型
+            return self::$instance[$_mid];
         } else { // 不存在报错
             $_obj_excpt = new Exception('Model not found', 500);
             $_obj_excpt->setData('err_detail', $_str_mdl);
@@ -174,15 +152,15 @@ class Loader {
      */
     public static function validate($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod, 'validate');
-        $_str_vld       = $_str_namespace . Func::ucwords($class, '_');
+        $_str_vld       = $_str_namespace . String::ucwords($class, '_');
 
         //print_r($_str_vld);
         //print_r('<br>');
 
         if (class_exists($_str_vld)) { // 如果验证器存在, 直接实例化
             $_vid = md5($_str_vld);
-            static::$instance[$_vid] = new $_str_vld($option); // 实例化验证器
-            return static::$instance[$_vid];
+            self::$instance[$_vid] = new $_str_vld($option); // 实例化验证器
+            return self::$instance[$_vid];
         } else { // 不存在报错
             $_obj_excpt = new Exception('Validator not found', 500);
             $_obj_excpt->setData('err_detail', $_str_vld);
@@ -205,14 +183,14 @@ class Loader {
      */
     public static function classes($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod);
-        $_str_class     = $_str_namespace . Func::ucwords($class, '_');
+        $_str_class     = $_str_namespace . String::ucwords($class, '_');
 
         //print_r('<br>');
 
         if (class_exists($_str_class)) {
             $_oid = md5($_str_class);
-            static::$instance[$_oid] = new $_str_class($option); //实例化类
-            return static::$instance[$_oid];
+            self::$instance[$_oid] = new $_str_class($option); //实例化类
+            return self::$instance[$_oid];
         } else {
             $_obj_excpt = new Exception('Class not found', 500);
             $_obj_excpt->setData('err_detail', $_str_class);
@@ -222,6 +200,13 @@ class Loader {
     }
 
 
+    // 清除实例
+    public static function clearInstance() {
+        Plugin::listen('action_fw_end'); //运行结束时触发
+
+        self::$instance = array();
+    }
+
     /**
      * getPath function.
      * 取得路径
@@ -230,70 +215,70 @@ class Loader {
      * @param mixed $path
      * @return void
      */
-    public static function getPath($path) {
+    private static function getPath($path) {
         $path  = strtolower($path);
 
         //print_r($path);
         //print_r('<br>');
 
-        $_arr_url = array();
+        $_arr_path = array();
 
         if (!empty($path)) {
-            $_arr_url = explode('\\', $path);
+            $_arr_path = explode('\\', $path);
         }
 
-        if (!isset($_arr_url[1])) {
-            $_arr_url[1] = '';
+        if (!isset($_arr_path[1])) {
+            $_arr_path[1] = '';
         }
 
         $_str_path = '';
 
-        switch ($_arr_url[0]) {
+        switch ($_arr_path[0]) {
             case 'ginkgo':
                 $_str_path  = GK_PATH_CORE;
-                $_str_path .= self::pathProcess($_arr_url);
+                $_str_path .= self::pathProcess($_arr_path);
                 $_str_path .= GK_EXT_CLASS;
             break;
 
             case 'app':
-                switch ($_arr_url[1]) {
+                switch ($_arr_path[1]) {
                     case 'model':
                         $_str_path  = GK_APP_MDL;
-                        $_str_path .= self::pathProcess($_arr_url);
+                        $_str_path .= self::pathProcess($_arr_path);
                         $_str_path .= GK_EXT_MDL;
                     break;
 
                     case 'validate':
                         $_str_path  = GK_APP_VLD;
-                        $_str_path .= self::pathProcess($_arr_url);
+                        $_str_path .= self::pathProcess($_arr_path);
                         $_str_path .= GK_EXT_VLD;
                     break;
 
                     case 'classes':
                         $_str_path  = GK_APP_CLASSES;
-                        $_str_path .= self::pathProcess($_arr_url);
+                        $_str_path .= self::pathProcess($_arr_path);
                         $_str_path .= GK_EXT_CLASS;
                     break;
 
                     case 'ctrl':
                         $_str_path  = GK_APP_CTRL;
-                        $_str_path .= self::pathProcess($_arr_url);
+                        $_str_path .= self::pathProcess($_arr_path);
                         $_str_path .= GK_EXT_CTRL;
                     break;
                 }
             break;
 
             case 'extend':
-                switch ($_arr_url[1]) {
+                switch ($_arr_path[1]) {
                     case 'plugin':
                         $_str_path  = GK_PATH_PLUGIN;
-                        $_str_path .= self::pathProcess($_arr_url);
+                        $_str_path .= self::pathProcess($_arr_path);
                         $_str_path .= GK_EXT_CLASS;
                     break;
 
                     default:
                         $_str_path  = GK_PATH_EXTEND;
-                        $_str_path .= self::pathProcess($_arr_url);
+                        $_str_path .= self::pathProcess($_arr_path);
                         $_str_path .= GK_EXT_CLASS;
                     break;
                 }
@@ -307,11 +292,24 @@ class Loader {
     }
 
 
-    // 清除实例
-    public static function clearInstance() {
-        Plugin::listen('action_fw_end'); //运行结束时触发
+    /** 自动加载函数
+     * autoload function.
+     *
+     * @access private
+     * @static
+     * @param mixed $class_name
+     * @return void
+     */
+    private static function autoload($class_name) {
+        $_str_path = self::getPath($class_name); // 根据类名分析路径
 
-        static::$instance = array();
+        /*print_r($_str_path);
+        print_r('<br>');
+        print_r(PHP_EOL);*/
+
+        self::load($_str_path);
+
+        return true;
     }
 
 
@@ -350,21 +348,21 @@ class Loader {
      * URL 数组组合成路径
      * @access private
      * @static
-     * @param mixed $_arr_url
+     * @param mixed $path
      * @return void
      */
-    private static function pathProcess($url) {
-        switch ($url[0]) {
+    private static function pathProcess($path) {
+        switch ($path[0]) {
             case 'ginkgo':
             break;
 
             default:
-                unset($url[1]);
+                unset($path[1]);
             break;
         }
 
-        unset($url[0]);
+        unset($path[0]);
 
-        return implode(DS, $url);
+        return implode(DS, $path);
     }
 }

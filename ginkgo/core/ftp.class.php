@@ -12,22 +12,43 @@ defined('IN_GINKGO') or exit('Access Denied');
 // FTP操作类
 class Ftp {
 
+    public $config = array(); // 配置
+    public $caInfo; // 一个保存着1个或多个用来让服务端验证的证书的文件名, $config['verify_peer'] 属性为 true 时有效
+    public $result; // 返回结果
+    public $error; // 错误
+    public $errno; // 错误号
+    public $statusCode; // http 状态码
+
     protected static $instance; // 当前实例
-    private $config; // 配置
-    protected $error; // 错误
-    public $obj_conn; // ftp 连接实例
+
+    private $allowScheme = array('ftp', 'ftps', 'sftp'); // 允许的协议
+
+    private $configThis = array(
+        'scheme'          => '', // 协议
+        'host'            => '', // 主机
+        'port'            => '',
+        'user'            => '',
+        'pass'            => '',
+        'path'            => '',
+        'pasv'            => false,
+        'verify_peer'     => false, // 验证对等证书
+        'verify_host'     => false, // 验证主机
+        'return_transfer' => true, // 是否转换返回, true 返回, false 输出
+        'timeout'         => 30, // 连接超时
+    );
+
+    private $res_curl; // cURL 资源
+    private $userPass; // 账号密码
+    private $hostUrl; // url
+    private $hostPath; // path
 
     protected function __construct($config = array()) {
-        $this->config = Config::get('ftp', 'var_extra');
-
-        if (!Func::isEmpty($config)) {
-            $this->config = array_replace_recursive($this->config, $config);
-        }
+        $this->config($config);
+        $this->init();
+        $this->res_curl  = curl_init(); // curl 初始化
     }
 
-    protected function __clone() {
-
-    }
+    protected function __clone() { }
 
     /** 实例化
      * instance function.
@@ -38,177 +59,46 @@ class Ftp {
      * @return 当前类的实例
      */
     public static function instance($config = array()) {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static($config);
+        if (Func::isEmpty(self::$instance)) {
+            self::$instance = new static($config);
         }
-        return static::$instance;
+        return self::$instance;
     }
 
 
-    /** 初始化
+    /** 初始化, 兼容
      * init function.
      *
-     * @access public
-     * @return 连接与登录结果 (bool)
+     * @access private
+     * @return 初始化结果 (bool)
      */
-    function init() {
-        if (!$this->connect()) {
-            return false;
-        }
-
-        if (!$this->login()) {
-            return false;
-        }
+    public function init() {
+        Func::fixDs($this->config['path'], '/');
+        str_replace('\\', '/', $this->config['path']);
+        str_replace('//', '/', $this->config['path']);
 
         return true;
     }
 
 
-    /** 连接 ftp 服务器
-     * connect function.
-     *
-     * @access public
-     * @return 连接结果 (bool)
-     */
-    function connect() {
-        if (!$this->initConfig()) { // 初始化配置
-            return false;
+    public function config($config = array()) {
+        $_arr_config   = Config::get('ftp', 'var_extra');
+
+        $_arr_configDo = $this->configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
         }
 
-        $this->obj_conn = @ftp_connect($this->config['host'], $this->config['port']); //连接
-
-        if (!$this->obj_conn) {
-            $this->error = 'FTP Error: Cannot conect to {:host}';
-            return false;
+        if (is_array($this->config) && !Func::isEmpty($this->config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $this->config); // 合并配置
         }
 
-        return true;
-    }
-
-
-    /** 登录
-     * login function.
-     *
-     * @access public
-     * @return 登录结果 (bool)
-     */
-    function login() {
-        if (!@ftp_login($this->obj_conn, $this->config['user'], $this->config['pass'])) {
-            $this->error = 'FTP Error: Cannot login to  {:host}';
-            return false;
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
         }
 
-        if (isset($this->config['pasv']) && ($this->config['pasv'] === true || $this->config['pasv'] === 'true' || $this->config['pasv'] === 'on')) {
-            // 打开被动模式
-            if (!@ftp_pasv($this->obj_conn, true)) {
-                $this->error = 'FTP Error: Turn on passive mode failed';
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    /** 列出远程目录结构
-     * dirList function.
-     *
-     * @access public
-     * @param string $path_remote 路径
-     * @param bool $is_abs (default: false) 是否为绝对路径
-     * @return 目录结构
-     */
-    function dirList($path_remote, $is_abs = false) {
-        if (!$is_abs) { // 假如为绝对路径, 则补全路径
-            $path_remote = $this->config['path'] . $path_remote;
-        }
-
-        if (!@ftp_chdir($path_remote)) { // 如路径不是目录, 则读取上一级
-            $path_remote = dirname($path_remote);
-        }
-
-        $_arr_return  = array();
-        $_arr_dir     = @ftp_nlist($this->obj_conn, $path_remote);// 列出目录
-
-        //print_r($_arr_dir);
-
-        if (!Func::isEmpty($_arr_dir)) {
-            foreach ($_arr_dir as $_key=>$_value) {
-                if (@ftp_chdir($_value)) {
-                    $_arr_return[$_key]['type'] = 'dir'; // 文件夹
-                } else {
-                    $_arr_return[$_key]['type'] = 'file'; // 文件
-                }
-
-                $_arr_return[$_key]['name'] = $_value;
-            }
-        }
-
-        return $_arr_return;
-    }
-
-    /** 创建目录
-     * dirMk function.
-     *
-     * @param string $path_remote 路径
-     * @param bool $is_abs (default: false) 是否为绝对路径
-     * @return 创建结果 (bool)
-     */
-    function dirMk($path_remote, $is_abs = false) {
-        if (!$is_abs) { // 假如为绝对路径, 则补全路径
-            $path_remote = $this->config['path'] . $path_remote;
-        }
-
-        if (!@ftp_chdir($path_remote)) { // 如路径不是目录, 则读取上一级
-            $path_remote = dirname($path_remote);
-        }
-
-        if (ftp_nlist($this->obj_conn, $path_remote)) { // 已存在
-            @ftp_chdir($this->obj_conn, $path_remote); // 切换到当前目录
-            $_mkdir_status = true;
-        } else {
-            if ($this->dirMk(dirname($path_remote), true)) { // 创建上一级目录
-                $_mkdir_status = @ftp_mkdir($this->obj_conn, $path_remote); // 创建当前目录
-            } else {
-                $this->error = 'FTP Error: Failed to create remote directory';
-                $_mkdir_status = false;
-            }
-        }
-
-        return $_mkdir_status;
-    }
-
-
-    /** 递归删除整个目录
-     * dirDelete function.
-     *
-     * @access public
-     * @param string $path_remote 路径
-     * @param bool $is_abs (default: false) 是否为绝对路径
-     * @return void
-     */
-    function dirDelete($path_remote, $is_abs = false) {
-        if (!$is_abs) { // 假如为绝对路径, 则补全路径
-            $path_remote = $this->config['path'] . $path_remote;
-        }
-
-        if (!@ftp_chdir($path_remote)) { // 如路径不是目录, 则读取上一级
-            $path_remote = dirname($path_remote);
-        }
-
-        $_arr_dir = $this->dirList($path_remote); // 逐级列出
-
-        //print_r($_arr_dir);
-
-        foreach ($_arr_dir as $_key=>$_value) {
-            if ($_value['type'] == 'file') {
-                $this->fileDelete($_value['name']);  // 删除文件
-            } else {
-                $this->dirDelete($_value['name'], false); // 递归
-            }
-        }
-
-        return @ftp_rmdir($this->obj_conn, $path_remote); // 最后删除目录
+        $this->config  = $_arr_configDo;
     }
 
 
@@ -219,30 +109,44 @@ class Ftp {
      * @param string $path_local 本地路径
      * @param string $path_remote 远程路径
      * @param bool $is_abs (default: false) 是否为绝对路径
-     * @param bool $mod (default: FTP_ASCII) 上次模式
+     * @param bool $mod (default: FTP_ASCII) 上传模式
      * @return 上传结果 (bool)
      */
-    function fileUpload($path_local, $path_remote, $is_abs = false, $mod = FTP_ASCII) {
-        if (!$is_abs) { // 假如为绝对路径, 则补全路径
-            $path_remote = $this->config['path'] . $path_remote;
-        }
-
-        if (!Func::isFile($path_local)) { // 检查本地文件是否存在
+    public function fileUpload($path_local, $path_remote, $ascii = true) {
+        if (!File::fileHas($path_local)) { // 检查本地文件是否存在
             $this->error = 'FTP Error: Local file not found';
             return false;
         }
 
-        if (!$this->dirMk($path_remote, true)) { // 创建远程目录
+        if (!$this->urlProcess()) { // url 处理
             return false;
         }
 
-        if (!@ftp_put($this->obj_conn, $path_remote, $path_local, $mod)) { // 上传
-            $this->error = 'FTP Error: Upload to remote directory failed';
-            return false;
+        $_res_file = fopen($path_local, 'r');
+
+        $_arr_opt = array(
+            CURLOPT_URL                     => $this->hostUrl . $this->hostPath . $path_remote, // 请求 url
+            CURLOPT_INFILE                  => $_res_file,
+            CURLOPT_INFILESIZE              => filesize($path_local),
+            CURLOPT_UPLOAD                  => true, // 准备上传
+            CURLOPT_FTP_CREATE_MISSING_DIRS => true, // 创建目录
+            CURLOPT_TRANSFERTEXT            => $ascii,
+        );
+
+        $this->optProcess($_arr_opt);
+
+        $_result      = curl_exec($this->res_curl); // 执行请求
+        $_num_size    = curl_getinfo($this->res_curl, CURLINFO_SIZE_UPLOAD); // 取得上传字节
+        $this->error  = curl_error($this->res_curl); // 取得错误信息
+        $this->errno  = curl_errno($this->res_curl); // 取得错误号
+
+        if ($this->errno < 1) {
+            $_result = true;
         }
 
-        return true;
+        return $_result;
     }
+
 
     /** 删除文件
      * fileDelete function.
@@ -252,19 +156,47 @@ class Ftp {
      * @param bool $is_abs (default: false) 是否为绝对路径
      * @return void
      */
-    function fileDelete($path_remote, $is_abs = false) {
-        if (!$is_abs) { // 假如为绝对路径, 则补全路径
-            $path_remote = $this->config['path'] . $path_remote;
+    public function fileDelete($path_remote, $is_abs = false) {
+        if (!$this->urlProcess()) { // url 处理
+            return false;
         }
 
-        //print_r($path_remote);
+        $_arr_opt = array(
+            CURLOPT_URL       => $this->hostUrl, // 请求 url
+            CURLOPT_POSTQUOTE => array('DELE ' . $this->hostPath . $path_remote),
+        );
 
-        return @ftp_delete($this->obj_conn, $path_remote);
+        $this->optProcess($_arr_opt);
+
+        $_result          = curl_exec($this->res_curl); // 执行请求
+        $this->result     = $_result;
+        $this->statusCode = curl_getinfo($this->res_curl, CURLINFO_HTTP_CODE); // 取得状态码
+        $this->error      = curl_error($this->res_curl); // 取得错误信息
+        $this->errno      = curl_errno($this->res_curl); // 取得错误号
+
+        if ($this->errno < 1) {
+            $_result = true;
+        }
+
+        return $_result;
     }
 
-    // 关闭连接
-    function close() {
-        ftp_close($this->obj_conn);
+
+    // 设置被动模式 since 0.2.0
+    public function pasv($pasv = true) {
+        if ($pasv === true || $pasv === 'true') {
+            $pasv = true;
+        } else {
+            $pasv = false;
+        }
+
+        $this->config['pasv'] = $pasv;
+    }
+
+
+    // 设置端口 since 0.2.0
+    public function port($port = '') {
+        $this->config['port'] = $port;
     }
 
 
@@ -274,37 +206,120 @@ class Ftp {
      * @access public
      * @return 错误信息
      */
-    function getError() {
+    public function getError() {
         return $this->error;
     }
 
 
-    /** 配置初始化
-     * initConfig function.
+    /** 取得错误号
+     * getErrno function.
      *
-     * @access private
-     * @return 初始化结果 (bool)
+     * @access public
+     * @return 错误号
      */
-    private function initConfig() {
-        if (!isset($this->config['host']) || Func::isEmpty($this->config['host'])) {
-            return false;
+    public function getErrno() {
+        return $this->errno;
+    }
+
+    // 设置 since 0.2.0
+    private function optProcess($opts) {
+        $_arr_optDo = array(
+            CURLOPT_CONNECTTIMEOUT          => $this->config['timeout'], // 超时
+            CURLOPT_RETURNTRANSFER          => $this->config['return_transfer'], // 是否转换返回, true 返回原生的（Raw）输出
+            CURLOPT_SSL_VERIFYPEER          => $this->config['verify_peer'], // 验证对等证书
+            CURLOPT_SSL_VERIFYHOST          => $this->config['verify_host'], // 验证主机
+            CURLOPT_FTP_USE_EPSV            => $this->config['pasv'], // 被动模式
+            CURLOPT_PORT                    => $this->config['port'], // 设置端口
+        );
+
+        $_arr_opt = array_replace_recursive($opts, $_arr_optDo);
+
+        if (!Func::isEmpty($this->userPass)) {
+            $_arr_opt[CURLOPT_USERPWD]= $this->userPass; // 账号密码
         }
-        if (!isset($this->config['user']) || Func::isEmpty($this->config['user'])) {
-            return false;
+
+        if (!Func::isEmpty($this->caInfo)) {
+            $_arr_opt[CURLOPT_CAINFO] = $this->caInfo; // 设置证书名
         }
-        if (!isset($this->config['pass']) || Func::isEmpty($this->config['pass'])) {
+
+        //print_r($_arr_opt);
+
+        curl_setopt_array($this->res_curl, $_arr_opt);
+    }
+
+    // url 处理 since 0.2.0
+    private function urlProcess() {
+        if (!stristr($this->config['host'], '://')) {
+            $this->config['host'] = 'ftp://' . $this->config['host'];
+        }
+
+        $_arr_urlParsed = parse_url($this->config['host']); // 解析 url
+
+        if (!isset($_arr_urlParsed['host']) || Func::isEmpty($_arr_urlParsed['host'])) {
+            $this->error = 'Missing HOST';
             return false;
         }
 
-        isset($this->config['path']) or $this->config['path'] = '/';
-        isset($this->config['port']) or $this->config['port'] = 21;
-        isset($this->config['pasv']) or $this->config['pasv'] = 'off';
+        if (isset($_arr_urlParsed['scheme']) && !Func::isEmpty($_arr_urlParsed['scheme'])) {
+            $_str_scheme = $_arr_urlParsed['scheme'];
+        } else if (!Func::isEmpty($this->config['scheme'])) {
+            $_str_scheme = $this->config['scheme'];
+        } else {
+            $_str_scheme = 'ftp';
+        }
 
-        //Func::fixDs($this->config['path']);
-        Func::fixDs($this->config['path'], '/');
-        str_replace('\\', '/', $this->config['path']);
-        str_replace('//', '/', $this->config['path']);
+        if (isset($_arr_urlParsed['port']) && !Func::isEmpty($_arr_urlParsed['port'])) {
+            $_str_port = $_arr_urlParsed['port'];
+        } else if (!Func::isEmpty($this->config['port'])) {
+            $_str_port = $this->config['port'];
+        } else {
+            $_str_port = '';
+        }
+
+        if (isset($_arr_urlParsed['path']) && !Func::isEmpty($_arr_urlParsed['path'])) {
+            $_str_path = $_arr_urlParsed['path'];
+        } else if (!Func::isEmpty($this->config['path'])) {
+            $_str_path = $this->config['path'];
+        } else {
+            $_str_path = '';
+        }
+
+        if (isset($_arr_urlParsed['user']) && !Func::isEmpty($_arr_urlParsed['user'])) {
+            $_str_user = $_arr_urlParsed['user'];
+        } else if (!Func::isEmpty($this->config['user'])) {
+            $_str_user = $this->config['user'];
+        } else {
+            $_str_user = '';
+        }
+
+        if (isset($_arr_urlParsed['pass']) && !Func::isEmpty($_arr_urlParsed['pass'])) {
+            $_str_pass = $_arr_urlParsed['pass'];
+        } else if (!Func::isEmpty($this->config['pass'])) {
+            $_str_pass = $this->config['pass'];
+        } else {
+            $_str_pass = '';
+        }
+
+        $this->hostUrl  = $_str_scheme . '://' . $_arr_urlParsed['host'];
+
+        if (!Func::isEmpty($_str_port)) {
+            $this->hostUrl .= ':' . $_str_port;
+        }
+
+        $this->hostPath = $_str_path;
+
+        if (!Func::isEmpty($_str_user) && !Func::isEmpty($_str_pass)) {
+            $this->userPass = $_str_user . ':' . $_str_pass;
+        }
 
         return true;
+    }
+
+    // 销毁 since 0.2.0
+    function __destruct() {
+        if ($this->res_curl != null) {
+            curl_close($this->res_curl);
+            $this->res_curl = null;
+        }
     }
 }

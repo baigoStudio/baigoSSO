@@ -20,6 +20,9 @@ class Opt extends Opt_Base {
         parent::v_init();
 
         $_arr_rule =  array(
+            'method' => array(
+                'require' => true,
+            ),
             'secure' => array(
                 'require' => true
             ),
@@ -39,9 +42,6 @@ class Opt extends Opt_Base {
             'reply_addr' => array(
                 'format' => 'email'
             ),
-            'debug' => array(
-                'require' => true
-            ),
             'site_timezone' => array(
                 'require' => true
             ),
@@ -52,6 +52,7 @@ class Opt extends Opt_Base {
 
         $_arr_scene = array(
             'smtp' => array(
+                'method',
                 'host',
                 'port',
                 'secure',
@@ -60,7 +61,10 @@ class Opt extends Opt_Base {
                 'pass',
                 'from_addr',
                 'reply_addr',
-                'debug',
+                '__token__',
+            ),
+            'func' => array(
+                'method',
                 '__token__',
             ),
             'mailtpl' => array(
@@ -69,6 +73,7 @@ class Opt extends Opt_Base {
         );
 
         $_arr_attrName = array(
+            'method'        => $this->obj_lang->get('Send method'),
             'host'          => $this->obj_lang->get('SMTP host'),
             'secure'        => $this->obj_lang->get('Secure type'),
             'auth'          => $this->obj_lang->get('Server authentication'),
@@ -76,7 +81,6 @@ class Opt extends Opt_Base {
             'pass'          => $this->obj_lang->get('Password'),
             'from_addr'     => $this->obj_lang->get('From'),
             'reply_addr'    => $this->obj_lang->get('Reply'),
-            'debug'         => $this->obj_lang->get('SMTP Debug'),
             'site_timezone' => $this->obj_lang->get('Timezone'),
             'site_tpl'      => $this->obj_lang->get('Template'),
             '__token__'     => $this->obj_lang->get('Token'),

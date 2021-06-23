@@ -31,7 +31,6 @@ class Opt {
             'pass'      => $this->inputDbconfig['pass'],
             'charset'   => $this->inputDbconfig['charset'],
             'prefix'    => $this->inputDbconfig['prefix'],
-            'debug'     => $this->inputDbconfig['debug'],
         );
 
         $_num_size   = Config::write(GK_APP_CONFIG . 'dbconfig' . GK_EXT_INC, $_arr_opt);
@@ -84,7 +83,6 @@ class Opt {
             'pass'      => array('txt', ''),
             'charset'   => array('txt', ''),
             'prefix'    => array('txt', ''),
-            'debug'     => array('txt', ''),
             '__token__' => array('txt', ''),
         );
 

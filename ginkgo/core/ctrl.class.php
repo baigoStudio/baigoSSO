@@ -19,7 +19,7 @@ abstract class Ctrl {
     protected $routeOrig    = array(); // 原始路由
     protected $param        = array(); // 路由参数
 
-    function __construct($param = array()) {
+    public function __construct($param = array()) {
         $this->obj_request  = Request::instance();
         $this->obj_lang     = Lang::instance();
         $this->obj_view     = View::instance();
@@ -114,14 +114,14 @@ abstract class Ctrl {
     }
 
     /** 初始化视图驱动
-     * engine function.
+     * driver function.
      *
      * @access protected
-     * @param string $engine 驱动
+     * @param string $driver 驱动
      * @return void
      */
-    protected function engine($engine) {
-        $this->obj_view->engine($engine);
+    protected function driver($driver) {
+        $this->obj_view->driver($driver);
     }
 
     // 清空变量
@@ -129,7 +129,7 @@ abstract class Ctrl {
         $this->obj_view->reset();
     }
 
-    // 设置模板对象
+    // 向模板映射对象
     protected function setObj($name, &$obj) {
         $this->obj_view->setObj($name, $obj);
     }

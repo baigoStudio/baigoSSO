@@ -102,13 +102,6 @@ return array(
             'ctrl'   => 'verify',
             'icon'   => 'file-alt',
         ),
-        'lists' => array(
-            'index' => array(
-                'title' => 'Token list',
-                'ctrl'  => 'verify',
-                'act'   => 'index',
-            ),
-        ),
         'allow' => array(
             'verify'    => 'Validation token',
         ),

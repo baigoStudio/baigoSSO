@@ -10,6 +10,7 @@ use app\classes\Model;
 use ginkgo\Func;
 use ginkgo\Json;
 use ginkgo\Html;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -22,9 +23,7 @@ class Combine extends Model {
             'combine_id',
         );
 
-        $_arr_combineRow = $this->read($mix_combine, $str_by, $num_notId, $_arr_select);
-
-        return $_arr_combineRow;
+        return $this->read($mix_combine, $str_by, $num_notId, $_arr_select);
     }
 
 
@@ -59,11 +58,11 @@ class Combine extends Model {
      *
      * @access public
      * @param mixed $num_no
-     * @param int $num_except (default: 0)
+     * @param int $num_offset (default: 0)
      * @param array $arr_search (default: array())
      * @return void
      */
-    function lists($num_no, $num_except = 0, $arr_search = array()) {
+    function lists($num_no, $num_offset = 0, $arr_search = array()) {
         $_arr_combineSelect = array(
             'combine_id',
             'combine_name',
@@ -71,7 +70,7 @@ class Combine extends Model {
 
         $_arr_where = $this->queryProcess($arr_search);
 
-        $_arr_combineRows = $this->where($_arr_where)->order('combine_id', 'DESC')->limit($num_except, $num_no)->select($_arr_combineSelect);
+        $_arr_combineRows = $this->where($_arr_where)->order('combine_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_combineSelect);
 
         return $_arr_combineRows;
     }
@@ -108,7 +107,7 @@ class Combine extends Model {
         }
 
         if (isset($arr_search['not_ids']) && !Func::isEmpty($arr_search['not_ids'])) {
-            $arr_search['not_ids'] = Func::arrayFilter($arr_search['not_ids']);
+            $arr_search['not_ids'] = Arrays::filter($arr_search['not_ids']);
             $_arr_where[] = array('combine_id', 'NOT IN', $arr_search['not_ids'], 'not_ids');
         }
 

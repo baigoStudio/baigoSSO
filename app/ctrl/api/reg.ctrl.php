@@ -10,7 +10,7 @@ use app\classes\api\Ctrl;
 use ginkgo\Loader;
 use ginkgo\Crypt;
 use ginkgo\Config;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Sign;
 use ginkgo\Func;
 use ginkgo\Smtp;
@@ -80,7 +80,7 @@ class Reg extends Ctrl {
             $_arr_verifySubmitResult    = $_mdl_verify->submit($_arr_regResult['user_id'], $_arr_inputReg['user_mail'], 'confirm');
 
             if ($_arr_verifySubmitResult['rcode'] != 'y120101' && $_arr_verifySubmitResult['rcode'] != 'y120103') { //生成验证失败
-                return $this->fetchJson('Send confirmation email failed', 'x010407');
+                return $this->fetchJson('Send verification email failed', 'x010407');
             }
 
             $_str_verifyUrl = $this->url['url_personal'] . 'verify/confirm/id/' . $_arr_verifySubmitResult['verify_id'] . '/token/' . $_arr_verifySubmitResult['verify_token'] . '/';
@@ -93,11 +93,6 @@ class Reg extends Ctrl {
 
             $_obj_smtp = Smtp::instance();
 
-            if (!$_obj_smtp->connect()) {
-                $_arr_error = $_obj_smtp->getError();
-                return $this->fetchJson(end($_arr_error), 'x010407');
-            }
-
             $_obj_smtp->addRcpt($_arr_regResult['user_mail']); //发送至
             $_obj_smtp->setSubject($this->configMailtpl['reg_subject']); //主题
             $_obj_smtp->setContent($_str_html); //内容
@@ -105,13 +100,19 @@ class Reg extends Ctrl {
 
             if (!$_obj_smtp->send()) {
                 $_arr_error = $_obj_smtp->getError();
-                return $this->fetchJson(end($_arr_error), 'x010407');
+                $_str_msg   = end($_arr_error);
+
+                if (Func::isEmpty($_str_msg)) {
+                    $_str_msg = 'Send verification email failed';
+                }
+
+                return $this->fetchJson($_str_msg, 'x010407');
             }
         }
 
         $_arr_regResult['timestamp'] = GK_NOW;
 
-        $_str_src   = Json::encode($_arr_regResult);
+        $_str_src   = Arrays::toJson($_arr_regResult);
 
         $_str_sign  = Sign::make($_str_src, $this->appRow['app_key'] . $this->appRow['app_secret']);
 
@@ -146,26 +147,7 @@ class Reg extends Ctrl {
 
         $_arr_inputChkname = $this->mdl_reg->inputChkname($this->decryptRow);
 
-        if ($_arr_inputChkname['rcode'] != 'y010201') {
-            return $this->fetchJson($_arr_inputChkname['msg'], $_arr_inputChkname['rcode']);
-        }
-
-        $_arr_checkResult = $this->mdl_reg->check($_arr_inputChkname['user_name'], 'user_name');
-
-        if ($_arr_checkResult['rcode'] == 'y010102') {
-            $_str_rcode = 'x010404';
-            $_str_msg   = $this->obj_lang->get('User already exists');
-        } else {
-            $_str_rcode = 'y010401';
-            $_str_msg   = $this->obj_lang->get('Username can be registered');
-        }
-
-        $_arr_return = array(
-            'rcode' => $_str_rcode,
-            'msg'   => $_str_msg,
-        );
-
-        $_arr_tpl = array_replace_recursive($this->version, $_arr_return);
+        $_arr_tpl = array_replace_recursive($this->version, $_arr_inputChkname);
 
         return $this->json($_arr_tpl);
     }
@@ -180,26 +162,7 @@ class Reg extends Ctrl {
 
         $_arr_inputChkmail = $this->mdl_reg->inputChkmail($this->decryptRow);
 
-        if ($_arr_inputChkmail['rcode'] != 'y010201') {
-            return $this->fetchJson($_arr_inputChkmail['msg'], $_arr_inputChkmail['rcode']);
-        }
-
-        $_str_rcode = 'y010401';
-        $_str_msg   = $this->obj_lang->get('Mailbox can be used');
-
-        $_arr_checkResult = $this->mdl_reg->check($_arr_inputChkmail['user_mail'], 'user_mail');
-
-        if ($_arr_checkResult['rcode'] == 'y010102') {
-            $_str_rcode = 'x010404';
-            $_str_msg   = $this->obj_lang->get('Mailbox already exists');
-        }
-
-        $_arr_return = array(
-            'rcode' => $_str_rcode,
-            'msg'   => $_str_msg,
-        );
-
-        $_arr_tpl = array_replace_recursive($this->version, $_arr_return);
+        $_arr_tpl = array_replace_recursive($this->version, $_arr_inputChkmail);
 
         return $this->json($_arr_tpl);
     }

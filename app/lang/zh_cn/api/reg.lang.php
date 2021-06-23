@@ -28,7 +28,7 @@ return array(
     'Illegal content in username'   => '用户名中含有非法内容',
     'Email is not allowed'          => '邮箱不被允许',
     'Illegal content in mailbox'    => '邮箱中含有非法内容',
-    'Send confirmation email failed'                    => '发送确认邮件失败',
+    'Send verification email failed'                    => '发送确认邮件失败',
     'Size of {:attr} must be {:rule}'                   => '{:attr} 的长度必须在 {:rule} 之间',
     'Max size of {:attr} must be {:rule}'               => '{:attr} 最长 {:rule}',
     '{:attr} must be alpha-numeric, dash, underscore'   => '{:attr} 必须为字母、数字、连接符和下划线',

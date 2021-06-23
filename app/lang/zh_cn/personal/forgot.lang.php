@@ -31,7 +31,7 @@ return array(
     'Confirm password'                      => '确认密码',
     'Did not make any changes'              => '未做任何修改',
     'Not allowed to edit'                   => '禁止修改',
-    'Form token is incorrect'                      => '表单令牌错误',
+    'Form token is incorrect'               => '表单令牌错误',
     'Password is incorrect'                 => '密码错误',
     'Change mailbox successfully'           => '更换邮箱成功',
     'Update password successfully'          => '更新密码成功',
@@ -43,7 +43,10 @@ return array(
     'Size of {:attr} must be {:rule}'       => '{:attr} 的长度必须在 {:rule} 之间',
     '{:attr} out of accord with {:confirm}' => '{:attr} 与 {:confirm} 不一致',
     '{:attr} must be alpha-numeric'         => '{:attr} 必须为字母和数字',
+    'You have not set a mailbox!'           => '您没有设置邮箱！',
+    'You have not set a secret question!'   => '您没有设置密保问题！',
+    'Send verification email failed'        => '发送确认邮件失败',
     'A verification email has been sent to your mailbox, please verify.' => '已将验证邮件发送至您的邮箱，请验证。',
     'System will send a confirmation email to the mailbox you reserved.' => '选择此方式找回密码，系统将向您预留的邮箱发送确认邮件。',
-    'You have not reserve mailbox and security question, cannot reset your password. Please contact your system administrator!' => '您没有设置邮箱和密保问题，无法找回密码，请联系系统管理员！'
+    'You have not set a mailbox and security question, cannot reset your password. Please contact your system administrator!' => '您没有设置邮箱和密保问题，无法找回密码，请联系系统管理员！'
 );

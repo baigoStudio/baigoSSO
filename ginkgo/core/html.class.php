@@ -12,21 +12,16 @@ defined('IN_GINKGO') or exit('Access Denied');
 // html 处理类
 class Html {
 
-    private $str           = ''; // 源字符串
-    private $tagAllow      = array(); // 允许保留的tag 例如: array('p', 'div')
-    private $attrAllow     = array(); // 允许保留的属性 例如 :array('id', 'class', 'title')
-    private $attrExcept    = array(); // 特例 例如: array('a' => array('href', 'class'), 'span' => array('class'))
-    private $attrIgnore    = array(); // 忽略过滤的标记 例如: array('span','img')
+    public $html          = ''; // 源字符串
+    public $tagAllow      = array(); // 允许保留的 tag 例如: array('p', 'div')
+    public $attrAllow     = array(); // 允许保留的属性 例如: array('id', 'class', 'title')
+    public $attrExcept    = array(); // 特例 例如: array('a' => array('href', 'class'), 'span' => array('class'))
+    public $tagIgnore    = array(); // 忽略过滤的标记 例如: array('span','img')
 
     protected static $instance; //用静态属性保存实例
 
-    protected function __construct() {
-
-    }
-
-    protected function __clone() {
-
-    }
+    protected function __construct() { }
+    protected function __clone() { }
 
 
     /**
@@ -37,10 +32,10 @@ class Html {
      * @return 当前类的实例
      */
     public static function instance() {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static();
+        if (Func::isEmpty(self::$instance)) {
+            self::$instance = new static();
         }
-        return static::$instance;
+        return self::$instance;
     }
 
 
@@ -52,7 +47,7 @@ class Html {
      * @param string $string 待编码的的 html
      * @return 编码后的 html
      */
-    static function encode($string) {
+    public static function encode($string) {
         if (!Func::isEmpty($string)) {
             $string = trim(htmlentities($string, ENT_QUOTES, 'UTF-8'));
         }
@@ -70,7 +65,7 @@ class Html {
      * @param string $spec (default: '') 特殊处理
      * @return 解码后的 html
      */
-    static function decode($string, $spec = '') {
+    public static function decode($string, $spec = '') {
         //print_r($string);
 
         if (!Func::isEmpty($string)) {
@@ -126,22 +121,94 @@ class Html {
     }
 
 
+    /** 补全 html 标签的图片地址部分
+     * fillImg function.
+     *
+     * @access public
+     * @static
+     * @param string $content html 全文
+     * @param string $baseUrl 基本 url
+     * @return 补全后的 html
+     */
+    public static function fillImg($content, $baseUrl) {
+        $_pattern         = '/<img[^>]*src[=\"\'\s]+([^\.]*\/[^\.]+\.[^\"\']+)[\"\']?[^>]*>/i'; // 图片标签的正则
+        //$_pattern_2         = '/\ssrc=["|\']?.*?["|\']?\s/i'; // 匹配图片src
+        $_str_contentTemp   = self::decode($content); // html 解码
+        $_str_contentTemp   = str_replace('\\', '', $_str_contentTemp); // 替换反斜杠
+
+        preg_match_all($_pattern, $_str_contentTemp, $_arr_match); // 匹配图片
+
+        //print_r($_arr_match);
+
+        if (isset($_arr_match[1])) { //匹配成功
+            $_arr_urlSrc    = array();
+            $_arr_urlDst    = array();
+            foreach ($_arr_match[1] as $_key=>$_value) { // 遍历匹配结果
+                $_str_urlSrc    = trim($_value);
+                $_str_urlSrc    = str_ireplace('src=', '', $_str_urlSrc); // 剔除属性
+                $_str_urlSrc    = str_replace('"', '', $_str_urlSrc);
+                $_str_urlSrc    = str_replace('\'', '', $_str_urlSrc);
+
+                $_arr_urlSrc[]  = trim($_str_urlSrc); // 源路径
+                $_arr_urlDst[]  = Func::fillUrl($_str_urlSrc, $baseUrl); // 补全后的替换路径
+            }
+
+            /*print_r($_arr_urlSrc);
+            print_r('<br>');
+            print_r($_arr_urlDst);
+            print_r('<br>');*/
+
+            $_arr_urlSrc = Arrays::filter($_arr_urlSrc); // 剔除重复项目
+            $_arr_urlDst = Arrays::filter($_arr_urlDst);
+
+            $content = str_replace($_arr_urlSrc, $_arr_urlDst, $content); // 替换
+        }
+
+        return $content;
+    }
+
+
     /** 剔除 tag
      * stripTag function.
      *
      * @access public
-     * @param string $str 待处理 html
+     * @param string $html 待处理 html
      * @return 处理后的 html
      */
-    public function stripTag($str) {
-        $this->str = $str;
+    public function stripTag($html) {
+        $this->html = $html;
 
-        if (is_string($this->str) && !Func::isEmpty($this->str)) { // 判断字符串
+        if (is_string($this->html) && !Func::isEmpty($this->html)) { // 判断字符串
             $_str_tagAllow  = $this->tagAllowProcess();
-            $this->str      = strip_tags($this->str, $_str_tagAllow);
+            $this->html     = strip_tags($this->html, $_str_tagAllow);
         }
 
-        return $this->str;
+        return $this->html;
+    }
+
+
+    /** 剔除属性
+     * stripAttr function.
+     *
+     * @access public
+     * @param string $html 待处理 html
+     * @return 处理后的 html
+     */
+    public function stripAttr($html) {
+        $this->html = $html;
+
+        if (is_string($this->html) && !Func::isEmpty($this->html)) { // 判断字符串
+            //$this->html = strtolower($this->html); // 转成小写
+
+            $_mix_eleRows = $this->findEle();
+            if (is_string($_mix_eleRows)) {
+                return $_mix_eleRows;
+            }
+            $_arr_nodeRows = $this->findAttr($_mix_eleRows);
+            $this->removeAttr($_arr_nodeRows);
+        }
+
+        return $this->html;
     }
 
 
@@ -152,33 +219,28 @@ class Html {
      * @param array $param (default: array())
      * @return void
      */
-    public function setTagAllow($param = array()) {
-        $this->tagAllow = $param;
+    public function setTagAllow($tag) {
+        if (is_array($tag)) {
+            $this->tagAllow = array_merge($this->tagAllow, $tag);
+        } else if (is_string($tag)) {
+            $this->tagAllow[] = $tag;
+        }
     }
 
 
-    /** 剔除属性
-     * stripAttr function.
+    /** 设置忽略的 tag
+     * setTagIgnore function.
      *
      * @access public
-     * @param string $str 待处理 html
-     * @return 处理后的 html
+     * @param array $param (default: array()) 忽略
+     * @return void
      */
-    public function stripAttr($str) {
-        $this->str = $str;
-
-        if (is_string($this->str) && !Func::isEmpty($this->str)) { // 判断字符串
-            //$this->str = strtolower($this->str); // 转成小写
-
-            $_mix_eleRows = $this->findEle();
-            if (is_string($_mix_eleRows)) {
-                return $_mix_eleRows;
-            }
-            $_arr_nodeRows = $this->findAttr($_mix_eleRows);
-            $this->removeAttr($_arr_nodeRows);
+    public function setTagIgnore($tag) {
+        if (is_array($tag)) {
+            $this->tagIgnore = array_merge($this->tagIgnore, $tag);
+        } else if (is_string($tag)) {
+            $this->tagIgnore[] = $tag;
         }
-
-        return $this->str;
     }
 
 
@@ -189,8 +251,12 @@ class Html {
      * @param array $param (default: array()) 属性
      * @return void
      */
-    public function setAttrAllow($param = array()) {
-        $this->attrAllow = $param;
+    public function setAttrAllow($attr) {
+        if (is_array($attr)) {
+            $this->attrAllow = array_merge($this->attrAllow, $attr);
+        } else if (is_string($attr)) {
+            $this->attrAllow[] = $attr;
+        }
     }
 
 
@@ -201,20 +267,16 @@ class Html {
      * @param array $param (default: array()) 特例
      * @return void
      */
-    public function setAttrExcept($param = array()) {
-        $this->attrExcept = $param;
-    }
-
-
-    /** 设置忽略的标记
-     * setAttrIgnore function.
-     *
-     * @access public
-     * @param array $param (default: array()) 忽略
-     * @return void
-     */
-    public function setAttrIgnore($param = array()) {
-        $this->attrIgnore = $param;
+    public function setAttrExcept($tag, $attr = '') {
+        if (is_array($tag)) {
+            $this->attrExcept = array_replace_recursive($this->attrExcept, $tag);
+        } else if (is_string($tag) && !Func::isEmpty($attr)) {
+            if (is_array($attr)) {
+                $this->attrExcept[$tag] = $attr;
+            } else if (is_string($attr)) {
+                $this->attrExcept[$tag][] = $attr;
+            }
+        }
     }
 
 
@@ -241,7 +303,7 @@ class Html {
      */
     private function findEle() {
         $_arr_nodeRows = array();
-        preg_match_all('/<([^ !\/\>\n]+)([^>]*)>/i', $this->str, $_arr_eleRows);
+        preg_match_all('/<([^ !\/\>\n]+)([^>]*)>/i', $this->html, $_arr_eleRows);
 
         if (isset($_arr_eleRows)) {
             foreach ($_arr_eleRows[1] as $_key=>$_value) {
@@ -250,7 +312,7 @@ class Html {
                     $_str_eleName   = $_arr_eleRows[1][$_key];
                     $_arr_attrRows  = $_arr_eleRows[2][$_key];
 
-                    if (is_array($this->attrIgnore) && !in_array($_str_eleName, $this->attrIgnore)) {
+                    if (is_array($this->tagIgnore) && !in_array($_str_eleName, $this->tagIgnore)) {
                         $_arr_nodeRows[] = array(
                             'literal'   => $_str_literal,
                             'name'      => $_str_eleName,
@@ -264,7 +326,7 @@ class Html {
         if (isset($_arr_nodeRows[0])) {
             return $_arr_nodeRows;
         } else {
-            return $this->str;
+            return $this->html;
         }
     }
 
@@ -273,11 +335,11 @@ class Html {
      * findAttr function.
      *
      * @access private
-     * @param array $arr_nodeRows 待处理节点
+     * @param array $nodeRows 待处理节点
      * @return 处理完的数据
      */
-    private function findAttr($arr_nodeRows) {
-        foreach($arr_nodeRows as $_key=>&$_value) {
+    private function findAttr($nodeRows) {
+        foreach($nodeRows as $_key=>&$_value) {
             preg_match_all('/([^ =]+)\s*=\s*["|\']{0,1}([^"\']*)["|\']{0,1}/i', $_value['attrs'], $_arr_attrRows);
             $_arr_attrs = array();
             if (isset($_arr_attrRows[1])) {
@@ -297,18 +359,18 @@ class Html {
             $_value['attrs'] = $_arr_attrs;
             unset($_arr_attrs);
         }
-        return $arr_nodeRows;
+        return $nodeRows;
     }
 
     /** 移除属性
      * removeAttr function.
      *
      * @access private
-     * @param array $arr_nodeRows 待处理节点
+     * @param array $nodeRows 待处理节点
      * @return void
      */
-    private function removeAttr($arr_nodeRows) {
-        foreach ($arr_nodeRows as $_key=>$_value) {
+    private function removeAttr($nodeRows) {
+        foreach ($nodeRows as $_key=>$_value) {
             $_str_nodeName = $_value['name'];
             $_str_newAttrs = '';
             if (is_array($_value['attrs'])) {
@@ -318,8 +380,8 @@ class Html {
                     }
                 }
             }
-            $_str_replace = ($_str_newAttrs) ? "<$_str_nodeName $_str_newAttrs>" : "<$_str_nodeName>";
-            $this->str = preg_replace('/' . $this->protect($_value['literal']) . '/i', $_str_replace, $this->str);
+            $_str_replace = ($_str_newAttrs) ? '<' . $_str_nodeName . ' ' . $_str_newAttrs . '>' : '<' . $_str_nodeName . '>';
+            $this->html   = preg_replace('/' . $this->protect($_value['literal']) . '/i', $_str_replace, $this->html);
         }
     }
 
@@ -342,15 +404,15 @@ class Html {
 
     /** 创建属性
     * @param String $new_attrs
-    * @param String $name
+    * @param String $tag
     * @param String $value
     * @return String
     */
-    private function createAttr($new_attrs, $name, $value) {
+    private function createAttr($new_attrs, $attr, $value) {
         if (!Func::isEmpty($new_attrs)) {
             $new_attrs .= ' ';
         }
-        $new_attrs .= "$name=\"$value\"";
+        $new_attrs .= $attr . '="' . $value . '"';
         return $new_attrs;
     }
 
@@ -359,10 +421,10 @@ class Html {
      * protect function.
      *
      * @access private
-    * @param string $str 源字符串
+    * @param string $html 源字符串
      * @return 处理完的字符串
      */
-    private function protect($str) {
+    private function protect($html) {
         $conversions = array(
             '^'     => '\^',
             '['     => '\[',
@@ -380,7 +442,6 @@ class Html {
             '<'     => '\<',
             '>'     => '\>'
         );
-        return strtr($str, $conversions);
+        return strtr($html, $conversions);
     }
-
 }

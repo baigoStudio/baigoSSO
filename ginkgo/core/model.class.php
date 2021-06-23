@@ -12,16 +12,13 @@ defined('IN_GINKGO') or exit('Access denied');
 // 模型抽象类
 abstract class Model {
 
-    protected $connection; // 数据连接参数
+    protected $config = array(); // 数据库配置
     protected $obj_request; // 请求实例
     protected $obj_builder; // sql 语句构建实例
-    protected $dbconfig; // 数据库配置
     protected $table; // 表名
     protected $className; // 类名
 
-    private $obj_db; // 数据库操作实例
-
-    private $this_config = array(
+    private $configThis = array(
         'type'      => 'mysql',
         'host'      => '',
         'name'      => '',
@@ -33,20 +30,21 @@ abstract class Model {
         'port'      => 3306,
     );
 
+    private $obj_db; // 数据库实例
 
     /** 构造函数
      * __construct function.
      *
      * @access public
-     * @param array $dbconfig (default: array()) 数据库配置
+     * @param array $config (default: array()) 数据库配置
      * @return void
      */
-    function __construct($dbconfig = array()) {
+    public function __construct($config = array()) {
         $this->obj_request  = Request::instance();
 
-        $this->config($dbconfig); // 配置处理
+        $this->config($config); // 配置处理
 
-        $this->obj_db       = Db::connect($this->dbconfig);
+        $this->obj_db       = Db::connect($this->config);
 
         $this->obj_builder  = $this->obj_db->obj_builder;
 
@@ -54,31 +52,65 @@ abstract class Model {
     }
 
 
-    // 模型初始化
-    protected function m_init() {
+    /** 魔术调用
+     * __call function.
+     *
+     * @access public
+     * @param string $method 数据库方法
+     * @param mixed $params 参数
+     * @return void
+     */
+    public function __call($method, $params) {
+        if (method_exists($this->obj_db, $method)) {
+            $_table = $this->realClassProcess(); // 取得表名
 
+            $this->obj_db->setModel($this->className); // 设置模型名 (防止冲突)
+
+            if (Func::isEmpty($this->table)) { // 假如未定义表名属性, 自动设置表名
+                $this->obj_db->setTable($_table);
+            } else {
+                $this->obj_db->setTable($this->table); // 表名属性作为表名
+            }
+
+            return call_user_func_array(array($this->obj_db, $method), $params); // 调用数据库驱动方法
+        } else {
+            $_obj_excpt = new Exception('Method not found', 500); // 报错
+            $_obj_excpt->setData('err_detail', __CLASS__ . '->' . $method);
+
+            throw $_obj_excpt;
+        }
     }
+
+
+    // 模型初始化
+    protected function m_init() { }
 
 
     /** 数据库配置
      * config function.
      *
      * @access protected
-     * @param array $dbconfig 配置参数
+     * @param array $config 配置参数
      * @return void
      */
-    protected function config($dbconfig) {
-        $_arr_dbconfig = Config::get('dbconfig');
+    protected function config($config = array()) {
+        $_arr_config   = Config::get('dbconfig');
 
-        if (!Func::isEmpty($this->connection)) {
-            $_dbconfig = $this->connection;
-        } else if (!Func::isEmpty($dbconfig)) {
-            $_dbconfig = $dbconfig;
-        } else {
-            $_dbconfig = $_arr_dbconfig;
+        $_arr_configDo = $this->configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
         }
 
-        $this->dbconfig = array_replace_recursive($this->this_config, $_dbconfig); // 合并配置
+        if (is_array($this->config) && !Func::isEmpty($this->config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $this->config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        $this->config  = $_arr_configDo;
     }
 
 
@@ -134,36 +166,6 @@ abstract class Model {
         }
 
         return $_mix_return;
-    }
-
-
-    /** 魔术静态调用
-     * __call function.
-     *
-     * @access public
-     * @param string $method 数据库方法
-     * @param mixed $params 参数
-     * @return void
-     */
-    public function __call($method, $params) {
-        if (method_exists($this->obj_db, $method)) {
-            $_table = $this->realClassProcess(); // 取得表名
-
-            $this->obj_db->setModel($this->className); // 设置模型名 (防止冲突)
-
-            if (Func::isEmpty($this->table)) { // 假如未定义表名属性, 自动设置表名
-                $this->obj_db->setTable($_table);
-            } else {
-                $this->obj_db->setTable($this->table); // 表名属性作为表名
-            }
-
-            return call_user_func_array(array($this->obj_db, $method), $params); // 调用数据库驱动方法
-        } else {
-            $_obj_excpt = new Exception('Method not found', 500); // 报错
-            $_obj_excpt->setData('err_detail', __CLASS__ . '->' . $method);
-
-            throw $_obj_excpt;
-        }
     }
 
 

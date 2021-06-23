@@ -24,7 +24,7 @@
 
     <!--jQuery 库-->
     <script src="{:DIR_STATIC}lib/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-    <link href="{:DIR_STATIC}lib/bootstrap/4.3.1/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="{:DIR_STATIC}lib/bootstrap/4.5.2/css/bootstrap.min.css" type="text/css" rel="stylesheet">
     <link href="{:DIR_STATIC}lib/font-awesome/5.9.0/css/fontawesome.min.css" type="text/css" rel="stylesheet">
     <link href="{:DIR_STATIC}lib/font-awesome/5.9.0/css/solid.min.css" type="text/css" rel="stylesheet">
 

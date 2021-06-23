@@ -10,7 +10,7 @@ use app\model\App as App_Base;
 use ginkgo\Config;
 use ginkgo\Func;
 use ginkgo\Crypt;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Html;
 
 // 不能非法包含或直接执行
@@ -48,7 +48,7 @@ class App extends App_Base {
             );
         }
 
-        $_arr_appData['app_allow'] = Json::encode($_arr_appData['app_allow']);
+        $_arr_appData['app_allow'] = Arrays::toJson($_arr_appData['app_allow']);
 
         $_num_appId  = $this->insert($_arr_appData);
 

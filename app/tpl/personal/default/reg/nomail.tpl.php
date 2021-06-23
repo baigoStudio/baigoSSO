@@ -25,7 +25,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                     <div class="input-group">
                         <input type="text" name="captcha" id="captcha" class="form-control">
                         <div class="input-group-append">
-                            <img src="<?php echo $route_misc; ?>captcha/" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
+                            <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_nomail/" data-id="captcha_nomail" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
                         </div>
                     </div>
                     <small class="form-text" id="msg_captcha"></small>
@@ -53,7 +53,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                 format: 'alpha_number',
                 ajax: {
                     key: 'captcha',
-                    url: '<?php echo $route_misc; ?>captcha/check/'
+                    url: '<?php echo $route_misc; ?>captcha/check/id/captcha_nomail/'
                 }
             }
         },
@@ -96,7 +96,11 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
 
         $('#nomail_form').submit(function(){
             if (obj_validate_form.verify()) {
-                obj_submit_form.formSubmit();
+                obj_submit_form.formSubmit(false, function(result){
+                    if (typeof result.rcode == 'undefined' || result.rcode != 'y010407') {
+                        captchaReload('captcha_nomail');
+                    }
+                });
             }
         });
     });

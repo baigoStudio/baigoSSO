@@ -8,7 +8,6 @@ namespace app\model\api;
 use app\model\User;
 use ginkgo\Func;
 use ginkgo\Crypt;
-use ginkgo\Config;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -17,13 +16,8 @@ defined('IN_GINKGO') or exit('Access denied');
 class Login extends User {
 
     public $inputSubmit;
-    public $configBase;
+
     protected $table = 'user';
-
-    function m_init() { //构造函数
-        $this->configBase       = Config::get('base', 'var_extra');
-    }
-
 
     function login() {
         $_arr_userData = array(
@@ -73,8 +67,9 @@ class Login extends User {
 
         return array(
             'user_id'               => $_arr_userRow['user_id'],
-            //'user_name'             => $_arr_userRow['user_name'],
-            //'user_ip'               => $_str_userIp,
+            'user_name'             => $_arr_userRow['user_name'],
+            'user_status'           => $_arr_userRow['user_status'],
+            'user_ip'               => $_str_userIp,
             'user_time_login'       => GK_NOW,
             'user_access_token'     => Crypt::crypt($_str_accessToken, $_arr_userRow['user_name']),
             'user_access_expire'    => $_tm_accessExpire,
@@ -94,16 +89,25 @@ class Login extends User {
      */
     function inputSubmit($arr_data) {
         $_arr_inputParam = array(
-            'user_pass'     => array('txt', ''),
-            'user_ip'       => array('txt', ''),
-            'timestamp'     => array('int', 0),
+            'user_str'  => array('txt', ''),
+            'user_by'   => array('txt', ''),
+            'user_pass' => array('txt', ''),
+            'user_ip'   => array('txt', ''),
+            'timestamp' => array('int', 0),
         );
 
         $_arr_inputSubmit  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
 
-        $_arr_inputUserCommon   = $this->inputUserCommon($arr_data);
-
-        $_arr_inputSubmit  = array_replace_recursive($_arr_inputSubmit, $_arr_inputUserCommon);
+        if (isset($arr_data['user_id'])) {
+            $_arr_inputSubmit['user_by']  = 'user_id';
+            $_arr_inputSubmit['user_str'] = $arr_data['user_id'];
+        } else if (isset($arr_data['user_name'])) {
+            $_arr_inputSubmit['user_by']  = 'user_name';
+            $_arr_inputSubmit['user_str'] = $arr_data['user_name'];
+        } else if (isset($arr_data['user_mail'])) {
+            $_arr_inputSubmit['user_by']  = 'user_mail';
+            $_arr_inputSubmit['user_str'] = $arr_data['user_mail'];
+        }
 
         $_mix_vld = $this->validate($_arr_inputSubmit, '', 'login');
 
@@ -114,6 +118,21 @@ class Login extends User {
             );
         }
 
+        if ($_arr_inputSubmit['user_by'] == 'user_mail') {
+            $_arr_search  = array(
+                'user_mail' => $_arr_inputSubmit['user_str'],
+            );
+
+            $_num_userCount = $this->count($_arr_search);
+
+            if ($_num_userCount > 0) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'There are duplicate emails in the system',
+                );
+            }
+        }
+
         $_arr_inputSubmit['rcode'] = 'y010201';
 
         $this->inputSubmit = $_arr_inputSubmit;
@@ -121,4 +140,3 @@ class Login extends User {
         return $_arr_inputSubmit;
     }
 }
-

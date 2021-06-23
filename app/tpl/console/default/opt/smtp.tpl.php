@@ -1,5 +1,5 @@
 <?php $cfg = array(
-    'title'             => $lang->get('System settings', 'console.common') . ' &raquo; ' . $lang->get('SMTP Settings', 'console.common'),
+    'title'             => $lang->get('System settings', 'console.common') . ' &raquo; ' . $lang->get('Email sending settings', 'console.common'),
     'menu_active'       => 'opt',
     'sub_active'        => 'smtp',
     'baigoValidate'     => 'true',
@@ -16,13 +16,33 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             <div class="card-body">
                 <div class="form-group">
                     <label>
+                        <?php echo $lang->get('Send method'); ?> <span class="text-danger">*</span>
+                    </label>
+                    <div class="form-check">
+                        <input type="radio"<?php if ($config['var_extra']['smtp']['method'] == 'smtp') { ?> checked<?php } ?> value="smtp" name="method" id="method_smtp" class="form-check-input">
+                        <label for="method_smtp" class="form-check-label">
+                            <?php echo $lang->get('SMTP'); ?>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio"<?php if ($config['var_extra']['smtp']['method'] == 'func') { ?> checked<?php } ?> value="func" name="method" id="method_func" class="form-check-input">
+                        <label for="method_func" class="form-check-label">
+                            <?php echo $lang->get('Sendmail via PHP function'); ?>
+                            <span class="text-muted">(<?php echo $lang->get('Need to configure <code>sendmail</code> service'); ?>)</span>
+                        </label>
+                    </div>
+                    <small class="form-text" id="msg_method"></small>
+                </div>
+
+                <div class="form-group group_smtp">
+                    <label>
                         <?php echo $lang->get('SMTP Host'); ?> <span class="text-danger">*</span>
                     </label>
                     <input type="text" value="<?php echo $config['var_extra']['smtp']['host']; ?>" name="host" id="host" class="form-control">
                     <small class="form-text" id="msg_host"></small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group group_smtp">
                     <label>
                         <?php echo $lang->get('Host port'); ?> <span class="text-danger">*</span>
                     </label>
@@ -30,7 +50,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <small class="form-text" id="msg_port"></small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group group_smtp">
                     <label>
                         <?php echo $lang->get('Secure type'); ?> <span class="text-danger">*</span>
                     </label>
@@ -59,7 +79,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <small class="form-text" id="msg_secure"></small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group group_smtp">
                     <div class="custom-control custom-switch">
                         <input type="checkbox" <?php if ($config['var_extra']['smtp']['auth'] === 'true') { ?>checked<?php } ?> value="true" name="auth" id="auth" class="custom-control-input">
                         <label for="auth" class="custom-control-label">
@@ -69,7 +89,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <small class="form-text" id="msg_auth"></small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group group_smtp">
                     <label>
                         <?php echo $lang->get('Username'); ?> <span class="text-danger">*</span>
                     </label>
@@ -77,7 +97,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                     <small class="form-text" id="msg_user"></small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group group_smtp">
                     <label>
                         <?php echo $lang->get('Password'); ?> <span class="text-danger">*</span>
                     </label>
@@ -117,31 +137,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                         <input type="text" value="<?php echo $config['var_extra']['smtp']['reply_name']; ?>" name="reply_name" id="reply_name" class="form-control">
                     </div>
                     <small class="form-text" id="msg_reply_addr"></small>
-                </div>
-
-                <div class="form-group">
-                    <label><?php echo $lang->get('SMTP Debug'); ?> <span class="text-danger">*</span></label>
-                    <div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" <?php if ($config['var_extra']['smtp']['debug'] == '0') { ?>checked<?php } ?> name="debug" id="debug_0" value='0'>
-                            <label class="form-check-label">
-                                <?php echo $lang->get('Off'); ?>
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" <?php if ($config['var_extra']['smtp']['debug'] == '1') { ?>checked<?php } ?> name="debug" id="debug_1" value='1'>
-                            <label class="form-check-label">
-                                <?php echo $lang->get('Client'); ?>
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" <?php if ($config['var_extra']['smtp']['debug'] == '2') { ?>checked<?php } ?> name="debug" id="debug_2" value='2'>
-                            <label class="form-check-label">
-                                <?php echo $lang->get('Client &amp; Server'); ?>
-                            </label>
-                        </div>
-                    </div>
-                    <small class="form-text" id="msg_debug"></small>
                 </div>
 
                 <div class="bg-validate-box"></div>
@@ -185,9 +180,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             reply_addr: {
                 require: true,
                 format: 'email'
-            },
-            debug: {
-                require: true
             }
         },
         attr_names: {
@@ -198,13 +190,11 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             user: '<?php echo $lang->get('Username'); ?>',
             pass: '<?php echo $lang->get('Password'); ?>',
             from_addr: '<?php echo $lang->get('From'); ?>',
-            reply_addr: '<?php echo $lang->get('Reply'); ?>',
-            debug: '<?php echo $lang->get('SMTP Debug'); ?>'
+            reply_addr: '<?php echo $lang->get('Reply'); ?>'
         },
         selector_types: {
             secure: 'name',
-            auth: 'name',
-            debug: 'name'
+            auth: 'name'
         },
         type_msg: {
             require: '<?php echo $lang->get('{:attr} require'); ?>'
@@ -229,13 +219,43 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         }
     };
 
+    function send_method(val) {
+        switch (val) {
+            case 'smtp':
+                $('.group_smtp').show();
+            break;
+
+            default:
+                $('.group_smtp').hide();
+            break;
+        }
+    }
+
     $(document).ready(function(){
+        send_method('<?php echo $config['var_extra']['smtp']['method']; ?>');
+
+        $('[name="method"]').click(function(){
+            var _val = $(this).val();
+
+            send_method(_val);
+        });
+
         var obj_validate_form   = $('#opt_form').baigoValidate(opts_validate_form);
         var obj_submit_form     = $('#opt_form').baigoSubmit(opts_submit_form);
 
         $('#opt_form').submit(function(){
-            if (obj_validate_form.verify()) {
-                obj_submit_form.formSubmit();
+            var _val = $('[name="method"]:checked').val();
+
+            switch (_val) {
+                case 'smtp':
+                    if (obj_validate_form.verify()) {
+                        obj_submit_form.formSubmit();
+                    }
+                break;
+
+                default:
+                    obj_submit_form.formSubmit();
+                break;
             }
         });
     });

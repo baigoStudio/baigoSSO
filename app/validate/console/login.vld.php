@@ -14,7 +14,7 @@ defined('IN_GINKGO') or exit('Access denied');
 /*-------------管理员模型-------------*/
 class Login extends Validate {
 
-    protected $rule     = array(
+    protected $rule = array(
         'admin_name' => array(
             'length' => '1,30',
             'format' => 'alpha_dash',
@@ -25,7 +25,7 @@ class Login extends Validate {
         'captcha' => array(
             'length'    => '4,4',
             'format'    => 'alpha_number',
-            'captcha'   => true,
+            'captcha'   => 'console_login',
         ),
         '__token__' => array(
             'require' => true,

@@ -14,8 +14,12 @@ defined('IN_GINKGO') or exit('Access denied');
 // 验证
 class Validate {
 
-    public $delimiter       = ' - '; // 范围符号
+    public $config    = array(); // 配置
+    public $delimiter = ' - '; // 范围符号
+
     protected static $instance; // 当前实例
+    protected $obj_lang; // 语言实例
+    protected $obj_rule; // 规则实例
     protected $rule         = array(); // 验证规则
     protected $data         = array(); // 待验证数据
     protected $attrName     = array(); // 字段名称
@@ -24,21 +28,6 @@ class Validate {
     protected $remove       = array(); // 移除规则
     protected $append       = array(); // 追加规则
     protected $currentScene = null; // 当前场景
-
-    private $message        = array(); // 验证消息
-
-    // 规则别名
-    private $alias = array(
-        '>'         => 'gt',
-        '>='        => 'egt',
-        '<'         => 'lt',
-        '<='        => 'elt',
-        '='         => 'eq',
-        'same'      => 'eq',
-        '!='        => 'neq',
-        '<>'        => 'neq',
-    );
-
 
     // 默认提示信息 (类型验证)
     protected $typeMsg = array(
@@ -95,21 +84,60 @@ class Validate {
         'ip'                => '{:attr} not a valid ip',
     );
 
+
+    private $configThis     = array(
+        'rule_class' => 'ginkgo',
+    ); // 默认配置
+
+    private $message        = array(); // 验证消息
+
+    // 规则别名
+    private $alias = array(
+        '>'         => 'gt',
+        '>='        => 'egt',
+        '<'         => 'lt',
+        '<='        => 'elt',
+        '='         => 'eq',
+        'same'      => 'eq',
+        '!='        => 'neq',
+        '<>'        => 'neq',
+    );
+
     /** 构造函数
      * __construct function.
      *
      * @access public
      * @return void
      */
-    public function __construct() {
+    public function __construct($config = array()) {
         $this->obj_lang = Lang::instance();
+
+        $this->config($config);
+
+        if (Func::isEmpty($this->config['rule_class'])) { // 假如未指定类型, 则默认为 ginkgo
+            $this->config['rule_class'] = $this->configThis['rule_class'];
+        }
+
+        if (strpos($this->config['rule_class'], '\\')) {
+            $_class = $this->config['rule_class'];
+        } else {
+            $_class = 'ginkgo\\validate\\rule\\' . String::ucwords($this->config['rule_class'], '_');
+        }
+
+        if (class_exists($_class)) {
+            $this->obj_rule = $_class::instance(); // 实例化规则
+        } else {
+            $_obj_excpt = new Exception('Unsupported rule type', 500);
+
+            $_obj_excpt->setData('err_detail', $_class);
+
+            throw $_obj_excpt;
+        }
 
         $this->v_init(); // 验证类初始化
     }
 
-    protected function __clone() {
-
-    }
+    protected function __clone() { }
 
     /** 实例化
      * instance function.
@@ -118,16 +146,41 @@ class Validate {
      * @static
      * @return 当前类的实例
      */
-    public static function instance() {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static();
+    public static function instance($config = array()) {
+        if (Func::isEmpty(self::$instance)) {
+            self::$instance = new static($config);
         }
-        return static::$instance;
+        return self::$instance;
     }
 
     // 验证器初始化
-    protected function v_init() {
+    protected function v_init() { }
 
+    /** 配置
+     * prefix function.
+     * since 0.2.0
+     * @access public
+     * @param string $config (default: array()) 配置
+     * @return
+     */
+    public function config($config = array()) {
+        $_arr_config   = Config::get('validate'); // 取得配置
+
+        $_arr_configDo = $this->configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
+        }
+
+        if (is_array($this->config) && !Func::isEmpty($this->config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $this->config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        $this->config  = $_arr_configDo;
     }
 
     /** 设置规则
@@ -138,7 +191,7 @@ class Validate {
      * @param string $value (default: '') 值
      * @return void
      */
-    function rule($rule, $value = '') {
+    public function rule($rule, $value = '') {
         if (is_array($rule)) {
             $this->rule = array_replace_recursive($this->rule, $rule);
         } else {
@@ -154,7 +207,7 @@ class Validate {
      * @param array $value (default: array()) 值
      * @return void
      */
-    function setScene($scene, $value = array()) {
+    public function setScene($scene, $value = array()) {
         if (is_array($scene)) {
             $this->scene = array_replace_recursive($this->scene, $scene);
         } else {
@@ -170,7 +223,7 @@ class Validate {
      * @param string $value (default: '') 值
      * @return void
      */
-    function setTypeMsg($msg, $value = '') {
+    public function setTypeMsg($msg, $value = '') {
         if (is_array($msg)) {
             $this->typeMsg = array_replace_recursive($this->typeMsg, $msg);
         } else {
@@ -186,7 +239,7 @@ class Validate {
      * @param string $value (default: '') 值
      * @return void
      */
-    function setFormatMsg($msg, $value = '') {
+    public function setFormatMsg($msg, $value = '') {
         if (is_array($msg)) {
             $this->formatMsg = array_replace_recursive($this->formatMsg, $msg);
         } else {
@@ -202,7 +255,7 @@ class Validate {
      * @param string $value (default: '') 值
      * @return void
      */
-    function setAttrName($attr, $value = '') {
+    public function setAttrName($attr, $value = '') {
         if (is_array($attr)) {
             $this->attrName = array_replace_recursive($this->attrName, $attr);
         } else {
@@ -217,7 +270,7 @@ class Validate {
      * @param array $data (default: array()) 待验证数据
      * @return bool
      */
-    function verify($data = array()) {
+    public function verify($data = array()) {
         $_bool_return   = true;
         $_num_err       = 0;
 
@@ -234,7 +287,7 @@ class Validate {
 
                 if (is_array($data[$_key])) { // 如果数据为数组
                     //$data[$_key]      = implode(',', $data[$_key]);
-                    $data[$_key]        = Json::encode($data[$_key]);
+                    $data[$_key]        = Arrays::toJson($data[$_key]);
                     $this->data[$_key]  = $data[$_key];
                 }
 
@@ -276,12 +329,14 @@ class Validate {
      * only function.
      *
      * @access public
-     * @param mixed $fields 字段名
+     * @param mixed $field 字段名
      * @return 当前实例
      */
-    public function only($fields) {
+    public function only($field) {
         if (is_array($field)) {
-            $this->only = $fields;
+            $this->only = array_merge($this->only, $field);
+        } else if (is_string($field)) {
+            array_push($this->only, $field);
         }
 
         return $this;
@@ -297,8 +352,8 @@ class Validate {
     public function remove($field) {
         if (is_array($field)) {
             $this->remove = array_replace_recursive($this->remove, $field);
-        } else if (is_scalar($field)) {
-            $this->remove[] = $field;
+        } else if (is_string($field)) {
+            array_push($this->remove, $field);
         }
 
         return $this;
@@ -321,7 +376,6 @@ class Validate {
 
         return $this;
     }
-
 
 
     /** 直接验证
@@ -367,9 +421,8 @@ class Validate {
      * @return void
      */
     public static function __callStatic($method, $params) {
-        $_class = self::instance();
-        if (method_exists('Rule', $method)) {
-            return call_user_func_array('ginkgo\validate\Rule::' . Func::toHump($method, '_', true), $params);
+        if (method_exists($this->obj_rule, $method)) {
+            return call_user_func_array(array($this->obj_rule, String::toHump($method, '_', true)), $params);
         } else {
             $_obj_excpt = new Exception('Method not found', 500);
             $_obj_excpt->setData('err_detail', __CLASS__ . '->' . $method);
@@ -465,11 +518,11 @@ class Validate {
 
         switch ($rule['type']) {
             case 'require':
-                $_bool_return = Rule::min($value, 1);
+                $_bool_return = $this->obj_rule->min($value, 1);
             break;
 
             case 'length':
-                $_bool_return = Rule::leng($value, $rule['rule']);
+                $_bool_return = $this->obj_rule->leng($value, $rule['rule']);
             break;
 
             case 'between':
@@ -494,7 +547,7 @@ class Validate {
                 print_r($rule);
                 print_r(PHP_EOL);*/
 
-                $_bool_return = call_user_func_array('ginkgo\validate\Rule::' . Func::toHump($rule['type'], '_', true), array($value, $rule['rule']));
+                $_bool_return = call_user_func_array(array($this->obj_rule, String::toHump($rule['type'], '_', true)), array($value, $rule['rule']));
             break;
 
             case 'token':
@@ -514,35 +567,35 @@ class Validate {
             case 'date_format':
             case 'time_format':
             case 'date_time_format':
-                $_bool_return = Rule::dateFormat($value, $rule['rule']);
+                $_bool_return = $this->obj_rule->dateFormat($value, $rule['rule']);
             break;
 
             case 'confirm':
-                if (is_string($rule['rule'])) {
-                    $_str_rule = $rule['rule'];
-                } else {
-                    $_str_rule = str_ireplace('_confirm', '', $key);
+                if (!is_string($rule['rule'])) {
+                    $rule['rule'] = str_ireplace('_confirm', '', $key);
                 }
 
                 /*print_r('key: ' . $key . ' -- ');
                 print_r('value: ' . $value . ' -- ');
-                print_r('rule: ' . $_str_rule . ' -- ');*/
+                print_r('rule: ' . $rule['rule'] . ' -- ');*/
 
-                $_bool_return = $this->confirm($value, $_str_rule); // 确认输入
+                $_data = $this->data[$rule['rule']];
+
+                $_bool_return = $this->obj_rule->confirm($value, $_data); // 确认输入
             break;
 
             case 'different':
-                if (is_string($rule['rule'])) {
-                    $_str_rule = $rule['rule'];
-                } else {
-                    $_str_rule = str_ireplace('_different', '', $key);
+                if (!is_string($rule['rule'])) {
+                    $rule['rule'] = str_ireplace('_different', '', $key);
                 }
 
                 /*print_r('key: ' . $key . ' -- ');
                 print_r('value: ' . $value . ' -- ');
-                print_r('rule: ' . $_str_rule . ' -- ');*/
+                print_r('rule: ' . $rule['rule'] . ' -- ');*/
 
-                $_bool_return = $this->confirm($value, $_str_rule, true);
+                $_data = $this->data[$rule['rule']];
+
+                $_bool_return = $this->obj_rule->different($value, $_data);
             break;
 
             case 'format':
@@ -578,50 +631,50 @@ class Validate {
 
                         case 'alpha_dash':
                             // 只允许字母、数字和下划线 破折号
-                            $_bool_return = Rule::regex($value, '/^[A-Za-z0-9\-\_]+$/');
+                            $_bool_return = $this->obj_rule->regex($value, '/^[A-Za-z0-9\-\_]+$/');
                         break;
 
                         case 'chs':
                             // 只允许汉字
-                            $_bool_return = Rule::regex($value, '/^[\x{4e00}-\x{9fa5}]+$/u');
+                            $_bool_return = $this->obj_rule->regex($value, '/^[\x{4e00}-\x{9fa5}]+$/u');
                         break;
 
                         case 'chs_alpha':
                             // 只允许汉字、字母
-                            $_bool_return = Rule::regex($value, '/^[\x{4e00}-\x{9fa5}a-zA-Z]+$/u');
+                            $_bool_return = $this->obj_rule->regex($value, '/^[\x{4e00}-\x{9fa5}a-zA-Z]+$/u');
                         break;
 
                         case 'chs_alpha_number':
                             // 只允许汉字、字母和数字
-                            $_bool_return = Rule::regex($value, '/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]+$/u');
+                            $_bool_return = $this->obj_rule->regex($value, '/^[\x{4e00}-\x{9fa5}a-zA-Z0-9]+$/u');
                         break;
 
                         case 'chs_dash':
                             // 只允许汉字、字母、数字和下划线_及破折号-
-                            $_bool_return = Rule::regex($value, '/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\_\-]+$/u');
+                            $_bool_return = $this->obj_rule->regex($value, '/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\_\-]+$/u');
                         break;
 
                         case 'url':
                             // 是否为一个URL地址
-                            $_bool_return = Rule::regex($value, '/^((https?|ftp|file):)?\/\/[\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|]$/u');
-                            //$_bool_return = Rule::filter($value, FILTER_VALIDATE_URL);
+                            $_bool_return = $this->obj_rule->regex($value, '/^((https?|ftp|file):)?\/\/[\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|]$/u');
+                            //$_bool_return = $this->obj_rule->filter($value, FILTER_VALIDATE_URL);
                         break;
 
                         case 'int':
-                            $_bool_return = Rule::filter($value, FILTER_VALIDATE_INT);
+                            $_bool_return = $this->obj_rule->filter($value, FILTER_VALIDATE_INT);
                         break;
 
                         case 'float':
-                            $_bool_return = Rule::filter($value, FILTER_VALIDATE_FLOAT);
+                            $_bool_return = $this->obj_rule->filter($value, FILTER_VALIDATE_FLOAT);
                         break;
 
                         case 'email':
-                            $_bool_return = Rule::filter($value, FILTER_VALIDATE_EMAIL);
+                            $_bool_return = $this->obj_rule->filter($value, FILTER_VALIDATE_EMAIL);
                         break;
 
                         case 'ip':
                             // 是否为IP地址
-                            $_bool_return = Rule::filter($value, FILTER_VALIDATE_IP, array(FILTER_FLAG_IPV4, FILTER_FLAG_IPV6));
+                            $_bool_return = $this->obj_rule->filter($value, FILTER_VALIDATE_IP, array(FILTER_FLAG_IPV4, FILTER_FLAG_IPV6));
                         break;
                     }
                 }
@@ -677,28 +730,6 @@ class Validate {
         print_r('<br>');*/
 
         return $_bool_return;
-    }
-
-    /** 比较值是否相同
-     * confirm function.
-     *
-     * @access protected
-     * @param mixed $value 值
-     * @param mixed $rule 规则
-     * @param bool $is_different (default: false) 是否不同
-     * @return void
-     */
-    protected function confirm($value, $rule, $is_different = false) {
-        /*print_r('data[$rule]: ');
-        print_r($this->data);
-        print_r(' -- ');
-        print_r('$value: ' . $value . ' -- ');*/
-
-        if ($is_different) {
-            return $this->data[$rule] != $value;
-        } else {
-            return $this->data[$rule] == $value;
-        }
     }
 
 

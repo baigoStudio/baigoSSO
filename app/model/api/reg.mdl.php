@@ -5,17 +5,23 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use ginkgo\Json;
+use app\model\User as User_Base;
+use ginkgo\Config;
+use ginkgo\Arrays;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户模型-------------*/
-class Reg extends User {
+class Reg extends User_Base {
 
     public $inputReg;
     protected $table = 'user';
+
+    function m_init() {
+        $this->configReg     = Config::get('reg', 'var_extra');
+    }
 
     function reg() {
         $_arr_userData = array(
@@ -64,8 +70,8 @@ class Reg extends User {
             );
         }
 
-        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
-        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
+        $_arr_userData['user_contact']    = Arrays::toJson($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Arrays::toJson($_arr_userData['user_extend']);
 
         $_num_userId     = $this->insert($_arr_userData);
 
@@ -120,55 +126,18 @@ class Reg extends User {
             );
         }
 
-        $_arr_configReg     = Config::get('reg', 'var_extra');
+        $_arr_checkResult   = $this->nameChkProcess($_arr_inputReg['user_name']);
 
-        if (isset($_arr_configReg['bad_name']) && !Func::isEmpty($_arr_configReg['bad_name'])) {
-            $_str_badName = str_replace(PHP_EOL, '|', $_arr_configReg['bad_name']);
-
-            if (Func::checkRegex($_arr_inputReg['user_name'], $_str_badName, true)) {
-                return array(
-                    'rcode' => 'x010201',
-                    'msg'   => 'Illegal content in username',
-                );
-            }
-        }
-
-        if (isset($_arr_configReg['acc_mail']) && !Func::isEmpty($_arr_configReg['acc_mail'])) {
-            $_str_accName = str_replace(PHP_EOL, '|', $_arr_configReg['acc_mail']);
-
-            if (!Func::checkRegex($_arr_inputReg['user_mail'], $_str_accName, true)) {
-                return array(
-                    'rcode' => 'x010201',
-                    'msg'   => 'Email is not allowed',
-                );
-            }
-        } else if (isset($_arr_configReg['bad_mail']) && !Func::isEmpty($_arr_configReg['bad_mail'])) {
-            $_str_badName = str_replace(PHP_EOL, '|', $_arr_configReg['bad_mail']);
-
-            if (Func::checkRegex($_arr_inputReg['user_mail'], $_str_badName, true)) {
-                return array(
-                    'rcode' => 'x010201',
-                    'msg'   => 'Illegal content in mailbox',
-                );
-            }
-        }
-
-        $_arr_userRow = $this->check($_arr_inputReg['user_name'], 'user_name');
-
-        if ($_arr_userRow['rcode'] == 'y010102') {
-            return array(
-                'rcode' => 'x010404',
-                'msg'   => 'User already exists',
-            );
+        if ($_arr_checkResult['rcode'] != 'y010401') {
+            return $_arr_checkResult;
         }
 
         if (!Func::isEmpty($_arr_inputReg['user_mail'])) {
-            $_arr_checkResult = $this->check($_arr_inputReg['user_mail'], 'user_mail'); //检查邮箱
+            $_arr_checkResult   = $this->nameChkProcess($_arr_inputReg['user_mail']);
 
-            return array(
-                'rcode' => 'x010404',
-                'msg'   => 'Mailbox already exists',
-            );
+            if ($_arr_checkResult['rcode'] != 'y010401') {
+                return $_arr_checkResult;
+            }
         }
 
         if ($_arr_configReg['reg_confirm'] === 'on') { //开启验证则为等待
@@ -202,6 +171,12 @@ class Reg extends User {
             );
         }
 
+        $_arr_checkResult   = $this->nameChkProcess($_arr_inputChkname['user_name']);
+
+        if ($_arr_checkResult['rcode'] != 'y010401') {
+            return $_arr_checkResult;
+        }
+
         $_arr_inputChkname['rcode'] = 'y010201';
 
         $this->inputChkname = $_arr_inputChkname;
@@ -227,11 +202,87 @@ class Reg extends User {
             );
         }
 
+        $_arr_checkResult   = $this->nameChkProcess($_arr_inputChkmail['user_mail']);
+
+        if ($_arr_checkResult['rcode'] != 'y010401') {
+            return $_arr_checkResult;
+        }
+
         $_arr_inputChkmail['rcode'] = 'y010201';
 
         $this->inputChkmail = $_arr_inputChkmail;
 
         return $_arr_inputChkmail;
     }
-}
 
+
+    private function nameChkProcess($str_userName) {
+        $_arr_configReg     = $this->configReg;
+
+        if (isset($_arr_configReg['bad_name']) && !Func::isEmpty($_arr_configReg['bad_name'])) {
+            $_str_badName = str_replace(PHP_EOL, '|', $_arr_configReg['bad_name']);
+
+            if (Func::checkRegex($str_userName, $_str_badName, true)) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'Illegal content in username',
+                );
+            }
+        }
+
+        $_arr_checkResult   = $this->check($str_userName, 'user_name');
+
+        if ($_arr_checkResult['rcode'] == 'y010102') {
+            return array(
+                'user_id' => $_arr_checkResult['user_id'],
+                'rcode'   => 'x010404',
+                'msg'     => 'User already exists',
+            );
+        } else {
+            return array(
+                'rcode' => 'y010401',
+                'msg'   => 'Username can be registered',
+            );
+        }
+    }
+
+
+    private function mailChkProcess($str_userMail) {
+        $_arr_configReg     = $this->configReg;
+
+        if (isset($_arr_configReg['acc_mail']) && !Func::isEmpty($_arr_configReg['acc_mail'])) {
+            $_str_accName = str_replace(PHP_EOL, '|', $_arr_configReg['acc_mail']);
+
+            if (!Func::checkRegex($str_userMail, $_str_accName, true)) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'Email is not allowed',
+                );
+            }
+        } else if (isset($_arr_configReg['bad_mail']) && !Func::isEmpty($_arr_configReg['bad_mail'])) {
+            $_str_badName = str_replace(PHP_EOL, '|', $_arr_configReg['bad_mail']);
+
+            if (Func::checkRegex($str_userMail, $_str_badName, true)) {
+                return array(
+                    'rcode' => 'x010201',
+                    'msg'   => 'Illegal content in mailbox',
+                );
+            }
+        }
+
+        $_arr_checkResult   = $this->check($str_userMail, 'user_mail');
+
+        if ($_arr_checkResult['rcode'] == 'y010102') {
+            return array(
+                'user_id' => $_arr_checkResult['user_id'],
+                'rcode'   => 'x010404',
+                'msg'     => 'Mailbox already exists',
+            );
+        } else {
+            return array(
+                'rcode' => 'y010401',
+                'msg'   => 'Mailbox can be used',
+            );
+        }
+    }
+}

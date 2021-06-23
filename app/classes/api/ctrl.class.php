@@ -11,7 +11,7 @@ use ginkgo\Loader;
 use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Sign;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Http;
 use ginkgo\Html;
 use ginkgo\Log;
@@ -136,7 +136,7 @@ abstract class Ctrl extends Ctrl_Base {
             );
         }
 
-        $_arr_decryptRow = Json::decode($_str_decrypt);
+        $_arr_decryptRow = Arrays::fromJson($_str_decrypt);
 
         if (!isset($_arr_decryptRow['timestamp'])) {
             return array(
@@ -197,7 +197,7 @@ abstract class Ctrl extends Ctrl_Base {
                 $_arr_notifyResult = $_obj_http->request($_str_urlNotify, $_arr_data, 'post');
 
                 if (!isset($_arr_notifyResult['msg']) || $_arr_notifyResult['msg'] != 'success') {
-                    Log::record('type: notify, action: ' . $_str_urlNotify . ', app_id: ' . $_value['app_id'] . ', result: failed ' . Json::encode($_arr_notifyResult), 'log');
+                    Log::record('type: notify, action: ' . $_str_urlNotify . ', app_id: ' . $_value['app_id'] . ', result: failed ' . Arrays::toJson($_arr_notifyResult), 'log');
                 }
             }
 

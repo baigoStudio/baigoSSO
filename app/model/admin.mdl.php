@@ -7,7 +7,7 @@
 namespace app\model;
 
 use app\classes\Model;
-use ginkgo\Json;
+use ginkgo\Arrays;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
@@ -89,11 +89,11 @@ class Admin extends Model {
      *
      * @access public
      * @param mixed $num_no
-     * @param int $num_except (default: 0)
+     * @param int $num_offset (default: 0)
      * @param array $arr_search (default: array())
      * @return void
      */
-    function lists($num_no, $num_except = 0, $arr_search = array()) {
+    function lists($num_no, $num_offset = 0, $arr_search = array()) {
         $_arr_adminSelect = array(
             'admin_id',
             'admin_name',
@@ -105,7 +105,7 @@ class Admin extends Model {
 
         $_arr_where = $this->queryProcess($arr_search);
 
-        $_arr_adminRows = $this->where($_arr_where)->order('admin_id', 'DESC')->limit($num_except, $num_no)->select($_arr_adminSelect);
+        $_arr_adminRows = $this->where($_arr_where)->order('admin_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_adminSelect);
 
         return $_arr_adminRows;
     }
@@ -167,19 +167,19 @@ class Admin extends Model {
 
     protected function rowProcess($arr_adminRow = array()) {
         if (isset($arr_adminRow['admin_allow'])) {
-            $arr_adminRow['admin_allow'] = Json::decode($arr_adminRow['admin_allow']); //json 解码
+            $arr_adminRow['admin_allow'] = Arrays::fromJson($arr_adminRow['admin_allow']); //json 解码
         } else {
             $arr_adminRow['admin_allow'] = array();
         }
 
         if (isset($arr_adminRow['admin_allow_profile'])) {
-            $arr_adminRow['admin_allow_profile'] = Json::decode($arr_adminRow['admin_allow_profile']); //json 解码
+            $arr_adminRow['admin_allow_profile'] = Arrays::fromJson($arr_adminRow['admin_allow_profile']); //json 解码
         } else {
             $arr_adminRow['admin_allow_profile'] = array();
         }
 
         if (isset($arr_adminRow['admin_shortcut'])) {
-            $arr_adminRow['admin_shortcut'] = Json::decode($arr_adminRow['admin_shortcut']); //json 解码
+            $arr_adminRow['admin_shortcut'] = Arrays::fromJson($arr_adminRow['admin_shortcut']); //json 解码
         } else {
             $arr_adminRow['admin_shortcut'] = array();
         }

@@ -22,10 +22,7 @@ GET
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
-| user_pass | string | true | 密码，必须用 MD5 加密后传输。 |
+| user_id | int | true | |
 | timestamp | int | true | UNIX 时间戳 |
 
 ##### 返回结果是否加密
@@ -106,9 +103,7 @@ POST
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
-| user_id | int | true | 优先级为 user_id &gt; user_name &gt; user_mail，三选一。 |
-| user_name | string | | |
-| user_mail | string | | 是否允许邮箱登录，视注册设置情况而定。 |
+| user_id | int | true | |
 | user_pass | string | false | 密码，仅在需要修改密码时传输该参数，必须用 MD5 加密后传输。 |
 | user_mail_new | string | false | 新邮箱，仅在需要修改邮箱时传输该参数。 |
 | user_nick | string | false | 昵称，仅在需要修改时传递该参数。 |
@@ -137,19 +132,19 @@ POST
 
 | 原接口 | 迁移至 | 新 URL | 版本 |
 | - | - | - | - |
-| 用户注册 | 注册接口 | http://server/index.php/api/reg/reg | `4.0` 新增 |
-| 检查用户名 | 注册接口 | http://server/index.php/api/reg/chkname | `4.0` 新增 |
-| 检查邮箱 | 注册接口 | http://server/index.php/api/reg/chkmail | `4.0` 新增 |
-| 用户登录 | 登录接口 | http://server/index.php/api/login/login | `4.0` 新增 |
-| 刷新访问口令 | 个人接口 | http://server/index.php/api/profile/token | `4.0` 新增 |
-| 更换邮箱 | 个人接口 | http://server/index.php/api/profile/mailbox | `4.0` 新增 |
+| 用户注册 | 注册接口 | http://server/index.php/api/reg/reg | `4.0` 起迁移 |
+| 检查用户名 | 注册接口 | http://server/index.php/api/reg/chkname | `4.0` 起迁移 |
+| 检查邮箱 | 注册接口 | http://server/index.php/api/reg/chkmail | `4.0` 起迁移 |
+| 用户登录 | 登录接口 | http://server/index.php/api/login/login | `4.0` 起迁移 |
+| 刷新访问口令 | 个人接口 | http://server/index.php/api/profile/token | `4.0` 起迁移 |
+| 更换邮箱 | 个人接口 | http://server/index.php/api/profile/mailbox | `4.0` 起迁移 |
 
 ----------
 
-### 已废弃接口
+### 已弃用接口
 
 | 原接口 | 替代方案 | 版本 |
 | - | - | - |
-| 找回密码 | 直接访问 http://server/index.php/personal/forgot，也可通过 `基本信息接口` 获得该 URL | `4.0` 新增 |
-| 重发激活邮件 | 直接访问 http://server/index.php/personal/reg/nomail，也可通过 `基本信息接口` 获得该 URL | `4.0` 新增 |
-| 删除用户 | 不再提供 | `4.0` 新增 |
+| 找回密码 | 直接访问 http://server/index.php/personal/forgot，也可通过 `基本信息接口` 获得该 URL | `4.0` 起不再提供 |
+| 重发激活邮件 | 直接访问 http://server/index.php/personal/reg/nomail，也可通过 `基本信息接口` 获得该 URL | `4.0` 起不再提供 |
+| 删除用户 | 不再提供 | `4.0` 起不再提供 |

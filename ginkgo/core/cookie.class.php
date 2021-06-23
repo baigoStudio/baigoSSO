@@ -12,7 +12,9 @@ defined('IN_GINKGO') or exit('Access denied');
 // Cookie 管理类
 class Cookie {
 
-    private static $this_config = array( // 默认配置
+    public static $config = array(); // 配置
+
+    private static $configThis = array( // 默认配置
         'prefix'    => '', // cookie 名称前缀
         'expire'    => 0, // cookie 保存时间
         'path'      => '/', // cookie 保存路径
@@ -22,34 +24,46 @@ class Cookie {
         'setcookie' => true, // 是否使用 setcookie
     );
 
-    private static $config; // 配置
-
     private static $init; // 是否初始化标志
-
-    protected function __construct() {
-    }
-
-
-    protected function __clone() {
-
-    }
 
 
     // 初始化
     public static function init($config = array()) {
-        $_arr_config  = Config::get('cookie'); // 取得配置
-
-        self::$config = array_replace_recursive(self::$this_config, $_arr_config); // 合并配置
-
-        if (!Func::isEmpty($config)) {
-            self::$config = array_replace_recursive(self::$config, $config); // 合并配置
-        }
+        self::config($config);
 
         if (!Func::isEmpty(self::$config['httponly'])) { //设为 httponly
             ini_set('session.cookie_httponly', 1);
         }
 
         self::$init = true; // 标识为已初始化
+    }
+
+
+    /** 配置
+     * prefix function.
+     * since 0.2.0
+     * @access public
+     * @param string $config (default: array()) 配置
+     * @return
+     */
+    public static function config($config = array()) {
+        $_arr_config   = Config::get('cookie'); // 取得配置
+
+        $_arr_configDo = self::$configThis;
+
+        if (is_array($_arr_config) && !Func::isEmpty($_arr_config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $_arr_config); // 合并配置
+        }
+
+        if (is_array(self::$config) && !Func::isEmpty(self::$config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, self::$config); // 合并配置
+        }
+
+        if (is_array($config) && !Func::isEmpty($config)) {
+            $_arr_configDo = array_replace_recursive($_arr_configDo, $config); // 合并配置
+        }
+
+        self::$config  = $_arr_configDo;
     }
 
 

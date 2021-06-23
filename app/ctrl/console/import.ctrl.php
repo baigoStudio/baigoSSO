@@ -13,6 +13,7 @@ use ginkgo\Func;
 use ginkgo\Config;
 use ginkgo\Upload;
 use ginkgo\Html;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
@@ -36,7 +37,7 @@ class Import extends Ctrl {
         $_arr_charsetOften              = array_keys($this->charsetRows['often']['lists']);
         $_arr_charsetList               = array_keys($this->charsetRows['lists']['lists']);
 
-        $this->mdl_import->charsetKeys  = Func::arrayFilter(array_replace_recursive($_arr_charsetOften, $_arr_charsetList));
+        $this->mdl_import->charsetKeys  = Arrays::filter(array_replace_recursive($_arr_charsetOften, $_arr_charsetList));
 
         $this->csvPath = $this->mdl_import->csvPath;
     }

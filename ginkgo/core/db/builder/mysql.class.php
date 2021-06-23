@@ -7,15 +7,13 @@
 namespace ginkgo\db\builder;
 
 use ginkgo\Func;
+use ginkgo\db\Builder;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------数据库类-------------*/
-class Mysql {
-
-    protected static $instance; // 当前实例
-    private $dbconfig; // 数据库配置
+class Mysql extends Builder {
 
     // SQL 操作符
     private $exp = array(
@@ -79,67 +77,6 @@ class Mysql {
     );
 
 
-    /** 配置参数
-     * this_config
-     *
-     * @var mixed
-     * @access private
-     */
-    private $this_config = array(
-        'type'      => 'mysql',
-        'host'      => '',
-        'name'      => '',
-        'user'      => '',
-        'pass'      => '',
-        'charset'   => 'utf8',
-        'prefix'    => 'ginkgo_',
-        'debug'     => false,
-        'port'      => 3306,
-    );
-
-    /** 构造函数
-     * __construct function.
-     *
-     * @access protected
-     * @param array $dbconfig (default: array()) 配置
-     * @return void
-     */
-    protected function __construct($dbconfig = array()) {
-        $this->config($dbconfig);
-    }
-
-    protected function __clone() {
-
-    }
-
-    /** 实例化
-     * instance function.
-     *
-     * @access public
-     * @static
-     * @param array $dbconfig (default: array()) 配置
-     * @return 当前类的实例
-     */
-    public static function instance($dbconfig = array()) {
-        if (Func::isEmpty(static::$instance)) {
-            static::$instance = new static($dbconfig);
-        }
-        return static::$instance;
-    }
-
-
-    /** 设定配置
-     * config function.
-     *
-     * @access public
-     * @param array $dbconfig (default: array())
-     * @return void
-     */
-    function config($dbconfig = array()) {
-        $this->dbconfig = array_replace_recursive($this->this_config, $dbconfig); // 合并配置
-    }
-
-
     /** 处理字段
      * field function.
      *
@@ -147,7 +84,7 @@ class Mysql {
      * @param mixed $field 字段
      * @return 字段字符串
      */
-    function field($field) {
+    public function field($field) {
         $_str_field = '*';
 
         if (is_array($field)) {
@@ -179,7 +116,7 @@ class Mysql {
     }
 
 
-    /** 处理 insert 语句
+    /** 构建 insert 语句
      * insert function.
      *
      * @access public
@@ -189,7 +126,7 @@ class Mysql {
      * @param string $type (default: '') 参数类型
      * @return sql 语句及绑定参数
      */
-    function insert($field, $value = '', $param = '', $type = '') {
+    public function insert($field, $value = '', $param = '', $type = '') {
         $_arr_result = $this->update($field, $value, $param, $type, 'insert');
 
         return array(
@@ -199,7 +136,7 @@ class Mysql {
     }
 
 
-    /** 处理 update 语句
+    /** 构建 update 语句
      * update function.
      *
      * @access public
@@ -210,7 +147,7 @@ class Mysql {
      * @param string $from (default: 'update')
      * @return sql 语句及绑定参数
      */
-    function update($field, $value = '', $param = '', $type = '', $from = 'update') {
+    public function update($field, $value = '', $param = '', $type = '', $from = 'update') {
         $_str_update    = '';
         $_arr_bind      = array();
         $_arr_condition = array();
@@ -263,8 +200,8 @@ class Mysql {
      * @param mixed $table 表名
      * @return 完整表名
      */
-    function table($table) {
-        return $this->addChar($this->dbconfig['prefix'] . $table);
+    public function table($table) {
+        return $this->addChar($this->config['prefix'] . $table);
     }
 
 
@@ -275,12 +212,12 @@ class Mysql {
      * @param mixed $index 索引名
      * @return 索引名
      */
-    function force($index) {
+    public function force($index) {
         return $this->addChar($index);
     }
 
 
-    /** 处理 join 命令
+    /** 构建 join 语句
      * join function.
      *
      * @access public
@@ -289,7 +226,7 @@ class Mysql {
      * @param string $type (default: '') join 类型
      * @return sql 语句
      */
-    function join($join, $on = '', $type = '') {
+    public function join($join, $on = '', $type = '') {
         $_str_join = '';
 
         if (is_array($join)) {
@@ -342,7 +279,7 @@ class Mysql {
     }
 
 
-    /** 处理 where 语句
+    /** 构建 where 语句
      * where function.
      *
      * @access public
@@ -353,7 +290,7 @@ class Mysql {
      * @param string $type (default: '') 参数类型
      * @return sql 语句及绑定参数
      */
-    function where($where, $exp = '', $value = '', $param = '', $type = '') {
+    public function where($where, $exp = '', $value = '', $param = '', $type = '') {
         $_str_where = '';
         $_arr_bind  = array();
 
@@ -454,19 +391,19 @@ class Mysql {
     }
 
 
-    /** 处理 group 命令
+    /** 构建 group 命令
      * group function.
      *
      * @access public
      * @param mixed $field 字段
      * @return group 语句
      */
-    function group($field) {
+    public function group($field) {
         return $this->field($field);
     }
 
 
-    /** 处理 order 语句
+    /** 构建 order 语句
      * order function.
      *
      * @access public
@@ -474,7 +411,7 @@ class Mysql {
      * @param string $type (default: '') 排序类型
      * @return order 语句
      */
-    function order($field, $type = '') {
+    public function order($field, $type = '') {
         $_str_order  = '';
 
         if (is_array($field)) {
@@ -519,20 +456,26 @@ class Mysql {
     }
 
 
-    /** 处理 limit 语句
+    /** 构建 limit 语句
      * limit function.
      *
      * @access public
-     * @param int $offset (default: 1) 偏离或数量
+     * @param int $limit 偏离或数量
      * @param bool $length (default: false) 数量
      * @return void
      */
-    function limit($offset = 1, $length = false) {
-        if ($length === false) {
-            return $offset;
-        } else {
-            return $offset . ', ' . $length;
+    public function limit($limit = false, $length = false) {
+        $_return = '';
+
+        if ($limit !== false) {
+            if ($length === false) {
+                $_return = $limit;
+            } else {
+                $_return = $limit . ', ' . $length;
+            }
         }
+
+        return $_return;
     }
 
 
@@ -543,7 +486,7 @@ class Mysql {
      * @param mixed $value 字符
      * @return 处理以后的字符
      */
-    function addChar($value) {
+    public function addChar($value) {
         // 如果包含 * 或者 使用了 sql 函数, 则不作处理
         if ($value != '*' && strpos($value, '(') === false && strpos($value, '`') === false) {
             $value = '`' . trim($value) . '`';
@@ -560,7 +503,7 @@ class Mysql {
      * @param mixed $field 字段名
      * @return 完整字段名
      */
-    function fieldProcess($field) {
+    public function fieldProcess($field) {
         if (strpos($field, '(') !== false || strpos($field, '`') !== false) {
             $_str_field = $field;
         } else {
@@ -584,7 +527,7 @@ class Mysql {
      * @param string $type (default: 'order') 类型
      * @return 命令
      */
-    function inArrayProcess($name, $type = 'order') {
+    private function inArrayProcess($name, $type = 'order') {
         $_str_return = '';
 
         if (isset($this->$type)) {
@@ -605,7 +548,7 @@ class Mysql {
      * @param mixed $name 运算符
      * @return 运算符
      */
-    function expProcess($name) {
+    private function expProcess($name) {
         $_str_return = '';
 
         $_str_name = strtoupper($name);
@@ -830,16 +773,16 @@ class Mysql {
      * @param string $value (default: '') 值
      * @return sql 语句
      */
-    private function whereProcessSub($where, $exp = '=', $param = '', $value = '') {
+    private function whereProcessSub($field, $exp = '=', $param = '', $value = '') {
         $_str_where     = '';
         $_arr_condition = array();
 
-        if (strpos($where, '|') || strpos($where, '&')) {
-            if (strpos($where, '|')) {
-                $_arr_where = explode('|', $where);
+        if (strpos($field, '|') || strpos($field, '&')) {
+            if (strpos($field, '|')) {
+                $_arr_where = explode('|', $field);
                 $_str_logic = 'OR';
-            } else if (strpos($where, '&')) {
-                $_arr_where = explode('&', $where);
+            } else if (strpos($field, '&')) {
+                $_arr_where = explode('&', $field);
                 $_str_logic = 'AND';
             }
 

@@ -6,15 +6,16 @@
 
 namespace app\model;
 
-use ginkgo\Json;
+use app\classes\Model;
 use ginkgo\Func;
 use ginkgo\Config;
+use ginkgo\Arrays;
 
 // 不能非法包含或直接执行
 defined('IN_GINKGO') or exit('Access denied');
 
 /*-------------用户模型-------------*/
-class User extends User_Common {
+class User extends Model {
 
     public $arr_status  = array('enable', 'wait', 'disabled');
 
@@ -23,9 +24,7 @@ class User extends User_Common {
             'user_id',
         );
 
-        $_arr_userRow = $this->read($mix_user, $str_by, $num_notId, $_arr_select);
-
-        return $_arr_userRow;
+        return $this->readProcess($mix_user, $str_by, $num_notId, $_arr_select);
     }
 
 
@@ -67,8 +66,8 @@ class User extends User_Common {
             $_arr_userData['user_extend'] = $this->inputSubmit['user_extend'];
         }
 
-        $_arr_userData['user_contact']    = Json::encode($_arr_userData['user_contact']);
-        $_arr_userData['user_extend']     = Json::encode($_arr_userData['user_extend']);
+        $_arr_userData['user_contact']    = Arrays::toJson($_arr_userData['user_contact']);
+        $_arr_userData['user_extend']     = Arrays::toJson($_arr_userData['user_extend']);
 
         if ($this->inputSubmit['user_id'] > 0) {
             if (isset($this->inputSubmit['user_pass']) && !Func::isEmpty($this->inputSubmit['user_pass'])) {
@@ -169,7 +168,7 @@ class User extends User_Common {
             'user_sec_answ' => $this->inputSecqa['user_sec_answ'],
         );
 
-        $_arr_userData['user_sec_ques'] = Json::encode($_arr_userData['user_sec_ques']);
+        $_arr_userData['user_sec_ques'] = Arrays::toJson($_arr_userData['user_sec_ques']);
 
         $_num_count     = $this->where('user_id', '=', $this->inputSecqa['user_id'])->update($_arr_userData); //更新数据
 
@@ -249,11 +248,11 @@ class User extends User_Common {
      *
      * @access public
      * @param mixed $num_no
-     * @param int $num_except (default: 0)
+     * @param int $num_offset (default: 0)
      * @param array $arr_search (default: array())
      * @return void
      */
-    function lists($num_no, $num_except = 0, $arr_search = array()) {
+    function lists($num_no, $num_offset = 0, $arr_search = array()) {
         $_arr_userSelect = array(
             'user_id',
             'user_name',
@@ -268,7 +267,7 @@ class User extends User_Common {
 
         $_arr_where    = $this->queryProcess($arr_search);
 
-        $_arr_userRows = $this->where($_arr_where)->order('user_id', 'DESC')->limit($num_except, $num_no)->select($_arr_userSelect);
+        $_arr_userRows = $this->where($_arr_where)->order('user_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_userSelect);
 
         return $_arr_userRows;
     }
@@ -344,7 +343,7 @@ class User extends User_Common {
         }
 
         if (isset($arr_search['user_names']) && !Func::isEmpty($arr_search['user_names'])) {
-            $arr_search['user_names']    = Func::arrayFilter($arr_search['user_names']);
+            $arr_search['user_names']    = Arrays::filter($arr_search['user_names']);
             $_arr_where[] = array('user_name', 'IN', $arr_search['user_names'], 'user_names');
         }
 
@@ -371,19 +370,19 @@ class User extends User_Common {
 
     protected function rowProcess($arr_userRow = array()) {
         if (isset($arr_userRow['user_contact'])) {
-            $arr_userRow['user_contact']   = Json::decode($arr_userRow['user_contact']);
+            $arr_userRow['user_contact']   = Arrays::fromJson($arr_userRow['user_contact']);
         } else {
             $arr_userRow['user_contact']   = array();
         }
 
         if (isset($arr_userRow['user_extend'])) {
-            $arr_userRow['user_extend']    = Json::decode($arr_userRow['user_extend']);
+            $arr_userRow['user_extend']    = Arrays::fromJson($arr_userRow['user_extend']);
         } else {
             $arr_userRow['user_extend']    = array();
         }
 
         if (isset($arr_userRow['user_sec_ques'])) {
-            $arr_userRow['user_sec_ques']  = Json::decode($arr_userRow['user_sec_ques']);
+            $arr_userRow['user_sec_ques']  = Arrays::fromJson($arr_userRow['user_sec_ques']);
         } else {
             $arr_userRow['user_sec_ques']  = array();
         }
