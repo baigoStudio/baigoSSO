@@ -9,7 +9,9 @@ namespace app\model\console;
 use app\model\Admin as Admin_Base;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------管理员模型-------------*/
 class Login extends Admin_Base {

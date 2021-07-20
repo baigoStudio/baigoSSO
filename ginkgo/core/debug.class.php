@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 调试
 class Debug {
@@ -115,12 +117,12 @@ class Debug {
                 foreach ($_arr_files as $_key=>$_value) {
                     $_arr_fileRows[$_key] = array( // 拼接已载入文件
                         'path' => $_value, // 路径
-                        'size' => String::sizeFormat(filesize($_value)), // 计算大小
+                        'size' => Strings::sizeFormat(filesize($_value)), // 计算大小
                     );
                 }
 
-                $_runtime   = String::numFormat(microtime(true) - GK_START_TIME, 6) . ' sec'; // 计算运行时间
-                $_memory    = String::sizeFormat((memory_get_usage() - GK_START_MEM)); // 计算占用内存大小
+                $_runtime   = Strings::numFormat(microtime(true) - GK_START_TIME, 6) . ' sec'; // 计算运行时间
+                $_memory    = Strings::sizeFormat((memory_get_usage() - GK_START_MEM)); // 计算占用内存大小
 
                 $_arr_data['trace'] = array(
                     'base'  => array(

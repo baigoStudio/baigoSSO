@@ -10,7 +10,9 @@ use app\classes\console\Ctrl;
 use ginkgo\Loader;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 class Index extends Ctrl {
 

@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 响应类
 class Response {
@@ -115,7 +117,7 @@ class Response {
             if (strpos($type, '\\')) { // 如指定类型包含命名空间, 则直接使用
                 $_class = $type;
             } else { // 否则补全命名空间
-                $_class = 'ginkgo\\response\\' . String::ucwords($type, '_');
+                $_class = 'ginkgo\\response\\' . Strings::ucwords($type, '_');
             }
         }
 

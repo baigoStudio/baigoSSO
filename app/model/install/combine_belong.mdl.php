@@ -10,7 +10,9 @@ use app\classes\install\Model;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------同步组归属-------------*/
 class Combine_Belong extends Model {

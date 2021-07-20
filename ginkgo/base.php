@@ -16,4 +16,3 @@ ginkgo\Loader::register();
 
 // 注册错误和异常处理机制
 ginkgo\Error::register();
-

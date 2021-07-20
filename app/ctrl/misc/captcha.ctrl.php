@@ -12,7 +12,9 @@ use ginkgo\Arrays;
 use ginkgo\Captcha as Captcha_Gen;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 class Captcha {
 

@@ -12,7 +12,9 @@ use ginkgo\cache\Driver;
 use ginkgo\File as File_Base;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 文件型缓存驱动
 class File extends Driver {
@@ -32,7 +34,6 @@ class File extends Driver {
      * @return 检查结果 (bool)
      */
     public function check($name, $check_expire = false) {
-        $_bool_return = true;
         $_str_path    = $this->getPath($name); // 取得路径
 
         $_bool_return = File_Base::fileHas($_str_path); // 文件是否存在
@@ -100,12 +101,15 @@ class File extends Driver {
             $_str_content = $content;
         }
 
-        if ($life_time > 0) { // 如果参数指定了有效时间, 则直接使用
-            $_tm_expire = GK_NOW + $life_time;
+        $_tm_expire = 0; // 永久有效
+
+        if ($life_time !== false && $life_time !== 'false') { // 如果参数指定了有效时间, 则直接使用
+            $life_time  = (int)$life_time;
+            if ($life_time > 0) {
+                $_tm_expire = GK_NOW + $life_time;
+            }
         } else if ($this->config['life_time'] > 0) { // 否则以配置文件为准
             $_tm_expire = GK_NOW + $this->config['life_time'];
-        } else { // 配置文件未定义
-            $_tm_expire = 0; // 永久有效
         }
 
         $_arr_outPut = array(

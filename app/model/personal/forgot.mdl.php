@@ -10,7 +10,9 @@ use ginkgo\Request;
 use ginkgo\Loader;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------管理员模型-------------*/
 class Forgot {

@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 认证处理类
 class Auth {
@@ -174,19 +176,23 @@ class Auth {
      * @param int $id (default: 0)
      * @return void
      */
-    public function end($regen = false) {
+    public function end($regen = false, $pathCookie = '/') {
+        $_arr_optCookie = array(
+            'path'      => $pathCookie,
+        );
+
         Session::delete($this->prefix . '_id');
         Session::delete($this->prefix . '_name');
         Session::delete($this->prefix . '_time');
         Session::delete($this->prefix . '_hash');
-        Cookie::delete($this->prefix . '_id');
-        Cookie::delete($this->prefix . '_name');
-        Cookie::delete($this->prefix . '_time');
-        Cookie::delete($this->prefix . '_hash');
-        Cookie::delete('remember_' . $this->prefix . '_id');
-        Cookie::delete('remember_' . $this->prefix . '_name');
-        Cookie::delete('remember_' . $this->prefix . '_hash');
-        Cookie::delete('remember_' . $this->prefix . '_time');
+        Cookie::delete($this->prefix . '_id', $_arr_optCookie);
+        Cookie::delete($this->prefix . '_name', $_arr_optCookie);
+        Cookie::delete($this->prefix . '_time', $_arr_optCookie);
+        Cookie::delete($this->prefix . '_hash', $_arr_optCookie);
+        Cookie::delete('remember_' . $this->prefix . '_id', $_arr_optCookie);
+        Cookie::delete('remember_' . $this->prefix . '_name', $_arr_optCookie);
+        Cookie::delete('remember_' . $this->prefix . '_hash', $_arr_optCookie);
+        Cookie::delete('remember_' . $this->prefix . '_time', $_arr_optCookie);
 
         if ($regen) {
             session_regenerate_id(true); // 使用新生成的会话 ID 更新现有会话 ID

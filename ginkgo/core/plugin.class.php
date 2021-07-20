@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access Denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 插件管理类
 class Plugin {
@@ -203,7 +205,7 @@ class Plugin {
         }
 
         if (strpos($_str_class, '\\') === false) { // 如果未定义命名空间
-            $_str_class = 'extend\\plugin\\' . $dir . '\\' . String::ucwords($_str_class, '_'); // 补全命名空间
+            $_str_class = 'extend\\plugin\\' . $dir . '\\' . Strings::ucwords($_str_class, '_'); // 补全命名空间
         }
 
         return $_str_class;

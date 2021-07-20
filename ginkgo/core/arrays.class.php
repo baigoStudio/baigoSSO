@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 数组处理
 class Arrays {
@@ -34,6 +36,10 @@ class Arrays {
     public static function toJson($array = array(), $encode = 'json_safe', $option = false) {
         $_str_json   = '[]';
 
+        if (version_compare(PHP_VERSION, '5.4.0', '>') && $option === false) {
+            $option = JSON_UNESCAPED_UNICODE;
+        }
+
         if (is_array($array) && !Func::isEmpty($array)) {
             $array     = self::each($array, $encode);
             $_str_json = json_encode($array, $option); //json编码
@@ -54,12 +60,12 @@ class Arrays {
      * @param mixed $option (default: false) 解码选项
      * @return 解码后的数组
      */
-    public static function fromJson($string = '', $decode = false, $option = true) {
+    public static function fromJson($string = '', $decode = false, $assoc = true) {
         $_arr_json = array();
 
         if (!Func::isEmpty($string)) {
             //$string    = Html::decode($string, 'json');
-            $_arr_json = json_decode($string, $option); //json解码
+            $_arr_json = json_decode($string, $assoc); //json解码
             $_arr_json = self::each($_arr_json, $decode); //json解码
 
             self::backtrace();
@@ -107,11 +113,11 @@ class Arrays {
                         break;
 
                         case 'base64encode':
-                            $arr[$_key] = String::toBase64($_value);
+                            $arr[$_key] = Strings::toBase64($_value);
                         break;
 
                         case 'base64decode':
-                            $arr[$_key] = String::fromBase64($_value);
+                            $arr[$_key] = Strings::fromBase64($_value);
                         break;
 
                         /*case 'utf8encode':
@@ -128,7 +134,7 @@ class Arrays {
 
                         case 'secrecy':
                         case 'secret': // 兼容
-                            $arr[$_key] = String::secrecy($_value, $left, $right, $hide);
+                            $arr[$_key] = Strings::secrecy($_value, $left, $right, $hide);
                         break;
                     }
                 } else {

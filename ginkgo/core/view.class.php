@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 视图类
 class View {
@@ -102,7 +104,7 @@ class View {
       if (strpos($this->config['type'], '\\')) { // 如果驱动类型指定了命名空间, 则直接使用
          $_class = $this->config['type'];
       } else {
-         $_class = 'ginkgo\\view\\driver\\' . String::ucwords($this->config['type'], '_'); // 补全命名空间
+         $_class = 'ginkgo\\view\\driver\\' . Strings::ucwords($this->config['type'], '_'); // 补全命名空间
       }
 
       if (class_exists($_class)) {

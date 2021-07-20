@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 文件操作类
 class File {
@@ -71,6 +73,7 @@ class File {
      * @return 目录结构
      */
     public function dirList($path, $ext = '') {
+        $path         = strtolower($path);
         $_arr_return  = array();
         $_arr_dir     = array();
 
@@ -124,6 +127,7 @@ class File {
      * @return 创建结果 (bool)
      */
     public function dirMk($path, $mod = false) {
+        $path      = strtolower($path);
         $old_umask = umask(0);
 
         if (self::dirHas($path)) { // 已存在
@@ -157,6 +161,9 @@ class File {
      * @return 拷贝结果 (bool)
      */
     public function dirCopy($src, $dst) {
+        $src = strtolower($src);
+        $dst = strtolower($dst);
+
         if (!$this->dirMk($dst)) {
             return false;
         }
@@ -188,6 +195,8 @@ class File {
      * @return 删除结果 (bool)
      */
     public function dirDelete($path) {
+        $path = strtolower($path);
+
         if (!self::dirHas($path)) { // 路径不存在则返回 false
             $this->error = 'Directory not found'; // 定义错误消息
             return false;
@@ -222,6 +231,8 @@ class File {
      * @return 文件内容
      */
     public function fileRead($path) {
+        $path = strtolower($path);
+
         if (!self::fileHas($path)) {
             $this->error = 'File not found'; // 定义错误消息
             return false;
@@ -240,6 +251,9 @@ class File {
      * @return 移动结果 (bool)
      */
     public function fileMove($src, $dst) {
+        $src = strtolower($src);
+        $dst = strtolower($dst);
+
         if (!self::fileHas($src)) {
             $this->error = 'Source file not found';
             return false;
@@ -263,6 +277,8 @@ class File {
      * @return 写入字节数
      */
     public function fileWrite($path, $content, $append = false) {
+        $path = strtolower($path);
+
         if (!$this->dirMk(dirname($path))) { // 假如目录不能存在则创建
             return false;
         }
@@ -284,6 +300,9 @@ class File {
      * @return 复制结果 (bool)
      */
     public function fileCopy($src, $dst) {
+        $src = strtolower($src);
+        $dst = strtolower($dst);
+
         if (!$this->dirMk($dst)) {
             return false;
         }
@@ -305,6 +324,8 @@ class File {
      * @return 删除结果 (bool)
      */
     public function fileDelete($path) {
+        $path = strtolower($path);
+
         if (!self::fileHas($path)) { // 文件不能存在则返回 false
             $this->error = 'File not found';
             return false;

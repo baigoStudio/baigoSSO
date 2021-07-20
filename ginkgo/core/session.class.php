@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 会话处理
 class Session {
@@ -44,7 +46,7 @@ class Session {
             if (strpos(self::$config['type'], '\\')) { // 如果类型包含命名空间则直接使用
                 $_class = self::$config['type'];
             } else { // 否则补全命名空间
-                $_class = 'ginkgo\\session\\driver\\' . String::ucwords(self::$config['type'], '_');
+                $_class = 'ginkgo\\session\\driver\\' . Strings::ucwords(self::$config['type'], '_');
             }
 
             // 检查驱动类

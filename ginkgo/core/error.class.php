@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 错误处理
 class Error {
@@ -32,7 +34,7 @@ class Error {
         E_NOTICE             => 'Notice - E_NOTICE',
         E_USER_NOTICE        => 'User Notice - E_USER_NOTICE',
 
-        E_STRICT             => 'Runtime Notice - E_STRICT',
+        //E_STRICT           => 'Runtime Notice - E_STRICT',
     );
 
     // 致命错误类型
@@ -306,6 +308,7 @@ class Error {
             '{:DIR_ROOT}',
             '{:DIR_STATIC}',
             '{:ROUTE_ROOT}',
+            '{:PHP_VERSION}',
         );
 
         $_arr_replaceDst = array(
@@ -314,6 +317,7 @@ class Error {
             $_str_dirRoot,
             $_str_dirRoot . GK_NAME_STATIC . '/',
             $_str_routeRoot,
+            PHP_VERSION,
         );
 
         $_str_content = str_ireplace($_arr_replaceSrc, $_arr_replaceDst, $_str_content);

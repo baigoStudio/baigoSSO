@@ -84,7 +84,7 @@ POST
 ``` php
 // 加密参数
 $_arr_crypt = array(
-    'user_name' => 'baigo',
+    'user_id' => 'baigo',
     'user_pass' => md5('123456'),
     'user_contact' => array(
         'tel' => array(
@@ -207,7 +207,7 @@ POST
 ``` php
 // 加密参数
 $_arr_crypt = array(
-    'user_name' => 'baigo',
+    'user_id' => 'baigo',
     'user_pass' => md5('123456'),
     'user_sec_ques'   => array(
         '您祖母叫什么名字？',

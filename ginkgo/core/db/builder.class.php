@@ -9,7 +9,9 @@ namespace ginkgo\db;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------SQL 语句构造抽象类-------------*/
 abstract class Builder {

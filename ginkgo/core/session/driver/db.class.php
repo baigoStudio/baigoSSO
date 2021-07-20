@@ -14,7 +14,9 @@ use ginkgo\session\Driver;
 use ginkgo\Db as Db_Base;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 数据库类型的会话驱动
 class Db extends Driver {

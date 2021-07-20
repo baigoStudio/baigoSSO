@@ -12,7 +12,9 @@ use ginkgo\Crypt;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 class Login extends Ctrl {
 
@@ -114,7 +116,7 @@ class Login extends Ctrl {
 
         $_arr_adminRow = array_replace_recursive($_arr_adminRow, $_arr_loginResult);
 
-        $this->obj_auth->write($_arr_adminRow, true, 'form', $_arr_inputSubmit['admin_remember'], $this->url['route_console']);
+        $this->obj_auth->write($_arr_adminRow, false, 'form', $_arr_inputSubmit['admin_remember'], $this->url['route_console']);
 
         return $this->fetchJson('Login successful', 'y020401');
     }

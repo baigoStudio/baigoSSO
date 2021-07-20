@@ -9,12 +9,14 @@ namespace ginkgo\db;
 use PDO;
 use ginkgo\Config;
 use ginkgo\Func;
-use ginkgo\String;
+use ginkgo\Strings;
 use ginkgo\Log;
 use ginkgo\Exception;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 数据库连接器抽象类
 abstract class Connector {
@@ -107,7 +109,7 @@ abstract class Connector {
             $this->config['type'] = $this->configThis['type'];
         }
 
-        $_class = 'ginkgo\\db\\builder\\' . String::ucwords($this->config['type'], '_'); // 补全构造器命名空间
+        $_class = 'ginkgo\\db\\builder\\' . Strings::ucwords($this->config['type'], '_'); // 补全构造器命名空间
 
         if (class_exists($_class)) {
             $this->obj_builder = $_class::instance($this->config); // 实例化 sql 语句构造器

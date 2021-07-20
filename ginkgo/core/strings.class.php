@@ -7,10 +7,12 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 字符串处理
-class String {
+class Strings {
 
     /** 将字符串中每个单词的首字母转换为大写
      * ucwords function.

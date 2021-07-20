@@ -11,7 +11,9 @@ use ginkgo\Loader;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------用户模型-------------*/
 class User extends Model {

@@ -9,7 +9,7 @@
 
     if (isset($cfg['baigoValidate'])) { ?>
         <!--表单验证 js-->
-        <script src="{:DIR_STATIC}lib/baigoValidate/3.0.3/baigoValidate.min.js" type="text/javascript"></script>
+        <script src="{:DIR_STATIC}lib/baigoValidate/3.1.0/baigoValidate.min.js" type="text/javascript"></script>
     <?php }
 
     if (isset($cfg['baigoSubmit'])) { ?>

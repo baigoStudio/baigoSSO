@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access Denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // html 处理类
 class Html {
@@ -198,8 +200,6 @@ class Html {
         $this->html = $html;
 
         if (is_string($this->html) && !Func::isEmpty($this->html)) { // 判断字符串
-            //$this->html = strtolower($this->html); // 转成小写
-
             $_mix_eleRows = $this->findEle();
             if (is_string($_mix_eleRows)) {
                 return $_mix_eleRows;

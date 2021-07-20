@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 路由处理
 class Route {
@@ -355,7 +357,7 @@ class Route {
         $_arr_route['act']  = str_replace('_', '-', $_arr_route['act']);
 
         // 转换为下划线分隔的驼峰命名
-        $_arr_route['act']  = String::toHump($_arr_route['act'], '-', true);
+        $_arr_route['act']  = Strings::toHump($_arr_route['act'], '-', true);
 
         // 合并路由
         self::$route = array_replace_recursive(self::$route, $_arr_route);

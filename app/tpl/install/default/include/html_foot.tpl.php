@@ -1,5 +1,5 @@
     <!--表单验证 js-->
-    <script src="{:DIR_STATIC}lib/baigoValidate/3.0.3/baigoValidate.min.js" type="text/javascript"></script>
+    <script src="{:DIR_STATIC}lib/baigoValidate/3.1.0/baigoValidate.min.js" type="text/javascript"></script>
 
     <!--表单 ajax 提交 js-->
     <script src="{:DIR_STATIC}lib/baigoSubmit/2.1.3/baigoSubmit.min.js" type="text/javascript"></script>

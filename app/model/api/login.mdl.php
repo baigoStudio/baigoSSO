@@ -10,7 +10,9 @@ use ginkgo\Func;
 use ginkgo\Crypt;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------用户模型-------------*/
 class Login extends User {
@@ -98,13 +100,13 @@ class Login extends User {
 
         $_arr_inputSubmit  = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
 
-        if (isset($arr_data['user_id'])) {
+        if (isset($arr_data['user_id']) && $arr_data['user_id'] > 0) {
             $_arr_inputSubmit['user_by']  = 'user_id';
             $_arr_inputSubmit['user_str'] = $arr_data['user_id'];
-        } else if (isset($arr_data['user_name'])) {
+        } else if (isset($arr_data['user_name']) && !Func::isEmpty($arr_data['user_name'])) {
             $_arr_inputSubmit['user_by']  = 'user_name';
             $_arr_inputSubmit['user_str'] = $arr_data['user_name'];
-        } else if (isset($arr_data['user_mail'])) {
+        } else if (isset($arr_data['user_mail']) && !Func::isEmpty($arr_data['user_mail'])) {
             $_arr_inputSubmit['user_by']  = 'user_mail';
             $_arr_inputSubmit['user_str'] = $arr_data['user_mail'];
         }

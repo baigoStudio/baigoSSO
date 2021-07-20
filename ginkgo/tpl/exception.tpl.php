@@ -35,20 +35,19 @@
             </h3>
             <?php if (isset($status_code) && !empty($status_code)) { ?>
                 <h4 class="text-center">
-                    <?php echo $lang->get($status_code); ?>
+                    <?php echo $status_code; ?>
                 </h4>
             <?php } ?>
             <hr>
-            <!--<h4><?php echo $lang->get('Error details'); ?></h4>-->
             <dl>
                 <?php if (isset($err_message) && !empty($err_message)) { ?>
                     <dt><?php echo $lang->get('Error message'); ?></dt>
-                    <dd class="lead text-break">
-                        <?php echo $lang->get($err_message);
+                    <dd>
+                        <div class="lead text-break"><?php echo $lang->get($err_message); ?></div>
 
-                        if (isset($err_detail) && !empty($err_detail)) {
-                            echo ', ', $err_detail;
-                        } ?>
+                        <?php if (isset($err_detail) && !empty($err_detail)) { ?>
+                            <div class="text-break"><?php echo $lang->get($err_detail); ?></div>
+                        <?php } ?>
                     </dd>
                 <?php }
 

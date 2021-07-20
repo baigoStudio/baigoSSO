@@ -9,13 +9,15 @@ namespace ginkgo\view;
 use ginkgo\Request;
 use ginkgo\Config;
 use ginkgo\Func;
-use ginkgo\String;
+use ginkgo\Strings;
 use ginkgo\File;
 use ginkgo\Exception;
 use ginkgo\Lang;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 视图驱动基类
 abstract class Driver {
@@ -208,7 +210,7 @@ abstract class Driver {
     protected function pathProcess($tpl = '') {
         $_str_tpl = $this->pathTpl;
 
-        $_str_act = String::toLine($this->route['act']); // 转为文件名
+        $_str_act = Strings::toLine($this->route['act']); // 转为文件名
 
         if (Func::isEmpty($tpl)) {
             $_str_tpl .= $this->route['ctrl'] . DS . $_str_act; // 如果未定义模板参数, 则自动定位

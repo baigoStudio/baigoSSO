@@ -12,10 +12,12 @@ use ginkgo\Func;
 use ginkgo\Html;
 use ginkgo\Plugin;
 use ginkgo\Ubbcode;
-use ginkgo\String;
+use ginkgo\Strings;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 class Pm extends Ctrl {
 
@@ -205,15 +207,15 @@ class Pm extends Ctrl {
 
             case 'bulk_range_reg':
                 $_arr_search = array(
-                    'begin_time'  => String::toTime($_arr_inputBulk['pm_to_begin_reg']),
-                    'end_time'    => String::toTime($_arr_inputBulk['pm_to_end_reg']),
+                    'begin_time'  => Strings::toTime($_arr_inputBulk['pm_to_begin_reg']),
+                    'end_time'    => Strings::toTime($_arr_inputBulk['pm_to_end_reg']),
                 );
             break;
 
             case 'bulk_range_login':
                 $_arr_search = array(
-                    'begin_login'  => String::toTime($_arr_inputBulk['pm_to_begin_login']),
-                    'end_login'    => String::toTime($_arr_inputBulk['pm_to_end_login']),
+                    'begin_login'  => Strings::toTime($_arr_inputBulk['pm_to_begin_login']),
+                    'end_login'    => Strings::toTime($_arr_inputBulk['pm_to_end_login']),
                 );
             break;
         }

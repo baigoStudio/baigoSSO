@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 加密解密 需要 openssl 支持
 class Crypt {
@@ -95,7 +97,7 @@ class Crypt {
 
         $_str_encrypt = openssl_encrypt($string, 'AES-128-CBC', $key, 1, $iv); // 加密
 
-        return String::toBase64($_str_encrypt); // base64 编码
+        return Strings::toBase64($_str_encrypt); // base64 编码
     }
 
 
@@ -114,7 +116,7 @@ class Crypt {
             return false;
         }
 
-        $string = String::fromBase64($string); // base64 解码
+        $string = Strings::fromBase64($string); // base64 解码
 
         return openssl_decrypt($string, 'AES-128-CBC', $key, 1, $iv); // 解密
     }

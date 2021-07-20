@@ -19,7 +19,9 @@ use ginkgo\Auth;
 use ginkgo\File;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------控制中心通用控制器-------------*/
 abstract class Ctrl extends Ctrl_Base {

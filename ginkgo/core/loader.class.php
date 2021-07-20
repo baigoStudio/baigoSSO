@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 加载管理类
 class Loader {
@@ -24,14 +26,9 @@ class Loader {
      * @return void
      */
     public static function load($path, $type = 'require') {
-        /*print_r($path);
-        print_r(' ::: ');
-        print_r('<br>');
-        print_r(PHP_EOL);*/
+        $path = strtolower($path);
 
-        if (!empty($path) && is_file(strtolower($path))) {
-            $path = strtolower($path);
-
+        if (!empty($path) && is_file($path)) {
             switch ($type) {
                 case 'include':
                     return include($path);
@@ -85,7 +82,7 @@ class Loader {
      */
     public static function ctrl($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod, 'ctrl');
-        $_str_ctrl      = $_str_namespace . String::ucwords($class, '_');
+        $_str_ctrl      = $_str_namespace . Strings::ucwords($class, '_');
 
         $_str_ctrlEmpty = $_str_namespace . 'C_Empty'; // 空控制器名
 
@@ -124,7 +121,7 @@ class Loader {
      */
     public static function model($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod, 'model');
-        $_str_mdl       = $_str_namespace . String::ucwords($class, '_');
+        $_str_mdl       = $_str_namespace . Strings::ucwords($class, '_');
 
         if (class_exists($_str_mdl)) { // 如果模型存在, 直接实例化
             $_mid = md5($_str_mdl);
@@ -152,7 +149,7 @@ class Loader {
      */
     public static function validate($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod, 'validate');
-        $_str_vld       = $_str_namespace . String::ucwords($class, '_');
+        $_str_vld       = $_str_namespace . Strings::ucwords($class, '_');
 
         //print_r($_str_vld);
         //print_r('<br>');
@@ -183,7 +180,7 @@ class Loader {
      */
     public static function classes($class, $layer = '', $mod = true, $option = array()) {
         $_str_namespace = self::namespaceProcess($class, $layer, $mod);
-        $_str_class     = $_str_namespace . String::ucwords($class, '_');
+        $_str_class     = $_str_namespace . Strings::ucwords($class, '_');
 
         //print_r('<br>');
 

@@ -13,7 +13,9 @@ use ginkgo\Paginator;
 use ginkgo\db\Connector;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 数据库连接器类
 class Mysql extends Connector {

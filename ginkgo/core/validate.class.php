@@ -9,7 +9,9 @@ namespace ginkgo;
 use ginkgo\validate\Rule;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 验证
 class Validate {
@@ -121,7 +123,7 @@ class Validate {
         if (strpos($this->config['rule_class'], '\\')) {
             $_class = $this->config['rule_class'];
         } else {
-            $_class = 'ginkgo\\validate\\rule\\' . String::ucwords($this->config['rule_class'], '_');
+            $_class = 'ginkgo\\validate\\rule\\' . Strings::ucwords($this->config['rule_class'], '_');
         }
 
         if (class_exists($_class)) {
@@ -422,7 +424,7 @@ class Validate {
      */
     public static function __callStatic($method, $params) {
         if (method_exists($this->obj_rule, $method)) {
-            return call_user_func_array(array($this->obj_rule, String::toHump($method, '_', true)), $params);
+            return call_user_func_array(array($this->obj_rule, Strings::toHump($method, '_', true)), $params);
         } else {
             $_obj_excpt = new Exception('Method not found', 500);
             $_obj_excpt->setData('err_detail', __CLASS__ . '->' . $method);
@@ -547,7 +549,7 @@ class Validate {
                 print_r($rule);
                 print_r(PHP_EOL);*/
 
-                $_bool_return = call_user_func_array(array($this->obj_rule, String::toHump($rule['type'], '_', true)), array($value, $rule['rule']));
+                $_bool_return = call_user_func_array(array($this->obj_rule, Strings::toHump($rule['type'], '_', true)), array($value, $rule['rule']));
             break;
 
             case 'token':

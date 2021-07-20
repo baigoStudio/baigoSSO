@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /** 以下为即将废弃的方法，供向下兼容 */
 
@@ -24,7 +26,7 @@ class Base64 {
      * @return 解码后字符串
      */
     public static function decode($string, $url_safe = true) {
-        return String::fromBase64($string, $url_safe);
+        return Strings::fromBase64($string, $url_safe);
     }
 
 
@@ -38,6 +40,6 @@ class Base64 {
      * @return 编码后字符串
      */
     public static function encode($string, $url_safe = true) {
-        return String::toBase64($string, $url_safe);
+        return Strings::toBase64($string, $url_safe);
     }
 }

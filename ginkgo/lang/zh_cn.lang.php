@@ -5,7 +5,9 @@
 -----------------------------------------------------------------*/
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------------------通用-------------------------*/
 return array(
@@ -38,8 +40,6 @@ return array(
     'Can not select database'       => '无法选择数据库',
     'File not found'                => '文件不存在',
     'Template not found'            => '模板不存在',
-    //'Language file not found'     => '语言文件不存在',
-    //'Other errors'                => '其他错误',
 
     E_ERROR                         => '致命错误',
     E_CORE_ERROR                    => '内核错误',

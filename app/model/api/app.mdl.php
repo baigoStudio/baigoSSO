@@ -14,7 +14,9 @@ use ginkgo\Arrays;
 use ginkgo\Html;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------应用模型-------------*/
 class App extends App_Base {

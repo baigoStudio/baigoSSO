@@ -12,7 +12,9 @@ use ginkgo\Exception;
 use ginkgo\view\Driver;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 视图驱动类 (php 原生)
 class Php extends Driver {

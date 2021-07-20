@@ -7,7 +7,9 @@
 namespace ginkgo;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 数据库类
 class Db {
@@ -45,13 +47,13 @@ class Db {
             }
 
             if (Func::isEmpty(self::$config['type'])) {
-                self::$config['type'] = String::ucwords(self::$configThis['type']);
+                self::$config['type'] = Strings::ucwords(self::$configThis['type']);
             }
 
             if (strpos(self::$config['type'], '\\')) {
                 $_class = self::$config['type'];
             } else {
-                $_class = 'ginkgo\\db\\connector\\' . String::ucwords(self::$config['type'], '_');
+                $_class = 'ginkgo\\db\\connector\\' . Strings::ucwords(self::$config['type'], '_');
             }
 
             if (class_exists($_class)) {

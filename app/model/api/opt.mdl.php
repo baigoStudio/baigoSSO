@@ -10,7 +10,9 @@ use app\model\Opt as Opt_Base;
 use ginkgo\Config;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 /*-------------设置项模型-------------*/
 class Opt extends Opt_Base {

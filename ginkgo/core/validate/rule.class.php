@@ -7,10 +7,12 @@
 namespace ginkgo\validate;
 
 use ginkgo\Func;
-use ginkgo\String;
+use ginkgo\Strings;
 
 // 不能非法包含或直接执行
-defined('IN_GINKGO') or exit('Access denied');
+if (!defined('IN_GINKGO')) {
+    return 'Access denied';
+}
 
 // 验证规则
 abstract class Rule {
@@ -184,15 +186,15 @@ abstract class Rule {
         $_end   = $_arr_rule[1];
 
         if (!is_numeric($_start)) {
-            $_start = String::toTime($_start);
+            $_start = Strings::toTime($_start);
         }
 
         if (!is_numeric($_end)) {
-            $_end = String::toTime($_end);
+            $_end = Strings::toTime($_end);
         }
 
         if (!is_numeric($value)) {
-            $value = String::toTime($value);
+            $value = Strings::toTime($value);
         }
 
         return $value >= $_start && $value <= $_end;
@@ -214,11 +216,11 @@ abstract class Rule {
         }
 
         if (!is_numeric($value)) {
-            $value = String::toTime($value);
+            $value = Strings::toTime($value);
         }
 
         if (!is_numeric($rule)) {
-            $rule = String::toTime($rule);
+            $rule = Strings::toTime($rule);
         }
 
         return $value >= $rule;
