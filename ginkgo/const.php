@@ -6,7 +6,7 @@
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 define('GK_VERSION', '0.2.1'); //框架版本

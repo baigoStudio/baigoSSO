@@ -11,141 +11,141 @@ use ginkgo\Config;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*-------------设置项模型-------------*/
 class Opt extends Opt_Base {
 
-    function security() {
-        $_arr_outPut = array(
-            'key'       => $this->inputCommon['key'],
-            'secret'    => $this->inputSecurity['secret'],
-        );
+  function security() {
+    $_arr_outPut = array(
+      'key'       => $this->inputCommon['key'],
+      'secret'    => $this->inputSecurity['secret'],
+    );
 
-        $_num_size   = Config::write(GK_PATH_TEMP . 'security' . GK_EXT_INC, $_arr_outPut);
+    $_num_size   = Config::write(GK_PATH_TEMP . 'security' . GK_EXT_INC, $_arr_outPut);
 
-        if ($_num_size > 0) {
-            $_str_rcode = 'y030401';
-            $_str_msg   = 'Security set successful';
-        } else {
-            $_str_rcode = 'x030401';
-            $_str_msg   = 'Security set failed';
-        }
-
-        return array(
-            'rcode' => $_str_rcode,
-            'msg'   => $_str_msg,
-        );
+    if ($_num_size > 0) {
+      $_str_rcode = 'y030401';
+      $_str_msg   = 'Security set successful';
+    } else {
+      $_str_rcode = 'x030401';
+      $_str_msg   = 'Security set failed';
     }
 
+    return array(
+      'rcode' => $_str_rcode,
+      'msg'   => $_str_msg,
+    );
+  }
 
-    function inputSecurity($arr_data = array()) {
-        $_arr_inputParam = array(
-            'secret'    => array('txt', ''),
-            'timestamp' => array('int', 0),
-        );
 
-        $_arr_inputSecurity = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
+  function inputSecurity($arr_data = array()) {
+    $_arr_inputParam = array(
+      'secret'    => array('txt', ''),
+      'timestamp' => array('int', 0),
+    );
 
-        $_is_vld = $this->vld_opt->scene('security')->verify($_arr_inputSecurity);
+    $_arr_inputSecurity = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
 
-        if ($_is_vld !== true) {
-            $_arr_message = $this->vld_opt->getMessage();
-            return array(
-                'rcode' => 'x030201',
-                'msg'   => end($_arr_message),
-            );
-        }
+    $_is_vld = $this->vld_opt->scene('security')->verify($_arr_inputSecurity);
 
-        $_arr_inputSecurity['rcode'] = 'y030201';
-
-        $this->inputSecurity = $_arr_inputSecurity;
-
-        return $_arr_inputSecurity;
+    if ($_is_vld !== true) {
+      $_arr_message = $this->vld_opt->getMessage();
+      return array(
+        'rcode' => 'x030201',
+        'msg'   => end($_arr_message),
+      );
     }
 
+    $_arr_inputSecurity['rcode'] = 'y030201';
 
-    function inputDbconfig($arr_data = array()) {
-        $_arr_inputParam = array(
-            'host'          => array('txt', 'localhost'),
-            'port'          => array('int', 3306),
-            'name'          => array('txt', ''),
-            'user'          => array('txt', ''),
-            'pass'          => array('txt', ''),
-            'charset'       => array('txt', ''),
-            'prefix'        => array('txt', ''),
-            'timestamp'     => array('int', 0),
-        );
+    $this->inputSecurity = $_arr_inputSecurity;
 
-        $_arr_inputDbconfig = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
+    return $_arr_inputSecurity;
+  }
 
-        $_is_vld = $this->vld_opt->scene('dbconfig')->verify($_arr_inputDbconfig);
 
-        if ($_is_vld !== true) {
-            $_arr_message = $this->vld_opt->getMessage();
-            return array(
-                'rcode' => 'x030201',
-                'msg'   => end($_arr_message),
-            );
-        }
+  function inputDbconfig($arr_data = array()) {
+    $_arr_inputParam = array(
+      'host'          => array('txt', 'localhost'),
+      'port'          => array('int', 3306),
+      'name'          => array('txt', ''),
+      'user'          => array('txt', ''),
+      'pass'          => array('txt', ''),
+      'charset'       => array('txt', ''),
+      'prefix'        => array('txt', ''),
+      'timestamp'     => array('int', 0),
+    );
 
-        $_arr_inputDbconfig['rcode'] = 'y030201';
+    $_arr_inputDbconfig = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
 
-        $this->inputDbconfig = $_arr_inputDbconfig;
+    $_is_vld = $this->vld_opt->scene('dbconfig')->verify($_arr_inputDbconfig);
 
-        return $_arr_inputDbconfig;
+    if ($_is_vld !== true) {
+      $_arr_message = $this->vld_opt->getMessage();
+      return array(
+        'rcode' => 'x030201',
+        'msg'   => end($_arr_message),
+      );
     }
 
+    $_arr_inputDbconfig['rcode'] = 'y030201';
 
-    function inputTimestamp($arr_data) {
-        $_arr_inputParam = array(
-            'timestamp' => array('int', 0),
-        );
+    $this->inputDbconfig = $_arr_inputDbconfig;
 
-        $_arr_inputTimestamp = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
+    return $_arr_inputDbconfig;
+  }
 
-        $_is_vld = $this->vld_opt->scene('timestamp')->verify($_arr_inputTimestamp);
 
-        if ($_is_vld !== true) {
-            $_arr_message = $this->vld_opt->getMessage();
-            return array(
-                'rcode' => 'x030201',
-                'msg'   => end($_arr_message),
-            );
-        }
+  function inputTimestamp($arr_data) {
+    $_arr_inputParam = array(
+      'timestamp' => array('int', 0),
+    );
 
-        $_arr_inputTimestamp['rcode'] = 'y030201';
+    $_arr_inputTimestamp = $this->obj_request->fillParam($arr_data, $_arr_inputParam);
 
-        $this->inputTimestamp = $_arr_inputTimestamp;
+    $_is_vld = $this->vld_opt->scene('timestamp')->verify($_arr_inputTimestamp);
 
-        return $_arr_inputTimestamp;
+    if ($_is_vld !== true) {
+      $_arr_message = $this->vld_opt->getMessage();
+      return array(
+        'rcode' => 'x030201',
+        'msg'   => end($_arr_message),
+      );
     }
 
+    $_arr_inputTimestamp['rcode'] = 'y030201';
 
-    function inputCommon() {
-        $_arr_inputParam = array(
-            'key'   => array('txt', ''),
-            'sign'  => array('txt', ''),
-            'code'  => array('txt', '', true),
-        );
+    $this->inputTimestamp = $_arr_inputTimestamp;
 
-        $_arr_inputCommon = $this->obj_request->request($_arr_inputParam);
+    return $_arr_inputTimestamp;
+  }
 
-        $_is_vld = $this->vld_opt->scene('common')->verify($_arr_inputCommon);
 
-        if ($_is_vld !== true) {
-            $_arr_message = $this->vld_opt->getMessage();
-            return array(
-                'rcode' => 'x030201',
-                'msg'   => end($_arr_message),
-            );
-        }
+  function inputCommon() {
+    $_arr_inputParam = array(
+      'key'   => array('txt', ''),
+      'sign'  => array('txt', ''),
+      'code'  => array('txt', '', true),
+    );
 
-        $_arr_inputCommon['rcode'] = 'y030201';
+    $_arr_inputCommon = $this->obj_request->request($_arr_inputParam);
 
-        $this->inputCommon = $_arr_inputCommon;
+    $_is_vld = $this->vld_opt->scene('common')->verify($_arr_inputCommon);
 
-        return $_arr_inputCommon;
+    if ($_is_vld !== true) {
+      $_arr_message = $this->vld_opt->getMessage();
+      return array(
+        'rcode' => 'x030201',
+        'msg'   => end($_arr_message),
+      );
     }
+
+    $_arr_inputCommon['rcode'] = 'y030201';
+
+    $this->inputCommon = $_arr_inputCommon;
+
+    return $_arr_inputCommon;
+  }
 }

@@ -6,12 +6,12 @@
 
 //不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*-------------------------通用-------------------------*/
 return array(
-    'Access denied'                 => '拒绝访问',
-    'Form token is incorrect'       => '表单令牌错误',
-    'Clear cookies successfully'    => '清除 Cookie 成功',
+  'Access denied'                 => '拒绝访问',
+  'Form token is incorrect'       => '表单令牌错误',
+  'Clear cookies successfully'    => '清除 Cookie 成功',
 );

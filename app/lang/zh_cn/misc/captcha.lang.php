@@ -6,10 +6,10 @@
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*-------------------------通用-------------------------*/
 return array(
-    'Captcha is incorrect'         => '验证码错误', //验证码
+  'Captcha is incorrect'         => '验证码错误', //验证码
 );

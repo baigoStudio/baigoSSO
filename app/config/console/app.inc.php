@@ -6,19 +6,19 @@
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*-------------------------权限-------------------------*/
 return array(
-    /*------用户------*/
-    'user' => array(
-        'title' => 'Users',
-        'allow' => array(
-            'reg'       => 'Register',
-            'edit'      => 'Edit',
-            'delete'    => 'Delete',
-            'global'    => 'Operate all users',
-        ),
+  /*------用户------*/
+  'user' => array(
+    'title' => 'Users',
+    'allow' => array(
+      'reg'       => 'Register',
+      'edit'      => 'Edit',
+      'delete'    => 'Delete',
+      'global'    => 'Operate all users',
     ),
+  ),
 );

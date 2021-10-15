@@ -15,44 +15,41 @@ use ginkgo\Plugin;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 
 /*-------------控制中心通用控制器-------------*/
 abstract class Ctrl extends Ctrl_Base {
 
-    protected function c_init($param = array()) { //构造函数
-        parent::c_init();
+  protected function c_init($param = array()) { //构造函数
+    parent::c_init();
 
-        Plugin::listen('action_personal_init'); //管理后台初始化时触发
+    Plugin::listen('action_personal_init'); //管理后台初始化时触发
 
-        $this->mdl_user       = Loader::model('User');
-        $this->mdl_verify     = Loader::model('Verify');
+    $this->mdl_user       = Loader::model('User');
+    $this->mdl_verify     = Loader::model('Verify');
 
-        $this->configMailtpl    = Config::get('mailtpl', 'var_extra');;
+    $this->configMailtpl    = Config::get('mailtpl', 'var_extra');;
 
+    $this->obj_view->setPath(BG_TPL_PERSONAL . $this->configBase['site_tpl']);
+  }
 
-        $this->obj_view->setPath(BG_TPL_PERSONAL . $this->configBase['site_tpl']);
+  protected function pathProcess() {
+    parent::pathProcess();
+
+    $this->tplPathPersonal = GK_PATH_TPL;
+
+    if (Func::notEmpty($this->tplPath)) {
+      $_str_pathTplPersonal = BG_TPL_PERSONAL . DS . $this->tplPath . DS;
     }
 
-    protected function pathProcess() {
-        parent::pathProcess();
+    $_arr_url = array(
+      'path_tpl_personal' => $_str_pathTplPersonal,
+    );
 
-        $_str_pathTpl = Config::get('path', 'tpl');
+    $this->url = $_arr_url;
 
-        $_str_pathTplPersonal = GK_PATH_TPL;
-
-        if (!Func::isEmpty($_str_pathTpl)) {
-            $_str_pathTplPersonal = BG_TPL_PERSONAL . DS . $_str_pathTpl . DS;
-        }
-
-        $_arr_url = array(
-            'path_tpl_personal' => $_str_pathTplPersonal,
-        );
-
-        $this->url = $_arr_url;
-
-        $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
-    }
+    $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
+  }
 }

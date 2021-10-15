@@ -6,28 +6,28 @@
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*----------后台管理模块----------*/
 return array(
-    'info'      => array(
-        'title' => 'Profile info',
-        'icon'  => 'user',
-    ),
-    /*'prefer'    => array(
-        'title' => 'Preferences',
-    ),*/
-    'pass'      => array(
-        'title' => 'Password',
-        'icon'  => 'key',
-    ),
-    'secqa'       => array(
-        'title' => 'Security question',
-        'icon'  => 'question-circle',
-    ),
-    'mailbox'   => array(
-        'title' => 'Mailbox',
-        'icon'  => 'at',
-    ),
+  'info'      => array(
+    'title' => 'Profile info',
+    'icon'  => 'user',
+  ),
+  /*'prefer'    => array(
+    'title' => 'Preferences',
+  ),*/
+  'pass'      => array(
+    'title' => 'Password',
+    'icon'  => 'key',
+  ),
+  'secqa'       => array(
+    'title' => 'Security question',
+    'icon'  => 'question-circle',
+  ),
+  'mailbox'   => array(
+    'title' => 'Mailbox',
+    'icon'  => 'at',
+  ),
 );

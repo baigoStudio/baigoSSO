@@ -11,13 +11,13 @@ use ginkgo\Config;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*-------------插件模型-------------*/
 class Plugin {
 
-    function __construct() { //构造函数
-        $this->configPlugin = Config::get('plugin');
-    }
+  function __construct() { //构造函数
+    $this->configPlugin = Config::get('plugin');
+  }
 }

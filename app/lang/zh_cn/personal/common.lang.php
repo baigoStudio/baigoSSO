@@ -6,10 +6,16 @@
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
-    return 'Access denied';
+  return 'Access denied';
 }
 
 /*-------------------------通用-------------------------*/
 return array(
-    'Error'                     => '错误',
+  'Error'      => '错误',
+  'Close'      => '关闭',
+  'OK'         => '确定',
+  'Cancel'     => '取消',
+  'Confirm'    => '确定',
+  'Submitting' => '正在提交 ...',
+  'Complete'   => '完成',
 );
