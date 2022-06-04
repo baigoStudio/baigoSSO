@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\personal;
 
-use app\model\Verify as Verify_Base;
+use app\model\common\Verify as Verify_Common;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
@@ -13,9 +13,9 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------验证模型-------------*/
-class Verify extends Verify_Base {
+class Verify extends Verify_Common {
 
-  public $inputVerify;
+  public $inputVerify = array();
 
   /** 失效
    * disabled function.
@@ -23,7 +23,7 @@ class Verify extends Verify_Base {
    * @access public
    * @return void
    */
-  function disabled() {
+  public function disabled() {
     $_arr_verifyUpdate = array(
       'verify_status'         => 'disabled',
       'verify_time_disabled'  => GK_NOW,
@@ -50,7 +50,7 @@ class Verify extends Verify_Base {
    * @access public
    * @return void
    */
-  function inputCommon() {
+  public function inputCommon() {
     $_arr_inputParam = array(
       'verify_id'     => array('int', ''),
       'verify_token'  => array('txt', ''),
@@ -83,7 +83,7 @@ class Verify extends Verify_Base {
    * @access public
    * @return void
    */
-  function inputPass() {
+  public function inputPass() {
     $_arr_inputParam = array(
       'verify_id'         => array('int', ''),
       'verify_token'      => array('txt', ''),

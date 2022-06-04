@@ -17,25 +17,27 @@ if (!defined('IN_GINKGO')) {
 /*-------------用户模型-------------*/
 class User_App_View extends Model {
 
+  protected $create = array(
+    array('user.user_id'),
+    array('user.user_name'),
+    array('user.user_mail'),
+    array('user.user_nick'),
+    array('user.user_note'),
+    array('user.user_status'),
+    array('user.user_time'),
+    array('user.user_time_login'),
+    array('user.user_ip'),
+  );
+
+
   /** 创建视图
    * mdl_create_view function.
    *
    * @access public
    * @return void
    */
-  function createView() {
-    $_arr_viewCreate = array(
-      array('user.user_id'),
-      array('user.user_name'),
-      array('user.user_mail'),
-      array('user.user_nick'),
-      array('user.user_note'),
-      array('user.user_status'),
-      array('user.user_time'),
-      array('user.user_time_login'),
-      array('user.user_ip'),
-      array('app_belong.belong_app_id'),
-    );
+  public function createView() {
+    $this->create[] = 'IFNULL(' . $this->obj_builder->table('app_belong') . '.`belong_app_id`, 0) AS `belong_app_id`';
 
     $_arr_join = array(
       'app_belong',
@@ -43,7 +45,7 @@ class User_App_View extends Model {
       'LEFT',
     );
 
-    $_num_count  = $this->viewFrom('user')->viewJoin($_arr_join)->create($_arr_viewCreate);
+    $_num_count  = $this->viewFrom('user')->viewJoin($_arr_join)->create();
 
     if ($_num_count !== false) {
       $_str_rcode = 'y010108'; //更新成功

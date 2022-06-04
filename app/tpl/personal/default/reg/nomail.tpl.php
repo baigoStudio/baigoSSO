@@ -4,14 +4,13 @@
   'baigoValidate'  => 'true',
   'baigoSubmit'    => 'true',
   'captchaReload'  => 'true',
-  'pathInclude'    => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'personal_head' . GK_EXT_TPL); ?>
 
   <div class="card">
     <div class="card-body">
-      <form name="nomail_form" id="nomail_form" action='<?php echo $route_personal; ?>reg/nomail-submit/'>
+      <form name="nomail_form" id="nomail_form" action='<?php echo $hrefRow['nomail-submit']; ?>'>
         <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
         <div class="form-group">
@@ -25,7 +24,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
           <div class="input-group">
             <input type="text" name="captcha" id="captcha" class="form-control">
             <div class="input-group-append">
-              <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_nomail/" data-id="captcha_nomail" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
+              <img src="<?php echo $hrefRow['captcha']; ?>" data-src="<?php echo $hrefRow['captcha']; ?>" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
             </div>
           </div>
           <small class="form-text" id="msg_captcha"></small>
@@ -40,7 +39,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'personal_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'personal_foot' . GK_EXT_TPL); ?>
   <script type="text/javascript">
   var opts_validate_form = {
     rules: {
@@ -53,7 +52,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
         format: 'alpha_number',
         ajax: {
           key: 'captcha',
-          url: '<?php echo $route_misc; ?>captcha/check/id/captcha_nomail/'
+          url: '<?php echo $hrefRow['captcha-check']; ?>'
         }
       }
     },
@@ -85,7 +84,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
       if (obj_validate_form.verify()) {
         obj_submit_form.formSubmit(false, function(result){
           if (typeof result.rcode == 'undefined' || result.rcode != 'y010407') {
-            captchaReload('captcha_nomail');
+            captchaReload('<?php echo $hrefRow['captcha']; ?>');
           }
         });
       }
@@ -93,4 +92,4 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

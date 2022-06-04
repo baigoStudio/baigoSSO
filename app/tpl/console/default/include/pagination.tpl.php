@@ -39,9 +39,9 @@
 
     <li class="page-item<?php if (!$pageRow['prev']) { ?> disabled<?php } ?>">
       <?php if ($pageRow['prev']) { ?>
-        <a href="{:ROUTE_PAGE}<?php echo $pageParam; ?>/<?php echo $pageRow['prev']; ?>/" title="<?php echo $_lang_pagePrev; ?>" class="page-link"><span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span></a>
+        <a href="{:ROUTE_PAGE}<?php echo $pageParam; ?>/<?php echo $pageRow['prev']; ?>/" title="<?php echo $_lang_pagePrev; ?>" class="page-link"><span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span></a>
       <?php } else { ?>
-        <span title="<?php echo $_lang_pagePrev; ?>" class="page-link"><span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span></span>
+        <span title="<?php echo $_lang_pagePrev; ?>" class="page-link"><span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span></span>
       <?php } ?>
     </li>
 
@@ -57,9 +57,9 @@
 
     <li class="page-item<?php if (!$pageRow['next']) { ?> disabled<?php } ?>">
       <?php if ($pageRow['next']) { ?>
-        <a href="{:ROUTE_PAGE}<?php echo $pageParam; ?>/<?php echo $pageRow['next']; ?>/" title="<?php echo $_lang_pageNext; ?>" class="page-link"><span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-right' . BG_EXT_SVG); ?></span></a>
+        <a href="{:ROUTE_PAGE}<?php echo $pageParam; ?>/<?php echo $pageRow['next']; ?>/" title="<?php echo $_lang_pageNext; ?>" class="page-link"><span class="bg-icon"><?php include($tpl_icon . 'chevron-right' . BG_EXT_SVG); ?></span></a>
       <?php } else { ?>
-        <span title="<?php echo $_lang_pageNext; ?>" class="page-link"><span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-right' . BG_EXT_SVG); ?></span></span>
+        <span title="<?php echo $_lang_pageNext; ?>" class="page-link"><span class="bg-icon"><?php include($tpl_icon . 'chevron-right' . BG_EXT_SVG); ?></span></span>
       <?php } ?>
     </li>
 

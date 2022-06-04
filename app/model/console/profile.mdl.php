@@ -18,10 +18,12 @@ if (!defined('IN_GINKGO')) {
 /*-------------管理员模型-------------*/
 class Profile extends Admin_Base {
 
-  public $inputInfo;
-  public $inputSecqa;
-  public $inputPass;
-  public $inputMailbox;
+  public $inputInfo     = array();
+  public $inputShortcut = array();
+  public $inputSecqa    = array();
+  public $inputPass     = array();
+  public $inputMailbox  = array();
+
   protected $table = 'admin';
 
 
@@ -32,7 +34,7 @@ class Profile extends Admin_Base {
    * @param mixed $num_adminId
    * @return void
    */
-  function info() {
+  public function info() {
     $_arr_adminData = array(
       'admin_nick' => $this->inputInfo['admin_nick'],
     );
@@ -63,7 +65,7 @@ class Profile extends Admin_Base {
   }
 
 
-  function shortcut() {
+  public function shortcut() {
     $_arr_adminData = array(
       'admin_shortcut' => $this->inputShortcut['admin_shortcut'],
     );
@@ -102,7 +104,7 @@ class Profile extends Admin_Base {
    * @access public
    * @return void
    */
-  function inputInfo() {
+  public function inputInfo() {
     $_arr_inputParam = array(
       'admin_pass'    => array('txt', ''),
       'admin_nick'    => array('txt', ''),
@@ -134,7 +136,7 @@ class Profile extends Admin_Base {
    * @access public
    * @return void
    */
-  function inputSecqa() {
+  public function inputSecqa() {
     $_arr_inputParam = array(
       'admin_pass'        => array('txt', ''),
       'admin_sec_ques'    => array('arr', array()),
@@ -167,7 +169,7 @@ class Profile extends Admin_Base {
    * @access public
    * @return void
    */
-  function inputPass() {
+  public function inputPass() {
     $_arr_inputParam = array(
       'admin_pass'            => array('txt', ''),
       'admin_pass_new'        => array('txt', ''),
@@ -200,7 +202,7 @@ class Profile extends Admin_Base {
    * @access public
    * @return void
    */
-  function inputMailbox() {
+  public function inputMailbox() {
     $_arr_inputParam = array(
       'admin_pass'            => array('txt', ''),
       'admin_mail_new'        => array('txt', ''),
@@ -226,7 +228,7 @@ class Profile extends Admin_Base {
   }
 
 
-  function inputShortcut() {
+  public function inputShortcut() {
     $_arr_inputParam = array(
       'admin_shortcut'   => array('arr', array()),
       '__token__'        => array('txt', ''),

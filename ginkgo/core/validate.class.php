@@ -6,7 +6,6 @@
 
 namespace ginkgo;
 
-use ginkgo\validate\Rule;
 use ginkgo\except\Vld_Except;
 
 // 不能非法包含或直接执行

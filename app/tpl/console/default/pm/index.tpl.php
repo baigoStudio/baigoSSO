@@ -8,27 +8,24 @@
   'baigoQuery'        => 'true',
   'baigoDialog'       => 'true',
   'tooltip'           => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <div class="d-flex justify-content-between">
     <nav class="nav mb-3">
-      <a href="<?php echo $route_console; ?>pm/bulk/" class="nav-link">
-        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'mail-bulk' . BG_EXT_SVG); ?></span>
+      <a href="<?php echo $hrefRow['bulk']; ?>" class="nav-link">
+        <span class="bg-icon"><?php include($tpl_icon . 'mail-bulk' . BG_EXT_SVG); ?></span>
         <?php echo $lang->get('Bulk'); ?>
       </a>
     </nav>
-    <form name="pm_search" id="pm_search" class="d-none d-lg-inline-block" action="<?php echo $route_console; ?>pm/index/">
+    <form name="pm_search" id="pm_search" class="d-none d-lg-inline-block" action="<?php echo $hrefRow['index']; ?>">
       <div class="input-group mb-3">
         <input type="text" name="key" value="<?php echo $search['key']; ?>" placeholder="<?php echo $lang->get('Keyword'); ?>" class="form-control">
         <span class="input-group-append">
           <button class="btn btn-outline-secondary" type="submit">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'search' . BG_EXT_SVG); ?></span>
+            <span class="bg-icon"><?php include($tpl_icon . 'search' . BG_EXT_SVG); ?></span>
           </button>
-        </span>
-        <span class="input-group-append">
           <button class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#bg-search-more">
             <span class="sr-only">Dropdown</span>
           </button>
@@ -58,36 +55,36 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   </div>
 
   <?php if (!empty($search['key']) || !empty($search['status']) || !empty($search['type'])) { ?>
-      <div class="mb-3 text-right">
-          <?php if (!empty($search['key'])) { ?>
-              <span class="badge badge-info">
-                  <?php echo $lang->get('Keyword'); ?>:
-                  <?php echo $search['key']; ?>
-              </span>
-          <?php }
+    <div class="mb-3 text-right">
+      <?php if (!empty($search['key'])) { ?>
+        <span class="badge badge-info">
+          <?php echo $lang->get('Keyword'); ?>:
+          <?php echo $search['key']; ?>
+        </span>
+      <?php }
 
-          if (!empty($search['status'])) { ?>
-              <span class="badge badge-info">
-                  <?php echo $lang->get('Status'); ?>:
-                  <?php echo $lang->get($search['status']); ?>
-              </span>
-          <?php }
+      if (!empty($search['status'])) { ?>
+        <span class="badge badge-info">
+          <?php echo $lang->get('Status'); ?>:
+          <?php echo $lang->get($search['status']); ?>
+        </span>
+      <?php }
 
-          if (!empty($search['type'])) { ?>
-              <span class="badge badge-info">
-                  <?php echo $lang->get('Type'); ?>:
-                  <?php echo $lang->get($search['type']); ?>
-              </span>
-          <?php } ?>
+      if (!empty($search['type'])) { ?>
+        <span class="badge badge-info">
+          <?php echo $lang->get('Type'); ?>:
+          <?php echo $lang->get($search['type']); ?>
+        </span>
+      <?php } ?>
 
-          <a href="<?php echo $route_console; ?>pm/index/" class="badge badge-danger badge-pill">
-              <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
-              <?php echo $lang->get('Reset'); ?>
-          </a>
-      </div>
+      <a href="<?php echo $hrefRow['index']; ?>" class="badge badge-danger badge-pill">
+        <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
+        <?php echo $lang->get('Reset'); ?>
+      </a>
+    </div>
   <?php } ?>
 
-  <form name="pm_list" id="pm_list" action="<?php echo $route_console; ?>pm/status/">
+  <form name="pm_list" id="pm_list" action="<?php echo $hrefRow['status']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="table-responsive">
@@ -137,12 +134,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 </div>
                 <div class="bg-manage-menu">
                   <div class="d-flex flex-wrap">
-                    <a href="#pm_modal" data-toggle="modal" data-id="<?php echo $value['pm_id']; ?>" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'eye' . BG_EXT_SVG); ?></span>
+                    <a href="#modal_nm" data-toggle="modal" data-href="<?php echo $hrefRow['show'], $value['pm_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'eye' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Show'); ?>
                     </a>
                     <a href="javascript:void(0);" data-id="<?php echo $value['pm_id']; ?>" class="pm_delete text-danger">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>
+                      <span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Delete'); ?>
                     </a>
                   </div>
@@ -153,7 +150,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   </dt>
                   <dd class="col-9">
                     <small>
-                      <a href="<?php echo $route_console; ?>pm/index/from/<?php echo $value['pm_from']; ?>/">
+                      <a href="<?php echo $hrefRow['index-from'], $value['pm_from']; ?>">
                         <?php if ($value['pm_from'] == -1) {
                           echo $lang->get('System');
                         } else if (isset($value['fromUser']['user_name'])) {
@@ -169,7 +166,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   </dt>
                   <dd class="col-9">
                     <small>
-                      <a href="<?php echo $route_console; ?>pm/index/to/<?php echo $value['pm_to']; ?>/">
+                      <a href="<?php echo $hrefRow['index-to'], $value['pm_to']; ?>">
                         <?php if (isset($value['toUser']['user_name'])) {
                           echo $value['toUser']['user_name'];
                         } else {
@@ -183,7 +180,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   </dt>
                   <dd class="col-9">
                     <?php $str_status = $value['pm_status'];
-                    include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                    include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                   </dd>
                   <dt class="col-3">
                     <small><?php echo $lang->get('Time'); ?></small>
@@ -197,7 +194,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 <div>
                   <small>
                     <?php echo $lang->get('Sender'); ?>:
-                    <a href="<?php echo $route_console; ?>pm/index/from/<?php echo $value['pm_from']; ?>/">
+                    <a href="<?php echo $hrefRow['form'], $value['pm_from']; ?>">
                       <?php if ($value['pm_from'] == -1) {
                         echo $lang->get('System');
                       } else if (isset($value['fromUser']['user_name'])) {
@@ -212,7 +209,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 <div>
                   <small>
                     <?php echo $lang->get('Recipient'); ?>:
-                    <a href="<?php echo $route_console; ?>pm/index/to/<?php echo $value['pm_to']; ?>/">
+                    <a href="<?php echo $hrefRow['index-to'], $value['pm_to']; ?>">
                       <?php if (isset($value['toUser']['user_name'])) {
                         echo $value['toUser']['user_name'];
                       } else {
@@ -225,7 +222,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               <td class="d-none d-lg-table-cell bg-td-md text-right">
                 <div>
                   <?php $str_status = $value['pm_status'];
-                  include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                  include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                 </div>
                 <div>
                   <small data-toggle="tooltip" data-placement="bottom" title="<?php echo $value['pm_time_format']['date_time']; ?>"><?php echo $value['pm_time_format']['date_time_short']; ?></small>
@@ -262,20 +259,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         <small id="msg_act" class="form-text"></small>
       </div>
       <div class="float-right">
-        <?php include($cfg['pathInclude'] . 'pagination' . GK_EXT_TPL); ?>
+        <?php include($tpl_include . 'pagination' . GK_EXT_TPL); ?>
       </div>
     </div>
   </form>
 
-  <div class="modal fade" id="pm_modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL);
 
-      </div>
-    </div>
-  </div>
-
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+  include($tpl_include . 'modal_nm' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_list = {
@@ -301,14 +292,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   };
 
   $(document).ready(function(){
-    $('#pm_modal').on('shown.bs.modal',function(event){
-      var _obj_button = $(event.relatedTarget);
-      var _pm_id      = _obj_button.data('id');
-      $('#pm_modal .modal-content').load('<?php echo $route_console; ?>pm/show/id/' + _pm_id + '/view/modal/');
-    }).on('hidden.bs.modal', function(){
-      $('#pm_modal .modal-content').empty();
-    });
-
     var obj_dialog          = $.baigoDialog(opts_dialog);
     var obj_validate_list   = $('#pm_list').baigoValidate(opts_validate_list);
     var obj_submit_list     = $('#pm_list').baigoSubmit(opts_submit);
@@ -319,13 +302,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         case 'delete':
           obj_dialog.confirm('<?php echo $lang->get('Are you sure to delete?'); ?>', function(result){
             if (result) {
-              obj_submit_list.formSubmit('<?php echo $route_console; ?>pm/delete/');
+              obj_submit_list.formSubmit('<?php echo $hrefRow['delete']; ?>');
             }
           });
         break;
 
         default:
-          obj_submit_list.formSubmit('<?php echo $route_console; ?>pm/status/');
+          obj_submit_list.formSubmit('<?php echo $hrefRow['status']; ?>');
         break;
       }
     });
@@ -348,4 +331,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

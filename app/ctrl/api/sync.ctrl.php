@@ -26,7 +26,7 @@ class Sync extends Ctrl {
   }
 
 
-  function login() {
+  public function login() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -60,7 +60,7 @@ class Sync extends Ctrl {
   }
 
 
-  function logout() {
+  public function logout() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -111,7 +111,7 @@ class Sync extends Ctrl {
       'not_ids'       => array($this->appRow['app_id']),
       'combine_ids'   => $_arr_combineIds,
     );
-    $this->appRows = $_mdl_appCombineView->lists(100, 0, $_arr_search);
+    $this->appRows = $_mdl_appCombineView->lists(array(100, 'limit'), $_arr_search);
   }
 
 

@@ -27,7 +27,7 @@ class Php extends Driver {
    * @param string $data (default: '') 内容
    * @return 渲染结果
    */
-  function fetch($tpl = '', $data = '') {
+  public function fetch($tpl = '', $data = '') {
     $_str_tpl = $this->pathProcess($tpl); // 路径处理
 
     if (!File::fileHas($_str_tpl)) {
@@ -59,10 +59,10 @@ class Php extends Driver {
    * @param string $data (default: '')
    * @return void
    */
-  function display($content = '', $data = '') {
+  public function display($content = '', $data = '') {
 
     if (Func::notEmpty($data)) {
-        extract($data, EXTR_OVERWRITE);
+      extract($data, EXTR_OVERWRITE);
     }
 
     eval('?>' . $content);

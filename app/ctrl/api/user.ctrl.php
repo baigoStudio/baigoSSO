@@ -27,7 +27,7 @@ class User extends Ctrl {
   }
 
 
-  function edit() {
+  public function edit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -101,7 +101,7 @@ class User extends Ctrl {
   }
 
 
-  function read() {
+  public function read() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

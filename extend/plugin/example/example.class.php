@@ -21,7 +21,7 @@ if (!class_exists('extend\plugin\example\Example')) { //防止类重复
         }
 
 
-        function doExample($data) {
+        public function doExample($data) {
             //echo '<div>test</div>';
 
             $data = '__doExample__';

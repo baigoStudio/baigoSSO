@@ -19,13 +19,13 @@ http://server/index.php/api/install/security
 ##### HTTP 请求方式
 
 POST
- 
+
 ##### 请求参数
 
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
 | code | string | true | 加密参数，将需要的参数进行 JSON 编码。 |
-| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 key 作为盐。  |
+| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 key 作为盐。 |
 | key | string | true | 通信密钥，随机生成，长度 32 位。 |
 
 ##### 加密参数
@@ -51,10 +51,10 @@ POST
 
 ``` javascript
 {
-    "rcode": "y030401",
-    "msg": "安全码生成成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y030401",
+  "msg": "安全码生成成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -67,7 +67,7 @@ POST
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
 | code | string | true | 加密参数，将需要的参数进行 JSON 编码，然后将 JSON 字符串进行加密。加密时，要把 key 作为 key 参数，secret 作为 iv 参数。 |
-| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 key 和 secret 连接作为盐。  |
+| sign | string | true | 签名，将加密参数加密前的 JSON 字符串进行签名。签名时，要把 key 和 secret 连接作为盐。 |
 | key | string | true | 通信密钥，作用类似于其他接口的 App Key。 |
 
 ----------
@@ -83,7 +83,7 @@ http://server/index.php/api/install/dbconfig
 ##### HTTP 请求方式
 
 POST
- 
+
 ##### 加密参数
 
 参数进行 JSON 编码，然后将 JSON 字符串进行加密。然后把加密的结果作为 `公共请求参数` 的 code 参数。
@@ -99,21 +99,21 @@ POST
 | charset | string | true | 数据库字符编码 |
 | prefix | string | true | 数据表前缀 |
 | timestamp | int | true | UNIX 时间戳 |
- 
+
 ##### 返回结果是否加密
 
 否
- 
+
 返回结果示例
 
 ``` javascript
 {
-    "rcode": "y010102",
-    "msg": "数据库设置成功",
-    "prd_sso_ver": "1.1.1", //SSO 版本号
-    "prd_sso_pub": 20150923, //SSO 版本发布时间
+  "rcode": "y010102",
+  "msg": "数据库设置成功",
+  "prd_sso_ver": "1.1.1", //SSO 版本号
+  "prd_sso_pub": 20150923, //SSO 版本发布时间
 }
-``` 
+```
 
 ----------
 
@@ -128,7 +128,7 @@ http://server/index.php/api/install/data
 ##### HTTP 请求方式
 
 POST
- 
+
 ##### 加密参数
 
 参数进行 JSON 编码，然后将 JSON 字符串进行加密。然后把加密的结果作为 `公共请求参数` 的 code 参数。
@@ -136,7 +136,7 @@ POST
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
 | timestamp | int | true | UNIX 时间戳 |
- 
+
 ##### 返回结果是否加密
 
 否
@@ -145,12 +145,12 @@ POST
 
 ``` javascript
 {
-    "rcode": "y010102" //返回代码
-    "msg": "创建数据成功",
-    "prd_sso_ver": "1.1.1", //SSO 版本号
-    "prd_sso_pub": 20150923, //SSO 版本发布时间
+  "rcode": "y010102" //返回代码
+  "msg": "创建数据成功",
+  "prd_sso_ver": "1.1.1", //SSO 版本号
+  "prd_sso_pub": 20150923, //SSO 版本发布时间
 }
-``` 
+```
 
 ----------
 
@@ -175,7 +175,7 @@ POST
 | admin_name | string | true | 管理员用户名 |
 | admin_pass | string | true | 密码，必须用 MD5 加密后传输。 |
 | timestamp | int | true | UNIX 时间戳 |
- 
+
 ##### 返回结果是否加密
 
 是
@@ -193,13 +193,13 @@ POST
 
 ``` javascript
 {
-    "admin_id": "1",
-    "admin_name": "baigo",
-    "admin_status": "wait",
-    "timestamp": "1550198497"
+  "admin_id": "1",
+  "admin_name": "baigo",
+  "admin_status": "wait",
+  "timestamp": "1550198497"
 }
 ```
-  
+
 ----------
 
 ### 读取安装状态
@@ -221,7 +221,7 @@ GET
 | 名称 | 类型 | 必需 | 描述 |
 | - | - | - | - |
 | timestamp | int | true | UNIX 时间戳 |
- 
+
 ##### 返回结果是否加密
 
 是
@@ -239,65 +239,65 @@ GET
 
 ``` javascript
 {
-    "dbconfig": {
-        "type": "mysql",
-        "host": "127.0.0.1",
-        "name": "baigo",
-        "user": "root",
-        "pass": "",
-        "port": "",
-        "charset": "utf8",
-        "prefix": "sso_"
+  "dbconfig": {
+    "type": "mysql",
+    "host": "127.0.0.1",
+    "name": "baigo",
+    "user": "root",
+    "pass": "",
+    "port": "",
+    "charset": "utf8",
+    "prefix": "sso_"
+  },
+  "data": {
+    "table": {
+      "sso_admin": {
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      },
+      "sso_app"{
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      },
+      "sso_app_belong"{
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      },
+      "sso_pm"{
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      },
+      "sso_user"{
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      },
+      "sso_verify"{
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      }
     },
-    "data": {
-        "table": {
-            "sso_admin": {
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            },
-            "sso_app"{
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            },
-            "sso_app_belong"{
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            },
-            "sso_pm"{
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            },
-            "sso_user"{
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            },
-            "sso_verify"{
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            }
-        },
-        "view": {
-            "sso_user_app_view"{
-                "rcode": "x030401",
-                "msg": "创建成功",
-                "status": "y",
-            }
-        }
-    },
-    "admin": {
-        "0": {
-            "admin_id": "1",
-            "admin_name": "baigo",
-            "admin_status": "wait"
-        }
-    },
-    "timestamp": "1550198497"
+    "view": {
+      "sso_user_app_view"{
+        "rcode": "x030401",
+        "msg": "创建成功",
+        "status": "y",
+      }
+    }
+  },
+  "admin": {
+    "0": {
+      "admin_id": "1",
+      "admin_name": "baigo",
+      "admin_status": "wait"
+    }
+  },
+  "timestamp": "1550198497"
 }
 ```
 
@@ -344,9 +344,9 @@ POST
 
 ``` javascript
 {
-    "base_url": "http://server/index.php/api",
-    "app_id": "1",
-    "app_key": "sfewrw8084382h2r9fdsw9ey5whfDISORwegds",
-    "app_secret": "sfewrw8084382h2r9fdsw9",
+  "base_url": "http://server/index.php/api",
+  "app_id": "1",
+  "app_key": "sfewrw8084382h2r9fdsw9ey5whfDISORwegds",
+  "app_secret": "sfewrw8084382h2r9fdsw9",
 }
 ```

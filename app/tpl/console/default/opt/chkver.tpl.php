@@ -3,12 +3,11 @@
   'menu_active'       => 'opt',
   'sub_active'        => 'chkver',
   'baigoSubmit'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
-  <form name="opt_form" id="opt_form" action="<?php echo $route_console; ?>opt/chkver-submit/" class="mb-3">
+  <form name="opt_form" id="opt_form" action="<?php echo $hrefRow['chkver-submit']; ?>" class="mb-3">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <button type="submit" class="btn btn-primary">
@@ -18,12 +17,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
 
   <?php if (isset($latest['prd_pub']) && $installed['prd_installed_pub'] < $latest['prd_pub']) { ?>
     <div class="alert alert-warning">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'exclamation-triangle' . BG_EXT_SVG); ?></span>
+      <span class="bg-icon"><?php include($tpl_icon . 'exclamation-triangle' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('There are new versions, this is the latest version of the issues and help.'); ?>
     </div>
   <?php } else { ?>
     <div class="alert alert-success">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'heart' . BG_EXT_SVG); ?></span>
+      <span class="bg-icon"><?php include($tpl_icon . 'heart' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Your version is the latest!'); ?>
     </div>
   <?php }
@@ -78,7 +77,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </table>
   </div>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   $(document).ready(function(){
@@ -90,4 +89,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

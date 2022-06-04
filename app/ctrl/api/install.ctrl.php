@@ -49,7 +49,7 @@ class Install extends Ctrl {
   }
 
 
-  function security() {
+  public function security() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -76,7 +76,7 @@ class Install extends Ctrl {
   }
 
 
-  function getStatus() {
+  public function getStatus() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -145,7 +145,7 @@ class Install extends Ctrl {
 
     $_mdl_admin = Loader::model('Admin');
 
-    $_arr_admin = $_mdl_admin->lists(1);
+    $_arr_admin = $_mdl_admin->lists(array(1, 'limit'));
 
     //print_r($_arr_dataRows);
 
@@ -180,7 +180,7 @@ class Install extends Ctrl {
   }
 
 
-  function dbconfig() {
+  public function dbconfig() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -207,7 +207,7 @@ class Install extends Ctrl {
   }
 
 
-  function data() {
+  public function data() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -259,7 +259,7 @@ class Install extends Ctrl {
   }
 
 
-  function admin() {
+  public function admin() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -332,7 +332,7 @@ class Install extends Ctrl {
   }
 
 
-  function over() {
+  public function over() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

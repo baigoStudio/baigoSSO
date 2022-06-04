@@ -2,7 +2,7 @@
 
 高级部署方式仅适合具备一定 PHP 开发经验，且熟悉网站部署方式的高级用户，初学者不推荐；
 
-高级部署方式可能需要更高的服务器权限，请确认您拥有足够的权限。更详细的部署方式可以参考 [ginkgo 文档](//doc.baigo.net/ginkgo/quick/deploy/index)
+高级部署方式可能需要更高的服务器权限，请确认您拥有足够的权限。更详细的部署方式可以参考 [ginkgo 文档](//doc.baigo.net/ginkgo/index/deploy/)
 
 ----------
 
@@ -16,42 +16,41 @@
 
 以下为默认目录结构
 
-    +--  ...
-    |
-    +-- project   应用部署目录
-    |   +-- app                    应用目录
-    |   +-- ginkgo                 框架目录
-    |   +-- extend                 扩展目录
-    |   +-- public                 web 部署目录（公开访问目录）
-    |   |   +-- static             静态资源存放目录（css、js、image）
-    |   |   +-- index.php          入口文件
-    |   |   +-- .htaccess          用于 apache 的重写
-    |
-    |   +-- runtime                运行时目录（可写、可设置）
-    |   +-- vendor                 第三方类库目录（Composer）
-    |   +-- composer.json          composer 定义文件
-    |
-    +--  ...
-
+  +--  ...
+  |
+  +-- project   应用部署目录
+  |   +-- app                    应用目录
+  |   +-- ginkgo                 框架目录
+  |   +-- extend                 扩展目录
+  |   +-- public                 web 部署目录（公开访问目录）
+  |   |   +-- static             静态资源存放目录（css、js、image）
+  |   |   +-- index.php          入口文件
+  |   |   +-- .htaccess          用于 apache 的重写
+  |
+  |   +-- runtime                运行时目录（可写、可设置）
+  |   +-- vendor                 第三方类库目录（Composer）
+  |   +-- composer.json          composer 定义文件
+  |
+  +--  ...
 
 假设服务目录要更改成如下结构，移动了框架目录 `ginkgo` 和 `extend` 目录
 
-    +--  ...
-    |
-    +-- ginkgo    框架目录
-    +-- extend    扩展目录
-    +-- project   应用部署目录
-    |   +-- app                    应用目录
-    |   +-- public                 web 部署目录（公开访问目录）
-    |   |   +-- static             静态资源存放目录（css、js、image）
-    |   |   +-- index.php          入口文件
-    |   |   +-- .htaccess          用于 apache 的重写
-    |   |
-    |   +-- runtime                运行时目录（可写、可设置）
-    |   +-- vendor                 第三方类库目录（Composer）
-    |   +-- composer.json          composer 定义文件
-    |
-    +--  ...
+  +--  ...
+  |
+  +-- ginkgo    框架目录
+  +-- extend    扩展目录
+  +-- project   应用部署目录
+  |   +-- app                    应用目录
+  |   +-- public                 web 部署目录（公开访问目录）
+  |   |   +-- static             静态资源存放目录（css、js、image）
+  |   |   +-- index.php          入口文件
+  |   |   +-- .htaccess          用于 apache 的重写
+  |   |
+  |   +-- runtime                运行时目录（可写、可设置）
+  |   +-- vendor                 第三方类库目录（Composer）
+  |   +-- composer.json          composer 定义文件
+  |
+  +--  ...
 
 ----------
 

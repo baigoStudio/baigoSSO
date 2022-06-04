@@ -7,7 +7,6 @@ namespace app\model;
 
 use app\classes\Model;
 use ginkgo\Func;
-use ginkgo\Crypt;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
@@ -20,7 +19,7 @@ class Verify extends Model {
   public $arr_status  = array('enable', 'disabled');
   public $arr_type    = array('mailbox', 'confirm', 'forgot');
 
-  function check($mix_verify, $str_by = 'verify_id') {
+  public function check($mix_verify, $str_by = 'verify_id') {
     $_arr_select = array(
       'verify_id',
     );
@@ -29,66 +28,7 @@ class Verify extends Model {
   }
 
 
-  /** 提交
-   * submit function.
-   *
-   * @access public
-   * @return void
-   */
-  function submit($num_userId, $str_mail, $str_type) {
-    $_arr_verifyRow = $this->check($num_userId, 'verify_user_id');
-
-    $_str_rand      = Func::rand();
-    $_str_token     = Func::rand();
-    $_str_tokenDo   = Crypt::crypt($_str_token, $_str_rand);
-
-    $_arr_verifyData = array(
-      'verify_user_id'        => $num_userId,
-      'verify_mail'           => $str_mail,
-      'verify_type'           => $str_type,
-      'verify_token'          => $_str_token,
-      'verify_rand'           => $_str_rand,
-      'verify_token_expire'   => GK_NOW + $this->configBase['verify_expire'] * GK_MINUTE,
-      'verify_status'         => 'enable',
-      'verify_time_refresh'   => GK_NOW,
-    );
-
-    if ($_arr_verifyRow['rcode'] == 'x120102') {
-      $_arr_verifyData['verify_time'] = GK_NOW;
-
-      $_num_verifyId  = $this->insert($_arr_verifyData);
-
-      if ($_num_verifyId > 0) {
-        $_str_rcode = 'y120101'; //更新成功
-        $_str_msg   = 'Add token successfully';
-      } else {
-        $_str_rcode = 'x120101'; //更新失败
-        $_str_msg   = 'Add token failed';
-      }
-    } else {
-      $_num_verifyId  = $_arr_verifyRow['verify_id'];
-
-      $_num_count     = $this->where('verify_id', '=', $_num_verifyId)->update($_arr_verifyData);
-
-      if ($_num_count > 0) {
-        $_str_rcode = 'y120103'; //更新成功
-        $_str_msg   = 'Update token successfully';
-      } else {
-        $_str_rcode = 'x120103';
-        $_str_msg   = 'Did not make any changes';
-      }
-    }
-
-    return array(
-      'verify_id'     => $_num_verifyId,
-      'verify_token'  => $_str_tokenDo,
-      'msg'           => $_str_msg,
-      'rcode'         => $_str_rcode, //成功
-    );
-  }
-
-
-  function read($mix_verify, $str_by = 'verify_id', $arr_select = array()) {
+  public function read($mix_verify, $str_by = 'verify_id', $arr_select = array()) {
     $_arr_verifyRow = $this->readProcess($mix_verify, $str_by, $arr_select);
 
     if ($_arr_verifyRow['rcode'] != 'y120102') {
@@ -99,7 +39,7 @@ class Verify extends Model {
   }
 
 
-  function readProcess($mix_verify, $str_by = 'verify_id', $arr_select = array()) {
+  public function readProcess($mix_verify, $str_by = 'verify_id', $arr_select = array()) {
     if (Func::isEmpty($arr_select)) {
       $arr_select = array(
         'verify_id',
@@ -120,15 +60,14 @@ class Verify extends Model {
 
     $_arr_verifyRow = $this->where($_arr_where)->find($arr_select);
 
-    if (!$_arr_verifyRow) {
-      return array(
-        'msg'   => 'Token not found',
-        'rcode' => 'x120102', //不存在记录
-      );
+    if ($_arr_verifyRow === false) {
+      $_arr_verifyRow          = $this->obj_request->fillParam(array(), $arr_select);
+      $_arr_verifyRow['msg']   = 'Token not found';
+      $_arr_verifyRow['rcode'] = 'x120102';
+    } else {
+      $_arr_verifyRow['rcode'] = 'y120102';
+      $_arr_verifyRow['msg']   = '';
     }
-
-    $_arr_verifyRow['rcode'] = 'y120102';
-    $_arr_verifyRow['msg']   = '';
 
     return $_arr_verifyRow;
   }
@@ -142,7 +81,7 @@ class Verify extends Model {
    * @param int $num_offset (default: 0)
    * @return void
    */
-  function lists($num_no, $num_offset = 0) {
+  public function lists($pagination = 0) {
     $_arr_verifySelect = array(
       'verify_id',
       'verify_user_id',
@@ -156,13 +95,22 @@ class Verify extends Model {
       'verify_time_disabled',
     );
 
-    $_arr_verifyRows = $this->order('verify_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_verifySelect);
+    $_arr_pagination = $this->paginationProcess($pagination);
+    $_arr_getData    = $this->order('verify_id', 'DESC')->limit($_arr_pagination['limit'], $_arr_pagination['length'])->paginate($_arr_pagination['perpage'], $_arr_pagination['current'])->select($_arr_verifySelect);
 
-    foreach ($_arr_verifyRows as $_key=>&$_value) {
-      $_value = $this->rowProcess($_value);
+    if (isset($_arr_getData['dataRows'])) {
+      $_arr_eachData = &$_arr_getData['dataRows'];
+    } else {
+      $_arr_eachData = &$_arr_getData;
     }
 
-    return $_arr_verifyRows;
+    if (Func::notEmpty($_arr_eachData)) {
+      foreach ($_arr_eachData as $_key=>&$_value) {
+        $_value = $this->rowProcess($_value);
+      }
+    }
+
+    return $_arr_getData;
   }
 
 
@@ -172,14 +120,14 @@ class Verify extends Model {
    * @access public
    * @return void
    */
-  function count() {
+  public function counts() {
     $_num_verifyCount = $this->where(false)->count();
 
     return $_num_verifyCount;
   }
 
 
-  function readQueryProcess($mix_verify, $str_by = 'verify_id') {
+  protected function readQueryProcess($mix_verify, $str_by = 'verify_id') {
     $_arr_where[] = array($str_by, '=', $mix_verify);
 
     return $_arr_where;

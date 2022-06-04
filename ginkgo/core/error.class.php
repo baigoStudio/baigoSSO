@@ -71,7 +71,7 @@ class Error {
       self::$optDebugDump = true;
     }
 
-    self::$pathTpl = GK_PATH_TPL . 'exception' . GK_EXT_TPL;
+    self::$pathTpl = GK_PATH_TPL . 'except' . GK_EXT_TPL;
 
     error_reporting(0); // 禁用系统报错
     libxml_use_internal_errors(true); // 禁止 html xml 解析报错
@@ -236,8 +236,6 @@ class Error {
 
         self::appExcept($_obj_except);
       }
-
-      Log::save(); // 写入日志
     }
 
     if (Func::notEmpty(self::$uncatchable)) {
@@ -269,16 +267,12 @@ class Error {
 
     $data['tpl_path'] = dirname($_str_tpl); // 输出模板目录
 
-    if (self::$optDebugDump === true) {
-      if (!File::fileHas($_str_tpl)) {
-        $_str_tpl = self::$pathTpl;
-      }
+    if (!File::fileHas($_str_tpl)) {
+      $_str_tpl = self::$pathTpl;
+    }
 
-      if (Func::notEmpty($data)) {
-        extract($data, EXTR_OVERWRITE); // 将内容数组转换为模板变量
-      }
-    } else {
-      return '<div>' . $data['http_status'] . '</div>';
+    if (Func::notEmpty($data)) {
+      extract($data, EXTR_OVERWRITE); // 将内容数组转换为模板变量
     }
 
     $_str_content = '';
@@ -426,7 +420,7 @@ class Error {
       $error['status_code'] = 500;
     }
 
-    //print_r($error);
+    Log::save(); // 写入日志
 
     $_obj_response  = Response::create('', '', $error['status_code']); // 实例化响应类
     $_obj_request   = Request::instance();
@@ -463,10 +457,10 @@ class Error {
 
   private static function pathProcess($tpl = '') {
     $_arr_configTplSys      = Config::get('tpl_sys'); // 取得系统模板目录
-    $_arr_configExceptPage  = Config::get('exception_page'); // 取得异常页配置
+    $_arr_configExceptPage  = Config::get('except_page'); // 取得异常页配置
 
     $_str_pathTpl   = GK_PATH_TPL;
-    $_str_tpl       = $_str_pathTpl . 'exception' . GK_EXT_TPL;
+    $_str_tpl       = $_str_pathTpl . 'except' . GK_EXT_TPL;
 
     if (Func::notEmpty($_arr_configTplSys['path'])) { // 如果定义了模板路径, 则替换默认路径
       if (strpos($_arr_configTplSys['path'], DS) !== false) {

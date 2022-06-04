@@ -14,7 +14,7 @@
       <label class="text-muted font-weight-light"><?php echo $lang->get('Status'); ?></label>
       <div class="form-text font-weight-bolder">
         <?php $str_status = $verifyRow['verify_status'];
-        include($path_tpl . 'include' . DS . 'status_process' . GK_EXT_TPL); ?>
+        include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
       </div>
     </div>
 

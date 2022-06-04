@@ -31,7 +31,7 @@ class Reg extends Ctrl {
   }
 
 
-  function reg() {
+  public function reg() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -140,7 +140,7 @@ class Reg extends Ctrl {
   }
 
 
-  function chkname() {
+  public function chkname() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -155,7 +155,7 @@ class Reg extends Ctrl {
   }
 
 
-  function chkmail() {
+  public function chkmail() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

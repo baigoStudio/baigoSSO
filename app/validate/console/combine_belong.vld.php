@@ -50,7 +50,7 @@ class Combine_Belong extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'combine_id'            => $this->obj_lang->get('Combine ID'),

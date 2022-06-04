@@ -6,7 +6,7 @@
 
 namespace app\model\console;
 
-use app\model\Opt as Opt_Base;
+use app\model\common\Opt as Opt_Common;
 use ginkgo\Config;
 use ginkgo\Func;
 use ginkgo\Http;
@@ -20,9 +20,17 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------设置项模型-------------*/
-class Opt extends Opt_Base {
+class Opt extends Opt_Common {
 
-  function __construct() { //构造函数
+  public $inputSubmit  = array();
+  public $inputMailtpl = array();
+  public $inputSmtp    = array();
+  public $inputData    = array();
+
+  protected $config = array();
+  protected $pathLatest = '';
+
+  public function __construct() { //构造函数
     parent::__construct();
 
     $this->config = Config::get();
@@ -31,7 +39,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function submit() {
+  public function submit() {
     $_arr_opt = array();
 
     foreach ($this->config['console']['opt'][$this->inputSubmit['act']]['lists'] as $_key=>$_value) {
@@ -62,7 +70,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function mailtpl() {
+  public function mailtpl() {
     $_arr_opt = array();
 
     $_arr_config = Config::get('mailtpl', 'console');
@@ -90,7 +98,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function smtp() {
+  public function smtp() {
     $_arr_opt = array(
       'method'        => $this->inputSmtp['method'],
       'host'          => $this->inputSmtp['host'],
@@ -122,7 +130,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function latest($method = 'auto') {
+  public function latest($method = 'auto') {
     $_arr_data = array(
       'name'      => 'baigo SSO',
       'ver'       => PRD_SSO_VER,
@@ -148,7 +156,7 @@ class Opt extends Opt_Base {
     );
   }
 
-  function chkver() {
+  public function chkver() {
     if (!File::fileHas($this->pathLatest)) {
       $this->latest();
     }
@@ -164,7 +172,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputSmtp() {
+  public function inputSmtp() {
     $_arr_inputParam = array(
       'method'        => array('txt', ''),
       'host'          => array('txt', 'localhost'),
@@ -200,7 +208,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       '__token__' => array('txt', ''),
       'act'       => array('txt', ''),
@@ -237,7 +245,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputMailtpl() {
+  public function inputMailtpl() {
     $_arr_inputParam = array(
       '__token__' => array('txt', ''),
     );
@@ -270,7 +278,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputData() {
+  public function inputData() {
     $_arr_inputParam = array(
       'type'      => array('str', ''),
       'model'     => array('str', ''),

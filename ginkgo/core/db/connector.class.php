@@ -204,7 +204,17 @@ abstract class Connector {
 
     $_obj_result = $this->obj_pdo->query($sql); // 执行
 
-    //print_r($sql);
+    if ($_obj_result === false) {
+      $_obj_excpt = new Db_Except('PDO::query error', 500);
+
+      $_arr_error = $this->obj_pdo->errorInfo();
+
+      if (isset($_arr_error[2])) {
+        $_obj_excpt->setData('err_detail', $sql . ', ' . $_arr_error[2]);
+      }
+
+      throw $_obj_excpt;
+    }
 
     $this->obj_result = $_obj_result;
 
@@ -711,7 +721,7 @@ abstract class Connector {
     return $_str_dsn;
   }
 
-  function __destruct() {
+  public function __destruct() {
     if ($this->obj_pdo) {
       //$this->closeDb();
       //unset($this->obj_pdo);

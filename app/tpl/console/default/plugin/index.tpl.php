@@ -6,23 +6,22 @@
   'baigoSubmit'       => 'true',
   'baigoCheckall'     => 'true',
   'baigoDialog'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <nav class="nav mb-3">
-    <a href="<?php echo $route_console; ?>plugin/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'list' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['index']; ?>" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'list' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('All'); ?>
     </a>
-    <a href="<?php echo $route_console; ?>plugin/index/status/installable/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'hammer' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['index']; ?>installable" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'hammer' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Installable'); ?>
     </a>
   </nav>
 
-  <form name="plugin_list" id="plugin_list" action="<?php echo $route_console; ?>plugin/uninstall/">
+  <form name="plugin_list" id="plugin_list" action="<?php echo $hrefRow['uninstall']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="table-responsive">
@@ -69,31 +68,31 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 <div class="bg-manage-menu">
                   <div class="d-flex flex-wrap">
                     <?php if ($value['plugin_status'] == 'enable') { ?>
-                      <a href="<?php echo $route_console; ?>plugin/show/dir/<?php echo $value['name']; ?>/" class="mr-2">
-                        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'eye' . BG_EXT_SVG); ?></span>
+                      <a href="<?php echo $hrefRow['show'], $value['name']; ?>" class="mr-2">
+                        <span class="bg-icon"><?php include($tpl_icon . 'eye' . BG_EXT_SVG); ?></span>
                         <?php echo $lang->get('Show'); ?>
                       </a>
-                      <a href="<?php echo $route_console; ?>plugin/form/dir/<?php echo $value['name']; ?>/" class="mr-2">
-                        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+                      <a href="<?php echo $hrefRow['edit'], $value['name']; ?>" class="mr-2">
+                        <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
                         <?php echo $lang->get('Edit'); ?>
                       </a>
                       <?php if ($value['plugin_opts']) { ?>
-                        <a href="<?php echo $route_console; ?>plugin/opts/dir/<?php echo $value['name']; ?>/" class="mr-2">
-                          <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'wrench' . BG_EXT_SVG); ?></span>
+                        <a href="<?php echo $hrefRow['opts'], $value['name']; ?>" class="mr-2">
+                          <span class="bg-icon"><?php include($tpl_icon . 'wrench' . BG_EXT_SVG); ?></span>
                           <?php echo $lang->get('Option'); ?>
                         </a>
                       <?php } ?>
                       <a href="javascript:void(0);" data-id="<?php echo $value['name']; ?>" class="plugin_uninstall text-danger">
-                        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
+                        <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
                         <?php echo $lang->get('Uninstall'); ?>
                       </a>
                     <?php } else if ($value['plugin_status'] == 'wait') { ?>
-                      <a href="<?php echo $route_console; ?>plugin/show/dir/<?php echo $value['name']; ?>/" class="mr-2">
-                        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'eye' . BG_EXT_SVG); ?></span>
+                      <a href="<?php echo $hrefRow['show'], $value['name']; ?>" class="mr-2">
+                        <span class="bg-icon"><?php include($tpl_icon . 'eye' . BG_EXT_SVG); ?></span>
                         <?php echo $lang->get('Show'); ?>
                       </a>
-                      <a href="<?php echo $route_console; ?>plugin/form/dir/<?php echo $value['name']; ?>/" class="mr-2">
-                        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'hammer' . BG_EXT_SVG); ?></span>
+                      <a href="<?php echo $hrefRow['edit'], $value['name']; ?>" class="mr-2">
+                        <span class="bg-icon"><?php include($tpl_icon . 'hammer' . BG_EXT_SVG); ?></span>
                         <?php echo $lang->get('Install'); ?>
                       </a>
                     <?php } ?>
@@ -111,7 +110,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   </dt>
                   <dd class="col-9">
                     <?php $str_status = $value['plugin_status'];
-                    include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                    include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                   </dd>
                   <dt class="col-3">
                     <small><?php echo $lang->get('Type'); ?></small>
@@ -127,7 +126,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               <td class="d-none d-lg-table-cell bg-td-md text-right">
                 <div class="mb-2">
                   <?php $str_status = $value['plugin_status'];
-                  include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                  include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                 </div>
                 <div>
                   <small><?php echo $lang->get($value['plugin_note']); ?></small>
@@ -150,7 +149,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </div>
   </form>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_list = {
@@ -179,7 +178,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
       if (obj_validate_list.verify()) {
         obj_dialog.confirm('<?php echo $lang->get('Are you sure to uninstall?'); ?>', function(result){
           if (result) {
-            obj_submit_list.formSubmit('<?php echo $route_console; ?>plugin/uninstall/');
+            obj_submit_list.formSubmit();
           }
         });
       }
@@ -197,4 +196,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

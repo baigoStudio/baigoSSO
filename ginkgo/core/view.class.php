@@ -148,7 +148,7 @@ class View {
    * @param bool $is_display (default: false) 是否为渲染内容
    * @return void
    */
-  public  function fetch($tpl = '', $assign = '', $value = '', $is_display = false) {
+  public function fetch($tpl = '', $assign = '', $value = '', $is_display = false) {
     if (Func::notEmpty($assign)) {
       $this->assign($assign, $value); // 赋值
     }

@@ -63,7 +63,7 @@ class Reg extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
     $_arr_configReg = Config::get('reg', 'var_extra');
 
     if (isset($_arr_configReg['reg_needmail']) && $_arr_configReg['reg_needmail'] === 'on') {

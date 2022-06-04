@@ -80,7 +80,7 @@ class File {
     if (self::dirHas($path)) { // 判断是否问文件夹
       $_arr_dir = scandir($path);
     } else {
-      $this->error = 'Not a directory'; // 定义错误消息
+      $this->errRecord('File::dirList(), Not a directory: ' . $path); // 定义错误消息
       return array();
     }
 
@@ -198,7 +198,7 @@ class File {
     $path = strtolower($path);
 
     if (!self::dirHas($path)) { // 路径不存在则返回 false
-      $this->error = 'Directory not found'; // 定义错误消息
+      $this->errRecord('File::dirDelete(), Directory not found: ' . $path); // 定义错误消息
       return false;
     }
 
@@ -234,7 +234,7 @@ class File {
     $path = strtolower($path);
 
     if (!self::fileHas($path)) {
-      $this->error = 'File not found'; // 定义错误消息
+      $this->errRecord('File::fileRead(), File not found: '. $path); // 定义错误消息
       return false;
     }
 
@@ -255,7 +255,7 @@ class File {
     $dst = strtolower($dst);
 
     if (!self::fileHas($src)) {
-      $this->error = 'Source file not found';
+      $this->errRecord('File::fileMove(), Source file not found: ' . $src);
       return false;
     }
 
@@ -308,7 +308,7 @@ class File {
     }
 
     if (!self::fileHas($src)) {
-      $this->error = 'Source file not found';
+      $this->errRecord('File::fileCopy(), Source file not found: ' . $src);
       return false;
     }
 
@@ -327,7 +327,7 @@ class File {
     $path = strtolower($path);
 
     if (!self::fileHas($path)) { // 文件不能存在则返回 false
-      $this->error = 'File not found';
+      $this->errRecord('File::fileDelete(), File not found: ' . $path);
       return false;
     }
 
@@ -348,5 +348,26 @@ class File {
   // 获取错误
   public function getError() {
     return $this->error;
+  }
+
+
+  private function errRecord($msg) {  // since 0.2.4
+    $this->error      = $msg;
+    $_bool_debugDump  = false;
+    $_mix_configDebug = Config::get('debug'); // 取得调试配置
+
+    if (is_array($_mix_configDebug)) {
+      if ($_mix_configDebug['dump'] === true || $_mix_configDebug['dump'] === 'true' || $_mix_configDebug['dump'] === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    } else if (is_scalar($_mix_configDebug)) {
+      if ($_mix_configDebug === true || $_mix_configDebug === 'true' || $_mix_configDebug === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    }
+
+    if ($_bool_debugDump) {
+      Log::record('type: ginkgo\Ftp, msg: ' . $msg, 'log');
+    }
   }
 }

@@ -4,9 +4,9 @@
       <div class="text-center">
         <div class="my-3">
           <?php if (isset($cfg['active']) && $cfg['active'] == 'login') { ?>
-            <a href="<?php echo $url_personal; ?>forgot/" target="_blank"><?php echo $lang->get('Forgot password'); ?></a>
+            <a href="<?php echo $hrefRow['forgot']; ?>" target="_blank"><?php echo $lang->get('Forgot password'); ?></a>
           <?php } else { ?>
-            <a href="<?php echo $route_console; ?>login/"><?php echo $lang->get('Login now'); ?></a>
+            <a href="<?php echo $hrefRow['login']; ?>"><?php echo $lang->get('Login now'); ?></a>
           <?php } ?>
         </div>
 
@@ -30,4 +30,4 @@
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'script_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'script_foot' . GK_EXT_TPL);

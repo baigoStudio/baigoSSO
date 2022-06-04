@@ -19,9 +19,11 @@ if (!defined('IN_GINKGO')) {
 class User extends Model {
 
   protected $pk = 'pm_id';
-  private $create;
+  protected $comment = '用户';
 
-  function m_init() { //构造函数
+  public $arr_status = array();
+
+  protected function m_init() { //构造函数
     $_mdl_user = Loader::model('User', '', false);
     $this->arr_status = $_mdl_user->arr_status;
 
@@ -159,8 +161,8 @@ class User extends Model {
    * @access public
    * @return void
    */
-  function createTable() {
-    $_num_count  = $this->create($this->create, '用户');
+  public function createTable() {
+    $_num_count  = $this->create();
 
     if ($_num_count !== false) {
       $_str_rcode = 'y010105'; //更新成功
@@ -183,31 +185,19 @@ class User extends Model {
    * @access public
    * @return void
    */
-  function alterTable() {
-    $_arr_alter = $this->alterProcess($this->create);
-
+  public function alterTable() {
     $_str_rcode = 'y010111';
     $_str_msg   = 'No need to update table';
 
-    if (Func::notEmpty($_arr_alter)) {
-      $_num_count = $this->alter($_arr_alter);
+    $_num_count = $this->alter();
 
-      if ($_num_count !== false) {
-        $_str_rcode = 'y010106';
-        $_str_msg   = 'Update table successfully';
+    if ($_num_count === false) {
+      $_str_rcode = 'x010106';
+      $_str_msg   = 'Update table failed';
+    } else if ($_num_count > 0) {
+      $_str_rcode = 'y010106';
+      $_str_msg   = 'Update table successfully';
 
-        foreach ($this->create as $_key=>$_value) {
-          if (isset($_value['update'])) {
-            $_arr_data = array(
-              $_key => $_value['update'],
-            );
-            $this->where('LENGTH(`' . $_key . '`) < 1')->update($_arr_data);
-          }
-        }
-      } else {
-        $_str_rcode = 'x010106';
-        $_str_msg   = 'Update table failed';
-      }
     }
 
     return array(

@@ -6,28 +6,28 @@
 
 ##### 目录结构
 
-    project 应用部署目录
-    +-- app                    应用目录
-    |   +-- classes            类库目录
-    |   +-- config             配置目录
-    |   +-- ctrl               控制器目录
-    |   +-- lang               语言目录
-    |   +-- model              模型目录
-    |   +-- tpl                模板目录
-    |   +-- validate           验证器目录
-    |   +-- common.php         公共文件
-    |
-    +-- ginkgo                 框架目录
-    +-- extend                 扩展目录
-    |   +-- plugin             插件目录
-    +-- public                 web 部署目录（公开访问目录）
-    |   +-- static             静态资源存放目录（css、js、image）
-    |   +-- index.php          入口文件
-    |   +-- .htaccess          用于 apache 的重写
-    |
-    +-- runtime                运行时目录（可写、可设置）
-    +-- vendor                 第三方类库目录（Composer）
-    +-- composer.json          composer 定义文件
+  project 应用部署目录
+  +-- app                    应用目录
+  |   +-- classes            类库目录
+  |   +-- config             配置目录
+  |   +-- ctrl               控制器目录
+  |   +-- lang               语言目录
+  |   +-- model              模型目录
+  |   +-- tpl                模板目录
+  |   +-- validate           验证器目录
+  |   +-- common.php         公共文件
+  |
+  +-- ginkgo                 框架目录
+  +-- extend                 扩展目录
+  |   +-- plugin             插件目录
+  +-- public                 web 部署目录（公开访问目录）
+  |   +-- static             静态资源存放目录（css、js、image）
+  |   +-- index.php          入口文件
+  |   +-- .htaccess          用于 apache 的重写
+  |
+  +-- runtime                运行时目录（可写、可设置）
+  +-- vendor                 第三方类库目录（Composer）
+  +-- composer.json          composer 定义文件
 
 建议 public 目录作为公开访问目录，其它都是公开目录之外，当然必须修改 `public/index.php` 中的相关路径。如果没法做到这点，请记得设置目录的访问权限或者添加目录保护的文件。
 

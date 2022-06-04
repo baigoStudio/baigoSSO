@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\User;
+use app\model\common\User as User_Common;
 use ginkgo\Arrays;
 use ginkgo\Func;
 use ginkgo\Crypt;
@@ -16,16 +16,15 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class Profile extends User {
+class Profile extends User_Common {
 
-  public $inputInfo;
-  public $inputPass;
-  public $inputToken;
-  public $configDefault;
+  public $inputInfo    = array();
+  public $inputPass    = array();
+  public $inputToken   = array();
+
   protected $table = 'user';
 
-
-  function token($num_userId, $str_userName) {
+  public function token($num_userId, $str_userName) {
     $_str_accessToken   = Func::rand();
     $_tm_accessExpire   = GK_NOW + $this->configBase['access_expire'] * GK_MINUTE;
 
@@ -54,7 +53,7 @@ class Profile extends User {
   }
 
 
-  function info() {
+  public function info() {
     $_arr_userData = array();
 
     if (isset($this->inputInfo['user_nick'])) {
@@ -108,7 +107,7 @@ class Profile extends User {
    * @access public
    * @return void
    */
-  function inputInfo($arr_data) {
+  public function inputInfo($arr_data) {
     $_arr_inputParam = array(
       'user_id'       => array('int', 0),
       'user_pass'     => array('txt', ''),
@@ -137,7 +136,7 @@ class Profile extends User {
   }
 
 
-  function inputPass($arr_data) {
+  public function inputPass($arr_data) {
     $_arr_inputParam = array(
       'user_id'       => array('int', 0),
       'user_pass'     => array('txt', ''),
@@ -164,7 +163,7 @@ class Profile extends User {
   }
 
 
-  function inputSecqa($arr_data) {
+  public function inputSecqa($arr_data) {
     $_arr_inputParam = array(
       'user_id'          => array('int', 0),
       'user_pass'        => array('txt', ''),
@@ -192,7 +191,7 @@ class Profile extends User {
   }
 
 
-  function inputMailbox($arr_data) {
+  public function inputMailbox($arr_data) {
     $_arr_inputParam = array(
       'user_id'          => array('int', 0),
       'user_pass'        => array('txt', ''),
@@ -219,7 +218,7 @@ class Profile extends User {
   }
 
 
-  function inputToken($arr_data) {
+  public function inputToken($arr_data) {
     $_arr_inputParam = array(
       'user_id'            => array('int', 0),
       'user_refresh_token' => array('txt', ''),

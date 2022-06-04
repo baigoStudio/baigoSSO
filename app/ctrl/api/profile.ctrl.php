@@ -31,7 +31,7 @@ class Profile extends Ctrl {
   }
 
 
-  function info() {
+  public function info() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -82,7 +82,7 @@ class Profile extends Ctrl {
   }
 
 
-  function pass() {
+  public function pass() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -125,7 +125,7 @@ class Profile extends Ctrl {
   }
 
 
-  function secqa() {
+  public function secqa() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -167,7 +167,7 @@ class Profile extends Ctrl {
   }
 
 
-  function mailbox() {
+  public function mailbox() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -255,7 +255,7 @@ class Profile extends Ctrl {
   }
 
 
-  function token() {
+  public function token() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

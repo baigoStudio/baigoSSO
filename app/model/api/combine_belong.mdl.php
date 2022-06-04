@@ -17,7 +17,7 @@ if (!defined('IN_GINKGO')) {
 /*-------------应用归属-------------*/
 class Combine_Belong extends Combine_Belong_Base {
 
-  function combineIds($arr_search) {
+  public function combineIds($arr_search) {
     $_arr_belongSelect = array(
       'belong_combine_id',
     );
@@ -32,6 +32,6 @@ class Combine_Belong extends Combine_Belong_Base {
       $_arr_belongIds[]   = $_value['belong_combine_id'];
     }
 
-    return Arrays::filter($_arr_belongIds);
+    return Arrays::unique($_arr_belongIds);
   }
 }

@@ -1,4 +1,4 @@
-<?php include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'html_head' . GK_EXT_TPL); ?>
 
   <div class="container">
     <div class="bg-card-md my-5">
@@ -16,8 +16,8 @@
               <ul class="nav flex-column mb-3">
                 <?php foreach ($config['install']['upgrade'] as $key_opt=>$value_opt) { ?>
                   <li class="nav-item">
-                    <a class="nav-link<?php if ($cfg['active'] == $key_opt) { ?> disabled<?php } ?>" href="<?php echo $route_install; ?>upgrade/<?php echo $key_opt; ?>/">
-                      <?php echo $lang->get($value_opt); ?>
+                    <a class="nav-link<?php if ($cfg['active'] == $key_opt) { ?> disabled<?php } ?>" href="<?php echo $value_opt['href']; ?>">
+                      <?php echo $lang->get($value_opt['title']); ?>
                     </a>
                   </li>
                 <?php } ?>
@@ -35,7 +35,7 @@
                   <span class="badge badge-warning"><?php echo PRD_SSO_VER; ?></span>
                 </h5>
                 <div>
-                  <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'exclamation-triangle' . BG_EXT_SVG); ?></span>
+                  <span class="bg-icon"><?php include($tpl_icon . 'exclamation-triangle' . BG_EXT_SVG); ?></span>
                   <?php echo $lang->get('Warning! Please backup the data before upgrading.'); ?>
                 </div>
               </div>

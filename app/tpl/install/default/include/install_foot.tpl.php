@@ -13,4 +13,4 @@
     </div>
   </div>
 
-  <?php include($cfg['pathInclude'] . 'script_foot' . GK_EXT_TPL);
+  <?php include($tpl_include . 'script_foot' . GK_EXT_TPL);

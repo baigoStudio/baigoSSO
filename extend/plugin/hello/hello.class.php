@@ -29,7 +29,7 @@ if (!class_exists('extend\plugin\hello\Hello')) { //防止类重复
         }
 
 
-        function doHello($data) {
+        public function doHello($data) {
             //echo '<div>test</div>';
 
             $data = '__doHello__';

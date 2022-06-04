@@ -1,6 +1,6 @@
 /*
 v2.0.0 jQuery baigoClear plugin 表单 ajax 清理插件
-(c) 2013 baigo studio - http://www.baigo.net/
+(c) 2013 baigo studio - https://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
 ;(function($) {

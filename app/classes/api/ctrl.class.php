@@ -161,7 +161,7 @@ abstract class Ctrl extends Ctrl_Base {
       'status'        => 'enable',
       'has_notify'    => true,
     );
-    $_arr_appRows = $this->mdl_app->lists(100, 0, $_arr_search);
+    $_arr_appRows = $this->mdl_app->lists(array(100, 'limit'), $_arr_search);
 
     //通知
     foreach ($_arr_appRows as $_key=>$_value) {

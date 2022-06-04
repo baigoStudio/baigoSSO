@@ -22,4 +22,4 @@
 
   <?php Plugin::listen('action_console_foot_after'); //后台界面底部触发
 
-  include($cfg['pathInclude'] . 'script_foot' . GK_EXT_TPL);
+  include($tpl_include . 'script_foot' . GK_EXT_TPL);

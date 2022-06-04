@@ -22,10 +22,23 @@ class Opt extends Ctrl {
     parent::c_init();
 
     $this->mdl_opt    = Loader::model('Opt');
+
+    $_str_hrefBase = $this->hrefBase . 'opt/';
+
+    $_arr_hrefRow   = array(
+      'submit'          => $_str_hrefBase . 'submit/',
+      'chkver-submit'   => $_str_hrefBase . 'chkver-submit/',
+      'dbconfig-submit' => $_str_hrefBase . 'dbconfig-submit/',
+      'mailtpl-submit'  => $_str_hrefBase . 'mailtpl-submit/',
+      'smtp-submit'     => $_str_hrefBase . 'smtp-submit/',
+      'data-upgrade'    => $_str_hrefBase . 'data-upgrade/',
+    );
+
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function form() {
+  public function form() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -102,7 +115,7 @@ class Opt extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -129,7 +142,7 @@ class Opt extends Ctrl {
   }
 
 
-  function mailtpl() {
+  public function mailtpl() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -158,7 +171,7 @@ class Opt extends Ctrl {
   }
 
 
-  function mailtplSubmit() {
+  public function mailtplSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -189,108 +202,7 @@ class Opt extends Ctrl {
   }
 
 
-  function dbconfig() {
-    $_mix_init = $this->init();
-
-    if ($_mix_init !== true) {
-      return $this->error($_mix_init['msg'], $_mix_init['rcode']);
-    }
-
-    if (!isset($this->adminAllow['opt']['dbconfig']) && !$this->isSuper) { //判断权限
-      return $this->error('You do not have permission', 'x030301');
-    }
-
-    $_arr_tplData = array(
-      'token'     => $this->obj_request->token(),
-    );
-
-
-    $_arr_tpl = array_replace_recursive($this->generalData, $_arr_tplData);
-
-    $this->assign($_arr_tpl);
-
-    return $this->fetch();
-  }
-
-
-  function dbconfigSubmit() {
-    $_mix_init = $this->init();
-
-    if ($_mix_init !== true) {
-      return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
-    }
-
-    if (!$this->isAjaxPost) {
-      return $this->fetchJson('Access denied', '', 405);
-    }
-
-    if (!isset($this->adminAllow['opt']['dbconfig']) && !$this->isSuper) { //判断权限
-      return $this->fetchJson('You do not have permission', 'x030301');
-    }
-
-    $_arr_inputDbconfig = $this->mdl_opt->inputDbconfig();
-
-    if ($_arr_inputDbconfig['rcode'] != 'y030201') {
-      return $this->fetchJson($_arr_inputDbconfig['msg'], $_arr_inputDbconfig['rcode']);
-    }
-
-    $_arr_dbconfigResult = $this->mdl_opt->dbconfig();
-
-    return $this->fetchJson($_arr_dbconfigResult['msg'], $_arr_dbconfigResult['rcode']);
-  }
-
-  function smtp() {
-    $_mix_init = $this->init();
-
-    if ($_mix_init !== true) {
-      return $this->error($_mix_init['msg'], $_mix_init['rcode']);
-    }
-
-    if (!isset($this->adminAllow['opt']['smtp']) && !$this->isSuper) { //判断权限
-      return $this->error('You do not have permission', 'x030301');
-    }
-
-    $_arr_tplData = array(
-      'token'     => $this->obj_request->token(),
-    );
-
-
-    $_arr_tpl = array_replace_recursive($this->generalData, $_arr_tplData);
-
-    $this->assign($_arr_tpl);
-
-    return $this->fetch();
-  }
-
-
-  function smtpSubmit() {
-    $_mix_init = $this->init();
-
-    if ($_mix_init !== true) {
-      return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
-    }
-
-    if (!$this->isAjaxPost) {
-      return $this->fetchJson('Access denied', '', 405);
-    }
-
-    if (!isset($this->adminAllow['opt']['smtp']) && !$this->isSuper) { //判断权限
-      return $this->fetchJson('You do not have permission', 'x030301');
-    }
-
-    $_arr_inputSmtp = $this->mdl_opt->inputSmtp();
-
-    if ($_arr_inputSmtp['rcode'] != 'y030201') {
-      return $this->fetchJson($_arr_inputSmtp['msg'], $_arr_inputSmtp['rcode']);
-    }
-
-    $_arr_smtpResult = $this->mdl_opt->smtp();
-
-    return $this->fetchJson($_arr_smtpResult['msg'], $_arr_smtpResult['rcode']);
-  }
-
-
-  function dataUpgrade() {
+  public function dbconfig() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -317,7 +229,84 @@ class Opt extends Ctrl {
   }
 
 
-  function dataSubmit() {
+  public function dbconfigSubmit() {
+    $_mix_init = $this->init();
+
+    if ($_mix_init !== true) {
+      return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
+    }
+
+    if (!$this->isAjaxPost) {
+      return $this->fetchJson('Access denied', '', 405);
+    }
+
+    if (!isset($this->adminAllow['opt']['dbconfig']) && !$this->isSuper) { //判断权限
+      return $this->fetchJson('You do not have permission', 'x030301');
+    }
+
+    $_arr_inputDbconfig = $this->mdl_opt->inputDbconfig();
+
+    if ($_arr_inputDbconfig['rcode'] != 'y030201') {
+      return $this->fetchJson($_arr_inputDbconfig['msg'], $_arr_inputDbconfig['rcode']);
+    }
+
+    $_arr_dbconfigResult = $this->mdl_opt->dbconfig();
+
+    return $this->fetchJson($_arr_dbconfigResult['msg'], $_arr_dbconfigResult['rcode']);
+  }
+
+  public function smtp() {
+    $_mix_init = $this->init();
+
+    if ($_mix_init !== true) {
+      return $this->error($_mix_init['msg'], $_mix_init['rcode']);
+    }
+
+    if (!isset($this->adminAllow['opt']['smtp']) && !$this->isSuper) { //判断权限
+      return $this->error('You do not have permission', 'x030301');
+    }
+
+    $_arr_tplData = array(
+      'token'     => $this->obj_request->token(),
+    );
+
+
+    $_arr_tpl = array_replace_recursive($this->generalData, $_arr_tplData);
+
+    $this->assign($_arr_tpl);
+
+    return $this->fetch();
+  }
+
+
+  public function smtpSubmit() {
+    $_mix_init = $this->init();
+
+    if ($_mix_init !== true) {
+      return $this->fetchJson($_mix_init['msg'], $_mix_init['rcode']);
+    }
+
+    if (!$this->isAjaxPost) {
+      return $this->fetchJson('Access denied', '', 405);
+    }
+
+    if (!isset($this->adminAllow['opt']['smtp']) && !$this->isSuper) { //判断权限
+      return $this->fetchJson('You do not have permission', 'x030301');
+    }
+
+    $_arr_inputSmtp = $this->mdl_opt->inputSmtp();
+
+    if ($_arr_inputSmtp['rcode'] != 'y030201') {
+      return $this->fetchJson($_arr_inputSmtp['msg'], $_arr_inputSmtp['rcode']);
+    }
+
+    $_arr_smtpResult = $this->mdl_opt->smtp();
+
+    return $this->fetchJson($_arr_smtpResult['msg'], $_arr_smtpResult['rcode']);
+  }
+
+
+  public function dataUpgrade() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -359,10 +348,6 @@ class Opt extends Ctrl {
         $_arr_dataResult = $this->copyTable($_arr_inputData['model']);
       break;
 
-      case 'drop':
-        $_arr_dataResult = $this->dropColumn($_arr_inputData['model']);
-      break;
-
       default:
         $_arr_dataResult = $this->createTable($_arr_inputData['model']);
       break;
@@ -372,7 +357,7 @@ class Opt extends Ctrl {
   }
 
 
-  function chkver() {
+  public function chkver() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -418,7 +403,7 @@ class Opt extends Ctrl {
   }
 
 
-  function chkverSubmit() {
+  public function chkverSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -511,17 +496,6 @@ class Opt extends Ctrl {
     return array(
       'rcode'   => $_arr_renmaeResult['rcode'],
       'msg'     => $_arr_renmaeResult['msg'],
-    );
-  }
-
-
-  protected function dropColumn($table) {
-    $_mdl_table        = Loader::model($table, '', 'install');
-    $_arr_dropResult   = $_mdl_table->dropColumn();
-
-    return array(
-      'rcode'   => $_arr_dropResult['rcode'],
-      'msg'     => $_arr_dropResult['msg'],
     );
   }
 }

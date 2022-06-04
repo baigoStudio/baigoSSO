@@ -29,12 +29,28 @@ class App extends Ctrl {
 
     $this->mdl_app  = Loader::model('App');
 
+    $_str_hrefBase = $this->hrefBase . 'app/';
+
+    $_arr_hrefRow   = array(
+      'index'      => $_str_hrefBase . 'index/',
+      'add'        => $_str_hrefBase . 'form/',
+      'show'       => $_str_hrefBase . 'show/id/',
+      'notify'     => $_str_hrefBase . 'notify/id/',
+      'edit'       => $_str_hrefBase . 'form/id/',
+      'submit'     => $_str_hrefBase . 'submit/',
+      'delete'     => $_str_hrefBase . 'delete/',
+      'status'     => $_str_hrefBase . 'status/',
+      'reset'      => $_str_hrefBase . 'reset/',
+      'app_belong' => $this->url['route_console'] . 'app_belong/index/id/',
+    );
+
     $this->generalData['status']    = $this->mdl_app->arr_status;
     $this->generalData['sync']      = $this->mdl_app->arr_sync;
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -55,14 +71,12 @@ class App extends Ctrl {
 
     //print_r($_arr_search);
 
-    $_num_appCount  = $this->mdl_app->count($_arr_search); //统计记录数
-    $_arr_pageRow   = $this->obj_request->pagination($_num_appCount); //取得分页数据
-    $_arr_appRows   = $this->mdl_app->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
+    $_arr_getData   = $this->mdl_app->lists($this->config['var_default']['perpage'], $_arr_search); //列出
 
     $_arr_tplData = array(
-      'pageRow'   => $_arr_pageRow,
       'search'    => $_arr_search,
-      'appRows'   => $_arr_appRows,
+      'pageRow'   => $_arr_getData['pageRow'],
+      'appRows'   => $_arr_getData['dataRows'],
       'token'     => $this->obj_request->token(),
     );
 
@@ -76,7 +90,7 @@ class App extends Ctrl {
   }
 
 
-  function show() {
+  public function show() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -123,7 +137,7 @@ class App extends Ctrl {
   }
 
 
-  function form() {
+  public function form() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -136,12 +150,12 @@ class App extends Ctrl {
       $_num_appId = $this->obj_request->input($this->param['id'], 'int', 0);
     }
 
+    $_arr_appRow = $this->mdl_app->read($_num_appId);
+
     if ($_num_appId > 0) {
       if (!isset($this->adminAllow['app']['edit']) && !$this->isSuper) { //判断权限
         return $this->error('You do not have permission', 'x050303');
       }
-
-      $_arr_appRow = $this->mdl_app->read($_num_appId);
 
       if ($_arr_appRow['rcode'] != 'y050102') {
         return $this->error($_arr_appRow['msg'], $_arr_appRow['rcode']);
@@ -150,20 +164,6 @@ class App extends Ctrl {
       if (!isset($this->adminAllow['app']['add']) && !$this->isSuper) { //判断权限
         return $this->error('You do not have permission', 'x050302');
       }
-
-      $_arr_appRow = array(
-        'app_id'            => 0,
-        'app_name'          => '',
-        'app_url_notify'    => '',
-        'app_url_sync'      => '',
-        'app_ip_allow'      => '',
-        'app_ip_bad'        => '',
-        'app_note'          => '',
-        'app_status'        => $this->mdl_app->arr_status[0],
-        'app_sync'          => $this->mdl_app->arr_sync[0],
-        'app_allow'         => array(),
-        'app_param'         => array(),
-      );
     }
 
     $_arr_allowRows     = Config::get('app', 'console');
@@ -184,7 +184,7 @@ class App extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -217,7 +217,7 @@ class App extends Ctrl {
   }
 
 
-  function delete() {
+  public function delete() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -248,7 +248,7 @@ class App extends Ctrl {
   }
 
 
-  function status() {
+  public function status() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -279,7 +279,7 @@ class App extends Ctrl {
   }
 
 
-  function reset() {
+  public function reset() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -312,7 +312,7 @@ class App extends Ctrl {
   }
 
 
-  function notify() {
+  public function notify() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

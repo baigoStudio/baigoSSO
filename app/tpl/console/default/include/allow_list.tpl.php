@@ -53,7 +53,7 @@
               $str_color = 'danger';
             } ?>
             <span>
-              <span class="bg-icon text-<?php echo $str_color; ?>"><?php include($cfg_global['pathIcon'] . $str_icon . BG_EXT_SVG); ?></span>
+              <span class="bg-icon text-<?php echo $str_color; ?>"><?php include($tpl_icon . $str_icon . BG_EXT_SVG); ?></span>
               <?php echo $lang->get($_value_s, 'console.common'); ?>
             </span>
           <?php }
@@ -89,7 +89,7 @@
             $str_color = 'danger';
           } ?>
           <span>
-            <span class="bg-icon text-<?php echo $str_color; ?>"><?php include($cfg_global['pathIcon'] . $str_icon . BG_EXT_SVG); ?></span>
+            <span class="bg-icon text-<?php echo $str_color; ?>"><?php include($tpl_icon . $str_icon . BG_EXT_SVG); ?></span>
             <?php echo $lang->get($_value_s['title'], 'console.common'); ?>
           </span>
         <?php }

@@ -17,6 +17,9 @@ if (!defined('IN_GINKGO')) {
 /*-------------应用归属-------------*/
 class Combine_Belong extends Combine_Belong_Base {
 
+  public $inputSubmit = array();
+  public $inputRemove = array();
+
   /** 提交
    * submit function.
    *
@@ -25,7 +28,7 @@ class Combine_Belong extends Combine_Belong_Base {
    * @param mixed $num_combineId
    * @return void
    */
-  function submit() {
+  public function submit() {
     $_num_count         = 0;
     $_num_countGlobal   = 0;
 
@@ -76,7 +79,7 @@ class Combine_Belong extends Combine_Belong_Base {
   }
 
 
-  function remove() {
+  public function remove() {
     $_num_count         = 0;
     $_num_countGlobal   = 0;
 
@@ -117,7 +120,7 @@ class Combine_Belong extends Combine_Belong_Base {
   }
 
 
-  function clear($num_no, $num_offset = 0, $arr_search = array()) {
+  public function clear($num_no, $num_offset = 0, $arr_search = array()) {
     $_arr_belongSelect = array(
       'belong_id',
       'belong_combine_id',
@@ -167,7 +170,7 @@ class Combine_Belong extends Combine_Belong_Base {
    * @param bool $arr_notUserIds (default: false)
    * @return void
    */
-  function delete($num_combineId = 0, $num_appId = 0, $arr_combineIds = false, $arr_appIds = false, $arr_notCombineIds = false, $arr_notUserIds = false, $num_belongId = 0) {
+  public function delete($num_combineId = 0, $num_appId = 0, $arr_combineIds = false, $arr_appIds = false, $arr_notCombineIds = false, $arr_notUserIds = false, $num_belongId = 0) {
 
     $_arr_where = array();
 
@@ -184,25 +187,25 @@ class Combine_Belong extends Combine_Belong_Base {
     }
 
     if (Func::notEmpty($arr_combineIds)) {
-      $arr_combineIds = Arrays::filter($arr_combineIds);
+      $arr_combineIds = Arrays::unique($arr_combineIds);
 
       $_arr_where[] = array('belong_combine_id', 'IN', $arr_combineIds, 'combine_ids');
     }
 
     if (Func::notEmpty($arr_appIds)) {
-      $arr_appIds = Arrays::filter($arr_appIds);
+      $arr_appIds = Arrays::unique($arr_appIds);
 
       $_arr_where[] = array('belong_app_id', 'IN', $arr_appIds, 'app_ids');
     }
 
     if (Func::notEmpty($arr_notCombineIds)) {
-      $arr_notCombineIds = Arrays::filter($arr_notCombineIds);
+      $arr_notCombineIds = Arrays::unique($arr_notCombineIds);
 
       $_arr_where[] = array('belong_combine_id', 'NOT IN', $arr_notCombineIds, 'not_combine_ids');
     }
 
     if (Func::notEmpty($arr_notUserIds)) {
-      $arr_notUserIds = Arrays::filter($arr_notUserIds);
+      $arr_notUserIds = Arrays::unique($arr_notUserIds);
 
       $_arr_where[] = array('belong_app_id', 'NOT IN', $arr_notUserIds, 'not_app_ids');
     }
@@ -217,7 +220,7 @@ class Combine_Belong extends Combine_Belong_Base {
   }
 
 
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'combine_id'    => array('int', 0),
       'app_ids'       => array('arr', array()),
@@ -243,7 +246,7 @@ class Combine_Belong extends Combine_Belong_Base {
   }
 
 
-  function inputRemove() {
+  public function inputRemove() {
     $_arr_inputParam = array(
       'combine_id'        => array('int', 0),
       'app_ids_belong'    => array('arr', array()),

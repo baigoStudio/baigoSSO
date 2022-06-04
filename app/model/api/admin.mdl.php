@@ -16,10 +16,7 @@ if (!defined('IN_GINKGO')) {
 /*-------------管理员模型-------------*/
 class Admin extends Admin_Base {
 
-  public $ip;
-  public $inputSubmit;
-  public $inputStatus;
-  public $inputDelete;
+  public $inputSubmit = array();
 
   /** 管理员创建、编辑提交
    * submit function.
@@ -29,7 +26,7 @@ class Admin extends Admin_Base {
    * @param string $str_adminRand (default: '')
    * @return void
    */
-  function submit() {
+  public function submit() {
     $_arr_adminRow  = $this->check($this->inputSubmit['admin_id']);
 
     $_arr_adminData = array(
@@ -95,7 +92,7 @@ class Admin extends Admin_Base {
    * @access public
    * @return void
    */
-  function inputSubmit($arr_data) {
+  public function inputSubmit($arr_data) {
     $_arr_inputParam = array(
       'admin_name'    => array('txt', ''),
       'admin_pass'    => array('txt', ''),

@@ -84,7 +84,7 @@ class Profile extends Validate {
   );
 
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'admin_pass'            => $this->obj_lang->get('Password'),

@@ -27,10 +27,21 @@ class Profile extends Ctrl {
     $this->mdl_verify     = Loader::model('Verify');
     $this->mdl_user       = Loader::model('User');
     $this->mdl_profile    = Loader::model('Profile');
+
+    $_str_hrefBase = $this->hrefBase . 'profile/';
+
+    $_arr_hrefRow   = array(
+      'info-submit'    => $_str_hrefBase . 'info-submit/',
+      'mailbox-submit' => $_str_hrefBase . 'mailbox-submit/',
+      'pass-submit'    => $_str_hrefBase . 'pass-submit/',
+      'secqa-submit'   => $_str_hrefBase . 'secqa-submit/',
+    );
+
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function info() {
+  public function info() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -55,7 +66,7 @@ class Profile extends Ctrl {
   }
 
 
-  function infoSubmit() {
+  public function infoSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -96,7 +107,7 @@ class Profile extends Ctrl {
   }
 
 
-  function pass() {
+  public function pass() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -121,7 +132,7 @@ class Profile extends Ctrl {
   }
 
 
-  function passSubmit() {
+  public function passSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -164,7 +175,7 @@ class Profile extends Ctrl {
   }
 
 
-  function secqa() {
+  public function secqa() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -193,7 +204,7 @@ class Profile extends Ctrl {
   }
 
 
-  function secqaSubmit() {
+  public function secqaSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -239,7 +250,7 @@ class Profile extends Ctrl {
   }
 
 
-  function mailbox() {
+  public function mailbox() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -265,7 +276,7 @@ class Profile extends Ctrl {
   }
 
 
-  function mailboxSubmit() {
+  public function mailboxSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

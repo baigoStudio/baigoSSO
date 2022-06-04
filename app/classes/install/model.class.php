@@ -31,8 +31,9 @@ abstract class Model extends Model_Base {
   protected $_viewOrderType   = '';
 
   protected $_copyTo          = '';
-  protected $_index           = '';
-
+  protected $create;
+  protected $drop;
+  protected $comment;
 
   protected function viewFrom($from) {
     $this->_viewFrom = $from;
@@ -40,27 +41,11 @@ abstract class Model extends Model_Base {
     return $this;
   }
 
-
   protected function viewJoin($join) {
     $this->_viewJoin = $join;
 
     return $this;
   }
-
-
-  protected function copyTo($dst) {
-    $this->_copyTo = $dst;
-
-    return $this;
-  }
-
-
-  protected function index($index) {
-    $this->_index = $index;
-
-    return $this;
-  }
-
 
   protected function viewWhere($where, $exp = '', $value = '', $param = '', $type = '') {
     $this->_viewWhere       = $where;
@@ -72,13 +57,11 @@ abstract class Model extends Model_Base {
     return $this;
   }
 
-
   protected function viewGroup($group) {
     $this->_viewGroup = $group;
 
     return $this;
   }
-
 
   protected function viewOrder($order, $type = '') {
     $this->_viewOrder       = $order;
@@ -87,24 +70,14 @@ abstract class Model extends Model_Base {
     return $this;
   }
 
-  protected function create($field = array(), $comment = '') {
-    if (Func::notEmpty($this->_index)) {
-      $_arr_index = $this->getTableInfo('index');
+  protected function copyTo($dst) {
+    $this->_copyTo = $dst;
 
-      if (in_array($this->_index, $_arr_index)) {
-        $_str_sqlDrop = 'DROP INDEX ' . $this->obj_builder->addChar($this->_index) . ' ON ' . $this->getTable();
-        $_return = $this->exec($_str_sqlDrop);
+    return $this;
+  }
 
-        if ($_return === false) {
-          return $_return;
-        }
-      }
-    }
-
-    $_str_sql    = $this->buildCreate($field, $comment);
-
-    //print_r($_str_sql);
-
+  protected function create() {
+    $_str_sql    = $this->buildCreate();
     $_return     = $this->exec($_str_sql);
 
     $this->resetSql();
@@ -112,21 +85,41 @@ abstract class Model extends Model_Base {
     return $_return;
   }
 
+  protected function index($name, $field) {
+    $_arr_index = $this->getTableInfo('index');
+    $_table     = $this->getTable();
+    $_name      = $this->obj_builder->addChar($name);
 
-  protected function alter($field = array(), $rename = '') {
-    $_return = array();
+    if (in_array($name, $_arr_index)) {
+      $_str_sqlDrop = 'DROP INDEX ' . $_name . ' ON ' . $_table; //先删除已存在的
+      $_return = $this->exec($_str_sqlDrop);
 
-    if (Func::notEmpty($field) || Func::notEmpty($rename)) {
-      $_str_sql    = 'ALTER TABLE ' . $this->getTable() . ' ';
-
-      if (Func::notEmpty($rename)) {
-        $_str_sql = 'ALTER TABLE ' . $this->obj_builder->table($rename) . ' RENAME TO ' . $this->getTable();
+      if ($_return === false) {
+        return $_return;
       }
+    }
 
-      if (Func::notEmpty($field)) {
+    $_str_field = $this->obj_builder->field($field);
+    $_str_sql   = 'CREATE INDEX ' . $_name . ' ON ' . $_table . ' (' . $_str_field . ') USING BTREE';
+    $_return    = $this->exec($_str_sql);
+
+    $this->resetSql();
+
+    return $_return;
+  }
+
+  protected function alter() {
+    $_return    = 0;
+
+    $_arr_alter = $this->alterProcess();
+
+    if (Func::notEmpty($_arr_alter)) {
+      $_str_sql = 'ALTER TABLE ' . $this->getTable() . ' ';
+
+      if (is_array($_arr_alter) && Func::notEmpty($_arr_alter)) {
         $_values  = array();
 
-        foreach ($field as $_key => $_value) {
+        foreach ($_arr_alter as $_key => $_value) {
           switch ($_value[0]) {
             case 'ADD':
               $_value[1] = $this->fieldProcess($_value[1]);
@@ -149,9 +142,26 @@ abstract class Model extends Model_Base {
         $_str_sql .= implode(',', $_values);
       }
 
-      //print_r($_str_sql);
-
       $_return   = $this->exec($_str_sql);
+
+      $this->resetSql();
+
+      if ($_return !== false && $_return > 0) {
+        $this->updateProcess();
+      }
+    }
+
+    return $_return;
+  }
+
+  protected function rename($old_name = '') {
+    $_return        = 0;
+    $_arr_tableRows = $this->getTables();
+    $_table         = $this->getTable();
+
+    if (Func::notEmpty($old_name) && in_array($old_name, $_arr_tableRows) && !in_array($_table, $_arr_tableRows)) {
+      $_str_sql   = 'ALTER TABLE ' . $this->obj_builder->table($old_name) . ' RENAME TO ' . $_table;
+      $_return    = $this->exec($_str_sql);
 
       $this->resetSql();
     }
@@ -159,16 +169,15 @@ abstract class Model extends Model_Base {
     return $_return;
   }
 
+  protected function copy($fields = array()) {
+    $_return = 0;
 
-  protected function copy($field = array(), $comment = '') {
-    $_return = false;
-
-    if (Func::notEmpty($field) && Func::notEmpty($this->_copyTo)) {
+    if (Func::notEmpty($fields) && Func::notEmpty($this->_copyTo)) {
       $_str_sql  = 'CREATE TABLE IF NOT EXISTS ' . $this->obj_builder->table($this->_copyTo) . ' (';
 
       $_values   = array();
 
-      foreach ($field as $_key => $_value) {
+      foreach ($fields as $_key => $_value) {
         if (isset($_value['target'])) {
           $_target = $_value['target'];
         } else {
@@ -181,12 +190,18 @@ abstract class Model extends Model_Base {
 
       $_str_sql     .= implode(',', $_values);
 
-      $_str_sql     .= ', PRIMARY KEY (' . $this->obj_builder->addChar($this->pk) . ')) ENGINE=InnoDB DEFAULT CHARSET=' . $this->config['charset'] . ' COMMENT=\'' . $comment . '\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
+      $_str_sql     .= ', PRIMARY KEY (' . $this->obj_builder->addChar($this->pk) . ')) ENGINE=InnoDB DEFAULT CHARSET=' . $this->config['charset'];
+
+      if (Func::notEmpty($this->comment)) {
+        $_str_sql   .= ' COMMENT=\'' . $this->comment . '\'';
+      }
+
+      $_str_sql     .= ' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
       $_str_sql     .= ' SELECT ';
 
       $_values   = array();
 
-      foreach ($field as $_key => $_value) {
+      foreach ($fields as $_key => $_value) {
         $_as = '';
         if (isset($_value['target'])) {
           $_as = ' AS ' . $this->obj_builder->addChar($_value['target']);
@@ -208,30 +223,60 @@ abstract class Model extends Model_Base {
     return $_return;
   }
 
+  protected function updateProcess() {
+    if (is_array($this->create) && Func::notEmpty($this->create)) {
+      foreach ($this->create as $_key=>$_value) {
+        if (isset($_value['update'])) {
+          $_arr_data = array(
+            $_key => $_value['update'],
+          );
+          $this->where('LENGTH(`' . $_key . '`) < 1')->update($_arr_data);
+        }
+      }
+    }
+  }
 
-  protected function alterProcess($create) {
+  protected function alterProcess() {
     $_arr_col      = $this->getTableInfo('full_columns');
     $_arr_alter    = array();
 
-    foreach ($create as $_key=>$_value) {
-      if (isset($_value['old']) && isset($_arr_col[$_value['old']]) && !isset($_arr_col[$_key])) {
-        $_arr_alter[$_value['old']] = array('CHANGE', $_value, $_key);
-      } else if (isset($_arr_col[$_key])) {
-        if (isset($_value['type'])) {
-          $_value = $this->fieldProcess($_value);
+    if (is_array($this->create) && Func::notEmpty($this->create)) {
+      foreach ($this->create as $_key=>$_value) {
+        if (is_array($_value)) {
+          $this->typeProcess($_value);
+          if (isset($_value['old']) && isset($_arr_col[$_value['old']]) && !isset($_arr_col[$_key])) {
+            $_arr_alter[$_value['old']] = array('CHANGE', $_value, $_key); //如果有 old 参数, 且现表中有 old 字段, 且现表中没有该字段，则用 change (改名, 改结构)
+          } else if (isset($_arr_col[$_key])) {
+            if (isset($_value['type'])) {
+              $_value = $this->fieldProcess($_value);
 
-          if ($_arr_col[$_key]['type'] != $_value['type'] || $_arr_col[$_key]['default'] != $_value['default'] || $_arr_col[$_key]['comment'] != $_value['comment']) {
-            $_arr_alter[$_key] = array('MODIFY', $_value);
+              if ($_arr_col[$_key]['type'] != $_value['type'] || $_arr_col[$_key]['default'] != $_value['default'] || $_arr_col[$_key]['comment'] != $_value['comment']) { //任何参数不符合则 modify (不改名)
+                $_arr_alter[$_key] = array('MODIFY', $_value);
+              }
+            }
+          } else {
+            $_arr_alter[$_key] = array('ADD', $_value); //默认添加
           }
         }
-      } else {
-        $_arr_alter[$_key] = array('ADD', $_value);
+      }
+    }
+
+    foreach ($_arr_col as $_key=>$_value) {
+      if (!isset($this->create[$_key])) {
+        //$_arr_alter[$_key] = array('DROP'); //如果现表中有未在 create 中定义的字段, 则 drop
+      }
+    }
+
+    if (is_array($this->drop) && Func::notEmpty($this->drop)) {
+      foreach ($this->drop as $_key=>$_value) {
+        if (is_string($_value) && isset($_arr_col[$_value])) {
+          $_arr_alter[$_value] = array('DROP');
+        }
       }
     }
 
     return $_arr_alter;
   }
-
 
   protected function resetSql() {
     $this->_viewFrom        = '';
@@ -245,18 +290,17 @@ abstract class Model extends Model_Base {
     $this->_viewOrder       = '';
     $this->_viewOrderType   = '';
     $this->_copyTo          = '';
-    $this->_index           = '';
 
     Db::resetSql();
   }
 
-
-  private function buildCreate($field = array(), $comment = '') {
+  private function buildCreate() {
     $_str_sql   = '';
+    $_table     = $this->getTable();
 
-    if (Func::notEmpty($field)) {
+    if (Func::notEmpty($this->create)) {
       if (Func::notEmpty($this->_viewFrom)) {
-        $_str_sql   = 'CREATE OR REPLACE SQL SECURITY INVOKER VIEW ' . $this->getTable() . ' AS ';
+        $_str_sql   = 'CREATE OR REPLACE SQL SECURITY INVOKER VIEW ' . $_table . ' AS ';
 
         $_obj_db    = $this->table($this->_viewFrom)->join($this->_viewJoin);
 
@@ -272,30 +316,31 @@ abstract class Model extends Model_Base {
           $_obj_db->order($this->_viewOrder, $this->_viewOrderType);
         }
 
-        $_str_sql  .= $_obj_db->fetchSql()->select($field);
-      } else if (Func::notEmpty($this->_index)) {
-        $_str_field = $this->obj_builder->field($field);
-
-        $_str_sql   = 'CREATE INDEX ' . $this->obj_builder->addChar($this->_index) . ' ON ' . $this->getTable() . ' (' . $_str_field . ') USING BTREE';
+        $_str_sql  .= $_obj_db->fetchSql()->select($this->create);
       } else {
-        $_str_sql   = 'CREATE TABLE IF NOT EXISTS ' . $this->getTable() . ' (';
+        $_str_sql   = 'CREATE TABLE IF NOT EXISTS ' . $_table . ' (';
 
         $_arr_field = array();
 
-        foreach ($field as $_key => $_value) {
+        foreach ($this->create as $_key => $_value) {
           $_value    = $this->fieldProcess($_value);
           $_str_sql .= $this->buildField($_key, $_value) . ',';
         }
 
         $_str_sql  .= ' PRIMARY KEY (' . $this->obj_builder->addChar($this->pk) . ')';
 
-        $_str_sql  .= ') ENGINE=InnoDB DEFAULT CHARSET=' . $this->config['charset'] . ' COMMENT=\'' . $comment . '\' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
+        $_str_sql  .= ') ENGINE=InnoDB DEFAULT CHARSET=' . $this->config['charset'];
+
+        if (Func::notEmpty($this->comment)) {
+          $_str_sql .= ' COMMENT=\'' . $this->comment . '\'';
+        }
+
+        $_str_sql  .= ' AUTO_INCREMENT=1 COLLATE utf8_general_ci';
       }
     }
 
     return $_str_sql;
   }
-
 
   private function buildField($name = '', $field = array()) {
     $_str_field = '';
@@ -327,7 +372,6 @@ abstract class Model extends Model_Base {
 
     return $_str_field;
   }
-
 
   private function fieldProcess($field = array()) {
     if (isset($field['type']) && Func::notEmpty($field['type'])) {
@@ -434,6 +478,35 @@ abstract class Model extends Model_Base {
 
       if (!isset($field['comment'])) {
         $field['comment'] = '';
+      }
+    }
+
+    return $field;
+  }
+
+  private function typeProcess($field = array()) {
+    if (isset($field['type']) && Func::notEmpty($field['type'])) {
+      if (strpos($field['type'], '(') === false) {
+
+        $_arr_types = array(
+          'tinyint'   => 'tinyint(4)',
+          'smallint'  => 'smallint(6)',
+          'mediumint' => 'mediumint(9)',
+          'int'       => 'int(11)',
+          'bigint'    => 'bigint(20)',
+          'decimal'   => 'decimal(11,2)',
+          'float'     => 'float(11,2)',
+          'double'    => 'double(11,2)',
+          'boolean'   => '',
+          'year'      => '',
+          'date'      => '',
+          'time'      => '',
+          'datetime'  => '',
+          'timestamp' => '',
+          'char'      => 'char(32)',
+          'varchar'   => 'varchar(32)',
+          'enum'      => 'enum(\'a\')',
+        );
       }
     }
 

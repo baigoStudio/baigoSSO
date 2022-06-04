@@ -116,7 +116,7 @@ class Ftp {
    */
   public function fileUpload($path_local, $path_remote, $ascii = true) {
     if (!File::fileHas($path_local)) { // 检查本地文件是否存在
-      $this->error = 'FTP Error: Local file not found';
+      $this->errRecord('Ftp::fileUpload(), Local file not found: ' . $path_local);
       return false;
     }
 
@@ -258,7 +258,7 @@ class Ftp {
     $_arr_urlParsed = parse_url($this->config['host']); // 解析 url
 
     if (!isset($_arr_urlParsed['host']) || Func::isEmpty($_arr_urlParsed['host'])) {
-      $this->error = 'Missing HOST';
+      $this->errRecord('Auth::urlProcess(), Missing HOST: ' . $_arr_urlParsed['host']);
       return false;
     }
 
@@ -318,10 +318,31 @@ class Ftp {
   }
 
   // 销毁 since 0.2.0
-  function __destruct() {
+  public function __destruct() {
     if ($this->res_curl != null) {
       curl_close($this->res_curl);
       $this->res_curl = null;
+    }
+  }
+
+
+  private function errRecord($msg) {  // since 0.2.4
+    $this->error      = $msg;
+    $_bool_debugDump  = false;
+    $_mix_configDebug = Config::get('debug'); // 取得调试配置
+
+    if (is_array($_mix_configDebug)) {
+      if ($_mix_configDebug['dump'] === true || $_mix_configDebug['dump'] === 'true' || $_mix_configDebug['dump'] === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    } else if (is_scalar($_mix_configDebug)) {
+      if ($_mix_configDebug === true || $_mix_configDebug === 'true' || $_mix_configDebug === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    }
+
+    if ($_bool_debugDump) {
+      Log::record('type: ginkgo\Ftp, msg: ' . $msg, 'log');
     }
   }
 }

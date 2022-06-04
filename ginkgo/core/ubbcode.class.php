@@ -33,13 +33,16 @@ class Ubbcode {
 
   // 正则规则
   public static $regexRules = array(
-    '/\[url=([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\](.+)\[\/url\]/i' => '<a href="$1" target="_blank" title="$1">$2</a>',
-    '/\[url\]([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\[\/url\]/i'      => '<a href="$1" target="_blank">$1</a>',
-    '/\[img=([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\](.+)\[\/img\]/i' => '<img src="$1" alt="$2" title="$2">',
-    '/\[img\]([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\[\/img\]/i'      => '<img src="$1">',
-    '/\[color=(\w+)\](.+)\[\/color\]/i'      => '<span style="color:$1">$2</span>',
-    '/\[bgcolor=(\w+)\](.+)\[\/bgcolor\]/i'  => '<span style="background-color:$1">$2</span>',
-    '/\[size=(\d+)\](\d+)\[\/size\]/i'       => '<span style="font-size:$1">$2</span>',
+    '/\[url=([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\](.+?)\[\/url\]/is' => '<a href="$1" target="_blank" title="$1">$2</a>',
+    '/\[url\]([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\[\/url\]/is'      => '<a href="$1" target="_blank">$1</a>',
+    '/\[img=([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\](.+?)\[\/img\]/is' => '<img src="$1" alt="$2" title="$2">',
+    '/\[img\]([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\[\/img\]/is'      => '<img src="$1">',
+    '/\[color=(\w+)\](.+?)\[\/color\]/is'      => '<span style="color:$1">$2</span>',
+    '/\[bgcolor=(\w+)\](.+?)\[\/bgcolor\]/is'  => '<span style="background-color:$1">$2</span>',
+    '/\[size=(\d+)\](.+?)\[\/size\]/is'        => '<span style="font-size:$1">$2</span>',
+    '/\[left](.+?)\[\/left\]/is'               => '<span style="text-align:left">$1</span>', // since 0.2.4
+    '/\[right](.+?)\[\/right\]/is'             => '<span style="text-align:right">$1</span>', // since 0.2.4
+    '/\[center](.+?)\[\/center\]/is'           => '<span style="text-align:center">$1</span>', // since 0.2.4
   );
 
 
@@ -85,11 +88,11 @@ class Ubbcode {
   // 去除标签
   public static function stripCode($string) {
     $_arr_regs = array(
-      '/\[img=(.+)\](.+)\[\/img\]/i',
-      '/\[img\](.+)\[\/img\]/i',
-      '/\[(.+)\]/i',
-      '/\[(.+)=(.+)\]/i',
-      '/\[\/(.+)\]/i',
+      '/\[img=(.+?)\](.+?)\[\/img\]/i',
+      '/\[img\](.+?)\[\/img\]/i',
+      '/\[(.+?)\]/i',
+      '/\[(.+?)=(.+?)\]/i',
+      '/\[\/(.+?)\]/i',
     );
 
     $string = preg_replace($_arr_regs, '', $string);
@@ -166,7 +169,7 @@ class Ubbcode {
 
     if (Func::notEmpty($string)) {
       preg_match_all('/\[img\]([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\[\/img\]/i', $string, $_arr_matches_1); // 正则匹配
-      preg_match_all('/\[img=([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\](.+)\[\/img\]/i', $string, $_arr_matches_2); // 正则匹配
+      preg_match_all('/\[img=([\-A-Za-z0-9+&@#\/%?\=~\_|!:,\.;]+[\-A-Za-z0-9+&@#\/%\=~\_|])\](.+?)\[\/img\]/i', $string, $_arr_matches_2); // 正则匹配
 
       if (isset($_arr_matches_1[1]) && Func::notEmpty($_arr_matches_1[1])) {
         $_arr_data = array_merge($_arr_data, $_arr_matches_1[1]);

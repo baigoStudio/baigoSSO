@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\User;
+use app\model\common\User as User_Common;
 use ginkgo\Func;
 use ginkgo\Crypt;
 
@@ -15,13 +15,11 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class Login extends User {
-
-  public $inputSubmit;
+class Login extends User_Common {
 
   protected $table = 'user';
 
-  function login() {
+  public function login() {
     $_arr_userData = array(
       'user_time_login'   => GK_NOW,
     );
@@ -89,7 +87,7 @@ class Login extends User {
    * @access public
    * @return void
    */
-  function inputSubmit($arr_data) {
+  public function inputSubmit($arr_data) {
     $_arr_inputParam = array(
       'user_str'  => array('txt', ''),
       'user_by'   => array('txt', ''),

@@ -132,6 +132,12 @@ class Response {
   // 配置 since 0.2.0
   public function config($config = array()) {
     $_arr_config   = Config::get('var_default'); // 取得配置
+    $_arr_header   = Config::get('header'); // 取得响应头 since 0.2.3
+
+    // since 0.2.3
+    if (is_array($_arr_header)) {
+      $this->header = array_replace_recursive($this->header, $_arr_header);
+    }
 
     $_arr_configDo = $this->configThis;
 

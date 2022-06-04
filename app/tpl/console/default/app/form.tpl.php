@@ -10,23 +10,22 @@ $cfg = array(
   'title'             => $lang->get('App', 'console.common') . ' &raquo; ' . $title_sub,
   'menu_active'       => 'app',
   'sub_active'        => $str_sub,
-  'baigoValidate'    => 'true',
+  'baigoValidate'     => 'true',
   'baigoSubmit'       => 'true',
   'baigoCheckall'     => 'true',
   'tooltip'           => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <nav class="nav mb-3">
-    <a href="<?php echo $route_console; ?>app/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['index']; ?>" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Back'); ?>
     </a>
   </nav>
 
-  <form name="app_form" id="app_form" action="<?php echo $route_console; ?>app/submit/">
+  <form name="app_form" id="app_form" action="<?php echo $hrefRow['submit']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
     <input type="hidden" name="app_id" id="app_id" value="<?php echo $appRow['app_id']; ?>">
 
@@ -168,7 +167,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                       <input type="text" name="app_param[<?php echo $_key; ?>][key]" id="app_param_<?php echo $_key; ?>_key" value="<?php if (isset($_value['key'])) { echo $_value['key']; } ?>" class="form-control">
                       <span class="input-group-append">
                         <button type="button" class="btn btn-info param_del" data-count="<?php echo $_key; ?>">
-                          <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>
+                          <span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>
                         </button>
                       </span>
                     </div>
@@ -186,7 +185,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               </div>
 
               <button type="button" class="btn btn-info param_add">
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'plus' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'plus' . BG_EXT_SVG); ?></span>
               </button>
               <small class="form-text"><?php echo $lang->get('These parameters will be transmitted with the notification, such as: <code>key_1=value_1&key_2=value_2</code>'); ?></small>
             </div>
@@ -201,7 +200,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </div>
   </form>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_form = {
@@ -271,7 +270,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         '<input type="text" name="app_param[' + count + '][key]" id="app_param_' + count + '" class="form-control">' +
         '<span class="input-group-append">' +
           '<button type="button" class="btn btn-info param_del" data-count="' + count + '">' +
-            '<span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>' +
+            '<span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>' +
           '</button>' +
         '</span>' +
       '</div>' +
@@ -308,4 +307,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

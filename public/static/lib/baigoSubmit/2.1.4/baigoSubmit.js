@@ -1,6 +1,6 @@
 /*
 v2.1.4 jQuery baigoSubmit plugin 表单提交插件
-(c) 2013 baigo studio - http://www.baigo.net/
+(c) 2013 baigo studio - https://www.baigo.net/
 License: http://www.opensource.org/licenses/mit-license.php
 */
 ;(function($){

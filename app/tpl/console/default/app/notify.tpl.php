@@ -15,7 +15,7 @@
 
   <div class="modal-body">
     <h3 class="text-<?php echo $str_color; ?>">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . $str_icon . BG_EXT_SVG); ?></span>
+      <span class="bg-icon"><?php include($tpl_icon . $str_icon . BG_EXT_SVG); ?></span>
       <?php if (isset($msg)) {
         echo $lang->get($msg);
       } ?>

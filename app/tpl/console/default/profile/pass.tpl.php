@@ -2,14 +2,13 @@
   'title'             => $lang->get('Profile', 'console.common') . ' &raquo; ' . $lang->get('Password', 'console.common'),
   'menu_active'       => 'profile',
   'sub_active'        => 'pass',
-  'baigoValidate'    => 'true',
+  'baigoValidate'     => 'true',
   'baigoSubmit'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
-  <form name="profile_form" id="profile_form" action="<?php echo $route_console; ?>profile/pass-submit/">
+  <form name="profile_form" id="profile_form" action="<?php echo $hrefRow['pass-submit']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="row">
@@ -49,11 +48,11 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </div>
       </div>
 
-      <?php include($cfg['pathInclude'] . 'profile_side' . GK_EXT_TPL); ?>
+      <?php include($tpl_ctrl . 'side' . GK_EXT_TPL); ?>
     </div>
   </form>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_form = {
@@ -94,4 +93,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

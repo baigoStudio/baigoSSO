@@ -126,7 +126,7 @@ class Upload {
    */
   public function create($name) {
     if (!isset($_FILES) || !isset($_FILES[$name])) {
-      $this->error = 'No files uploaded'; // 没有上传数据
+      $this->errRecord('Upload::create(), No files uploaded'); // 没有上传数据
 
       return false;
     }
@@ -135,7 +135,7 @@ class Upload {
 
     // 上传文件校验
     if (!isset($_arr_fileInfo['tmp_name']) || !is_uploaded_file($_arr_fileInfo['tmp_name'])) {
-      $this->error = 'No files uploaded';
+      $this->errRecord('Upload::create(), No files uploaded');
 
       return false;
     }
@@ -159,7 +159,7 @@ class Upload {
     }
 
     if ($_arr_fileInfo['size'] > $this->limitSize) { //是否超过尺寸
-      $this->error = 'Upload file size exceeds the settings';
+      $this->errRecord('Upload::create(), Upload file size exceeds the settings');
 
       return false;
     }
@@ -202,7 +202,7 @@ class Upload {
    */
   public function move($dir, $name = true, $replace = true) {
     if (!$this->obj_file->dirMk($dir)) { // 建目录
-      $this->error = 'Failed to create directory';
+      $this->errRecord('Upload::move(), Failed to create directory: ' . $dir);
 
       return false;
     }
@@ -210,7 +210,7 @@ class Upload {
     $name = $this->genFilename($name); // 生成文件名
 
     if (Func::isEmpty($name)) {
-      $this->error = 'Missing filename';
+      $this->errRecord('Upload::move(), Missing filename');
 
       return false;
     }
@@ -218,13 +218,13 @@ class Upload {
     $_str_path = Func::fixDs($dir) . $name; // 补全路径
 
     if (!$replace && File::fileHas($_str_path)) { // 如果为不替换, 冲突时报错
-      $this->error = 'Has the same filename: ' . $_str_path;
+      $this->errRecord('Upload::move(), Has the same filename: ' . $_str_path);
 
       return false;
     }
 
     if (!move_uploaded_file($this->fileInfo['tmp_name'], $_str_path)) { // 移动至指定目录
-      $this->error = 'Failed to move uploaded file'; // 移动失败
+      $this->errRecord('Upload::move(), Failed to move uploaded file'); // 移动失败
 
       return false;
     }
@@ -362,31 +362,31 @@ class Upload {
   private function errorProcess($error_no) {
     switch ($error_no) {
       case UPLOAD_ERR_INI_SIZE:
-        $this->error = 'Upload file size exceeds the php.ini settings';
+        $this->errRecord('Upload::errorProcess(), Upload file size exceeds the php.ini settings');
       break;
 
       case UPLOAD_ERR_FORM_SIZE:
-        $this->error = 'Upload file size exceeds the form settings';
+        $this->errRecord('Upload::errorProcess(), Upload file size exceeds the form settings');
       break;
 
       case UPLOAD_ERR_PARTIAL:
-        $this->error = 'Only the portion of file is uploaded';
+        $this->errRecord('Upload::errorProcess(), Only the portion of file is uploaded');
       break;
 
       case UPLOAD_ERR_NO_FILE:
-        $this->error = 'No files uploaded';
+        $this->errRecord('Upload::errorProcess(), No files uploaded');
       break;
 
       case UPLOAD_ERR_NO_TMP_DIR:
-        $this->error = 'Upload temp dir not found';
+        $this->errRecord('Upload::errorProcess(), Upload temp dir not found');
       break;
 
       case UPLOAD_ERR_CANT_WRITE:
-        $this->error = 'File write error';
+        $this->errRecord('Upload::errorProcess(), File write error');
       break;
 
       default:
-        $this->error = 'Unknown upload error';
+        $this->errRecord('Upload::errorProcess(), Unknown upload error');
       break;
     }
   }
@@ -404,13 +404,13 @@ class Upload {
   private function verifyFile($ext, $mime) {
     if (Func::notEmpty($this->mimeRows)) {
       if (!isset($this->mimeRows[$ext])) { //该扩展名的 mime 数组是否存在
-        $this->error = 'MIME check failed';
+        $this->errRecord('Upload::verifyFile(), MIME check failed: ' . $ext);
 
         return false;
       }
 
       if (!in_array($mime, $this->mimeRows[$ext])) { //是否允许
-        $this->error = 'MIME not allowed';
+        $this->errRecord('Upload::verifyFile(), MIME not allowed: ' . $mime);
 
         return false;
       }
@@ -452,13 +452,23 @@ class Upload {
   }
 
 
-  /**
-   * __destruct function.
-   *
-   * @access public
-   * @return void
-   */
-  function __destruct() { //析构函数
+  private function errRecord($msg) {  // since 0.2.4
+    $this->error      = $msg;
+    $_bool_debugDump  = false;
+    $_mix_configDebug = Config::get('debug'); // 取得调试配置
 
+    if (is_array($_mix_configDebug)) {
+      if ($_mix_configDebug['dump'] === true || $_mix_configDebug['dump'] === 'true' || $_mix_configDebug['dump'] === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    } else if (is_scalar($_mix_configDebug)) {
+      if ($_mix_configDebug === true || $_mix_configDebug === 'true' || $_mix_configDebug === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    }
+
+    if ($_bool_debugDump) {
+      Log::record('type: ginkgo\Upload, msg: ' . $msg, 'log');
+    }
   }
 }

@@ -16,7 +16,7 @@ if (!defined('IN_GINKGO')) {
 
 class Base extends Ctrl {
 
-  function pm() {
+  public function pm() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -44,7 +44,7 @@ class Base extends Ctrl {
   }
 
 
-  function urls() {
+  public function urls() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

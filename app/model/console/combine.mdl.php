@@ -19,8 +19,8 @@ if (!defined('IN_GINKGO')) {
 /*-------------应用模型-------------*/
 class Combine extends Combine_Base {
 
-  public $inputSubmit;
-  public $inputDelete;
+  public $inputSubmit = array();
+  public $inputDelete = array();
 
 
   /** 提交
@@ -29,9 +29,9 @@ class Combine extends Combine_Base {
    * @access public
    * @return void
    */
-  function submit() {
+  public function submit() {
     $_arr_data = array(
-      'combine_name'          => $this->inputSubmit['combine_name'],
+      'combine_name' => $this->inputSubmit['combine_name'],
     );
 
     $_mix_vld = $this->validate($_arr_data, '', 'submit_db');
@@ -45,7 +45,7 @@ class Combine extends Combine_Base {
     }
 
     if ($this->inputSubmit['combine_id'] > 0) {
-      $_num_combineId     = $this->inputSubmit['combine_id'];
+      $_num_combineId = $this->inputSubmit['combine_id'];
       $_num_count     = $this->where('combine_id', '=', $_num_combineId)->update($_arr_data);
 
       if ($_num_count > 0) {
@@ -68,7 +68,7 @@ class Combine extends Combine_Base {
     }
 
     return array(
-      'combine_id'        => $_num_combineId,
+      'combine_id'    => $_num_combineId,
       'rcode'         => $_str_rcode, //成功
       'msg'           => $_str_msg,
     );
@@ -81,7 +81,7 @@ class Combine extends Combine_Base {
    * @access public
    * @return void
    */
-  function delete() {
+  public function delete() {
     $_num_count     = $this->where('combine_id', 'IN', $this->inputDelete['combine_ids'], 'combine_ids')->delete(); //更新数据
 
     //如车影响行数小于0则返回错误
@@ -107,7 +107,7 @@ class Combine extends Combine_Base {
    * @access public
    * @return void
    */
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'combine_id'    => array('int', 0),
       'combine_name'  => array('txt', ''),
@@ -147,7 +147,7 @@ class Combine extends Combine_Base {
    * @access public
    * @return void
    */
-  function inputDelete() {
+  public function inputDelete() {
     $_arr_inputParam = array(
       'combine_ids'   => array('arr', array()),
       '__token__' => array('txt', ''),
@@ -155,7 +155,7 @@ class Combine extends Combine_Base {
 
     $_arr_inputDelete = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputDelete['combine_ids'] = Arrays::filter($_arr_inputDelete['combine_ids']);
+    $_arr_inputDelete['combine_ids'] = Arrays::unique($_arr_inputDelete['combine_ids']);
 
     $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

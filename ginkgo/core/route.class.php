@@ -173,7 +173,7 @@ class Route {
       }
     }
 
-    $_arr_routeExclude = Arrays::filter($_arr_routeExclude);
+    $_arr_routeExclude = Arrays::unique($_arr_routeExclude);
 
     $_str_param = '';
 
@@ -211,7 +211,7 @@ class Route {
       }
     }
 
-    self::$routeExclude = Arrays::filter(self::$routeExclude);
+    self::$routeExclude = Arrays::unique(self::$routeExclude);
   }
 
 
@@ -358,6 +358,11 @@ class Route {
     $_arr_route['ctrl'] = str_replace('-', '_', $_arr_route['ctrl']);
     $_arr_route['act']  = str_replace('_', '-', $_arr_route['act']);
 
+    // 安全过滤
+    $_arr_route['mod']  = Func::safe($_arr_route['mod']);
+    $_arr_route['ctrl'] = Func::safe($_arr_route['ctrl']);
+    $_arr_route['act']  = Func::safe($_arr_route['act']);
+
     // 转换为下划线分隔的驼峰命名
     $_arr_route['act']  = Strings::toHump($_arr_route['act'], '-', true);
 
@@ -390,6 +395,11 @@ class Route {
       if (isset($_arr_path[2]) && Func::notEmpty($_arr_path[2])) {
         $_arr_routeOrig['act'] = $_arr_path[2];
       }
+
+      // 安全过滤
+      $_arr_routeOrig['mod']  = Func::safe($_arr_routeOrig['mod']);
+      $_arr_routeOrig['ctrl'] = Func::safe($_arr_routeOrig['ctrl']);
+      $_arr_routeOrig['act']  = Func::safe($_arr_routeOrig['act']);
     }
 
     self::$routeOrig = array_replace_recursive(self::$routeOrig, $_arr_routeOrig);
@@ -438,8 +448,8 @@ class Route {
     foreach ($_arr_key as $_key=>$_value) { // 遍历参数名
       if (Func::notEmpty($_value)) { // 参数名不为空才拼合
         if (isset($_arr_value[$_key])) { // 如果有此参数
-          $_arr_param[$_value]    = $_arr_value[$_key]; // 加入到参数属性
-          $_GET[$_value]          = $_arr_value[$_key]; // 额外加入到 $_GET 变量
+          $_arr_param[$_value]    = Func::safe($_arr_value[$_key]); // 加入到参数属性
+          $_GET[$_value]          = Func::safe($_arr_value[$_key]); // 额外加入到 $_GET 变量
         } else { // 无此参数, 则用空值填充
           $_arr_param[$_value]    = '';
           $_GET[$_value]          = '';

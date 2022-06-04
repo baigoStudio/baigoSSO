@@ -7,27 +7,24 @@
   'baigoCheckall'     => 'true',
   'baigoQuery'        => 'true',
   'baigoDialog'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <div class="d-flex justify-content-between">
     <nav class="nav mb-3">
-      <a href="<?php echo $route_console; ?>app/form/" class="nav-link">
-        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'plus' . BG_EXT_SVG); ?></span>
+      <a href="<?php echo $hrefRow['add']; ?>" class="nav-link">
+        <span class="bg-icon"><?php include($tpl_icon . 'plus' . BG_EXT_SVG); ?></span>
         <?php echo $lang->get('Add'); ?>
       </a>
     </nav>
-    <form name="app_search" id="app_search" class="d-none d-lg-inline-block" action="<?php echo $route_console; ?>app/index/">
+    <form name="app_search" id="app_search" class="d-none d-lg-inline-block" action="<?php echo $hrefRow['index']; ?>">
       <div class="input-group mb-3">
         <input type="text" name="key" value="<?php echo $search['key']; ?>" placeholder="<?php echo $lang->get('Keyword'); ?>" class="form-control">
         <span class="input-group-append">
           <button class="btn btn-outline-secondary" type="submit">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'search' . BG_EXT_SVG); ?></span>
+            <span class="bg-icon"><?php include($tpl_icon . 'search' . BG_EXT_SVG); ?></span>
           </button>
-        </span>
-        <span class="input-group-append">
           <button class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" type="button" data-toggle="collapse" data-target="#bg-search-more">
             <span class="sr-only">Dropdown</span>
           </button>
@@ -79,14 +76,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </span>
       <?php } ?>
 
-      <a href="<?php echo $route_console; ?>app/index/" class="badge badge-danger badge-pill">
-        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
+      <a href="<?php echo $hrefRow['index']; ?>" class="badge badge-danger badge-pill">
+        <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
         <?php echo $lang->get('Reset'); ?>
       </a>
     </div>
   <?php } ?>
 
-  <form name="app_list" id="app_list" action="<?php echo $route_console; ?>app/status/">
+  <form name="app_list" id="app_list" action="<?php echo $hrefRow['status']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="table-responsive">
@@ -132,34 +129,34 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   <span class="sr-only">Collapse</span>
                 </a>
                 <div class="mb-2 text-wrap text-break">
-                  <a href="<?php echo $route_console; ?>app/form/id/<?php echo $value['app_id']; ?>/">
+                  <a href="<?php echo $hrefRow; ?>app/form/id/<?php echo $value['app_id']; ?>">
                     <?php echo $value['app_name']; ?>
                   </a>
                 </div>
                 <div class="bg-manage-menu">
                   <div class="d-flex flex-wrap">
-                    <a href="<?php echo $route_console; ?>app/show/id/<?php echo $value['app_id']; ?>/" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'eye' . BG_EXT_SVG); ?></span>
+                    <a href="<?php echo $hrefRow['show'], $value['app_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'eye' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Show'); ?>
                     </a>
-                    <a href="<?php echo $route_console; ?>app/form/id/<?php echo $value['app_id']; ?>/" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+                    <a href="<?php echo $hrefRow['edit'], $value['app_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Edit'); ?>
                     </a>
-                    <a href="<?php echo $route_console; ?>app/show/id/<?php echo $value['app_id']; ?>/" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'key' . BG_EXT_SVG); ?></span>
+                    <a href="<?php echo $hrefRow['show'], $value['app_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'key' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('View key'); ?>
                     </a>
-                    <a href="<?php echo $route_console; ?>app-belong/index/id/<?php echo $value['app_id']; ?>/" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'users' . BG_EXT_SVG); ?></span>
+                    <a href="<?php echo $hrefRow['app_belong'], $value['app_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'users' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Authorize users'); ?>
                     </a>
                     <a href="javascript:void(0);" data-id="<?php echo $value['app_id']; ?>" class="app_delete text-danger mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>
+                      <span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Delete'); ?>
                     </a>
-                    <a href="<?php echo $route_console; ?>app/show/id/<?php echo $value['app_id']; ?>/">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'flag-checkered' . BG_EXT_SVG); ?></span>
+                    <a href="<?php echo $hrefRow['show'], $value['app_id']; ?>">
+                      <span class="bg-icon"><?php include($tpl_icon . 'flag-checkered' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Notification test'); ?>
                     </a>
                   </div>
@@ -176,14 +173,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   </dt>
                   <dd class="col-9">
                     <?php $str_status = $value['app_status'];
-                    include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                    include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                   </dd>
                   <dt class="col-3">
                     <small><?php echo $lang->get('Sync'); ?></small>
                   </dt>
                   <dd class="col-9">
                     <?php $str_status = $value['app_sync'];
-                    include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                    include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                   </dd>
                 </dl>
               </td>
@@ -193,11 +190,11 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               <td class="d-none d-lg-table-cell bg-td-md text-right">
                 <div>
                   <?php $str_status = $value['app_status'];
-                  include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                  include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                 </div>
                 <div>
                   <?php $str_status = $value['app_sync'];
-                  include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                  include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                 </div>
               </td>
             </tr>
@@ -231,12 +228,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         <small id="msg_act" class="form-text"></small>
       </div>
       <div class="float-right">
-        <?php include($cfg['pathInclude'] . 'pagination' . GK_EXT_TPL); ?>
+        <?php include($tpl_include . 'pagination' . GK_EXT_TPL); ?>
       </div>
     </div>
   </form>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_list = {
@@ -275,13 +272,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           case 'delete':
             obj_dialog.confirm('<?php echo $lang->get('Are you sure to delete?'); ?>', function(result){
               if (result) {
-                obj_submit_list.formSubmit('<?php echo $route_console; ?>app/delete/');
+                obj_submit_list.formSubmit('<?php echo $hrefRow['delete']; ?>');
               }
             });
           break;
 
           default:
-            obj_submit_list.formSubmit('<?php echo $route_console; ?>app/status/');
+            obj_submit_list.formSubmit('<?php echo $hrefRow['status']; ?>');
           break;
         }
       }
@@ -305,4 +302,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

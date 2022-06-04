@@ -30,7 +30,7 @@ class Pm extends Ctrl {
   }
 
 
-  function lists() {
+  public function lists() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -69,11 +69,9 @@ class Pm extends Ctrl {
       break;
     }
 
-    $_num_pmCount   = $this->mdl_pm->count($_arr_search);
-    $_arr_pageRow   = $this->obj_request->pagination($_num_pmCount, $_arr_inputLists['perpage'], $_arr_inputLists['page']);
-    $_arr_pmRows    = $this->mdl_pm->lists($_arr_inputLists['perpage'], $_arr_pageRow['offset'], $_arr_search);
+    $_arr_getData    = $this->mdl_pm->lists($_arr_inputLists['perpage'], $_arr_search);
 
-    foreach ($_arr_pmRows as $_key=>&$_value) {
+    foreach ($_arr_getData['dataRows'] as $_key=>&$_value) {
       $_value['fromUser'] = $this->mdl_user->readBase($_value['pm_from']);
       $_value['toUser']   = $this->mdl_user->readBase($_value['pm_to']);
 
@@ -88,8 +86,8 @@ class Pm extends Ctrl {
     }
 
     $_arr_return = array(
-      'pmRows'    => $_arr_pmRows,
-      'pageRow'   => $_arr_pageRow,
+      'pageRow'   => $_arr_getData['pageRow'],
+      'pmRows'    => $_arr_getData['dataRows'],
     );
 
     $_arr_return    = Plugin::listen('filter_api_pm_lists', $_arr_return); //编辑文章时触发
@@ -117,7 +115,7 @@ class Pm extends Ctrl {
   }
 
 
-  function read() {
+  public function read() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -172,7 +170,7 @@ class Pm extends Ctrl {
   }
 
 
-  function send() {
+  public function send() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -196,7 +194,7 @@ class Pm extends Ctrl {
     $_arr_search = array(
       'user_names'  => $_arr_inputSend['pm_to_name'],
     );
-    $_arr_userRows = $this->mdl_user->lists(1000, 0, $_arr_search);
+    $_arr_userRows = $this->mdl_user->lists(array(1000, 'limit'), $_arr_search);
 
     $_num_count = 0;
 
@@ -234,7 +232,7 @@ class Pm extends Ctrl {
   }
 
 
-  function status() {
+  public function status() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -279,7 +277,7 @@ class Pm extends Ctrl {
   }
 
 
-  function revoke() {
+  public function revoke() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -323,7 +321,7 @@ class Pm extends Ctrl {
   }
 
 
-  function delete() {
+  public function delete() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -364,7 +362,7 @@ class Pm extends Ctrl {
   }
 
 
-  function check() {
+  public function check() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -385,7 +383,7 @@ class Pm extends Ctrl {
       'status'    => 'wait',
     );
 
-    $_num_pmCount   = $this->mdl_pm->count($_arr_search);
+    $_num_pmCount   = $this->mdl_pm->counts($_arr_search);
 
     $_arr_return = array(
       'rcode'     => 'y110102',

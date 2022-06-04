@@ -50,36 +50,36 @@ GET
 
 ``` javascript
 {
-    "user_id": "1",
-    "user_name": "baigo",
-    "user_mail": "baigo@baigo.net",
-    "user_nick": "nickname",
-    "user_status": "wait",
-    "user_sec_ques": {
-        "1": "您祖母叫什么名字？",
-        "2": "您的家乡是哪里？",
-        "3": "您的生日是什么时候？"
+  "user_id": "1",
+  "user_name": "baigo",
+  "user_mail": "baigo@baigo.net",
+  "user_nick": "nickname",
+  "user_status": "wait",
+  "user_sec_ques": {
+    "1": "您祖母叫什么名字？",
+    "2": "您的家乡是哪里？",
+    "3": "您的生日是什么时候？"
+  },
+  "user_time": "1550198497",
+  "user_time_login": "1550198497",
+  "user_ip": "127.0.0.1",
+  "user_contact": {
+    "tel": {
+      "key": "电话",
+      "value": "0574-88888888"
     },
-    "user_time": "1550198497",
-    "user_time_login": "1550198497",
-    "user_ip": "127.0.0.1",
-    "user_contact": {
-        "tel": {
-            "key": "电话",
-            "value": "0574-88888888"
-        },
-        "addr": {
-            "key": "地址",
-            "value": "浙江省宁波市"
-        }
-    },
-    "user_extend": {
-        "test": {
-            "key": "名称",
-            "value": "值"
-        }
-    },
-    "timestamp": "1550198497"
+    "addr": {
+      "key": "地址",
+      "value": "浙江省宁波市"
+    }
+  },
+  "user_extend": {
+    "test": {
+      "key": "名称",
+      "value": "值"
+    }
+  },
+  "timestamp": "1550198497"
 }
 ```
 
@@ -119,10 +119,10 @@ POST
 
 ``` javascript
 {
-    "rcode": "y010103",
-    "msg": "编辑用户资料成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010103",
+  "msg": "编辑用户资料成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 

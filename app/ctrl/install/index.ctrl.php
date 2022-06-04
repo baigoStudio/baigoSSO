@@ -19,7 +19,7 @@ if (!defined('IN_GINKGO')) {
 
 class Index extends Ctrl {
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init(true, false);
 
     if ($_mix_init !== true) {
@@ -37,7 +37,7 @@ class Index extends Ctrl {
     return $this->fetch();
   }
 
-  function dbconfig() {
+  public function dbconfig() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -55,7 +55,7 @@ class Index extends Ctrl {
     return $this->fetch();
   }
 
-  function dbconfigSubmit() {
+  public function dbconfigSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -78,7 +78,7 @@ class Index extends Ctrl {
   }
 
 
-  function admin() {
+  public function admin() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -96,7 +96,7 @@ class Index extends Ctrl {
     return $this->fetch();
   }
 
-  function adminCheck() {
+  public function adminCheck() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -125,7 +125,7 @@ class Index extends Ctrl {
     return $this->json($_arr_return);
   }
 
-  function adminSubmit() {
+  public function adminSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -176,7 +176,7 @@ class Index extends Ctrl {
   }
 
 
-  function over() {
+  public function over() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -194,7 +194,7 @@ class Index extends Ctrl {
     return $this->fetch();
   }
 
-  function overSubmit() {
+  public function overSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -219,7 +219,7 @@ class Index extends Ctrl {
   }
 
 
-  function data() {
+  public function data() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -238,7 +238,7 @@ class Index extends Ctrl {
   }
 
 
-  function dataSubmit() {
+  public function dataSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

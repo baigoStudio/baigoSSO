@@ -26,11 +26,11 @@
 
 * 返回
 
-    | 参数 | 类型 | 描述 |
-    | - | - | - |
-    | pm_ids | array | 被变更的短信 ID |
-    | pm_status | array | 状态 |
-    
+  | 参数 | 类型 | 描述 |
+  | - | - | - |
+  | pm_ids | array | 被变更的短信 ID |
+  | pm_status | array | 状态 |
+
 ----------
 
 <span id="action_console_pm_delete"></span>
@@ -39,9 +39,9 @@
 
 * 返回
 
-    | 参数 | 类型 | 描述 |
-    | - | - | - |
-    | pm_ids | array | 被删除的短信 ID |
+  | 参数 | 类型 | 描述 |
+  | - | - | - |
+  | pm_ids | array | 被删除的短信 ID |
 
 ----------
 
@@ -51,11 +51,11 @@
 
 * 返回
 
-    | 参数 | 类型 | 描述 |
-    | - | - | - |
-    | user_ids | array | 被变更的用户 ID |
-    | user_status | array | 状态 |
-    
+  | 参数 | 类型 | 描述 |
+  | - | - | - |
+  | user_ids | array | 被变更的用户 ID |
+  | user_status | array | 状态 |
+
 ----------
 
 <span id="action_console_user_delete"></span>
@@ -64,6 +64,6 @@
 
 * 返回
 
-    | 参数 | 类型 | 描述 |
-    | - | - | - |
-    | user_ids | array | 被删除的用户 ID |
+  | 参数 | 类型 | 描述 |
+  | - | - | - |
+  | user_ids | array | 被删除的用户 ID |

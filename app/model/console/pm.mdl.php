@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\console;
 
-use app\model\Pm as Pm_Base;
+use app\model\common\Pm as Pm_Common;
 use ginkgo\Func;
 use ginkgo\Arrays;
 
@@ -15,11 +15,9 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------短消息模型-------------*/
-class Pm extends Pm_Base {
+class Pm extends Pm_Common {
 
-  public $inputBulk;
-  public $inputDelete;
-  public $inputStatus;
+  public $inputBulk   = array();
 
   /** 短消息创建、编辑提交
    * send function.
@@ -29,7 +27,7 @@ class Pm extends Pm_Base {
    * @param mixed $num_pmFrom
    * @return void
    */
-  function bulk() {
+  public function bulk() {
     $_arr_pmData = array(
       'pm_to'        => $this->inputBulk['pm_to'],
       'pm_from'      => -1,
@@ -77,7 +75,7 @@ class Pm extends Pm_Base {
    * @access public
    * @return void
    */
-  function inputBulk() {
+  public function inputBulk() {
     $_arr_inputParam = array(
       'pm_title'          => array('txt', ''),
       'pm_content'        => array('txt', ''),
@@ -121,7 +119,7 @@ class Pm extends Pm_Base {
    * @access public
    * @return void
    */
-  function inputStatus() {
+  public function inputStatus() {
     $_arr_inputParam = array(
       'pm_ids'    => array('arr', array()),
       'act'       => array('txt', ''),
@@ -130,7 +128,7 @@ class Pm extends Pm_Base {
 
     $_arr_inputStatus = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputStatus['pm_ids'] = Arrays::filter($_arr_inputStatus['pm_ids']);
+    $_arr_inputStatus['pm_ids'] = Arrays::unique($_arr_inputStatus['pm_ids']);
 
     $_mix_vld = $this->validate($_arr_inputStatus, '', 'status');
 
@@ -149,7 +147,7 @@ class Pm extends Pm_Base {
   }
 
 
-  function inputDelete() {
+  public function inputDelete() {
     $_arr_inputParam = array(
       'pm_ids'    => array('arr', array()),
       '__token__' => array('txt', ''),
@@ -157,7 +155,7 @@ class Pm extends Pm_Base {
 
     $_arr_inputDelete = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputDelete['pm_ids'] = Arrays::filter($this->inputDelete['pm_ids']);
+    $_arr_inputDelete['pm_ids'] = Arrays::unique($this->inputDelete['pm_ids']);
 
     $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

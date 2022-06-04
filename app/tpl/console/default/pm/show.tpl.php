@@ -1,6 +1,3 @@
-  <?php $cfg_global = array(
-    'pathIcon' => $path_tpl_common . 'icon' . DS,
-  ); ?>
   <div class="modal-header">
     <?php echo $lang->get('Private message', 'console.common'), ' &raquo; ', $lang->get('Show'); ?>
     <button type="button" class="close" data-dismiss="modal">
@@ -11,7 +8,7 @@
     <ul class="list-inline">
       <li class="list-inline-item"><?php echo $lang->get('Sender'); ?>:</li>
       <li class="list-inline-item">
-        <a href="<?php echo $route_console; ?>user/show/id/<?php echo $pmRow['pm_from']; ?>/">
+        <a href="<?php echo $hrefRow['user-show'], $pmRow['pm_from']; ?>">
           <?php if ($pmRow['pm_from'] == -1) {
             echo $lang->get('System');
           } else if (isset($pmRow['fromUser']['user_name'])) {
@@ -23,7 +20,7 @@
       </li>
       <li class="list-inline-item"><?php echo $lang->get('Recipient'); ?>:</li>
       <li class="list-inline-item">
-        <a href="<?php echo $route_console; ?>user/show/id/<?php echo $pmRow['pm_to']; ?>/">
+        <a href="<?php echo $hrefRow['user-show'], $pmRow['pm_to']; ?>">
           <?php if (isset($pmRow['toUser']['user_name'])) {
             echo $pmRow['toUser']['user_name'];
           } else {
@@ -43,7 +40,7 @@
     <ul class="list-inline">
       <li class="list-inline-item">
         <?php $str_status = $pmRow['pm_status'];
-        include($path_tpl . 'include' . DS . 'status_process' . GK_EXT_TPL); ?>
+        include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
       </li>
       <li class="list-inline-item">
         <small><?php echo $lang->get($pmRow['pm_type']); ?></small>
@@ -52,6 +49,6 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">
-      <?php echo $lang->get('Close'); ?>
+      <?php echo $lang->get('Close', 'console.common'); ?>
     </button>
   </div>

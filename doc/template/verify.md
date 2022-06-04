@@ -19,17 +19,17 @@
 
 ``` php
 $userRows = array(
-    'user_id'       => '1', // ID
-    'user_name'     => 'baigo', // 用户名
-    'user_mail'     => 'baigo@baigo.net', // 邮箱
-    'user_nick'     => 'nickname', // 昵称
-    'user_status'   => 'wait', // 状态
+  'user_id'       => '1', // ID
+  'user_name'     => 'baigo', // 用户名
+  'user_mail'     => 'baigo@baigo.net', // 邮箱
+  'user_nick'     => 'nickname', // 昵称
+  'user_status'   => 'wait', // 状态
 );
 
 $verifyRow = array(
-    'verify_id'     => '1', // ID
-    'verify_token'  => 'fwegweerIUreljiErl', // 验证口令
-    'verify_mail'   => 'baigo@baigo.net', // 邮箱
+  'verify_id'     => '1', // ID
+  'verify_token'  => 'fwegweerIUreljiErl', // 验证口令
+  'verify_mail'   => 'baigo@baigo.net', // 邮箱
 );
 ```
 
@@ -50,17 +50,17 @@ $verifyRow = array(
 
 ``` php
 $userRows = array(
-    'user_id'       => '1', // ID
-    'user_name'     => 'baigo', // 用户名
-    'user_mail'     => 'baigo@baigo.net', // 邮箱
-    'user_nick'     => 'nickname', // 昵称
-    'user_status'   => 'wait', // 状态
+  'user_id'       => '1', // ID
+  'user_name'     => 'baigo', // 用户名
+  'user_mail'     => 'baigo@baigo.net', // 邮箱
+  'user_nick'     => 'nickname', // 昵称
+  'user_status'   => 'wait', // 状态
 );
 
 $verifyRow = array(
-    'verify_id'     => '1', // ID
-    'verify_token'  => 'fwegweerIUreljiErl', // 验证口令
-    'verify_mail'   => 'baigo@baigo.net', // 要更换的邮箱
+  'verify_id'     => '1', // ID
+  'verify_token'  => 'fwegweerIUreljiErl', // 验证口令
+  'verify_mail'   => 'baigo@baigo.net', // 要更换的邮箱
 );
 ```
 
@@ -81,16 +81,16 @@ $verifyRow = array(
 
 ``` php
 $userRows = array(
-    'user_id'       => '1', // ID
-    'user_name'     => 'baigo', // 用户名
-    'user_mail'     => 'baigo@baigo.net', // 邮箱
-    'user_nick'     => 'nickname', // 昵称
-    'user_status'   => 'wait', // 状态
+  'user_id'       => '1', // ID
+  'user_name'     => 'baigo', // 用户名
+  'user_mail'     => 'baigo@baigo.net', // 邮箱
+  'user_nick'     => 'nickname', // 昵称
+  'user_status'   => 'wait', // 状态
 );
 
 $verifyRow = array(
-    'verify_id'     => '1', // ID
-    'verify_token'  => 'fwegweerIUreljiErl', // 验证口令
-    'verify_mail'   => 'baigo@baigo.net', // 邮箱
+  'verify_id'     => '1', // ID
+  'verify_token'  => 'fwegweerIUreljiErl', // 验证口令
+  'verify_mail'   => 'baigo@baigo.net', // 邮箱
 );
 ```

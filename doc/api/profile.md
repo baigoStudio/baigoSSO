@@ -43,10 +43,10 @@ POST
 
 ``` javascript
 {
-    "user_id": "1",
-    "user_access_token": "0VHBRPQUICBKGVWXTBDQBHVEPWK",
-    "user_access_expire": "1550198497",
-    "timestamp": "1550198497"
+  "user_id": "1",
+  "user_access_token": "0VHBRPQUICBKGVWXTBDQBHVEPWK",
+  "user_access_expire": "1550198497",
+  "timestamp": "1550198497"
 }
 ```
 
@@ -84,25 +84,25 @@ POST
 ``` php
 // 加密参数
 $_arr_crypt = array(
-    'user_id' => 'baigo',
-    'user_pass' => md5('123456'),
-    'user_contact' => array(
-        'tel' => array(
-            'key'   => '电话',
-            'value' => '0574-88888888'
-        ),
-        'addr' => array(
-            'key'   => '地址',
-            'value' => '浙江省宁波市'
-        )
+  'user_id' => 'baigo',
+  'user_pass' => md5('123456'),
+  'user_contact' => array(
+    'tel' => array(
+      'key'   => '电话',
+      'value' => '0574-88888888'
     ),
-    'user_extend'   => array(
-        'test' => array(
-            'key'   => '名称',
-            'value' => '值'
-        )
-    ),
-    'timestamp' => time(),
+    'addr' => array(
+      'key'   => '地址',
+      'value' => '浙江省宁波市'
+    )
+  ),
+  'user_extend'   => array(
+    'test' => array(
+      'key'   => '名称',
+      'value' => '值'
+    )
+  ),
+  'timestamp' => time(),
 );
 
 $_str_crypt   = Json::encode($_arr_crypt); // 编码
@@ -110,10 +110,10 @@ $_arr_encrypt = Crypt::encrypt($_str_crypt, $_app_key, $_app_secret); // 加密
 
 // 公共参数
 $_arr_data = array(
-    'app_id'    => $_app_id,
-    'app_key'   => $_app_key,
-    'code'      => $_arr_encrypt['encrypt'], // 加密参数
-    'sign'      => Sign::make($_str_crypt, $_app_key . $_app_secret), // 签名
+  'app_id'    => $_app_id,
+  'app_key'   => $_app_key,
+  'code'      => $_arr_encrypt['encrypt'], // 加密参数
+  'sign'      => Sign::make($_str_crypt, $_app_key . $_app_secret), // 签名
 );
 ```
 
@@ -125,10 +125,10 @@ $_arr_data = array(
 
 ``` javascript
 {
-    "rcode": "y010103",
-    "msg": "编辑个人资料成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010103",
+  "msg": "编辑个人资料成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -167,10 +167,10 @@ POST
 
 ``` javascript
 {
-    "rcode": "y010103",
-    "msg": "修改密码成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010103",
+  "msg": "修改密码成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -207,19 +207,19 @@ POST
 ``` php
 // 加密参数
 $_arr_crypt = array(
-    'user_id' => 'baigo',
-    'user_pass' => md5('123456'),
-    'user_sec_ques'   => array(
-        '您祖母叫什么名字？',
-        '您的家乡是哪里？',
-        '您的生日是什么时候？',
-    ),
-    'user_sec_ques'   => array(
-        '祖母名字',
-        '宁波',
-        '2014-05-06',
-    ),
-    'timestamp' => time(),
+  'user_id' => 'baigo',
+  'user_pass' => md5('123456'),
+  'user_sec_ques'   => array(
+    '您祖母叫什么名字？',
+    '您的家乡是哪里？',
+    '您的生日是什么时候？',
+  ),
+  'user_sec_ques'   => array(
+    '祖母名字',
+    '宁波',
+    '2014-05-06',
+  ),
+  'timestamp' => time(),
 );
 
 $_str_crypt   = Json::encode($_arr_crypt); // 编码
@@ -227,10 +227,10 @@ $_arr_encrypt = Crypt::encrypt($_str_crypt, $_app_key, $_app_secret); // 加密
 
 // 公共参数
 $_arr_data = array(
-    'app_id'    => $_app_id,
-    'app_key'   => $_app_key,
-    'code'      => $_arr_encrypt['encrypt'], // 加密参数
-    'sign'      => Sign::make($_str_crypt, $_app_key . $_app_secret), // 签名
+  'app_id'    => $_app_id,
+  'app_key'   => $_app_key,
+  'code'      => $_arr_encrypt['encrypt'], // 加密参数
+  'sign'      => Sign::make($_str_crypt, $_app_key . $_app_secret), // 签名
 );
 ```
 
@@ -242,10 +242,10 @@ $_arr_data = array(
 
 ``` javascript
 {
-    "rcode": "y010103",
-    "msg": "修改密保问题成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010103",
+  "msg": "修改密保问题成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -282,9 +282,9 @@ POST
 
 ``` javascript
 {
-    "rcode": "y010405",
-    "msg": "更换邮箱成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010405",
+  "msg": "更换邮箱成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```

@@ -4,10 +4,9 @@
   'baigoValidate'  => 'true',
   'baigoSubmit'    => 'true',
   'captchaReload'  => 'true',
-  'pathInclude'    => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'personal_head' . GK_EXT_TPL); ?>
 
   <div class="card">
     <div class="card-header">
@@ -27,7 +26,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
     <div class="card-body">
       <div class="tab-content">
         <div class="tab-pane active" id="mail">
-          <form name="forgot_mail" id="forgot_mail" action='<?php echo $route_personal; ?>forgot/bymail/'>
+          <form name="forgot_mail" id="forgot_mail" action='<?php echo $hrefRow['bymail']; ?>'>
             <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
             <div class="form-group">
@@ -38,12 +37,12 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
             <?php if (empty($userRow['user_mail'])) { ?>
               <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
                 <?php echo $lang->get('You have not set a mailbox!'); ?>
               </div>
             <?php } else { ?>
               <div class="alert alert-warning">
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'exclamation-triangle' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'exclamation-triangle' . BG_EXT_SVG); ?></span>
                 <?php echo $lang->get('System will send a confirmation email to the mailbox you reserved.'); ?>
               </div>
 
@@ -52,7 +51,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                 <div class="input-group">
                   <input type="text" name="captcha_mail" id="captcha_mail" class="form-control">
                   <div class="input-group-append">
-                    <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_mail/" data-id="captcha_mail" class="bg-captcha-img"  alt="<?php echo $lang->get('Captcha'); ?>">
+                    <img src="<?php echo $hrefRow['captcha-mail']; ?>" class="bg-captcha-img"  alt="<?php echo $lang->get('Captcha'); ?>">
                   </div>
                 </div>
                 <small class="form-text" id="msg_captcha_mail"></small>
@@ -69,7 +68,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
           </form>
         </div>
         <div class="tab-pane" id="secqa">
-          <form name="forgot_secqa" id="forgot_secqa" action='<?php echo $route_personal; ?>forgot/bysecqa/'>
+          <form name="forgot_secqa" id="forgot_secqa" action='<?php echo $hrefRow['bysecqa']; ?>'>
             <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
             <div class="form-group">
@@ -80,7 +79,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
             <?php if (empty($userRow['user_sec_ques'])) { ?>
               <div class="alert alert-danger alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
                 <?php echo $lang->get('You have not set a secret question!'); ?>
               </div>
             <?php } else {
@@ -109,7 +108,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
                 <div class="input-group">
                   <input type="text" name="captcha_secqa" id="captcha_secqa" class="form-control">
                   <div class="input-group-append">
-                    <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_secqa/" data-id="captcha_secqa" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
+                    <img src="<?php echo $hrefRow['captcha-secqa']; ?>" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
                   </div>
                 </div>
                 <small class="form-text" id="msg_captcha_secqa"></small>
@@ -127,7 +126,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'personal_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'personal_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_mail = {
@@ -137,7 +136,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
         format: 'alpha_number',
         ajax: {
           key: 'captcha',
-          url: '<?php echo $route_misc; ?>captcha/check/id/captcha_mail/'
+          url: '<?php echo $hrefRow['captcha-mail-check']; ?>'
         }
       }
     },
@@ -178,7 +177,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
         format: 'alpha_number',
         ajax: {
           key: 'captcha',
-          url: '<?php echo $route_misc; ?>captcha/check/id/captcha_secqa/'
+          url: '<?php echo $hrefRow['captcha-secqa-check']; ?>'
         }
       }
     },
@@ -215,7 +214,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
       if (obj_validate_mail.verify()) {
         obj_submit_mail.formSubmit(false, function(result){
           if (typeof result.rcode == 'undefined' || result.rcode != 'y010406') {
-            captchaReload('captcha_mail');
+            captchaReload('<?php echo $hrefRow['captcha-mail']; ?>');
           }
         });
       }
@@ -228,7 +227,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
       if (obj_validate_secqa.verify()) {
         obj_submit_secqa.formSubmit(false, function(result){
           if (typeof result.rcode == 'undefined' || result.rcode != 'y010103') {
-            captchaReload('captcha_secqa');
+            captchaReload('<?php echo $hrefRow['captcha-secqa']; ?>');
           }
         });
       }
@@ -236,4 +235,4 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

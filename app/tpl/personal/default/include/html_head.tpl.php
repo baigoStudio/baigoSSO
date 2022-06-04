@@ -1,8 +1,4 @@
-<?php use ginkgo\Plugin;
-
-$cfg_global = array(
-  'pathIcon' => $path_tpl_common . 'icon' . DS,
-); ?>
+<?php use ginkgo\Plugin; ?>
 <!DOCTYPE html>
 <html lang="<?php echo $lang->getCurrent(); ?>">
 <head>
@@ -23,7 +19,9 @@ $cfg_global = array(
     } ?>
   </title>
 
+  <link href="{:DIR_STATIC}image/favicon.png" rel="shortcut icon">
   <link href="{:DIR_STATIC}lib/bootstrap/4.6.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+
   <?php if (isset($cfg['baigoSubmit'])) { ?>
     <link rel="stylesheet" href="{:DIR_STATIC}lib/baigoSubmit/2.1.4/baigoSubmit.css" type="text/css" rel="stylesheet">
   <?php }

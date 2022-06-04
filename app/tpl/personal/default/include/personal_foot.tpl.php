@@ -21,8 +21,8 @@
         </div>
       <?php }
 
-      Plugin::listen('action_personal_foot_after'); //个人界面底部触发 ?> ?>
+      Plugin::listen('action_personal_foot_after'); //个人界面底部触发 ?>
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'script_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'script_foot' . GK_EXT_TPL);

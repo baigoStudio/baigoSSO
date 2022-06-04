@@ -7,24 +7,23 @@
   'baigoCheckall'     => 'true',
   'baigoQuery'        => 'true',
   'baigoDialog'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <div class="d-flex justify-content-between">
     <nav class="nav mb-3">
-      <a href="#combine_modal" data-toggle="modal" data-id="0" class="nav-link">
-        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'plus' . BG_EXT_SVG); ?></span>
+      <a href="#modal_nm" data-toggle="modal" data-href="<?php echo $hrefRow['add']; ?>" class="nav-link">
+        <span class="bg-icon"><?php include($tpl_icon . 'plus' . BG_EXT_SVG); ?></span>
         <?php echo $lang->get('Add'); ?>
       </a>
     </nav>
-    <form name="combine_search" id="combine_search" class="d-none d-lg-inline-block" action="<?php echo $route_console; ?>combine/index/">
+    <form name="combine_search" id="combine_search" class="d-none d-lg-inline-block" action="<?php echo $hrefRow['index']; ?>">
       <div class="input-group mb-3">
         <input type="text" name="key" value="<?php echo $search['key']; ?>" placeholder="<?php echo $lang->get('Keyword'); ?>" class="form-control">
         <span class="input-group-append">
           <button class="btn btn-outline-secondary" type="submit">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'search' . BG_EXT_SVG); ?></span>
+            <span class="bg-icon"><?php include($tpl_icon . 'search' . BG_EXT_SVG); ?></span>
           </button>
         </span>
       </div>
@@ -40,14 +39,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </span>
       <?php } ?>
 
-      <a href="<?php echo $route_console; ?>combine/index/" class="badge badge-danger badge-pill">
-        <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
+      <a href="<?php echo $hrefRow['index']; ?>" class="badge badge-danger badge-pill">
+        <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
         <?php echo $lang->get('Reset'); ?>
       </a>
     </div>
   <?php } ?>
 
-  <form name="combine_list" id="combine_list" action="<?php echo $route_console; ?>combine/delete/">
+  <form name="combine_list" id="combine_list" action="<?php echo $hrefRow['delete']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="table-responsive">
@@ -80,22 +79,22 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               </td>
               <td>
                 <div class="mb-2 text-wrap text-break">
-                  <a href="#combine_modal" data-toggle="modal" data-id="<?php echo $value['combine_id']; ?>">
+                  <a href="#modal_nm" data-toggle="modal" data-href="<?php echo $hrefRow['edit'], $value['combine_id']; ?>">
                     <?php echo $value['combine_name']; ?>
                   </a>
                 </div>
                 <div class="bg-manage-menu">
                   <div class="d-flex flex-wrap">
-                    <a href="#combine_modal" data-toggle="modal" data-id="<?php echo $value['combine_id']; ?>" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+                    <a href="#modal_nm" data-toggle="modal" data-href="<?php echo $hrefRow['edit'], $value['combine_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Edit'); ?>
                     </a>
-                    <a href="<?php echo $route_console; ?>combine-belong/index/id/<?php echo $value['combine_id']; ?>/" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'check-circle' . BG_EXT_SVG); ?></span>
+                    <a href="<?php echo $hrefRow['combine_belong'], $value['combine_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'check-circle' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Choose Apps'); ?>
                     </a>
                     <a href="javascript:void(0);" data-id="<?php echo $value['combine_id']; ?>" class="combine_delete text-danger">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>
+                      <span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Delete'); ?>
                     </a>
                   </div>
@@ -118,20 +117,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </button>
       </div>
       <div class="float-right">
-        <?php include($cfg['pathInclude'] . 'pagination' . GK_EXT_TPL); ?>
+        <?php include($tpl_include . 'pagination' . GK_EXT_TPL); ?>
       </div>
     </div>
   </form>
 
-  <div class="modal fade" id="combine_modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL);
 
-      </div>
-    </div>
-  </div>
-
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+  include($tpl_include . 'modal_nm' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_list = {
@@ -157,14 +150,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   };
 
   $(document).ready(function(){
-    $('#combine_modal').on('shown.bs.modal',function(event){
-      var _obj_button   = $(event.relatedTarget);
-      var _id          = _obj_button.data('id');
-      $('#combine_modal .modal-content').load('<?php echo $route_console; ?>combine/form/id/' + _id + '/view/modal/');
-    }).on('hidden.bs.modal', function(){
-        $('#combine_modal .modal-content').empty();
-    });
-
     var obj_dialog          = $.baigoDialog(opts_dialog);
     var obj_validate_list   = $('#combine_list').baigoValidate(opts_validate_list);
     var obj_submit_list     = $('#combine_list').baigoSubmit(opts_submit);
@@ -172,21 +157,21 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     //console.log(obj_submit_list);
 
     $('#combine_list').submit(function(){
-        if (obj_validate_list.verify()) {
-            obj_dialog.confirm('<?php echo $lang->get('Are you sure to delete?'); ?>', function(result){
-                if (result) {
-                    obj_submit_list.formSubmit();
-                }
-            });
-        }
+      if (obj_validate_list.verify()) {
+        obj_dialog.confirm('<?php echo $lang->get('Are you sure to delete?'); ?>', function(result){
+          if (result) {
+            obj_submit_list.formSubmit();
+          }
+        });
+      }
     });
 
     $('.combine_delete').click(function(){
-        var _combine_id = $(this).data('id');
-        $('.combine_id').prop('checked', false);
-        $('#combine_id_' + _combine_id).prop('checked', true);
-        $('#act').val('delete');
-        $('#combine_list').submit();
+      var _combine_id = $(this).data('id');
+      $('.combine_id').prop('checked', false);
+      $('#combine_id_' + _combine_id).prop('checked', true);
+      $('#act').val('delete');
+      $('#combine_list').submit();
     });
 
     $('#combine_list').baigoCheckall();
@@ -194,9 +179,9 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     var obj_query = $('#combine_search').baigoQuery();
 
     $('#combine_search').submit(function(){
-        obj_query.formSubmit();
+      obj_query.formSubmit();
     });
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

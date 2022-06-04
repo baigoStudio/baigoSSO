@@ -8,6 +8,8 @@ namespace app\ctrl\console;
 
 use app\classes\console\Ctrl;
 use ginkgo\Loader;
+use ginkgo\Config;
+use ginkgo\Strings;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
@@ -19,84 +21,76 @@ class Index extends Ctrl {
   protected function c_init($param = array()) {
     parent::c_init();
 
+    $this->countLists    = Config::get('count_lists', 'console.index');
+
     $this->mdl_profile  = Loader::model('Profile');
 
-    $this->mdl_user     = Loader::model('User');
-    $this->mdl_app      = Loader::model('App');
-    $this->mdl_admin    = Loader::model('Admin');
-    $this->mdl_pm       = Loader::model('Pm');
+    $_str_hrefBase = $this->hrefBase . 'index/';
 
-    $this->generalData['status_user']   = $this->mdl_user->arr_status;
-    $this->generalData['status_app']    = $this->mdl_app->arr_status;
-    $this->generalData['status_admin']  = $this->mdl_admin->arr_status;
-    $this->generalData['type_admin']    = $this->mdl_admin->arr_type;
-    $this->generalData['status_pm']     = $this->mdl_pm->arr_status;
-    $this->generalData['type_pm']       = $this->mdl_pm->arr_type;
+    $_arr_hrefRow = array(
+      'setting' => $_str_hrefBase . 'setting/',
+      'submit'  => $_str_hrefBase . 'submit/',
+    );
+
+    $this->generalData['countLists'] = $this->countLists;
+    $this->generalData['hrefRow']    = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
+
+    foreach ($this->countLists as $_key=>$_value) {
+      $this->mdlRows[$_key]  = Loader::model(Strings::ucwords($_key));
+
+      if (isset($_value['status'])) {
+        $this->generalData['status_' . $_key] = $this->mdlRows[$_key]->arr_status;
+      }
+
+      if (isset($_value['type'])) {
+        $this->generalData['type_' . $_key] = $this->mdlRows[$_key]->arr_type;
+      }
+    }
   }
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
       return $this->error($_mix_init['msg'], $_mix_init['rcode']);
     }
 
-    $_arr_userCount['total'] = $this->mdl_user->count();
+    $_arr_tplData = array();
 
-    foreach ($this->mdl_user->arr_status as $_key=>$_value) {
-      $_arr_search = array(
-        'status' => $_value,
-      );
-      $_arr_userCount[$_value] = $this->mdl_user->count($_arr_search);
+    foreach ($this->countLists as $_key=>$_value) {
+      if (isset($_value['lists']['total'])) {
+        if (is_array($_value['lists']['total'])) {
+          if (isset($_value['lists']['total'][0]) && isset($_value['lists']['total'][1])) {
+            $_arr_search = array(
+              $_value['lists']['total'][0] => $_value['lists']['total'][1],
+            );
+            $_arr_tplData['countRows'][$_key]['total'] = $this->mdlRows[$_key]->counts($_arr_search);
+          } else {
+            $_arr_tplData['countRows'][$_key]['total'] = $this->mdlRows[$_key]->counts();
+          }
+        } else {
+          $_arr_tplData['countRows'][$_key]['total'] = $this->mdlRows[$_key]->counts();
+        }
+      }
+
+      if (isset($_value['lists']['status'])) {
+        foreach ($this->mdlRows[$_key]->arr_status as $_key_sub=>$_value_sub) {
+          $_arr_search = array(
+            'status' => $_value_sub,
+          );
+          $_arr_tplData['countRows'][$_key][$_value_sub] = $this->mdlRows[$_key]->counts($_arr_search);
+        }
+      }
+
+      if (isset($_value['lists']['type'])) {
+        foreach ($this->mdlRows[$_key]->arr_type as $_key_sub=>$_value_sub) {
+          $_arr_search = array(
+            'type' => $_value_sub,
+          );
+          $_arr_tplData['countRows'][$_key][$_value_sub] = $this->mdlRows[$_key]->counts($_arr_search);
+        }
+      }
     }
-
-    $_arr_appCount['total'] = $this->mdl_app->count();
-
-    foreach ($this->mdl_app->arr_status as $_key=>$_value) {
-      $_arr_search = array(
-        'status' => $_value,
-      );
-      $_arr_appCount[$_value] = $this->mdl_app->count($_arr_search);
-    }
-
-    $_arr_adminCount['total'] = $this->mdl_admin->count();
-
-    foreach ($this->mdl_admin->arr_status as $_key=>$_value) {
-      $_arr_search = array(
-        'status' => $_value,
-      );
-      $_arr_adminCount[$_value] = $this->mdl_admin->count($_arr_search);
-    }
-
-    foreach ($this->mdl_admin->arr_type as $_key=>$_value) {
-      $_arr_search = array(
-        'type' => $_value,
-      );
-      $_arr_adminCount[$_value] = $this->mdl_admin->count($_arr_search);
-    }
-
-    $_arr_pmCount['total'] = $this->mdl_pm->count();
-
-    foreach ($this->mdl_pm->arr_status as $_key=>$_value) {
-      $_arr_search = array(
-        'status' => $_value,
-      );
-      $_arr_pmCount[$_value] = $this->mdl_pm->count($_arr_search);
-    }
-
-    foreach ($this->mdl_pm->arr_type as $_key=>$_value) {
-      $_arr_search = array(
-        'type' => $_value,
-      );
-      $_arr_pmCount[$_value] = $this->mdl_pm->count($_arr_search);
-    }
-
-    $_arr_tplData = array(
-      'user_count'    => $_arr_userCount,
-      'app_count'     => $_arr_appCount,
-      'admin_count'   => $_arr_adminCount,
-      'pm_count'      => $_arr_pmCount,
-    );
 
     $_arr_tpl = array_replace_recursive($this->generalData, $_arr_tplData);
 
@@ -106,7 +100,7 @@ class Index extends Ctrl {
   }
 
 
-  function setting() {
+  public function setting() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -125,7 +119,7 @@ class Index extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

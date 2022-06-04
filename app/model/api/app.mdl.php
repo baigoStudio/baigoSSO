@@ -21,7 +21,10 @@ if (!defined('IN_GINKGO')) {
 /*-------------应用模型-------------*/
 class App extends App_Base {
 
-  function submit() {
+  public $inputSubmit = array();
+  public $inputCommon = array();
+
+  public function submit() {
     $_str_appKey    = Func::rand(64);
     $_str_appSecret = Func::rand(16);
 
@@ -72,7 +75,7 @@ class App extends App_Base {
   }
 
 
-  function inputSubmit($arr_data) {
+  public function inputSubmit($arr_data) {
     $_arr_inputParam = array(
       'app_name'          => array('txt', ''),
       'app_url_notify'    => array('txt', ''),
@@ -119,7 +122,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function inputCommon() {
+  public function inputCommon() {
     $_arr_inputParam = array(
       'app_id'    => array('int', 0),
       'app_key'   => array('txt', ''),

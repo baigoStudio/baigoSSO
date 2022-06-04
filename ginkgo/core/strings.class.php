@@ -258,4 +258,19 @@ class Strings {
 
     return $string;
   }
+
+
+  public static function isJson($string) {
+    $_return = true;
+
+    json_decode($string);
+
+    $_last_err = json_last_error();
+
+    if ($_last_err) {
+      $_return = false;
+    }
+
+    return $_return;
+  }
 }

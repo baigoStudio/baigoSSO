@@ -17,6 +17,7 @@ if (!defined('IN_GINKGO')) {
 class App {
 
   public static $config = array(); // 配置
+  public static $header = array(); // http 头 since 0.2.3
 
   private static $configThis = array( // 默认配置
     'timezone'         => 'Asia/Shanghai', //默认时区
@@ -104,7 +105,22 @@ class App {
       $_obj_response = Response::create($_mix_content, $_str_type); // 实例化响应类
     }
 
+    // since 0.2.3
+    if (Func::notEmpty(self::$header) && method_exists($_obj_response, 'setHeader')) {
+      $_obj_response->setHeader(self::$header);
+    }
+
     return $_obj_response; // 返回响应实例
+  }
+
+
+  // 设置头 since 0.2.3
+  public function header($header, $value = '') {
+    if (is_array($header)) {
+      self::$header = array_replace_recursive(self::$header, $header);
+    } else {
+      self::$header[$header] = $value;
+    }
   }
 
 
@@ -154,6 +170,7 @@ class App {
     }
   }
 
+
   // 配置处理
   private static function configProcess() {
     $_arr_configExtra = Config::get('config_extra'); // 获取哪些扩展配置需要载入
@@ -180,6 +197,7 @@ class App {
     $_str_pathPlugin = GK_APP_CONFIG . 'plugin' . GK_EXT_INC;
     Config::load($_str_pathPlugin, 'plugin');
   }
+
 
   // 扩展函数处理
   private static function extraProcess() {

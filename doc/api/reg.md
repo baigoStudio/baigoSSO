@@ -26,7 +26,7 @@ POST
 | - | - | - | - |
 | user_name | string | true | 用户名 |
 | user_pass | string | true | 密码，必须用 MD5 加密后传输。 |
-| user_mail | string |  | 视注册设置情况而定。|
+| user_mail | string | | 视注册设置情况而定。|
 | user_nick | string | false | 昵称 |
 | user_contact | string | false | 联系方式。 |
 | user_extend | string | false | 扩展字段。 |
@@ -50,10 +50,10 @@ POST
 
 ``` javascript
 {
-    "user_id": "1",
-    "user_name": "baigo",
-    "user_status": "wait",
-    "timestamp": "1550198497"
+  "user_id": "1",
+  "user_name": "baigo",
+  "user_status": "wait",
+  "timestamp": "1550198497"
 }
 ```
 
@@ -94,10 +94,10 @@ GET
 
 ``` javascript
 {
-    "rcode": "y010102",
-    "msg": "用户名已存在",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010102",
+  "msg": "用户名已存在",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -138,9 +138,9 @@ GET
 
 ``` javascript
 {
-    "rcode": "y010102",
-    "msg": "邮箱已存在",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y010102",
+  "msg": "邮箱已存在",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```

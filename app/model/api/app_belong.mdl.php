@@ -15,7 +15,7 @@ if (!defined('IN_GINKGO')) {
 /*-------------应用归属-------------*/
 class App_Belong extends App_Belong_Base {
 
-  function submit($num_appId, $num_userId) {
+  public function submit($num_appId, $num_userId) {
     $_str_rcode = 'x070101';
 
     if ($num_userId > 0 && $num_appId > 0) { //插入

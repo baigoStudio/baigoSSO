@@ -3,7 +3,7 @@
     "class": "Example",
     "version": "1.0",
     "author": "Baigo",
-    "plugin_url": "http://www.baigo.net/cms/plugin/example",
+    "plugin_url": "https://www.baigo.net/cms/plugin/example",
     "detail": "本插件为一个开发示例",
-    "author_url": "http://www.baigo.net"
+    "author_url": "https://www.baigo.net"
 }

@@ -1,7 +1,7 @@
 ## 通知概述
 
 系统在执行一些特定操作的时候，会根据应用的设置，向指定的“通知接口 URL”推送通知，“通知接口 URL”接收到通知以后，可以根据实际情况，在本地执行一些必要的程序。
- 
+
 ----------
 
 ### 通知的验证
@@ -16,9 +16,9 @@
 
 ``` php
 array(
-    'code'          => 'CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARb', //加密参数
-    'sign'          => '0VHBRPQUICBKGVWXTBDQBHVEPWK', //签名
-    'app_id'        => '1.1.1', //SSO 版本号
-    'prd_sso_pub'   => 20150923, //SSO 版本发布时间
+  'code'          => 'CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARb', //加密参数
+  'sign'          => '0VHBRPQUICBKGVWXTBDQBHVEPWK', //签名
+  'app_id'        => '1.1.1', //SSO 版本号
+  'prd_sso_pub'   => 20150923, //SSO 版本发布时间
 );
 ```

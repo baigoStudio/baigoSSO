@@ -25,7 +25,7 @@ class Combine_Belong extends Model {
    * @param int $num_appId (default: 0)
    * @return void
    */
-  function read($num_combineId = 0, $num_appId = 0) {
+  public function read($num_combineId = 0, $num_appId = 0) {
     $_arr_belongSelect = array(
       'belong_id',
       'belong_combine_id',
@@ -36,13 +36,14 @@ class Combine_Belong extends Model {
 
     $_arr_belongRow = $this->where($_arr_where)->find($_arr_belongSelect);
 
-    if (!$_arr_belongRow) {
-      return array(
-        'rcode' => 'x060102', //不存在记录
-      );
+    if ($_arr_belongRow === false) {
+      $_arr_belongRow          = $this->obj_request->fillParam(array(), $arr_select);
+      $_arr_belongRow['msg']   = 'Data not found';
+      $_arr_belongRow['rcode'] = 'x060102';
+    } else {
+      $_arr_belongRow['msg']   = '';
+      $_arr_belongRow['rcode'] = 'y060102';
     }
-
-    $_arr_belongRow['rcode'] = 'y060102';
 
     return $_arr_belongRow;
   }
@@ -57,7 +58,7 @@ class Combine_Belong extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function lists($num_no, $num_offset = 0, $arr_search = array()) {
+  public function lists($pagination = 0, $arr_search = array()) {
     $_arr_belongSelect = array(
       'belong_id',
       'belong_app_id',
@@ -65,8 +66,8 @@ class Combine_Belong extends Model {
     );
 
     $_arr_query = $this->queryProcess($arr_search);
-
-    $_arr_belongRows = $this->where($_arr_query)->order('belong_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_belongSelect);
+    $_arr_pagination = $this->paginationProcess($pagination);
+    $_arr_belongRows = $this->where($_arr_query)->order('belong_id', 'DESC')->limit($_arr_pagination['limit'], $_arr_pagination['length'])->paginate($_arr_pagination['perpage'], $_arr_pagination['current'])->select($_arr_belongSelect);
 
     return $_arr_belongRows;
   }
@@ -79,7 +80,7 @@ class Combine_Belong extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function count($arr_search = array()) {
+  public function counts($arr_search = array()) {
     $_arr_query = $this->queryProcess($arr_search);
 
     $_num_belongCount = $this->where($_arr_query)->count();
@@ -107,9 +108,11 @@ class Combine_Belong extends Model {
     }
 
     if (isset($arr_search['app_ids']) && Func::notEmpty($arr_search['app_ids'])) {
-      $arr_search['app_ids'] = Arrays::filter($arr_search['app_ids'], 'app_ids');
+      $arr_search['app_ids'] = Arrays::unique($arr_search['app_ids'], 'app_ids');
 
-      $_arr_where[] = array('belong_app_id', 'IN', $arr_search['app_ids'], 'app_ids');
+      if (Func::notEmpty($arr_search['app_ids'])) {
+        $_arr_where[] = array('belong_app_id', 'IN', $arr_search['app_ids'], 'app_ids');
+      }
     }
 
     if (isset($arr_search['min_id']) && $arr_search['min_id'] > 0) {
@@ -124,7 +127,7 @@ class Combine_Belong extends Model {
   }
 
 
-  function readQueryProcess($num_combineId = 0, $num_appId = 0) {
+  protected function readQueryProcess($num_combineId = 0, $num_appId = 0) {
     $_arr_where[] = array('belong_combine_id', '=', $num_combineId);
 
     if ($num_appId > 0) {

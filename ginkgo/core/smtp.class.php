@@ -131,7 +131,7 @@ class Smtp {
         $this->res_conn = stream_socket_client($_str_host . ':' . $this->config['port'], $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $_res_socket);
 
         if (!$this->res_conn) { // 报错
-          $this->error['connect'] = 'Socket Connection Error: Cannot conect to ' . $this->config['host'] . ', Error No.: ' . $errno . ', Error string: ' . $errstr;
+          $this->errRecord('Smtp::connect(), Socket Connection Error: Cannot conect to ' . $this->config['host'] . ', Error No.: ' . $errno . ', Error string: ' . $errstr);
           return false;
         }
 
@@ -253,14 +253,8 @@ class Smtp {
    * @access public
    * @return 错误
    */
-  public function getError($name = '') {
-    $_return = '';
-    if (Func::isEmpty($name)) {
-      $_return = $this->error;
-    } else if (isset($this->error[$name])) {
-      $_return = $this->error[$name];
-    }
-    return $_return;
+  public function getError() {
+    return $this->error;
   }
 
 
@@ -336,7 +330,7 @@ class Smtp {
         // 发送收件人邮箱 250 OK
         foreach ($this->rcpt as $_key=>$_value) {
           if (!isset($_value['addr']) || Func::isEmpty($_value['addr'])) { // 发件人地址参数未设置返回错误
-            $this->error['rcpt'] = 'Recipient is not set';
+            $this->errRecord('Smtp::send(), Recipient is not set');
             return false;
           }
 
@@ -358,7 +352,7 @@ class Smtp {
 
       default: // php 函数发送
         if (!function_exists('mail')) {
-          $this->error['func'] = 'PHP Function &quot;mail&quot; does not exist';
+          $this->errRecord('Smtp::send(), PHP Function &quot;mail&quot; does not exist');
           return false;
         }
 
@@ -368,7 +362,7 @@ class Smtp {
         // 发送收件人邮箱 250 OK
         foreach ($this->rcpt as $_key=>$_value) {
           if (!isset($_value['addr']) || Func::isEmpty($_value['addr'])) { // 发件人地址参数未设置返回错误
-            $this->error['rcpt'] = 'Recipient is not set';
+            $this->errRecord('Smtp::send(), Recipient is not set');
             return false;
           }
 
@@ -467,7 +461,7 @@ class Smtp {
     }
 
     if (!in_array($_str_code, $expect)) {
-      $this->error[$cmd] = $_str_code . ' - ' . $_str_detail;
+      $this->errRecord('Smtp::sendCmd(), ' . $cmd . ': ' . $_str_code . ' - ' . $_str_detail;
       return false;
     }
 
@@ -740,7 +734,7 @@ class Smtp {
    */
   private function getResult() {
     if (!is_resource($this->res_conn)) {
-      $this->error[] = 'Socket connection is not a resource';
+      $this->errRecord('Smtp::getResult(), Socket connection is not a resource');
       return '';
     }
 
@@ -769,5 +763,26 @@ class Smtp {
     }
 
     return $_str_return;
+  }
+
+
+  private function errRecord($msg) {  // since 0.2.4
+    $this->error      = $msg;
+    $_bool_debugDump  = false;
+    $_mix_configDebug = Config::get('debug'); // 取得调试配置
+
+    if (is_array($_mix_configDebug)) {
+      if ($_mix_configDebug['dump'] === true || $_mix_configDebug['dump'] === 'true' || $_mix_configDebug['dump'] === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    } else if (is_scalar($_mix_configDebug)) {
+      if ($_mix_configDebug === true || $_mix_configDebug === 'true' || $_mix_configDebug === 'trace') { // 假如配置为输出
+        $_bool_debugDump = true;
+      }
+    }
+
+    if ($_bool_debugDump) {
+      Log::record('type: ginkgo\Smtp, msg: ' . $msg, 'log');
+    }
   }
 }

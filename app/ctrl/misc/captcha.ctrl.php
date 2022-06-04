@@ -18,7 +18,7 @@ if (!defined('IN_GINKGO')) {
 
 class Captcha {
 
-  function __construct($param = array()) {
+  public function __construct($param = array()) {
     $this->obj_captcha  = Captcha_Gen::instance();
     $this->obj_request  = Request::instance();
 

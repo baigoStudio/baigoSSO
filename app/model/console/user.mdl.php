@@ -6,7 +6,7 @@
 
 namespace app\model\console;
 
-use app\model\User as User_Base;
+use app\model\common\User as User_Common;
 use ginkgo\Func;
 use ginkgo\Arrays;
 
@@ -16,13 +16,12 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class User extends User_Base {
+class User extends User_Common {
 
-  public $inputSubmit;
-  public $inputDelete;
-  public $inputStatus;
+  public $inputDelete = array();
+  public $inputStatus = array();
 
-  function login() {
+  public function login() {
     $_tm_timeLogin  = GK_NOW;
 
     if (isset($this->inputSubmit['user_ip']) && Func::notEmpty($this->inputSubmit['user_ip'])) {
@@ -60,7 +59,7 @@ class User extends User_Base {
    * @param mixed $str_status
    * @return void
    */
-  function status() {
+  public function status() {
     $_arr_userUpdate = array(
       'user_status' => $this->inputStatus['act'],
     );
@@ -91,7 +90,7 @@ class User extends User_Base {
    * @param mixed $_arr_inputDelete
    * @return void
    */
-  function delete() {
+  public function delete() {
     $_num_count     = $this->where('user_id', 'IN', $this->inputDelete['user_ids'], 'user_ids')->delete(); //更新数据
 
     //如车影响行数小于0则返回错误
@@ -117,7 +116,7 @@ class User extends User_Base {
    * @access public
    * @return void
    */
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'user_id'       => array('int', 0),
       'user_name'     => array('txt', ''),
@@ -180,7 +179,7 @@ class User extends User_Base {
    * @access public
    * @return void
    */
-  function inputStatus() {
+  public function inputStatus() {
     $_arr_inputParam = array(
       'user_ids'  => array('arr', array()),
       'act'       => array('txt', ''),
@@ -189,7 +188,7 @@ class User extends User_Base {
 
     $_arr_inputStatus = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputStatus['user_ids'] = Arrays::filter($_arr_inputStatus['user_ids']);
+    $_arr_inputStatus['user_ids'] = Arrays::unique($_arr_inputStatus['user_ids']);
 
     $_mix_vld = $this->validate($_arr_inputStatus, '', 'status');
 
@@ -210,7 +209,7 @@ class User extends User_Base {
   }
 
 
-  function inputDelete() {
+  public function inputDelete() {
     $_arr_inputParam = array(
       'user_ids' => array('arr', array()),
       '__token__' => array('txt', ''),
@@ -218,7 +217,7 @@ class User extends User_Base {
 
     $_arr_inputDelete = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputDelete['user_ids'] = Arrays::filter($_arr_inputDelete['user_ids']);
+    $_arr_inputDelete['user_ids'] = Arrays::unique($_arr_inputDelete['user_ids']);
 
     $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

@@ -19,10 +19,13 @@ if (!defined('IN_GINKGO')) {
 class Admin extends Model {
 
   protected $pk = 'admin_id';
-  private $create;
+  protected $comment = '管理帐号';
   private $mdl_adminBase;
 
-  function m_init() { //构造函数
+  public $arr_status = array();
+  public $arr_type   = array();
+
+  protected function m_init() { //构造函数
     $this->mdl_adminBase    = Loader::model('Admin', '', false);
     $this->arr_status       = $this->mdl_adminBase->arr_status;
     $this->arr_type         = $this->mdl_adminBase->arr_type;
@@ -115,8 +118,8 @@ class Admin extends Model {
    * @access public
    * @return void
    */
-  function createTable() {
-    $_num_count  = $this->create($this->create, '管理帐号');
+  public function createTable() {
+    $_num_count  = $this->create();
 
     if ($_num_count !== false) {
       $_str_rcode = 'y020105'; //更新成功
@@ -139,31 +142,18 @@ class Admin extends Model {
    * @access public
    * @return void
    */
-  function alterTable() {
-    $_arr_alter = $this->alterProcess($this->create);
-
+  public function alterTable() {
     $_str_rcode = 'y020111';
     $_str_msg   = 'No need to update table';
 
-    if (Func::notEmpty($_arr_alter)) {
-      $_num_count  = $this->alter($_arr_alter);
+    $_num_count  = $this->alter();
 
-      if ($_num_count !== false) {
-        $_str_rcode = 'y020106';
-        $_str_msg   = 'Update table successfully';
-
-        foreach ($this->create as $_key=>$_value) {
-          if (isset($_value['update'])) {
-            $_arr_data = array(
-              $_key => $_value['update'],
-            );
-            $this->where('LENGTH(`' . $_key . '`) < 1')->update($_arr_data);
-          }
-        }
-      } else {
-        $_str_rcode = 'x020106';
-        $_str_msg   = 'Update table failed';
-      }
+    if ($_num_count === false) {
+      $_str_rcode = 'y020106';
+      $_str_msg   = 'Update table successfully';
+    } else if ($_num_count > 0) {
+      $_str_rcode = 'x020106';
+      $_str_msg   = 'Update table failed';
     }
 
     return array(
@@ -173,12 +163,12 @@ class Admin extends Model {
   }
 
 
-  function check($mix_admin, $str_by = 'admin_id', $num_notId = 0) {
+  public function check($mix_admin, $str_by = 'admin_id', $num_notId = 0) {
     return $this->mdl_adminBase->check($mix_admin, $str_by, $num_notId);
   }
 
 
-  function submit() {
+  public function submit() {
     $_arr_adminRow  = $this->check($this->inputSubmit['admin_id']);
 
     $_arr_adminData = array(
@@ -243,7 +233,7 @@ class Admin extends Model {
    * @access public
    * @return void
    */
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'admin_name'            => array('txt', ''),
       'admin_pass'            => array('txt', ''),
@@ -272,7 +262,7 @@ class Admin extends Model {
   }
 
 
-  function inputAuth() {
+  public function inputAuth() {
     $_arr_inputParam = array(
       'admin_name'            => array('txt', ''),
       '__token__'             => array('txt', ''),

@@ -77,9 +77,8 @@ class Debug {
       self::init();
     }
 
-    $_mix_return   = $content;
-    $_optDebugDump = '';
-
+    $_mix_return      = $content;
+    $_optDebugDump    = '';
     $_mix_configDebug = Config::get('debug'); // 取得调试配置
 
     if (is_array($_mix_configDebug)) {
@@ -160,7 +159,6 @@ class Debug {
 
             default: // 注入 html
               $_str_err   = Error::dump(self::$error); // 输出
-
               $_num_pos   = strripos($_mix_return, '</body>'); // 取得 body 标签结束位置
 
               // 注入调试信息

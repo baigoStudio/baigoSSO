@@ -1,4 +1,4 @@
-<?php include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'html_head' . GK_EXT_TPL); ?>
 
   <div class="container">
     <div class="bg-card-xs my-lg-5 my-3">

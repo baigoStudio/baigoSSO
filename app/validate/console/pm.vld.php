@@ -119,7 +119,7 @@ class Pm extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'pm_title'          => $this->obj_lang->get('Title'),

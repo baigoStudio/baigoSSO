@@ -23,12 +23,21 @@ class Auth extends Ctrl {
     $this->mdl_user = Loader::model('User');
     $this->mdl_auth = Loader::model('Auth');
 
+    $_str_hrefBase = $this->hrefBase . 'auth/';
+
+    $_arr_hrefRow   = array(
+      'submit' => $_str_hrefBase . 'submit/',
+      'check'  => $_str_hrefBase . 'check/',
+      'back'   => $this->url['route_console'] . 'admin/',
+    );
+
     $this->generalData['status']    = $this->mdl_auth->arr_status;
     $this->generalData['type']      = $this->mdl_auth->arr_type;
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function form() {
+  public function form() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -59,7 +68,7 @@ class Auth extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -101,7 +110,7 @@ class Auth extends Ctrl {
   }
 
 
-  function check() {
+  public function check() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

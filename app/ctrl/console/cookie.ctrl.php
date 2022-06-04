@@ -15,7 +15,7 @@ if (!defined('IN_GINKGO')) {
 
 class Cookie extends Ctrl {
 
-  function clear() {
+  public function clear() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {

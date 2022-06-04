@@ -2,14 +2,13 @@
   'title'             => $lang->get('User management', 'console.common') . ' &raquo; ' . $lang->get('Show'),
   'menu_active'       => 'user',
   'sub_active'        => 'index',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <nav class="nav mb-3">
-    <a href="<?php echo $route_console; ?>user/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['index']; ?>" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Back'); ?>
     </a>
   </nav>
@@ -39,8 +38,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           </div>
         </div>
         <div class="card-footer text-right">
-          <a href="<?php echo $route_console; ?>user/form/id/<?php echo $userRow['user_id']; ?>/">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+          <a href="<?php echo $hrefRow['edit'], $userRow['user_id']; ?>">
+            <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
             <?php echo $lang->get('Edit'); ?>
           </a>
         </div>
@@ -63,11 +62,11 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               <tr>
                 <td class="text-nowrap bg-td-xs"><?php echo $value['app_id']; ?></td>
                 <td>
-                  <a href="<?php echo $route_console; ?>/app/show/id/<?php echo $value['app_id']; ?>/"><?php echo $value['app_name']; ?></a>
+                  <a href="<?php echo $hrefRow['app-show'], $value['app_id']; ?>"><?php echo $value['app_name']; ?></a>
                 </td>
                 <td class="text-nowrap bg-td-md">
                   <?php $str_status = $value['app_status'];
-                  include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                  include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                 </td>
               </tr>
             <?php } ?>
@@ -87,7 +86,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           <div class="form-group">
             <label class="text-muted font-weight-light"><?php echo $lang->get('Status'); ?></label>
             <div class="form-text font-weight-bolder"><?php $str_status = $userRow['user_status'];
-            include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?></div>
+            include($tpl_include . 'status_process' . GK_EXT_TPL); ?></div>
           </div>
 
           <?php if (is_array($userRow['user_contact'])) {
@@ -116,7 +115,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             <label class="text-muted font-weight-light"><?php echo $lang->get('Registered from App'); ?></label>
             <div>
               <?php if (isset($appRow['app_name'])) { ?>
-                <a href="<?php echo $route_console; ?>/app/show/id/<?php echo $userRow['user_app_id']; ?>/">
+                <a href="<?php echo $hrefRow['app-show'], $userRow['user_app_id']; ?>">
                   <?php echo $appRow['app_name']; ?>
                 </a>
               <?php } else {
@@ -126,8 +125,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           </div>
         </div>
         <div class="card-footer text-right">
-          <a href="<?php echo $route_console; ?>user/form/id/<?php echo $userRow['user_id']; ?>/">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+          <a href="<?php echo $hrefRow['edit'], $userRow['user_id']; ?>">
+            <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
             <?php echo $lang->get('Edit'); ?>
           </a>
         </div>
@@ -135,5 +134,5 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL);
-include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL);
+include($tpl_include . 'html_foot' . GK_EXT_TPL);

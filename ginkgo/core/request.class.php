@@ -247,11 +247,11 @@ class Request {
    * @param mixed $name (default: true) 名称
    * @param string $type (default: 'str') 期待类型
    * @param string $default (default: '') 默认值
-   * @param bool $htmlmode (default: false) html 模式
+   * @param bool $htmldecode (default: false) html 解码
    * @return 变量
    */
-  public function param($name = true, $type = 'str', $default = '', $htmlmode = false) {
-    return $this->varProcessR($name, $type, $default, $htmlmode, $this->param);
+  public function param($name = true, $type = 'str', $default = '', $htmldecode = false) {
+    return $this->varProcessR($name, $type, $default, $htmldecode, $this->param);
   }
 
 
@@ -262,11 +262,11 @@ class Request {
    * @param mixed $name (default: true) 变量名
    * @param string $type (default: 'str') 期待类型
    * @param string $default (default: '') 默认值
-   * @param bool $htmlmode (default: false) html 模式
+   * @param bool $htmldecode (default: false) html 解码
    * @return 变量
    */
-  public function get($name = true, $type = 'str', $default = '', $htmlmode = false) {
-    return $this->varProcessR($name, $type, $default, $htmlmode, $_GET);
+  public function get($name = true, $type = 'str', $default = '', $htmldecode = false) {
+    return $this->varProcessR($name, $type, $default, $htmldecode, $_GET);
   }
 
 
@@ -277,11 +277,11 @@ class Request {
    * @param mixed $name (default: true) 变量名
    * @param string $type (default: 'str') 期待类型
    * @param string $default (default: '') 默认值
-   * @param bool $htmlmode (default: false) html 模式
+   * @param bool $htmldecode (default: false) html 解码
    * @return 变量
    */
-  public function post($name = true, $type = 'str', $default = '', $htmlmode = false) {
-    return $this->varProcessR($name, $type, $default, $htmlmode, $_POST);
+  public function post($name = true, $type = 'str', $default = '', $htmldecode = false) {
+    return $this->varProcessR($name, $type, $default, $htmldecode, $_POST);
   }
 
 
@@ -292,11 +292,11 @@ class Request {
    * @param mixed $name (default: true) 变量名
    * @param string $type (default: 'str') 期待类型
    * @param string $default (default: '') 默认值
-   * @param bool $htmlmode (default: false) html 模式
+   * @param bool $htmldecode (default: false) html 解码
    * @return 变量
    */
-  public function request($name = true, $type = 'str', $default = '', $htmlmode = false) {
-    return $this->varProcessR($name, $type, $default, $htmlmode, $_REQUEST);
+  public function request($name = true, $type = 'str', $default = '', $htmldecode = false) {
+    return $this->varProcessR($name, $type, $default, $htmldecode, $_REQUEST);
   }
 
 
@@ -804,16 +804,16 @@ class Request {
    * @return 补全后的数据
    */
   public function fillParam($data, $param) {
-    //print_r($param);
-    $_arr_return    = array();
+    $_arr_return = array();
+    $data        = (array)$data;
 
     if (is_array($param) && Func::notEmpty($param)) {
       foreach ($param as $_key=>$_value) { // 遍历参数
-        $_type      = 'str'; // 未指定期待类型, 则认为是字符串
-        $_default   = ''; // 未指定默认值, 则用空值
-        $_html      = false; // 未指定 html 模式, 则为否
-        $_data      = ''; // 如果不存在则用空值填充
-        $_key_name  = ''; // 如果不存在则用空值填充
+        $_type       = 'str'; // 未指定期待类型, 则认为是字符串
+        $_default    = ''; // 未指定默认值, 则用空值
+        $_htmldecode = false; // 未指定 html 解码, 则为否
+        $_data       = ''; // 如果不存在则用空值填充
+        $_key_name   = ''; // 如果不存在则用空值填充
 
         if (is_string($_key)) { // 如果指定了键名
           $_key_name = $_key;
@@ -832,7 +832,7 @@ class Request {
             }
 
             if (isset($_value[2])) {
-              $_html = $_value[2]; // 指定 html 模式
+              $_htmldecode = $_value[2]; // 指定 html 解码
             }
           } else if (is_scalar($_value)) {
             $_type = $_value; // 仅指定类型
@@ -846,7 +846,7 @@ class Request {
           }
         }
 
-        $_arr_return[$_key_name] = $this->input($_data, $_type, $_default, $_html); // 过滤
+        $_arr_return[$_key_name] = $this->input($_data, $_type, $_default, $_htmldecode); // 过滤
       }
     }
 
@@ -854,7 +854,7 @@ class Request {
   }
 
 
-  /** 取得分页参数
+  /** 取得分页参数(即将废弃, 兼容用)
    * pagination function.
    *
    * @access public
@@ -884,10 +884,10 @@ class Request {
    * @param string $input (default: '') 数据
    * @param string $type (default: 'str') 期待类型
    * @param string $default (default: '') 默认值
-   * @param bool $htmlmode (default: false) html 模式
+   * @param bool $htmldecode (default: false) html 解码
    * @return void
    */
-  public function input($input = '', $type = 'str', $default = '', $htmlmode = false) {
+  public function input($input = '', $type = 'str', $default = '', $htmldecode = false) {
     //print_r($input);
     //print_r(PHP_EOL);
 
@@ -922,11 +922,11 @@ class Request {
           $input = array();
         }
 
-        $_return = Arrays::each($input); // 遍历数组
+        $_return = Arrays::map($input); // 遍历数组
       break;
 
       default: // 默认
-        $_return = Func::safe($input, $htmlmode); // 安全过滤
+        $_return = Func::safe($input, $htmldecode); // 安全过滤
       break;
 
     }
@@ -972,17 +972,17 @@ class Request {
    * @param mixed $name (default: true) 变量名
    * @param string $type (default: 'str') 期待类型
    * @param string $default (default: '') 默认值
-   * @param bool $htmlmode (default: false) html 模式
+   * @param bool $htmldecode (default: false) html 解码
    * @param array $var (default: array()) 数据
    * @return void
    */
-  private function varProcessR($name = true, $type = 'str', $default = '', $htmlmode = false, $var = array()) {
+  private function varProcessR($name = true, $type = 'str', $default = '', $htmldecode = false, $var = array()) {
     $_return    = '';
 
     if ($name === false) { // 如果为 false, 返回全部原始参数
       $_return = $var;
     } else if ($name === true) { // 如果是 true, 返回全部参数, 并作安全过滤
-      $_return = Arrays::each($var);
+      $_return = Arrays::map($var);
     } else if (is_array($name)) { // 如果为数组, 则补全
       $_return = $this->fillParam($var, $name);
     } else if (is_scalar($name)) { // 如果为标量, 则返回该元素
@@ -990,7 +990,7 @@ class Request {
         $_return = $var[$name];
       }
 
-      $_return = $this->input($_return, $type, $default, $htmlmode); // 安全过滤
+      $_return = $this->input($_return, $type, $default, $htmldecode); // 安全过滤
     }
 
     return $_return;

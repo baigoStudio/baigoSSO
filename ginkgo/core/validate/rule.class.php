@@ -182,11 +182,11 @@ abstract class Rule {
 
     $_arr_rule = explode(',', $rule);
 
-    $_start = $_arr_rule[0];
+    $_begin = $_arr_rule[0];
     $_end   = $_arr_rule[1];
 
-    if (!is_numeric($_start)) {
-      $_start = Strings::toTime($_start);
+    if (!is_numeric($_begin)) {
+      $_begin = Strings::toTime($_begin);
     }
 
     if (!is_numeric($_end)) {
@@ -197,7 +197,7 @@ abstract class Rule {
       $value = Strings::toTime($value);
     }
 
-    return $value >= $_start && $value <= $_end;
+    return $value >= $_begin && $value <= $_end;
   }
 
 

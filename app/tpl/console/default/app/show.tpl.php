@@ -4,14 +4,13 @@
   'sub_active'        => 'index',
   'baigoSubmit'       => 'true',
   'baigoDialog'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <nav class="nav mb-3">
-    <a href="<?php echo $route_console; ?>app/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['index']; ?>" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Back'); ?>
     </a>
   </nav>
@@ -45,13 +44,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             <input type="text" value="<?php echo $appRow['app_secret']; ?>" class="form-control" readonly>
           </div>
 
-          <form name="app_form" id="app_form" action="<?php echo $route_console; ?>app/reset/">
+          <form name="app_form" id="app_form" action="<?php echo $hrefRow['reset']; ?>">
             <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
             <input type="hidden" name="app_id" value="<?php echo $appRow['app_id']; ?>">
 
             <div class="form-group">
               <button type="submit" class="btn btn-primary">
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'redo-alt' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'redo-alt' . BG_EXT_SVG); ?></span>
                 <?php echo $lang->get('Reset App Key & App Secret'); ?>
               </button>
               <small class="form-text"><?php echo $lang->get('If you suspect that the App Key or App Secret has been compromised, you can reset them.'); ?></small>
@@ -78,14 +77,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 } else {
                   $str_icon  = 'times-circle';
                   $str_color = 'danger';
-                }
+                } ?>
                 <dt>
                   <?php echo $lang->get($value_m['title']); ?>
                 </dt>
                 <dd>
                   <?php foreach ($value_m['allow'] as $key_s=>$value_s) { ?>
                     <span>
-                      <span class="bg-icon text-<?php echo $str_color; ?>"><?php include($cfg_global['pathIcon'] . $str_icon . BG_EXT_SVG); ?></span>
+                      <span class="bg-icon text-<?php echo $str_color; ?>"><?php include($tpl_icon . $str_icon . BG_EXT_SVG); ?></span>
 
                       <?php echo $lang->get($value_s); ?>
                     </span>
@@ -112,13 +111,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         </div>
         <div class="card-footer">
           <div class="d-flex justify-content-between">
-            <a href="#notify_modal" class="btn btn-info" data-toggle="modal">
-              <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'flag-checkered' . BG_EXT_SVG); ?></span>
+            <a href="#modal_nm" class="btn btn-info" data-toggle="modal">
+              <span class="bg-icon"><?php include($tpl_icon . 'flag-checkered' . BG_EXT_SVG); ?></span>
               <?php echo $lang->get('Notification test'); ?>
             </a>
 
-            <a href="<?php echo $route_console; ?>app/form/id/<?php echo $appRow['app_id']; ?>/">
-              <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+            <a href="<?php echo $hrefRow['edit'], $appRow['app_id']; ?>">
+              <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
               <?php echo $lang->get('Edit'); ?>
             </a>
           </div>
@@ -137,13 +136,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           <div class="form-group">
             <label class="text-muted font-weight-light"><?php echo $lang->get('Status'); ?></label>
             <div class="form-text font-weight-bolder"><?php $str_status = $appRow['app_status'];
-              include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?></div>
+              include($tpl_include . 'status_process' . GK_EXT_TPL); ?></div>
           </div>
 
           <div class="form-group">
             <label class="text-muted font-weight-light"><?php echo $lang->get('Sync'); ?></label>
             <div class="form-text font-weight-bolder"><?php $str_status = $appRow['app_sync'];
-              include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?></div>
+              include($tpl_include . 'status_process' . GK_EXT_TPL); ?></div>
           </div>
 
           <div class="form-group">
@@ -160,8 +159,8 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           </div>
         </div>
         <div class="card-footer text-right">
-          <a href="<?php echo $route_console; ?>app/form/id/<?php echo $appRow['app_id']; ?>/">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'edit' . BG_EXT_SVG); ?></span>
+          <a href="<?php echo $hrefRow['edit'], $appRow['app_id']; ?>">
+            <span class="bg-icon"><?php include($tpl_icon . 'edit' . BG_EXT_SVG); ?></span>
             <?php echo $lang->get('Edit'); ?>
           </a>
         </div>
@@ -169,23 +168,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </div>
   </div>
 
-  <div class="modal fade" id="notify_modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-      </div>
-    </div>
-  </div>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL);
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+  include($tpl_include . 'modal_nm' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   $(document).ready(function(){
-    $('#notify_modal').on('shown.bs.modal',function(event){
-      $('#notify_modal .modal-content').load('<?php echo $route_console; ?>app/notify/id/<?php echo $appRow['app_id']; ?>/');
-    }).on('hidden.bs.modal', function(){
-      $('#notify_modal .modal-content').empty();
-    });
-
     var obj_submit_notify  = $('#app_notify').baigoSubmit(opts_submit);
 
     $('#app_notify').submit(function(){
@@ -205,4 +193,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

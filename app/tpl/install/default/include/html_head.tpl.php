@@ -1,6 +1,3 @@
-<?php $cfg_global = array(
-  'pathIcon' => $path_tpl_common . 'icon' . DS,
-); ?>
 <!DOCTYPE html>
 <html lang="<?php echo $lang->getCurrent(); ?>">
 <head>
@@ -17,7 +14,7 @@
     } ?>
   </title>
 
-  <!--bootstrap-->
+  <link href="{:DIR_STATIC}image/favicon.png" rel="shortcut icon">
   <link href="{:DIR_STATIC}lib/bootstrap/4.6.0/css/bootstrap.min.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" href="{:DIR_STATIC}lib/baigoValidate/3.1.1/baigoValidate.css" type="text/css" rel="stylesheet">
   <link rel="stylesheet" href="{:DIR_STATIC}lib/baigoSubmit/2.1.4/baigoSubmit.css" type="text/css" rel="stylesheet">

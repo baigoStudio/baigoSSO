@@ -41,7 +41,7 @@ class Arrays {
     }
 
     if (is_array($array) && Func::notEmpty($array)) {
-      $array     = self::each($array, $encode);
+      $array     = self::map($array, $encode);
       $_str_json = json_encode($array, $option); //json编码
 
       self::backtrace();
@@ -62,11 +62,12 @@ class Arrays {
    */
   public static function fromJson($string = '', $decode = false, $assoc = true) {
     $_arr_json = array();
+    $string    = (string)$string;
 
     if (Func::notEmpty($string)) {
       //$string    = Html::decode($string, 'json');
       $_arr_json = json_decode($string, $assoc); //json解码
-      $_arr_json = self::each($_arr_json, $decode); //json解码
+      $_arr_json = self::map($_arr_json, $decode); //json解码
 
       self::backtrace();
     }
@@ -79,43 +80,63 @@ class Arrays {
   }
 
 
+  public static function each($arr, $func = '', $left = 5, $right = 5, $hide = '*') {
+    return self::map($arr, $func, $left, $right, $hide);
+  }
+
+
   /** 遍历数组并用指定函数处理
-   * arrayEach function.
+   * map function.
    *
    * @access public
    * @static
    * @param array $arr 数组
    * @param string $func (default: '') 处理函数
-   * @param int $left (default: 5) 保留左边字符数, 仅在处理函数为 secret 时有效
-   * @param int $right (default: 5) 保留右边字符数, 仅在处理函数为 secret 时有效
-   * @param string $hide (default: '*') 替换字符, 仅在处理函数为 secret 时有效
+   * @param int $left (default: 5) 保留左边字符数, 仅在处理函数为 secrecy 时有效
+   * @param int $right (default: 5) 保留右边字符数, 仅在处理函数为 secrecy 时有效
+   * @param string $hide (default: '*') 替换字符, 仅在处理函数为 secrecy 时有效
    * @return 处理后的数组
    */
-  public static function each($arr, $func = '', $left = 5, $right = 5, $hide = '*') {
+  public static function map($arr, $func = '', $left = 5, $right = 5, $hide = '*') {
     if (is_array($arr) && Func::notEmpty($arr)) {
       foreach ($arr as $_key=>$_value) {
         if (is_array($_value) && Func::notEmpty($_value)) {
-          $arr[$_key] = self::each($_value, $func, $left, $right, $hide);
+          $arr[$_key] = self::map($_value, $func, $left, $right, $hide);
         } else if (is_scalar($_value) && Func::notEmpty($_value)) {
-          $_value = Func::safe($_value);
+          $_value = Func::safe($_value, true);
 
           switch ($func) {
             case 'json_safe':
+            case 'jsonsafe':
+              $_value = Html::decode($_value, true);
+            break;
+
+            case 'html_decode':
+            case 'htmldecode':
               $_value = Html::decode($_value);
             break;
 
+            case 'html_encode':
+            case 'htmlencode':
+              $_value = Html::encode($_value);
+            break;
+
+            case 'url_encode':
             case 'urlencode':
               $_value = rawurlencode($_value);
             break;
 
+            case 'url_decode':
             case 'urldecode':
               $_value = rawurldecode($_value);
             break;
 
+            case 'base64_encode':
             case 'base64encode':
               $_value = Strings::toBase64($_value);
             break;
 
+            case 'base64_decode':
             case 'base64decode':
               $_value = Strings::fromBase64($_value);
             break;
@@ -151,8 +172,8 @@ class Arrays {
   }
 
 
-  /** 过滤数组重复项目
-   * arrayFilter function.
+  /** 兼容用
+   * filter function.
    *
    * @access public
    * @static
@@ -161,6 +182,19 @@ class Arrays {
    * @return void
    */
   public static function filter($arr, $pop_false = true) {
+    return self::unique($arr, $pop_false);
+  }
+
+  /** 过滤数组重复项目
+   * unique function.
+   *
+   * @access public
+   * @static
+   * @param array $arr 数组
+   * @param bool $pop_false (default: true) 是否剔除 false 元素
+   * @return void
+   */
+  public static function unique($arr, $pop_false = true) {
     if (Func::notEmpty($arr)) {
       $arr = array_unique($arr);
 

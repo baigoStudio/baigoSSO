@@ -1,6 +1,5 @@
 # baigo SSO 文档
 
-
 ----------
 
 概况 / 安装
@@ -11,7 +10,6 @@
 * [手动安装](./index/manual.md)
 * [高级部署](./index/advance.md)
 * [更新日志](./index/changelog.md)
-
 
 ----------
 
@@ -27,7 +25,6 @@
 * [插件](./console/plugin.md)
 * [系统设置](./console/opt.md)
 
-
 ----------
 
 API 接口
@@ -40,11 +37,10 @@ API 接口
 * [登录接口](./api/login.md)
 * [个人接口](./api/profile.md)
 * [用户接口](./api/user.md)
-* [忘记密码接口](./api/forgot.md)
 * [站内短信接口](./api/pm.md)
 * [同步登录接口](./api/sync.md)
 * [安装](./api/install.md)
-
+* [已弃用接口](./api/abandoned.md)
 
 ----------
 
@@ -56,7 +52,6 @@ API 接口
 
 ----------
 
-
 模板
 
 * [概况](./template/index.md)
@@ -66,7 +61,6 @@ API 接口
 * [验证](./template/verify.md)
 
 ----------
-
 
 插件
 

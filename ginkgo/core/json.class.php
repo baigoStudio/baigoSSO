@@ -14,7 +14,7 @@ if (!defined('IN_GINKGO')) {
 /** 以下为即将废弃的方法，供向下兼容 */
 
 // json 编码解码 兼容用
-class Json extends Arrays {
+class Json {
 
   /** JSON 编码
    * encode function.
@@ -26,7 +26,7 @@ class Json extends Arrays {
    * @return 编码后的字符串
    */
   static function encode($array = array(), $encode = 'json_safe', $option = false) {
-    return parent::toJson($array, $encode, $option);
+    return Arrays::toJson($array, $encode, $option);
   }
 
 
@@ -40,6 +40,6 @@ class Json extends Arrays {
    * @return 解码后的数组
    */
   static function decode($string = '', $decode = false, $option = true) {
-    return parent::fromJson($string, $decode, $option);
+    return Arrays::fromJson($string, $decode, $option);
   }
 }

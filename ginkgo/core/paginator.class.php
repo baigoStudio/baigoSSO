@@ -16,7 +16,7 @@ class Paginator {
 
   public $config = array(); // 配置
   public $current; // 当前页
-  public $count; // 总记录数
+  public $count = 0; // 总记录数
   public $totalRow; // 总页数
 
   protected static $instance; // 当前实例
@@ -98,6 +98,9 @@ class Paginator {
       'offset'    => $_num_offset, // 应排除的记录数
       'except'    => $_num_offset, // 应排除的记录数, 兼容老版本
     );
+
+    $this->current = 1;
+    $this->count   = 0;
 
     return array_replace_recursive($_arr_return, $_arr_totalRow, $_arr_groupRow, $_arr_stepRow);
   }

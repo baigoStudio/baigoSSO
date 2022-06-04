@@ -5,19 +5,18 @@
   'baigoValidate'    => 'true',
   'baigoSubmit'       => 'true',
   'baigoCheckall'     => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <nav class="nav mb-3">
-    <a href="<?php echo $route_console; ?>admin/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['back']; ?>" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Back'); ?>
     </a>
   </nav>
 
-  <form name="admin_form" id="admin_form" autocomplete="off" action="<?php echo $route_console; ?>auth/submit/">
+  <form name="admin_form" id="admin_form" autocomplete="off" action="<?php echo $hrefRow['submit']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="row">
@@ -33,7 +32,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
             <div class="form-group">
               <label><?php echo $lang->get('Permission'); ?> <span class="text-danger">*</span></label>
 
-              <?php include($cfg['pathInclude'] . 'allow_list' . GK_EXT_TPL); ?>
+              <?php include($tpl_include . 'allow_list' . GK_EXT_TPL); ?>
               <small class="form-text" id="msg_admin_allow"></small>
             </div>
 
@@ -104,7 +103,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </div>
   </form>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_form = {
@@ -113,7 +112,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         length: '1,30',
         format: 'alpha_dash',
         ajax: {
-          url: '<?php echo $route_console; ?>auth/check/'
+          url: '<?php echo $hrefRow['check']; ?>'
         }
       },
       admin_note: {
@@ -172,4 +171,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

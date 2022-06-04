@@ -17,14 +17,14 @@
 
 ``` php
 <h3 class="text-danger">
-    <?php echo $lang->get($msg); ?>
+  <?php echo $lang->get($msg); ?>
 </h3>
 
 <div class="text-danger">
-    <?php echo $msg; ?>
+  <?php echo $msg; ?>
 </div>
 
 <div class="text-danger lead">
-    <?php echo $rcode; ?>
+  <?php echo $rcode; ?>
 </div>
 ```

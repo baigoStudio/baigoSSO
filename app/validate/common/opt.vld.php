@@ -4,7 +4,7 @@
 以下为系统文件，请勿修改
 -----------------------------------------------------------------*/
 
-namespace app\validate;
+namespace app\validate\common;
 
 use ginkgo\Validate;
 
@@ -74,7 +74,7 @@ class Opt extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'host'       => $this->obj_lang->get('Database host'),

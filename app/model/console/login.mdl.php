@@ -16,10 +16,11 @@ if (!defined('IN_GINKGO')) {
 /*-------------管理员模型-------------*/
 class Login extends Admin_Base {
 
-  public $inputSubmit;
+  public $inputSubmit = array();
+
   protected $table = 'admin';
 
-  function login() {
+  public function login() {
     $_tm_timeLogin  = GK_NOW;
 
     if (isset($this->inputSubmit['admin_ip']) && Func::notEmpty($this->inputSubmit['admin_ip'])) {
@@ -59,7 +60,7 @@ class Login extends Admin_Base {
    * @access public
    * @return void
    */
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'admin_name'        => array('txt', ''),
       'admin_pass'        => array('txt', ''),

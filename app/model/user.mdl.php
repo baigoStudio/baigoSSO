@@ -21,7 +21,7 @@ class User extends Model {
 
   public $arr_status  = array('enable', 'wait', 'disabled');
 
-  function check($mix_user, $str_by = 'user_id', $num_notId = 0) {
+  public function check($mix_user, $str_by = 'user_id', $num_notId = 0) {
     $_arr_select = array(
       'user_id',
     );
@@ -30,177 +30,14 @@ class User extends Model {
   }
 
 
-  /** 提交
-   * submit function.
-   *
-   * @access public
-   * @param string $str_userPass (default: '')
-   * @return void
-   */
-  function submit() {
-    $_arr_userData = array();
-
-    if (isset($this->inputSubmit['user_name'])) {
-      $_arr_userData['user_name'] = $this->inputSubmit['user_name'];
-    }
-
-    if (isset($this->inputSubmit['user_mail'])) {
-      $_arr_userData['user_mail'] = $this->inputSubmit['user_mail'];
-    }
-
-    if (isset($this->inputSubmit['user_status'])) {
-      $_arr_userData['user_status'] = $this->inputSubmit['user_status'];
-    }
-
-    if (isset($this->inputSubmit['user_nick'])) {
-      $_arr_userData['user_nick'] = $this->inputSubmit['user_nick'];
-    }
-
-    if (isset($this->inputSubmit['user_note'])) {
-      $_arr_userData['user_note'] = $this->inputSubmit['user_note'];
-    }
-
-    if (isset($this->inputSubmit['user_contact'])) {
-      $_arr_userData['user_contact'] = $this->inputSubmit['user_contact'];
-    }
-
-    if (isset($this->inputSubmit['user_extend'])) {
-      $_arr_userData['user_extend'] = $this->inputSubmit['user_extend'];
-    }
-
-    $_arr_userData['user_contact']    = Arrays::toJson($_arr_userData['user_contact']);
-    $_arr_userData['user_extend']     = Arrays::toJson($_arr_userData['user_extend']);
-
-    if ($this->inputSubmit['user_id'] > 0) {
-      if (isset($this->inputSubmit['user_pass']) && Func::notEmpty($this->inputSubmit['user_pass'])) {
-        $_arr_userData['user_pass'] = $this->inputSubmit['user_pass']; //如果密码为空，则不修改
-        $_arr_userData['user_rand'] = $this->inputSubmit['user_rand']; //如果密码为空，则不修改
-      }
-      $_num_userId    = $this->inputSubmit['user_id'];
-
-      $_num_count     = $this->where('user_id', '=', $_num_userId)->update($_arr_userData); //更新数据
-
-      if ($_num_count > 0) {
-        $_str_rcode = 'y010103'; //更新成功
-        $_str_msg   = 'Update user successfully';
-      } else {
-        $_str_rcode = 'x010103'; //更新失败
-        $_str_msg   = 'Did not make any changes';
-      }
-    } else {
-      $_arr_insert = array(
-        'user_pass'         => $this->inputSubmit['user_pass'],
-        'user_rand'         => $this->inputSubmit['user_rand'],
-        'user_time'         => GK_NOW,
-        'user_time_login'   => GK_NOW,
-        'user_ip'           => $this->obj_request->ip(),
-        //'user_app_id'       => $this->inputSubmit['user_app_id'],
-      );
-      $_arr_data      = array_replace_recursive($_arr_userData, $_arr_insert);
-
-      $_num_userId    = $this->insert($_arr_data); //更新数据
-
-      if ($_num_userId > 0) {
-        $_str_rcode = 'y010101'; //更新成功
-        $_str_msg   = 'Add user successfully';
-      } else {
-        $_str_rcode = 'x010101'; //更新失败
-        $_str_msg   = 'Add user failed';
-      }
-    }
-
-    return array(
-      'user_id'   => $_num_userId,
-      'rcode'     => $_str_rcode,
-      'msg'       => $_str_msg,
-    );
-  }
-
-
-  function pass($num_userId, $str_userPass, $str_userRand) {
-    $_arr_userData = array(
-      'user_rand'         => $str_userRand,
-      'user_pass'         => $str_userPass,
-    );
-
-    if (Func::notEmpty($_arr_userData)) {
-      $_num_count     = $this->where('user_id', '=', $num_userId)->update($_arr_userData); //更新数据
-    }
-
-    if ($_num_count > 0) {
-      $_str_rcode = 'y010103'; //更新成功
-      $_str_msg   = 'Update password successfully';
-    } else {
-      $_str_rcode = 'x010103'; //更新成功
-      $_str_msg   = 'Did not make any changes';
-    }
-
-    return array(
-      'rcode' => $_str_rcode, //成功
-      'msg'   => $_str_msg,
-    );
-  }
-
-
-  function mailbox() {
-    $_arr_userData = array(
-      'user_mail' => $this->inputMailbox['user_mail_new'],
-    );
-
-    $_num_count     = $this->where('user_id', '=', $this->inputMailbox['user_id'])->update($_arr_userData); //更新数据
-
-    if ($_num_count > 0) {
-      $_str_rcode = 'y010103';
-      $_str_msg   = 'Change mailbox successfully';
-    } else {
-      $_str_rcode = 'x010103';
-      $_str_msg   = 'Did not make any changes';
-    }
-
-    return array(
-      'rcode'     => $_str_rcode, //成功
-      'msg'       => $_str_msg,
-    );
-  }
-
-
-  function secqa() {
-    $_arr_userData = array(
-      'user_sec_ques' => $this->inputSecqa['user_sec_ques'],
-      'user_sec_answ' => $this->inputSecqa['user_sec_answ'],
-    );
-
-    $_arr_userData['user_sec_ques'] = Arrays::toJson($_arr_userData['user_sec_ques']);
-
-    $_num_count     = $this->where('user_id', '=', $this->inputSecqa['user_id'])->update($_arr_userData); //更新数据
-
-    if ($_num_count > 0) {
-      $_str_rcode = 'y010103'; //更新成功
-      $_str_msg   = 'Update security question successfully';
-    } else {
-      $_str_rcode = 'x010103'; //更新成功
-      $_str_msg   = 'Did not make any changes';
-    }
-
-    return array(
-      'rcode' => $_str_rcode, //成功
-      'msg'   => $_str_msg,
-    );
-  }
-
-
-  function read($mix_user, $str_by = 'user_id', $num_notId = 0, $arr_select = array()) {
+  public function read($mix_user, $str_by = 'user_id', $num_notId = 0, $arr_select = array()) {
     $_arr_userRow = $this->readProcess($mix_user, $str_by, $num_notId, $arr_select);
-
-    if ($_arr_userRow['rcode'] != 'y010102') {
-      return $_arr_userRow;
-    }
 
     return $this->rowProcess($_arr_userRow);
   }
 
 
-  function readProcess($mix_user, $str_by = 'user_id', $num_notId = 0, $arr_select = array()) {
+  public function readProcess($mix_user, $str_by = 'user_id', $num_notId = 0, $arr_select = array()) {
     if (Func::isEmpty($arr_select)) {
       $arr_select = array(
         'user_id',
@@ -230,15 +67,14 @@ class User extends Model {
 
     $_arr_userRow = $this->where($_arr_where)->find($arr_select);
 
-    if (!$_arr_userRow) {
-      return array(
-        'msg'   => 'User not found',
-        'rcode' => 'x010102', //不存在记录
-      );
+    if ($_arr_userRow === false) {
+      $_arr_userRow          = $this->obj_request->fillParam(array(), $arr_select);
+      $_arr_userRow['msg']   = 'User not found';
+      $_arr_userRow['rcode'] = 'x010102';
+    } else {
+      $_arr_userRow['rcode'] = 'y010102';
+      $_arr_userRow['msg']   = '';
     }
-
-    $_arr_userRow['rcode'] = 'y010102';
-    $_arr_userRow['msg']   = '';
 
     return $_arr_userRow;
   }
@@ -253,7 +89,7 @@ class User extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function lists($num_no, $num_offset = 0, $arr_search = array()) {
+  public function lists($pagination = 0, $arr_search = array()) {
     $_arr_userSelect = array(
       'user_id',
       'user_name',
@@ -266,9 +102,10 @@ class User extends Model {
       'user_ip',
     );
 
-    $_arr_where    = $this->queryProcess($arr_search);
+    $_arr_where      = $this->queryProcess($arr_search);
+    $_arr_pagination = $this->paginationProcess($pagination);
 
-    $_arr_userRows = $this->where($_arr_where)->order('user_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_userSelect);
+    $_arr_userRows   = $this->where($_arr_where)->order('user_id', 'DESC')->limit($_arr_pagination['limit'], $_arr_pagination['length'])->paginate($_arr_pagination['perpage'], $_arr_pagination['current'])->select($_arr_userSelect);
 
     return $_arr_userRows;
   }
@@ -281,7 +118,7 @@ class User extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function count($arr_search = array()) {
+  public function counts($arr_search = array()) {
     $_arr_where     = $this->queryProcess($arr_search);
 
     $_num_userCount = $this->where($_arr_where)->count();
@@ -296,7 +133,7 @@ class User extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function queryProcess($arr_search = array()) {
+  public function queryProcess($arr_search = array()) {
     $_arr_where = array();
 
     if (isset($arr_search['key']) && Func::notEmpty($arr_search['key'])) {
@@ -344,8 +181,11 @@ class User extends Model {
     }
 
     if (isset($arr_search['user_names']) && Func::notEmpty($arr_search['user_names'])) {
-      $arr_search['user_names']    = Arrays::filter($arr_search['user_names']);
-      $_arr_where[] = array('user_name', 'IN', $arr_search['user_names'], 'user_names');
+      $arr_search['user_names']    = Arrays::unique($arr_search['user_names']);
+
+      if (Func::notEmpty($arr_search['user_names'])) {
+        $_arr_where[] = array('user_name', 'IN', $arr_search['user_names'], 'user_names');
+      }
     }
 
     if (isset($arr_search['not_in']) && Func::notEmpty($arr_search['not_in'])) {
@@ -358,7 +198,7 @@ class User extends Model {
   }
 
 
-  function readQueryProcess($mix_user, $str_by = 'user_id', $num_notId = 0) {
+  protected function readQueryProcess($mix_user, $str_by = 'user_id', $num_notId = 0) {
     $_arr_where[] = array($str_by, '=', $mix_user);
 
     if ($num_notId > 0) {

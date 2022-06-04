@@ -2,10 +2,9 @@
   'title'         => $lang->get('Installer', 'install.common'),
   'sub_title'     => $lang->get('Error', 'install.common'),
   'no_loading'    => 'true',
-  'pathInclude'   => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'html_head' . GK_EXT_TPL); ?>
 
   <div class="container">
     <div class="bg-card-sm my-3">
@@ -17,7 +16,7 @@ include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
 
         <div class="card-body">
           <h3 class="text-danger">
-            <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'times-circle' . BG_EXT_SVG); ?></span>
+            <span class="bg-icon"><?php include($tpl_icon . 'times-circle' . BG_EXT_SVG); ?></span>
             <?php if (isset($msg)) {
               echo $lang->get($msg, 'install.common');
             } ?>
@@ -51,4 +50,4 @@ include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

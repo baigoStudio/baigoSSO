@@ -22,7 +22,7 @@ class User_App_View extends User {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function queryProcess($arr_search = array()) {
+  public function queryProcess($arr_search = array()) {
     $_arr_where = parent::queryProcess($arr_search);
 
     if (isset($arr_search['app_id']) && $arr_search['app_id'] > 0) {

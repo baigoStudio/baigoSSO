@@ -55,17 +55,17 @@ POST
 
 ``` javascript
 {
-    "user_id": "1",
-    "user_name": "baigo",
-    "user_mail": "baigo@baigo.net",
-    "user_nick": "nickname",
-    "user_status": "wait",
-    "user_time": "1550198497",
-    "user_time_login": "1550198497",
-    "user_access_token": "0VHBRPQUICBKGVWXTBDQBHVEPWK",
-    "user_access_expire": "1550198497",
-    "user_refresh_token": "0VHBRPQUICBKGVWXTBDQBHVEPWK",
-    "user_refresh_expire": "1550198497",
-    "timestamp": "1550198497"
+  "user_id": "1",
+  "user_name": "baigo",
+  "user_mail": "baigo@baigo.net",
+  "user_nick": "nickname",
+  "user_status": "wait",
+  "user_time": "1550198497",
+  "user_time_login": "1550198497",
+  "user_access_token": "0VHBRPQUICBKGVWXTBDQBHVEPWK",
+  "user_access_expire": "1550198497",
+  "user_refresh_token": "0VHBRPQUICBKGVWXTBDQBHVEPWK",
+  "user_refresh_expire": "1550198497",
+  "timestamp": "1550198497"
 }
 ```

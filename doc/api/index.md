@@ -6,7 +6,7 @@
 
 ##### API 调用示例
 
-本文档的所有的示例都是在 ginkgo 框架基础之上建立的，关于 ginkgo 框架的详情请查看 [ginkgo 框架文档](//doc.baigo.net/ginkgo/quick/)。以下为完整的调用登录接口的示例：
+本文档的所有的示例都是在 ginkgo 框架基础之上建立的，关于 ginkgo 框架的详情请查看 [ginkgo 框架文档](//doc.baigo.net/ginkgo/)。以下为完整的调用登录接口的示例：
 
 ``` php
 use ginkgo/Json;
@@ -20,24 +20,24 @@ $_app_key           = 'e10adc3949ba59abbe56e057f20f883e'; //App Key
 $_app_secret        = 'e10adc3949ba59ab'; //App Secret
 
 $_arr_crypt = array(
-    'user_name' => 'baigo',
-    'user_pass' => md5('123456'),
-    'user_ip'   => '127.0.0.1',
-    'timestamp' => time(),
+  'user_name' => 'baigo',
+  'user_pass' => md5('123456'),
+  'user_ip'   => '127.0.0.1',
+  'timestamp' => time(),
 );
 
 $_str_crypt   = Json::encode($_arr_crypt); //编码
 $_arr_encrypt = Crypt::encrypt($_str_crypt, $_app_key, $_app_secret); //加密
 
 if (isset($_arr_encrypt['error'])) { //加密出错
-    return $_arr_encrypt;
+  return $_arr_encrypt;
 }
 
 $_arr_data = array(
-    'app_id'    => $_app_id,
-    'app_key'   => $_app_key,
-    'code'      => $_arr_encrypt['encrypt'],
-    'sign'      => Sign::make($_str_crypt, $_app_key . $_app_secret),
+  'app_id'    => $_app_id,
+  'app_key'   => $_app_key,
+  'code'      => $_arr_encrypt['encrypt'],
+  'sign'      => Sign::make($_str_crypt, $_app_key . $_app_secret),
 );
 
 $_arr_get = Http::instance()->request('http://server/index.php/api/login/login/', $_arr_data, 'post'); //请求
@@ -45,21 +45,21 @@ $_arr_get = Http::instance()->request('http://server/index.php/api/login/login/'
 $_arr_decrypt = Crypt::decrypt($_arr_get['code'], $_app_key, $_app_secret); //解密
 
 if (isset($_arr_decrypt['error'])) { //解密出错
-    return $_arr_decrypt;
+  return $_arr_decrypt;
 }
 
 if (!Sign::check($_arr_decrypt['decrypt'], $str_sign, $_app_key . $_app_secret)) {
-    return 'Signature is incorrect'; //签名错误
+  return 'Signature is incorrect'; //签名错误
 }
 
 $_arr_return = Json::decode($_arr_decrypt['decrypt']); //解码
 
 if (!isset($_arr_return['timestamp'])) {
-    return 'Timestamp out of range'; //缺少时间戳
+  return 'Timestamp out of range'; //缺少时间戳
 }
 
 if ($_arr_return['timestamp'] > GK_NOW + $_time_deviation || $_arr_return['timestamp'] < GK_NOW - $_time_deviation) {
-    return 'Timestamp out of range'; //超时
+  return 'Timestamp out of range'; //超时
 }
 
 print_r($_arr_return);
@@ -84,11 +84,11 @@ baigo SSO 大部分 API 接口返回加密参数，真正内容需要解密，�
 
 ``` javascript
 {
-    "code": "CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARb", //加密参数
-    "sign": "0VHBRPQUICBKGVWXTBDQBHVEPWK", //签名
-    "rcode": "y010102" //返回代码
-    "msg": "登录成功",
-    "prd_sso_ver": "1.1.1", //SSO 版本号
-    "prd_sso_pub": 20150923, //SSO 版本发布时间
+  "code": "CSMEIFh7AHYBOFIlXQwAaQE0UXENawF2WUxXUQNFVD4Ac1R%2BUSUFdQgnBmYMcARb", //加密参数
+  "sign": "0VHBRPQUICBKGVWXTBDQBHVEPWK", //签名
+  "rcode": "y010102" //返回代码
+  "msg": "登录成功",
+  "prd_sso_ver": "1.1.1", //SSO 版本号
+  "prd_sso_pub": 20150923, //SSO 版本发布时间
 }
 ```

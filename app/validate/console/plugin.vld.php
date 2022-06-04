@@ -17,7 +17,7 @@ if (!defined('IN_GINKGO')) {
 /*-------------管理员模型-------------*/
 class Plugin extends Validate {
 
-  protected $rule     = array(
+  protected $rule = array(
     'plugin_dir' => array(
       'require' => true,
     ),
@@ -41,7 +41,7 @@ class Plugin extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'plugin_dir'    => $this->obj_lang->get('Directory'),

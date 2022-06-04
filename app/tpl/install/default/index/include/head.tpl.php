@@ -1,4 +1,4 @@
-<?php include($cfg['pathInclude'] . 'html_head' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'html_head' . GK_EXT_TPL); ?>
 
   <div class="container">
     <div class="bg-card-md my-lg-5 my-3">
@@ -16,8 +16,8 @@
               <ul class="nav flex-column mb-3">
                 <?php foreach ($config['install']['index'] as $key_opt=>$value_opt) { ?>
                   <li class="nav-item">
-                    <a class="nav-link<?php if ($cfg['active'] == $key_opt) { ?> disabled<?php } ?>" href="<?php echo $route_install; ?>index/<?php echo $key_opt; ?>/">
-                      <?php echo $lang->get($value_opt); ?>
+                    <a class="nav-link<?php if ($cfg['active'] == $key_opt) { ?> disabled<?php } ?>" href="<?php echo $value_opt['href']; ?>">
+                      <?php echo $lang->get($value_opt['title']); ?>
                     </a>
                   </li>
                 <?php } ?>

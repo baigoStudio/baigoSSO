@@ -22,34 +22,50 @@ if (!defined('IN_GINKGO')) {
 abstract class Ctrl extends Gk_Ctrl {
 
   protected $isAjaxPost   = false;
+  protected $isAjax       = false;
   protected $isPost       = false;
+  protected $isGet        = false;
   protected $generalData  = array();
   protected $url          = array();
   protected $config;
   protected $tplPath;
+  protected $hrefBase;
 
   protected function c_init($param = array()) { //构造函数
-    $this->configProcess();
     $this->pathProcess();
+    $this->configProcess();
     $this->configAdd();
 
     if ($this->obj_request->isAjax() && $this->obj_request->isPost()) {
-      $this->isAjaxPost   = true;
-      $this->isPost       = true;
+      $this->isAjaxPost = true;
+      $this->isAjax     = true;
+      $this->isPost     = true;
+    }
+
+    if ($this->obj_request->isAjax()) {
+      $this->isAjax = true;
     }
 
     if ($this->obj_request->isPost()) {
       $this->isPost = true;
     }
 
+    if ($this->obj_request->isGet()) {
+      $this->isGet = true;
+    }
+
     App::setTimezone($this->configBase['site_timezone']);
 
     $_arr_data = array(
-      'ui_ctrl'       => $this->configUi,
-      'config'        => $this->config,
-      'route'         => $this->route,
-      'route_orig'    => $this->routeOrig,
-      'param'         => $this->param,
+      'ui_ctrl'      => $this->configUi,
+      'config'       => $this->config,
+      'route'        => $this->route,
+      'route_orig'   => $this->routeOrig,
+      'param'        => $this->param,
+      'is_ajax_post' => $this->isAjaxPost,
+      'is_ajax'      => $this->isAjax,
+      'is_post'      => $this->isPost,
+      'is_get'       => $this->isGet,
     );
 
     $this->generalData = array_replace_recursive($this->generalData, $_arr_data);
@@ -82,6 +98,7 @@ abstract class Ctrl extends Gk_Ctrl {
   private function dataProcess($msg, $rcode = '', $langReplace = '') {
     $_arr_data = array(
       'msg'       => $this->obj_lang->get($msg, '', $langReplace),
+      'detail'    => $this->obj_lang->get($rcode, '', $langReplace, false),
       'rcode'     => $rcode,
       'rstatus'   => substr($rcode, 0, 1),
     );
@@ -90,10 +107,9 @@ abstract class Ctrl extends Gk_Ctrl {
   }
 
   private function configAdd() {
-    $_arr_config    = Config::get();
-    $_arr_configUi  = Config::get('ui_ctrl');
-
-    $_arr_convention    = Loader::load(BG_PATH_CONFIG . 'convention' . GK_EXT_INC);
+    $_arr_config     = Config::get();
+    $_arr_configUi   = Config::get('ui_ctrl');
+    $_arr_convention = Loader::load(BG_PATH_CONFIG . 'convention' . GK_EXT_INC);
 
     $_arr_config = array_replace_recursive($_arr_convention, $_arr_config);
 
@@ -168,7 +184,11 @@ abstract class Ctrl extends Gk_Ctrl {
       'route_console'     => $_str_routeRoot . 'console/',
       'route_misc'        => $_str_routeRoot . 'misc/',
       'route_personal'    => $_str_routeRoot . 'personal/',
-      'path_tpl_common'   => $_str_pathTplCommon,
+      'path_tpl'          => $this->pathTpl,
+      'tpl_include'       => $this->pathTpl . 'include' . DS,
+      'tpl_ctrl'          => $this->pathTpl . $this->routeOrig['ctrl'] . DS . 'include' . DS,
+      'tpl_common'        => $_str_pathTplCommon,
+      'tpl_icon'          => $_str_pathTplCommon . 'icon' . DS,
     );
 
     $this->url = array_replace_recursive($this->url, $_arr_url);

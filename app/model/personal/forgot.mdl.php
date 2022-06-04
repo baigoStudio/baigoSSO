@@ -17,10 +17,13 @@ if (!defined('IN_GINKGO')) {
 /*-------------管理员模型-------------*/
 class Forgot {
 
-  public $inputByMail;
-  public $inputBySecqa;
+  public $inputByMail  = array();
+  public $inputBySecqa = array();
 
-  function __construct() {
+  protected $obj_request;
+  protected $vld_forgot;
+
+  public function __construct() {
     $this->obj_request = Request::instance();
 
     $this->vld_forgot  = Loader::validate('Forgot');
@@ -32,7 +35,7 @@ class Forgot {
    * @access public
    * @return void
    */
-  function inputByMail() {
+  public function inputByMail() {
     $_arr_inputParam = array(
       'user_name'     => array('txt', ''),
       'captcha_mail'  => array('txt', ''),
@@ -65,7 +68,7 @@ class Forgot {
    * @access public
    * @return void
    */
-  function inputBySecqa() {
+  public function inputBySecqa() {
     $_arr_inputParam = array(
       'user_name'            => array('txt', ''),
       'user_pass_new'        => array('txt', ''),

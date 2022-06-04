@@ -19,7 +19,7 @@ if (!defined('IN_GINKGO')) {
 
 class Upgrade extends Ctrl {
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init(false, false);
 
     if ($_mix_init !== true) {
@@ -37,7 +37,7 @@ class Upgrade extends Ctrl {
     return $this->fetch();
   }
 
-  function admin() {
+  public function admin() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -55,7 +55,7 @@ class Upgrade extends Ctrl {
     return $this->fetch();
   }
 
-  function adminCheck() {
+  public function adminCheck() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -92,7 +92,7 @@ class Upgrade extends Ctrl {
     return $this->json($_arr_return);
   }
 
-  function adminSubmit() {
+  public function adminSubmit() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -152,7 +152,7 @@ class Upgrade extends Ctrl {
     return $this->fetchJson($_arr_submitResult['msg'], $_arr_submitResult['rcode']);
   }
 
-  function auth() {
+  public function auth() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -170,7 +170,7 @@ class Upgrade extends Ctrl {
     return $this->fetch();
   }
 
-  function authCheck() {
+  public function authCheck() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -209,7 +209,7 @@ class Upgrade extends Ctrl {
     return $this->json($_arr_return);
   }
 
-  function authSubmit() {
+  public function authSubmit() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -252,7 +252,7 @@ class Upgrade extends Ctrl {
   }
 
 
-  function over() {
+  public function over() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -270,7 +270,7 @@ class Upgrade extends Ctrl {
     return $this->fetch();
   }
 
-  function overSubmit() {
+  public function overSubmit() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -294,7 +294,7 @@ class Upgrade extends Ctrl {
     return $this->fetchJson($_arr_overResult['msg'], $_arr_overResult['rcode']);
   }
 
-  function data() {
+  public function data() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -313,7 +313,7 @@ class Upgrade extends Ctrl {
   }
 
 
-  function dataSubmit() {
+  public function dataSubmit() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {

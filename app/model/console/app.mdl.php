@@ -20,10 +20,10 @@ if (!defined('IN_GINKGO')) {
 /*-------------应用模型-------------*/
 class App extends App_Base {
 
-  public $inputSubmit;
-  public $inputStatus;
-  public $inputDelete;
-  public $inputCommon;
+  public $inputSubmit = array();
+  public $inputDelete = array();
+  public $inputStatus = array();
+  public $inputCommon = array();
 
   /** 重置 app key
    * reset function.
@@ -32,7 +32,7 @@ class App extends App_Base {
    * @param mixed $num_appId
    * @return void
    */
-  function reset() {
+  public function reset() {
     $_arr_appData = array(
       'app_key'       => Func::rand(64),
       'app_secret'    => Func::rand(16),
@@ -61,7 +61,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function submit() {
+  public function submit() {
     $_str_appKey    = '';
     $_str_appSecret = '';
 
@@ -142,7 +142,7 @@ class App extends App_Base {
    * @param mixed $str_status
    * @return void
    */
-  function status() {
+  public function status() {
     $_arr_appUpdate = array(
       'app_status' => $this->inputStatus['act'],
     );
@@ -172,7 +172,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function delete() {
+  public function delete() {
     $_num_count     = $this->where('app_id', 'IN', $this->inputDelete['app_ids'], 'app_ids')->delete(); //更新数据
 
     //如车影响行数小于0则返回错误
@@ -198,7 +198,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'app_id'            => array('int', 0),
       'app_name'          => array('txt', ''),
@@ -250,7 +250,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function inputCommon() {
+  public function inputCommon() {
     $_arr_inputParam = array(
       'app_id'    => array('int', 0),
       '__token__' => array('txt', ''),
@@ -282,7 +282,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function inputStatus() {
+  public function inputStatus() {
     $_arr_inputParam = array(
       'app_ids'   => array('arr', array()),
       'act'       => array('txt', ''),
@@ -291,7 +291,7 @@ class App extends App_Base {
 
     $_arr_inputStatus = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputStatus['app_ids'] = Arrays::filter($_arr_inputStatus['app_ids']);
+    $_arr_inputStatus['app_ids'] = Arrays::unique($_arr_inputStatus['app_ids']);
 
     $_mix_vld = $this->validate($_arr_inputStatus, '', 'status');
 
@@ -316,7 +316,7 @@ class App extends App_Base {
    * @access public
    * @return void
    */
-  function inputDelete() {
+  public function inputDelete() {
     $_arr_inputParam = array(
       'app_ids'   => array('arr', array()),
       '__token__' => array('txt', ''),
@@ -324,7 +324,7 @@ class App extends App_Base {
 
     $_arr_inputDelete = $this->obj_request->post($_arr_inputParam);
 
-    $_arr_inputDelete['app_ids'] = Arrays::filter($_arr_inputDelete['app_ids']);
+    $_arr_inputDelete['app_ids'] = Arrays::unique($_arr_inputDelete['app_ids']);
 
     $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

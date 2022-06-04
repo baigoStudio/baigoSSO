@@ -22,12 +22,21 @@ class Verify extends Ctrl {
     $this->mdl_user     = Loader::model('User');
     $this->mdl_verify   = Loader::model('Verify');
 
+    $_str_hrefBase = $this->hrefBase . 'verify/';
+
+    $_arr_hrefRow = array(
+      'show'     => $_str_hrefBase . 'show/id/',
+      'delete'   => $_str_hrefBase . 'delete/',
+      'status'   => $_str_hrefBase . 'status/',
+    );
+
     $this->generalData['status']    = $this->mdl_verify->arr_status;
     $this->generalData['type']      = $this->mdl_verify->arr_type;
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -40,18 +49,16 @@ class Verify extends Ctrl {
 
     //print_r($_arr_search);
 
-    $_num_verifyCount   = $this->mdl_verify->count(); //统计记录数
-    $_arr_pageRow       = $this->obj_request->pagination($_num_verifyCount); //取得分页数据
-    $_arr_verifyRows    = $this->mdl_verify->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset']); //列出
+    $_arr_getData    = $this->mdl_verify->lists($this->config['var_default']['perpage']); //列出
 
-    foreach ($_arr_verifyRows as $_key=>&$_value) {
+    foreach ($_arr_getData['dataRows'] as $_key=>&$_value) {
       //print_r($_value);
       $_value['userRow']      = $this->mdl_user->read($_value['verify_user_id']);
     }
 
     $_arr_tplData = array(
-      'pageRow'       => $_arr_pageRow,
-      'verifyRows'    => $_arr_verifyRows,
+      'pageRow'       => $_arr_getData['pageRow'],
+      'verifyRows'    => $_arr_getData['dataRows'],
       'token'         => $this->obj_request->token(),
     );
 
@@ -65,7 +72,7 @@ class Verify extends Ctrl {
   }
 
 
-  function show() {
+  public function show() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -108,7 +115,7 @@ class Verify extends Ctrl {
   }
 
 
-  function delete() {
+  public function delete() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -135,11 +142,11 @@ class Verify extends Ctrl {
       'count' => $_arr_deleteResult['count'],
     );
 
-    return $this->fetchJson($_arr_deleteResult['msg'], $$_arr_deleteResult['rcode'], 200, $_arr_langReplace);
+    return $this->fetchJson($_arr_deleteResult['msg'], $_arr_deleteResult['rcode'], 200, $_arr_langReplace);
   }
 
 
-  function status() {
+  public function status() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

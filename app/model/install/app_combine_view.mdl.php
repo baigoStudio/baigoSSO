@@ -17,29 +17,28 @@ if (!defined('IN_GINKGO')) {
 /*-------------用户模型-------------*/
 class App_Combine_View extends Model {
 
+  protected $create = array(
+    array('app.app_id'),
+    array('app.app_name'),
+    array('app.app_note'),
+    array('app.app_status'),
+    array('app.app_key'),
+    array('app.app_secret'),
+    array('app.app_param'),
+    array('app.app_url_notify'),
+    array('app.app_url_sync'),
+    array('app.app_sync'),
+    array('app.app_time'),
+  );
+
   /** 创建视图
    * mdl_create_view function.
    *
    * @access public
    * @return void
    */
-  function createView() {
-    $_arr_viewCreate = array(
-      array('app.app_id'),
-      array('app.app_name'),
-      array('app.app_note'),
-      array('app.app_status'),
-      array('app.app_key'),
-      array('app.app_secret'),
-      array('app.app_param'),
-      array('app.app_url_notify'),
-      array('app.app_url_sync'),
-      array('app.app_sync'),
-      array('app.app_time'),
-      //array('combine_belong.belong_combine_id'),
-
-      'IFNULL(' . $this->obj_builder->table('combine_belong') . '.`belong_combine_id`, 0) AS `belong_combine_id`',
-    );
+  public function createView() {
+    $this->create[] = 'IFNULL(' . $this->obj_builder->table('combine_belong') . '.`belong_combine_id`, 0) AS `belong_combine_id`';
 
     $_arr_join = array(
       'combine_belong',
@@ -47,7 +46,7 @@ class App_Combine_View extends Model {
       'LEFT',
     );
 
-    $_num_count  = $this->viewFrom('app')->viewJoin($_arr_join)->create($_arr_viewCreate);
+    $_num_count  = $this->viewFrom('app')->viewJoin($_arr_join)->create();
 
     if ($_num_count !== false) {
       $_str_rcode = 'y040108'; //更新成功

@@ -6,29 +6,29 @@ baigo SSO 使用 PHP 作为模板。
 
 模板目录结构说明
 
-    +-- default
-    |   +-- forgot                    忘记密码
-    |   |   +-- index.tpl.php         输入用户名
-    |   |   +-- confirm.tpl.php       找回密码
-    |   |
-    |   +-- reg                       注册
-    |   |   +-- nomail.tpl.php        重发激活邮件
-    |   |
-    |   +-- verify                    验证
-    |   |   +-- confirm.tpl.php       确认注册
-    |   |   +-- mailbox.tpl.php       确认更好邮箱
-    |   |   +-- pass.tpl.php          确认更换密码
-    |   |
-    |   +-- common                    通用
-    |   |   +-- error.tpl.php         出错信息
-    |   |
-    |   +-- include                   include
-    |      +-- html_head.tpl.php      HTML 头部
-    |      +-- html_foot.tpl.php      HTML 底部
-    |      +-- personal_head.tpl.php  头部
-    |      +-- personal_foot.tpl.php  底部
-    |   
-    +--  ...
+  +-- default
+  |   +-- forgot                    忘记密码
+  |   |   +-- index.tpl.php         输入用户名
+  |   |   +-- confirm.tpl.php       找回密码
+  |   |
+  |   +-- reg                       注册
+  |   |   +-- nomail.tpl.php        重发激活邮件
+  |   |
+  |   +-- verify                    验证
+  |   |   +-- confirm.tpl.php       确认注册
+  |   |   +-- mailbox.tpl.php       确认更好邮箱
+  |   |   +-- pass.tpl.php          确认更换密码
+  |   |
+  |   +-- common                    通用
+  |   |   +-- error.tpl.php         出错信息
+  |   |
+  |   +-- include                   include
+  |      +-- html_head.tpl.php      HTML 头部
+  |      +-- html_foot.tpl.php      HTML 底部
+  |      +-- personal_head.tpl.php  头部
+  |      +-- personal_foot.tpl.php  底部
+  |
+  +--  ...
 
 ----------
 
@@ -67,9 +67,9 @@ Email：<?php echo $data['email']; ?>
 | $route_misc | string | 杂项模块路径 | 通常用于显示验证码 |
 | $token | array | 表单令牌 | 所有需要提交的表单都必须用 hidden 域包含这个变量，`4.0-beta-3` 起变更为数组类型，`$token['name']` 为表单名，`$token['value']` 为表单值 |
 | | string | | 4.0-beta-3 之前的版本，表单的名称必须为 `__token__`。 |
-| $lang | object | 语言对象 |  |
-| $request | object | 请求对象 |  |
-| $config | array | 配置数组 |  |
+| $lang | object | 语言对象 | |
+| $request | object | 请求对象 | |
+| $config | array | 配置数组 | |
 
 ----------
 
@@ -95,7 +95,7 @@ Email：<?php echo $data['email']; ?>
 <?php echo $request->cookie('name'); ?>  // 输出 $_COOKIE['name'] 变量
 ```
 
-支持输出 `$_SERVER`、`$_POST`、`$_GET`、`$_REQUEST`、`$_SESSION` 和 `$_COOKIE` 变量，详情请查看 ginkgo 文档的 [请求 -> 输入变量](//doc.baigo.net/ginkgo/quick/request/input)
+支持输出 `$_SERVER`、`$_POST`、`$_GET`、`$_REQUEST`、`$_SESSION` 和 `$_COOKIE` 变量，详情请查看 ginkgo 文档的 [请求 -> 输入变量](//doc.baigo.net/ginkgo/index/request/input)
 
 ----------
 

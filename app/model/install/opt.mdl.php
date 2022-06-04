@@ -6,7 +6,7 @@
 
 namespace app\model\install;
 
-use app\model\Opt as Opt_Base;
+use app\model\common\Opt as Opt_Common;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
@@ -14,9 +14,11 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------设置项模型-------------*/
-class Opt extends Opt_Base {
+class Opt extends Opt_Common {
 
-  function inputData() {
+  public $inputData = array();
+
+  public function inputData() {
     $_arr_inputParam = array(
       'type'      => array('txt', ''),
       'model'     => array('txt', ''),

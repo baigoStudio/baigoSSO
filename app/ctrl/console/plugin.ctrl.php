@@ -28,10 +28,24 @@ class Plugin extends Ctrl {
     $this->mdl_plugin   = Loader::model('Plugin');
 
     $this->configPlugin = Config::get('plugin');
+
+    $_str_hrefBase = $this->hrefBase . 'plugin/';
+
+    $_arr_hrefRow   = array(
+      'index'        => $_str_hrefBase . 'index/status/',
+      'show'         => $_str_hrefBase . 'show/dir/',
+      'edit'         => $_str_hrefBase . 'form/dir/',
+      'opts'         => $_str_hrefBase . 'opts/dir/',
+      'opts-submit'  => $_str_hrefBase . 'opts-submit/',
+      'submit'       => $_str_hrefBase . 'submit/',
+      'uninstall'    => $_str_hrefBase . 'uninstall/',
+    );
+
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -93,7 +107,7 @@ class Plugin extends Ctrl {
       $_value['plugin_opts'] = $_mix_pluginOpts;
 
       if ($_arr_search['status'] == 'installable' && (isset($this->configPlugin[$_value['name']]) || $_value['plugin_status'] != 'wait')) {
-        unset($_value);
+        unset($_arr_pluginRows[$_key]);
       }
     }
 
@@ -119,7 +133,7 @@ class Plugin extends Ctrl {
   }
 
 
-  function show() {
+  public function show() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -188,7 +202,7 @@ class Plugin extends Ctrl {
   }
 
 
-  function form() {
+  public function form() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -263,7 +277,7 @@ class Plugin extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -292,7 +306,7 @@ class Plugin extends Ctrl {
   }
 
 
-  function opts() {
+  public function opts() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -381,7 +395,7 @@ class Plugin extends Ctrl {
   }
 
 
-  function optsSubmit() {
+  public function optsSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -420,7 +434,7 @@ class Plugin extends Ctrl {
   }
 
 
-  function uninstall() {
+  public function uninstall() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -482,7 +496,7 @@ class Plugin extends Ctrl {
 
   private function pluginDisable($arr_pluginDisable) {
     if (Func::notEmpty($arr_pluginDisable)) {
-      $this->mdl_plugin->inputUninstall['plugin_dirs'] = Arrays::filter($arr_pluginDisable);
+      $this->mdl_plugin->inputUninstall['plugin_dirs'] = Arrays::unique($arr_pluginDisable);
       $this->mdl_plugin->uninstall();
     }
   }

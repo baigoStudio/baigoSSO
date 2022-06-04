@@ -13,7 +13,7 @@ if (!defined('IN_GINKGO')) {
 
 // 验证码
 class Captcha {
-  public $chars     = 'abdefhijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'; // 字符池
+  public $chars     = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'; // 字符池
   public $secKey    = 'ginkgo'; // 安全码
   public $config    = array(); // 配置
 

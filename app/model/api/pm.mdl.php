@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\Pm as Pm_Base;
+use app\model\common\Pm as Pm_Common;
 use ginkgo\Func;
 use ginkgo\Plugin;
 
@@ -15,13 +15,14 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class Pm extends Pm_Base {
+class Pm extends Pm_Common {
 
-  public $inputRead;
-  public $inputCheck;
-  public $inputLists;
+  public $inputRead   = array();
+  public $inputCheck  = array();
+  public $inputLists  = array();
+  public $inputSend   = array();
 
-  function send() {
+  public function send() {
     $_arr_pmData = array(
       'pm_to'        => $this->inputSend['pm_to'],
       'pm_from'      => $this->inputSend['pm_from'],
@@ -78,7 +79,7 @@ class Pm extends Pm_Base {
    * @access public
    * @return void
    */
-  function inputRead($arr_data) {
+  public function inputRead($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),
@@ -111,7 +112,7 @@ class Pm extends Pm_Base {
    * @access public
    * @return void
    */
-  function inputLists($arr_data) {
+  public function inputLists($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),
@@ -143,7 +144,7 @@ class Pm extends Pm_Base {
   }
 
 
-  function inputSend($arr_data) {
+  public function inputSend($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),
@@ -171,7 +172,7 @@ class Pm extends Pm_Base {
     return $_arr_inputSend;
   }
 
-  function inputCheck($arr_data) {
+  public function inputCheck($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),
@@ -197,7 +198,7 @@ class Pm extends Pm_Base {
   }
 
 
-  function inputStatus($arr_data) {
+  public function inputStatus($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),
@@ -225,7 +226,7 @@ class Pm extends Pm_Base {
   }
 
 
-  function inputDelete($arr_data) {
+  public function inputDelete($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),

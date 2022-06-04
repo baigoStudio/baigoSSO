@@ -6,7 +6,7 @@
 
 namespace app\model\console;
 
-use app\model\User;
+use app\model\common\User as User_Common;
 use ginkgo\Func;
 use ginkgo\Crypt;
 use ginkgo\Html;
@@ -18,17 +18,19 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class Import extends User {
+class Import extends User_Common {
+
+  public $inputCommon = array();
 
   public $charsetKeys = array();
   public $csvRows = array();
-  public $inputSubmit;
+
   public $csvPath;
   public $csvPrefix = GK_PATH_DATA;
   public $csvName = 'user_import.csv';
   protected $table = 'user';
 
-  function m_init() { //构造函数
+  protected function m_init() { //构造函数
     $this->csvPath = $this->csvPrefix . $this->csvName;
   }
 
@@ -39,7 +41,7 @@ class Import extends User {
    * @access public
    * @return void
    */
-  function preview($str_charset = '', $offset = 5) {
+  public function preview($str_charset = '', $offset = 5) {
     if (File::fileHas($this->csvPath)) {
       $_res_csv    = fopen($this->csvPath, 'r');
 
@@ -89,7 +91,7 @@ class Import extends User {
    * @access public
    * @return void
    */
-  function submit() {
+  public function submit() {
     $_num_count = 0;
 
     $this->preview($this->inputSubmit['charset'], 0);
@@ -152,7 +154,7 @@ class Import extends User {
    * @access public
    * @return void
    */
-  function inputSubmit() {
+  public function inputSubmit() {
     $_arr_inputParam = array(
       'charset'       => array('txt', ''),
       'user_convert'  => array('arr', array()),
@@ -194,7 +196,7 @@ class Import extends User {
   }
 
 
-  function inputCommon() {
+  public function inputCommon() {
     $_arr_inputParam = array(
       '__token__' => array('txt', ''),
     );

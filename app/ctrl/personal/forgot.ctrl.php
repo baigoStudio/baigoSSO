@@ -24,9 +24,23 @@ class Forgot extends Ctrl {
     parent::c_init();
 
     $this->mdl_forgot     = Loader::model('Forgot');
+
+    $_str_hrefBase = $this->hrefBase . 'forgot/';
+
+    $_arr_hrefRow = array(
+      'confirm'             => $_str_hrefBase . 'confirm/',
+      'bymail'              => $_str_hrefBase . 'bymail/',
+      'bysecqa'             => $_str_hrefBase . 'bysecqa/',
+      'captcha-mail'        => $this->url['route_misc'] . 'captcha/index/id/captcha_mail/',
+      'captcha-secqa'       => $this->url['route_misc'] . 'captcha/index/id/captcha_secqa/',
+      'captcha-mail-check'  => $this->url['route_misc'] . 'captcha/check/id/captcha_mail/',
+      'captcha-secqa-check' => $this->url['route_misc'] . 'captcha/check/id/captcha_secqa/',
+    );
+
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
-  function index() {
+  public function index() {
     $_arr_tplData = array(
     );
 
@@ -38,7 +52,7 @@ class Forgot extends Ctrl {
   }
 
 
-  function confirm() {
+  public function confirm() {
     $_str_userName = '';
 
     if (isset($this->param['user'])) {
@@ -87,7 +101,7 @@ class Forgot extends Ctrl {
   }
 
 
-  function bymail() {
+  public function bymail() {
     if (!$this->isAjaxPost) {
       return $this->fetchJson('Access denied', '', 405);
     }
@@ -145,7 +159,7 @@ class Forgot extends Ctrl {
   }
 
 
-  function bysecqa() {
+  public function bysecqa() {
     if (!$this->isAjaxPost) {
       return $this->fetchJson('Access denied', '', 405);
     }

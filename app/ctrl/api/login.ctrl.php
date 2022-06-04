@@ -27,7 +27,7 @@ class Login extends Ctrl {
   }
 
 
-  function login() {
+  public function login() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

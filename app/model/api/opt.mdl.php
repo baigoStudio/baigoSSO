@@ -6,7 +6,7 @@
 
 namespace app\model\api;
 
-use app\model\Opt as Opt_Base;
+use app\model\common\Opt as Opt_Common;
 use ginkgo\Config;
 
 // 不能非法包含或直接执行
@@ -15,9 +15,12 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------设置项模型-------------*/
-class Opt extends Opt_Base {
+class Opt extends Opt_Common {
 
-  function security() {
+  public $inputSecurity  = array();
+  public $inputTimestamp = array();
+
+  public function security() {
     $_arr_outPut = array(
       'key'       => $this->inputCommon['key'],
       'secret'    => $this->inputSecurity['secret'],
@@ -40,7 +43,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputSecurity($arr_data = array()) {
+  public function inputSecurity($arr_data = array()) {
     $_arr_inputParam = array(
       'secret'    => array('txt', ''),
       'timestamp' => array('int', 0),
@@ -66,7 +69,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputDbconfig($arr_data = array()) {
+  public function inputDbconfig($arr_data = array()) {
     $_arr_inputParam = array(
       'host'          => array('txt', 'localhost'),
       'port'          => array('int', 3306),
@@ -98,7 +101,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputTimestamp($arr_data) {
+  public function inputTimestamp($arr_data) {
     $_arr_inputParam = array(
       'timestamp' => array('int', 0),
     );
@@ -123,7 +126,7 @@ class Opt extends Opt_Base {
   }
 
 
-  function inputCommon() {
+  public function inputCommon() {
     $_arr_inputParam = array(
       'key'   => array('txt', ''),
       'sign'  => array('txt', ''),

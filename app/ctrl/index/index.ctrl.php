@@ -13,7 +13,7 @@ if (!defined('IN_GINKGO')) {
 
 class Index {
 
-  function __construct() {
+  public function __construct() {
     $_array_tpl = array(
       'path_tpl' => GK_PATH_TPL,
     );
@@ -21,7 +21,7 @@ class Index {
   }
 
 
-  function index() {
+  public function index() {
     /*$this->obj_tpl->assign($this->param);
     $this->obj_tpl->fetch('index');*/
   }

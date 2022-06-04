@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\console;
 
-use app\model\Verify as Verify_Base;
+use app\model\common\Verify as Verify_Common;
 use ginkgo\Func;
 use ginkgo\Arrays;
 
@@ -15,9 +15,10 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------验证模型-------------*/
-class Verify extends Verify_Base {
+class Verify extends Verify_Common {
 
-  public $inputStatus;
+  public $inputStatus = array();
+  public $inputDelete = array();
 
   /** 更改状态
    * status function.
@@ -26,7 +27,7 @@ class Verify extends Verify_Base {
    * @param mixed $str_status
    * @return void
    */
-  function status() {
+  public function status() {
     $_arr_verifyUpdate = array(
       'verify_status' => $this->inputStatus['act'],
     );
@@ -56,7 +57,7 @@ class Verify extends Verify_Base {
    * @access public
    * @return void
    */
-  function delete() {
+  public function delete() {
     $_num_count     = $this->where('verify_id', 'IN', $this->inputDelete['verify_ids'], 'verify_ids')->delete();
 
     //如车影响行数小于0则返回错误
@@ -82,7 +83,7 @@ class Verify extends Verify_Base {
    * @access public
    * @return void
    */
-  function inputStatus() {
+  public function inputStatus() {
     $_arr_inputParam = array(
       'verify_ids'    => array('arr', array()),
       'act'           => array('txt', ''),
@@ -93,7 +94,7 @@ class Verify extends Verify_Base {
 
     //print_r($_arr_inputStatus);
 
-    $_arr_inputStatus['verify_ids'] = Arrays::filter($_arr_inputStatus['verify_ids']);
+    $_arr_inputStatus['verify_ids'] = Arrays::unique($_arr_inputStatus['verify_ids']);
 
     $_mix_vld = $this->validate($_arr_inputStatus, '', 'status');
 
@@ -114,7 +115,7 @@ class Verify extends Verify_Base {
   }
 
 
-  function inputDelete() {
+  public function inputDelete() {
     $_arr_inputParam = array(
       'verify_ids'    => array('arr', array()),
       '__token__'     => array('txt', ''),
@@ -124,7 +125,7 @@ class Verify extends Verify_Base {
 
     //print_r($_arr_inputDelete);
 
-    $_arr_inputDelete['verify_ids'] = Arrays::filter($_arr_inputDelete['verify_ids']);
+    $_arr_inputDelete['verify_ids'] = Arrays::unique($_arr_inputDelete['verify_ids']);
 
     $_mix_vld = $this->validate($_arr_inputDelete, '', 'delete');
 

@@ -18,9 +18,9 @@ if (!defined('IN_GINKGO')) {
 class App_Belong extends Model {
 
   protected $pk = 'belong_id';
-  private $create;
+  protected $comment = '应用从属';
 
-  function m_init() { //构造函数
+  protected function m_init() { //构造函数
     $this->create = array(
       'belong_id' => array(
         'type'      => 'int(11)',
@@ -50,8 +50,8 @@ class App_Belong extends Model {
    * @access public
    * @return void
    */
-  function createTable() {
-    $_num_count  = $this->create($this->create, '应用从属');
+  public function createTable() {
+    $_num_count  = $this->create();
 
     if ($_num_count !== false) {
       $_str_rcode = 'y070105'; //更新成功
@@ -74,22 +74,18 @@ class App_Belong extends Model {
    * @access public
    * @return void
    */
-  function alterTable() {
-    $_arr_alter = $this->alterProcess($this->create);
-
+  public function alterTable() {
     $_str_rcode = 'y070111';
     $_str_msg   = 'No need to update table';
 
-    if (Func::notEmpty($_arr_alter)) {
-      $_num_count  = $this->alter($_arr_alter);
+    $_num_count  = $this->alter();
 
-      if ($_num_count !== false) {
-        $_str_rcode = 'y070106';
-        $_str_msg   = 'Update table successfully';
-      } else {
-        $_str_rcode = 'x070106';
-        $_str_msg   = 'Update table failed';
-      }
+    if ($_num_count === false) {
+      $_str_rcode = 'x070106';
+      $_str_msg   = 'Update table failed';
+    } else if ($_num_count > 0) {
+      $_str_rcode = 'y070106';
+      $_str_msg   = 'Update table successfully';
     }
 
     return array(

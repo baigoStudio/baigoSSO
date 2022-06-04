@@ -33,7 +33,7 @@ class Crypt {
 
     $_arr_algoLists  = openssl_get_cipher_methods(true);
 
-    $_arr_algoLists  = Arrays::filter(array_map('strtoupper', $_arr_algoLists));
+    $_arr_algoLists  = Arrays::unique(array_map('strtoupper', $_arr_algoLists));
     self::$algo      = strtoupper(self::$algo);
 
     if (!in_array(self::$algo, $_arr_algoLists)) {

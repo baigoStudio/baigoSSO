@@ -17,7 +17,7 @@ if (!defined('IN_GINKGO')) {
 /*-------------设置项模型-------------*/
 class Opt extends Opt_Base {
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
     parent::v_init();
 
     $_arr_rule     = array(

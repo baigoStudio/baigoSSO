@@ -16,7 +16,6 @@ baigo SSO 采用 HTTP 方式调用 API 接口，可以完全消除兼容问题�
 
 `4.0` 起，基于 baigo 自主开发的框架 —— ginkgo 进行开发。
 
-
 * [项目主页](https://www.baigo.net/sso/)
 * [演示](https://demo.baigo.net/sso/index.php/console/)
 * [下载](https://www.baigo.net/cate/baigoSSO/download/)

@@ -40,8 +40,8 @@ m=sso&c=notify&a=test
 
 ``` javascript
 {
-    "echostr": "sdferi84hkdfufdsERTeugroe7treie",
-    "timestamp": "1550198497"
+  "echostr": "sdferi84hkdfufdsERTeugroe7treie",
+  "timestamp": "1550198497"
 }
 ```
 
@@ -75,27 +75,27 @@ m=sso&c=notify&a=reg
 
 ``` javascript
 {
-    "user_id": "1", //用户 ID
-    "user_name": "baigo", //用户名
-    "user_mail": "baigo@baigo.net", //邮箱
-    "user_nick": "nickname" //昵称
-    "user_contact": {
-        "tel": {
-            "key": "电话",
-            "value": "0574-88888888"
-        },
-        "addr": {
-            "key": "地址",
-            "value": "浙江省宁波市"
-        }
+  "user_id": "1", //用户 ID
+  "user_name": "baigo", //用户名
+  "user_mail": "baigo@baigo.net", //邮箱
+  "user_nick": "nickname" //昵称
+  "user_contact": {
+    "tel": {
+      "key": "电话",
+      "value": "0574-88888888"
     },
-    "user_extend": {
-        "test": {
-            "key": "名称",
-            "value": "值"
-        }
-    },
-    "timestamp": "1550198497"
+    "addr": {
+      "key": "地址",
+      "value": "浙江省宁波市"
+    }
+  },
+  "user_extend": {
+    "test": {
+      "key": "名称",
+      "value": "值"
+    }
+  },
+  "timestamp": "1550198497"
 }
 ```
 
@@ -129,27 +129,27 @@ m=sso&c=notify&a=edit
 
 ``` javascript
 {
-    "user_id": "1", //用户 ID
-    "user_name": "baigo", //用户名
-    "user_mail": "baigo@baigo.net", //邮箱
-    "user_nick": "nickname" //昵称
-    "user_contact": {
-        "tel": {
-            "key": "电话",
-            "value": "0574-88888888"
-        },
-        "addr": {
-            "key": "地址",
-            "value": "浙江省宁波市"
-        }
+  "user_id": "1", //用户 ID
+  "user_name": "baigo", //用户名
+  "user_mail": "baigo@baigo.net", //邮箱
+  "user_nick": "nickname" //昵称
+  "user_contact": {
+    "tel": {
+      "key": "电话",
+      "value": "0574-88888888"
     },
-    "user_extend": {
-        "test": {
-            "key": "名称",
-            "value": "值"
-        }
-    },
-    "timestamp": "1550198497"
+    "addr": {
+      "key": "地址",
+      "value": "浙江省宁波市"
+    }
+  },
+  "user_extend": {
+    "test": {
+      "key": "名称",
+      "value": "值"
+    }
+  },
+  "timestamp": "1550198497"
 }
 ```
 
@@ -181,25 +181,25 @@ m=sso&c=notify&a=info
 
 ``` javascript
 {
-    "user_id": "1", //用户 ID
-    "user_nick": "nickname" //昵称
-    "user_contact": {
-        "tel": {
-            "key": "电话",
-            "value": "0574-88888888"
-        },
-        "addr": {
-            "key": "地址",
-            "value": "浙江省宁波市"
-        }
+  "user_id": "1", //用户 ID
+  "user_nick": "nickname" //昵称
+  "user_contact": {
+    "tel": {
+      "key": "电话",
+      "value": "0574-88888888"
     },
-    "user_extend": {
-        "test": {
-            "key": "名称",
-            "value": "值"
-        }
-    },
-    "timestamp": "1550198497"
+    "addr": {
+      "key": "地址",
+      "value": "浙江省宁波市"
+    }
+  },
+  "user_extend": {
+    "test": {
+      "key": "名称",
+      "value": "值"
+    }
+  },
+  "timestamp": "1550198497"
 }
 ```
 
@@ -229,9 +229,9 @@ m=sso&c=notify&a=mailbox
 
 ``` javascript
 {
-    "user_id": "1", //用户 ID
-    "user_mail": "baigo@baigo.net", //邮箱
-    "timestamp": "1550198497"
+  "user_id": "1", //用户 ID
+  "user_mail": "baigo@baigo.net", //邮箱
+  "timestamp": "1550198497"
 }
 ```
 

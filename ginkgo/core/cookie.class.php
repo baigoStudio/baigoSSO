@@ -122,9 +122,11 @@ class Cookie {
     if ($_arr_config['setcookie']) { // 是否启用 setcookie 函数 (不启用只影响 $_COOKIE 全局变量)
       if (is_array($_arr_config['path'])) {
         foreach ($_arr_config['path'] as $_key=>$_value) {
+          $_value = (string)$_value;
           setcookie($name, $value, intval($_tm_expire), $_value, $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
         }
-      } else if (is_string($_arr_config['path'])) {
+      } else {
+        $_arr_config['path'] = (string)$_arr_config['path'];
         setcookie($name, $value, intval($_tm_expire), $_arr_config['path'], $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
       }
     }
@@ -191,9 +193,11 @@ class Cookie {
 
     if (is_array($_arr_config['path'])) {
       foreach ($_arr_config['path'] as $_key=>$_value) {
+        $_value = (string)$_value;
         setcookie($name, '', intval(GK_NOW - GK_HOUR), $_value, $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
       }
-    } else if (is_string($_arr_config['path'])) {
+    } else {
+      $_arr_config['path'] = (string)$_arr_config['path'];
       setcookie($name, '', intval(GK_NOW - GK_HOUR), $_arr_config['path'], $_arr_config['domain'], $_arr_config['secure'], $_arr_config['httponly']);
     }
 

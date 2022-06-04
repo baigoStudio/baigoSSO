@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\User;
+use app\model\common\User as User_Common;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
@@ -13,11 +13,13 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class Sync extends User {
+class Sync extends User_Common {
 
   protected $table = 'user';
 
-  function inputCommon($arr_data) {
+  public $inputCommon = array();
+
+  public function inputCommon($arr_data) {
     $_arr_inputParam = array(
       'user_id'           => array('int', 0),
       'user_access_token' => array('txt', ''),

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\Verify as Verify_Base;
+use app\model\common\Verify as Verify_Common;
 use ginkgo\Func;
 
 // 不能非法包含或直接执行
@@ -14,6 +14,6 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------验证模型-------------*/
-class Verify extends Verify_Base {
+class Verify extends Verify_Common {
 
 }

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\User as User_Base;
+use app\model\common\User as User_Common;
 use ginkgo\Config;
 use ginkgo\Arrays;
 use ginkgo\Func;
@@ -16,16 +16,19 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class Reg extends User_Base {
+class Reg extends User_Common {
 
-  public $inputReg;
+  public $inputReg     = array();
+  public $inputChkname = array();
+  public $inputChkmail = array();
+
   protected $table = 'user';
 
-  function m_init() {
+  protected function m_init() {
     $this->configReg     = Config::get('reg', 'var_extra');
   }
 
-  function reg() {
+  public function reg() {
     $_arr_userData = array(
       'user_name'         => $this->inputReg['user_name'],
       'user_pass'         => $this->inputReg['user_pass'],
@@ -105,7 +108,7 @@ class Reg extends User_Base {
    * @access public
    * @return void
    */
-  function inputReg($arr_data) {
+  public function inputReg($arr_data) {
     $_arr_inputParam = array(
       'user_name'     => array('txt', ''),
       'user_mail'     => array('txt', ''),
@@ -156,7 +159,7 @@ class Reg extends User_Base {
   }
 
 
-  function inputChkname($arr_data) {
+  public function inputChkname($arr_data) {
     $_arr_inputParam = array(
       'user_name'     => array('txt', ''),
       'timestamp'     => array('int', 0),
@@ -187,7 +190,7 @@ class Reg extends User_Base {
   }
 
 
-  function inputChkmail($arr_data) {
+  public function inputChkmail($arr_data) {
     $_arr_inputParam = array(
       'user_mail'     => array('txt', ''),
       'timestamp'     => array('int', 0),

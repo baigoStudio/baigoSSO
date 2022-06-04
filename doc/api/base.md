@@ -41,16 +41,16 @@ GET
 
 ``` javascript
 {
-    "staus": {
-        "wait": "未读",
-        "read": "已读"
-    },
-    "type": {
-        "in": "收件箱",
-        "out": "已发送"
-    },
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "staus": {
+    "wait": "未读",
+    "read": "已读"
+  },
+  "type": {
+    "in": "收件箱",
+    "out": "已发送"
+  },
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -91,9 +91,9 @@ GET
 
 ``` javascript
 {
-    "url_forgot": "http://server/index.php/personal/forgot",
-    "url_nomail": "http://server/index.php/personal/reg/nomail",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "url_forgot": "http://server/index.php/personal/forgot",
+  "url_nomail": "http://server/index.php/personal/reg/nomail",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```

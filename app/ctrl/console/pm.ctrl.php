@@ -27,12 +27,29 @@ class Pm extends Ctrl {
     $this->mdl_user       = Loader::model('User');
     $this->mdl_pm         = Loader::model('Pm');
 
+    $_str_hrefBase = $this->hrefBase . 'pm/';
+
+    $_arr_hrefRow   = array(
+      'index'       => $_str_hrefBase . 'index/',
+      'index-from'  => $_str_hrefBase . 'index/from/',
+      'index-to'    => $_str_hrefBase . 'index/to/',
+      'show'        => $_str_hrefBase . 'show/id/',
+      'edit'        => $_str_hrefBase . 'form/dir/',
+      'bulk'        => $_str_hrefBase . 'bulk/',
+      'bulk-submit' => $_str_hrefBase . 'bulk-submit/',
+      'submit'      => $_str_hrefBase . 'submit/',
+      'status'      => $_str_hrefBase . 'status/',
+      'delete'      => $_str_hrefBase . 'delete/',
+      'user-show'   => $this->url['route_console'] . 'user/show/id/',
+    );
+
     $this->generalData['status']    = $this->mdl_pm->arr_status;
     $this->generalData['type']      = $this->mdl_pm->arr_type;
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -55,20 +72,18 @@ class Pm extends Ctrl {
 
     //print_r($_arr_search);
 
-    $_num_pmCount   = $this->mdl_pm->count($_arr_search); //统计记录数
-    $_arr_pageRow   = $this->obj_request->pagination($_num_pmCount); //取得分页数据
-    $_arr_pmRows    = $this->mdl_pm->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
+    $_arr_getData    = $this->mdl_pm->lists($this->config['var_default']['perpage'], $_arr_search); //列出
 
-    foreach ($_arr_pmRows as $_key=>&$_value) {
+    foreach ($_arr_getData['dataRows'] as $_key=>&$_value) {
       $_value['toUser']   = $this->mdl_user->read($_value['pm_to']);
       $_value['fromUser'] = $this->mdl_user->read($_value['pm_from']);
       $_value['pm_title'] = Html::decode($_value['pm_title'], 'json');
     }
 
     $_arr_tplData = array(
-      'pageRow'       => $_arr_pageRow,
       'search'        => $_arr_search,
-      'pmRows'        => $_arr_pmRows,
+      'pageRow'       => $_arr_getData['pageRow'],
+      'pmRows'        => $_arr_getData['dataRows'],
       'token'         => $this->obj_request->token(),
     );
 
@@ -82,7 +97,7 @@ class Pm extends Ctrl {
   }
 
 
-  function show() {
+  public function show() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -128,7 +143,7 @@ class Pm extends Ctrl {
   }
 
 
-  function bulk() {
+  public function bulk() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -155,7 +170,7 @@ class Pm extends Ctrl {
   }
 
 
-  function bulkSubmit() {
+  public function bulkSubmit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -220,7 +235,7 @@ class Pm extends Ctrl {
       break;
     }
 
-    $_arr_userRows = $this->mdl_user->lists(1000, 0, $_arr_search);
+    $_arr_userRows = $this->mdl_user->lists(array(1000, 'limit'), $_arr_search);
 
     if (Func::isEmpty($_arr_userRows)) {
       return $this->fetchJson('No eligible recipients', 'x110201');
@@ -252,7 +267,7 @@ class Pm extends Ctrl {
   }
 
 
-  function delete() {
+  public function delete() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -289,7 +304,7 @@ class Pm extends Ctrl {
   }
 
 
-  function status() {
+  public function status() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

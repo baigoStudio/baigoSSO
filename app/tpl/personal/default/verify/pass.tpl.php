@@ -3,14 +3,13 @@
   'baigoValidate' => 'true',
   'baigoSubmit'    => 'true',
   'captchaReload'  => 'true',
-  'pathInclude'    => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'personal_head' . GK_EXT_TPL); ?>
 
   <div class="card">
     <div class="card-body">
-      <form name="forgot_form" id="forgot_form" action="<?php echo $route_personal; ?>verify/pass-submit/">
+      <form name="forgot_form" id="forgot_form" action="<?php echo $hrefRow['pass-submit']; ?>">
         <input type="hidden" name="verify_id" value="<?php echo $verifyRow['verify_id']; ?>">
         <input type="hidden" name="verify_token" value="<?php echo $verifyRow['verify_token']; ?>">
         <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
@@ -37,7 +36,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
           <div class="input-group">
             <input type="text" name="captcha" id="captcha" class="form-control">
             <div class="input-group-append">
-              <img src="<?php echo $route_misc; ?>captcha/index/id/captcha_verify/" data-id="captcha_pass" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
+              <img src="<?php echo $hrefRow['captcha']; ?>" data-src="<?php echo $hrefRow['captcha']; ?>" class="bg-captcha-img" alt="<?php echo $lang->get('Captcha'); ?>">
             </div>
           </div>
           <small class="form-text" id="msg_captcha"></small>
@@ -54,7 +53,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
     </div>
   </div>
 
-<?php include($cfg['pathInclude'] . 'personal_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'personal_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_form = {
@@ -69,7 +68,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
         length: '4,4',
         format: 'alpha_number',
         ajax: {
-          url: '<?php echo $route_misc; ?>captcha/check/id/captcha_pass/'
+          url: '<?php echo $hrefRow['captcha-check']; ?>'
         }
       }
     },
@@ -103,7 +102,7 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
       if (obj_validate_form.verify()) {
         obj_submit_form.formSubmit(false, function(result){
           if (typeof result.rcode == 'undefined' || result.rcode != 'y010103') {
-            captchaReload('captcha_pass');
+            captchaReload('<?php echo $hrefRow['captcha']; ?>');
           }
         });
       }
@@ -111,4 +110,4 @@ include($cfg['pathInclude'] . 'personal_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

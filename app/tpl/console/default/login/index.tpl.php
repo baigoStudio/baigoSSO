@@ -1,18 +1,15 @@
 <?php $cfg = array(
   'title'          => $lang->get('Login'),
   'active'         => 'login',
-  'baigoValidate' => 'true',
+  'baigoValidate'  => 'true',
   'baigoSubmit'    => 'true',
   'captchaReload'  => 'true',
   'tooltip'        => 'true',
-  'pathInclude'    => $path_tpl . 'include' . DS,
 );
 
-//print_r($path_tpl);
+include($tpl_ctrl . 'head' . GK_EXT_TPL); ?>
 
-include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
-
-  <form name="login_form" id="login_form" action="<?php echo $route_console; ?>login/submit/">
+  <form name="login_form" id="login_form" action="<?php echo $hrefRow['submit']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="form-group">
@@ -32,7 +29,7 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
       <div class="input-group">
         <input type="text" name="captcha" id="captcha" class="form-control">
         <div class="input-group-append">
-          <img src="<?php echo $route_misc; ?>captcha/index/id/console_login/" data-id="console_login" class="bg-captcha-img" alt="<?php echo $lang->get('Refresh'); ?>">
+          <img src="<?php echo $hrefRow['captcha']; ?>" data-src="<?php echo $hrefRow['captcha']; ?>" class="bg-captcha-img" alt="<?php echo $lang->get('Refresh'); ?>">
         </div>
       </div>
 
@@ -55,12 +52,12 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
     </button>
   </form>
 
-<?php include($cfg['pathInclude'] . 'login_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_ctrl . 'foot' . GK_EXT_TPL); ?>
 
-  <form name="clear_form" id="clear_form" action="<?php echo $route_console; ?>cookie/clear/" class="my-3 text-center">
+  <form name="clear_form" id="clear_form" action="<?php echo $hrefRow['cookie']; ?>" class="my-3 text-center">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
     <button type="submit" class="btn btn-link">
-        <?php echo $lang->get('Clear cookie'); ?>
+      <?php echo $lang->get('Clear cookie'); ?>
     </button>
   </form>
 
@@ -68,39 +65,39 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
   var opts_validate_form = {
     rules: {
       admin_name: {
-          require: true,
-          format: 'alpha_dash'
+        require: true,
+        format: 'alpha_dash'
       },
       admin_pass: {
-          require: true
+        require: true
       },
       captcha: {
-          length: '4,4',
-          format: 'alpha_number',
-          ajax: {
-              url: '<?php echo $route_misc; ?>captcha/check/id/console_login/'
-          }
+        length: '4,4',
+        format: 'alpha_number',
+        ajax: {
+          url: '<?php echo $hrefRow['captcha-check']; ?>'
+        }
       }
     },
     attr_names: {
-        admin_name: '<?php echo $lang->get('Username'); ?>',
-        admin_pass: '<?php echo $lang->get('Password'); ?>',
-        captcha: '<?php echo $lang->get('Captcha'); ?>'
+      admin_name: '<?php echo $lang->get('Username'); ?>',
+      admin_pass: '<?php echo $lang->get('Password'); ?>',
+      captcha: '<?php echo $lang->get('Captcha'); ?>'
     },
     type_msg: {
-        require: '<?php echo $lang->get('{:attr} require'); ?>',
-        length: '<?php echo $lang->get('Size of {:attr} must be {:rule}'); ?>'
+      require: '<?php echo $lang->get('{:attr} require'); ?>',
+      length: '<?php echo $lang->get('Size of {:attr} must be {:rule}'); ?>'
     },
     format_msg: {
-        alpha_number: '<?php echo $lang->get('{:attr} must be alpha-numeric'); ?>',
-        alpha_dash: '<?php echo $lang->get('{:attr} must be alpha-numeric, dash, underscore'); ?>'
+      alpha_number: '<?php echo $lang->get('{:attr} must be alpha-numeric'); ?>',
+      alpha_dash: '<?php echo $lang->get('{:attr} must be alpha-numeric, dash, underscore'); ?>'
     },
     msg: {
-        loading: '<?php echo $lang->get('Loading'); ?>',
-        ajax_err: '<?php echo $lang->get('Server side error'); ?>'
+      loading: '<?php echo $lang->get('Loading'); ?>',
+      ajax_err: '<?php echo $lang->get('Server side error'); ?>'
     },
     box: {
-        msg: '<?php echo $lang->get('Input error'); ?>'
+      msg: '<?php echo $lang->get('Input error'); ?>'
     }
   };
 
@@ -117,7 +114,7 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
       if (obj_validate_form.verify()) {
         obj_submit_form.formSubmit(false, function(result){
           if (typeof result.rcode == 'undefined' || result.rcode != 'y020401') {
-            captchaReload('console_login');
+            captchaReload('<?php echo $hrefRow['captcha']; ?>');
           }
         });
       }
@@ -133,4 +130,4 @@ include($cfg['pathInclude'] . 'login_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

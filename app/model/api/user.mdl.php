@@ -5,7 +5,7 @@
 -----------------------------------------------------------------*/
 namespace app\model\api;
 
-use app\model\User as User_Base;
+use app\model\common\User as User_Common;
 use ginkgo\Arrays;
 use ginkgo\Func;
 
@@ -15,11 +15,12 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------用户模型-------------*/
-class User extends User_Base {
+class User extends User_Common {
 
-  public $inputEdit;
+  public $inputEdit = array();
+  public $inputRead = array();
 
-  function readBase($mix_user, $str_by = 'user_id', $num_notId = 0) {
+  public function readBase($mix_user, $str_by = 'user_id', $num_notId = 0) {
     $_arr_select = array(
       'user_id',
       'user_name',
@@ -38,7 +39,7 @@ class User extends User_Base {
   }
 
 
-  function edit() {
+  public function edit() {
     $_arr_userData = array();
 
     if (isset($this->inputEdit['user_pass']) && Func::notEmpty($this->inputEdit['user_pass'])) { //如果 新密码 为空，则不修改
@@ -97,7 +98,7 @@ class User extends User_Base {
   }
 
 
-  function inputRead($arr_data) {
+  public function inputRead($arr_data) {
     $_arr_inputParam = array(
       'user_id'    => array('int', 0),
       'timestamp'  => array('int', 0),
@@ -122,7 +123,7 @@ class User extends User_Base {
   }
 
 
-  function inputEdit($arr_data) {
+  public function inputEdit($arr_data) {
     $_arr_inputParam = array(
       'user_id'       => array('int', 0),
       'user_pass'     => array('txt', ''),

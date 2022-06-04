@@ -23,7 +23,7 @@ class App_Combine_View extends App {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function queryProcess($arr_search = array()) {
+  public function queryProcess($arr_search = array()) {
     $_arr_where = parent::queryProcess($arr_search);
 
     if (isset($arr_search['min_id']) && $arr_search['min_id'] > 0) {
@@ -40,7 +40,7 @@ class App_Combine_View extends App {
 
     if (isset($arr_search['combine_ids']) && Func::notEmpty($arr_search['combine_ids'])) {
       $arr_search['combine_ids'][]    = 0;
-      $arr_search['combine_ids']      = Arrays::filter($arr_search['combine_ids']);
+      $arr_search['combine_ids']      = Arrays::unique($arr_search['combine_ids']);
       $_arr_where[] = array('belong_combine_id', 'IN', $arr_search['combine_ids'], 'belong_combine_ids');
     }
 

@@ -4,6 +4,6 @@
 
 不同的插件之间具有位置共同性，比如，有些插件的作用位置都是在应用执行前，有些插件都是在模板输出之后，我们把这些插件发生作用的位置称之为钩子，当应用程序运行到这个钩子的时候，就会被拦截下来，统一执行相关的插件。
 
-插件开发的详情请查看 ginkgo 文档的 [扩展 -> 插件](//doc.baigo.net/ginkgo/quick/extend/plugin)，本文档将列出 baigo SSO 预埋的插件钩子。
+插件开发的详情请查看 ginkgo 文档的 [扩展 -> 插件](//doc.baigo.net/ginkgo/index/extend/plugin)，本文档将列出 baigo SSO 预埋的插件钩子。
 
 `2.2` 起支持插件

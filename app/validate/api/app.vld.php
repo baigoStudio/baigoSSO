@@ -70,7 +70,7 @@ class App extends Validate {
   );
 
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'app_id'            => $this->obj_lang->get('App ID', 'api.common'),

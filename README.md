@@ -22,4 +22,4 @@ http://server/index.php/console/
 
 # 在线帮助
 
-<http://doc.baigo.net/sso/>
+https://doc.baigo.net/sso/

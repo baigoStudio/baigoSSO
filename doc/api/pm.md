@@ -37,10 +37,10 @@ POST
 
 ``` javascript
 {
-    "rcode": "y110101" //返回代码
-    "msg": "发送成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y110101" //返回代码
+  "msg": "发送成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -76,9 +76,9 @@ GET
 
 ``` javascript
 {
-    "pm_count": "10" //未读短信数
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "pm_count": "10" //未读短信数
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -172,21 +172,21 @@ GET
 
 ``` javascript
 {
-    "pm_id": "1", //短信 ID
-    "pm_title": "test", //标题
-    "pm_content": "test", //内容
-    "pm_from": "1", //发送者用户 ID
-    "pm_to": "1", //接收者用户 ID
-    "pm_status": "read" //短信状态
-    "pm_time": "1550198497", //发送时间
-    "fromUser": { //发送者用户信息
-        "user_id": "1"
-        "user_name": "baigo"
-    },
-    "toUser": { //接收者用户信息
-        "user_id": "2"
-        "user_name": "test"
-    },
+  "pm_id": "1", //短信 ID
+  "pm_title": "test", //标题
+  "pm_content": "test", //内容
+  "pm_from": "1", //发送者用户 ID
+  "pm_to": "1", //接收者用户 ID
+  "pm_status": "read" //短信状态
+  "pm_time": "1550198497", //发送时间
+  "fromUser": { //发送者用户信息
+    "user_id": "1"
+    "user_name": "baigo"
+  },
+  "toUser": { //接收者用户信息
+    "user_id": "2"
+    "user_name": "test"
+  },
 }
 ```
 
@@ -224,10 +224,10 @@ POST
 
 ``` javascript
 {
-    "rcode": "y110103" //返回代码
-    "msg": "更改状态成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y110103" //返回代码
+  "msg": "更改状态成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -264,10 +264,10 @@ POST
 
 ``` javascript
 {
-    "rcode": "y110104" //返回代码
-    "msg": "撤回成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y110104" //返回代码
+  "msg": "撤回成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```
 
@@ -304,9 +304,9 @@ POST
 
 ``` javascript
 {
-    "rcode": "y110104" //返回代码
-    "msg": "删除成功",
-    "prd_sso_ver": "1.1.1",
-    "prd_sso_pub": 20150923
+  "rcode": "y110104" //返回代码
+  "msg": "删除成功",
+  "prd_sso_ver": "1.1.1",
+  "prd_sso_pub": 20150923
 }
 ```

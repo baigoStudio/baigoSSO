@@ -20,6 +20,7 @@ abstract class Ctrl {
   protected $route        = array(); // 路由
   protected $routeOrig    = array(); // 原始路由
   protected $param        = array(); // 路由参数
+  protected $pathTpl      = ''; // 目标路径
 
   public function __construct($param = array()) {
     $this->obj_request  = Request::instance();
@@ -27,6 +28,7 @@ abstract class Ctrl {
     $this->obj_view     = View::instance();
     $this->route        = $this->obj_request->route;
     $this->routeOrig    = $this->obj_request->routeOrig;
+    $this->pathTpl      = $this->obj_view->getPath();
     $this->param        = $param;
 
     // 控制器初始化

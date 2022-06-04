@@ -53,12 +53,12 @@ m=sso&c=sync&a=login
 
 ``` javascript
 {
-    "user_id": "1",
-    "user_name": "baigo",
-    "user_mail": "baigo@baigo.net",
-    "app_id": "1",
-    "app_key": "sfewrw8084382h2r9fdsw9ey5whfDISORwegds",
-    "timestamp": "1550198497"
+  "user_id": "1",
+  "user_name": "baigo",
+  "user_mail": "baigo@baigo.net",
+  "app_id": "1",
+  "app_key": "sfewrw8084382h2r9fdsw9ey5whfDISORwegds",
+  "timestamp": "1550198497"
 }
 ```
 
@@ -91,11 +91,11 @@ m=sso&c=sync&a=logout
 
 ``` javascript
 {
-    "user_id": "1",
-    "user_name": "baigo",
-    "user_mail": "baigo@baigo.net",
-    "app_id": "1",
-    "app_key": "sfewrw8084382h2r9fdsw9ey5whfDISORwegds",
-    "timestamp": "1550198497"
+  "user_id": "1",
+  "user_name": "baigo",
+  "user_mail": "baigo@baigo.net",
+  "app_id": "1",
+  "app_key": "sfewrw8084382h2r9fdsw9ey5whfDISORwegds",
+  "timestamp": "1550198497"
 }
 ```

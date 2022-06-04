@@ -2,7 +2,7 @@
 
   <div class="alert">
     <h1 class="text-center">
-      <?php include($tpl_path . DS . 'include' . DS . 'exception.svg'); ?>
+      <?php include($tpl_path . DS . 'include' . DS . 'except.svg'); ?>
     </h1>
     <h3 class="text-center">
       <?php if (isset($http_status) && !empty($http_status)) {

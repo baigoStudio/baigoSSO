@@ -91,16 +91,10 @@
   <?php }
 
   if (isset($cfg['captchaReload'])) { ?>
-    function captchaReload(id) {
-      var imgSrc = '<?php echo $route_misc; ?>captcha/index/';
+    function captchaReload(img_src) {
+      img_src += '?' + new Date().getTime() + '=' + Math.random();
 
-      if (typeof id != 'undefined') {
-        imgSrc += 'id/' + id + '/';
-      }
-
-      imgSrc += new Date().getTime() + '/' + Math.random() + '/';
-
-      $('.bg-captcha-img').attr('src', imgSrc);
+      $('.bg-captcha-img').attr('src', img_src);
     }
   <?php }
 
@@ -125,7 +119,7 @@
       msg_text: {
         submitting: '<?php echo $lang->get('Submitting', 'console.common'); ?>'
       }
-    }
+    };
   <?php }
 
   if (isset($cfg['baigoClear'])) { ?>
@@ -140,8 +134,8 @@
   $(document).ready(function(){
     <?php if (isset($cfg['captchaReload'])) { ?>
       $('.bg-captcha-img').click(function(){
-        var _id = $(this).data('id');
-        captchaReload(_id);
+        var _src = $(this).data('src');
+        captchaReload(_src);
       });
     <?php }
 
@@ -156,6 +150,14 @@
       $('[data-toggle="tooltip"]').tooltip({
         html: true,
         template: '<div class="tooltip bg-tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+      });
+    <?php }
+
+    if (isset($cfg['selectInput'])) { ?>
+      $('.bg-select-input').click(function(){
+        var _val    = $(this).data('value');
+        var _target = $(this).data('target');
+        $(_target).val(_val);
       });
     <?php }
 

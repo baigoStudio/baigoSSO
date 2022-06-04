@@ -6,7 +6,7 @@
 
 namespace app\validate\install;
 
-use ginkgo\Validate;
+use app\validate\common\Admin as Admin_Common;
 
 // 不能非法包含或直接执行
 if (!defined('IN_GINKGO')) {
@@ -14,31 +14,7 @@ if (!defined('IN_GINKGO')) {
 }
 
 /*-------------管理员模型-------------*/
-class Admin extends Validate {
-
-  protected $rule     = array(
-    'admin_name' => array(
-      'length'  => '1,30',
-      'format'  => 'alpha_dash',
-    ),
-    'admin_pass' => array(
-      'require' => true,
-    ),
-    'admin_pass_confirm' => array(
-      'confirm' => true,
-    ),
-    'admin_mail' => array(
-      'max'     => 30,
-      'format'  => 'email'
-    ),
-    'admin_nick' => array(
-      'max'     => 30,
-    ),
-    '__token__' => array(
-      'require' => true,
-      'token'   => true,
-    ),
-  );
+class Admin extends Admin_Common {
 
   protected $scene = array(
     'submit' => array(
@@ -59,32 +35,28 @@ class Admin extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
+    parent::v_init();
+
+    $_arr_rule     = array(
+      'admin_pass' => array(
+        'require' => true,
+      ),
+      'admin_pass_confirm' => array(
+        'confirm' => true,
+      ),
+    );
 
     $_arr_attrName = array(
-      'admin_name'            => $this->obj_lang->get('Username'),
-      'admin_pass'            => $this->obj_lang->get('Password'),
       'admin_pass_confirm'    => $this->obj_lang->get('Confirm password'),
-      'admin_mail'            => $this->obj_lang->get('Email'),
-      'admin_nick'            => $this->obj_lang->get('Nickname'),
-      '__token__'             => $this->obj_lang->get('Token'),
     );
 
     $_arr_typeMsg = array(
-      'require'   => $this->obj_lang->get('{:attr} require'),
-      'length'    => $this->obj_lang->get('Size of {:attr} must be {:rule}'),
       'confirm'   => $this->obj_lang->get('{:attr} out of accord with {:confirm}'),
-      'max'       => $this->obj_lang->get('Max size of {:attr} must be {:rule}'),
-      'token'     => $this->obj_lang->get('Form token is incorrect'),
     );
 
-    $_arr_formatMsg = array(
-      'alpha_dash' => $this->obj_lang->get('{:attr} must be alpha-numeric, dash, underscore'),
-      'email'     => $this->obj_lang->get('{:attr} not a valid email address'),
-    );
-
+    $this->rule($_arr_rule);
     $this->setAttrName($_arr_attrName);
     $this->setTypeMsg($_arr_typeMsg);
-    $this->setFormatMsg($_arr_formatMsg);
   }
 }

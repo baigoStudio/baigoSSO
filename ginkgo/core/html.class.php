@@ -51,6 +51,7 @@ class Html {
    */
   public static function encode($string) {
     if (Func::notEmpty($string)) {
+      $string = (string)$string;
       $string = trim(htmlentities($string, ENT_QUOTES, 'UTF-8'));
     }
 
@@ -71,6 +72,7 @@ class Html {
     //print_r($string);
 
     if (Func::notEmpty($string)) {
+      $string         = (string)$string;
       $string         = html_entity_decode($string, ENT_COMPAT, 'UTF-8');
       $_arr_src       = array('(', ')', '`');
       $_arr_dst       = array('&#40;', '&#41;', '&#96;');
@@ -78,27 +80,25 @@ class Html {
       $_arr_dstSub    = array();
 
       switch ($spec) {
-        case 'json': //转换 json 特殊字符
+        case 'json': // 转换 json 特殊字符
+        case 'json_safe':
           $_arr_srcSub = array('&#58;', '&#91;', '&#93;', '&#123;', '&#125;');
           $_arr_dstSub = array(':', '[', ']', '{', '}');
         break;
-        case 'json_safe': //转换 json 特殊字符
-          $_arr_srcSub = array('&#58;', '&#91;', '&#93;', '&#123;', '&#125;');
-          $_arr_dstSub = array(':', '[', ']', '{', '}');
-        break;
-        case 'url': //转换 加密 特殊字符
+        case 'url': // 转换 url 特殊字符
           $_arr_srcSub = array('&#58;', '&#45;', '&#61;', '&#63;');
           $_arr_dstSub = array(':', '-', '=', '?');
         break;
-        case 'selector': //转换 选择器 特殊字符
+        case 'selector': // 转换 选择器 特殊字符
           $_arr_srcSub = array('&#58;', '&#45;', '&#61;', '&#33;');
           $_arr_dstSub = array(':', '-', '=', '!');
         break;
-        case 'date_time':
+        case 'date_time': // 转换 日期时间 特殊字符
+        case 'datetime':
           $_arr_srcSub = array('&#45;', '&#58;');
           $_arr_dstSub = array('-', ':');
         break;
-        case 'rgb':
+        case 'rgb': // 转换 rgb 值 特殊字符
           $_arr_src   = array('`');
           $_arr_dst   = array('&#96;');
         break;
@@ -160,8 +160,8 @@ class Html {
       print_r($_arr_urlDst);
       print_r('<br>');*/
 
-      $_arr_urlSrc = Arrays::filter($_arr_urlSrc); // 剔除重复项目
-      $_arr_urlDst = Arrays::filter($_arr_urlDst);
+      $_arr_urlSrc = Arrays::unique($_arr_urlSrc); // 剔除重复项目
+      $_arr_urlDst = Arrays::unique($_arr_urlDst);
 
       $content = str_replace($_arr_urlSrc, $_arr_urlDst, $content); // 替换
     }

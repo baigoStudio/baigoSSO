@@ -7,12 +7,11 @@
   'baigoCheckall'     => 'true',
   'baigoDialog'       => 'true',
   'tooltip'           => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
-  <form name="verify_list" id="verify_list" action="<?php echo $route_console; ?>verify/status/">
+  <form name="verify_list" id="verify_list" action="<?php echo $hrefRow['status']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
 
     <div class="table-responsive">
@@ -66,12 +65,12 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                 </div>
                 <div class="bg-manage-menu">
                   <div class="d-flex flex-wrap">
-                    <a href="#verify_modal" data-toggle="modal" data-id="<?php echo $value['verify_id']; ?>" class="mr-2">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'eye' . BG_EXT_SVG); ?></span>
+                    <a href="#modal_nm" data-toggle="modal" data-href="<?php echo $hrefRow['show'], $value['verify_id']; ?>" class="mr-2">
+                      <span class="bg-icon"><?php include($tpl_icon . 'eye' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Show'); ?>
                     </a>
                     <a href="javascript:void(0);" data-id="<?php echo $value['verify_id']; ?>" class="verify_delete text-danger">
-                      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>
+                      <span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>
                       <?php echo $lang->get('Delete'); ?>
                     </a>
                   </div>
@@ -88,7 +87,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
                   </dt>
                   <dd class="col-9">
                     <?php $str_status = $value['verify_status'];
-                    include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                    include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                   </dd>
                   <dt class="col-3">
                     <small><?php echo $lang->get('Type'); ?></small>
@@ -104,7 +103,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               <td class="d-none d-lg-table-cell bg-td-md text-right">
                 <div>
                   <?php $str_status = $value['verify_status'];
-                  include($cfg['pathInclude'] . 'status_process' . GK_EXT_TPL); ?>
+                  include($tpl_include . 'status_process' . GK_EXT_TPL); ?>
                 </div>
                 <div>
                   <small><?php echo $lang->get($value['verify_type']); ?></small>
@@ -141,20 +140,14 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         <small id="msg_act" class="form-text"></small>
       </div>
       <div class="float-right">
-        <?php include($cfg['pathInclude'] . 'pagination' . GK_EXT_TPL); ?>
+        <?php include($tpl_include . 'pagination' . GK_EXT_TPL); ?>
       </div>
     </div>
   </form>
 
-  <div class="modal fade" id="verify_modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL);
 
-      </div>
-    </div>
-  </div>
-
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+  include($tpl_include . 'modal_nm' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_list = {
@@ -180,14 +173,6 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   };
 
   $(document).ready(function(){
-    $('#verify_modal').on('shown.bs.modal',function(event){
-      var _obj_button = $(event.relatedTarget);
-      var _verify_id      = _obj_button.data('id');
-      $('#verify_modal .modal-content').load('<?php echo $route_console; ?>verify/show/id/' + _verify_id + '/view/modal/');
-    }).on('hidden.bs.modal', function(){
-      $('#verify_modal .modal-content').empty();
-    });
-
     var obj_dialog          = $.baigoDialog(opts_dialog);
     var obj_validate_list   = $('#verify_list').baigoValidate(opts_validate_list);
     var obj_submit_list     = $('#verify_list').baigoSubmit(opts_submit);
@@ -199,13 +184,13 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           case 'delete':
             obj_dialog.confirm('<?php echo $lang->get('Are you sure to delete?'); ?>', function(result){
               if (result) {
-                obj_submit_list.formSubmit('<?php echo $route_console; ?>verify/delete/');
+                obj_submit_list.formSubmit('<?php echo $hrefRow['delete']; ?>');
               }
             });
           break;
 
           default:
-            obj_submit_list.formSubmit('<?php echo $route_console; ?>verify/status/');
+            obj_submit_list.formSubmit('<?php echo $hrefRow['status']; ?>');
           break;
         }
       }
@@ -223,4 +208,4 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
   });
   </script>
 
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

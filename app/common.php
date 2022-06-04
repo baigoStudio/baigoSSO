@@ -10,11 +10,11 @@ if (!defined('IN_GINKGO')) {
 }
 
 define('PRD_SSO_NAME', 'baigo SSO');
-define('PRD_SSO_URL', 'http://www.baigo.net/sso/');
-define('PRD_SSO_VER', '4.0-alpha-2');
-define('PRD_SSO_PUB', 20210720);
-define('PRD_SSO_HELP', 'http://doc.baigo.net/sso/');
-define('PRD_VER_CHECK', 'http://www.baigo.net/ver_check/check.php');
+define('PRD_SSO_URL', 'https://www.baigo.net/sso/');
+define('PRD_SSO_VER', '4.0');
+define('PRD_SSO_PUB', 20220604);
+define('PRD_SSO_HELP', 'https://doc.baigo.net/sso/');
+define('PRD_VER_CHECK', 'https://www.baigo.net/ver_check/check.php');
 
 defined('BG_EXT_SVG') || define('BG_EXT_SVG', '.svg'); //SVG
 defined('BG_TPL_PERSONAL') || define('BG_TPL_PERSONAL', GK_APP_TPL . 'personal' . DS); //前台模板

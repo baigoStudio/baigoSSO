@@ -4,7 +4,7 @@
     $title_sub    = $lang->get('Add');
   } ?>
 
-  <form name="combine_form" id="combine_form" action="<?php echo $route_console; ?>combine/submit/">
+  <form name="combine_form" id="combine_form" action="<?php echo $hrefRow['submit']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
     <input type="hidden" name="combine_id" id="combine_id" value="<?php echo $combineRow['combine_id']; ?>">
 
@@ -60,21 +60,9 @@
     }
   };
 
-  var opts_submit_modal = {
-    modal: {
-      btn_text: {
-        close: '<?php echo $lang->get('Close', 'console.common'); ?>',
-        ok: '<?php echo $lang->get('OK', 'console.common'); ?>'
-      }
-    },
-    msg_text: {
-      submitting: '<?php echo $lang->get('Saving'); ?>'
-    }
-  };
-
   $(document).ready(function(){
     var obj_validate_modal   = $('#combine_form').baigoValidate(opts_validate_modal);
-    var obj_submit_modal     = $('#combine_form').baigoSubmit(opts_submit_modal);
+    var obj_submit_modal     = $('#combine_form').baigoSubmit(opts_submit);
 
     $('#combine_form').submit(function(){
       if (obj_validate_modal.verify()) {

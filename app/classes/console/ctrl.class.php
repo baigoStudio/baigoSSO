@@ -32,7 +32,7 @@ abstract class Ctrl extends Ctrl_Base {
 
   protected $adminAllow = array();
 
-  protected $adminLogged = array(
+  protected $_arr_adminLogged = array(
     'admin_status'  => '',
   );
 
@@ -44,9 +44,15 @@ abstract class Ctrl extends Ctrl_Base {
     $this->obj_auth     = Auth::instance(array(), 'admin');
     $this->mdl_login    = Loader::model('Login', '', 'console');
 
+    $this->hrefBase     = $this->url['route_console'];
+
     $_arr_adminLogged   = $this->sessionRead();
 
-    //print_r($_arr_adminLogged);
+    if (isset($_arr_adminLogged['admin_shortcut']) && Func::notEmpty($_arr_adminLogged['admin_shortcut'])) {
+      foreach ($_arr_adminLogged['admin_shortcut'] as $_key=>&$_value) {
+        $_value['href'] = $this->url['route_console'] . $_value['ctrl'] . '/' . $_value['act']. '/';
+      }
+    }
 
     if (isset($_arr_adminLogged['admin_type']) && $_arr_adminLogged['admin_type'] == 'super') {
       $this->isSuper = true;
@@ -56,8 +62,12 @@ abstract class Ctrl extends Ctrl_Base {
       $this->adminAllow = $_arr_adminLogged['admin_allow'];
     }
 
-    $this->generalData['adminLogged']   = $_arr_adminLogged;
-    $this->adminLogged                  = $_arr_adminLogged;
+    $this->generalData['hrefRow'] = array(
+      'logout' => $this->url['route_console'] . 'login/logout/',
+    );
+
+    $this->generalData['adminLogged']       = $_arr_adminLogged;
+    $this->adminLogged                      = $_arr_adminLogged;
   }
 
 
@@ -187,35 +197,53 @@ abstract class Ctrl extends Ctrl_Base {
   }
 
 
-  protected function pathProcess() {
-    parent::pathProcess();
-
-    $_str_pathTplConsole = GK_PATH_TPL;
-
-    if (Func::notEmpty($this->tplPath)) {
-      $_str_pathTplConsole = GK_APP_TPL . 'console' . DS . $this->tplPath . DS;
-    }
-
-    $_arr_url = array(
-      'path_tpl_console'  => $_str_pathTplConsole,
-    );
-
-    $this->url = array_replace_recursive($this->url, $_arr_url);
-
-    $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
-  }
-
-
   protected function configProcess() {
     parent::configProcess();
 
-    $_str_configOpt = BG_PATH_CONFIG . 'console' . DS . 'opt' . GK_EXT_INC;
-    Config::load($_str_configOpt, 'opt', 'console');
+    $_arr_configOptExtra   = Config::get('opt_extra', 'console');
 
-    $_str_configConsoleMod  = BG_PATH_CONFIG . 'console' . DS . 'console_mod' . GK_EXT_INC;
-    Config::load($_str_configConsoleMod, 'console_mod', 'console');
+    $_str_configOpt        = BG_PATH_CONFIG . 'console' . DS . 'opt' . GK_EXT_INC;
+    $_arr_configOpt        = Config::load($_str_configOpt, 'opt', 'console');
 
-    $_str_configProfile = BG_PATH_CONFIG . 'console' . DS . 'profile_mod' . GK_EXT_INC;
-    Config::load($_str_configProfile, 'profile_mod', 'console');
+    $_str_configConsoleMod = BG_PATH_CONFIG . 'console' . DS . 'console_mod' . GK_EXT_INC;
+    $_arr_configConsoleMod = Config::load($_str_configConsoleMod, 'console_mod', 'console');
+
+    $_str_configProfile    = BG_PATH_CONFIG . 'console' . DS . 'profile_mod' . GK_EXT_INC;
+    $_arr_configProfile    = Config::load($_str_configProfile, 'profile_mod', 'console');
+
+    if (is_array($_arr_configOptExtra) && Func::notEmpty($_arr_configOptExtra)) {
+      foreach ($_arr_configOptExtra as $_key_m=>&$_value_m) {
+        $_value_m['href'] = $this->url['route_console'] . $_value_m['ctrl'] . '/' . $_value_m['act'] . '/';
+      }
+    }
+
+    if (is_array($_arr_configOpt) && Func::notEmpty($_arr_configOpt)) {
+      foreach ($_arr_configOpt as $_key_m=>&$_value_m) {
+        $_value_m['href'] = $this->url['route_console'] . 'opt/' . $_key_m . '/';
+      }
+    }
+
+    if (is_array($_arr_configConsoleMod) && Func::notEmpty($_arr_configConsoleMod)) {
+      foreach ($_arr_configConsoleMod as $_key_m=>&$_value_m) {
+        $_value_m['main']['href'] = $this->url['route_console'] . $_value_m['main']['ctrl'] . '/';
+
+        if (isset($_value_m['lists']) && Func::notEmpty($_value_m['lists'])) {
+          foreach ($_value_m['lists'] as $_key_s=>&$_value_s) {
+            $_value_s['href'] = $this->url['route_console'] . $_value_s['ctrl'] . '/' . $_value_s['act'] . '/';
+          }
+        }
+      }
+    }
+
+    if (is_array($_arr_configProfile) && Func::notEmpty($_arr_configProfile)) {
+      foreach ($_arr_configProfile as $_key_m=>&$_value_m) {
+        $_value_m['href'] = $this->url['route_console'] . 'profile/' . $_key_m . '/';
+      }
+    }
+
+    Config::set('opt_extra', $_arr_configOptExtra, 'console');
+    Config::set('opt', $_arr_configOpt, 'console');
+    Config::set('console_mod', $_arr_configConsoleMod, 'console');
+    Config::set('profile_mod', $_arr_configProfile, 'console');
   }
 }

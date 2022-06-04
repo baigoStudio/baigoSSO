@@ -26,12 +26,23 @@ class Combine_Belong extends Ctrl {
     $this->mdl_combine              = Loader::model('Combine');
     $this->mdl_combineBelong        = Loader::model('Combine_Belong');
 
+    $_str_hrefBase = $this->hrefBase . 'combine_belong/';
+
+    $_arr_hrefRow   = array(
+      'index'  => $this->hrefBase . 'index/id/',
+      'submit' => $this->hrefBase . 'submit/',
+      'remove' => $this->hrefBase . 'remove/',
+      'back'   => $this->url['route_console'] . 'app/',
+      'show'   => $this->url['route_console'] . 'app/show/id/',
+    );
+
     $this->generalData['status']    = $this->mdl_app->arr_status;
     $this->generalData['sync']      = $this->mdl_app->arr_sync;
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -60,34 +71,31 @@ class Combine_Belong extends Ctrl {
       return $this->error($_arr_combineRow['msg'], $_arr_combineRow['rcode']);
     }
 
-    $_arr_search['not_in'] = Db::table('combine_belong')->where('belong_combine_id', '=', $_arr_combineRow['combine_id'])->fetchSql()->select('belong_app_id');
-
-    //print_r($_arr_search);
-
-    $_num_appCount   = $this->mdl_app->count($_arr_search); //统计记录数
-    $_arr_pageRow    = $this->obj_request->pagination($_num_appCount); //取得分页数据
-    $_arr_appRows    = $this->mdl_app->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
-
     $_arr_searchBelong = array(
       'combine_id' => $_arr_combineRow['combine_id'],
     );
 
     $_str_pageParamBelong   = 'page-belong';
 
-    $_num_appCountBelong    = $this->mdl_appCombineView->count($_arr_searchBelong); //统计记录数
-    $_arr_pageRowBelong     = $this->obj_request->pagination($_num_appCountBelong, 0, 'get', $_str_pageParamBelong); //取得分页数据
-    $_arr_appRowsBelong     = $this->mdl_appCombineView->lists($this->config['var_default']['perpage'], $_arr_pageRowBelong['offset'], $_arr_searchBelong); //列出
+    $_arr_pagination        = array($this->config['var_default']['perpage'], '', '', $_str_pageParamBelong);
+
+    $_arr_getDataBelong     = $this->mdl_appCombineView->lists($_arr_pagination, $_arr_searchBelong); //列出
+
+    $_arr_search['not_in'] = Db::table('combine_belong')->where('belong_combine_id', '=', $_arr_combineRow['combine_id'])->fetchSql()->select('belong_app_id');
+
+    $_arr_getData    = $this->mdl_app->lists($this->config['var_default']['perpage'], $_arr_search); //列出
 
     $_arr_tplData = array(
       'combineRow'        => $_arr_combineRow,
-
       'search'            => $_arr_search,
-      'pageRowApp'        => $_arr_pageRow,
-      'appRows'           => $_arr_appRows,
 
       'pageParamBelong'   => $_str_pageParamBelong,
-      'pageRowBelong'     => $_arr_pageRowBelong,
-      'appRowsBelong'     => $_arr_appRowsBelong,
+      'pageRowBelong'     => $_arr_getDataBelong['pageRow'],
+      'appRowsBelong'     => $_arr_getDataBelong['dataRows'],
+
+      'pageRowApp'        => $_arr_getData['pageRow'],
+      'appRows'           => $_arr_getData['dataRows'],
+
 
       'token'             => $this->obj_request->token(),
     );
@@ -102,7 +110,7 @@ class Combine_Belong extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -141,7 +149,7 @@ class Combine_Belong extends Ctrl {
   }
 
 
-  function remove() {
+  public function remove() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

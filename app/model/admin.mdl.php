@@ -21,7 +21,7 @@ class Admin extends Model {
   public $arr_status  = array('enable', 'disabled'); //状态
   public $arr_type    = array('normal', 'super'); //类型
 
-  function check($mix_admin, $str_by = 'admin_id', $num_notId = 0) {
+  public function check($mix_admin, $str_by = 'admin_id', $num_notId = 0) {
     $_arr_select = array(
       'admin_id',
     );
@@ -39,18 +39,14 @@ class Admin extends Model {
    * @param int $num_notId (default: 0)
    * @return void
    */
-  function read($mix_admin, $str_by = 'admin_id', $num_notId = 0, $arr_select = array()) {
+  public function read($mix_admin, $str_by = 'admin_id', $num_notId = 0, $arr_select = array()) {
     $_arr_adminRow = $this->readProcess($mix_admin, $str_by, $num_notId, $arr_select);
-
-    if ($_arr_adminRow['rcode'] != 'y020102') {
-      return $_arr_adminRow;
-    }
 
     return $this->rowProcess($_arr_adminRow);
   }
 
 
-  function readProcess($mix_admin, $str_by = 'admin_id', $num_notId = 0, $arr_select = array()) {
+  public function readProcess($mix_admin, $str_by = 'admin_id', $num_notId = 0, $arr_select = array()) {
     if (Func::isEmpty($arr_select)) {
       $arr_select = array(
         'admin_id',
@@ -72,15 +68,14 @@ class Admin extends Model {
 
     $_arr_adminRow = $this->where($_arr_where)->find($arr_select);
 
-    if (!$_arr_adminRow) {
-      return array(
-        'msg'   => 'Administrator not found',
-        'rcode' => 'x020102', //不存在记录
-      );
+    if ($_arr_adminRow === false) {
+      $_arr_adminRow          = $this->obj_request->fillParam(array(), $arr_select);
+      $_arr_adminRow['msg']   = 'Administrator not found';
+      $_arr_adminRow['rcode'] = 'x020102';
+    } else {
+      $_arr_adminRow['rcode'] = 'y020102';
+      $_arr_adminRow['msg']   = '';
     }
-
-    $_arr_adminRow['rcode']   = 'y020102';
-    $_arr_adminRow['msg']     = '';
 
     return $_arr_adminRow;
   }
@@ -95,7 +90,7 @@ class Admin extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function lists($num_no, $num_offset = 0, $arr_search = array()) {
+  public function lists($pagination = 0, $arr_search = array()) {
     $_arr_adminSelect = array(
       'admin_id',
       'admin_name',
@@ -105,9 +100,9 @@ class Admin extends Model {
       'admin_type',
     );
 
-    $_arr_where = $this->queryProcess($arr_search);
-
-    $_arr_adminRows = $this->where($_arr_where)->order('admin_id', 'DESC')->limit($num_offset, $num_no)->select($_arr_adminSelect);
+    $_arr_where      = $this->queryProcess($arr_search);
+    $_arr_pagination = $this->paginationProcess($pagination);
+    $_arr_adminRows  = $this->where($_arr_where)->order('admin_id', 'DESC')->limit($_arr_pagination['limit'], $_arr_pagination['length'])->paginate($_arr_pagination['perpage'], $_arr_pagination['current'])->select($_arr_adminSelect);
 
     return $_arr_adminRows;
   }
@@ -121,7 +116,7 @@ class Admin extends Model {
    * @param array $arr_search (default: array())
    * @return void
    */
-  function count($arr_search = array()) {
+  public function counts($arr_search = array()) {
     $_arr_where = $this->queryProcess($arr_search);
 
     $_num_adminCount = $this->where($_arr_where)->count();
@@ -156,7 +151,7 @@ class Admin extends Model {
   }
 
 
-  function readQueryProcess($mix_admin, $str_by = 'admin_id', $num_notId = 0) {
+  protected function readQueryProcess($mix_admin, $str_by = 'admin_id', $num_notId = 0) {
     $_arr_where[] = array($str_by, '=', $mix_admin);
 
     if ($num_notId > 0) {

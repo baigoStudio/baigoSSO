@@ -44,7 +44,7 @@ class Login extends Validate {
     ),
   );
 
-  function v_init() { //构造函数
+  protected function v_init() { //构造函数
 
     $_arr_attrName = array(
       'user_str'      => $this->obj_lang->get('User ID, Username or Email'),

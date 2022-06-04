@@ -16,11 +16,11 @@
 
 ``` php
 <h3 class="text-danger">
-    <?php echo $lang->get($msg); ?>
+  <?php echo $lang->get($msg); ?>
 </h3>
 
 <div class="text-danger">
-    <?php echo $msg; ?>
+  <?php echo $msg; ?>
 </div>
 ```
 
@@ -40,10 +40,10 @@
 
 ``` php
 $userRows = array(
-    'user_id'       => '1', // ID
-    'user_name'     => 'baigo', // 用户名
-    'user_mail'     => 'baigo@baigo.net', // 邮箱
-    'user_nick'     => 'nickname', // 昵称
-    'user_status'   => 'wait', // 状态
+  'user_id'       => '1', // ID
+  'user_name'     => 'baigo', // 用户名
+  'user_mail'     => 'baigo@baigo.net', // 邮箱
+  'user_nick'     => 'nickname', // 昵称
+  'user_status'   => 'wait', // 状态
 );
 ```

@@ -1,1 +1,1 @@
-<?php include(__DIR__ . DS . 'exception' . GK_EXT_TPL);
+<?php include(__DIR__ . DS . 'except' . GK_EXT_TPL);

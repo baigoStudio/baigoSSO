@@ -22,9 +22,22 @@ class Login extends Ctrl {
     parent::c_init();
 
     $this->mdl_user     = Loader::model('User');
+
+    $_str_hrefBase = $this->hrefBase . 'login/';
+
+    $_arr_hrefRow   = array(
+      'login'         => $_str_hrefBase,
+      'submit'        => $_str_hrefBase . 'submit/',
+      'forgot'        => $this->url['url_personal'] . 'forgot/',
+      'cookie'        => $this->url['route_console'] . 'cookie/clear/',
+      'captcha'       => $this->url['route_misc'] . 'captcha/index/id/console_login/',
+      'captcha-check' => $this->url['route_misc'] . 'captcha/check/id/console_login/',
+    );
+
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -56,7 +69,7 @@ class Login extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init(false);
 
     if ($_mix_init !== true) {
@@ -121,7 +134,7 @@ class Login extends Ctrl {
     return $this->fetchJson('Login successful', 'y020401');
   }
 
-  function logout() {
+  public function logout() {
     $this->obj_auth->end(true);
 
     return $this->redirect($this->url['route_console']);

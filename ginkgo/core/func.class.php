@@ -192,73 +192,73 @@ class Func {
    * @access public
    * @static
    * @param string $string 字符串
-   * @param bool $htmlmode (default: false) 支持 html
+   * @param bool $htmldecode (default: false) html 解码
    * @return 过滤后的字符串
    */
-  public static function safe($string, $htmlmode = false) {
+  public static function safe($string, $htmldecode = false) {
 
     //正则剔除
     $_arr_dangerRegs = array(
       /*-------- 跨站 --------*/
 
       //html 标签
-      '/<(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer|bgsound|link|base|meta).*>/i',
+      '/<(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer|bgsound|link|base|meta).*>/is',
 
       //html 标签结束
-      '/<\/(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer)>/i',
+      '/<\/(script|frame|iframe|blink|object|applet|embed|style|layer|ilayer)>/is',
 
       //html 事件
-      '/on\w+\s*=\s*("|\')?\S*("|\')?/i',
+      '/on\w+\s*=\s*("|\')?\S*("|\')?/is',
 
       //html 属性包含脚本
-      '/(java|vb)script:\s*\S*/i',
+      '/(java|vb)script:\s*\S*/is',
 
       //js 对象
-      '/(document|location)\s*\.\s*\S*/i',
+      '/(document|location)\s*\.\s*\S*/is',
 
       //js 函数
-      '/(eval|alert|prompt|msgbox)\s*\(.*\)/i',
+      '/(eval|alert|prompt|msgbox)\s*\(.*\)/is',
 
       //css
-      '/expression\s*:\s*\S*/i',
+      '/expression\s*:\s*\S*/is',
 
       /*-------- sql 注入 --------*/
 
       //显示 数据库 | 表 | 索引 | 字段
-      '/show\s+(databases|tables|index|columns)/i',
+      '/show\s+(databases|tables|index|columns)/is',
 
       //创建 数据库 | 表 | 索引 | 视图 | 存储过程 | 存储过程
-      '/create\s+(database|table|(unique\s+)?index|view|procedure|proc)/i',
+      '/create\s+(database|table|(unique\s+)?index|view|procedure|proc)/is',
 
       //更新 数据库 | 表
-      '/alter\s+(database|table)/i',
+      '/alter\s+(database|table)/is',
 
       //丢弃 数据库 | 表 | 索引 | 视图 | 字段
-      '/drop\s+(database|table|index|view|column)/i',
+      '/drop\s+(database|table|index|view|column)/is',
 
       //备份 数据库 | 日志
-      '/backup\s+(database|log)/i',
+      '/backup\s+(database|log)/is',
 
       //初始化 表
-      '/truncate\s+table/i',
+      '/truncate\s+table/is',
 
       //替换 视图
-      '/replace\s+view/i',
+      '/replace\s+view/is',
 
       //创建 | 更改 字段
-      '/(add|change)\s+column/i',
+      '/(add|change)\s+column/is',
 
       //选择 | 更新 | 删除 记录
-      '/(select|update|delete)\s+\S*\s+from/i',
+      '/(select|update|delete)\s+\S*\s+from/is',
 
       //插入 记录 | 选择到文件
-      '/insert\s+into/i',
+      '/insert\s+into/is',
 
       //sql 函数
-      '/load_file\s*\(.*\)/i',
+      '/load_file\s*\(.*\)/is',
 
       //sql 其他
-      '/(outfile|infile)\s+("|\')?\S*("|\')/i',
+      '/(outfile|infile)\s+("|\')?\S*("|\')/is',
     );
 
     //特殊字符 直接剔除
@@ -295,10 +295,10 @@ class Func {
     $_str_return = Html::encode($_str_return);
     $_str_return = str_replace(array_keys($_arr_replace), array_values($_arr_replace), $_str_return);
 
-    //print_r($htmlmode);
+    //print_r($htmldecode);
 
-    if ($htmlmode) {
-      $_str_return = Html::decode($_str_return); // 假如为 html 模式, 则用 html 解码
+    if ($htmldecode) {
+      $_str_return = Html::decode($_str_return); // html 解码
     }
 
     return trim($_str_return);
@@ -418,11 +418,11 @@ class Func {
 
   /** 过滤数组重复项目 向下兼容 */
   public static function arrayFilter($arr, $pop_false = true) {
-    return Arrays::filter($arr, $pop_false);
+    return Arrays::unique($arr, $pop_false);
   }
 
   /** 遍历数组并用指定函数处理 向下兼容 */
   public static function arrayEach($arr, $func = '', $left = 5, $right = 5, $hide = '') {
-    return Arrays::each($arr, $func, $left, $right, $hide);
+    return Arrays::map($arr, $func, $left, $right, $hide);
   }
 }

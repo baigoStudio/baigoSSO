@@ -1,32 +1,35 @@
-<?php function extend_list($arr_extend, $target, $lang) {
-  $_key = 0;
-  if (!empty($arr_extend)) {
-    foreach ($arr_extend as $_key=>$_value) { ?>
-      <div id="<?php echo $target; ?>_group_<?php echo $_key; ?>">
-        <div class="input-group mb-2">
-          <span class="input-group-prepend">
-            <span class="input-group-text"><?php echo $lang->get('Name'); ?></span>
-          </span>
-          <input type="text" name="user_<?php echo $target; ?>[<?php echo $_key; ?>][key]" id="user_<?php echo $target; ?>_<?php echo $_key; ?>_key" value="<?php if (isset($_value['key'])) { echo $_value['key']; } ?>" class="form-control">
-          <span class="input-group-append">
-            <button type="button" class="btn btn-info extend_del" data-target="<?php echo $target; ?>" data-count="<?php echo $_key; ?>">
-              <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>
-            </button>
-          </span>
-        </div>
+<?php
+if (!function_exists('extend_list')) {
+  function extend_list($arr_extend, $target, $lang) {
+    $_key = 0;
+    if (!empty($arr_extend)) {
+      foreach ($arr_extend as $_key=>$_value) { ?>
+        <div id="<?php echo $target; ?>_group_<?php echo $_key; ?>">
+          <div class="input-group mb-2">
+            <span class="input-group-prepend">
+              <span class="input-group-text"><?php echo $lang->get('Name'); ?></span>
+            </span>
+            <input type="text" name="user_<?php echo $target; ?>[<?php echo $_key; ?>][key]" id="user_<?php echo $target; ?>_<?php echo $_key; ?>_key" value="<?php if (isset($_value['key'])) { echo $_value['key']; } ?>" class="form-control">
+            <span class="input-group-append">
+              <button type="button" class="btn btn-info extend_del" data-target="<?php echo $target; ?>" data-count="<?php echo $_key; ?>">
+                <span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>
+              </button>
+            </span>
+          </div>
 
-        <div class="input-group">
-          <span class="input-group-prepend">
-            <span class="input-group-text"><?php echo $lang->get('Content'); ?></span>
-          </span>
-          <input type="text" name="user_<?php echo $target; ?>[<?php echo $_key; ?>][value]" id="user_<?php echo $target; ?>_<?php echo $_key; ?>_value" value="<?php if (isset($_value['value'])) { echo $_value['value']; } ?>" class="form-control">
+          <div class="input-group">
+            <span class="input-group-prepend">
+              <span class="input-group-text"><?php echo $lang->get('Content'); ?></span>
+            </span>
+            <input type="text" name="user_<?php echo $target; ?>[<?php echo $_key; ?>][value]" id="user_<?php echo $target; ?>_<?php echo $_key; ?>_value" value="<?php if (isset($_value['value'])) { echo $_value['value']; } ?>" class="form-control">
+          </div>
+          <hr>
         </div>
-        <hr>
-      </div>
-    <?php }
+      <?php }
+    }
+
+    return $_key;
   }
-
-  return $_key;
 }
 
 if ($userRow['user_id'] > 0) {
@@ -43,19 +46,18 @@ $cfg = array(
   'sub_active'        => $str_sub,
   'baigoValidate'    => 'true',
   'baigoSubmit'       => 'true',
-  'pathInclude'       => $path_tpl . 'include' . DS,
 );
 
-include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
+include($tpl_include . 'console_head' . GK_EXT_TPL); ?>
 
   <nav class="nav mb-3">
-    <a href="<?php echo $route_console; ?>user/" class="nav-link">
-      <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'chevron-left' . BG_EXT_SVG); ?></span>
+    <a href="<?php echo $hrefRow['index']; ?>" class="nav-link">
+      <span class="bg-icon"><?php include($tpl_icon . 'chevron-left' . BG_EXT_SVG); ?></span>
       <?php echo $lang->get('Back'); ?>
     </a>
   </nav>
 
-  <form name="user_form" id="user_form" autocomplete="off" action="<?php echo $route_console; ?>user/submit/">
+  <form name="user_form" id="user_form" autocomplete="off" action="<?php echo $hrefRow['submit']; ?>">
     <input type="hidden" name="<?php echo $token['name']; ?>" value="<?php echo $token['value']; ?>">
     <input type="hidden" name="user_id" id="user_id" value="<?php echo $userRow['user_id']; ?>">
 
@@ -145,7 +147,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               </div>
 
               <button type="button" class="btn btn-info extend_add" data-target="contact">
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'plus' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'plus' . BG_EXT_SVG); ?></span>
               </button>
             </div>
 
@@ -156,7 +158,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
               </div>
 
               <button type="button" class="btn btn-info extend_add" data-target="extend">
-                <span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'plus' . BG_EXT_SVG); ?></span>
+                <span class="bg-icon"><?php include($tpl_icon . 'plus' . BG_EXT_SVG); ?></span>
               </button>
             </div>
           </div>
@@ -170,7 +172,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     </div>
   </form>
 
-<?php include($cfg['pathInclude'] . 'console_foot' . GK_EXT_TPL); ?>
+<?php include($tpl_include . 'console_foot' . GK_EXT_TPL); ?>
 
   <script type="text/javascript">
   var opts_validate_form = {
@@ -180,7 +182,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
           length: '1,30',
           format: 'alpha_dash',
           ajax: {
-            url: '<?php echo $route_console; ?>user/check/',
+            url: '<?php echo $hrefRow['check']; ?>',
             attach: {
               selectors: ['#user_id'],
               keys: ['user_id']
@@ -246,7 +248,7 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
         '<input type="text" name="user_' + target + '[' + count + '][key]" id="user_' + target + '_' + count + '" class="form-control">' +
         '<span class="input-group-append">' +
           '<button type="button" class="btn btn-info extend_del" data-target="' + target + '" data-count="' + count + '">' +
-            '<span class="bg-icon"><?php include($cfg_global['pathIcon'] . 'trash-alt' . BG_EXT_SVG); ?></span>' +
+            '<span class="bg-icon"><?php include($tpl_icon . 'trash-alt' . BG_EXT_SVG); ?></span>' +
           '</button>' +
         '</span>' +
       '</div>' +
@@ -283,4 +285,5 @@ include($cfg['pathInclude'] . 'console_head' . GK_EXT_TPL); ?>
     });
   });
   </script>
-<?php include($cfg['pathInclude'] . 'html_foot' . GK_EXT_TPL);
+
+<?php include($tpl_include . 'html_foot' . GK_EXT_TPL);

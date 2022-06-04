@@ -3,7 +3,7 @@
     "class": "Hello",
     "version": "1.0",
     "author": "Baigo",
-    "plugin_url": "http://www.baigo.net/cms/plugin/hello",
+    "plugin_url": "https://www.baigo.net/cms/plugin/hello",
     "detail": "本插件为一个开发示例",
-    "author_url": "http://www.baigo.net"
+    "author_url": "https://www.baigo.net"
 }

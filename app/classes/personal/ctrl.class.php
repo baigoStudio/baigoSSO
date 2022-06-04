@@ -30,7 +30,11 @@ abstract class Ctrl extends Ctrl_Base {
     $this->mdl_user       = Loader::model('User');
     $this->mdl_verify     = Loader::model('Verify');
 
-    $this->configMailtpl    = Config::get('mailtpl', 'var_extra');;
+    $this->hrefBase       = $this->url['route_personal'];
+
+    $this->generalData['hrefRow'] = array();
+
+    $this->configMailtpl  = Config::get('mailtpl', 'var_extra');
 
     $this->obj_view->setPath(BG_TPL_PERSONAL . $this->configBase['site_tpl']);
   }
@@ -41,14 +45,14 @@ abstract class Ctrl extends Ctrl_Base {
     $this->tplPathPersonal = GK_PATH_TPL;
 
     if (Func::notEmpty($this->tplPath)) {
-      $_str_pathTplPersonal = BG_TPL_PERSONAL . DS . $this->tplPath . DS;
+      $_str_pathTplPersonal = BG_TPL_PERSONAL . $this->tplPath . DS;
     }
 
     $_arr_url = array(
-      'path_tpl_personal' => $_str_pathTplPersonal,
+      'tpl_personal' => $_str_pathTplPersonal,
     );
 
-    $this->url = $_arr_url;
+    $this->url = array_replace_recursive($this->generalData, $_arr_url);
 
     $this->generalData = array_replace_recursive($this->generalData, $_arr_url);
   }

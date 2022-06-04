@@ -27,11 +27,26 @@ class User extends Ctrl {
     $this->mdl_appBelong    = Loader::model('App_Belong');
     $this->mdl_user         = Loader::model('User');
 
+    $_str_hrefBase = $this->hrefBase . 'user/';
+
+    $_arr_hrefRow = array(
+      'index'    => $_str_hrefBase . 'index/',
+      'add'      => $_str_hrefBase . 'form/',
+      'show'     => $_str_hrefBase . 'show/id/',
+      'edit'     => $_str_hrefBase . 'form/id/',
+      'submit'   => $_str_hrefBase . 'submit/',
+      'check'    => $_str_hrefBase . 'check/',
+      'delete'   => $_str_hrefBase . 'delete/',
+      'status'   => $_str_hrefBase . 'status/',
+      'app-show' => $this->url['route_console'] . 'app/show/id/'
+    );
+
     $this->generalData['status']    = $this->mdl_user->arr_status;
+    $this->generalData['hrefRow']   = array_replace_recursive($this->generalData['hrefRow'], $_arr_hrefRow);
   }
 
 
-  function index() {
+  public function index() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -51,14 +66,12 @@ class User extends Ctrl {
 
     //print_r($_arr_search);
 
-    $_num_userCount = $this->mdl_user->count($_arr_search); //统计记录数
-    $_arr_pageRow   = $this->obj_request->pagination($_num_userCount); //取得分页数据
-    $_arr_userRows  = $this->mdl_user->lists($this->config['var_default']['perpage'], $_arr_pageRow['offset'], $_arr_search); //列出
+    $_arr_getData  = $this->mdl_user->lists($this->config['var_default']['perpage'], $_arr_search); //列出
 
     $_arr_tplData = array(
-      'pageRow'    => $_arr_pageRow,
       'search'     => $_arr_search,
-      'userRows'   => $_arr_userRows,
+      'pageRow'    => $_arr_getData['pageRow'],
+      'userRows'   => $_arr_getData['dataRows'],
       'token'      => $this->obj_request->token(),
     );
 
@@ -72,7 +85,7 @@ class User extends Ctrl {
   }
 
 
-  function show() {
+  public function show() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -106,17 +119,17 @@ class User extends Ctrl {
     $_arr_searchBelong = array(
       'belong_user_id' => $_num_userId,
     );
-    $_arr_appBelongRows   = $this->mdl_appBelong->lists(1000, 0, $_arr_searchBelong);
+    $_arr_appRowsBelong   = $this->mdl_appBelong->lists(array(1000, 'limit'), $_arr_searchBelong);
 
     $_arr_appRows       = array();
     $_arr_belongAppIds  = array();
 
-    foreach ($_arr_appBelongRows as $_key=>$_value) {
+    foreach ($_arr_appRowsBelong as $_key=>$_value) {
       $_arr_belongAppIds[] = $_value['belong_app_id'];
     }
 
     if (Func::notEmpty($_arr_belongAppIds)) {
-      $_arr_belongAppIds = Arrays::filter($_arr_belongAppIds);
+      $_arr_belongAppIds = Arrays::unique($_arr_belongAppIds);
 
       foreach ($_arr_belongAppIds as $_key=>$_value) {
         $_arr_appRow = $this->mdl_app->read($_value);
@@ -142,7 +155,7 @@ class User extends Ctrl {
   }
 
 
-  function form() {
+  public function form() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -155,14 +168,12 @@ class User extends Ctrl {
       $_num_userId = $this->obj_request->input($this->param['id'], 'int', 0);
     }
 
-    //print_r($_num_userId);
+    $_arr_userRow = $this->mdl_user->read($_num_userId);
 
     if ($_num_userId > 0) {
       if (!isset($this->adminAllow['user']['edit']) && !$this->isSuper) { //判断权限
         return $this->error('You do not have permission', 'x010303');
       }
-
-      $_arr_userRow = $this->mdl_user->read($_num_userId);
 
       if ($_arr_userRow['rcode'] != 'y010102') {
         return $this->error($_arr_userRow['msg'], $_arr_userRow['rcode']);
@@ -171,17 +182,6 @@ class User extends Ctrl {
       if (!isset($this->adminAllow['user']['add']) && !$this->isSuper) { //判断权限
         return $this->error('You do not have permission', 'x010302');
       }
-
-      $_arr_userRow = array(
-        'user_id'       => 0,
-        'user_mail'     => '',
-        'user_nick'     => '',
-        'user_note'     => '',
-        'user_status'   => $this->mdl_user->arr_status[0],
-        'user_allow'    => array(),
-        'user_contact'  => array(),
-        'user_extend'   => array(),
-      );
     }
 
     $_arr_tplData = array(
@@ -199,7 +199,7 @@ class User extends Ctrl {
   }
 
 
-  function submit() {
+  public function submit() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -243,7 +243,7 @@ class User extends Ctrl {
   }
 
 
-  function status() {
+  public function status() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -281,7 +281,7 @@ class User extends Ctrl {
   }
 
 
-  function delete() {
+  public function delete() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {
@@ -318,7 +318,7 @@ class User extends Ctrl {
   }
 
 
-  function check() {
+  public function check() {
     $_mix_init = $this->init();
 
     if ($_mix_init !== true) {

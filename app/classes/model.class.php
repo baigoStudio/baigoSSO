@@ -62,6 +62,7 @@ abstract class Model extends Gk_Model {
       if (isset($pagination[2]) && isset($pagination[1]) && isset($pagination[0])) { // 指定了参数2
         $pagination[0]  = (int)$pagination[0]; // 转换参数0
         $pagination[1]  = (int)$pagination[1]; // 转换参数1
+        $_num_perpage   = (int)$pagination[0]; // 每页记录数
         $_str_type      = (string)$pagination[2]; // 转换参数2
 
         if ($_str_type == 'limit') { // 参数2为 limit
